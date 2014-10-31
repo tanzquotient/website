@@ -1,0 +1,178 @@
+/* 
+	* File: tanzquotient.css
+	* Author: F.Ducry
+	* Version: 0.1.1
+	* Complements and replacements of the bootstrap css-classes. 
+	
+	* Whenever classes of bootstrap are changed, set only the nessecary values again.
+*/
+
+/* Set the background of the page. This overrides certain settings of bootstrap. */
+body {
+	background: url('../elements/bg.png') repeat-x top;
+	background-color: #DB0100;
+	/*fuer lange Bildschirme die nach unten mehr anzeigen als das Hintergrundbild*/
+	background-attachment: fixed;
+	/*so bleibt das bild immer oben links stehen, auch wenn ich scrolle*/
+	padding-top: 70px;
+	/*This is needed because otherwise the fixed navbar overlaps content*/
+}
+
+/* Bootstrap containers:
+   Each container type only occures once, so we use IDs to identify them.
+   - Menu (maybe not)
+   - Titel
+   - Body
+   - Links
+   - Footer
+*/
+
+/* This changes every container! */
+.container {
+	color: black;
+}
+
+@media ( min-width :768px) {
+	.container {
+		width: 750px
+	}
+}
+
+@media ( min-width :992px) {
+	.container {
+		width: 970px; padding-left : 60px;
+		padding-right: 60px;
+		padding-left: 60px;
+	}
+}
+
+@media ( min-width :1200px) {
+	.container {
+		width: 1170px
+	}
+}
+
+/* The menu at the very top of the page. Does not scroll. 
+	Menu will be a different item. Use bootstraps navbar. */
+#TQ_container_menu {
+	background-color: #8C0000;
+	border: 2px solid #DB0100;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+/* The welcoming moto, located below the menu. */
+#TQ_container_titel {
+	font-weight: bold;
+	padding-bottom: 30px;
+	color: #DB0100;
+}
+
+/* The body holds the page specific content. */
+#TQ_container_body {
+	background-color: #FFFF99; /*helles gelb*/
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+/* Holds the icons with links, such as VSETH or our Facebook page. */
+#TQ_container_links {
+	
+}
+
+/* Located at the very end. Contains the impressum. */
+#TQ_container_footer {
+	
+}
+
+/* Bootstrap menu bar:
+   
+
+/* The menu, change the default settings. */
+.navbar-default {
+	background-color: transparent;
+	border-color: transparent;
+	color: white;
+}
+
+.navbar-default .navbar-brand {
+	color: white;
+}
+
+.navbar-default .navbar-brand:hover,.navbar-default .navbar-brand:focus
+	{
+	color: white;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: white;
+}
+
+.navbar-default .navbar-toggle:hover,.navbar-default .navbar-toggle:focus
+	{
+	background-color: #DB0100;
+}
+
+/* Override the font color of the links in the menu. */
+.navbar-default .navbar-text {
+	color: white;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: white;
+}
+
+.navbar-default .navbar-nav>li>a:hover,.navbar-default .navbar-nav>li>a:focus
+	{
+	color: black;
+	background-color: #DB0100;
+}
+
+/* Override the background and font colour of the current page. */
+.navbar-default .navbar-nav>.active>a {
+	color: #DB0100;
+	background-color: #8C0000;
+}
+
+.navbar-default .navbar-nav>.active>a:hover,.navbar-default .navbar-nav>.active>a:focus
+	{
+	color: black;
+	background-color: #DB0100;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>.active>a {
+	color: #DB0100;
+	background-color: #8C0000;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,.navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus
+	{
+	color: black;
+	background-color: #DB0100;
+}
+
+/* Dropdown */
+.dropdown-menu {
+	background-color: #8C0000;
+	border: 1px solid #DB0100;
+}
+
+.dropdown-menu>li>a {
+	background-color: #8C0000;
+	color: white;
+}
+
+.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus {
+	color: white;
+	background-color: #DB0100;
+}
+
+.dropdown-menu .divider {
+	background-color: #DB0100;
+}
+
+.navbar-default .navbar-nav>.open>a,.navbar-default .navbar-nav>.open>a:hover,.navbar-default .navbar-nav>.open>a:focus
+	{
+	background-color: #DB0100;
+	color: black;
+}

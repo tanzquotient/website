@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load staticfiles %}
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% block title %}<title>TanzQuotient</title>{% endblock title %}
+<link rel="shortcut icon" href="{% static "images/icon.png" %}">
+
+
+<!-- Free glyphicons from http://fortawesome.github.io/Font-Awesome/ -->
+<link href="{% static "font-awesome-4.1.0/css/font-awesome.min.css" %}"
+	rel="stylesheet">
+<!-- Bildschirbmreiten, von Desktop zu Smartphone: col-md >> col-sm >> col-xs -->
+<!-- Bootstrap -->
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "css/tanzquotient.css" %}" rel="stylesheet">
+
+
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+</head>
+
+
+<body>
+
+	{% block menu %}
+	
+	<!-- Menu -->
+
+	<!-- To fix the menu at the top, remove the container and add navbar-fixed-top to the class. Also add a margin to the next container, otherwise it's top will be hidden. -->
+	<nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container" id="TQ_container_menu">
+			<!-- Collection of nav links and other content for toggling -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{% url 'home' %}">TQ</a>
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="navbarCollapse" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="{% if menu == "home" %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'about' %}">About</a></li>
+					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Courses</a></li>
+					<li class="{% if menu == "events" %}active{% endif %}"><a href="{% url 'events' %}">Events</a></li>
+					<li class="{% if menu == "gallery" %}active{% endif %}"><a href="{% url 'gallery' %}">Gallery</a></li>
+					<li class="{% if menu == "music" %}active{% endif %}"><a href="{% url 'music' %}">Music</a></li>
+					<li class="{% if menu == "faq" %}active{% endif %}"><a href="{% url 'faq' %}">FAQ</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Erstens</a></li>
+							<li><a href="#">Zweitens</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Drittens</a></li>
+						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a
+						href="http://www.facebook.com/group.php?gid=181865511616"> <span
+							class="fa fa-facebook-square fa-lg"></span></a></li>
+					{% if user.is_authenticated %}
+          	  <li class="dropdown">
+		        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+		        <ul class="dropdown-menu">
+		        	<li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin area</a></li>
+		          <li><a href="{% url 'logout' %}"><span class="fa fa-sign-out fa-lg"></span> Logout</a></li>
+		        </ul>
+		      </li>
+      	  	{% else %}
+	      	  <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span></a></li>
+		      {% endif %}
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
+	
+	{% endblock menu %}
+
+	<!-- Titel -->
+	<div class="container" id="TQ_container_titel">
+		<div class="row">
+			<div class="col-sm-3">
+				<p class="text-center">
+					<img src="{% static "elements/tq_logo.png" %}" alt="...">
+				</p>
+			</div>
+			<div class="col-sm-9 hidden-xs">
+				<h1 class="text-center">Herzlich Willkommen beim Tanzquotient</h1>
+			</div>
+		</div>
+	</div>
+
+	<!-- Body -->
+	<div class="container" id="TQ_container_body">
+	
+	{% block content %}
+	{% endblock content %}
+	
+	</div>
+	
+	<!-- Links -->
+	<div class="container" id="TQ_container_links">
+		.<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br />.
+	</div>
+    
+    <!-- Footer -->
+	<div class="container" id="TQ_container_footer">
+		.<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+		<br /> <br /> <br />.
+	</div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="{% static "js/jquery.min.js" %}"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="{% static "js/bootstrap.min.js" %}"></script>
+
+</body></html>

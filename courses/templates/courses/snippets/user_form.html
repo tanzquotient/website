@@ -1,0 +1,89 @@
+  {% if form.errors %}
+		<div class="alert alert-danger alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		  <strong>Einige Eingaben sind ungültig</strong>
+		</div>
+	{% endif %}
+
+  <div class="form-group has-feedback {% if form.first_name.errors or form.last_name.errors %}has-error{% endif %}">
+    <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-5 col-md-3">
+      <input type="text" class="form-control" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" placeholder="{{ form.first_name.label }}" value="{{ form.first_name.value|default:'' }}">
+   			{% if form.first_name.errors %}
+			    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+				{% endif %}
+			{% include "courses/snippets/field_errors.html" with field=form.first_name %}
+    </div>
+    <div class="col-sm-5 col-md-3">
+      <input type="text" class="form-control" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" placeholder="{{ form.last_name.label }}" value="{{ form.last_name.value|default:'' }}">
+   			{% if form.last_name.errors %}
+			    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+				{% endif %}
+			{% include "courses/snippets/field_errors.html" with field=form.last_name %}
+    </div>
+  </div>
+  <div class="form-group has-feedback {% if form.gender.errors %}has-error{% endif %}">
+  	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Gender</label>
+    <div class="col-sm-offset-2 col-sm-10 col-sr-offset-0">
+  		<label class="radio-inline">
+			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="m" {% if form.gender.value == 'm' %}checked="checked"{% endif %}> Man
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="w" {% if form.gender.value == 'w' %}checked="checked"{% endif %}> Woman
+			</label>
+			{% include "courses/snippets/field_errors.html" with field=form.gender %}
+    </div>
+  </div>
+  <div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
+    <label for="{{ form.adress.id_for_label }}" class="col-sm-2 control-label">Adress</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="{{ form.street.id_for_label }}" name="{{ form.street.html_name }}" placeholder="Street" value="{{ form.street.value|default:'' }}">
+   			{% if form.street.errors %}
+			    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+				{% endif %}
+			{% include "courses/snippets/field_errors.html" with field=form.street %}
+    </div>
+    <div class="col-sm-3 col-sm-offset-2">
+      <input type="text" class="form-control" id="{{ form.plz.id_for_label }}" name="{{ form.plz.html_name }}" placeholder="{{ form.plz.label }}" value="{{ form.plz.value|default:'' }}">
+   			{% if form.plz.errors %}
+			    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+				{% endif %}
+	    {% include "courses/snippets/field_errors.html" with field=form.plz %}
+    </div>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" id="{{ form.city.id_for_label }}" name="{{ form.city.html_name }}" placeholder="{{ form.city.label }}" value="{{ form.city.value|default:'' }}">
+   			{% if form.city.errors %}
+			    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+				{% endif %}
+	    {% include "courses/snippets/field_errors.html" with field=form.city %}
+    </div>
+  </div>
+  {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
+  {% include "courses/snippets/text_input.html" with field=form.email only %}
+  {% include "courses/snippets/text_input.html" with field=form.email_repetition only %}
+	
+	 <div class="form-group has-feedback {% if form.student_status.errors %}has-error{% endif %}">
+	  <label for="{{ form.student_status.id_for_label }}" class="col-sm-2 control-label">{{ form.student_status.label }}</label>
+	  <div class="col-sm-10">
+	 		{{ form.student_status }}
+	 		{% if form.student_status.errors %}
+		    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+			{% endif %}
+			{% include "courses/snippets/field_errors.html" with field=form.student_status %}
+	  </div>
+	</div>
+  
+  {% include "courses/snippets/text_input.html" with field=form.legi only %}
+  {% include "courses/snippets/text_input.html" with field=form.experience only %}
+  {% include "courses/snippets/text_area.html" with field=form.comment only %}
+  
+  <div class="form-group has-feedback">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          {{ form.newsletter }} {{ form.newsletter.label }}
+        </label>
+      </div>
+      {% include "courses/snippets/field_errors.html" with field=form.newsletter %}
+    </div>
+  </div>

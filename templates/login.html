@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block content %}
+<div class="page-header">
+	<span class="h1">Login</span>
+</div>
+
+{% if form.errors %}
+<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert"
+		aria-hidden="true">&times;</button>
+	<p>Your username and password didn't match. Please try again.</p>
+</div>
+{% endif %}
+
+<form class="form-horizontal" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+<div class="form-group">
+	<label for="{{ form.username.id_for_label }}"
+		class="col-sm-2 control-label">{{ form.username.label }}</label>
+	<div class="col-sm-10">
+		<input class="form-control" type="text" name="{{ form.username.html_name }}"
+			placeholder="Enter your username" value="{{ form.username.value|default:"" }}">
+	</div>
+</div>
+<div class="form-group">
+	<label for="{{ form.password.id_for_label }}"
+		class="col-sm-2 control-label">{{ form.password.label }}</label>
+	<div class="col-sm-10">
+		<input class="form-control" type="password" name="{{ form.password.html_name }}"
+			placeholder="Enter your password" value="{{ form.password.value|default:"" }}">
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-sm-2 control-label"></label>
+	<div class="col-sm-10">
+		<button class="btn btn-default" type="submit" value="login">Login</button>
+	</div>
+</div>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+
+{% endblock content %}

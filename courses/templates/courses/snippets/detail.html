@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+  	<h3>{{ course.type.name }}</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-3">
+				<h4>Infos</h4>
+				<p><strong>{{ course.format_times|default:"not yet known" }}</strong>, {{ course.room|default:"room not yet known" }}</p>
+				<p>{{ course.get_period }}</p>
+				<p>{{ course.type.get_level|default:"-" }}, {{ course.format_prices }}</p>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+				<h4>Tanzstile</h4>
+				<p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+				<h4>Beschreibung</h4>
+				<p>{{ course.description }}</p>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+				<h4>Weiteres</h4>
+				<p>{{ course.spezial }}</p>
+			</div>
+		</div>
+  </div>
+</div>

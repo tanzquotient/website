@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block content %}
+	
+	<p>{% include "courses/snippets/detail.html" with course=course only %}</p>
+	
+<a id="subscription"></a>
+
+<h3>Anmeldung der {{person}}. Person</h3>
+
+<form class="form-horizontal" role="form" action="{% url 'courses:subscription' course.id %}" method="post">
+ 	{% csrf_token %}
+	{% include "courses/snippets/user_form.html" with form=form only %}
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" value="Subscribe">Anmelden</button>
+    </div>
+  </div>
+</form>
+
+{% endblock content %}
