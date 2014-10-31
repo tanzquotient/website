@@ -15,6 +15,8 @@ from models import *
 
 from forms import *
 
+from services import *
+
 import logging
 log = logging.getLogger('courses')
 
@@ -61,13 +63,13 @@ def subscription(request, course_id):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            request.session['form1']=form.cleaned_data
+            request.session['user1_data']=form.cleaned_data
             return redirect('courses:subscription2', course_id)
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        data = {'newsletter': True}
-        form = UserForm(data)
+        initial = {'newsletter': True}
+        form = UserForm(initial=initial)
 
     context.update({
             'menu': "courses",
@@ -79,7 +81,7 @@ def subscription(request, course_id):
 
 
 def subscription2(request, course_id):
-    template_name = "courses/subscription.html"
+    template_name = "courses/subscription2.html"
     context={}
     
     # if this is a POST request we need to process the form data
@@ -91,18 +93,30 @@ def subscription2(request, course_id):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            request.session['form2']=form
-            return redirect('courses:subscription', course_id)
+            request.session['user2_data']=form.cleaned_data
+            return redirect('courses:subscription_done', course_id)
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        data = {'newsletter': True}
-        form = UserForm(data)
+        initial = {'newsletter': True}
+        form = UserForm(initial=initial)
 
     context.update({
             'menu': "courses",
             'course': Course.objects.get(id=course_id),
             'person': 2,
             'form': form
+        })
+    return render(request, template_name, context)
+
+def subscription_done(request, course_id):
+    template_name = "courses/subscription_done.html"
+    context={}
+    
+    subscribe(request.session['user1_data'], request.session['user2_data'])
+
+    context.update({
+            'menu': "courses",
+            'course': Course.objects.get(id=course_id),
         })
     return render(request, template_name, context)

@@ -6,13 +6,12 @@
 
 <h3>Anmeldung der {{person}}. Person</h3>
 
-<form class="form-horizontal" role="form" action="{% url 'courses:subscription' course.id %}" method="post">
+<form class="form-horizontal" role="form" action="{% url 'courses:subscription2' course.id %}" method="post">
  	{% csrf_token %}
 	{% include "courses/snippets/user_form.html" with form=form only %}
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" value="Subscribe_partner">Subscribe a partner</button>
-      <button type="submit" class="btn btn-default" value="Subscribe">Subscribe alone</button>
+      <button type="submit" class="btn btn-default" value="Subscribe">Subscribe both of us</button>
     </div>
   </div>
 </form>

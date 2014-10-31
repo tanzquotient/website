@@ -28,3 +28,10 @@ class UserForm(forms.Form):
             msg="Email adresses do not match."
             self.add_error('email_repetition', msg)
             raise forms.ValidationError(msg)
+
+        # if a student, the legi must be set
+        if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
+            msg="Legi must be set for students."
+            self.add_error('legi', msg)
+            raise forms.ValidationError(msg)
+            
