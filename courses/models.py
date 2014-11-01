@@ -201,7 +201,7 @@ class Subscribe(models.Model):
     list_display = ('user', 'course', 'partner', 'payed', 'confirmed')
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
-    course = models.ForeignKey(Course, related_name='subscriptions')
+    course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__active': True})
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text="The date when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
