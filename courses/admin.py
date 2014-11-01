@@ -5,6 +5,9 @@ from courses.models import *
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from courses.admin_actions import *
+from django.contrib.admin.filters import SimpleListFilter
+from courses.filters import SubscribeOfferingListFilter
 
 class CourseInline(admin.TabularInline):
     model=Course
@@ -104,12 +107,15 @@ class CourseTypeAdmin(admin.ModelAdmin):
     autocomplete_lookup_fields = {
         'm2m': ['styles'],
     }
-    
+            
 class SubscribeAdmin(admin.ModelAdmin):  
-    list_display = ('course', 'user', 'partner', 'date','payed','confirmed','experience','comment')
-    list_filter = ('course', 'user','date','payed','confirmed')
+    list_display = ('get_offering','course', 'user', 'partner', 'date','payed','confirmed','experience','comment',)
+    list_display_links = ('user', 'partner')
+    list_filter = (SubscribeOfferingListFilter,'course', 'user','date','payed','confirmed')
   
     model = Subscribe
+    
+    actions = [confirm_subscriptions,set_subscriptions_as_payed]
     
     # define the raw_id_fields (grappelli feature)
     raw_id_fields = ('user','partner')
@@ -117,6 +123,8 @@ class SubscribeAdmin(admin.ModelAdmin):
     autocomplete_lookup_fields = {
         'fk': ['user','partner'],
     }
+    
+
     
 class PeriodAdmin(admin.ModelAdmin):
     inlines = (PeriodCancellationInline,)

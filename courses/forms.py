@@ -17,7 +17,7 @@ class UserForm(forms.Form):
     legi = forms.CharField(max_length=100, required=False)
     experience = forms.CharField(widget=forms.Textarea, required=False)
     comment = forms.CharField(widget=forms.Textarea, required=False)
-    newsletter = forms.BooleanField(required=True)
+    newsletter = forms.BooleanField(required=False)
     
     def clean(self):
         cleaned_data = super(UserForm, self).clean()

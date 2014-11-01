@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from models import *
 
 import logging
+from django.utils import datastructures
 log = logging.getLogger('courses')
 
 # Create your services here.
@@ -35,13 +36,10 @@ def update_user(user, user_data):
     user.last_name=ln
     user.save()
     
-    #address = Address({k: user_data[k] for k in ('street', 'plz', 'city')})
-    #address.save()
-    
     userinfo=get_or_create_userinfo(user)
     userinfo.legi=user_data['legi']
     userinfo.gender=user_data['gender']
-    userinfo.address=None
+    userinfo.address=Address.objects.create_from_user_data(user_data)
     userinfo.phone_number=user_data['phone_number']
     userinfo.student_status=user_data['student_status']
     userinfo.newsletter=user_data['newsletter']
@@ -65,12 +63,10 @@ def create_user(user_data):
     ln = user_data['last_name']
     
     user = User.objects.create_user(generate_username(fn, ln), email=user_data['email'], password=User.objects.make_random_password(), first_name=fn, last_name=ln)
-    #address = Address({k: user_data[k] for k in ('street', 'plz', 'city')})
-    #address.save()
-    userinfo = UserInfo(user=user,legi=user_data['legi'],gender=user_data['gender'],address=None,phone_number=user_data['phone_number'],student_status=user_data['student_status'],newsletter=user_data['newsletter'])
+    userinfo = UserInfo(user=user,legi=user_data['legi'],gender=user_data['gender'],address=Address.objects.create_from_user_data(user_data),phone_number=user_data['phone_number'],student_status=user_data['student_status'],newsletter=user_data['newsletter'])
     userinfo.user=user
     userinfo.save()
-    return user
+    return user    
 
 def generate_username(first_name, last_name):
     username="{}_{}".format(first_name,last_name)
@@ -99,7 +95,7 @@ def subscribe(course_id, user1_data, user2_data=None):
         
 def get_or_create_userinfo(user):
     try:
-        return UserInfo.objects.get(user=user).first()
+        return UserInfo.objects.get(user=user)
     except ObjectDoesNotExist:
         userinfo = UserInfo(user=user)
         return userinfo

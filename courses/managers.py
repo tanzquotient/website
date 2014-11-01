@@ -6,7 +6,7 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
-from models import *
+import models as my_models
 
 class CourseManager(models.Manager):
     def weekday(self, weekday):
@@ -16,3 +16,10 @@ class CourseManager(models.Manager):
             if (weekday==None and t==None) or (t !=None and t.weekday==weekday):
                 result_list.append(c)
         return result_list
+    
+class AddressManager(models.Manager):
+    def create_from_user_data(self,data):
+        address = my_models.Address(street=data['street'],plz=data['plz'],city=data['city'])
+        address.save()
+        return address
+        

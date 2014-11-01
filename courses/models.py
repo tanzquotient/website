@@ -9,6 +9,8 @@ from django.conf import settings
 import django.contrib.auth as auth
 
 import managers
+from courses.managers import AddressManager
+from django.core.exceptions import ValidationError
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -25,8 +27,10 @@ class Address(models.Model):
     plz = models.IntegerField()
     city = models.CharField(max_length=30)
     
+    objects = AddressManager()
+    
     def __unicode__(self):
-        return u"{} {}, {} {}".format(self.street,self.number,self.plz,self.city)
+        return u"{}, {} {}".format(self.street,self.plz,self.city)
 
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
@@ -207,6 +211,15 @@ class Subscribe(models.Model):
     payed = models.BooleanField(blank=False, null=False, default=False)
     confirmed = models.BooleanField(blank=False, null=False, default=False)
     confirmed.help_text="When this is checked, a confirmation email is send (once) to the user while saving this form."
+
+    def get_offering(self):
+        return self.course.offering
+    get_offering.short_description="Offering"
+    
+    def clean(self):
+        # Don't allow subscriptions with partner equals to subscriber
+        if self.partner == self.user:
+            raise ValidationError('Subscriptions with yourself as the partner are not allowed.')
 
     def __unicode__(self):
         return u"{} subscribes to {}".format(self.user.get_full_name(),self.course)
