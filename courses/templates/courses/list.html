@@ -1,108 +1,20 @@
 {% extends "base.html" %} {% block content %}
 
-		<div class="page-header">
-			<h1>Tanzkurse{% if offering %} <small>{{ offering.name }} ({{ offering.period }})</small>{% endif %}</h1>
-		</div>
+	<div class="page-header">
+		<h1>Tanzkurse</h1>
+	</div>
 
-		<p>
-			<strong>Unser Angebot richtet sich an Studenten und
-				ETH-Mitarbeiter. Ausnahmen werden nur für Tanzpartner von Studenten
-				und ETH-Mitarbeiter gemacht.</strong> Einzelanmeldungen von anderen werden
-			nicht berücksichtigt.
-		</p>
-		
-		{% if offering %}
-			<div class="hidden-xs">
-				{% for d in weekday_list %}
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4>{{ d.weekday }}</h4>
-					</div>
+	<p>
+		<strong>Unser Angebot richtet sich an Studenten und
+			ETH-Mitarbeiter. Ausnahmen werden nur für Tanzpartner von Studenten
+			und ETH-Mitarbeiter gemacht.</strong> Einzelanmeldungen von anderen werden
+		nicht berücksichtigt.
+	</p>
 	
-					<table class="table table-striped">
-						{% if d.courses %}
-							<thead>
-								<tr>
-									<th>Kurs</th>
-									<th>Ort</th>
-									<th>Zeit</th>
-									<th>Kursperiode</th>
-									<th>Niveau</th>
-									<th>Preis</th>
-									<th>Anmelden / Freie Plätze</th>
-								</tr>
-							</thead>
-							<tbody>
-							{% for c in d.courses %}
-								<tr>
-									<td><a href="{% url 'courses:subscription' c.id %}">{{ c.type.name }}</a></td>
-									<td>{{ c.room|default:"not yet known" }}</td>
-									<td>{{ c.format_times|default:"not yet known" }}</td>
-									<td>{{ c.get_period }}</td>
-									<td>{{ c.type.get_level|default:"-" }}</td>
-									<td>{{ c.format_prices }}</td>
-									<td>
-										{% if c.is_subscription_allowed %}
-											{% if c.get_free_places_count and c.get_free_places_count == 0 %}
-												<em>Ausgebucht</em>
-											{% else %}
-												<a href="{% url 'courses:subscription' c.id %}#subscription">Anmelden </a>
-												{% if c.get_free_places_count and c.get_free_places_count != 0 %}
-													<span class="badge">{{ c.get_free_places }}</span>
-												{% endif %}
-											{% endif %}
-										{% endif %}
-									</td>
-								</tr>
-							{% endfor %}
-						{% else %}
-							<div class="alert alert-info">No courses available.</div>
-						{% endif %}
-						</tbody>
-					</table>
-				</div>
-				{% endfor %}
-			</div>
-	
-			<div class="visible-xs">
-				{% for d in weekday_list %}
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h4>{{ d.weekday }}</h4>
-					</div>
-					{% if d.courses %}
-						<div class="list-group">
-							{% for c in d.courses %}
-	 							<a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
-									<h4 class="list-group-item-heading">
-										{{ c.type.name }}
-										{% if c.is_subscription_allowed %}
-											{% if c.get_free_places_count and c.get_free_places_count == 0 %}
-												<em>Ausgebucht</em>
-											{% else %}
-												{% if c.get_free_places_count and c.get_free_places_count != 0 %}
-													<span class="badge">{{ c.get_free_places }}</span>
-												{% endif %}
-											{% endif %}
-										{% endif %}
-									</h4>
-									<p class="list-group-item-text"><b>{{ c.format_times|default:"not yet known" }}</b>, {{ c.room|default:"room not yet known" }}</p>
-									{% if c.period %}
-									<p class="list-group-item-text">{{ c.get_period }}</p>
-									{% endif %}
-									<p class="list-group-item-text">{{ c.type.get_level|default:"-" }}, {{ c.format_prices }}</p>
-								</a>
-						{% endfor %}
-					</div>
-					{% else %}
-						<div class="alert alert-info">No courses available.</div>
-					{% endif %}
-				</div>
-				{% endfor %}
-				
-			</div>
-		{% else %}
-			<div class="alert alert-info">No courses available at the moment.</div>
-		{% endif %}
+	{% for o in offerings %}
+		<p>{% include "courses/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
+	{% empty %}
+		<div class="alert alert-info">No courses available at the moment.</div>
+	{% endfor %}
 
 {% endblock content %}

@@ -25,10 +25,15 @@ log = logging.getLogger('courses')
 def course_list(request):
     template_name = "courses/list.html"
     context={}
+    context.update({
+        'menu': "courses",
+    })
     
-    offering=get_offering_to_display()
-    weekday_list = []
-    if offering:
+    offerings=get_offerings_to_display()
+    print len(offerings)
+    c_offerings=[]
+    for offering in offerings:
+        weekday_list = []
         course_set=offering.course_set
         for (w,w_name) in WEEKDAYS:
             weekday_dict = {}
@@ -45,12 +50,15 @@ def course_list(request):
         weekday_dict['courses']=course_set.weekday(None)
         if weekday_dict['courses'].__len__() != 0:
             weekday_list.append(weekday_dict)
-        
-        
+            
+        c_offerings.append({
+            'offering': offering,
+            'weekday_list': weekday_list,
+        })
+    
+    print len(c_offerings)
     context.update({
-        'menu': "courses",
-        'offering': offering,
-        'weekday_list': weekday_list,
+        'offerings': c_offerings,
     })
     return render(request, template_name, context)
 

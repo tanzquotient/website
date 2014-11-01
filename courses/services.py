@@ -12,13 +12,9 @@ log = logging.getLogger('courses')
 
 # Create your services here.
 
-def get_offering_to_display():
-    offerings= Offering.objects.filter(period__date_from__lte=datetime.date.today()).order_by('period__date_from')
-    # return offering starting earliest or None if no offering
-    if len(offerings)>0:
-        return offerings[0]
-    else:
-        return None
+def get_offerings_to_display():
+    # return offerings that have display flag on and order them with increasing start
+    return Offering.objects.filter(display=True).order_by('period__date_from')
 
 def get_or_create_user(user_data):
     user = find_user(user_data)
