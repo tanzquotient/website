@@ -22,7 +22,6 @@ STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'O
             
 class Address(models.Model):
     street = models.CharField(max_length=30)
-    number = models.CharField(max_length=6, blank=True, null=True)
     plz = models.IntegerField()
     city = models.CharField(max_length=30)
     
@@ -30,16 +29,18 @@ class Address(models.Model):
         return u"{} {}, {} {}".format(self.street,self.number,self.plz,self.city)
 
 class UserInfo(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     user.help_text="The user profile which is matched to this user info."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
                                       choices=GENDER, blank=False, null=False,
                                       default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
+    phone_number = models.CharField(max_length=16, blank=True, null=True)
     student_status = models.CharField(max_length=3,
                                       choices=STUDENT_STATUS, blank=False, null=False,
                                       default=None)
+    newsletter = models.BooleanField(default=True)
     
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name())
@@ -200,8 +201,9 @@ class Subscribe(models.Model):
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text="The date when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
-    note = models.TextField(blank=True, null=True)
-    note.help_text="A optional note made by the user during subscription."
+    experience = models.TextField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+    comment.help_text="A optional comment made by the user during subscription."
     payed = models.BooleanField(blank=False, null=False, default=False)
     confirmed = models.BooleanField(blank=False, null=False, default=False)
     confirmed.help_text="When this is checked, a confirmation email is send (once) to the user while saving this form."
@@ -225,7 +227,7 @@ class Offering(models.Model):
     display = models.BooleanField(default=False)
     display.help_text="Defines if the courses in this offering should be displayed on the Website."
     active = models.BooleanField(default=False)
-    active.help_text="Defines if cliensts can subscribe to courses in this offering."
+    active.help_text="Defines if clients can subscribe to courses in this offering."
     
     def format_period(self):
         return self.period

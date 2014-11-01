@@ -116,6 +116,8 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 "django.core.context_processors.request",
 )
 
+GRAPPELLI_ADMIN_TITLE = "TQ Backend"
+
 # Grappelli dashboard location
 GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 

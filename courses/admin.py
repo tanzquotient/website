@@ -105,6 +105,19 @@ class CourseTypeAdmin(admin.ModelAdmin):
         'm2m': ['styles'],
     }
     
+class SubscribeAdmin(admin.ModelAdmin):  
+    list_display = ('course', 'user', 'partner', 'date','payed','confirmed','experience','comment')
+    list_filter = ('course', 'user','date','payed','confirmed')
+  
+    model = Subscribe
+    
+    # define the raw_id_fields (grappelli feature)
+    raw_id_fields = ('user','partner')
+    # define the autocomplete_lookup_fields (grappelli feature)
+    autocomplete_lookup_fields = {
+        'fk': ['user','partner'],
+    }
+    
 class PeriodAdmin(admin.ModelAdmin):
     inlines = (PeriodCancellationInline,)
     
@@ -126,6 +139,7 @@ admin.site.register(Room)
 admin.site.register(Period, PeriodAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Teach, TeachAdmin)
+admin.site.register(Subscribe,SubscribeAdmin)
 
 class UserInfoInline(admin.StackedInline):
     model = UserInfo

@@ -26,26 +26,30 @@ def course_list(request):
     template_name = "courses/list.html"
     context={}
     
-    course_set=Offering.objects.get(name='HS 2014 Q1').course_set
+    offering=get_offering_to_display()
     weekday_list = []
-    for (w,w_name) in WEEKDAYS:
+    if offering:
+        course_set=offering.course_set
+        for (w,w_name) in WEEKDAYS:
+            weekday_dict = {}
+            weekday_dict['weekday']=w_name
+            weekday_dict['courses']=course_set.weekday(w)
+            if (w=='sat' or w=='sun') and weekday_dict['courses'].__len__() == 0:
+                pass
+            else:
+                weekday_list.append(weekday_dict)
+        
+        #add courses that have no weekday entry yet
         weekday_dict = {}
-        weekday_dict['weekday']=w_name
-        weekday_dict['courses']=course_set.weekday(w)
-        if (w=='sat' or w=='sun') and weekday_dict['courses'].__len__() == 0:
-            pass
-        else:
+        weekday_dict['weekday']=_("Unknown weekday")
+        weekday_dict['courses']=course_set.weekday(None)
+        if weekday_dict['courses'].__len__() != 0:
             weekday_list.append(weekday_dict)
-    
-    #add courses that have no weekday entry yet
-    weekday_dict = {}
-    weekday_dict['weekday']=_("Unknown weekday")
-    weekday_dict['courses']=course_set.weekday(None)
-    if weekday_dict['courses'].__len__() != 0:
-        weekday_list.append(weekday_dict)
+        
         
     context.update({
         'menu': "courses",
+        'offering': offering,
         'weekday_list': weekday_list,
     })
     return render(request, template_name, context)
@@ -64,7 +68,12 @@ def subscription(request, course_id):
             # ...
             # redirect to a new URL:
             request.session['user1_data']=form.cleaned_data
-            return redirect('courses:subscription2', course_id)
+            if "subscribe_partner" in request.POST:
+                return redirect('courses:subscription2', course_id)
+            elif "subscribe_alone" in request.POST:
+                return redirect('courses:subscription_done', course_id)
+            else:
+                return redirect('courses:subscription', course_id)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -113,7 +122,10 @@ def subscription_done(request, course_id):
     template_name = "courses/subscription_done.html"
     context={}
     
-    subscribe(request.session['user1_data'], request.session['user2_data'])
+    if 'user2_data' in request.session:
+        subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
+    else:
+        subscribe(course_id,request.session['user1_data'],None)
 
     context.update({
             'menu': "courses",
