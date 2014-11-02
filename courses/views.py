@@ -76,10 +76,10 @@ def subscription(request, course_id):
             # ...
             # redirect to a new URL:
             request.session['user1_data']=form.cleaned_data
-            if "subscribe_partner" in request.POST:
-                return redirect('courses:subscription2', course_id)
-            elif "subscribe_alone" in request.POST:
+            if not Course.objects.get(id=course_id).type.couple_course or ("subscribe_alone" in request.POST):
                 return redirect('courses:subscription_done', course_id)
+            elif "subscribe_partner" in request.POST:
+                return redirect('courses:subscription2', course_id)
             else:
                 return redirect('courses:subscription', course_id)
 

@@ -12,7 +12,7 @@
 	</p>
 	
 	{% for o in offerings %}
-		<p>{% include "courses/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
+		<p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
 	{% empty %}
 		<div class="alert alert-info">No courses available at the moment.</div>
 	{% endfor %}

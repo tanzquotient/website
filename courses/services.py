@@ -65,7 +65,7 @@ def create_user(user_data):
     return user    
 
 def generate_username(first_name, last_name):
-    username="{}_{}".format(first_name,last_name)
+    username=u"{}_{}".format(first_name,last_name)
     un=username
     i=1;
     while User.objects.filter(username=un).count() > 0:

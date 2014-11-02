@@ -124,9 +124,15 @@ class PeriodCancellation(models.Model):
     course = models.ForeignKey('Period', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
     
+    def __unicode__(self):
+        return u"{}".format(self.date.strftime('%d.%m.%Y'))
+    
 class CourseCancellation(models.Model):
     course = models.ForeignKey('Course', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
+    
+    def __unicode__(self):
+        return u"{}".format(self.date.strftime('%d.%m.%Y'))
     
 class Course(models.Model):
     list_display = ('name', 'offering', 'period', 'room', )
@@ -176,6 +182,18 @@ class Course(models.Model):
     def format_times(self):
         return u' / '.join(map(str,self.times.all()))
     format_times.short_description="Times"
+    
+    def get_cancellation_dates(self):
+        # take the union of the cancellations of this course and the period it belongs to
+        dates = [c.date for c in self.cancellations.all()]
+        print dates
+        dates_offering = [c.date for c in self.offering.period.cancellations.all()]
+        return sorted(dates+dates_offering)
+    
+    def format_cancellations(self):
+        dates = [d.strftime('%d.%m.%Y') for d in self.get_cancellation_dates()]
+        return u' / '.join(dates)
+    format_cancellations.short_description="Cancellations"
     
     def get_first_time(self):
         if self.times.exists():
