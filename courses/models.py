@@ -11,6 +11,7 @@ import django.contrib.auth as auth
 import managers
 from courses.managers import AddressManager
 from django.core.exceptions import ValidationError
+from courses.services import calculate_relevant_experience
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -76,8 +77,8 @@ class Room(models.Model):
         return u"{}".format(self.name)
 
 class Period(models.Model):
-    date_from = models.DateField(blank=True, null=True)
-    date_to = models.DateField(blank=True, null=True)
+    date_from = models.DateField()
+    date_to = models.DateField()
     
     def format_date(self,d):
         return d.strftime('%d. %b %Y')
@@ -104,15 +105,13 @@ class CourseType(models.Model):
 
     name = models.CharField(max_length=30, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
-    level = models.CharField(max_length=3,
-                                      choices=LEVELS,
-                                      default=None, blank=True, null=True)
+    level = models.IntegerField(default=None, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     spezial = models.TextField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
     
     def get_level(self):
-        return _(self.level)
+        return self.level if self.level else "";
         
     def format_styles(self):
         return ', '.join(map(str,self.styles.all()))
@@ -208,13 +207,18 @@ class Subscribe(models.Model):
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text="A optional comment made by the user during subscription."
-    payed = models.BooleanField(blank=False, null=False, default=False)
     confirmed = models.BooleanField(blank=False, null=False, default=False)
     confirmed.help_text="When this is checked, a confirmation email is send (once) to the user while saving this form."
+    payed = models.BooleanField(blank=False, null=False, default=False)
 
     def get_offering(self):
         return self.course.offering
     get_offering.short_description="Offering"
+    
+    # returns similar courses that the user did before in the system
+    def get_calculated_experience(self):
+        return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
+    get_calculated_experience.short_description="Calculated experience"
     
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber

@@ -24,7 +24,7 @@ class Command(NoArgsCommand):
         for course_name in self.course_names:
             for i in range(1, 6):
                 n=u"{} {}".format(course_name, i)
-                CourseType.objects.get_or_create(name=n, defaults={'level': 2})
+                CourseType.objects.get_or_create(name=n, defaults={'level': i})
         d = CourseType.objects.get(name='Discofox 1')
         d.styles = [Style.objects.get(name='Walzer'),Style.objects.get(name='Tango'),Style.objects.get(name='Jive'),Style.objects.get(name='Discofox')]
         d.save()
