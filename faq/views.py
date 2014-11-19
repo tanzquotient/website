@@ -9,6 +9,6 @@ def faq(request):
 
     context.update({
             'menu': "faq",
-            'questions': Question.objects.displayed(),
+            'questions': QuestionGroup.objects.get(name='main_faq').questions.displayed(),
         })
     return render(request, template_name, context)
