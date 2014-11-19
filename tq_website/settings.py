@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'tq_website',
     'courses',
+    'faq',
+    'events',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,12 +66,24 @@ WSGI_APPLICATION = 'tq_website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+#===============================================================================
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'HOST': 'localhost',
+#         'NAME': 'tq_website',
+#         'USER': 'postgres',
+#         'PASSWORD': 'eesseell',
+#     }
+# }
+#===============================================================================
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
         'NAME': 'tq_website',
-        'USER': 'postgres',
+        'USER': 'root',
         'PASSWORD': 'eesseell',
     }
 }

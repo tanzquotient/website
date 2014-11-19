@@ -14,26 +14,32 @@ from grappelli.dashboard.utils import get_admin_site_name
 
 class CustomIndexDashboard(Dashboard):
     """
-    Custom index dashboard for www.
+    Custom index dashboard
     """
     
     def init_with_context(self, context):
         site_name = get_admin_site_name(context)   
         
         # helper variable
+        course_models=('courses.models.Offering','courses.models.Course','courses.models.Subscribe','courses.models.Teach',)
         meta_models=('courses.models.CourseType','courses.models.Style','courses.models.Period','courses.models.Room',)
         
         self.children.append(modules.ModelList(
             title='Course Administration',
             column=1,
-            models=('courses.models.*'),
-            exclude=('django.contrib.*',)+meta_models
+            models=course_models
         ))
         
         self.children.append(modules.ModelList(
             title='Course Administration - Meta Infos',
             column=1,
             models=meta_models
+        ))
+        
+        self.children.append(modules.ModelList(
+            title='FAQ',
+            column=1,
+            models=('faq.models.QuestionGroup',)
         ))
 
         # append an app list module for "Administration"
