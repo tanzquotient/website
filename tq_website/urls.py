@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^events/$', views.events, name='events'),
     url(r'^gallery/$', views.gallery, name='gallery'),
     url(r'^music/$', views.music, name='music'),
-    url(r'^faq/$', views.faq, name='faq'),
+    url(r'^faq/', include('faq.urls', namespace="faq")),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),

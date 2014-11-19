@@ -10,6 +10,7 @@ class QuestionInline(admin.TabularInline):
     extra=0
     
 class QuestionGroupAdmin(admin.ModelAdmin):
+    list_display = ('name',)
     inlines = (QuestionInline,)
     
 # Register your models here.

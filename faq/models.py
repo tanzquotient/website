@@ -4,6 +4,8 @@ import managers
 
 # Create your models here.
 class QuestionGroup(models.Model):
+    list_display = ('name', )
+    
     name = models.CharField(max_length=30, blank=False)
 
 class Question(models.Model):

@@ -88,8 +88,6 @@ class Period(models.Model):
         return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
 
 class CourseTime(models.Model):
-    list_display = ('course', 'weekday', 'time_from', 'time_to', )
-
     course = models.ForeignKey('Course', related_name='times')
     weekday = models.CharField(max_length=3,
                                       choices=WEEKDAYS,
@@ -101,8 +99,6 @@ class CourseTime(models.Model):
         return u"{}, {}-{}".format(_(self.weekday),self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
 
 class CourseType(models.Model):
-    list_display = ('name', 'styles', 'level', 'couple_course',)
-
     name = models.CharField(max_length=30, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
@@ -135,8 +131,6 @@ class CourseCancellation(models.Model):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
     
 class Course(models.Model):
-    list_display = ('name', 'offering', 'period', 'room', )
-
     name = models.CharField(max_length=30, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
     type = models.ForeignKey(CourseType,related_name='courses', blank=False, null=False)
@@ -215,8 +209,6 @@ class Course(models.Model):
         return u"{}".format(self.name)
 
 class Subscribe(models.Model):
-    list_display = ('user', 'course', 'partner', 'payed', 'confirmed')
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__active': True})
     date = models.DateField(blank=False, null=False, auto_now_add=True)
@@ -255,8 +247,6 @@ class Teach(models.Model):
 
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
-    list_display = ('name', 'active')
-    
     name = models.CharField(max_length=30, unique=True, blank=False)
     period = models.ForeignKey(Period,blank=True, null=True)
     display = models.BooleanField(default=False)

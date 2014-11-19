@@ -30,7 +30,6 @@ def course_list(request):
     })
     
     offerings=get_offerings_to_display()
-    print len(offerings)
     c_offerings=[]
     for offering in offerings:
         weekday_list = []
