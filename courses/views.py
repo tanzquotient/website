@@ -139,3 +139,14 @@ def subscription_done(request, course_id):
             'course': Course.objects.get(id=course_id),
         })
     return render(request, template_name, context)
+
+
+def music(request):
+    template_name = "courses/music.html"
+    context={}
+        
+    context.update({
+            'menu': "music",
+            'styles': Style.objects.all()
+        })
+    return render(request, template_name, context)

@@ -15,7 +15,6 @@ urlpatterns = patterns('',
     url(r'^about/$', views.about, name='about'),
     url(r'^events/$', views.events, name='events'),
     url(r'^gallery/$', views.gallery, name='gallery'),
-    url(r'^music/$', views.music, name='music'),
     url(r'^faq/', include('faq.urls', namespace="faq")),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),

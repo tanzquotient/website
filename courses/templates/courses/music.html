@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>Musikvorschläge zum Tanzen</h1>
+<p>
+Wir werden ab und zu nach guter Tanzmusik gefragt.
+Diese Musikvorschläge sollen euch die Suche nach Tanzmusik vereinfachen. Natürlich existieren noch viele andere gute Lieder. Hier einfach eine Auswahl. Manche der Titel passen für zwei oder mehr Tanzrichtungen. Wir haben uns dafür entschieden jeden Titel nur einmal aufzuführen, bei dem Stil wo er am besten passt.
+Leider können wir euch keine Musik vorspielen. Die meisten Lieder finden sich aber auf YouTube (teilweise hier verlinkt). Sollen sich die mit den Copyrights rumschlagen ;).
+</p>
+<p>
+Und jetzt viel Spass beim Tanzen!
+</p>
+
+{% for style in styles %}
+	{% if style.songs.sorted_speed %}
+		<h3>{{ style.name }}</h3>
+		{% include "courses/snippets/song_list.html" with songs=style.songs.sorted_speed.all only %}
+	{% endif %}
+{% endfor %}
+
+{% endblock content %}

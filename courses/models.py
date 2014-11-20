@@ -9,9 +9,9 @@ from django.conf import settings
 import django.contrib.auth as auth
 
 import managers
-from courses.managers import AddressManager
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience
+from pip._vendor.colorama.ansi import Style
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -28,7 +28,7 @@ class Address(models.Model):
     plz = models.IntegerField()
     city = models.CharField(max_length=30)
     
-    objects = AddressManager()
+    objects = managers.AddressManager()
     
     def __unicode__(self):
         return u"{}, {} {}".format(self.street,self.plz,self.city)
@@ -265,3 +265,16 @@ class Offering(models.Model):
     
     def __unicode__(self):
         return u"{}".format(self.name)
+    
+class Song(models.Model):
+    title = models.CharField(max_length=255, blank=False)
+    artist = models.CharField(max_length=255, blank=True, null=True)
+    length = models.TimeField(blank=True, null=True)
+    speed = models.IntegerField(blank=True, null=True)
+    speed.help_text="The speed of the song in TPM"
+    style = models.ForeignKey(Style, related_name='songs')
+    url_video = models.URLField(blank=True, null=True)
+    url_video.help_text="A url to a demo video (e.g Youtube)."
+    
+    objects = managers.SongManager()
+

@@ -10,7 +10,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="modal_label_style-{{s.id}}">{{ s.name }}</h4>
+	        <h3 class="modal-title" id="modal_label_style-{{s.id}}">{{ s.name }}</h3>
 	      </div>
 	      <div class="modal-body">
 	      	{% if s.description %}
@@ -22,6 +22,8 @@
 	        {% if s.url_video %}
 	        	<p><a href="{{ s.url_video }}" target=”_blank”>Video</a></p>
 	        {% endif %}
+	        <h4>Songs</h4>
+	        <p>{% include "courses/snippets/song_list.html" with songs=s.songs.all only %}</p>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

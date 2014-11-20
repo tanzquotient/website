@@ -44,15 +44,6 @@ def gallery(request):
         })
     return render(request, template_name, context)
 
-def music(request):
-    template_name = "music.html"
-    context={}
-        
-    context.update({
-            'menu': "music",
-        })
-    return render(request, template_name, context)
-
 def faq(request):
     template_name = "faq.html"
     context={}

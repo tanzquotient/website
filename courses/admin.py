@@ -69,6 +69,10 @@ class PeriodCancellationInline(admin.TabularInline):
     model = PeriodCancellation
     extra = 2
     
+class SongInline(admin.TabularInline):
+    model = Song
+    extra = 5
+    
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'type','offering','period','format_times','room','format_prices','format_teachers')
     list_filter = ('offering', 'type', 'room')
@@ -139,6 +143,7 @@ class TeachAdmin(admin.ModelAdmin):
     
 class StyleAdmin(admin.ModelAdmin):
     list_display = ('name', 'url_info', 'url_video', )
+    inlines = (SongInline,)
 
 admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Course, CourseAdmin)
