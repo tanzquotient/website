@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.core.management.base import NoArgsCommand
 from courses.models import *
+from django.contrib.auth.models import User
 
 import datetime
 
@@ -10,14 +11,26 @@ class Command(NoArgsCommand):
     style_names = ['Walzer','Discofox','Foxtrott','Quick-Step','Jive','Rumba','Tango','Salsa Cubana',u'Salsa Puertorriqueña','Bachata','Lindy Hop','Zouk']
     course_names = ['Discofox','Social','Tango','Salsa Cubana',u'Salsa Puertorriqueña','Bachata','Lindy Hop','Zouk']
     room_names = ['CAB Foodlab','GEP/Alumni-Pavillon','HXE','Raum der Stille',u'ASVZ Hönggerberg Arena 3']
-    room_desc = ['Das foodLAB ist das DSR Restaurant im CAB. Es befindet sich im obersten Stock direkt über dem Haupteingang. Die Treppe hoch, dann gerade aus. Auf der rechten Seite geht eine Metalltreppe in den obersten Stock. Das foodLAB ist dort oben. ',
-                     'Das GEP befindet sich zwischen der Polybahn und der Cafeteria. Der Eingang ist auf der Seite der Polyterasse beim roten Pfeil. ',
+    room_desc = ['Das foodLAB ist das DSR Restaurant im CAB. Es befindet sich im obersten Stock direkt über dem Haupteingang. Die Treppe hoch, dann gerade aus. Auf der rechten Seite geht eine Metalltreppe in den obersten Stock. Oder nach dem Haupteingang gerade nach hinten laufen, dann links den Lift ins oberste Stockwerk.',
+                     'Das GEP befindet sich zwischen der Polybahn und der Cafeteria. Der Eingang ist auf der Seite der Polyterasse.',
                      'In Richtung Stadt auf ist das HXE auf der rechten Seite der Strasse. Der Eingang ist auf der Seite, gleich da, wo die Rampe zu Ende ist. Der Tanzraum ist direkt hinter der Tür rechts.',
-                     'Der Raum der Stille befindet sich im HPI auf dem Hönggerberg. Dies ist das Gebäude in dem sich auch das Bistro und die Buchhandlung befinden. Der Eingang befindet sich beim Pfeil auf der Rückseite des Gebäudes. Von der Bushaltestelle aus um das Gebäude herum gehen. Die Tür sieht aus wie ein Hintereingang, ist aber Richtig. Der Raum der Stille befindet sich im D-Stock. ',
+                     'Der Raum der Stille befindet sich im HPI auf dem Hönggerberg. Dies ist das Gebäude in dem sich auch das Bistro und der Coop befinden. Der Eingang befindet sich auf der Rückseite des Gebäudes. Von der Bushaltestelle aus um das Gebäude herum gehen. Die Tür sieht aus wie ein Hintereingang, ist aber richtig. Der Raum der Stille befindet sich im D-Stock (ein Stock runter).',
                      'Die Arena 3 ist das Tanzstudio des ASVZ auf dem Hönggerberg. Von der Bushaltestelle aus rechts am HPH vorbei. Im Gebäude die Treppe runter (Legi wird hier kontrolliert), dann links. An der Turnhalle vorbei, bis an das Ende des Gang. Hier die Treppe nach oben. Die Arena 3 ist der erste Raum auf der linken Seite.<br/><b>Wichtig: Bitte nehmt ein Schloss mit, und schliesst eure Sachen ein. Aus feuerpolizeilichen Gründen dürfen im und vor dem Raum KEINE Taschen herumstehen!</b>',
                      ]
+    room_url = ['',
+                'https://www.google.ch/maps/place/Alumni+Pavillon,+8001+Z%C3%BCrich/@47.3766703,8.5464373,17z/data=!4m2!3m1!1s0x479aa0a62c4b4f21:0xb86c4ed668042726',
+                '',
+                '',
+                '',]
     
     def handle_noargs(self, **options):
+        user_simon =User.objects.create_user('simon', 'siwehrli@student.ethz.ch', 'a')
+        user_simon.is_staff = True
+        user_simon.is_superuser = True
+        user_simon.save();
+        User.objects.create_user('irina', None, 'i')
+        User.objects.create_user('maire', None, 'm')
+        
         for style_name in self.style_names:
             Style.objects.get_or_create(name=style_name, defaults={'url_info': "http://de.wikipedia.org/wiki/{}".format(style_name)})
         Style.objects.get_or_create(name="Discofox", defaults={'url_info': "http://de.wikipedia.org/wiki/{}".format("Discofox")})
@@ -30,7 +43,7 @@ class Command(NoArgsCommand):
         d.save()
   
         for i,room_name in enumerate(self.room_names):
-            Room.objects.get_or_create(name=room_name, defaults={'description': self.room_desc[i]})
+            Room.objects.get_or_create(name=room_name, defaults={'description': self.room_desc[i],'url': self.room_url[i]})
         
         pHS14q1 = Period.objects.get_or_create(date_from=datetime.date(2014,9,15), date_to=datetime.date(2014,10,31))[0]
         pHS14q2 = Period.objects.get_or_create(date_from=datetime.date(2014,11,2), date_to=datetime.date(2014,12,19))[0]

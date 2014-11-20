@@ -63,7 +63,7 @@ class CourseCancellationInline(admin.TabularInline):
     
 class CourseTimeInline(admin.TabularInline):
     model = CourseTime
-    extra = 1
+    extra = 0
     
 class PeriodCancellationInline(admin.TabularInline):
     model = PeriodCancellation
@@ -144,6 +144,7 @@ admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseType, CourseTypeAdmin)
 admin.site.register(Room)
+admin.site.register(Address)
 admin.site.register(Period, PeriodAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Teach, TeachAdmin)

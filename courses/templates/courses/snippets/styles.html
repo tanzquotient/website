@@ -1,16 +1,16 @@
 {% for s in type.styles.all %}
 	<!-- Button trigger modal -->
-	<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalStyle-{{s.id}}">
+	<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal_style-{{s.id}}">
 	  {{ s.name }}
 	</button>
 	
 	<!-- Modal -->
-	<div class="modal fade" id="modalStyle-{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="Style Info" aria-hidden="true">
+	<div class="modal fade" id="modal_style-{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="Style Info" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel-{{s.id}}">{{ s.name }}</h4>
+	        <h4 class="modal-title" id="modal_label_style-{{s.id}}">{{ s.name }}</h4>
 	      </div>
 	      <div class="modal-body">
 	      	{% if s.description %}

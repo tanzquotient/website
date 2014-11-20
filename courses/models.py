@@ -70,7 +70,8 @@ class Room(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(max_length=500, blank=True, null=True)
+    url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
     
     def __unicode__(self):

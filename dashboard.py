@@ -22,7 +22,7 @@ class CustomIndexDashboard(Dashboard):
         
         # helper variable
         course_models=('courses.models.Offering','courses.models.Course','courses.models.Subscribe','courses.models.Teach',)
-        meta_models=('courses.models.CourseType','courses.models.Style','courses.models.Period','courses.models.Room',)
+        meta_models=('courses.models.CourseType','courses.models.Style','courses.models.Period','courses.models.Room','courses.models.Address',)
         
         self.children.append(modules.ModelList(
             title='Course Administration',

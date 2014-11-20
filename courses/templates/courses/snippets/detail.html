@@ -6,7 +6,13 @@
     <div class="row">
 			<div class="col-xs-12 col-sm-6 col-md-3">
 				<h4>Infos</h4>
-				<p><strong>{{ course.format_times|default:"not yet known" }}</strong>, {{ course.room|default:"room not yet known" }}</p>
+				<p><strong>{{ course.format_times|default:"not yet known" }}</strong>,
+					{% if course.room %}
+						{% include "courses/snippets/room.html" with room=course.room only %}
+					{% else %}
+						Raum noch unbekannt
+					{% endif %}
+				</p>
 				<p>{{ course.get_period }}</p>
 				<p>{{ course.type.get_level|default:"-" }}, {{ course.format_prices }}</p>
 			</div>
@@ -23,7 +29,7 @@
 				<p>{{ course.spezial }}</p>
 				{% if course.get_cancellation_dates %}
 					<h4>Ausfälle</h4>
-					{{ course.format_cancellations }}
+					<p>{{ course.format_cancellations }}</p>
 				{% endif %}
 			</div>
 		</div>
