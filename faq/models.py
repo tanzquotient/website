@@ -4,9 +4,10 @@ import managers
 
 # Create your models here.
 class QuestionGroup(models.Model):
-    list_display = ('name', )
-    
     name = models.CharField(max_length=30, blank=False)
+    
+    def __unicode__(self):
+        return u"{}".format(self.name)
 
 class Question(models.Model):
     question_text = models.TextField()
@@ -20,3 +21,6 @@ class Question(models.Model):
         ordering = ['position']
         
     objects=managers.QuestionManager()
+    
+    def __unicode__(self):
+        return u"{}".format(self.question_text)

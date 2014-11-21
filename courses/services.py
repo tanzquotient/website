@@ -32,14 +32,14 @@ def update_user(user, user_data):
     user.last_name=ln
     user.save()
     
-    userinfo=get_or_create_userinfo(user)
-    userinfo.legi=user_data['legi']
-    userinfo.gender=user_data['gender']
-    userinfo.address=mymodels.Address.objects.create_from_user_data(user_data)
-    userinfo.phone_number=user_data['phone_number']
-    userinfo.student_status=user_data['student_status']
-    userinfo.newsletter=user_data['newsletter']
-    userinfo.save()
+    userprofile=get_or_create_userprofile(user)
+    userprofile.legi=user_data['legi']
+    userprofile.userprofileser_data['gender']
+    userprofile.address=mymodels.Address.objects.create_from_user_data(user_data)
+    userprofile.phone_number=user_data['phone_number']
+    userprofile.student_status=user_data['student_status']
+    userprofile.newsletter=user_data['newsletter']
+    userprofile.save()
     
     return user
     
@@ -59,9 +59,9 @@ def create_user(user_data):
     ln = user_data['last_name']
     
     user = User.objects.create_user(generate_username(fn, ln), email=user_data['email'], password=User.objects.make_random_password(), first_name=fn, last_name=ln)
-    userinfo = mymodels.UserInfo(user=user,legi=user_data['legi'],gender=user_data['gender'],address=mymodels.Address.objects.create_from_user_data(user_data),phone_number=user_data['phone_number'],student_status=user_data['student_status'],newsletter=user_data['newsletter'])
-    userinfo.user=user
-    userinfo.save()
+    userprofile = mymodels.UserProfile(user=user,legi=user_data['legi'],gender=user_data['gender'],address=mymodels.Address.objects.create_from_user_data(user_data),phone_number=user_data['phone_number'],student_status=user_data['student_status'],newsletter=user_data['newsletter'])
+    userprofile.user=user
+    userprofile.save()
     return user    
 
 def generate_username(first_name, last_name):
@@ -89,12 +89,12 @@ def subscribe(course_id, user1_data, user2_data=None):
         subscription2 = mymodels.Subscribe(user=user2,course=course,partner=user1,experience=user2_data['experience'],comment=user2_data['comment'])
         subscription2.save()
         
-def get_or_create_userinfo(user):
+def get_or_create_userprofile(user):
     try:
-        return mymodels.UserInfo.objects.get(user=user)
+        return mymodels.UserProfile.objects.get(user=user)
     except ObjectDoesNotExist:
-        userinfo = mymodels.UserInfo(user=user)
-        return userinfo
+        userprofile = mymodels.UserProfile(user=user)
+        return userprofile
 
 # finds a list of courses the 'user' did already and that are somehow relevant for 'course'
 def calculate_relevant_experience(user,course):

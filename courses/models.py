@@ -33,9 +33,9 @@ class Address(models.Model):
     def __unicode__(self):
         return u"{}, {} {}".format(self.street,self.plz,self.city)
 
-class UserInfo(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
-    user.help_text="The user profile which is matched to this user info."
+    user.help_text="The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
                                       choices=GENDER, blank=False, null=False,
@@ -48,8 +48,7 @@ class UserInfo(models.Model):
     newsletter = models.BooleanField(default=True)
     
     def __unicode__(self):
-        return u"{}".format(self.user.get_full_name())
-    
+        return u"{}".format(self.user.get_full_name())    
     
 class Style(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -277,4 +276,7 @@ class Song(models.Model):
     url_video.help_text="A url to a demo video (e.g Youtube)."
     
     objects = managers.SongManager()
+    
+    def __unicode__(self):
+        return u"{} - {}".format(self.title, self.artist)
 

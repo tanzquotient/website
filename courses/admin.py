@@ -155,13 +155,13 @@ admin.site.register(Style, StyleAdmin)
 admin.site.register(Teach, TeachAdmin)
 admin.site.register(Subscribe,SubscribeAdmin)
 
-class UserInfoInline(admin.StackedInline):
-    model = UserInfo
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
     can_delete = False
 
 # Define a new User admin
 class MyUserAdmin(UserAdmin):
-    inlines = (UserInfoInline, SubscribeInlineForUser)
+    inlines = (UserProfileInline, SubscribeInlineForUser)
 
 # Re-register UserAdmin
 admin.site.unregister(User)
