@@ -8,7 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP,\
+    MEDIA_ROOT, STATIC_ROOT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -44,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce',
     'tq_website',
     'courses',
     'faq',
@@ -114,10 +116,15 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+STATIC_ROOT = 'tq.ethz.ch/static/'
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
+
+MEDIA_ROOT = 'tq.ethz.ch/media/'
+MEDIA_URL = '/media/'
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 "django.contrib.auth.context_processors.auth",

@@ -12,6 +12,7 @@ import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience
 from pip._vendor.colorama.ansi import Style
+from tinymce.models import HTMLField
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -46,6 +47,8 @@ class UserProfile(models.Model):
                                       choices=STUDENT_STATUS, blank=False, null=False,
                                       default=None)
     newsletter = models.BooleanField(default=True)
+    
+    about_me = HTMLField()
     
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name())    

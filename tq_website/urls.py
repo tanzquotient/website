@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'tq.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'^courses/', include('courses.urls', namespace="courses")),
     url(r'^$', views.home, name='home'),
     url(r'^home/$', views.home, name='home'),
