@@ -136,17 +136,17 @@ class Course(models.Model):
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
     type = models.ForeignKey(CourseType,related_name='courses', blank=False, null=False)
     type.help_text = "The name of the course type is displayed on the website as the course title ."
-    room = models.ForeignKey(Room, related_name='courses', blank=True, null=True)
+    room = models.ForeignKey(Room, related_name='courses', blank=True, null=True, on_delete=models.SET_NULL)
     min_subscribers = models.IntegerField(blank=False,null=False,default=6)
     max_subscribers = models.IntegerField(blank=True,null=True)
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
     price_without_legi = models.FloatField(blank=True, null=True, default=70)
     comment = models.TextField(blank=True, null=True)
-    period = models.ForeignKey(Period,blank=True, null=True)
+    period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
     period.help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken."
     teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses', through_fields=('course','user'))
-    offering = models.ForeignKey('Offering')
+    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
     
     objects=managers.CourseManager()
     
@@ -249,7 +249,7 @@ class Teach(models.Model):
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    period = models.ForeignKey(Period,blank=True, null=True)
+    period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
     display = models.BooleanField(default=False)
     display.help_text="Defines if the courses in this offering should be displayed on the Website."
     active = models.BooleanField(default=False)
@@ -272,7 +272,7 @@ class Song(models.Model):
     length = models.TimeField(blank=True, null=True)
     speed = models.IntegerField(blank=True, null=True)
     speed.help_text="The speed of the song in TPM"
-    style = models.ForeignKey(Style, related_name='songs')
+    style = models.ForeignKey(Style, related_name='songs', blank=False, null=True, on_delete=models.SET_NULL)
     url_video = models.URLField(blank=True, null=True)
     url_video.help_text="A url to a demo video (e.g Youtube)."
     
