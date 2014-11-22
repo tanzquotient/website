@@ -11,9 +11,9 @@ Und jetzt viel Spass beim Tanzen!
 </p>
 
 {% for style in styles %}
-	{% if style.songs.sorted_speed %}
+	{% if style.songs.all %}
 		<h3>{{ style.name }}</h3>
-		{% include "courses/snippets/song_list.html" with songs=style.songs.sorted_speed.all only %}
+		{% include "courses/snippets/song_list.html" with songs=style.songs.all only %}
 	{% endif %}
 {% endfor %}
 

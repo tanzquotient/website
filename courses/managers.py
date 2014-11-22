@@ -22,8 +22,4 @@ class AddressManager(models.Manager):
         address = my_models.Address(street=data['street'],plz=data['plz'],city=data['city'])
         address.save()
         return address
-
-class SongManager(models.Manager):
-    def sorted_speed(self):
-        return self.order_by("speed")
         

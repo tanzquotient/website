@@ -278,8 +278,9 @@ class Song(models.Model):
     url_video = models.URLField(blank=True, null=True)
     url_video.help_text="A url to a demo video (e.g Youtube)."
     
-    objects = managers.SongManager()
-    
     def __unicode__(self):
         return u"{} - {}".format(self.title, self.artist)
+    
+    class Meta:
+        ordering = ['speed','length',]
 
