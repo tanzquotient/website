@@ -92,7 +92,7 @@ class CourseAdmin(admin.ModelAdmin):
                     'classes': ("grp-collapse grp-open",),
                     'fields': ['room']}),
         ('Billing', {
-                     'classes': ("grp-collapse grp-closed",),
+                     'classes': ("grp-collapse grp-open",),
                      'fields': ['price_with_legi','price_without_legi']}),
         ('Etc', {
                  'classes': ("grp-collapse grp-closed",),

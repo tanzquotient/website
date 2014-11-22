@@ -10,7 +10,7 @@ import django.contrib.auth as auth
 
 import managers
 from django.core.exceptions import ValidationError
-from courses.services import calculate_relevant_experience
+from courses.services import calculate_relevant_experience, format_prices
 from pip._vendor.colorama.ansi import Style
 from tinymce.models import HTMLField
 
@@ -157,8 +157,7 @@ class Course(models.Model):
     format_teachers.short_description="Teachers"
     
     def format_prices(self):
-        r = self.price_with_legi.__str__()+u" / "+self.price_without_legi.__str__()+" CHF"
-        return r
+        return format_prices(self.price_with_legi,self.price_without_legi)
     format_prices.short_description="Prices"
     
     def get_period(self):

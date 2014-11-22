@@ -37,15 +37,21 @@ class CustomIndexDashboard(Dashboard):
         ))
         
         self.children.append(modules.ModelList(
-            title='Internal organisation',
+            title='Events',
             column=1,
+            models=('events.models.Event',)
+        ))
+        
+        self.children.append(modules.ModelList(
+            title='Internal organisation',
+            column=2,
             models=('organisation.models.Function','faq.models.QuestionGroup',)
         ))
 
         # append an app list module for "Administration"
         self.children.append(modules.ModelList(
             _('User Administration'),
-            column=1,
+            column=2,
             collapsible=True,
             models=('django.contrib.*',),
         ))

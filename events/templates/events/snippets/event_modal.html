@@ -1,0 +1,25 @@
+<!-- Modal -->
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="Event" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="modal_label_event-{{event.id}}">{{ event.name }}<small> {{ event.date }}</small></h4>
+      </div>
+      <div class="modal-body">
+      	<p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
+		<p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
+		{% if event.format_organisators %}
+			<p class="list-group-item-text">Organisiert von {{ event.format_organisators }}</p>
+		{% endif %}
+		{% if event.description %}
+      		<br />
+			<p class="list-group-item-text">{{ event.description|safe }}</p>
+		{% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

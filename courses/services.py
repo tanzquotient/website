@@ -100,3 +100,16 @@ def get_or_create_userprofile(user):
 def calculate_relevant_experience(user,course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in mymodels.Subscribe.objects.filter(user=user,course__type__styles__id__in=relevant_exp).order_by('course__type__level').all() if s.course != course]
+
+def format_prices(price_with_legi, price_without_legi):
+        if price_with_legi and price_without_legi:
+            if price_with_legi == price_without_legi:
+                r = u"{} CHF".format(price_with_legi.__str__())
+            else:
+                r = u"mit Legi {} / sonst {} CHF".format(price_with_legi.__str__(), price_without_legi.__str__())
+        elif price_without_legi:
+            r = u"mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
+        else:
+            r = None # handle this case in template!
+        return r
+

@@ -17,15 +17,6 @@ def home(request):
         })
     return render(request, template_name, context)
 
-def events(request):
-    template_name = "events.html"
-    context={}
-        
-    context.update({
-            'menu': "events",
-        })
-    return render(request, template_name, context)
-
 def gallery(request):
     template_name = "gallery.html"
     context={}

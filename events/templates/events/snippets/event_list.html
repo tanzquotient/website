@@ -1,0 +1,63 @@
+<div class="hidden-xs">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Datum</th>
+				<th>Zeit</th>
+				<th>Ort</th>
+				<th>Eintritt</th>
+				<th>Organisatoren</th>
+				<th></th>
+			</tr>
+		</thead>
+		{% if events %}
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{ event.name }}</td>
+						<td>{{ event.date }}</td>
+						<td>{{ event.format_time }}</td>
+						<td>{{ event.room.name|default:"Raum noch unbekannt" }}</td>
+						<td>{{ event.format_prices|default:"frei" }}</td>
+						<td>{{ event.format_organisators }}</td>
+						<td>
+							<!-- Button trigger modal -->
+							{% with event_id=event.id|stringformat:"s" %}
+								{% with modal_id="modal_event-"|add:event_id %}     
+									<a href="#" data-toggle="modal" data-target="#{{ modal_id }}">Mehr Infos</a>
+									{% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
+								{% endwith %}
+							{% endwith %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		{% endif %}
+	</table>
+</div>
+
+<div class="visible-xs">
+	{% if events %}
+		<div class="list-group">
+			{% for event in events %}
+				{% with event_id=event.id|stringformat:"s" %}
+					{% with modal_id="modal_event_xs-"|add:event_id %}
+		 				<a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item">
+							<h4 class="list-group-item-heading">
+								{{ event.name }}
+								<small> {{ event.date }}</small>
+							</h4>
+							<p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
+							<p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
+							{% if event.format_organisators %}
+								<p class="list-group-item-text">Organisiert von {{ event.format_organisators }}</p>
+							{% endif %}
+						</a>
+						{% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
+					{% endwith %}
+				{% endwith %}
+			{% endfor %}
+		</div>
+	{% endif %}
+</div>
