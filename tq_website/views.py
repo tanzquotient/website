@@ -17,15 +17,6 @@ def home(request):
         })
     return render(request, template_name, context)
 
-def about(request):
-    template_name = "about.html"
-    context={}
-        
-    context.update({
-            'menu': "about",
-        })
-    return render(request, template_name, context)
-
 def events(request):
     template_name = "events.html"
     context={}

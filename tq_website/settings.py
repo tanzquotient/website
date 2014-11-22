@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'tq_website',
     'courses',
     'faq',
+    'organisation',
     'events',
 )
 
@@ -147,6 +148,12 @@ GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS = {
     "django.contrib.auth": {
         "User": ("id__iexact","username__icontains", "first_name__icontains","last_name__icontains","email__icontains",)
     }
+}
+
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins' : '',
+    'width': 600,
+    'height': 450,
 }
 
 LOGGING = {

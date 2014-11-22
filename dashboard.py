@@ -37,9 +37,9 @@ class CustomIndexDashboard(Dashboard):
         ))
         
         self.children.append(modules.ModelList(
-            title='FAQ',
+            title='Internal organisation',
             column=1,
-            models=('faq.models.QuestionGroup',)
+            models=('organisation.models.Function','faq.models.QuestionGroup',)
         ))
 
         # append an app list module for "Administration"

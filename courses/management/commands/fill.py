@@ -24,12 +24,16 @@ class Command(NoArgsCommand):
                 '',]
     
     def handle_noargs(self, **options):
-        user_simon =User.objects.create_user('simon', 'siwehrli@student.ethz.ch', 'a')
+        user_simon =User.objects.create_user('simon', 'siwehrli@student.ethz.ch', 'a', first_name="Simon", last_name="Wehrli")
         user_simon.is_staff = True
         user_simon.is_superuser = True
         user_simon.save();
-        User.objects.create_user('irina', None, 'i')
-        User.objects.create_user('maire', None, 'm')
+        User.objects.create_user('irina', None, 'i', first_name="Irina", last_name="Ritsch")
+        User.objects.create_user('matthäus', None, 'm', first_name="Matthäus", last_name="Geiger")
+        User.objects.create_user('hendrik', None, 'h', first_name="Hendrik", last_name="Spanke")
+        User.objects.create_user('julian', None, 'j', first_name="Julian", last_name="Böhler")
+        User.objects.create_user('marie', None, 'm', first_name="Marie", last_name="Andrä")
+        User.objects.create_user('kelsey', None, 'k', first_name="Kelsey", last_name="Schärer")
         
         for style_name in self.style_names:
             Style.objects.get_or_create(name=style_name, defaults={'url_info': "http://de.wikipedia.org/wiki/{}".format(style_name)})

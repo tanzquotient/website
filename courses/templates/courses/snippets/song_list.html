@@ -1,28 +1,28 @@
 <table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Titel</th>
+			<th>Interpret</th>
+			<th>Länge</th>
+			<th>Tempo (TPM)</th>
+		</tr>
+	</thead>
 	{% if songs %}
-		<thead>
-			<tr>
-				<th>Titel</th>
-				<th>Interpret</th>
-				<th>Länge</th>
-				<th>Tempo (TPM)</th>
-			</tr>
-		</thead>
 		<tbody>
-		{% for song in songs %}
-			<tr>
-				<td>
-					{% if song.url_video %}
-						<a href="{{ song.url_video }}" target="_blank">{{ song.title }}</a>
-					{% else %}
-						{{ song.title }}
-					{% endif %}
-				</td>
-				<td>{{ song.artist|default:"-" }}</td>
-				<td>{{ song.length|default:"-" }}</td>
-				<td>{{ song.speed|default:"-" }}</td>
-			</tr>
-		{% endfor %}
+			{% for song in songs %}
+				<tr>
+					<td>
+						{% if song.url_video %}
+							<a href="{{ song.url_video }}" target="_blank">{{ song.title }}</a>
+						{% else %}
+							{{ song.title }}
+						{% endif %}
+					</td>
+					<td>{{ song.artist|default:"-" }}</td>
+					<td>{{ song.length|default:"-" }}</td>
+					<td>{{ song.speed|default:"-" }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
 	{% endif %}
-	</tbody>
 </table>

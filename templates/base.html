@@ -54,7 +54,7 @@
 			<div id="navbarCollapse" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="{% if menu == "home" %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
-					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'about' %}">About</a></li>
+					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'organisation:about' %}">About</a></li>
 					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Courses</a></li>
 					<li class="{% if menu == "events" %}active{% endif %}"><a href="{% url 'events' %}">Events</a></li>
 					<li class="{% if menu == "gallery" %}active{% endif %}"><a href="{% url 'gallery' %}">Gallery</a></li>
