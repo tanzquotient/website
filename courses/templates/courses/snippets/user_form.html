@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
-    <label for="{{ form.adress.id_for_label }}" class="col-sm-2 control-label">Adress</label>
+    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Address</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="{{ form.street.id_for_label }}" name="{{ form.street.html_name }}" placeholder="Street" value="{{ form.street.value|default:'' }}">
    			{% if form.street.errors %}

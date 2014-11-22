@@ -43,7 +43,7 @@ class CustomIndexDashboard(Dashboard):
         ))
         
         self.children.append(modules.ModelList(
-            title='Internal organisation',
+            title='Internal Organisation',
             column=2,
             models=('organisation.models.Function','faq.models.QuestionGroup',)
         ))

@@ -6,7 +6,7 @@
     <div class="row">
 			<div class="col-xs-12 col-sm-6 col-md-3">
 				<h4>Infos</h4>
-				<p><strong>{{ course.format_times|default:"not yet known" }}</strong>,
+				<p><strong>{{ course.format_times|default:"Zeit noch unbekannt" }}</strong>,
 					{% if course.room %}
 						{% include "courses/snippets/room.html" with room=course.room only %}
 					{% else %}

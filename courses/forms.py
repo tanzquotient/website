@@ -25,13 +25,13 @@ class UserForm(forms.Form):
         email_repetition = cleaned_data.get("email_repetition")
 
         if email != email_repetition:
-            msg="Email adresses do not match."
+            msg=u"Email-Adressen sind nicht gleich."
             self.add_error('email_repetition', msg)
             raise forms.ValidationError(msg)
 
         # if a student, the legi must be set
         if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
-            msg="Legi must be set for students."
+            msg=u"Legi muss fuer Studenten angegeben werden."
             self.add_error('legi', msg)
             raise forms.ValidationError(msg)
             

@@ -24,8 +24,8 @@
 				{% for c in d.courses %}
 					<tr>
 						<td><a href="{% url 'courses:subscription' c.id %}">{{ c.type.name }}</a></td>
-						<td>{{ c.room|default:"not yet known" }}</td>
-						<td>{{ c.format_times|default:"not yet known" }}</td>
+						<td>{{ c.room|default:"noch unbekannt" }}</td>
+						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
 						<td>{{ c.get_period }}</td>
 						<td>{{ c.type.get_level|default:"-" }}</td>
 						<td>{{ c.format_prices }}</td>
@@ -44,7 +44,7 @@
 					</tr>
 				{% endfor %}
 			{% else %}
-				<div class="alert alert-info">No courses available.</div>
+				<div class="alert alert-info">Keine Kurse verfügbar.</div>
 			{% endif %}
 			</tbody>
 		</table>
@@ -74,7 +74,7 @@
 								{% endif %}
 							{% endif %}
 						</h4>
-						<p class="list-group-item-text"><b>{{ c.format_times|default:"not yet known" }}</b>, {{ c.room|default:"room not yet known" }}</p>
+						<p class="list-group-item-text"><b>{{ c.format_times|default:"Zeit noch unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
 						{% if c.period %}
 							<p class="list-group-item-text">{{ c.get_period }}</p>
 						{% endif %}
@@ -83,7 +83,7 @@
 				{% endfor %}
 			</div>
 		{% else %}
-			<div class="alert alert-info">No courses available.</div>
+			<div class="alert alert-info">Keine Kurse verfügbar.</div>
 		{% endif %}
 	</div>
 	{% endfor %}

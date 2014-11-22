@@ -54,20 +54,12 @@
 			<div id="navbarCollapse" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="{% if menu == "home" %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
-					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'organisation:about' %}">About</a></li>
-					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Courses</a></li>
+					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'organisation:about' %}">Über</a></li>
+					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Kurse</a></li>
 					<li class="{% if menu == "events" %}active{% endif %}"><a href="{% url 'events:events' %}">Events</a></li>
-					<li class="{% if menu == "gallery" %}active{% endif %}"><a href="{% url 'gallery' %}">Gallery</a></li>
-					<li class="{% if menu == "music" %}active{% endif %}"><a href="{% url 'courses:music' %}">Music</a></li>
+					<li class="{% if menu == "gallery" %}active{% endif %}"><a href="{% url 'gallery' %}">Gallerie</a></li>
+					<li class="{% if menu == "music" %}active{% endif %}"><a href="{% url 'courses:music' %}">Musik</a></li>
 					<li class="{% if menu == "faq" %}active{% endif %}"><a href="{% url 'faq:faq' %}">FAQ</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Erstens</a></li>
-							<li><a href="#">Zweitens</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Drittens</a></li>
-						</ul></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a
