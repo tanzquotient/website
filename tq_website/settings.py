@@ -117,14 +117,14 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATIC_ROOT = '/collected_static/'
+STATIC_ROOT = './collected_static/' # TODO maybe change this to absolute path (saver)
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
-MEDIA_ROOT = '/media/'
+MEDIA_ROOT = './media/' # TODO maybe change this to absolute path (saver)
 MEDIA_URL = '/media/'
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
