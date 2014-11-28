@@ -11,7 +11,7 @@ class Organise(models.Model):
     
 # Create your models here.
 class Event(models.Model):
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=255, blank=False)
     name.help_text = "The name of this event (e.g. 'Freies Tanzen')"
     date = models.DateField()
     time_from = models.TimeField(blank=True, null=True)

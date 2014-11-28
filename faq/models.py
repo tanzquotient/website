@@ -4,7 +4,7 @@ import managers
 
 # Create your models here.
 class QuestionGroup(models.Model):
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=255, blank=False)
     
     def __unicode__(self):
         return u"{}".format(self.name)

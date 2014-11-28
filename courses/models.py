@@ -25,9 +25,9 @@ GENDER = (('m', u'Men'), ('w', u'Woman'))
 STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
             
 class Address(models.Model):
-    street = models.CharField(max_length=30)
+    street = models.CharField(max_length=255)
     plz = models.IntegerField()
-    city = models.CharField(max_length=30)
+    city = models.CharField(max_length=255)
     
     objects = managers.AddressManager()
     
@@ -42,7 +42,7 @@ class UserProfile(models.Model):
                                       choices=GENDER, blank=False, null=False,
                                       default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
-    phone_number = models.CharField(max_length=16, blank=True, null=True)
+    phone_number = models.CharField(max_length=255, blank=True, null=True)
     student_status = models.CharField(max_length=3,
                                       choices=STUDENT_STATUS, blank=False, null=False,
                                       default=None)
@@ -54,7 +54,7 @@ class UserProfile(models.Model):
         return u"{}".format(self.user.get_full_name())    
     
 class Style(models.Model):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     url_info = models.URLField(blank=True, null=True)
     url_info.help_text="A url to an information page (e.g. Wikipedia)."
@@ -69,7 +69,7 @@ class Style(models.Model):
         return u"{}".format(self.name)
     
 class Room(models.Model):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
     url = models.URLField(max_length=500, blank=True, null=True)
@@ -102,7 +102,7 @@ class CourseTime(models.Model):
         return u"{}, {}-{}".format(_(self.weekday),self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
 
 class CourseType(models.Model):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -134,7 +134,7 @@ class CourseCancellation(models.Model):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
     
 class Course(models.Model):
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
     type = models.ForeignKey(CourseType,related_name='courses', blank=False, null=False)
     type.help_text = "The name of the course type is displayed on the website as the course title ."
@@ -249,7 +249,7 @@ class Teach(models.Model):
 
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=False)
     period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
     display = models.BooleanField(default=False)
     display.help_text="Defines if the courses in this offering should be displayed on the Website."
