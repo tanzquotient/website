@@ -117,14 +117,14 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATIC_ROOT = 'tq.ethz.ch/static/'
+STATIC_ROOT = '/collected_static/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
-MEDIA_ROOT = 'tq.ethz.ch/media/'
+MEDIA_ROOT = '/media/'
 MEDIA_URL = '/media/'
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
