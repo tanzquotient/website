@@ -1,6 +1,8 @@
 from django.contrib import admin
 from events.models import *
 
+from events.admin_actions import *
+
 # Register your models here.
 
 class OrganisatorInline(admin.TabularInline):
@@ -21,6 +23,9 @@ class EventAdmin(admin.ModelAdmin):
     inlines = (OrganisatorInline,)
     
     model = Event
+    
+    actions = [copy_event,]
+
     fieldsets = [
         ('What?', {
                      'classes': ("grp-collapse grp-open",),
