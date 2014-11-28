@@ -106,7 +106,7 @@ class CourseType(models.Model):
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    spezial = models.TextField(blank=True, null=True)
+    special = models.TextField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
     
     def get_level(self):
