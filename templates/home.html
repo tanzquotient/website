@@ -4,13 +4,17 @@
   <div class="col-md-8">
   	<div class="jumbotron">
 		<h1>TanzQuotient</h1>
-		<p>This is the new Webinterface and is growing steadily.</p>
-			<a class="btn btn-primary btn-lg" role="button" href="#">Try it</a>
+		<p>Das ist das neue TQ Webinterface und wird stetig ausgebaut! Momentan ist es noch im beta-Status.</p>
+			<a class="btn btn-primary btn-lg" role="button" href="{% url 'courses:list' %}">Ausprobieren</a>
 		</p>
 	</div>
   </div>
   <div class="col-md-4">
-  	{% include "snippets/slider.html" %}
+  	<h2>Nächstes Events</h2>
+  	<p><div class="list-group">{% include "events/snippets/event_list_entry.html" with event=event only %}</div></p>
+  	<p><a href="{% url 'events:events' %}">Alle Events</a> anzeigen.</p>
+  	<h2>Tanzkurse</h2>
+  	<p>Wir unterrichten viele verschiedene Stilrichtungen. Wirf einen Blick auf unser <a href="{% url 'courses:list' %}"> Kursangebot</a>.</p>
   </div>
 </div>
 

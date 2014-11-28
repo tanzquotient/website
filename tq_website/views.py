@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from events.models import Event
+
 import logging
 log = logging.getLogger('courses')
 
@@ -11,9 +13,16 @@ log = logging.getLogger('courses')
 def home(request):
     template_name = "home.html"
     context={}
-        
+    
+    events = Event.objects.all()
+    if len(events) > 0:
+        event = events[0]
+    else:
+        event = None
+    
     context.update({
             'menu': "home",
+            'event': event,
         })
     return render(request, template_name, context)
 

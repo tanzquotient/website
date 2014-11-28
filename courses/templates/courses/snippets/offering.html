@@ -24,7 +24,13 @@
 				{% for c in d.courses %}
 					<tr>
 						<td><a href="{% url 'courses:subscription' c.id %}">{{ c.type.name }}</a></td>
-						<td>{{ c.room|default:"noch unbekannt" }}</td>
+						<td>
+							{% if c.room %}
+								{% include "courses/snippets/room.html" with room=c.room only %}
+							{% else %}
+								noch unbekannt
+							{% endif %}
+						</td>
 						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
 						<td>{{ c.get_period }}</td>
 						<td>{{ c.type.get_level|default:"-" }}</td>
