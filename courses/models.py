@@ -56,9 +56,9 @@ class UserProfile(models.Model):
 class Style(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
-    url_info = models.URLField(blank=True, null=True)
+    url_info = models.URLField(max_length=500, blank=True, null=True)
     url_info.help_text="A url to an information page (e.g. Wikipedia)."
-    url_video = models.URLField(blank=True, null=True)
+    url_video = models.URLField(max_length=500, blank=True, null=True)
     url_video.help_text="A url to a demo video (e.g Youtube)."
     
     @staticmethod
@@ -72,7 +72,7 @@ class Room(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
     
@@ -274,7 +274,7 @@ class Song(models.Model):
     speed = models.IntegerField(blank=True, null=True)
     speed.help_text="The speed of the song in TPM"
     style = models.ForeignKey(Style, related_name='songs', blank=False, null=True, on_delete=models.SET_NULL)
-    url_video = models.URLField(blank=True, null=True)
+    url_video = models.URLField(max_length=500, blank=True, null=True)
     url_video.help_text="A url to a demo video (e.g Youtube)."
     
     def __unicode__(self):
