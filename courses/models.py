@@ -54,7 +54,7 @@ class UserProfile(models.Model):
         return u"{}".format(self.user.get_full_name())    
     
 class Style(models.Model):
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=30, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     url_info = models.URLField(blank=True, null=True)
     url_info.help_text="A url to an information page (e.g. Wikipedia)."
@@ -69,10 +69,10 @@ class Style(models.Model):
         return u"{}".format(self.name)
     
 class Room(models.Model):
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=30, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
-    url = models.URLField(max_length=500, blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
     
@@ -102,7 +102,7 @@ class CourseTime(models.Model):
         return u"{}, {}-{}".format(_(self.weekday),self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
 
 class CourseType(models.Model):
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=30, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -249,7 +249,7 @@ class Teach(models.Model):
 
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=30, unique=True, blank=False)
     period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
     display = models.BooleanField(default=False)
     display.help_text="Defines if the courses in this offering should be displayed on the Website."
