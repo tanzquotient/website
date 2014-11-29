@@ -39,7 +39,7 @@ class UserProfile(models.Model):
     user.help_text="The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
-                                      choices=GENDER, blank=False, null=False,
+                                      choices=GENDER, blank=False, null=True,
                                       default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
