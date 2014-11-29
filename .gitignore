@@ -47,7 +47,7 @@ target/
 ################
 # My own ignores
 ################
-fabfile.py
+# fabfile.py # better include this in production (because passwords are visible in plain text)
 *.pyc
 *.*~
 
