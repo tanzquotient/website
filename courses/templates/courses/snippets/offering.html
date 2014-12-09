@@ -4,7 +4,7 @@
 	{% for d in weekday_list %}
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h4>{{ d.weekday }}</h4>
+			{{ d.weekday }}
 		</div>
 
 		<table class="table table-striped">
@@ -62,7 +62,7 @@
 	{% for d in weekday_list %}
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h4>{{ d.weekday }}</h4>
+			{{ d.weekday }}
 		</div>
 		{% if d.courses %}
 			<div class="list-group">
