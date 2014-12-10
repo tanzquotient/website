@@ -1,6 +1,6 @@
 # Anleitung zur TQ-Webseite
 
-
+Diese Anleitung enthält Informationen für Anwender der Webseite. Informationen für Entwickler findest du [hier](developers.md).
 
 ## Testing
 
