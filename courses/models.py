@@ -43,12 +43,12 @@ class UserProfile(models.Model):
                                       default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
-    student_status = models.CharField(max_length=3,
+    student_status = models.CharField(max_length=10,
                                       choices=STUDENT_STATUS, blank=False, null=False,
-                                      default=None)
+                                      default='no')
     newsletter = models.BooleanField(default=True)
     
-    about_me = HTMLField()
+    about_me = HTMLField(blank=True, null=True)
     
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name())    

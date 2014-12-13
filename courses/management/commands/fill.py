@@ -38,23 +38,23 @@ class Command(NoArgsCommand):
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)
-        User.objects.create_user('matthäus', None, 'm', first_name="Matthäus", last_name="Geiger")
+        user=User.objects.create_user('matthäus', None, 'm', first_name="Matthäus", last_name="Geiger")
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)
-        User.objects.create_user('hendrik', None, 'h', first_name="Hendrik", last_name="Spanke")
+        user=User.objects.create_user('hendrik', None, 'h', first_name="Hendrik", last_name="Spanke")
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)
-        User.objects.create_user('julian', None, 'j', first_name="Julian", last_name="Böhler")
+        user=User.objects.create_user('julian', None, 'j', first_name="Julian", last_name="Böhler")
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)
-        User.objects.create_user('marie', None, 'm', first_name="Marie", last_name="Andrä")
+        user=User.objects.create_user('marie', None, 'm', first_name="Marie", last_name="Andrä")
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)
-        User.objects.create_user('kelsey', None, 'k', first_name="Kelsey", last_name="Schärer")
+        user=User.objects.create_user('kelsey', None, 'k', first_name="Kelsey", last_name="Schärer")
         user.is_staff = True
         user.save()
         vorstand.user_set.add(user)

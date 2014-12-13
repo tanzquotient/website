@@ -27,11 +27,6 @@ body {
    - Footer
 */
 
-/* This changes every container! */
-.container {
-	color: black;
-}
-
 @media ( min-width :768px) {
 	.container {
 		width: 750px
@@ -82,7 +77,11 @@ body {
 
 /* Located at the very end. Contains the impressum. */
 #TQ_container_footer {
-	
+	color: white;	
+}
+
+#TQ_container_footer, #TQ_container_footer a {
+	color: white;	
 }
 
 /* Bootstrap menu bar:
