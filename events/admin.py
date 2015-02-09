@@ -44,7 +44,7 @@ class EventAdmin(admin.ModelAdmin):
                  'fields': ['comment'],}),
         ('Admin', {
                  'classes': ("grp-collapse grp-open",),
-                 'fields': ['display'],}),
+                 'fields': ['special','display'],}),
     ]
     
 admin.site.register(Event,EventAdmin)

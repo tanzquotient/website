@@ -1,9 +1,26 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-	<div class="page-header">
-		<h1>Tanzkurse</h1>
-	</div>
+{% block header %}
+	<header id="header_courses">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead">Kurse</h1>
+			</div>
+		</div>
+	</header>
+{% endblock header %}
 
+{% block content %}
+
+<div class="container">
+	<h2></h2>
+
+	<p>
+		Viel Spass beim stöbern in unserem Kursangebot.
+	</p>
+	<p>
+		Du kannst dich als Paar oder <strong>auch gerne alleine</strong> Anmelden. Es gibt immer Einzelanmeldungen von anderen Leuten, die froh sind, wenn sie einen Kurs beginnen oder fortsetzen können.
+	</p>
 	<p>
 		<strong>Unser Angebot richtet sich an Studenten und
 			ETH-Mitarbeiter. Ausnahmen werden nur für Tanzpartner von Studenten
@@ -11,10 +28,12 @@
 		nicht berücksichtigt.
 	</p>
 	
+	
 	{% for o in offerings %}
 		<p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
 	{% empty %}
 		<div class="alert alert-info">Keine Kurse verfügbar.</div>
 	{% endfor %}
+</div>
 
 {% endblock content %}

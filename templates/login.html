@@ -1,42 +1,60 @@
-{% extends "base.html" %} {% block content %}
-<div class="page-header">
-	<span class="h1">Login</span>
-</div>
+{% extends "base.html" %}
 
-{% if form.errors %}
-<div class="alert alert-danger alert-dismissable">
-	<button type="button" class="close" data-dismiss="alert"
-		aria-hidden="true">&times;</button>
-	<p>Your username and password didn't match. Please try again.</p>
-</div>
-{% endif %}
+{% block header %}
+	<header id="header_login">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead">Einloggen</h1>
+			</div>
+		</div>
+	</header>
+{% endblock header %}
 
-<form class="form-horizontal" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<div class="form-group">
-	<label for="{{ form.username.id_for_label }}"
-		class="col-sm-2 control-label">{{ form.username.label }}</label>
-	<div class="col-sm-10">
-		<input class="form-control" type="text" name="{{ form.username.html_name }}"
-			placeholder="Enter your username" value="{{ form.username.value|default:"" }}">
+{% block content %}
+<div class="container">
+	<h2></h2>
+	
+	<div class="row">
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h3 class="thin text-center">Log dich in deinen Account ein</h3>
+						<p class="text-center text-muted">Das Einloggen ist momentatn nur für Admins möglich.</p>
+						<hr>
+						
+						<form role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+							{% csrf_token %}
+							<div class="top-margin">
+								<label for="{{ form.username.id_for_label }}">{{ form.username.label }} <span class="text-danger">*</span></label>
+								<input class="form-control" type="text" name="{{ form.username.html_name }}" placeholder="Enter your username" value="{{ form.username.value|default:"" }}" />
+							</div>
+							<div class="top-margin">
+								<label for="{{ form.password.id_for_label }}">{{ form.password.label }} <span class="text-danger">*</span></label>
+								<input class="form-control" type="password" name="{{ form.password.html_name }}" placeholder="Enter your password" value="{{ form.password.value|default:"" }}">
+							</div>
+
+							<hr>
+
+							<div class="row">
+								<div class="col-lg-8">
+									<b><a href="">Forgot password?</a></b>
+								</div>
+								<div class="col-lg-4 text-right">
+									<button class="btn btn-action" type="submit" value="login">Einloggen</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+			
+		</article>
+		<!-- /Article -->
+
 	</div>
 </div>
-<div class="form-group">
-	<label for="{{ form.password.id_for_label }}"
-		class="col-sm-2 control-label">{{ form.password.label }}</label>
-	<div class="col-sm-10">
-		<input class="form-control" type="password" name="{{ form.password.html_name }}"
-			placeholder="Enter your password" value="{{ form.password.value|default:"" }}">
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-sm-2 control-label"></label>
-	<div class="col-sm-10">
-		<button class="btn btn-default" type="submit" value="login">Login</button>
-	</div>
-</div>
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-
+	
 {% endblock content %}

@@ -1,24 +1,38 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-<div class="row">
-  <div class="col-md-8">
-  	<div class="jumbotron">
-		<h1>TanzQuotient</h1>
-		<p>Das ist das neue TQ Webinterface und wird stetig ausgebaut! Momentan ist es noch im beta-Status.</p>
-			<a class="btn btn-primary btn-lg" role="button" href="{% url 'courses:list' %}">Ausprobieren</a>
-		</p>
+{% block header %}
+<header id="head">
+	<div class="container">
+		<div class="row">
+			<h1 class="lead">Willkommen beim Tanzquotient</h1>
+			<p class="tagline">Die neuen Kurse sind online!</p>
+			<p>
+				<a class="btn btn-action btn-lg" href="{% url 'courses:list' %}" role="button">Zu den Kursen</a>
+				<a class="btn btn-default btn-lg" href="{% url 'events:events' %}" role="button">Zu den Events</a>
+			</p>
+		</div>
 	</div>
-  </div>
-  <div class="col-md-4">
-  	<h2>Nächstes Event</h2>
-  	{% if event %}
-  		<p><div class="list-group">{% include "events/snippets/event_list_entry.html" with event=event only %}</div></p>
-  	{% endif %}
-  	<p><a href="{% url 'events:events' %}">Alle Events</a> anzeigen.</p>
-  	<h2>Tanzkurse</h2>
-  	<p>Wir unterrichten viele verschiedene Stilrichtungen. Wirf einen Blick auf unser <a href="{% url 'courses:list' %}"> Kursangebot</a>.</p>
-  </div>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+	<div class="col-md-8">
+		<h2>Let's dance!</h2>
+		Das ganze Team des TQs heisst dich herzlich willkommen auf der brandneuen Webseite! Wir haben keinen Winterschlaf gemacht und für euch wieder ein breites Angebot zum Tanzen auf die Beine gestellt. So haben wir wieder viele verschiedene Kurse parat, melde dich am besten gleich an (auch alleine!).
+		<br />
+		Einige Events sind auch bereits organisiert. Speziell freuen wir uns natürlich auf den <strong>PBTQ-Party</strong>, wo ihr zu Livemusik von der Polyband tanzen könnt!
+	</div>
+	<div class="col-md-4">
+		<h2>Nächstes Event</h2>
+		{% if event %}
+			<p><div class="list-group">{% include "events/snippets/event_list_entry.html" with event=event only %}</div></p>
+		{% endif %}
+		<p><a href="{% url 'events:events' %}">Alle Events</a> anzeigen.</p>
+		<h2>Tanzkurse</h2>
+		<p>Wir unterrichten viele verschiedene Stilrichtungen. Wirf einen Blick auf unser <a href="{% url 'courses:list' %}"> Kursangebot</a>.</p>
+	</div>
 </div>
-
-
+</div>
 {% endblock content %}

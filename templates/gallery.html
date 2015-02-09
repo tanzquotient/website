@@ -1,5 +1,20 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-{% include "snippets/slider.html" %}
+{% block header %}
+	<header id="header_gallery">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead">Galerie</h1>
+			</div>
+		</div>
+	</header>
+{% endblock header %}
 
+{% block content %}
+	
+<div class="container">
+	<h2 class="page-title">Fotos von unseren Events</h2>
+	{% include "snippets/slider.html" %}
+</div>
+	
 {% endblock content %}

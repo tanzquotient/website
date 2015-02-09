@@ -1,9 +1,11 @@
-{% extends "base.html" %} {% block content %}
-	
-<p>{% include "courses/snippets/detail.html" with course=course only %}</p>
-	
-<a id="subscription"></a>
+{% extends "courses/subscription_template.html" %} {% block content %}
 
-<div class="alert alert-info">Anmeldung erfolgreich.</div>
+<div class="container">
+	<p>{% include "courses/snippets/detail.html" with course=course only %}</p>
+		
+	<a id="subscription"></a>
+	
+	<div class="alert alert-info">Anmeldung erfolgreich.</div>
+</div>
 
 {% endblock content %}
