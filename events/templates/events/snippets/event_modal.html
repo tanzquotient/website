@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="modal_label_event-{{event.id}}">{{ event.name }}<small> {{ event.date }}</small></h4>
       </div>
       <div class="modal-body">
-      	<p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
+      	<p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>, {{ event.room|default:"Raum noch unbekannt" }}</p>
 		<p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
 		{% if event.format_organisators %}
 			<p class="list-group-item-text">Organisiert von {{ event.format_organisators }}</p>

@@ -2,6 +2,7 @@ from django.db import models
 from courses.models import *
 from courses.services import format_prices
 from django.db.models.fields import BooleanField
+import managers
 
 class Organise(models.Model):
     organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
@@ -26,7 +27,12 @@ class Event(models.Model):
     organisators = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Organise, related_name='organising_events')
     description = HTMLField(blank=True, null=True)
     special = BooleanField(blank=True, null=False, default=False)
-    price_without_legi.help_text = "If this is a special event that should be emphasized on website"
+    special.help_text = "If this is a special event that should be emphasized on the website"
+    display = models.BooleanField(default=True)
+    display.help_text="Defines if this event should be displayed on the website."
+    
+    objects = managers.EventManager()
+    special_events=managers.SpecialEventManager()
     
     def format_organisators(self):
         return ', '.join(map(auth.get_user_model().get_full_name,self.organisators.all()))

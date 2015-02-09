@@ -14,7 +14,7 @@ def home(request):
     template_name = "home.html"
     context={}
     
-    events = Event.objects.all()
+    events = Event.special_events.displayed().all()
     if len(events) > 0:
         event = events[0]
     else:

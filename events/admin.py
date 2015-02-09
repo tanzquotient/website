@@ -18,7 +18,7 @@ class OrganisatorInline(admin.TabularInline):
     }
     
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date','format_time','room','format_prices','format_organisators')
+    list_display = ('name', 'date','format_time','room','format_prices','format_organisators','display')
     list_filter = ('date', 'room',)
     inlines = (OrganisatorInline,)
     
@@ -42,6 +42,9 @@ class EventAdmin(admin.ModelAdmin):
         ('Etc', {
                  'classes': ("grp-collapse grp-closed",),
                  'fields': ['comment'],}),
+        ('Admin', {
+                 'classes': ("grp-collapse grp-open",),
+                 'fields': ['display'],}),
     ]
     
 admin.site.register(Event,EventAdmin)
