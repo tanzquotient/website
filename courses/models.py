@@ -18,6 +18,8 @@ WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
                ('sun', u'Sunday'))
 
+WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag', 'sat': 'Samstag', 'sun': 'Sonntag'}
+
 LEVELS = ((1, u'beginner'),(2,u'intermediate'),(3,u'advanced'))
 
 GENDER = (('m', u'Men'), ('w', u'Woman'))

@@ -36,7 +36,7 @@ def course_list(request):
         course_set=offering.course_set
         for (w,w_name) in WEEKDAYS:
             weekday_dict = {}
-            weekday_dict['weekday']=w_name
+            weekday_dict['weekday']=WEEKDAYS_TRANS[w]
             weekday_dict['courses']=course_set.weekday(w)
             if (w=='sat' or w=='sun') and weekday_dict['courses'].__len__() == 0:
                 pass

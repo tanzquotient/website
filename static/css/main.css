@@ -35,6 +35,11 @@ header.secondary { height:100px; min-height: 100px; padding-top:0px; }
 	background-size: cover;
 	background-position: 50% 50%;
 }
+#header_gallery {
+	background:#333 url( ../elements/gallery.jpg) no-repeat;
+	background-size: cover;
+	background-position: 30% 50%;
+}
 #header_faq {
 	background:#333 url( ../elements/faq.jpg) no-repeat;
 	background-size: cover;

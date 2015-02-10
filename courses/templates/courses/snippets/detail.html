@@ -17,16 +17,22 @@
 				<p>{{ course.type.get_level|default:"-" }}, {{ course.format_prices }}</p>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-3">
-				<h4>Tanzstile</h4>
-				<p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
+				{% if course.type.styles.all %}
+					<h4>Tanzstile</h4>
+					<p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
+				{% endif %}
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-3">
-				<h4>Beschreibung</h4>
-				<p>{{ course.description }}</p>
+				{% if course.type.description %}
+					<h4>Beschreibung</h4>
+					<p>{{ course.type.description }}</p>
+				{% endif %}
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-3">
-				<h4>Weiteres</h4>
-				<p>{{ course.special }}</p>
+				{% if course.type.special %}
+					<h4>Weiteres</h4>
+					<p>{{ course.type.special }}</p>
+				{% endif %}
 				{% if course.get_cancellation_dates %}
 					<h4>Ausfälle</h4>
 					<p>{{ course.format_cancellations }}</p>

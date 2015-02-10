@@ -3,13 +3,13 @@
 <h2></h2>
 
 <div class="container">
+	<a id="subscription"></a>
 	<p>{% include "courses/snippets/detail.html" with course=course only %}</p>
 </div>
 		
 <div class="jumbotron">
 	<div class="container">
 			
-		<a id="subscription"></a>
 		
 		{% if course.is_subscription_allowed %}
 			<h3>Anmeldung der {{person}}. Person</h3>
