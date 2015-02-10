@@ -66,21 +66,17 @@ ROOT_URLCONF = 'tq_website.urls'
 
 WSGI_APPLICATION = 'tq_website.wsgi.application'
 
+ALLOWED_HOSTS = [
+    # with . at beginning allows domain and subdomains
+    # with . at end allows FQDN
+    '.tq.ethz.ch.',  
+    '.tq.vseth.ch.',
+    '.tq.vseth.ethz.ch.',
+    '.tanzquotient.vseth.ethz.ch.',
+]
+
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-#===============================================================================
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'HOST': 'localhost',
-#         'NAME': 'tq_website',
-#         'USER': 'postgres',
-#         'PASSWORD': 'eesseell',
-#     }
-# }
-#===============================================================================
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

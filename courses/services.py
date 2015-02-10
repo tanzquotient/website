@@ -10,6 +10,8 @@ import logging
 from django.utils import datastructures
 log = logging.getLogger('courses')
 
+from emailcenter import *
+
 # Create your services here.
 
 def get_offerings_to_display():
@@ -34,7 +36,7 @@ def update_user(user, user_data):
     
     userprofile=get_or_create_userprofile(user)
     userprofile.legi=user_data['legi']
-    userprofile.userprofileser_data['gender']
+    userprofile.gender= user_data['gender']
     userprofile.address=mymodels.Address.objects.create_from_user_data(user_data)
     userprofile.phone_number=user_data['phone_number']
     userprofile.student_status=user_data['student_status']
@@ -84,10 +86,12 @@ def subscribe(course_id, user1_data, user2_data=None):
     
     subscription = mymodels.Subscribe(user=user1,course=course,partner=user2,experience=user1_data['experience'],comment=user1_data['comment'])
     subscription.save();
+    send_subscription_confirmation(subscription)
     
     if user2:
         subscription2 = mymodels.Subscribe(user=user2,course=course,partner=user1,experience=user2_data['experience'],comment=user2_data['comment'])
         subscription2.save()
+        send_subscription_confirmation(subscription2)
         
 def get_or_create_userprofile(user):
     try:
