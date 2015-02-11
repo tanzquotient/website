@@ -76,7 +76,7 @@ def subscription(request, course_id):
             # redirect to a new URL:
             request.session['user1_data']=form.cleaned_data
             if not Course.objects.get(id=course_id).type.couple_course or ("subscribe_alone" in request.POST):
-                return redirect('courses:subscription_done', course_id)
+                return redirect('courses:subscription_do', course_id)
             elif "subscribe_partner" in request.POST:
                 return redirect('courses:subscription2', course_id)
             else:
@@ -110,7 +110,7 @@ def subscription2(request, course_id):
             # ...
             # redirect to a new URL:
             request.session['user2_data']=form.cleaned_data
-            return redirect('courses:subscription_done', course_id)
+            return redirect('courses:subscription_do', course_id)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -125,17 +125,21 @@ def subscription2(request, course_id):
         })
     return render(request, template_name, context)
 
+def subscription_do(request, course_id):
+    if 'user2_data' in request.session:
+        res=subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
+    else:
+        res=subscribe(course_id,request.session['user1_data'],None)
+    request.session['subscription_result']=res
+    return redirect('courses:subscription_done', course_id)
+
 def subscription_done(request, course_id):
     template_name = "courses/subscription_done.html"
     context={}
-    
-    if 'user2_data' in request.session:
-        subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
-    else:
-        subscribe(course_id,request.session['user1_data'],None)
 
     context.update({
             'menu': "courses",
+            'message': request.session['subscription_result'],
             'course': Course.objects.get(id=course_id),
         })
     return render(request, template_name, context)

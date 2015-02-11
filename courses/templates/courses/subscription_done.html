@@ -5,7 +5,10 @@
 		
 	<a id="subscription"></a>
 	
-	<div class="alert alert-info">Anmeldung erfolgreich.</div>
+	<div class="alert alert-{{ message.tag }}">{{ message.text }}</div>
+	<p>
+		{{ message.long_text }}
+	</p>
 </div>
 
 {% endblock content %}

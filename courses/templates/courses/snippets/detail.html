@@ -14,7 +14,7 @@
 					{% endif %}
 				</p>
 				<p>{{ course.get_period }}</p>
-				<p>{{ course.type.get_level|default:"-" }}, {{ course.format_prices }}</p>
+				<p>Niveau {{ course.type.get_level|default:"-" }}, {{ course.format_prices }}</p>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-3">
 				{% if course.type.styles.all %}

@@ -84,7 +84,7 @@
 						{% if c.period %}
 							<p class="list-group-item-text">{{ c.get_period }}</p>
 						{% endif %}
-						<p class="list-group-item-text">{{ c.type.get_level|default:"-" }}, {{ c.format_prices }}</p>
+						<p class="list-group-item-text">Niveau {{ c.type.get_level|default:"-" }}, {{ c.format_prices }}</p>
 					</a>
 				{% endfor %}
 			</div>

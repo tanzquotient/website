@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 
@@ -75,8 +78,10 @@ def generate_username(first_name, last_name):
         i+=1
             
     return un.lower()
-    
+
 def subscribe(course_id, user1_data, user2_data=None):
+    res = dict()
+    
     course = mymodels.Course.objects.get(id=course_id)
     user1 = get_or_create_user(user1_data)
     if user2_data:
@@ -84,14 +89,32 @@ def subscribe(course_id, user1_data, user2_data=None):
     else:
         user2=None
     
-    subscription = mymodels.Subscribe(user=user1,course=course,partner=user2,experience=user1_data['experience'],comment=user1_data['comment'])
-    subscription.save();
-    send_subscription_confirmation(subscription)
-    
-    if user2:
-        subscription2 = mymodels.Subscribe(user=user2,course=course,partner=user1,experience=user2_data['experience'],comment=user2_data['comment'])
-        subscription2.save()
-        send_subscription_confirmation(subscription2)
+    if user1 == user2:
+        res['tag'] = 'danger'
+        res['text'] = u'Du kannst dich nicht mit dir selbst anmelden!'
+    elif mymodels.Subscribe.objects.filter(user=user1, course__id=course_id).count() > 0:
+        res['tag'] = 'danger'
+        res['text'] = u'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
+        res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
+    elif user2!=None and mymodels.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
+        res['tag'] = 'danger'
+        res['text'] = u'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
+        res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
+    else:
+        subscription = mymodels.Subscribe(user=user1,course=course,partner=user2,experience=user1_data['experience'],comment=user1_data['comment'])
+        subscription.save();
+        send_subscription_confirmation(subscription)
+        
+        if user2:
+            subscription2 = mymodels.Subscribe(user=user2,course=course,partner=user1,experience=user2_data['experience'],comment=user2_data['comment'])
+            subscription2.save()
+            send_subscription_confirmation(subscription2)
+            
+        res['tag'] = 'info'
+        res['text'] = u'Anmeldung erfolgreich.'
+        res['long_text'] = u'Du erhältst in Kürze eine Emailbestätigung.'
+        
+    return res
         
 def get_or_create_userprofile(user):
     try:
