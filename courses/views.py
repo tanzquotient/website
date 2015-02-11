@@ -65,6 +65,12 @@ def subscription(request, course_id):
     template_name = "courses/subscription.html"
     context={}
     
+    # clear session keys
+    if 'user1_data' in request.session:
+        del request.session['user1_data']
+    if 'user2_data' in request.session:
+        del request.session['user2_data']
+    
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
