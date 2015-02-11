@@ -15,7 +15,6 @@
 						<th>Ort</th>
 						<th>Zeit</th>
 						<th>Kursperiode</th>
-						<th>Niveau</th>
 						<th>Preis</th>
 						<th>Anmelden / Freie Plätze</th>
 					</tr>
@@ -33,8 +32,7 @@
 						</td>
 						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
 						<td>{{ c.get_period }}</td>
-						<td>{{ c.type.get_level|default:"-" }}</td>
-						<td>{{ c.format_prices }}</td>
+						<td>{{ c.format_prices|default:"-" }}</td>
 						<td>
 							{% if c.is_subscription_allowed %}
 								{% if c.get_free_places_count and c.get_free_places_count == 0 %}
@@ -84,7 +82,7 @@
 						{% if c.period %}
 							<p class="list-group-item-text">{{ c.get_period }}</p>
 						{% endif %}
-						<p class="list-group-item-text">Niveau {{ c.type.get_level|default:"-" }}, {{ c.format_prices }}</p>
+						<p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
 					</a>
 				{% endfor %}
 			</div>

@@ -1,7 +1,9 @@
 {% for s in type.styles.all %}
 	<!-- Button trigger modal -->
-	<a href="#" data-toggle="modal" data-target="#modal_style-{{s.id}}">{{ s.name }}</a>
-	
+	<a href="#" data-toggle="modal" data-target="#modal_style-{{s.id}}">{{ s.name }}</a>{% if not forloop.last %}, {% endif %}
+{% endfor %}
+
+{% for s in type.styles.all %}
 	<!-- Modal -->
 	<div class="modal fade" id="modal_style-{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="Style Info" aria-hidden="true">
 	  <div class="modal-dialog">
@@ -24,7 +26,7 @@
 	        <p>{% include "courses/snippets/song_list.html" with songs=s.songs.all only %}</p>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
 	      </div>
 	    </div>
 	  </div>

@@ -1,6 +1,6 @@
   {% if form.errors %}
 		<div class="alert alert-danger alert-dismissible" role="alert">
-		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Schliessen</span></button>
 		  <strong>Einige Eingaben sind ungültig</strong>
 		</div>
 	{% endif %}
@@ -26,10 +26,10 @@
   	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Geschlecht</label>
     <div class="col-sm-offset-2 col-sm-10 col-sr-offset-0">
   		<label class="radio-inline">
-			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="m" {% if form.gender.value == 'm' %}checked="checked"{% endif %}> Man
+			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="m" {% if form.gender.value == 'm' %}checked="checked"{% endif %}> männlich
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="w" {% if form.gender.value == 'w' %}checked="checked"{% endif %}> Woman
+			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="w" {% if form.gender.value == 'w' %}checked="checked"{% endif %}> weiblich
 			</label>
 			{% include "courses/snippets/field_errors.html" with field=form.gender %}
     </div>
