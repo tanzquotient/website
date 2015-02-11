@@ -31,7 +31,12 @@
 							{% endif %}
 						</td>
 						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
-						<td>{{ c.get_period }}</td>
+						<td>
+							{% if c.period %}
+								<i class="fa fa-exclamation-circle fa-lg"></i> 
+							{% endif %}
+							{{ c.get_period }}
+						</td>
 						<td>{{ c.format_prices|default:"-" }}</td>
 						<td>
 							{% if c.is_subscription_allowed %}
