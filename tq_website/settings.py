@@ -65,13 +65,6 @@ ROOT_URLCONF = 'tq_website.urls'
 
 WSGI_APPLICATION = 'tq_website.wsgi.application'
 
-EMAIL_HOST = 'mailsrv.vseth.ethz.ch'
-EMAIL_HOST_USER = 'anmeldungen@tq.vseth.ethz.ch'
-
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_SUBJECT_PREFIX = u"[TQ System] "
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
