@@ -12,8 +12,8 @@ def send_subscription_confirmation(subscription):
     else:
         message = add_footer(u'Hallo {}\n\nDu wurdest soeben für den Kurs {} im {} angemeldet. Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv. Du erhältst später eine Anmeldungsbestätigung.').format(subscription.user.first_name, subscription.course.type.name, subscription.course.offering.name)
 
-    send_mail(create_subject(u'TQ Anmeldungseingang'), message, 'anmeldungen@tq.vseth.ethz.ch',
-        ['anmeldungen@tq.vseth.ethz.ch', subscription.user.email], fail_silently=False)
+    send_mail(create_subject(u'TQ Anmeldungseingang'), message, 'tanzen@tq.vseth.ch',
+        ['tanzen@tq.vseth.ch', subscription.user.email], fail_silently=False)
     
 def create_subject(subject):
     s = u""

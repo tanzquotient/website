@@ -130,6 +130,13 @@ def subscription_do(request, course_id):
         res=subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
     else:
         res=subscribe(course_id,request.session['user1_data'],None)
+        
+    # clear session keys
+    if 'user1_data' in request.session:
+        del request.session['user1_data']
+    if 'user2_data' in request.session:
+        del request.session['user2_data']
+    
     request.session['subscription_result']=res
     return redirect('courses:subscription_done', course_id)
 
