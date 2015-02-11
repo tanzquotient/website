@@ -18,7 +18,7 @@ class OrganisatorInline(admin.TabularInline):
     }
     
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date','format_time','room','format_prices','format_organisators','display')
+    list_display = ('name', 'date','format_time','room','format_prices','format_organisators','special','display')
     list_filter = ('date', 'room',)
     inlines = (OrganisatorInline,)
     

@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="form-group has-feedback {% if form.gender.errors %}has-error{% endif %}">
-  	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Gender</label>
+  	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Geschlecht</label>
     <div class="col-sm-offset-2 col-sm-10 col-sr-offset-0">
   		<label class="radio-inline">
 			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="m" {% if form.gender.value == 'm' %}checked="checked"{% endif %}> Man
@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
-    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Address</label>
+    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Adresse</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="{{ form.street.id_for_label }}" name="{{ form.street.html_name }}" placeholder="Street" value="{{ form.street.value|default:'' }}">
    			{% if form.street.errors %}

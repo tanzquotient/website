@@ -42,7 +42,7 @@
 								{% else %}
 									<a href="{% url 'courses:subscription' c.id %}#subscription">Anmelden </a>
 									{% if c.get_free_places_count and c.get_free_places_count != 0 %}
-										<span class="badge">{{ c.get_free_places }}</span>
+										<span class="badge">{{ c.get_free_places_count }}</span>
 									{% endif %}
 								{% endif %}
 							{% endif %}
@@ -75,7 +75,7 @@
 									<em>Ausgebucht</em>
 								{% else %}
 									{% if c.get_free_places_count and c.get_free_places_count != 0 %}
-										<span class="badge">{{ c.get_free_places }}</span>
+										<span class="badge">{{ c.get_free_places_count }}</span>
 									{% endif %}
 								{% endif %}
 							{% endif %}

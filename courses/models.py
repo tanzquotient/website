@@ -101,7 +101,7 @@ class CourseTime(models.Model):
     time_to = models.TimeField()
     
     def __unicode__(self):
-        return u"{}, {}-{}".format(_(self.weekday),self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
+        return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday],self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
 
 class CourseType(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -178,7 +178,7 @@ class Course(models.Model):
         return self.offering.active
     
     def format_times(self):
-        return u' / '.join(map(str,self.times.all()))
+        return u' & '.join(map(str,self.times.all()))
     format_times.short_description="Times"
     
     def get_cancellation_dates(self):
