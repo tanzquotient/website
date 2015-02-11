@@ -74,8 +74,8 @@ class SongInline(admin.TabularInline):
     extra = 5
     
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type','offering','period','format_times','room','format_prices','format_teachers')
-    list_filter = ('offering', 'type', 'room')
+    list_display = ('name', 'type','offering','period','format_times','room','format_prices','format_teachers','active')
+    list_filter = ('offering', 'type', 'room','active')
     inlines = (CourseCancellationInline,CourseTimeInline,TeachInlineForCourse,SubscribeInlineForCourse,)
     
     model = Course
@@ -96,7 +96,10 @@ class CourseAdmin(admin.ModelAdmin):
                      'fields': ['price_with_legi','price_without_legi']}),
         ('Etc', {
                  'classes': ("grp-collapse grp-closed",),
-                 'fields': ['comment'],}),
+                 'fields': ['special','comment'],}),
+        ('Admin', {
+                     'classes': ("grp-collapse grp-open",),
+                     'fields': ['active']}),
     ]
     
 class CourseTypeAdmin(admin.ModelAdmin):  

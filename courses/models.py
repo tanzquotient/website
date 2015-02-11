@@ -108,7 +108,6 @@ class CourseType(models.Model):
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    special = models.TextField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
     
     def get_level(self):
@@ -151,6 +150,10 @@ class Course(models.Model):
     teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses', through_fields=('course','user'))
     offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
+    active = models.BooleanField(default=True)
+    active.help_text="Defines if clients can subscribe to this course (if unchecked, course is active if offering is active)."
+    special = models.TextField(blank=True, null=True)
+    special.help_text = 'Any special properties of this course.'
     
     objects=managers.CourseManager()
     
@@ -175,7 +178,10 @@ class Course(models.Model):
             return None
         
     def is_subscription_allowed(self):
-        return self.offering.active
+        if self.offering is None:
+            return self.active
+        else:
+            return self.offering.active and self.active # both must be true to allow subscription
     
     def format_times(self):
         return u' & '.join(map(str,self.times.all()))
