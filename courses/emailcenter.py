@@ -18,8 +18,8 @@ def send_subscription_confirmation(subscription):
     
 def create_subject(subject):
     s = u""
-    if settings.DEBUG:
-        s += u"[DEBUG MODE] "
+    #if settings.DEBUG:
+    #    s += u"[DEBUG MODE] "
     s += subject
     return s
 

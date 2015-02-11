@@ -27,6 +27,7 @@ TEMPLATE_DIRS = (
 ALLOWED_HOSTS = [
     # with . at beginning allows domain and subdomains
     # with . at end allows FQDN
+    u'127.0.0.1',
     '.tq.ethz.ch.',  
     '.tq.vseth.ch.',
     '.tq.vseth.ethz.ch.',
