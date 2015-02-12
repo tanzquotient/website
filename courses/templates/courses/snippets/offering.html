@@ -32,10 +32,7 @@
 						</td>
 						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
 						<td>
-							{% if c.period %}
-								<i class="fa fa-exclamation-circle fa-lg"></i> 
-							{% endif %}
-							{{ c.get_period }}
+							{% include "courses/snippets/period.html" with course=c only %}
 						</td>
 						<td>{{ c.format_prices|default:"-" }}</td>
 						<td>
@@ -85,7 +82,7 @@
 						</h4>
 						<p class="list-group-item-text"><b>{{ c.format_times|default:"Zeit noch unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
 						{% if c.period %}
-							<p class="list-group-item-text">{{ c.get_period }}</p>
+							<p class="list-group-item-text">{% include "courses/snippets/period.html" with course=c only %}</p>
 						{% endif %}
 						<p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
 					</a>

@@ -14,6 +14,9 @@
 					{% endif %}
 				</p>
 				<p>{{ course.get_period }}</p>
+				{% if course.format_teachers %}
+					<p>Mit {{ course.format_teachers }}</p>
+				{% endif %}
 				<p>Kosten: {{ course.format_prices|default:"-" }}</p>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-3">
