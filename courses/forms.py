@@ -2,7 +2,6 @@ from django import forms
 
 from models import GENDER
 from models import STUDENT_STATUS
-from courses.models import STUDENT_STATUS
 
 class UserForm(forms.Form):
     first_name = forms.CharField(max_length=100)

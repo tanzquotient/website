@@ -228,7 +228,7 @@ class Subscribe(models.Model):
     comment = models.TextField(blank=True, null=True)
     comment.help_text="A optional comment made by the user during subscription."
     confirmed = models.BooleanField(blank=False, null=False, default=False)
-    confirmed.help_text="When this is checked, a confirmation email is send (once) to the user while saving this form."
+    confirmed.help_text="When this is checked, a participation confirmation email is send (once) to the user while saving this form."
     payed = models.BooleanField(blank=False, null=False, default=False)
 
     def get_offering(self):
@@ -247,6 +247,14 @@ class Subscribe(models.Model):
 
     def __unicode__(self):
         return u"{} subscribes to {}".format(self.user.get_full_name(),self.course)
+    
+class Confirmation(models.Model):
+    subscription = models.ForeignKey(Subscribe, related_name='confirmations')
+    date = models.DateField(blank=False, null=False, auto_now_add=True)
+    date.help_text="The date when the participation confirmation mail was sent to the subscriber."
+    
+    def __unicode__(self):
+        return u"({}) confirmed at {}".format(self.subscription,self.date)
     
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')

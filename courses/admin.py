@@ -131,6 +131,12 @@ class SubscribeAdmin(admin.ModelAdmin):
         'fk': ['user','partner'],
     }
     
+class ConfirmationAdmin(admin.ModelAdmin):  
+    list_display = ('subscription','date')
+    list_filter = ('date',)
+    
+    model = Confirmation
+    
 
     
 class PeriodAdmin(admin.ModelAdmin):
@@ -157,6 +163,7 @@ admin.site.register(Period, PeriodAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Teach, TeachAdmin)
 admin.site.register(Subscribe,SubscribeAdmin)
+admin.site.register(Confirmation,ConfirmationAdmin)
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile

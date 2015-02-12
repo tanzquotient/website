@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 import models as mymodels
 
 import logging
-from django.utils import datastructures
 log = logging.getLogger('courses')
 
 from emailcenter import *
@@ -115,6 +114,16 @@ def subscribe(course_id, user1_data, user2_data=None):
         res['long_text'] = u'Du erhältst in Kürze eine Emailbestätigung.'
         
     return res
+
+def confirm_subscription(subscription):
+    if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
+        # no subscription was send and the subscription is confirmed, so send one
+        send_participation_confirmation(subscription)
+        
+        # log that we sent the confirmation
+        c = mymodels.Confirmation(subscription=subscription)
+        c.save()
+
         
 def get_or_create_userprofile(user):
     try:
@@ -129,14 +138,14 @@ def calculate_relevant_experience(user,course):
     return [s.course for s in mymodels.Subscribe.objects.filter(user=user,course__type__styles__id__in=relevant_exp).order_by('course__type__level').all() if s.course != course]
 
 def format_prices(price_with_legi, price_without_legi):
-        if price_with_legi and price_without_legi:
-            if price_with_legi == price_without_legi:
-                r = u"{} CHF".format(price_with_legi.__str__())
-            else:
-                r = u"mit Legi {} / sonst {} CHF".format(price_with_legi.__str__(), price_without_legi.__str__())
-        elif price_without_legi:
-            r = u"mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
+    if price_with_legi and price_without_legi:
+        if price_with_legi == price_without_legi:
+            r = u"{} CHF".format(price_with_legi.__str__())
         else:
-            r = None # handle this case in template!
-        return r
+            r = u"mit Legi {} / sonst {} CHF".format(price_with_legi.__str__(), price_without_legi.__str__())
+    elif price_without_legi:
+        r = u"mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
+    else:
+        r = None # handle this case in template!
+    return r
 

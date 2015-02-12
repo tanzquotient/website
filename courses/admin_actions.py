@@ -8,7 +8,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 def confirm_subscriptions(modeladmin, request, queryset):
-    queryset.update(confirmed=True)
+    for subscription in queryset:
+        subscription.confirmed = True
+        subscription.save()
+        
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
