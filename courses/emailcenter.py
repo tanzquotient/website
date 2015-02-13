@@ -42,7 +42,7 @@ def send_participation_confirmation(subscription):
 
     try:
         send_mail(create_subject(u'TQ Teilnahmebestätigung'), message, my_settings.EMAIL_HOST_USER,
-        [subscription.user.email], fail_silently=False)
+        [subscription.user.email, my_settings.EMAIL_HOST_USER], fail_silently=False)
         return True
     except SMTPRecipientsRefused as e:
         services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, e.__str__())
