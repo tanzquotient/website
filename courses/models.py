@@ -173,7 +173,7 @@ class Course(models.Model):
         
     def get_free_places_count(self):
         if self.max_subscribers != None:
-            return self.max_subscribers-self.subscribers.count()
+            return self.max_subscribers-self.subscriptions.filter(confirmed=True).count()
         else:
             return None
         
