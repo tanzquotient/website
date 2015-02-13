@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'faq',
     'organisation',
     'events',
+    'auditing',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -118,11 +118,10 @@ def subscribe(course_id, user1_data, user2_data=None):
 def confirm_subscription(subscription):
     if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
         # no subscription was send and the subscription is confirmed, so send one
-        send_participation_confirmation(subscription)
-        
-        # log that we sent the confirmation
-        c = mymodels.Confirmation(subscription=subscription)
-        c.save()
+        if send_participation_confirmation(subscription):
+            # log that we sent the confirmation
+            c = mymodels.Confirmation(subscription=subscription)
+            c.save()
 
         
 def get_or_create_userprofile(user):
@@ -149,3 +148,9 @@ def format_prices(price_with_legi, price_without_legi):
         r = None # handle this case in template!
     return r
 
+
+from auditing.models import Problem
+
+def audit_user_error(user, tag, message):
+    p = Problem(tag=tag, message = message, priority=Problem.PRIORITY_NORMAL, content_object=user)
+    p.save()
