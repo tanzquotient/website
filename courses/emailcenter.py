@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-          
+
+from django.core import mail
 from django.core.mail import send_mail
 from django.conf import settings
 from tq_website import settings as my_settings
@@ -27,12 +28,14 @@ def send_subscription_confirmation(subscription):
         return True
     except SMTPRecipientsRefused as e:
         services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, e.__str__())
+    except Exception as e2:
+        services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, e2.__str__())
     except:
         services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, "Unexpected Error")
     return False
         
 ERROR_TAG_PARTICIPATION = u'participation confirmation email'
-def send_participation_confirmation(subscription):
+def send_participation_confirmation(subscription, connection = None):
     if subscription.partner != None:
         message = u'Hallo {}\n\nDeine Teilnahme am Kurs {} im {} ist nun definitiv.\n'.format(subscription.user.first_name, subscription.course.type.name, subscription.course.offering.name)+create_user_info(subscription.partner)+u'\n'+create_course_info(subscription.course)+FOOTER2
     elif subscription.course.type.couple_course:
@@ -40,15 +43,31 @@ def send_participation_confirmation(subscription):
     else:
         message = u'Hallo {}\n\nDeine Teilnahme am Kurs {} im {} ist nun definitiv.\n\n'.format(subscription.user.first_name, subscription.course.type.name, subscription.course.offering.name)+create_course_info(subscription.course)+FOOTER2
 
+    opened = False
+    if not connection:
+        opened = True
+        connection = mail.get_connection()
+
+        # Manually open the connection
+        connection.open()
+
+    success = False
     try:
-        send_mail(create_subject(u'TQ Teilnahmebestätigung'), message, my_settings.EMAIL_HOST_USER,
-        [subscription.user.email, my_settings.EMAIL_HOST_USER], fail_silently=False)
-        return True
+        # Construct an email message that uses the connection
+        email = mail.EmailMessage(create_subject(u'TQ Teilnahmebestätigung'), message, my_settings.EMAIL_HOST_USER,[subscription.user.email, my_settings.EMAIL_HOST_USER])
+        email.send(fail_silently=False) # Send the email
+        success = True
     except SMTPRecipientsRefused as e:
         services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, e.__str__())
+    except Exception as e2:
+        services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, e2.__str__())
     except:
         services.audit_user_error(subscription.user, ERROR_TAG_CONFIRMATION, "Unexpected Error")
-    return False
+    
+    if opened:
+        # If we opened it, we need to manually close the connection.
+        connection.close()
+    return success
     
 def create_user_info(user):
     s=u'Die Kontaktdaten deines Partners sind:\n{}\n'.format(user.get_full_name())

@@ -115,6 +115,7 @@ def subscribe(course_id, user1_data, user2_data=None):
         
     return res
 
+# sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
 def confirm_subscription(subscription):
     if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
         # no subscription was send and the subscription is confirmed, so send one
@@ -122,6 +123,16 @@ def confirm_subscription(subscription):
             # log that we sent the confirmation
             c = mymodels.Confirmation(subscription=subscription)
             c.save()
+
+# same as confirm_subscription, but for multiple subscriptions at once
+def confirm_subscriptions(subscriptions):
+    # send mail via single connection!
+    connection = mail.get_connection()
+    connection.open()
+    for subscription in subscriptions:
+        if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
+            send_participation_confirmation(subscription, connection)
+    connection.close()
 
         
 def get_or_create_userprofile(user):

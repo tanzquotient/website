@@ -2,15 +2,17 @@ from django.contrib import admin
 
 from courses.models import *
 
-from services import *
+import services
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 def confirm_subscriptions(modeladmin, request, queryset):
-    for subscription in queryset:
-        subscription.confirmed = True
-        subscription.save()
+    # this is directly executed with database query, does not trigger signals!
+    queryset.update(confirmed=True)
+    
+    # manually send confirmation mails
+    services.confirm_subscriptions(queryset)
         
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
