@@ -131,7 +131,9 @@ def confirm_subscriptions(subscriptions):
     connection.open()
     for subscription in subscriptions:
         if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
-            send_participation_confirmation(subscription, connection)
+            if send_participation_confirmation(subscription, connection):
+                c = mymodels.Confirmation(subscription=subscription)
+                c.save()
     connection.close()
 
         
