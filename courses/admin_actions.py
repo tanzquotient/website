@@ -15,5 +15,5 @@ def confirm_subscriptions(modeladmin, request, queryset):
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
-    queryset.update(confirmed=True)
+    queryset.update(payed=True)
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
