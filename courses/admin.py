@@ -137,7 +137,12 @@ class ConfirmationAdmin(admin.ModelAdmin):
     
     model = Confirmation
     
-
+    # define the raw_id_fields (grappelli feature)
+    raw_id_fields = ('subscription',)
+    # define the autocomplete_lookup_fields (grappelli feature)
+    autocomplete_lookup_fields = {
+        'fk': ['subscription',],
+    }
     
 class PeriodAdmin(admin.ModelAdmin):
     inlines = (PeriodCancellationInline,)
