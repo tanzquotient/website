@@ -102,6 +102,8 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = './media/' # TODO maybe change this to absolute path (saver)
 MEDIA_URL = '/media/'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 "django.contrib.auth.context_processors.auth",
 "django.core.context_processors.debug",
