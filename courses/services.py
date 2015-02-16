@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 import models as mymodels
 
 import logging
+from django.http.response import HttpResponse
 log = logging.getLogger('courses')
 
 from emailcenter import *
@@ -167,3 +168,21 @@ from auditing.models import Problem
 def audit_user_error(user, tag, message):
     p = Problem(tag=tag, message = message, priority=Problem.PRIORITY_NORMAL, content_object=user)
     p.save()
+    
+import csv
+
+# exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
+def export_subscriptions(course_id):
+    
+    # Create the HttpResponse object with the appropriate CSV header.
+    fileobj = HttpResponse(content_type='text/csv')
+    fileobj['Content-Disposition'] = u'attachment; filename="Kursteilnehmer-{}.csv"'.format(mymodels.Course.objects.get(id=course_id).name)
+    
+    writer = csv.writer(fileobj)
+    
+    writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
+    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.experience]
+        writer.writerow(l)
+
+    return fileobj

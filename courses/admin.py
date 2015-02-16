@@ -102,6 +102,8 @@ class CourseAdmin(admin.ModelAdmin):
                      'fields': ['active']}),
     ]
     
+    actions = [export_confirmed_subscriptions,]
+    
 class CourseTypeAdmin(admin.ModelAdmin):  
     list_display = ('name', 'format_styles', 'level', 'couple_course',)
     list_filter = ('level', 'couple_course')
