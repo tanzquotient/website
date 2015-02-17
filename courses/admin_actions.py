@@ -21,5 +21,8 @@ def set_subscriptions_as_payed(modeladmin, request, queryset):
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
 
 def export_confirmed_subscriptions(modeladmin, request, queryset):
-    return services.export_subscriptions(queryset[0].id)
+    ids = []
+    for c in queryset:
+        ids.append(c.id)
+    return services.export_subscriptions(ids)
 set_subscriptions_as_payed.short_description = "Export confirmed subscriptions of selected course"

@@ -169,20 +169,48 @@ def audit_user_error(user, tag, message):
     p = Problem(tag=tag, message = message, priority=Problem.PRIORITY_NORMAL, content_object=user)
     p.save()
     
-import csv
+import zipfile
+import unicodecsv
+from StringIO import StringIO
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
-def export_subscriptions(course_id):
+def export_subscriptions(course_ids):
     
-    # Create the HttpResponse object with the appropriate CSV header.
-    fileobj = HttpResponse(content_type='text/csv')
-    fileobj['Content-Disposition'] = u'attachment; filename="Kursteilnehmer-{}.csv"'.format(mymodels.Course.objects.get(id=course_id).name)
+    if len(course_ids)==1:
+        course_id = course_ids[0]
+        # Create the HttpResponse object with the appropriate CSV header.
+        fileobj = HttpResponse(content_type='text/csv')
+        fileobj['Content-Disposition'] = u'attachment; filename="Kursteilnehmer-{}.csv"'.format(mymodels.Course.objects.get(id=course_id).name)
+        
+        writer = unicodecsv.writer(fileobj)
+        
+        writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
+        for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.experience]
+            writer.writerow(l)
     
-    writer = csv.writer(fileobj)
-    
-    writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
-    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.experience]
-        writer.writerow(l)
-
-    return fileobj
+        return fileobj
+    elif len(course_ids) > 1:
+        zipped_file = StringIO()
+        with zipfile.ZipFile(zipped_file, 'w') as f:
+            for course_id in course_ids:
+                fileobj = StringIO()
+                writer = unicodecsv.writer(fileobj, encoding='utf-8')
+        
+                writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
+                for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.experience]
+                    writer.writerow(l)
+                f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
+                fileobj.seek(0)
+                
+        
+        zipped_file.seek(0)
+        response = HttpResponse(zipped_file, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
+        response['Content-Length'] = zipped_file.tell()
+        
+        return response
+    else:
+        return None
+        
