@@ -186,7 +186,7 @@ def export_subscriptions(course_ids):
         
         writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
         for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.mobile, s.experience]
+            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.experience]
             writer.writerow(l)
     
         return fileobj
@@ -199,7 +199,7 @@ def export_subscriptions(course_ids):
         
                 writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
                 for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.mobile, s.experience]
+                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.experience]
                     writer.writerow(l)
                 f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
                 fileobj.seek(0)
