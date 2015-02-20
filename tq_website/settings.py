@@ -82,6 +82,8 @@ USE_TZ = True
 # default redirect URL after login (if no GET paramter next is given)
 LOGIN_REDIRECT_URL = "/admin/"
 
+LOGIN_URL = '/accounts/login/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 

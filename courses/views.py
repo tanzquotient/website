@@ -168,6 +168,16 @@ def music(request):
         })
     return render(request, template_name, context)
 
+@login_required
+def confirmation_check(request):
+    template_name = "courses/confirmation_check.html"
+    context={}
+        
+    context.update({
+            'subscriptions': Subscribe.objects.filter(confirmed=True).select_related().filter(confirmations__isnull=True).all()
+        })
+    return render(request, template_name, context)
+
 ################
 # Export views #
 ################
