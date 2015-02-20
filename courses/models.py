@@ -239,6 +239,10 @@ class Subscribe(models.Model):
         return self.course.offering
     get_offering.short_description="Offering"
     
+    def get_user_email(self):
+        return self.user.email
+    get_user_email.short_description="User email"
+    
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
         return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))

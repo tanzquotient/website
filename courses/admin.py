@@ -118,7 +118,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
     }
             
 class SubscribeAdmin(admin.ModelAdmin):  
-    list_display = ('get_offering','course', 'user', 'partner', 'date','get_calculated_experience','experience','comment','confirmed','payed')
+    list_display = ('get_offering','course', 'user','get_user_email', 'partner', 'date','get_calculated_experience','experience','comment','confirmed','payed')
     list_display_links = ('user', 'partner')
     list_filter = (SubscribeOfferingListFilter,'course', 'user','date','payed','confirmed')
   
