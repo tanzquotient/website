@@ -239,6 +239,10 @@ class Subscribe(models.Model):
         return self.course.offering
     get_offering.short_description="Offering"
     
+    def get_user_gender(self):
+        return self.user.profile.gender
+    get_user_gender.short_description="User gender"
+    
     def get_user_email(self):
         return self.user.email
     get_user_email.short_description="User email"
@@ -247,6 +251,12 @@ class Subscribe(models.Model):
     def get_calculated_experience(self):
         return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
     get_calculated_experience.short_description="Calculated experience"
+    
+    def get_price_to_pay(self):
+        if self.user.profile.student_status == 'no':
+            return self.course.price_without_legi
+        else:
+            return self.course.price_with_legi
     
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber

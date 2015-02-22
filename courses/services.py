@@ -184,9 +184,9 @@ def export_subscriptions(course_ids):
         
         writer = unicodecsv.writer(fileobj)
         
-        writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
+        writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile','Zu bezahlen', 'Erfahrung'])
         for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.experience]
+            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
             writer.writerow(l)
     
         return fileobj
@@ -197,9 +197,9 @@ def export_subscriptions(course_ids):
                 fileobj = StringIO()
                 writer = unicodecsv.writer(fileobj, encoding='utf-8')
         
-                writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Erfahrung'])
+                writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Zu bezahlen', 'Erfahrung'])
                 for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.experience]
+                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
                     writer.writerow(l)
                 f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
                 fileobj.seek(0)

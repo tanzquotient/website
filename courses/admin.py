@@ -118,7 +118,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
     }
             
 class SubscribeAdmin(admin.ModelAdmin):  
-    list_display = ('get_offering','course', 'user','get_user_email', 'partner', 'date','get_calculated_experience','experience','comment','confirmed','payed')
+    list_display = ('get_offering','course', 'user','get_user_gender','get_user_email', 'partner', 'date','get_calculated_experience','experience','comment','confirmed','payed')
     list_display_links = ('user', 'partner')
     list_filter = (SubscribeOfferingListFilter,'course', 'user','date','payed','confirmed')
   
@@ -135,7 +135,7 @@ class SubscribeAdmin(admin.ModelAdmin):
     
 class ConfirmationAdmin(admin.ModelAdmin):  
     list_display = ('subscription','date')
-    list_filter = ('date',)
+    list_filter = ('subscription__course','date',)
     
     model = Confirmation
     
