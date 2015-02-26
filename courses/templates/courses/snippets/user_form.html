@@ -6,7 +6,7 @@
 	{% endif %}
 
   <div class="form-group has-feedback {% if form.first_name.errors or form.last_name.errors %}has-error{% endif %}">
-    <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">Name</label>
+    <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">Name*</label>
     <div class="col-sm-5 col-md-3">
       <input type="text" class="form-control" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" placeholder="{{ form.first_name.label }}" value="{{ form.first_name.value|default:'' }}">
    			{% if form.first_name.errors %}
@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="form-group has-feedback {% if form.gender.errors %}has-error{% endif %}">
-  	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Geschlecht</label>
+  	<label for="{{ form.gender.id_for_label }}" class="col-sr-2 sr-only control-label">Geschlecht*</label>
     <div class="col-sm-offset-2 col-sm-10 col-sr-offset-0">
   		<label class="radio-inline">
 			  <input type="radio" name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" value="m" {% if form.gender.value == 'm' %}checked="checked"{% endif %}> männlich
@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
-    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Adresse</label>
+    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Adresse*</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="{{ form.street.id_for_label }}" name="{{ form.street.html_name }}" placeholder="{{ form.street.label }}" value="{{ form.street.value|default:'' }}">
    			{% if form.street.errors %}
@@ -59,8 +59,8 @@
     </div>
   </div>
   {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
-  {% include "courses/snippets/text_input.html" with field=form.email only %}
-  {% include "courses/snippets/text_input.html" with field=form.email_repetition only %}
+  {% include "courses/snippets/text_input.html" with field=form.email star=True only %}
+  {% include "courses/snippets/text_input.html" with field=form.email_repetition star=True only %}
 	
 	 <div class="form-group has-feedback {% if form.student_status.errors %}has-error{% endif %}">
 	  <label for="{{ form.student_status.id_for_label }}" class="col-sm-2 control-label">{{ form.student_status.label }}</label>

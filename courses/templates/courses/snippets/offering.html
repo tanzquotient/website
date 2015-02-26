@@ -45,6 +45,10 @@
 										<em>(Warteliste)</em>
 									{% endif %}
 								{% endif %}
+							{% else %}
+								{% if c.get_free_places_count != None and c.get_free_places_count <= 0 %}
+									<em>ausgebucht</em>
+								{% endif %}
 							{% endif %}
 						</td>
 					</tr>
@@ -84,6 +88,7 @@
 						{% if c.period %}
 							<p class="list-group-item-text">{% include "courses/snippets/period.html" with course=c only %}</p>
 						{% endif %}
+						<p class="list-group-item-text">{% include "courses/snippets/level.html" with level=c.type.get_level only %}</p>
 						<p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
 					</a>
 				{% endfor %}
