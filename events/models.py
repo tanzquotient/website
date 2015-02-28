@@ -31,7 +31,8 @@ class Event(models.Model):
     display = models.BooleanField(default=True)
     display.help_text="Defines if this event should be displayed on the website."
     
-    objects = managers.EventManager()
+    objects = models.Manager()
+    displayed_events = managers.DisplayedEventManager()
     special_events=managers.SpecialEventManager()
     
     def format_organisators(self):

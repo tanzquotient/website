@@ -8,6 +8,6 @@ def events(request):
         
     context.update({
             'menu': "events",
-            'events': Event.objects.displayed().all()
+            'events': Event.displayed_events.future().all(),
         })
     return render(request, template_name, context)

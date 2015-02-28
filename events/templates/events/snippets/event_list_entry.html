@@ -1,8 +1,16 @@
 {% with event_id=event.id|stringformat:"s" %}
 	{% with modal_id="modal_event_xs-"|add:event_id %}
- 				<a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item">
+ 			<a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item 
+ 				{% if event.special %}
+ 					emphasize
+ 				{% endif %}
+ 			">
 			<h4 class="list-group-item-heading">
+				{% if event.special %}
+					<i class="fa fa-hand-o-right fa-lg"></i>
+			 	{% endif %}
 				{{ event.name }}
+				<br />
 				<small> {{ event.date }}</small>
 			</h4>
 			<p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>, {{ event.room|default:"Raum noch unbekannt" }}</p>

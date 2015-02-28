@@ -1,5 +1,5 @@
 <div class="hidden-xs">
-	<table class="table table-striped">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -14,8 +14,17 @@
 		{% if events %}
 			<tbody>
 				{% for event in events %}
-					<tr>
-						<td>{{ event.name }}</td>
+					<tr class="
+						{% if event.special %}
+	 						emphasize
+	 					{% endif %}
+					">
+						<td>
+							{% if event.special %}
+								<i class="fa fa-hand-o-right fa-lg"></i>
+		 					{% endif %}
+							{{ event.name }}
+						</td>
 						<td>{{ event.date }}</td>
 						<td>{{ event.format_time }}</td>
 						<td>{{ event.room.name|default:"Raum noch unbekannt" }}</td>
@@ -38,11 +47,5 @@
 </div>
 
 <div class="visible-xs">
-	{% if events %}
-		<div class="list-group">
-			{% for event in events %}
-				{% include "events/snippets/event_list_entry.html" with event=event only %}
-			{% endfor %}
-		</div>
-	{% endif %}
+	{% include "events/snippets/event_list_xs.html" with events=events only %}
 </div>

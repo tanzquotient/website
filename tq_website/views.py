@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from events.models import Event
 
 import logging
+import datetime
 log = logging.getLogger('courses')
 
 # Create your views here.
@@ -14,15 +15,11 @@ def home(request):
     template_name = "home.html"
     context={}
     
-    events = Event.special_events.displayed().all()
-    if len(events) > 0:
-        event = events[0]
-    else:
-        event = None
+    events = Event.displayed_events.future(datetime.timedelta(days = 30)).all()
     
     context.update({
             'menu': "home",
-            'event': event,
+            'events': events,
         })
     return render(request, template_name, context)
 

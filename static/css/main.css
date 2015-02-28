@@ -171,6 +171,14 @@ header .btn-default:active, header .btn-default.active {
 	
 }
 
+.emphasize {
+	background-color: #FAEE76;
+}
+
+.emphasize td {
+	background: transparent:
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
 	font-family: "Open sans", Helvetica, Arial;

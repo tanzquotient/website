@@ -1,0 +1,7 @@
+{% if events %}
+	<div class="list-group">
+		{% for event in events %}
+			{% include "events/snippets/event_list_entry.html" with event=event only %}
+		{% endfor %}
+	</div>
+{% endif %}
