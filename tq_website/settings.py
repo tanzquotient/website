@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     '.tq.vseth.ch.',
     '.tq.vseth.ethz.ch.',
     '.tanzquotient.vseth.ethz.ch.',
+    '127.0.0.1', 'localhost'
 ]
 
 # Application definition
