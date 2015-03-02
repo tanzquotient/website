@@ -173,44 +173,109 @@ import zipfile
 import unicodecsv
 from StringIO import StringIO
 
+import openpyxl
+from openpyxl.cell import get_column_letter
+from openpyxl.styles import Alignment
+
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
-def export_subscriptions(course_ids):
+def export_subscriptions(course_ids, export_format):
+    def create_xlsx_sheet(wb, course_id, course_name):
+        ws = wb.create_sheet(title=course_name)
     
+        row_num = 0
+    
+        columns = [
+            (u"Vorname", 20),
+            (u"Nachname", 20),
+            (u"Geschlecht", 10),
+            (u"E-Mail", 50),
+            (u"Mobile", 30),
+            (u"Zu bezahlen", 10),
+            (u"Erfahrung", 60),
+        ]
+    
+        for col_num in xrange(len(columns)):
+            c = ws.cell(row=row_num + 1, column=col_num + 1)
+            c.value = columns[col_num][0]
+            c.style = c.style.copy(font=c.style.font.copy(bold=True))
+            # set column width
+            ws.column_dimensions[get_column_letter(col_num+1)].width = columns[col_num][1]
+    
+        for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+            row_num += 1
+            row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+            for col_num in xrange(len(row)):
+                c = ws.cell(row=row_num + 1, column=col_num + 1)
+                c.value = row[col_num]
+
+                alignment = Alignment(wrap_text=True)
+                c.style = c.style.copy(alignment=alignment)
+                
     if len(course_ids)==1:
         course_id = course_ids[0]
-        # Create the HttpResponse object with the appropriate CSV header.
-        fileobj = HttpResponse(content_type='text/csv')
-        fileobj['Content-Disposition'] = u'attachment; filename="Kursteilnehmer-{}.csv"'.format(mymodels.Course.objects.get(id=course_id).name)
+        course_name = mymodels.Course.objects.get(id=course_id).name
+        filename = u'Kursteilnehmer-{}'.format(course_name)
+        if export_format=='csv':
+            # Create the HttpResponse object with the appropriate CSV header.
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = u'attachment; filename="{}.csv"'.format(filename)
+            
+            writer = unicodecsv.writer(response)
+            
+            writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile','Zu bezahlen', 'Erfahrung'])
+            for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+                writer.writerow(row)
         
-        writer = unicodecsv.writer(fileobj)
-        
-        writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile','Zu bezahlen', 'Erfahrung'])
-        for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-            l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
-            writer.writerow(l)
-    
-        return fileobj
+            return response
+        elif export_format=='xlsx':
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = u'attachment; filename={}.xlsx'.format(filename)
+            wb = openpyxl.Workbook()
+            # remove preinitialized sheet
+            wb.remove_sheet(wb.get_active_sheet())
+            
+            create_xlsx_sheet(wb, course_id, course_name)
+            
+            wb.save(response)
+            return response
+        else:
+            return None
     elif len(course_ids) > 1:
-        zipped_file = StringIO()
-        with zipfile.ZipFile(zipped_file, 'w') as f:
+        if export_format=='csv':
+            zipped_file = StringIO()
+            with zipfile.ZipFile(zipped_file, 'w') as f:
+                for course_id in course_ids:
+                    fileobj = StringIO()
+                    writer = unicodecsv.writer(fileobj, encoding='utf-8')
+            
+                    writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Zu bezahlen', 'Erfahrung'])
+                    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+                        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+                        writer.writerow(l)
+                    f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
+                    fileobj.seek(0)
+                    
+            
+            zipped_file.seek(0)
+            response = HttpResponse(zipped_file, content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
+            response['Content-Length'] = zipped_file.tell()
+            
+            return response
+        elif export_format=='xlsx':
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = u'attachment; filename=Kursteilnehmer.xlsx'
+            wb = openpyxl.Workbook()
+            # remove preinitialized sheet
+            wb.remove_sheet(wb.get_active_sheet())
+            
             for course_id in course_ids:
-                fileobj = StringIO()
-                writer = unicodecsv.writer(fileobj, encoding='utf-8')
-        
-                writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Zu bezahlen', 'Erfahrung'])
-                for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-                    l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
-                    writer.writerow(l)
-                f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
-                fileobj.seek(0)
-                
-        
-        zipped_file.seek(0)
-        response = HttpResponse(zipped_file, content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
-        response['Content-Length'] = zipped_file.tell()
-        
-        return response
+                create_xlsx_sheet(wb, course_id, mymodels.Course.objects.get(id=course_id).name)
+            
+            wb.save(response)
+            return response
+        else:
+            return None
     else:
         return None
-        

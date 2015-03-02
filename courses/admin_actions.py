@@ -20,9 +20,16 @@ def set_subscriptions_as_payed(modeladmin, request, queryset):
     queryset.update(payed=True)
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
 
-def export_confirmed_subscriptions(modeladmin, request, queryset):
+def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     ids = []
     for c in queryset:
         ids.append(c.id)
-    return services.export_subscriptions(ids)
-set_subscriptions_as_payed.short_description = "Export confirmed subscriptions of selected course"
+    return services.export_subscriptions(ids, 'csv')
+export_confirmed_subscriptions_csv.short_description = "Export confirmed subscriptions of selected course as CSV"
+
+def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
+    ids = []
+    for c in queryset:
+        ids.append(c.id)
+    return services.export_subscriptions(ids, 'xlsx')
+export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected course as XLSX"
