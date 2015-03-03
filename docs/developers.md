@@ -5,8 +5,19 @@ This page contains information for developers of the website. A [user manual](in
 ## Additional Icons:
 [Font-Awesome](http://fortawesome.github.io/Font-Awesome/icons/)
  
- 
+## Instructions for server setup
+
+### Basic stuff
+[nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
+
+### for sending mails asynchronously
+[post_office plugin + celery](http://scanova.io/blog/engineering/2014/05/05/asynchronous-email-sending-using-django-post_office-celery/)
+
+Note that we use MySQL instead of Postgres
+
 ## Commands:
+
+### Data related commands
 
 	python manage.py migrate
 	python manage.py fill
@@ -15,10 +26,34 @@ easier but more dangerous: resetting *everything*, including database content!
 
 	fab local_reset
 
+### Servers
+
+Run message passing server RabbitMQ
+
+	sudo rabbitmq-server
+	
 Run local test server:
 
 	python manage.py runserver
 
+Run celery:
+
+	python manage.py celeryd
+
+Note: *In production* the setting is a bit different:
+
+* a dedicated application server called gunicorn is used instead of the Django development server and run via supervisor:
+
+	sudo supervisorctl restart tq_website
+	
+* as a webserver nginx is used:
+
+	sudo service nginx restart
+
+* and celery is also run via supervisor
+
+
+	
 
 ## Installation:
 
@@ -31,6 +66,7 @@ Install the following packages with `sudo apt-get install ...`
 	python-dev
 	gcc
 	gcc-multilib
+	rabbitmq-server // used by celery (and celery is used by post_office)
 
 
 

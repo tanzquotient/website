@@ -28,7 +28,7 @@ def send_subscription_confirmation(subscription):
     
     mail.send(
         [subscription.user.email, my_settings.EMAIL_HOST_USER],
-        my_settings.EMAIL_HOST_USER,
+        my_settings.DEFAULT_FROM_EMAIL,
         template=template,
         context=context,
     )
@@ -56,7 +56,7 @@ def send_participation_confirmation(subscription, connection=None):
 
     mail.send(
         [subscription.user.email, my_settings.EMAIL_HOST_USER],
-        my_settings.EMAIL_HOST_USER,
+        my_settings.DEFAULT_FROM_EMAIL,
         template=template,
         context=context,
     )
