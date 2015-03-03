@@ -8,9 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP,\
-    MEDIA_ROOT, STATIC_ROOT, EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,\
-    EMAIL_SUBJECT_PREFIX
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -46,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce',
+    'post_office',
     'tq_website',
     'courses',
     'faq',
@@ -118,6 +117,14 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 "django.core.context_processors.request",
 )
 
+#######################################
+# Configuration of post_office plugin #
+#######################################
+EMAIL_BACKEND = 'post_office.EmailBackend'
+
+#####################################
+# Configuration of grappelli plugin #
+#####################################
 GRAPPELLI_ADMIN_TITLE = "TQ Backend"
 
 # Grappelli dashboard location

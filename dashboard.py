@@ -49,6 +49,12 @@ class CustomIndexDashboard(Dashboard):
         ))
         
         self.children.append(modules.ModelList(
+            title='Email',
+            column=1,
+            models=('post_office.models.*',)
+        ))
+        
+        self.children.append(modules.ModelList(
             title='Internal Organisation',
             column=2,
             models=('organisation.models.Function','faq.models.QuestionGroup',)
