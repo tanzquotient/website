@@ -181,6 +181,18 @@ class Course(models.Model):
         else:
             return None
         
+    def single_men_count(self):
+        return self.subscriptions.single_men().count()
+        
+    def single_women_count(self):
+        return self.subscriptions.single_women().count()
+    
+    def men_needed(self):
+        return self.single_men_count()>self.single_women_count()
+    
+    def women_needed(self):
+        return self.single_women_count()>self.single_men_count()
+        
     def is_subscription_allowed(self):
         if self.offering is None:
             return self.active
@@ -235,6 +247,8 @@ class Subscribe(models.Model):
     confirmed.help_text="When this is checked, a participation confirmation email is send (once) to the user while saving this form."
     payed = models.BooleanField(blank=False, null=False, default=False)
 
+    objects = managers.SubscribeManager()
+    
     def get_offering(self):
         return self.course.offering
     get_offering.short_description="Offering"

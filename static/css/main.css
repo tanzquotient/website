@@ -263,6 +263,12 @@ img.pull-left {
 	margin: 0 auto;
 }
 
+/* Other elements */
+.subscription_info {
+	display:inline-block;
+	white-space:nowrap;
+}
+
 /* Main content block */
 .maincontent {
 	

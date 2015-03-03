@@ -16,9 +16,7 @@
 <div class="container">
 	<a id="subscription"></a>
 	<p>{% include "courses/snippets/detail.html" with course=course only %}</p>
-	{% if course.is_subscription_allowed and course.get_free_places_count != None and course.get_free_places_count <= 0 %}
-		<div class="alert alert-info"><i class="fa fa-info-circle fa-lg"></i> <em>Warteliste: </em>Dieser Kurs ist schon voll. Du kannst dich trotzdem gerne anmelden und wirst auf die Warteliste gesetzt.</div>
-	{% endif %}
+	{% include "courses/snippets/subscription_info.html" with course=course long=True only %}
 </div>
 
 {% if course.is_subscription_allowed %}

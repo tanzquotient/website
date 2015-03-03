@@ -22,4 +22,11 @@ class AddressManager(models.Manager):
         address = my_models.Address(street=data['street'],plz=data['plz'],city=data['city'])
         address.save()
         return address
+    
+class SubscribeManager(models.Manager):
+    def single_men(self):
+        return self.filter(partner__isnull=True, user__profile__gender='m')
+    
+    def single_women(self):
+        return self.filter(partner__isnull=True, user__profile__gender='w')
         

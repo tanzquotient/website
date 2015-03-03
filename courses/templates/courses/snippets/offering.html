@@ -36,20 +36,7 @@
 						</td>
 						<td>{{ c.format_prices|default:"-" }}</td>
 						<td>
-							{% if c.is_subscription_allowed %}
-								<a href="{% url 'courses:subscription' c.id %}#subscription">Anmelden </a>
-								{% if c.get_free_places_count != None %}
-									{% if c.get_free_places_count > 0 %}
-										<span class="badge">{{ c.get_free_places_count }}</span>
-									{% else %}
-										<em>(Warteliste)</em>
-									{% endif %}
-								{% endif %}
-							{% else %}
-								{% if c.get_free_places_count != None and c.get_free_places_count <= 0 %}
-									<em>ausgebucht</em>
-								{% endif %}
-							{% endif %}
+							{% include "courses/snippets/subscription_info.html" with course=c display_link=True only %}
 						</td>
 					</tr>
 				{% endfor %}
@@ -74,15 +61,9 @@
  					<a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
 						<h4 class="list-group-item-heading">
 							{{ c.type.name }}
-							{% if c.is_subscription_allowed %}
-								{% if c.get_free_places_count != None %}
-									{% if c.get_free_places_count > 0 %}
-										<span class="badge">{{ c.get_free_places_count }}</span>
-									{% else %}
-										<em>(Warteliste)</em>
-									{% endif %}
-								{% endif %}
-							{% endif %}
+							<small>
+								{% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
+							</small>
 						</h4>
 						<p class="list-group-item-text"><b>{{ c.format_times|default:"Zeit noch unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
 						{% if c.period %}
