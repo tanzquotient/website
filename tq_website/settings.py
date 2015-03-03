@@ -29,7 +29,8 @@ ALLOWED_HOSTS = [
     '.tq.vseth.ch.',
     '.tq.vseth.ethz.ch.',
     '.tanzquotient.vseth.ethz.ch.',
-    '127.0.0.1', 'localhost'
+    '127.0.0.1', 'localhost', '*'
+    # NOTE: we add '*' which is very bad, but it does not work otherwise when DEBUG = False (I don't know why...)
 ]
 
 # Application definition
