@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 from django import forms
 
 from models import GENDER
@@ -26,6 +29,9 @@ class UserForm(forms.Form):
     student_status.label = u'Student'
     legi = forms.CharField(max_length=16, required=False)
     legi.label = u'Legi-Nummer'
+    body_height = forms.IntegerField(max_value=400, required=False)
+    body_height.label = u'Körpergrösse (cm)'
+    body_height.help_text = u'Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum finden eines ähnlich grossen Partners.'
     experience = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
     experience.label = u'Erfahrung'
     comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)

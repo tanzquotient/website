@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 from django.contrib import admin
 
 # Register your models here.
@@ -118,13 +121,13 @@ class CourseTypeAdmin(admin.ModelAdmin):
     }
             
 class SubscribeAdmin(admin.ModelAdmin):  
-    list_display = ('get_offering','course', 'user','get_user_gender','get_user_email', 'partner', 'date','get_calculated_experience','experience','comment','confirmed','payed')
-    list_display_links = ('user', 'partner')
+    list_display = ('id', 'get_offering','course', 'user','partner', 'get_user_gender', 'get_user_body_height', 'get_user_email', 'date','get_calculated_experience','experience','comment','confirmed','payed')
+    list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter,'course', 'user','date','payed','confirmed')
   
     model = Subscribe
     
-    actions = [confirm_subscriptions,set_subscriptions_as_payed]
+    actions = [match_partners, confirm_subscriptions, set_subscriptions_as_payed]
     
     # define the raw_id_fields (grappelli feature)
     raw_id_fields = ('user','partner')

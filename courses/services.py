@@ -41,8 +41,11 @@ def update_user(user, user_data):
     userprofile.legi=user_data['legi']
     userprofile.gender= user_data['gender']
     userprofile.address=mymodels.Address.objects.create_from_user_data(user_data)
-    userprofile.phone_number=user_data['phone_number']
+    if user_data['phone_number']:
+        userprofile.phone_number=user_data['phone_number']
     userprofile.student_status=user_data['student_status']
+    if user_data['body_height']:
+        userprofile.body_height=user_data['body_height']
     userprofile.newsletter=user_data['newsletter']
     userprofile.save()
     
@@ -64,9 +67,7 @@ def create_user(user_data):
     ln = user_data['last_name']
     
     user = User.objects.create_user(generate_username(fn, ln), email=user_data['email'], password=User.objects.make_random_password(), first_name=fn, last_name=ln)
-    userprofile = mymodels.UserProfile(user=user,legi=user_data['legi'],gender=user_data['gender'],address=mymodels.Address.objects.create_from_user_data(user_data),phone_number=user_data['phone_number'],student_status=user_data['student_status'],newsletter=user_data['newsletter'])
-    userprofile.user=user
-    userprofile.save()
+    update_user(user, user_data)
     return user    
 
 def generate_username(first_name, last_name):
@@ -115,6 +116,25 @@ def subscribe(course_id, user1_data, user2_data=None):
         res['long_text'] = u'Du erhältst in Kürze eine Emailbestätigung.'
         
     return res
+
+def match_partners(subscriptions):
+    single = subscriptions.filter(partner__isnull=True).all()
+    sm = single.filter(user__profile__gender='m').order_by('date').all()
+    sw = single.filter(user__profile__gender='w').order_by('date').all()
+    log.info(len(sm))
+    log.info(len(sw))
+    c = min(sm.count(), sw.count())
+    log.info("c: {}".format(c))
+    while c>0:
+        c=c-1
+        m=sm[c]
+        w=sw[c]
+        m.partner=w.user
+        m.save()
+        w.partner=m.user
+        w.save()
+        
+        
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
 def confirm_subscription(subscription):

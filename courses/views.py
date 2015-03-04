@@ -15,6 +15,7 @@ from models import *
 
 from forms import *
 
+import services
 from services import *
 
 import logging
@@ -177,19 +178,3 @@ def confirmation_check(request):
             'subscriptions': Subscribe.objects.filter(confirmed=True).select_related().filter(confirmations__isnull=True).all()
         })
     return render(request, template_name, context)
-
-################
-# Export views #
-################
-
-import csv
-from django.http import HttpResponse
-
-def export_subscriptions(request, course_id):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-
-    services.export_subscriptions(course_id, response)
-    
-    return response

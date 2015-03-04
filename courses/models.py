@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from pip._vendor.colorama.ansi import Style
 from tinymce.models import HTMLField
+from _mysql import NULL
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -48,6 +49,8 @@ class UserProfile(models.Model):
     student_status = models.CharField(max_length=10,
                                       choices=STUDENT_STATUS, blank=False, null=False,
                                       default='no')
+    body_height = models.IntegerField(blank=True, null=True)
+    body_height.help_text = "The user's body height in cm."
     newsletter = models.BooleanField(default=True)
     
     about_me = HTMLField(blank=True, null=True)
@@ -237,8 +240,8 @@ class Course(models.Model):
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__active': True})
-    date = models.DateField(blank=False, null=False, auto_now_add=True)
-    date.help_text="The date when the subscription was made."
+    date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    date.help_text="The date/time when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
@@ -260,6 +263,10 @@ class Subscribe(models.Model):
     def get_user_email(self):
         return self.user.email
     get_user_email.short_description="User email"
+    
+    def get_user_body_height(self):
+        return self.user.profile.body_height
+    get_user_body_height.short_description="User body height"
     
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
