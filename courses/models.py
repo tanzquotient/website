@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 from django.db import models
 
 import datetime
@@ -13,7 +16,6 @@ from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from pip._vendor.colorama.ansi import Style
 from tinymce.models import HTMLField
-from _mysql import NULL
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -243,11 +245,11 @@ class Course(models.Model):
         return ("id__iexact", "name__icontains",)
           
     def __unicode__(self):
-        return u"{}".format(self.name)
+        return u"{} ({})".format(self.name,self.offering)
 
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
-    course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__active': True})
+    course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__display': True})
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     date.help_text="The date/time when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
