@@ -173,6 +173,14 @@ class Course(models.Model):
             return self.offering.period
         else:
             return self.period
+    
+    # only show free_places_count if it can be calculated and is below 10
+    def show_free_places_count(self):
+        r = self.get_free_places_count()
+        if r != None and r < 10 and r > 0:
+            return r
+        else:
+            return None
         
     def get_free_places_count(self):
         if self.max_subscribers != None:

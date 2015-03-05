@@ -22,13 +22,15 @@
 				<a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
 			{% endif %}
 		<div class="subscription_info">
-			{% if course.get_free_places_count != None %}
-				{% if course.get_free_places_count > 0 %}
-					<span class="badge">{{ course.get_free_places_count }}</span>
-				{% else %}
-					<em>(Warteliste)</em>
+			{% with count=course.get_free_places_count %}
+				{% if count != None %}
+					{% if course.show_free_places_count %}
+						<span class="badge">{{ course.get_free_places_count }}</span>
+					{% elif count <= 0 %}
+						<em>(Warteliste)</em>
+					{% endif %}
 				{% endif %}
-			{% endif %}
+			{% endwith %}
 			{% if course.men_needed %}
 				[<i class="fa fa-mars"></i> gesucht]
 			{% endif %}
