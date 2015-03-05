@@ -117,24 +117,25 @@ def subscribe(course_id, user1_data, user2_data=None):
         
     return res
 
+# matches partners within the same course, considering their subscription time (fairness!)
 def match_partners(subscriptions):
-    single = subscriptions.filter(partner__isnull=True).all()
-    sm = single.filter(user__profile__gender='m').order_by('date').all()
-    sw = single.filter(user__profile__gender='w').order_by('date').all()
-    log.info(len(sm))
-    log.info(len(sw))
-    c = min(sm.count(), sw.count())
-    log.info("c: {}".format(c))
-    while c>0:
-        c=c-1
-        m=sm[c]
-        w=sw[c]
-        m.partner=w.user
-        m.save()
-        w.partner=m.user
-        w.save()
-        
-        
+    courses=subscriptions.values_list('course', flat=True)
+    log.info(courses)
+    for course_id in courses:
+        single = subscriptions.filter(course__id=course_id, partner__isnull=True).all()
+        sm = single.filter(user__profile__gender='m').order_by('date').all()
+        sw = single.filter(user__profile__gender='w').order_by('date').all()
+        log.info(len(sm))
+        log.info(len(sw))
+        c = min(sm.count(), sw.count())
+        while c>0:
+            c=c-1
+            m=sm[c]
+            w=sw[c]
+            m.partner=w.user
+            m.save()
+            w.partner=m.user
+            w.save()
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
 def confirm_subscription(subscription):
