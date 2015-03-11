@@ -105,7 +105,7 @@ class CourseAdmin(admin.ModelAdmin):
                      'fields': ['active']}),
     ]
     
-    actions = [export_confirmed_subscriptions_csv, export_confirmed_subscriptions_xlsx, ]
+    actions = [activate_courses, deactivate_courses, copy_courses, export_confirmed_subscriptions_csv, export_confirmed_subscriptions_xlsx, ]
     
 class CourseTypeAdmin(admin.ModelAdmin):  
     list_display = ('name', 'format_styles', 'level', 'couple_course',)

@@ -11,6 +11,7 @@ import models as mymodels
 
 import logging
 from django.http.response import HttpResponse
+from datetime import date
 log = logging.getLogger('courses')
 
 from emailcenter import *
@@ -21,6 +22,13 @@ def get_offerings_to_display():
     # return offerings that have display flag on and order them with increasing start
     return mymodels.Offering.objects.filter(display=True).order_by('period__date_from')
 
+def get_subsequent_offering():
+    res =mymodels.Offering.objects.filter(period__date_from__gte=date.today()).order_by('period__date_from').all()
+    if len(res)>0:
+        return res[0]
+    else:
+        return None
+    
 def get_or_create_user(user_data):
     user = find_user(user_data)
     if user:
@@ -116,6 +124,15 @@ def subscribe(course_id, user1_data, user2_data=None):
         res['long_text'] = u'Du erhältst in Kürze eine Emailbestätigung.'
         
     return res
+
+# creates a copy of course and sets its offering to the next offering in the future
+def copy_course(course):
+    course = course.copy()
+    o = get_subsequent_offering()
+    if o is not None:
+        course.offering = o
+    course.active = False
+    course.save()
 
 # matches partners within the same course, considering their subscription time (fairness!)
 def match_partners(subscriptions):

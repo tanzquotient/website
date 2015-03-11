@@ -233,6 +233,25 @@ class Course(models.Model):
             return self.times.all()[0]
         else:
             return None
+    # create and stores identical copy of this course
+    def copy(self):
+        old = Course.objects.get(pk=self.id)
+        self.pk = None
+        self.save()
+        
+        # copy course times
+        for time in old.times.all():
+            time.pk=None
+            time.course=self
+            time.save()
+            
+        # copy teachers
+        for teach in old.teaching.all():
+            teach.pk = None
+            teach.course = self
+            teach.save()
+            
+        return self
     
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField("Position", default=0)
