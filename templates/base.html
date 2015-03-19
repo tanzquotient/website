@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% load cms_tags sekizai_tags %}
+
 <html lang="de">
 
 {% load staticfiles %}
@@ -9,7 +11,7 @@
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 	
-	<title>TanzQuotient</title>
+	<title>{% page_attribute "page_title" %}</title>
 
 	<link rel="shortcut icon" href="{% static "elements/favicon_small.png" %}">
 	
@@ -26,10 +28,13 @@
 	<script src="{% static "js/html5shiv.js" %}"></script>
 	<script src="{% static "js/respond.min.js" %}"></script>
 	<![endif]-->
+	
+	{% render_block "css" %}
 </head>
 
 <body class="home">
-
+	{% cms_toolbar %}
+    
 	{% block menu %}
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
@@ -79,6 +84,9 @@
 	</header>
 	{% endblock header %}
 	
+    {% placeholder base_content %}
+    {% block base_content %}{% endblock %}
+    
 	{% block content %}
 	{% endblock content %}
 
@@ -190,10 +198,11 @@
 
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="{% static "js/headroom.min.js" %}"></script>
 	<script src="{% static "js/jQuery.headroom.min.js" %}"></script>
 	<script src="{% static "js/template.js" %}"></script>
+	{% render_block "js" %}
 </body>
 </html>

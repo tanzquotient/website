@@ -24,7 +24,7 @@ def restart():
         
 def local_reset():
     with lcd(os.path.dirname(env.real_fabfile)):
-        local('mysql --user=root --password="eesseell" --execute="drop schema if exists tq_website; CREATE SCHEMA tq_website DEFAULT CHARACTER SET utf8mb4 ;"')
+        local('mysql --user=root --password="eesseell" --execute="drop schema if exists tq_cms; CREATE SCHEMA tq_cms;"')
         local('python manage.py migrate')
         local('python manage.py fill')
         local('python manage.py fill_functions')

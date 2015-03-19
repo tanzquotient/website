@@ -14,8 +14,7 @@ import django.contrib.auth as auth
 import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
-from pip._vendor.colorama.ansi import Style
-from tinymce.models import HTMLField
+from djangocms_text_ckeditor.fields import HTMLField
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),

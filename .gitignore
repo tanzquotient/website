@@ -53,6 +53,7 @@ target/
 
 bin/
 collected_static/
+/media/
 
 .bash_history
 .project

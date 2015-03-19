@@ -5,10 +5,5 @@ from models import *
 
 class ProblemAdmin(admin.ModelAdmin):
     list_display = ('datetime', 'tag', 'priority', 'message', )
-    
-    # define the related_lookup_fields
-    related_lookup_fields = {
-        'generic': [['content_type', 'object_id'],],
-    }
 
 admin.site.register(Problem, ProblemAdmin)

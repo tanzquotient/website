@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 """
 Django settings for tq project.
 
@@ -12,6 +15,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+gettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -36,18 +40,35 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = (
-    'grappelli.dashboard',
-    'grappelli',
+    'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
+    'filer',
+    'easy_thumbnails',
+    'djangocms_googlemap',
+    'djangocms_inherit',
+    'djangocms_link',
+    'djangocms_snippet',
+    'cmsplugin_filer_file',
+    'cmsplugin_filer_folder',
+    'cmsplugin_filer_link',
+    'cmsplugin_filer_image',
+    'cmsplugin_filer_teaser',
+    'cmsplugin_filer_video',
+    'cms',  # django CMS itself
+    'mptt',  # utilities for implementing a tree
+    'menus',  # helper for model independent hierarchical website navigation
+    'sekizai',  # for javascript and css management
+    'djangocms_admin_style',  # for the admin skin. You **must** add 'djangocms_admin_style' in the list **before** 'django.contrib.admin'.
+    'django.contrib.messages',  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'reversion',
     'djcelery',
     'djcelery_email',
     'post_office',
-    'tinymce',
     'tq_website',
     'courses',
     'faq',
@@ -58,12 +79,38 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.doc.XViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+MIGRATION_MODULES = {
+    'filer': 'filer.migrations_django',
+    'cmsplugin_filer_file': 'cmsplugin_filer_file.migrations_django',
+    'cmsplugin_filer_folder': 'cmsplugin_filer_folder.migrations_django',
+    'cmsplugin_filer_link': 'cmsplugin_filer_link.migrations_django',
+    'cmsplugin_filer_image': 'cmsplugin_filer_image.migrations_django',
+    'cmsplugin_filer_teaser': 'cmsplugin_filer_teaser.migrations_django',
+    'cmsplugin_filer_video': 'cmsplugin_filer_video.migrations_django',
+    'cms': 'cms.migrations_django',
+    'menus': 'menus.migrations_django',
+    'djangocms_flash': 'djangocms_flash.migrations_django',
+    'djangocms_googlemap': 'djangocms_googlemap.migrations_django',
+    'djangocms_inherit': 'djangocms_inherit.migrations_django',
+    'djangocms_link': 'djangocms_link.migrations_django',
+    'djangocms_snippet': 'djangocms_snippet.migrations_django',
+    'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+}
+
+SITE_ID=1
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -90,35 +137,100 @@ LOGIN_URL = '/accounts/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-# app specific static files
-STATIC_URL = '/static/' 
 # general cross-used static files
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATIC_ROOT = './collected_static/' # TODO maybe change this to absolute path (saver)
+STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
+STATIC_URL = '/static/' 
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
-MEDIA_ROOT = './media/' # TODO maybe change this to absolute path (saver)
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-"django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.static",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages",
-"django.core.context_processors.request",
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+    'sekizai.context_processors.sekizai',
+    'cms.context_processors.cms_settings',
 )
+
+############################################
+# Configuration of djangocms-text-ckeditor #
+############################################
+CKEDITOR_UPLOAD_PATH = "uploads/"
+#CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
+CKEDITOR_IMAGE_BACKEND='pillow'
+
+CKEDITOR_SETTINGS = {
+    'language': 'en',
+    'toolbar_HTMLField': [
+        ['Undo', 'Redo'],
+        ['ShowBlocks'],
+        ['Format', 'Styles'],
+        [ 'Link', 'Unlink' ],
+        ['Source',],
+    ],
+    'skin': 'moono',
+}
+
+###############################
+# Configuration of django-cms #
+###############################
+CMS_TEMPLATES = (
+    ('template1.html', 'Template One'),
+)
+
+LANGUAGES = [
+    ('de-ch', 'Deutsch'),
+    ('en', 'English'),
+]
+
+CMS_PLACEHOLDER_CONF = {
+    'content': {
+        'name' : 'Content',
+        'plugins': ['TextPlugin', 'LinkPlugin'],
+        'default_plugins':[
+            {
+                'plugin_type':'TextPlugin',
+                'values':{
+                    'body':'<p>Great websites : %(_tag_child_1)s and %(_tag_child_2)s</p>'
+                },
+            },
+        ]
+    }
+}
+
+##########################
+# Configuration of filer #
+##########################
+THUMBNAIL_HIGH_RESOLUTION = True
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    #'easy_thumbnails.processors.scale_and_crop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+)
+
+####################################
+# Configuration of cmsplugin-filer #
+####################################
+TEXT_SAVE_IMAGE_FUNCTION='cmsplugin_filer_image.integrations.ckeditor.create_image_plugin'
 
 ##################################################
 # Configuration of post_office plugin und celery #
@@ -135,27 +247,6 @@ POST_OFFICE_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 POST_OFFICE = {
     'DEFAULT_PRIORITY' : 'now'
-}
-
-#####################################
-# Configuration of grappelli plugin #
-#####################################
-GRAPPELLI_ADMIN_TITLE = "TQ Backend"
-
-# Grappelli dashboard location
-GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
-
-# Grappelli autocomplete for user model
-GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS = {
-    "django.contrib.auth": {
-        "User": ("id__iexact","username__icontains", "first_name__icontains","last_name__icontains","email__icontains",)
-    }
-}
-
-TINYMCE_DEFAULT_CONFIG = {
-    'plugins' : '',
-    'width': 600,
-    'height': 450,
 }
 
 LOGGING = {
