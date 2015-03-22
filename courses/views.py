@@ -158,17 +158,6 @@ def subscription_done(request, course_id):
         })
     return render(request, template_name, context)
 
-
-def music(request):
-    template_name = "courses/music.html"
-    context={}
-        
-    context.update({
-            'menu': "music",
-            'styles': Style.objects.all()
-        })
-    return render(request, template_name, context)
-
 @login_required
 def confirmation_check(request):
     template_name = "courses/confirmation_check.html"
