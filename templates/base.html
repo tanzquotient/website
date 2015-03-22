@@ -75,10 +75,10 @@
 	{% endblock menu %}
 	
 	{% block header %}
-	<header>
+	<header id="header_{% page_attribute "slug" %}">
 		<div class="container">
 			<div class="row">
-				<h1 class="lead">Willkommen beim Tanzquotient</h1>
+				<h1 class="lead">{% page_attribute "page_title" request.current_page.get_root %}</h1>
 			</div>
 		</div>
 	</header>
@@ -154,14 +154,7 @@
 					
 					<div class="col-md-5 widget">
 						<div class="widget-body">
-							<p class="simplenav">
-								<a href="{% url 'home' %}">Home</a>|
-								<a href="{% url 'organisation:about' %}">Über uns</a>|
-								<a href="{% url 'courses:list' %}">Kurse</a>|
-								<a href="{% url 'events:events' %}">Events</a>|
-								<a href="{% url 'gallery' %}">Gallerie</a>|
-								<a href="{% url 'faq:faq' %}">FAQ</a>
-							</p>
+							{% show_menu 0 1 0 1 'simple_menu.html' %}
 						</div>
 					</div>
 					
