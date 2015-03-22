@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load cms_tags sekizai_tags %}
+{% load cms_tags sekizai_tags menu_tags placeholder_tags %}
 
 <html lang="de">
 
@@ -46,6 +46,7 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
+					{% show_menu 0 1 0 1 'menu.html' %}
 					<li class="{% if menu == "home" %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
 					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'organisation:about' %}">Über uns</a></li>
 					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Kurse</a></li>
@@ -84,8 +85,8 @@
 	</header>
 	{% endblock header %}
 	
-    {% placeholder base_content %}
-    {% block base_content %}{% endblock %}
+    {% block cms_content %}
+    {% endblock cms_content %}
     
 	{% block content %}
 	{% endblock content %}

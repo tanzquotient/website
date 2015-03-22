@@ -15,7 +15,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-gettext = lambda s: s
+ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -191,13 +191,42 @@ CKEDITOR_SETTINGS = {
 # Configuration of django-cms #
 ###############################
 CMS_TEMPLATES = (
-    ('template1.html', 'Template One'),
+    ('template_basic.html', 'Basic Template'),
+    ('template_sidebar.html', 'Sidebar Template'),
 )
 
 LANGUAGES = [
-    ('de-ch', 'Deutsch'),
-    ('en', 'English'),
+    ('de-ch', ugettext('Deutsch')),
+    ('en', ugettext('English')),
 ]
+
+CMS_LANGUAGES = {
+    1: [
+        {
+            'code': 'de-ch',
+            'name': ugettext('Deutsch'),
+            'fallbacks': ['en',],
+            'public': True,
+            'hide_untranslated': False,
+            'redirect_on_fallback':False,
+        },
+        {
+            'code': 'en',
+            'name': ugettext('English'),
+            'fallbacks': ['en',],
+            'public': True,
+            'hide_untranslated': False,
+            'redirect_on_fallback':False,
+        },
+    ],
+    'default': {
+        'fallbacks': ['en', 'de',],
+        'redirect_on_fallback':True,
+        'public': True,
+        'hide_untranslated': False,
+    }
+}
+
 
 CMS_PLACEHOLDER_CONF = {
     'content': {
