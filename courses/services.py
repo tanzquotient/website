@@ -179,7 +179,7 @@ def get_or_create_userprofile(user):
 # finds a list of courses the 'user' did already and that are somehow relevant for 'course'
 def calculate_relevant_experience(user,course):
     relevant_exp = [style.id for style in course.type.styles.all()]
-    return [s.course for s in mymodels.Subscribe.objects.filter(user=user,course__type__styles__id__in=relevant_exp).exclude(course=course).order_by('course__type__level').all()]
+    return [s.course for s in mymodels.Subscribe.objects.filter(user=user,confirmed=True,course__type__styles__id__in=relevant_exp).exclude(course=course).order_by('course__type__level').all()]
 
 def format_prices(price_with_legi, price_without_legi):
     if price_with_legi and price_without_legi:
@@ -221,6 +221,7 @@ def export_subscriptions(course_ids, export_format):
             (u"Geschlecht", 10),
             (u"E-Mail", 50),
             (u"Mobile", 30),
+            (u"Legi-Nr.", 30),
             (u"Zu bezahlen", 10),
             (u"Erfahrung", 60),
         ]
@@ -234,7 +235,7 @@ def export_subscriptions(course_ids, export_format):
     
         for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
             row_num += 1
-            row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+            row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
             for col_num in xrange(len(row)):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 c.value = row[col_num]
@@ -253,9 +254,9 @@ def export_subscriptions(course_ids, export_format):
             
             writer = unicodecsv.writer(response)
             
-            writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile','Zu bezahlen', 'Erfahrung'])
+            writer.writerow([u'Vorname', u'Nachname', u'Geschlecht', u'E-Mail', u'Mobile', u'Legi-Nr.', u'Zu bezahlen', u'Erfahrung'])
             for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
                 writer.writerow(row)
         
             return response
@@ -280,9 +281,9 @@ def export_subscriptions(course_ids, export_format):
                     fileobj = StringIO()
                     writer = unicodecsv.writer(fileobj, encoding='utf-8')
             
-                    writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Zu bezahlen', 'Erfahrung'])
+                    writer.writerow(['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', u'Legi-Nr.', 'Zu bezahlen', 'Erfahrung'])
                     for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
-                        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.get_price_to_pay(), s.experience]
+                        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email, s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
                         writer.writerow(l)
                     f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name), fileobj.getvalue())
                     fileobj.seek(0)
