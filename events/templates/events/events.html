@@ -1,24 +1,5 @@
-{% extends "base.html" %}
-
-{% block header %}
-	<header id="header_events">
-		<div class="container">
-			<div class="row">
-				<h1 class="lead">Events</h1>
-			</div>
-		</div>
-	</header>
-{% endblock header %}
-
-{% block content %}
-<div class="container">
-	<h2></h2>
-
-	{% if events %}
-		{% include "events/snippets/event_list.html" with events=events only %}
-	{% else %}
-		<div class="alert alert-info">Keine Events geplant.</div>	
-	{% endif %}
-</div>
-
-{% endblock content %}
+{% if events %}
+	{% include "events/snippets/event_list.html" with events=events only %}
+{% else %}
+	<div class="alert alert-info">Keine Events geplant.</div>	
+{% endif %}

@@ -42,17 +42,11 @@
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="{% url 'home' %}"><img src="{% static "elements/logo_transparent.svg" %}" height="60px" alt="TQ"></a>
+				<a class="navbar-brand" href="/"><img src="{% static "elements/logo_transparent.svg" %}" height="60px" alt="TQ"></a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
 					{% show_menu 0 1 0 1 'menu.html' %}
-					<li class="{% if menu == "home" %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
-					<li class="{% if menu == "about" %}active{% endif %}"><a href="{% url 'organisation:about' %}">Über uns</a></li>
-					<li class="{% if menu == "courses" %}active{% endif %}"><a href="{% url 'courses:list' %}">Kurse</a></li>
-					<li class="{% if menu == "events" %}active{% endif %}"><a href="{% url 'events:events' %}">Events</a></li>
-					<li class="{% if menu == "gallery" %}active{% endif %}"><a href="{% url 'gallery' %}">Galerie</a></li>
-					<li class="{% if menu == "faq" %}active{% endif %}"><a href="{% url 'faq:faq' %}">FAQ</a></li>
 					<li><a
 						href="http://www.facebook.com/group.php?gid=181865511616" target="_blank"> <span
 							class="fa fa-facebook-square fa-lg"></span></a></li>
@@ -67,6 +61,7 @@
 					{% else %}
 			      		<li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span></a></li>
 					{% endif %}
+					{% language_chooser %}
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -78,7 +73,7 @@
 	<header id="header_{% page_attribute "slug" %}">
 		<div class="container">
 			<div class="row">
-				<h1 class="lead">{% page_attribute "page_title" request.current_page.get_root %}</h1>
+				<h1 class="lead">{% page_attribute "page_title" %}</h1>
 			</div>
 		</div>
 	</header>

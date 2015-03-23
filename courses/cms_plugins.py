@@ -10,16 +10,14 @@ class MusicPluginModel(CMSPlugin):
     styles.help_text=u"Styles to be displayed in this plugin. Leave empty to show all styles."
     
 class MusicPlugin(CMSPluginBase):
+    name = _("Music of dance styles")
     model = MusicPluginModel
     render_template = "courses/music.html"
     
     def render(self, context, instance, placeholder):
-        context['instance'] = instance
         context.update({
             'styles': instance.styles.all() if instance.styles.count() else Style.objects.all()
         })
         return context
-    
-        
 
 plugin_pool.register_plugin(MusicPlugin)

@@ -1,22 +1,4 @@
-{% extends "base.html" %}
-
-{% block header %}
-	<header id="header_faq">
-		<div class="container">
-			<div class="row">
-				<h1 class="lead">FAQ</h1>
-			</div>
-		</div>
-	</header>
-{% endblock header %}
-
-{% block content %}
-
-<div class="container">
-	<h2>Häufige Fragen und Antworten</h2>
-
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
- 
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 	{% for q in questions %}
 		<div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="heading-{{ q.id }}">
@@ -35,12 +17,4 @@
 	{% empty %}
 		<div class="alert alert-info">No questions to be displayed.</div>
 	{% endfor %}
-	
-	</div>
-	
-	<p>
-		Falls ihr weitere Fragen habt, schickt eine Mail an <a href="mailto:kontakt@tq.vseth.ch">kontakt@tq.vseth.ch</a>.
-	</p>
 </div>
-
-{% endblock content %}

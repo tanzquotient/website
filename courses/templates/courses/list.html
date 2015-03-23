@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "template_basic.html" %}
 
 {% block header %}
 	<header id="header_courses">
@@ -11,29 +11,11 @@
 {% endblock header %}
 
 {% block content %}
-
-<div class="container">
-	<h2></h2>
-
-	<p>
-		Viel Spass beim Stöbern in unserem Kursangebot.
-	</p>
-	<p>
-		Du kannst dich als Paar oder <strong>auch gerne einzeln</strong> anmelden. Es gibt immer Einzelanmeldungen von anderen Leuten, die froh sind, wenn sie einen Kurs beginnen oder fortsetzen können.
-	</p>
-	<p>
-		<strong>Unser Angebot richtet sich an Studenten und
-			ETH-Mitarbeiter. Ausnahmen werden nur für Tanzpartner von Studenten
-			und ETH-Mitarbeiter gemacht.</strong> Einzelanmeldungen von anderen werden
-		nicht berücksichtigt.
-	</p>
-	
-	
-	{% for o in offerings %}
-		<p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
-	{% empty %}
-		<div class="alert alert-info">Keine Kurse verfügbar.</div>
-	{% endfor %}
-</div>
-
+	<div class="container">
+		{% for o in offerings %}
+			<p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
+		{% empty %}
+			<div class="alert alert-info">Keine Kurse verfügbar.</div>
+		{% endfor %}
+	</div>
 {% endblock content %}

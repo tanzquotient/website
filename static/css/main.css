@@ -9,6 +9,7 @@ header {
 	color: white;
 	font-family: "Open sans", Helvetica, Arial;
 	font-weight: 450;
+	margin-bottom: 25px;
 }
 
 header.secondary {
