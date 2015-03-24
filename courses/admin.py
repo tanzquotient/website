@@ -55,28 +55,33 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
     
 class SongInline(admin.TabularInline):
+    search_fields = ['title',]
     model = Song
     extra = 5
+    
+class SongAdmin(admin.ModelAdmin):
+    list_display = ['title', 'artist','length','speed','style']
+    search_fields = ['title','artist','style__name']
+    model = Song
     
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'type','offering','period','format_times','room','format_prices','format_teachers','active')
     list_filter = ('offering', 'type', 'room','active')
+    search_fields = ['name','type__name',]
     inlines = (CourseCancellationInline,CourseTimeInline,TeachInlineForCourse,SubscribeInlineForCourse,)
     
     model = Course
     fieldsets = [
         ('What?', {
-                     'fields': ['name','type','min_subscribers','max_subscribers']}),
+                     'fields': ['name','type','min_subscribers','max_subscribers','special']}),
         ('When?', {
                    'fields': ['offering','period',]}),
-        ("CourseCancellation Inlines", {"fields" : ()}),
-        ("CourseTime Inlines", {"fields" : ()}),
         ('Where?', {
                     'fields': ['room']}),
         ('Billing', {
                      'fields': ['price_with_legi','price_without_legi']}),
         ('Etc', {
-                 'fields': ['special','comment'],}),
+                 'fields': ['comment'],}),
         ('Admin', {
                      'fields': ['active']}),
     ]
@@ -86,6 +91,7 @@ class CourseAdmin(admin.ModelAdmin):
 class CourseTypeAdmin(admin.ModelAdmin):  
     list_display = ('name', 'format_styles', 'level', 'couple_course',)
     list_filter = ('level', 'couple_course')
+    search_fields = ['name',]
   
     model = CourseType
     
@@ -94,7 +100,8 @@ class CourseTypeAdmin(admin.ModelAdmin):
 class SubscribeAdmin(admin.ModelAdmin):  
     list_display = ('id', 'get_offering','course', 'user','partner', 'get_user_gender', 'get_user_body_height', 'get_user_email', 'date','get_calculated_experience','experience','comment','confirmed','payed')
     list_display_links = ('id',)
-    list_filter = (SubscribeOfferingListFilter,'course', 'user','date','payed','confirmed')
+    list_filter = (SubscribeOfferingListFilter,'course','date','payed','confirmed')
+    search_fields = ['user__email','user__first_name','user__last_name']
   
     model = Subscribe
     
@@ -105,6 +112,7 @@ class SubscribeAdmin(admin.ModelAdmin):
 class ConfirmationAdmin(admin.ModelAdmin):  
     list_display = ('subscription','date')
     list_filter = ('subscription__course','date',)
+    search_fields = ['subscription__course__name','subscription__course__type__name','subscription__user__email','subscription__user__first_name','subscription__user__last_name']
     
     model = Confirmation
     
@@ -115,6 +123,9 @@ class PeriodAdmin(admin.ModelAdmin):
     
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ('teacher',)
+    list_display = ('id','teacher', 'course', )
+    list_display_link = ('id',)
+    search_fields = ['teacher__email','teacher__first_name','teacher__last_name','course__name','course__type__name']
     
 class StyleAdmin(admin.ModelAdmin):
     list_display = ('name', 'url_info', 'url_video', )
@@ -124,6 +135,7 @@ admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseType, CourseTypeAdmin)
 admin.site.register(Room)
+admin.site.register(Song,SongAdmin)
 admin.site.register(Address)
 admin.site.register(Period, PeriodAdmin)
 admin.site.register(Style, StyleAdmin)
