@@ -72,11 +72,23 @@ Install the following packages with `sudo apt-get install ...`
 
 ### Inside virtualenv (as root)
 
+#### Maybe remove all packages first
+
+If the virtualenv is not freshly created and there are already packages installed, remove them with
+
+	pip freeze | xargs pip uninstall -y
+	
+NOTE: this is better then deleting and recreating the virtualenv because it preserves other virtualenv configuraitons.
+	
+#### Install packages
+
 	pip install mysql-python // without sudo!!!
 
 or
 
 	pip install -r requirements.txt
+	
+to install all at ones from requirements file (recommended).
 
 ## Setup
 

@@ -8,5 +8,6 @@ class EventsToolbar(CMSToolbar):
 
     def populate(self):
         menu = self.toolbar.get_or_create_menu('events-app', _('Events'))
-        url = reverse('admin:events_event_changelist')
-        menu.add_sideframe_item(_('Events'), url=url)
+        if self.request.user.has_perm('events.change_event'):
+            url = reverse('admin:events_event_changelist')
+            menu.add_sideframe_item(_('Events'), url=url)

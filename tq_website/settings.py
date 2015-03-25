@@ -129,8 +129,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-# default redirect URL after login (if no GET paramter next is given)
-LOGIN_REDIRECT_URL = "/admin/"
+# default redirect URL after login (if no GET parameter next is given)
+LOGIN_REDIRECT_URL = "/"
 
 LOGIN_URL = '/accounts/login/'
 
@@ -213,7 +213,7 @@ CMS_LANGUAGES = {
         {
             'code': 'en',
             'name': ugettext('English'),
-            'fallbacks': ['en',],
+            'fallbacks': ['de',],
             'public': True,
             'hide_untranslated': False,
             'redirect_on_fallback':False,
