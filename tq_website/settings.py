@@ -168,6 +168,11 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'cms.context_processors.cms_settings',
 )
 
+##########################
+# Configuration of filer #
+##########################
+THUMBNAIL_HIGH_RESOLUTION = True
+
 ############################################
 # Configuration of djangocms-text-ckeditor #
 ############################################
