@@ -229,17 +229,13 @@ CMS_LANGUAGES = {
 
 
 CMS_PLACEHOLDER_CONF = {
-    'content': {
-        'name' : 'Content',
-        'plugins': ['TextPlugin', 'LinkPlugin'],
-        'default_plugins':[
-            {
-                'plugin_type':'TextPlugin',
-                'values':{
-                    'body':'<p>Great websites : %(_tag_child_1)s and %(_tag_child_2)s</p>'
-                },
-            },
-        ]
+    'main_content': {
+        'name' : ugettext('Main content'),
+        'language_fallback' : True,
+    },
+    'side_content': {
+        'name' : ugettext('Main content'),
+        'language_fallback' : True,
     }
 }
 
