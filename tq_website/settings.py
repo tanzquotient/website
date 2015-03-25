@@ -119,7 +119,7 @@ WSGI_APPLICATION = 'tq_website.wsgi.application'
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'de-ch'
+LANGUAGE_CODE = 'de'
 
 TIME_ZONE = 'CET'
 
@@ -196,14 +196,14 @@ CMS_TEMPLATES = (
 )
 
 LANGUAGES = [
-    ('de-ch', ugettext('Deutsch')),
+    ('de', ugettext('Deutsch')),
     ('en', ugettext('English')),
 ]
 
 CMS_LANGUAGES = {
     1: [
         {
-            'code': 'de-ch',
+            'code': 'de',
             'name': ugettext('Deutsch'),
             'fallbacks': ['en',],
             'public': True,
