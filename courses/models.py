@@ -99,7 +99,7 @@ class Period(models.Model):
         elif self.date_to:
             return u"bis {}".format(self.format_date(self.date_to))
         else:
-            return u"auf Anfrage"
+            return u"ganzjährlich"
 
 class CourseTime(models.Model):
     course = models.ForeignKey('Course', related_name='times')

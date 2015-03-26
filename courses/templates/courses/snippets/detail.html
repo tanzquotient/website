@@ -13,7 +13,7 @@
 						Raum noch unbekannt
 					{% endif %}
 				</p>
-				<p>{{ course.get_period }}</p>
+				<p>{{ course.get_period|default:'ganzes Jahr' }}</p>
 				<p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
 				{% if course.format_teachers %}
 					<p>Mit {{ course.format_teachers }}</p>
