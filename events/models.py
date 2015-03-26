@@ -15,6 +15,7 @@ import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
+from filer.fields.image import FilerImageField
 
 class Organise(models.Model):
     organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
@@ -35,13 +36,16 @@ class Event(models.Model):
     price_with_legi.help_text = "Leave this empty for free entrance"
     price_without_legi = models.FloatField(blank=True, null=True)
     price_without_legi.help_text = "Leave this empty for free entrance"
-    comment = models.TextField(blank=True, null=True)
+    price_special = models.CharField(max_length=255, blank=True, null=True)
+    price_special.help_text = u"Set this only if you want a different price schema."
     organisators = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Organise, related_name='organising_events')
     description = HTMLField(blank=True, null=True)
     special = BooleanField(blank=True, null=False, default=False)
     special.help_text = "If this is a special event that should be emphasized on the website"
     display = models.BooleanField(default=True)
     display.help_text="Defines if this event should be displayed on the website."
+    image = FilerImageField(blank=True,null=True)
+    image.help_text=u"Advertising image for this event."
     
     objects = models.Manager()
     displayed_events = managers.DisplayedEventManager()
@@ -52,7 +56,7 @@ class Event(models.Model):
     format_organisators.short_description="Organisators"
     
     def format_prices(self):
-        return format_prices(self.price_with_legi,self.price_without_legi)
+        return format_prices(self.price_with_legi,self.price_without_legi,self.price_special)
     format_prices.short_description="Prices"
     
     def format_time(self):
@@ -65,12 +69,6 @@ class Event(models.Model):
             
     format_time.short_description="Time"
     
-    
-    # autocomplete fields (grappelli feature)
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("id__iexact", "name__icontains",)
-          
     def __unicode__(self):
         return u"{}".format(self.name)
     

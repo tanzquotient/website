@@ -181,8 +181,10 @@ def calculate_relevant_experience(user,course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in mymodels.Subscribe.objects.filter(user=user,confirmed=True,course__type__styles__id__in=relevant_exp).exclude(course=course).order_by('course__type__level').all()]
 
-def format_prices(price_with_legi, price_without_legi):
-    if price_with_legi and price_without_legi:
+def format_prices(price_with_legi, price_without_legi, price_special=None):
+    if price_special:
+        return price_special    
+    elif price_with_legi and price_without_legi:
         if price_with_legi == price_without_legi:
             r = u"{} CHF".format(price_with_legi.__str__())
         else:

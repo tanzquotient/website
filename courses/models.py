@@ -61,22 +61,18 @@ class UserProfile(models.Model):
     
 class Style(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    description = models.TextField(blank=True, null=True)
+    description = HTMLField(blank=True, null=True)
     url_info = models.URLField(max_length=500, blank=True, null=True)
     url_info.help_text="A url to an information page (e.g. Wikipedia)."
     url_video = models.URLField(max_length=500, blank=True, null=True)
     url_video.help_text="A url to a demo video (e.g Youtube)."
-    
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("id__iexact", "name__icontains",)
     
     def __unicode__(self):
         return u"{}".format(self.name)
     
 class Room(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    description = models.TextField(blank=True, null=True)
+    description = HTMLField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
     url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
@@ -86,15 +82,24 @@ class Room(models.Model):
         return u"{}".format(self.name)
 
 class Period(models.Model):
-    date_from = models.DateField()
-    date_to = models.DateField()
+    date_from = models.DateField(blank=True, null=True)
+    date_from.help_text = u"The start date of this period. Can be left empty."
+    date_to = models.DateField(blank=True, null=True)
+    date_to.help_text = u"The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'."
     
     def format_date(self,d):
         return d.strftime('%d. %b %Y')
     format_date.short_description = 'Period from/to'
     
     def __unicode__(self):
-        return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
+        if self.date_from and self.date_to:
+            return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
+        elif self.date_from:
+            return u"ab {}".format(self.format_date(self.date_from))
+        elif self.date_to:
+            return u"bis {}".format(self.format_date(self.date_to))
+        else:
+            return u"auf Anfrage"
 
 class CourseTime(models.Model):
     course = models.ForeignKey('Course', related_name='times')
@@ -111,7 +116,7 @@ class CourseType(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
     level = models.IntegerField(default=None, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    description = HTMLField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
     
     def get_level(self):
@@ -148,7 +153,10 @@ class Course(models.Model):
     max_subscribers = models.IntegerField(blank=True,null=True)
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
     price_without_legi = models.FloatField(blank=True, null=True, default=70)
-    comment = models.TextField(blank=True, null=True)
+    price_special = models.CharField(max_length=255, blank=True, null=True)
+    price_special.help_text = u"Set this only if you want a different price schema."
+    open_class=models.BooleanField(blank=True, null=False, default=False)
+    open_class.help_text = "Open classes do not require a subscription or subscription is done via a different channel."
     period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
     period.help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken."
     teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
@@ -156,7 +164,7 @@ class Course(models.Model):
     offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
     active.help_text="Defines if clients can subscribe to this course (if unchecked, course is active if offering is active)."
-    special = models.TextField(blank=True, null=True)
+    special = HTMLField(blank=True, null=True)
     special.help_text = 'Any special properties of this course.'
     
     objects=managers.CourseManager()
@@ -166,7 +174,7 @@ class Course(models.Model):
     format_teachers.short_description="Teachers"
     
     def format_prices(self):
-        return format_prices(self.price_with_legi,self.price_without_legi)
+        return format_prices(self.price_with_legi,self.price_without_legi,self.price_special)
     format_prices.short_description="Prices"
     
     def get_period(self):
@@ -206,10 +214,13 @@ class Course(models.Model):
         return self.single_women_count()>self.single_men_count()
         
     def is_subscription_allowed(self):
-        if self.offering is None:
-            return self.active
+        if self.open_class:
+            return False
         else:
-            return self.offering.active and self.active # both must be true to allow subscription
+            if self.offering is None:
+                return self.active
+            else:
+                return self.offering.active and self.active # both must be true to allow subscription
     
     def format_times(self):
         return u' & '.join(map(str,self.times.all()))
@@ -256,11 +267,6 @@ class Course(models.Model):
     position = models.PositiveSmallIntegerField("Position", default=0)
     class Meta:
         ordering = ['position']
-    
-    # autocomplete fields (grappelli feature)
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("id__iexact", "name__icontains",)
           
     def __unicode__(self):
         return u"{} ({})".format(self.name,self.offering)
@@ -341,11 +347,6 @@ class Offering(models.Model):
     
     def format_period(self):
         return self.period
-        
-    # autocomplete fields (grappelli feature)
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("id__iexact", "name__icontains",)
     
     def __unicode__(self):
         return u"{}".format(self.name)

@@ -23,15 +23,13 @@ class EventAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('What?', {
-                     'fields': ['name','description']}),
+                     'fields': ['name','description','image']}),
         ('When?', {
                    'fields': ['date','time_from','time_to',]}),
         ('Where?', {
                     'fields': ['room',]}),
         ('Billing', {
-                     'fields': ['price_with_legi','price_without_legi']}),
-        ('Etc', {
-                 'fields': ['comment'],}),
+                     'fields': ['price_with_legi','price_without_legi','price_special',]}),
         ('Admin', {
                  'fields': ['special','display'],}),
     ]

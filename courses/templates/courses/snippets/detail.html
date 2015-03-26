@@ -23,7 +23,7 @@
 			<div class="col-xs-12 col-sm-6 col-md-3">
 				{% if course.special %}
 					<h4>Weiteres</h4>
-					<p>{{ course.special }}</p>
+					<p>{{ course.special|safe }}</p>
 				{% endif %}
 				{% if course.get_cancellation_dates %}
 					<h4>Ausfälle</h4>
@@ -39,7 +39,7 @@
 			<div class="col-xs-12 col-sm-6 col-md-3">
 				{% if course.type.description %}
 					<h4>Beschreibung</h4>
-					<p>{{ course.type.description }}</p>
+					<p>{{ course.type.description|safe }}</p>
 				{% endif %}
 			</div>
 		</div>

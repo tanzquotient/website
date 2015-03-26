@@ -1,4 +1,7 @@
 {% if course.period %}
-	<i class="fa fa-exclamation-circle fa-lg"></i> 
+	<i class="fa fa-exclamation fa-lg"></i> 
 {% endif %}
 {{ course.get_period }}
+{% if course.period %}
+	<i class="fa fa-exclamation fa-lg"></i> 
+{% endif %}

@@ -65,7 +65,7 @@ class SongAdmin(admin.ModelAdmin):
     model = Song
     
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type','offering','period','format_times','room','format_prices','format_teachers','active')
+    list_display = ('name', 'type', 'open_class', 'offering','period','format_times','room','format_prices','format_teachers','active')
     list_filter = ('offering', 'type', 'room','active')
     search_fields = ['name','type__name',]
     inlines = (CourseCancellationInline,CourseTimeInline,TeachInlineForCourse,SubscribeInlineForCourse,)
@@ -73,15 +73,13 @@ class CourseAdmin(admin.ModelAdmin):
     model = Course
     fieldsets = [
         ('What?', {
-                     'fields': ['name','type','min_subscribers','max_subscribers','special']}),
+                     'fields': ['name','type','open_class','min_subscribers','max_subscribers','special']}),
         ('When?', {
                    'fields': ['offering','period',]}),
         ('Where?', {
                     'fields': ['room']}),
         ('Billing', {
-                     'fields': ['price_with_legi','price_without_legi']}),
-        ('Etc', {
-                 'fields': ['comment'],}),
+                     'fields': ['price_with_legi','price_without_legi','price_special']}),
         ('Admin', {
                      'fields': ['active']}),
     ]

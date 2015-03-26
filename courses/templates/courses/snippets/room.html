@@ -11,7 +11,7 @@
       </div>
       <div class="modal-body">
       	{% if room.description %}
-        	<p>{{ room.description }}</p>
+        	<p>{{ room.description|safe }}</p>
         {% endif %}
         {% if room.address %}
         	<p>{{ room.address }}</p>
