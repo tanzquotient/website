@@ -22,7 +22,7 @@ Wenn dir was aufällt, sag es nicht (nur) mir, sondern trag es gleich im [Bug tr
 Die Bedienung der Website ist grundsätzlich in zwei Bereiche aufgeteilt:
 
 * *Frontend*: Dies ist öffentlich zugänglich und somit für beliebige Nutzer des Internets abrufbar. TQ Kunden und Mitarbeiter im Verein können sich einloggen und sehen je nach dem mehr Informationen, die auf sie zugeschnitten sind. Zum Beispiel sieht ein Tanzschüler seine besuchten Kurse oder ein Tanzlehrer die Kurse, die er gerade unterrichtet. (Noch nicht implementiert)
-* *Backend*: Dies ist nur für eingeloggte Benutzer sichtbar und nur Mitglieder des Vereins können es sehen. (Es kann genau gesteuert werden wer was sieht). Das Backend ist nicht immer supereinfach zu bediehnen, dafür ist es extrem schnell erweiterbar. Das heisst wenn dir ein Feld fehlt bei irgendeinem Eintrag, zögere nicht diesen Wunsch zu äussern, es ist eine Sache von Minuten (wirklich!) das zu ändern. Am Besten du trägst den Wunsch gleich im [Bug tracking System](https://github.com/gitsimon/tq_website/issues) ein.
+* *Backend*: Das Backend ist nur für eingeloggte Benutzer sichtbar und nur Mitglieder des Vereins können es sehen. (Es kann genau gesteuert werden wer was sieht). Grobe Anleitung zum verwendeten CMS gibts [hier](https://django-cms.readthedocs.org/en/support-3.0.x/user/reference/page_admin.html). Das Backend ist nicht immer supereinfach zu bediehnen, dafür ist es extrem schnell erweiterbar. Das heisst wenn dir ein Feld fehlt bei irgendeinem Eintrag, zögere nicht diesen Wunsch zu äussern, es ist eine Sache von Minuten (wirklich!) das zu ändern. Am Besten du trägst den Wunsch gleich im [Bug tracking System](https://github.com/gitsimon/tq_website/issues) ein.
 
 ## Datenmodell
 

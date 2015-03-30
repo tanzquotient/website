@@ -13,6 +13,8 @@ class MusicPlugin(CMSPluginBase):
     name = _("Music of dance styles")
     model = MusicPluginModel
     render_template = "courses/music.html"
+    text_enabled = False
+    allow_children = False
     
     def render(self, context, instance, placeholder):
         context.update({

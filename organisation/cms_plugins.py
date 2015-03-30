@@ -9,6 +9,8 @@ class ManagingCommitteePlugin(CMSPluginBase):
     name = _("Managing Committee")
     model = CMSPlugin
     render_template = "organisation/managing_committee.html"
+    text_enabled = False
+    allow_children = False
     
     def render(self, context, instance, placeholder):
         context.update({

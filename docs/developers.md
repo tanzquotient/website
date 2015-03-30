@@ -67,6 +67,15 @@ Install the following packages with `sudo apt-get install ...`
 	gcc
 	gcc-multilib
 	rabbitmq-server // used by celery (and celery is used by post_office)
+	libjpeg-dev // used by pillow for image handling
+
+maybe reinstall if already installed without libjpeg-dev
+
+	pip install -I pillow
+
+Strange, but we have to separately migrate ckeditor
+
+	manage.py migrate djangocms_text_ckeditor
 
 
 

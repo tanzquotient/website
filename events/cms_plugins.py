@@ -9,6 +9,8 @@ class EventsPlugin(CMSPluginBase):
     name = _("Events")
     model = CMSPlugin
     render_template = "events/events.html"
+    text_enabled = False
+    allow_children = False
     
     def render(self, context, instance, placeholder):
         context.update({
@@ -26,6 +28,9 @@ class EventsTeaserPlugin(CMSPluginBase):
     name = _("Events Teaser")
     model = EventsTeaserPluginModel
     render_template = "events/events_teaser.html"
+    text_enabled = False
+    allow_children = False
+    
     def render(self, context, instance, placeholder):
         events=Event.displayed_events.future(instance.delta_days).all()
         if instance.max_displayed:

@@ -73,7 +73,9 @@
 	<header id="header_{% page_attribute "slug" %}">
 		<div class="container">
 			<div class="row">
-				<h1 class="lead">{% page_attribute "page_title" %}</h1>
+				{% placeholder title or %}
+					<h1 class="lead">{% page_attribute "page_title" %}</h1>
+				{% endplaceholder %}
 			</div>
 		</div>
 	</header>

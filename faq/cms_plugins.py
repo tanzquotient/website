@@ -13,6 +13,8 @@ class FaqPlugin(CMSPluginBase):
     name = _("FAQ")
     model = FaqPluginModel
     render_template = "faq/faq.html"
+    text_enabled = False
+    allow_children = False
     
     def render(self, context, instance, placeholder):
         context.update({

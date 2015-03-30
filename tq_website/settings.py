@@ -75,6 +75,7 @@ INSTALLED_APPS = (
     'organisation',
     'events',
     'auditing',
+    'cms_plugins',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -239,9 +240,29 @@ CMS_PLACEHOLDER_CONF = {
         'language_fallback' : True,
     },
     'side_content': {
-        'name' : ugettext('Main content'),
+        'name' : ugettext('Side content'),
         'language_fallback' : True,
-    }
+    },
+    'title': {
+        'name' : ugettext('Title'),
+        'language_fallback' : True,
+        'plugins': ['PageTitlePlugin'],
+        'limits': {
+            'PageTitlePlugin': 1,
+        },
+        'default_plugins': [
+            {
+                'plugin_type': 'PageTitlePlugin',
+                'values': {},
+            },
+        ],
+        'child_classes': {
+            'PageTitlePlugin': ['ButtonPlugin',],
+        },
+        'parent_classes': {
+            'ButtonPlugin': ['PageTitlePlugin'],
+        },
+    },
 }
 
 ##########################
