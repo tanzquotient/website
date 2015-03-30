@@ -1,10 +1,11 @@
+{% load thumbnail %}
+
 {% with event_id=event.id|stringformat:"s" %}
 	{% with modal_id="modal_event_xs-"|add:event_id %}
- 			<a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item 
- 				{% if event.special %}
- 					emphasize
- 				{% endif %}
- 			">
+ 		<a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item {% if event.special %}emphasize{% endif %}">
+ 			{% if event.image %}
+				<p class="text-center"><img src="{% thumbnail event.image 350x150 crop %}" alt="" /></p>
+			{% endif %}
 			<h4 class="list-group-item-heading">
 				{% if event.special %}
 					<i class="fa fa-hand-o-right fa-lg"></i>

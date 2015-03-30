@@ -1,3 +1,5 @@
+{% load thumbnail %}
+
 <!-- Modal -->
 <div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="Event" aria-hidden="true">
   <div class="modal-dialog">
@@ -15,6 +17,10 @@
 		{% if event.description %}
       		<br />
 			<p class="list-group-item-text">{{ event.description|safe }}</p>
+		{% endif %}
+		{% if event.image %}
+      		<br />
+			<p class="list-group-item-text"><img src="{% thumbnail event.image 600x600 %}" alt="" /></p>
 		{% endif %}
       </div>
       <div class="modal-footer">

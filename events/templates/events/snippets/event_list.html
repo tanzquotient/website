@@ -1,3 +1,5 @@
+{% load thumbnail %}
+
 <div class="hidden-xs">
 	<table class="table">
 		<thead>
@@ -14,16 +16,24 @@
 		{% if events %}
 			<tbody>
 				{% for event in events %}
-					<tr class="
-						{% if event.special %}
-	 						emphasize
-	 					{% endif %}
-					">
+					<tr class="{% if event.special %}emphasize{% endif %}">
 						<td>
-							{% if event.special %}
-								<i class="fa fa-hand-o-right fa-lg"></i>
-		 					{% endif %}
-							{{ event.name }}
+							{% with event_id=event.id|stringformat:"s" %}
+								{% with modal_id="modal_event-"|add:event_id %}     
+									<a href="#" data-toggle="modal" data-target="#{{ modal_id }}">
+										<p>
+											{% if event.special %}
+												<i class="fa fa-hand-o-right fa-lg"></i>
+						 					{% endif %}
+											{{ event.name }}
+										</p>
+										{% if event.image %}
+											<p class="text-left"><img src="{% thumbnail event.image 350x150 crop %}" alt="" /></p>
+										{% endif %}
+									</a>
+									{% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
+								{% endwith %}
+							{% endwith %}
 						</td>
 						<td>{{ event.date }}</td>
 						<td>{{ event.format_time }}</td>
@@ -32,12 +42,9 @@
 						<td>{{ event.format_organisators }}</td>
 						<td>
 							<!-- Button trigger modal -->
-							{% with event_id=event.id|stringformat:"s" %}
-								{% with modal_id="modal_event-"|add:event_id %}     
-									<a href="#" data-toggle="modal" data-target="#{{ modal_id }}">Mehr Infos</a>
-									{% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
-								{% endwith %}
-							{% endwith %}
+							<p>
+								
+							</p>
 						</td>
 					</tr>
 				{% endfor %}
