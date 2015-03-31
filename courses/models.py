@@ -208,10 +208,10 @@ class Course(models.Model):
         return self.subscriptions.single_women().count()
     
     def men_needed(self):
-        return self.single_men_count()>self.single_women_count()
+        return self.single_men_count()<self.single_women_count()
     
     def women_needed(self):
-        return self.single_women_count()>self.single_men_count()
+        return self.single_women_count()<self.single_men_count()
         
     def is_subscription_allowed(self):
         if self.open_class:
