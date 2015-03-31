@@ -273,7 +273,7 @@ class Course(models.Model):
 
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
-    course = models.ForeignKey(Course, related_name='subscriptions', limit_choices_to={'offering__display': True})
+    course = models.ForeignKey(Course, related_name='subscriptions')
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     date.help_text="The date/time when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
