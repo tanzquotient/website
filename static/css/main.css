@@ -172,8 +172,8 @@ header .btn-default:active, header .btn-default.active {
 	
 }
 
-.emphasize {
-	background-color: #FAEE76;
+.list-group-item.emphasize {
+	border: 2px solid #000;
 }
 
 .emphasize td {
