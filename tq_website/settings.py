@@ -290,6 +290,8 @@ TEXT_SAVE_IMAGE_FUNCTION='cmsplugin_filer_image.integrations.ckeditor.create_ima
 import djcelery
 djcelery.setup_loader()
 
+CELERYBEAT_SCHEDULER ='djcelery.schedulers.DatabaseScheduler'
+
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
 
@@ -345,6 +347,7 @@ LOGGING = {
         },
     }
 }
+
 
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
 from settings_local import *

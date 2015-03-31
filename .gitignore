@@ -60,4 +60,6 @@ collected_static/
 .pydevproject
 .settings
 
+celerybeat.*
+
 
