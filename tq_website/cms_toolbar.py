@@ -39,3 +39,8 @@ class OrganisationToolbar(CMSToolbar):
         
         url = reverse('no_newsletter_list')
         submenu.add_modal_item(_('Show non-subscriptions'), url=url)
+        
+        menu = self.toolbar.get_or_create_menu('files', _('Files'))
+        if self.request.user.has_perm('filer.change_folder'):
+            url = reverse('admin:filer_folder_changelist')
+            menu.add_modal_item(_('Files'), url=url)
