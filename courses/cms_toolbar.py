@@ -44,4 +44,4 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_confirmation'):
             url = reverse('admin:courses_confirmation_changelist')
             menu.add_sideframe_item(_('Confirmations'), url=url)
-        
+

@@ -6,9 +6,12 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
+import views
 
 urlpatterns = patterns('',
     url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
+    url(r'^export/newsletter/$', views.newsletter_list, name="newsletter_list"),
+    url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
 )
 
 urlpatterns += staticfiles_urlpatterns()
