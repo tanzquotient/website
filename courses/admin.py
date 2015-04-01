@@ -96,7 +96,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
     raw_id_fields = ('styles',)
             
 class SubscribeAdmin(admin.ModelAdmin):  
-    list_display = ('id', 'get_offering','course', 'user','partner', 'get_user_gender', 'get_user_body_height', 'get_user_email', 'date','get_calculated_experience','experience','comment','confirmed','payed')
+    list_display = ('id','confirmed', 'get_offering','course', 'user','partner', 'get_user_gender', 'get_user_body_height', 'get_user_email','experience','comment','get_payment_status','get_calculated_experience','date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter,'course','date','payed','confirmed')
     search_fields = ['user__email','user__first_name','user__last_name']

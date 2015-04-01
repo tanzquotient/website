@@ -292,20 +292,35 @@ class Subscribe(models.Model):
     
     def get_user_gender(self):
         return self.user.profile.gender
-    get_user_gender.short_description="User gender"
+    get_user_gender.short_description="Gender"
     
     def get_user_email(self):
         return self.user.email
-    get_user_email.short_description="User email"
+    get_user_email.short_description="Email"
     
     def get_user_body_height(self):
         return self.user.profile.body_height
-    get_user_body_height.short_description="User body height"
+    get_user_body_height.short_description="Body height"
     
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
         return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
     get_calculated_experience.short_description="Calculated experience"
+    
+    # returns similar courses that the user did before in the system
+    def get_payment_status(self):
+        if self.payed:
+            r='Yes'
+        else:
+            r='No'
+        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).count()
+        if c > 0:
+            # this user didn't payed for other courses
+            r+=', owes {} more'.format(c)
+        return r
+        
+        return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
+    get_payment_status.short_description="Payed?"
     
     def get_price_to_pay(self):
         if self.user.profile.student_status == 'no':
