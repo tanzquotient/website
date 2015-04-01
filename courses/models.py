@@ -309,11 +309,12 @@ class Subscribe(models.Model):
     
     # returns similar courses that the user did before in the system
     def get_payment_status(self):
+        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).count()
         if self.payed:
             r='Yes'
         else:
             r='No'
-        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).count()
+            c-=1
         if c > 0:
             # this user didn't payed for other courses
             r+=', owes {} more'.format(c)
