@@ -16,6 +16,8 @@ from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
 
+from django.db.models import Q
+
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
                ('sun', u'Sunday'))
@@ -309,12 +311,12 @@ class Subscribe(models.Model):
     
     # returns similar courses that the user did before in the system
     def get_payment_status(self):
-        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).count()
+        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).filter(~Q(course=self.course)).count()
         if self.payed:
             r='Yes'
         else:
             r='No'
-            c-=1
+            
         if c > 0:
             # this user didn't payed for other courses
             r+=', owes {} more'.format(c)
