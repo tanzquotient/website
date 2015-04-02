@@ -134,17 +134,19 @@ def copy_course(course):
     course.active = False
     course.save()
 
-# matches partners within the same course, considering their subscription time (fairness!)
+# matches partners within the same course, considering their subscription time (fairness!) and respects also body_height (second criteria)
+DEFAULT_BODY_HEIGHT = 170
 def match_partners(subscriptions):
     courses=subscriptions.values_list('course', flat=True)
-    log.info(courses)
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all()
         sm = single.filter(user__profile__gender='m').order_by('date').all()
         sw = single.filter(user__profile__gender='w').order_by('date').all()
-        log.info(len(sm))
-        log.info(len(sw))
         c = min(sm.count(), sw.count())
+        sm=list(sm[0:c]) # list() enforces evaluation of queryset
+        sw=list(sw[0:c])
+        sm.sort(key=lambda x: x.user.profile.body_height if x else DEFAULT_BODY_HEIGHT)
+        sw.sort(key=lambda x: x.user.profile.body_height if x else DEFAULT_BODY_HEIGHT)
         while c>0:
             c=c-1
             m=sm[c]

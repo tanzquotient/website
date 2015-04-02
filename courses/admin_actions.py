@@ -30,7 +30,7 @@ confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 def match_partners(modeladmin, request, queryset):
     services.match_partners(queryset)
-match_partners.short_description = "Match partners (chronologically)"   
+match_partners.short_description = "Match partners (chronologically, body height optimal)"   
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
     queryset.update(payed=True)
