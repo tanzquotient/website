@@ -16,7 +16,8 @@ from models import *
 from forms import *
 
 import services
-from services import *
+
+from django.contrib.auth.models import User
 
 import logging
 log = logging.getLogger('courses')
@@ -30,7 +31,7 @@ def course_list(request):
         'menu': "courses",
     })
     
-    offerings=get_offerings_to_display()
+    offerings=services.get_offerings_to_display()
     c_offerings=[]
     for offering in offerings:
         weekday_list = []
@@ -134,9 +135,9 @@ def subscription2(request, course_id):
 
 def subscription_do(request, course_id):
     if 'user2_data' in request.session:
-        res=subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
+        res=services.subscribe(course_id,request.session['user1_data'], request.session['user2_data'])
     else:
-        res=subscribe(course_id,request.session['user1_data'],None)
+        res=services.subscribe(course_id,request.session['user1_data'],None)
         
     # clear session keys
     if 'user1_data' in request.session:
@@ -167,3 +168,26 @@ def confirmation_check(request):
             'subscriptions': Subscribe.objects.filter(confirmed=True).select_related().filter(confirmations__isnull=True).all()
         })
     return render(request, template_name, context)
+
+@login_required
+def duplicate_users(request):
+    template_name = "courses/duplicate_users.html"
+    context={}
+    users = []
+    user_aliases = dict()
+    duplicates=services.find_duplicate_users()
+    for primary,aliases in duplicates.iteritems():
+        users.append(User.objects.get(id=primary))
+        user_aliases[primary]=User.objects.filter(id__in=aliases)
+        
+    context.update({
+            'users': users,
+            'user_aliases': user_aliases
+        })
+    return render(request, template_name, context)
+
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)

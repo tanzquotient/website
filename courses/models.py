@@ -37,6 +37,9 @@ class Address(models.Model):
     
     objects = managers.AddressManager()
     
+    def equals(self, a):
+        return self.street==a.street and self.plz==a.plz and self.city==a.city
+    
     def __unicode__(self):
         return u"{}, {} {}".format(self.street,self.plz,self.city)
 

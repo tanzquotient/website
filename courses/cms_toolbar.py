@@ -44,4 +44,10 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_confirmation'):
             url = reverse('admin:courses_confirmation_changelist')
             menu.add_sideframe_item(_('Confirmations'), url=url)
+            
+        menu = self.toolbar.get_or_create_menu('tools', _('Tools'))
+        url = reverse('duplicate_users')
+        menu.add_modal_item(_('Merge duplicate users'), url=url)
+        url = reverse('confirmation_check')
+        menu.add_modal_item(_('Check confirmations'), url=url)
 

@@ -1,33 +1,6 @@
-{% extends "base.html" %}
-
-{% block header %}
-	<header id="header_courses">
-		<div class="container">
-			<div class="row">
-				<h1 class="lead">Admin</h1>
-			</div>
-		</div>
-	</header>
-{% endblock header %}
-
-{% block content %}
-
-<div class="container">
-	<h2></h2>
-
-	<p>
-		Diese Seite ist nur für Admins zugänglich.
-	</p>
-	<p>
-		Sie zeigt möglicherweise passierte Fehler im System auf.
-	</p>
-
-	<h3>Confirmed subscriptions without a corresponding entry in confirmation log:</h3>
-	{% for s in subscriptions %}
-		<p>{{ s }}</p>
-	{% empty %}
-		<div class="alert alert-info">Everthing is fine here.</div>
-	{% endfor %}
-</div>
-
-{% endblock content %}
+<h3>Confirmed subscriptions without a corresponding entry in confirmation log:</h3>
+{% for s in subscriptions %}
+	<p>{{ s }}</p>
+{% empty %}
+	Everthing is fine here.
+{% endfor %}

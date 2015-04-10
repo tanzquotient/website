@@ -1,0 +1,15 @@
+<h3>Duplicate users candidates detected by the system:</h3>
+{% for u in users %}
+	<p>
+		{{ u }}
+		<ul>
+			{% for a in user_aliases|get_item:u.id %}
+				<li>
+					{{ a }}
+				</li>
+			{% endfor %}
+		</ul>
+	</p>
+{% empty %}
+	Everthing is fine here.
+{% endfor %}
