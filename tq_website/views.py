@@ -23,5 +23,6 @@ def newsletter_list(request, newsletter=True):
         })
     return render(request, template_name, context)
 
+@login_required
 def no_newsletter_list(request):
     return newsletter_list(request, False)
