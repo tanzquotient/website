@@ -327,10 +327,12 @@ from django.contrib.auth.models import User
 # find duplicates for all users in the system
 def find_duplicate_users():
     ret = dict()
+    done = set()
     for user in User.objects.all():
         d = find_user_duplicates_ids(user)
-        if len(d) > 1:
+        if len(d) > 1 and user.id not in done:
             ret[user.id] = d[1:]
+            done.update(d)
     return ret
 
 # finds duplicates of the given user
