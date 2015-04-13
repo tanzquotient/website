@@ -175,10 +175,30 @@ def duplicate_users(request):
     context={}
     users = []
     user_aliases = dict()
-    duplicates=services.find_duplicate_users()
-    for primary,aliases in duplicates.iteritems():
-        users.append(User.objects.get(id=primary))
-        user_aliases[primary]=User.objects.filter(id__in=aliases)
+    
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST' and 'post' in request.POST and request.POST['post'] == 'yes':
+        duplicates_ids=request.session['duplicates']
+        to_merge=dict()
+        for primary_id,aliases_ids in duplicates_ids.iteritems():
+            to_merge_aliases=[]
+            for alias_id in aliases_ids:
+                key = '{}-{}'.format(primary_id,alias_id)
+                if key in request.POST and request.POST[key]=='yes':
+                    to_merge_aliases.append(alias_id)
+            if to_merge_aliases:
+                to_merge[primary_id]=to_merge_aliases
+        log.info(to_merge)
+        services.merge_duplicate_users_by_ids(to_merge)
+    else:
+        duplicates=services.find_duplicate_users()
+        for primary,aliases in duplicates.iteritems():
+            users.append(User.objects.get(id=primary))
+            user_aliases[primary]=list(User.objects.filter(id__in=aliases))
+        
+        # for use when form is submitted
+        request.session['duplicates']=duplicates
+        
         
     context.update({
             'users': users,

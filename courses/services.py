@@ -64,8 +64,11 @@ def find_user(user_data):
     fn = user_data['first_name']
     ln = user_data['last_name']
     
-    qs=User.objects.filter(first_name=fn,last_name=ln,email=user_data['email'])
-    if len(qs)==1:
+    q_email = Q(email=user_data['email'])
+    q_address = Q(profile__address__plz=user_data['plz']) & Q(profile__address__street=user_data['street']) & Q(profile__address__city=user_data['city'])
+    q=q_email|q_address
+    qs=User.objects.filter(first_name=fn,last_name=ln).filter(q).all()
+    if qs.count()>0:
         return qs[0]
     else:
         return None
@@ -349,12 +352,15 @@ def find_user_duplicates_ids(user):
     return ret
 
 def merge_duplicate_users(to_merge):
-    for (primary, duplicates) in to_merge.iteritems():
-        merge_model_objects(primary, duplicates, False)
+    for (primary, aliases) in to_merge.iteritems():
+        merge_model_objects(primary, aliases, False)
+        
+def merge_duplicate_users_by_ids(to_merge):
+    for (primary, aliases) in to_merge.iteritems():
+        merge_model_objects(User.objects.get(id=primary), list(User.objects.filter(id__in=aliases)), False)
     
     
 # Based on https://gist.github.com/NicholasMerrill/7c395aa3634b2f2a0cb4
-@transaction.atomic
 def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
     """
     Use this function to merge model objects (i.e. Users, Organizations, Polls,
@@ -400,19 +406,23 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
             alias_varname = related_object.get_accessor_name()
             # The variable name on the related model.
             obj_varname = related_object.field.name
-            related_objects = getattr(alias_object, alias_varname)
-            if hasattr(related_objects, 'all'):
-                for obj in related_objects.all():
-                    setattr(obj, obj_varname, primary_object)
-                    obj.save()
+            if hasattr(alias_object, alias_varname):
+                related_objects = getattr(alias_object, alias_varname)
+                if hasattr(related_objects, 'all'):
+                    for obj in related_objects.all():
+                        setattr(obj, obj_varname, primary_object)
+                        obj.save()
+                else:
+                    # `related_objects` is a one-to-one field.
+                    # Merge related one-to-one fields.
+                    alias_related_object = related_objects
+                    primary_related_object = getattr(primary_object, alias_varname)
+                    # The delete will cascade later if `keep_old` is False.
+                    # Otherwise, could violate a not-null one-to-one field constraint.
+                    merge_model_objects(primary_related_object, alias_related_object, keep_old=True)
             else:
-                # `related_objects` is a one-to-one field.
-                # Merge related one-to-one fields.
-                alias_related_object = related_objects
-                primary_related_object = getattr(primary_object, alias_varname)
-                # The delete will cascade later if `keep_old` is False.
-                # Otherwise, could violate a not-null one-to-one field constraint.
-                merge_model_objects(primary_related_object, alias_related_object, keep_old=True)
+                # TODO This is kind of a hack: we just display a message and do not merge that failing relation!
+                log.warning("some parts could not be merged: {} has no variable {} induced from {}".format(alias_object, alias_varname, related_object))
 
         # Migrate all many to many references from alias object to primary object.
         for related_many_object in alias_object._meta.get_all_related_many_to_many_objects():

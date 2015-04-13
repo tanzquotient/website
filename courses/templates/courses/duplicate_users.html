@@ -1,15 +1,34 @@
-<h3>Duplicate users candidates detected by the system:</h3>
-{% for u in users %}
-	<p>
-		{{ u }}
-		<ul>
-			{% for a in user_aliases|get_item:u.id %}
-				<li>
-					{{ a }}
-				</li>
-			{% endfor %}
-		</ul>
-	</p>
-{% empty %}
-	Everthing is fine here.
-{% endfor %}
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block content %}
+	<div id="content-main">
+		{% if users %}
+		    <form action="" method="post">{% csrf_token %}
+				<h3>Duplicate user candidates detected by the system:</h3>
+				{% for u in users %}
+					<p>
+						{% include "courses/snippets/user.html" with user=u only %}
+						<ul>
+							{% for a in user_aliases|get_item:u.id %}
+								<li>
+									<input type="checkbox" name="{{ u.id }}-{{ a.id }}" id="{{ a.id }}" value="yes" checked="checked">
+									{% include "courses/snippets/user.html" with user=a only %}
+								</li>
+							{% endfor %}
+						</ul>
+					</p>
+				{% endfor %}
+			    <div>
+				    <input type="hidden" name="post" value="yes" />
+				    <input type="submit" value="{% trans "Merge selected proposals" %}" />
+			    </div>
+		    </form>
+		{% else %}
+			Everthing is fine here.
+		{% endif %}
+	</div>
+	
+{% endblock %}
+
+
