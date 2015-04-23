@@ -50,7 +50,7 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=1,
                                       choices=GENDER, blank=False, null=True,
                                       default=None)
-    address = models.OneToOneField(Address, blank=True, null=True)
+    address = models.ForeignKey(Address, blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     student_status = models.CharField(max_length=10,
                                       choices=STUDENT_STATUS, blank=False, null=False,
