@@ -345,11 +345,10 @@ def find_user_duplicates_ids(user):
     """
     candidates=list(User.objects.filter(first_name=user.first_name, last_name=user.last_name).order_by('date_joined'))
     # candidates intentionally also includes the passed user
-    ret = []
+    ret = set()
     for c in candidates:
-        if c.id not in ret and (user.email == c.email or (user.profile.address and c.profile.address and user.profile.address.equals(c.profile.address)) or (user.profile.phone_number and c.profile.phone_number and user.profile.phone_number == c.profile.phone_number)):
-            ret.append(c.id)
-    return ret
+        ret.add(c.id)
+    return list(ret)
 
 def merge_duplicate_users(to_merge):
     for (primary, aliases) in to_merge.iteritems():
@@ -402,6 +401,7 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
     for alias_object in alias_objects:
         # Migrate all foreign key references from alias object to primary object.
         for related_object in alias_object._meta.get_all_related_objects():
+            log.info("related object: {}".format(related_object))
             # The variable name on the alias_object model.
             alias_varname = related_object.get_accessor_name()
             # The variable name on the related model.
@@ -426,9 +426,10 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
 
         # Migrate all many to many references from alias object to primary object.
         for related_many_object in alias_object._meta.get_all_related_many_to_many_objects():
+            log.info("many to many: {}".format(related_many_object))
             alias_varname = related_many_object.get_accessor_name()
             obj_varname = related_many_object.field.name
-
+            
             if alias_varname is not None:
                 # standard case
                 related_many_objects = getattr(alias_object, alias_varname).all()
@@ -436,8 +437,11 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
                 # special case, symmetrical relation, no reverse accessor
                 related_many_objects = getattr(alias_object, obj_varname).all()
             for obj in related_many_objects.all():
-                getattr(obj, obj_varname).remove(alias_object)
-                getattr(obj, obj_varname).add(primary_object)
+                try:
+                    getattr(obj, obj_varname).remove(alias_object)
+                    getattr(obj, obj_varname).add(primary_object)
+                except AttributeError:
+                    pass # TODO kind of a hack because we do not know how to check if m2m related object has a through model defined (in which case we can not use remove/add)
 
         # Migrate all generic foreign key references from alias object to primary object.
         for field in generic_fields:
