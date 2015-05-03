@@ -214,6 +214,7 @@ from StringIO import StringIO
 import openpyxl
 from openpyxl.cell import get_column_letter
 from openpyxl.styles import Alignment
+from openpyxl.styles.fonts import Font
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_subscriptions(course_ids, export_format):
@@ -236,7 +237,9 @@ def export_subscriptions(course_ids, export_format):
         for col_num in xrange(len(columns)):
             c = ws.cell(row=row_num + 1, column=col_num + 1)
             c.value = columns[col_num][0]
-            c.style = c.style.copy(font=c.style.font.copy(bold=True))
+            font = c.font.copy()
+            font.bold = True
+            c.font = font
             # set column width
             ws.column_dimensions[get_column_letter(col_num+1)].width = columns[col_num][1]
     
@@ -247,8 +250,9 @@ def export_subscriptions(course_ids, export_format):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 c.value = row[col_num]
 
-                alignment = Alignment(wrap_text=True)
-                c.style = c.style.copy(alignment=alignment)
+                alignment = c.alignment.copy()
+                alignment.wrap_text=True
+                c.alignment = alignment
                 
     if len(course_ids)==1:
         course_id = course_ids[0]
