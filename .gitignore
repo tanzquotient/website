@@ -53,7 +53,7 @@ target/
 
 bin/
 collected_static/
-/media/
+media/
 
 .bash_history
 .project
@@ -62,4 +62,4 @@ collected_static/
 
 celerybeat.*
 
-
+.idea/
