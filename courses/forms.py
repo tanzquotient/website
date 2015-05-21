@@ -6,6 +6,7 @@ from django import forms
 from models import GENDER
 from models import STUDENT_STATUS
 
+
 class UserForm(forms.Form):
     first_name = forms.CharField(max_length=30)
     first_name.label = u'Vorname'
@@ -38,20 +39,19 @@ class UserForm(forms.Form):
     comment.label = u'Kommentar'
     newsletter = forms.BooleanField(required=False)
     newsletter.label = u'Newsletter abonnieren'
-    
+
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
         email = cleaned_data.get("email")
         email_repetition = cleaned_data.get("email_repetition")
 
         if email != email_repetition:
-            msg=u"Email-Adressen sind nicht gleich."
+            msg = u"Email-Adressen sind nicht gleich."
             self.add_error('email_repetition', msg)
             raise forms.ValidationError(msg)
 
         # if a student, the legi must be set
         if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
-            msg=u"Legi muss fuer Studenten angegeben werden."
+            msg = u"Legi muss fuer Studenten angegeben werden."
             self.add_error('legi', msg)
             raise forms.ValidationError(msg)
-            

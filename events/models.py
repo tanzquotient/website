@@ -17,13 +17,15 @@ from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 
+
 class Organise(models.Model):
     organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
     event = models.ForeignKey('Event', related_name='organising')
-    
+
     def __unicode__(self):
-        return u"{} organises {}".format(self.organiser,self.event)
-    
+        return u"{} organises {}".format(self.organiser, self.event)
+
+
 # Create your models here.
 class Event(models.Model):
     name = models.CharField(max_length=255, blank=False)
@@ -43,34 +45,36 @@ class Event(models.Model):
     special = BooleanField(blank=True, null=False, default=False)
     special.help_text = "If this is a special event that should be emphasized on the website"
     display = models.BooleanField(default=True)
-    display.help_text="Defines if this event should be displayed on the website."
-    image = FilerImageField(blank=True,null=True)
-    image.help_text=u"Advertising image for this event."
-    
+    display.help_text = "Defines if this event should be displayed on the website."
+    image = FilerImageField(blank=True, null=True)
+    image.help_text = u"Advertising image for this event."
+
     objects = models.Manager()
     displayed_events = managers.DisplayedEventManager()
-    special_events=managers.SpecialEventManager()
-    
+    special_events = managers.SpecialEventManager()
+
     def format_organisators(self):
-        return ', '.join(map(auth.get_user_model().get_full_name,self.organisators.all()))
-    format_organisators.short_description="Organisators"
-    
+        return ', '.join(map(auth.get_user_model().get_full_name, self.organisators.all()))
+
+    format_organisators.short_description = "Organisators"
+
     def format_prices(self):
-        return format_prices(self.price_with_legi,self.price_without_legi,self.price_special)
-    format_prices.short_description="Prices"
-    
+        return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
+
+    format_prices.short_description = "Prices"
+
     def format_time(self):
         if self.time_from and self.time_to:
-            return  u"{}-{}".format(self.time_from.strftime("%H:%M") , self.time_to.strftime("%H:%M") )
+            return u"{}-{}".format(self.time_from.strftime("%H:%M"), self.time_to.strftime("%H:%M"))
         elif self.time_from:
-            return  u"ab {}".format(self.time_from.strftime("%H:%M"))
+            return u"ab {}".format(self.time_from.strftime("%H:%M"))
         else:
-            return  u"unbekannt"
-            
-    format_time.short_description="Time"
-    
+            return u"unbekannt"
+
+    format_time.short_description = "Time"
+
     def __unicode__(self):
         return u"{}".format(self.name)
-    
+
     class Meta:
-        ordering = ['date','time_from','room']
+        ordering = ['date', 'time_from', 'room']

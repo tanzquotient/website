@@ -1,87 +1,91 @@
-<h2>{{ offering.name }} <small>{{ offering.period }}</small></h2>
+<h2>{{ offering.name }}
+    <small>{{ offering.period }}</small>
+</h2>
 
 <div class="hidden-xs">
-	{% for d in weekday_list %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{{ d.weekday }}
-		</div>
+    {% for d in weekday_list %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ d.weekday }}
+            </div>
 
-		<table class="table table-striped">
-			{% if d.courses %}
-				<thead>
-					<tr>
-						<th>Kurs</th>
-						<th>Ort</th>
-						<th>Zeit</th>
-						<th>Kursperiode</th>
-						<th>Kosten</th>
-						<th>Anmelden / Freie Plätze</th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for c in d.courses %}
-					<tr>
-						<td>
-							<a href="{% url 'courses:subscription' c.id %}">
-								{{ c.type.name }}
-							</a>
-						</td>
-						<td>
-							{% if c.room %}
-								{% include "courses/snippets/room.html" with room=c.room only %}
-							{% else %}
-								noch unbekannt
-							{% endif %}
-						</td>
-						<td>{{ c.format_times|default:"noch unbekannt" }}</td>
-						<td>
-							{% include "courses/snippets/period.html" with course=c only %}
-						</td>
-						<td>{{ c.format_prices|default:"-" }}</td>
-						<td>
-							{% include "courses/snippets/subscription_info.html" with course=c display_link=True only %}
-						</td>
-					</tr>
-				{% endfor %}
-			{% else %}
-				<div class="alert alert-info">Keine Kurse verfügbar.</div>
-			{% endif %}
-			</tbody>
-		</table>
-	</div>
-	{% endfor %}
+            <table class="table table-striped">
+                {% if d.courses %}
+                    <thead>
+                    <tr>
+                        <th>Kurs</th>
+                        <th>Ort</th>
+                        <th>Zeit</th>
+                        <th>Kursperiode</th>
+                        <th>Kosten</th>
+                        <th>Anmelden / Freie Plätze</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in d.courses %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'courses:subscription' c.id %}">
+                                    {{ c.type.name }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if c.room %}
+                                    {% include "courses/snippets/room.html" with room=c.room only %}
+                                {% else %}
+                                    noch unbekannt
+                                {% endif %}
+                            </td>
+                            <td>{{ c.format_times|default:"noch unbekannt" }}</td>
+                            <td>
+                                {% include "courses/snippets/period.html" with course=c only %}
+                            </td>
+                            <td>{{ c.format_prices|default:"-" }}</td>
+                            <td>
+                                {% include "courses/snippets/subscription_info.html" with course=c display_link=True only %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">Keine Kurse verfügbar.</div>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
 </div>
 
 <div class="visible-xs">
-	{% for d in weekday_list %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{{ d.weekday }}
-		</div>
-		{% if d.courses %}
-			<div class="list-group">
-				{% for c in d.courses %}
- 					<a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							{{ c.type.name }}
-							<small>
-								{% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
-							</small>
-						</h4>
-						<p class="list-group-item-text"><b>{{ c.format_times|default:"Zeit noch unbekannt" }}</b>, {{ c.room|default:"Raum noch unbekannt" }}</p>
-						{% if c.period %}
-							<p class="list-group-item-text">{% include "courses/snippets/period.html" with course=c only %}</p>
-						{% endif %}
-						<p class="list-group-item-text">{% include "courses/snippets/level.html" with level=c.type.get_level only %}</p>
-						<p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
-					</a>
-				{% endfor %}
-			</div>
-		{% else %}
-			<div class="alert alert-info">Keine Kurse verfügbar.</div>
-		{% endif %}
-	</div>
-	{% endfor %}
-	
+    {% for d in weekday_list %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ d.weekday }}
+            </div>
+            {% if d.courses %}
+                <div class="list-group">
+                    {% for c in d.courses %}
+                        <a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                {{ c.type.name }}
+                                <small>
+                                    {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
+                                </small>
+                            </h4>
+                            <p class="list-group-item-text"><b>{{ c.format_times|default:"Zeit noch unbekannt" }}</b>,
+                                {{ c.room|default:"Raum noch unbekannt" }}</p>
+                            {% if c.period %}
+                                <p class="list-group-item-text">{% include "courses/snippets/period.html" with course=c only %}</p>
+                            {% endif %}
+                            <p class="list-group-item-text">{% include "courses/snippets/level.html" with level=c.type.get_level only %}</p>
+
+                            <p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">Keine Kurse verfügbar.</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
 </div>

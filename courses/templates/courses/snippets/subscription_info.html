@@ -1,52 +1,62 @@
 {% if long %}
-	{% if course.open_class %}
-		<div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen Kurs kann man sich nicht hier anmelden.</div>
-	{% endif %}
-	{% if course.is_subscription_allowed %}
-		{% if course.get_free_places_count != None %}
-			{% if course.get_free_places_count <= 0 %}
-				<div class="alert alert-info"><i class="fa fa-info-circle fa-lg"></i> <em>Warteliste: </em>Dieser Kurs ist schon voll. Du kannst dich trotzdem gerne anmelden und wirst auf die Warteliste gesetzt.</div>
-			{% endif %}
-		{% endif %}
-		{% if course.men_needed %}
-			<div class="alert alert-info"><i class="fa fa-mars fa-lg"></i> <em>Männer gesucht: </em>In diesem Kurs gibt es noch Frauen ohne Partner. Du kannst dich trotzdem auch als Frau oder Paar anmelden.</div>
-		{% endif %}
-		{% if course.women_needed %}
-			<div class="alert alert-info"><i class="fa fa-venus fa-lg"></i> <em>Frauen gesucht: </em>In diesem Kurs gibt es noch Männer ohne Partner. Du kannst dich trotzdem auch als Mann oder Paar anmelden.</div>
-		{% endif %}
-	{% else %}
-		{% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
-			<div class="alert alert-danger"><i class="fa fa-exclamation-triangle fa-lg"></i> <em>Ausgebucht: </em>Dieser Kurs ist ausgebucht. Die Anmeldung ist leider nicht mehr möglich.</div>
-		{% endif %}
-	{% endif %}
+    {% if course.open_class %}
+        <div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen Kurs
+            kann man sich nicht hier anmelden.
+        </div>
+    {% endif %}
+    {% if course.is_subscription_allowed %}
+        {% if course.get_free_places_count != None %}
+            {% if course.get_free_places_count <= 0 %}
+                <div class="alert alert-info"><i class="fa fa-info-circle fa-lg"></i> <em>Warteliste: </em>Dieser Kurs
+                    ist schon voll. Du kannst dich trotzdem gerne anmelden und wirst auf die Warteliste gesetzt.
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if course.men_needed %}
+            <div class="alert alert-info"><i class="fa fa-mars fa-lg"></i> <em>Männer gesucht: </em>In diesem Kurs gibt
+                es noch Frauen ohne Partner. Du kannst dich trotzdem auch als Frau oder Paar anmelden.
+            </div>
+        {% endif %}
+        {% if course.women_needed %}
+            <div class="alert alert-info"><i class="fa fa-venus fa-lg"></i> <em>Frauen gesucht: </em>In diesem Kurs gibt
+                es noch Männer ohne Partner. Du kannst dich trotzdem auch als Mann oder Paar anmelden.
+            </div>
+        {% endif %}
+    {% else %}
+        {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-triangle fa-lg"></i> <em>Ausgebucht: </em>Dieser
+                Kurs ist ausgebucht. Die Anmeldung ist leider nicht mehr möglich.
+            </div>
+        {% endif %}
+    {% endif %}
 {% else %}
-	{% if course.open_class %}
-		<i class="fa fa-connectdevelop fa-lg"></i> Open Class
-	{% endif %}
-	{% if course.is_subscription_allowed %}
-			{% if display_link %}
-				<a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
-			{% endif %}
-		<div class="subscription_info">
-			{% with count=course.get_free_places_count %}
-				{% if count != None %}
-					{% if course.show_free_places_count %}
-						<span class="badge">{{ course.get_free_places_count }}</span>
-					{% elif count <= 0 %}
-						<em>(Warteliste)</em>
-					{% endif %}
-				{% endif %}
-			{% endwith %}
-			{% if course.men_needed %}
-				[<i class="fa fa-mars"></i> gesucht]
-			{% endif %}
-			{% if course.women_needed %}
-				[<i class="fa fa-venus fa-lg"></i> gesucht]
-			{% endif %}
-		</div>
-	{% else %}
-		{% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
-			<em>ausgebucht</em>
-		{% endif %}
-	{% endif %}
+    {% if course.open_class %}
+        <i class="fa fa-connectdevelop fa-lg"></i> Open Class
+    {% endif %}
+    {% if course.is_subscription_allowed %}
+        {% if display_link %}
+            <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
+        {% endif %}
+        <div class="subscription_info">
+            {% with count=course.get_free_places_count %}
+                {% if count != None %}
+                    {% if course.show_free_places_count %}
+                        <span class="badge">{{ course.get_free_places_count }}</span>
+                    {% elif count <= 0 %}
+                        <em>(Warteliste)</em>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+            {% if course.men_needed %}
+                [<i class="fa fa-mars"></i> gesucht]
+            {% endif %}
+            {% if course.women_needed %}
+                [<i class="fa fa-venus fa-lg"></i> gesucht]
+            {% endif %}
+        </div>
+    {% else %}
+        {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
+            <em>ausgebucht</em>
+        {% endif %}
+    {% endif %}
 {% endif %}

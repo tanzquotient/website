@@ -1,1 +1,2 @@
-<b>{{ user.first_name }} {{ user.last_name }}</b>, {{ user.email }}, {{ user.profile.phone_number|default:"no phone number" }}, [{{ user.profile.address }}]
+<b>{{ user.first_name }} {{ user.last_name }}</b>, {{ user.email }},
+{{ user.profile.phone_number|default:"no phone number" }}, [{{ user.profile.address }}]

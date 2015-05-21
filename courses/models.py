@@ -6,7 +6,6 @@ from django.db import models
 import datetime
 from django.utils.translation import ugettext as _
 
-
 from django.conf import settings
 
 import django.contrib.auth as auth
@@ -19,37 +18,40 @@ from djangocms_text_ckeditor.fields import HTMLField
 from django.db.models import Q
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
-               ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
-               ('sun', u'Sunday'))
+            ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
+            ('sun', u'Sunday'))
 
-WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag', 'sat': 'Samstag', 'sun': 'Sonntag'}
+WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
+                  'sat': 'Samstag', 'sun': 'Sonntag'}
 
-LEVELS = ((1, u'beginner'),(2,u'intermediate'),(3,u'advanced'))
+LEVELS = ((1, u'beginner'), (2, u'intermediate'), (3, u'advanced'))
 
 GENDER = (('m', u'Men'), ('w', u'Woman'))
 
 STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
-            
+
+
 class Address(models.Model):
     street = models.CharField(max_length=255)
     plz = models.IntegerField()
     city = models.CharField(max_length=255)
-    
+
     objects = managers.AddressManager()
-    
+
     def equals(self, a):
-        return self.street==a.street and self.plz==a.plz and self.city==a.city
-    
+        return self.street == a.street and self.plz == a.plz and self.city == a.city
+
     def __unicode__(self):
-        return u"{}, {} {}".format(self.street,self.plz,self.city)
+        return u"{}, {} {}".format(self.street, self.plz, self.city)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
-    user.help_text="The user which is matched to this user profile."
+    user.help_text = "The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
-                                      choices=GENDER, blank=False, null=True,
-                                      default=None)
+                              choices=GENDER, blank=False, null=True,
+                              default=None)
     address = models.ForeignKey(Address, blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     student_status = models.CharField(max_length=10,
@@ -58,23 +60,25 @@ class UserProfile(models.Model):
     body_height = models.IntegerField(blank=True, null=True)
     body_height.help_text = "The user's body height in cm."
     newsletter = models.BooleanField(default=True)
-    
+
     about_me = HTMLField(blank=True, null=True)
-    
+
     def __unicode__(self):
-        return u"{}".format(self.user.get_full_name())    
-    
+        return u"{}".format(self.user.get_full_name())
+
+
 class Style(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     description = HTMLField(blank=True, null=True)
     url_info = models.URLField(max_length=500, blank=True, null=True)
-    url_info.help_text="A url to an information page (e.g. Wikipedia)."
+    url_info.help_text = "A url to an information page (e.g. Wikipedia)."
     url_video = models.URLField(max_length=500, blank=True, null=True)
-    url_video.help_text="A url to a demo video (e.g Youtube)."
-    
+    url_video.help_text = "A url to a demo video (e.g Youtube)."
+
     def __unicode__(self):
         return u"{}".format(self.name)
-    
+
+
 class Room(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     description = HTMLField(blank=True, null=True)
@@ -82,20 +86,22 @@ class Room(models.Model):
     url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
-    
+
     def __unicode__(self):
         return u"{}".format(self.name)
+
 
 class Period(models.Model):
     date_from = models.DateField(blank=True, null=True)
     date_from.help_text = u"The start date of this period. Can be left empty."
     date_to = models.DateField(blank=True, null=True)
     date_to.help_text = u"The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'."
-    
-    def format_date(self,d):
+
+    def format_date(self, d):
         return d.strftime('%d. %b %Y')
+
     format_date.short_description = 'Period from/to'
-    
+
     def __unicode__(self):
         if self.date_from and self.date_to:
             return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
@@ -106,16 +112,19 @@ class Period(models.Model):
         else:
             return u"ganzjährlich"
 
+
 class CourseTime(models.Model):
     course = models.ForeignKey('Course', related_name='times')
     weekday = models.CharField(max_length=3,
-                                      choices=WEEKDAYS,
-                                      default=None)
+                               choices=WEEKDAYS,
+                               default=None)
     time_from = models.TimeField()
     time_to = models.TimeField()
-    
+
     def __unicode__(self):
-        return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday],self.time_from.strftime("%H:%M") ,self.time_to.strftime("%H:%M") )
+        return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
+                                   self.time_to.strftime("%H:%M"))
+
 
 class CourseType(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -123,71 +132,78 @@ class CourseType(models.Model):
     level = models.IntegerField(default=None, blank=True, null=True)
     description = HTMLField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
-    
+
     def get_level(self):
         return self.level if self.level else "";
-        
+
     def format_styles(self):
-        return ', '.join(map(str,self.styles.all()))
-    format_styles.short_description="Styles"
-    
+        return ', '.join(map(str, self.styles.all()))
+
+    format_styles.short_description = "Styles"
+
     def __unicode__(self):
         return u"{}".format(self.name)
+
 
 class PeriodCancellation(models.Model):
     course = models.ForeignKey('Period', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
-    
+
     def __unicode__(self):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
-    
+
+
 class CourseCancellation(models.Model):
     course = models.ForeignKey('Course', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
-    
+
     def __unicode__(self):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
-    
+
+
 class Course(models.Model):
     name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
-    type = models.ForeignKey(CourseType,related_name='courses', blank=False, null=False)
+    type = models.ForeignKey(CourseType, related_name='courses', blank=False, null=False)
     type.help_text = "The name of the course type is displayed on the website as the course title ."
     room = models.ForeignKey(Room, related_name='courses', blank=True, null=True, on_delete=models.SET_NULL)
-    min_subscribers = models.IntegerField(blank=False,null=False,default=6)
-    max_subscribers = models.IntegerField(blank=True,null=True)
+    min_subscribers = models.IntegerField(blank=False, null=False, default=6)
+    max_subscribers = models.IntegerField(blank=True, null=True)
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
     price_without_legi = models.FloatField(blank=True, null=True, default=70)
     price_special = models.CharField(max_length=255, blank=True, null=True)
     price_special.help_text = u"Set this only if you want a different price schema."
-    open_class=models.BooleanField(blank=True, null=False, default=False)
+    open_class = models.BooleanField(blank=True, null=False, default=False)
     open_class.help_text = "Open classes do not require a subscription or subscription is done via a different channel."
-    period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
-    period.help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken."
+    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
+    period.help_text = "You can set a custom period for this course here. If this is left empty, the period from the offering is taken."
     teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
-    subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses', through_fields=('course','user'))
+    subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses',
+                                         through_fields=('course', 'user'))
     offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
-    active.help_text="Defines if clients can subscribe to this course (if unchecked, course is active if offering is active)."
+    active.help_text = "Defines if clients can subscribe to this course (if unchecked, course is active if offering is active)."
     special = HTMLField(blank=True, null=True)
     special.help_text = 'Any special properties of this course.'
-    
-    objects=managers.CourseManager()
-    
+
+    objects = managers.CourseManager()
+
     def format_teachers(self):
-        return ', '.join(map(auth.get_user_model().get_full_name,self.teachers.all()))
-    format_teachers.short_description="Teachers"
-    
+        return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
+
+    format_teachers.short_description = "Teachers"
+
     def format_prices(self):
-        return format_prices(self.price_with_legi,self.price_without_legi,self.price_special)
-    format_prices.short_description="Prices"
-    
+        return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
+
+    format_prices.short_description = "Prices"
+
     def get_period(self):
-        if(self.period is None):
+        if (self.period is None):
             return self.offering.period
         else:
             return self.period
-    
+
     # only show free_places_count if it can be calculated and is below 10
     def show_free_places_count(self):
         r = self.get_free_places_count()
@@ -195,29 +211,29 @@ class Course(models.Model):
             return r
         else:
             return None
-        
+
     def get_free_places_count(self):
         if self.max_subscribers != None:
-            c=self.max_subscribers-self.subscriptions.filter(confirmed=True).count()
+            c = self.max_subscribers - self.subscriptions.filter(confirmed=True).count()
             if c > 0:
                 return c
             else:
                 return 0
         else:
             return None
-        
+
     def single_men_count(self):
         return self.subscriptions.single_men().count()
-        
+
     def single_women_count(self):
         return self.subscriptions.single_women().count()
-    
+
     def men_needed(self):
-        return self.single_men_count()<self.single_women_count()
-    
+        return self.single_men_count() < self.single_women_count()
+
     def women_needed(self):
-        return self.single_women_count()<self.single_men_count()
-        
+        return self.single_women_count() < self.single_men_count()
+
     def is_subscription_allowed(self):
         if self.open_class:
             return False
@@ -225,166 +241,182 @@ class Course(models.Model):
             if self.offering is None:
                 return self.active
             else:
-                return self.offering.active and self.active # both must be true to allow subscription
-    
+                return self.offering.active and self.active  # both must be true to allow subscription
+
     def format_times(self):
-        return u' & '.join(map(str,self.times.all()))
-    format_times.short_description="Times"
-    
+        return u' & '.join(map(str, self.times.all()))
+
+    format_times.short_description = "Times"
+
     def get_cancellation_dates(self):
         # take the union of the cancellations of this course and the period it belongs to
         dates = [c.date for c in self.cancellations.all()]
         print dates
         dates_offering = [c.date for c in self.offering.period.cancellations.all()]
-        return sorted(dates+dates_offering)
-    
+        return sorted(dates + dates_offering)
+
     def format_cancellations(self):
         dates = [d.strftime('%d.%m.%Y') for d in self.get_cancellation_dates()]
         return u' / '.join(dates)
-    format_cancellations.short_description="Cancellations"
-    
+
+    format_cancellations.short_description = "Cancellations"
+
     def get_first_time(self):
         if self.times.exists():
             return self.times.all()[0]
         else:
             return None
+
     # create and stores identical copy of this course
     def copy(self):
         old = Course.objects.get(pk=self.id)
         self.pk = None
         self.save()
-        
+
         # copy course times
         for time in old.times.all():
-            time.pk=None
-            time.course=self
+            time.pk = None
+            time.course = self
             time.save()
-            
+
         # copy teachers
         for teach in old.teaching.all():
             teach.pk = None
             teach.course = self
             teach.save()
-            
+
         return self
-    
+
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField("Position", default=0)
+
     class Meta:
         ordering = ['position']
-          
+
     def __unicode__(self):
-        return u"{} ({})".format(self.name,self.offering)
+        return u"{} ({})".format(self.name, self.offering)
+
 
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions')
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
-    date.help_text="The date/time when the subscription was made."
-    partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True, null=True)
+    date.help_text = "The date/time when the subscription was made."
+    partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
+                                null=True)
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
-    comment.help_text="A optional comment made by the user during subscription."
+    comment.help_text = "A optional comment made by the user during subscription."
     confirmed = models.BooleanField(blank=False, null=False, default=False)
-    confirmed.help_text="When this is checked, a participation confirmation email is send (once) to the user while saving this form."
+    confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
     payed = models.BooleanField(blank=False, null=False, default=False)
 
     objects = managers.SubscribeManager()
-    
+
     def get_offering(self):
         return self.course.offering
-    get_offering.short_description="Offering"
-    
+
+    get_offering.short_description = "Offering"
+
     def get_user_gender(self):
         return self.user.profile.gender
-    get_user_gender.short_description="Gender"
-    
+
+    get_user_gender.short_description = "Gender"
+
     def get_user_email(self):
         return self.user.email
-    get_user_email.short_description="Email"
-    
+
+    get_user_email.short_description = "Email"
+
     def get_user_body_height(self):
         return self.user.profile.body_height
-    get_user_body_height.short_description="Body height"
-    
+
+    get_user_body_height.short_description = "Body height"
+
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
-        return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
-    get_calculated_experience.short_description="Calculated experience"
-    
+        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
+
+    get_calculated_experience.short_description = "Calculated experience"
+
     # returns similar courses that the user did before in the system
     def get_payment_status(self):
-        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).filter(~Q(course=self.course)).count()
+        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).filter(
+            ~Q(course=self.course)).count()
         if self.payed:
-            r='Yes'
+            r = 'Yes'
         else:
-            r='No'
-            
+            r = 'No'
+
         if c > 0:
             # this user didn't payed for other courses
-            r+=', owes {} more'.format(c)
+            r += ', owes {} more'.format(c)
         return r
-        
-        return ', '.join(map(str,calculate_relevant_experience(self.user,self.course)))
-    get_payment_status.short_description="Payed?"
-    
+
+        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
+
+    get_payment_status.short_description = "Payed?"
+
     def get_price_to_pay(self):
         if self.user.profile.student_status == 'no':
             return self.course.price_without_legi
         else:
             return self.course.price_with_legi
-    
+
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
         if self.partner == self.user:
             raise ValidationError('Subscriptions with yourself as the partner are not allowed.')
 
     def __unicode__(self):
-        return u"{} subscribes to {}".format(self.user.get_full_name(),self.course)
-    
+        return u"{} subscribes to {}".format(self.user.get_full_name(), self.course)
+
+
 class Confirmation(models.Model):
     subscription = models.ForeignKey(Subscribe, related_name='confirmations')
     date = models.DateField(blank=False, null=False, auto_now_add=True)
-    date.help_text="The date when the participation confirmation mail was sent to the subscriber."
-    
+    date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
+
     def __unicode__(self):
-        return u"({}) confirmed at {}".format(self.subscription,self.date)
-    
+        return u"({}) confirmed at {}".format(self.subscription, self.date)
+
+
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
     course = models.ForeignKey('Course', related_name='teaching')
-    
+
     def __unicode__(self):
-        return u"{} teaches {}".format(self.teacher,self.course)
+        return u"{} teaches {}".format(self.teacher, self.course)
+
 
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    period = models.ForeignKey(Period,blank=True, null=True, on_delete=models.SET_NULL)
+    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
     display = models.BooleanField(default=False)
-    display.help_text="Defines if the courses in this offering should be displayed on the Website."
+    display.help_text = "Defines if the courses in this offering should be displayed on the Website."
     active = models.BooleanField(default=False)
-    active.help_text="Defines if clients can subscribe to courses in this offering."
-    
+    active.help_text = "Defines if clients can subscribe to courses in this offering."
+
     def format_period(self):
         return self.period
-    
+
     def __unicode__(self):
         return u"{}".format(self.name)
-    
+
+
 class Song(models.Model):
     title = models.CharField(max_length=255, blank=False)
     artist = models.CharField(max_length=255, blank=True, null=True)
     length = models.TimeField(blank=True, null=True)
     speed = models.IntegerField(blank=True, null=True)
-    speed.help_text="The speed of the song in TPM"
+    speed.help_text = "The speed of the song in TPM"
     style = models.ForeignKey(Style, related_name='songs', blank=False, null=True, on_delete=models.SET_NULL)
     url_video = models.URLField(max_length=500, blank=True, null=True)
-    url_video.help_text="A url to a demo video (e.g Youtube)."
-    
+    url_video.help_text = "A url to a demo video (e.g Youtube)."
+
     def __unicode__(self):
         return u"{} - {}".format(self.title, self.artist)
-    
-    class Meta:
-        ordering = ['speed','length',]
 
+    class Meta:
+        ordering = ['speed', 'length', ]

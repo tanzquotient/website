@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
 
-    
+
 class SubscribeOfferingListFilter(SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
@@ -25,11 +25,11 @@ class SubscribeOfferingListFilter(SimpleListFilter):
         human-readable name for the option that will appear
         in the right sidebar.
         """
-        
-        filters =()
+
+        filters = ()
         for o in Offering.objects.all():
-            filters+=((o.id,o.name),)
-            
+            filters += ((o.id, o.name),)
+
         return filters
 
     def queryset(self, request, queryset):
@@ -38,9 +38,8 @@ class SubscribeOfferingListFilter(SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
         """
-        
+
         if self.value() is not None:
             return queryset.filter(course__offering__id=self.value())
         else:
             return queryset
-            

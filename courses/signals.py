@@ -9,8 +9,8 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger('signals')
 
+
 @receiver(post_save, sender=my_models.Subscribe)
 def subscription_edit_handler(sender, **kwargs):
     subscription = kwargs.get('instance')
     services.confirm_subscription(subscription)
-    

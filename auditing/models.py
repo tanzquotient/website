@@ -16,7 +16,7 @@ class Problem(models.Model):
         (PRIORITY_HIGH, 'High'),
     )
 
-    datetime=models.DateTimeField(blank=False, null=False, auto_now=True, auto_now_add=True)
+    datetime = models.DateTimeField(blank=False, null=False, auto_now=True, auto_now_add=True)
     tag = models.SlugField()
     message = models.TextField(blank=True, null=True)
     priority = models.IntegerField(default=PRIORITY_NO, choices=PRIORITIES)
@@ -28,4 +28,3 @@ class Problem(models.Model):
 
     def __unicode__(self):
         return self.tag
-    

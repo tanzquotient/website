@@ -1,6 +1,6 @@
 <h3>Confirmed subscriptions without a corresponding entry in confirmation log:</h3>
 {% for s in subscriptions %}
-	<p>{{ s }}</p>
-{% empty %}
-	Everthing is fine here.
+    <p>{{ s }}</p>
+    {% empty %}
+    Everthing is fine here.
 {% endfor %}

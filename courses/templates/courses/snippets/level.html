@@ -1,13 +1,13 @@
 <em>
-{% if level %}
-	{% if level <= 1 %}
-		Anfängerkurs
-	{% elif level <= 3 %}
-		Mittleres Niveau
-	{% else %}
-		Fortgeschrittenes Niveau
-	{% endif %}
-{% else %}
-	alle Niveaus
-{% endif %}
+    {% if level %}
+        {% if level <= 1 %}
+            Anfängerkurs
+        {% elif level <= 3 %}
+            Mittleres Niveau
+        {% else %}
+            Fortgeschrittenes Niveau
+        {% endif %}
+    {% else %}
+        alle Niveaus
+    {% endif %}
 </em>

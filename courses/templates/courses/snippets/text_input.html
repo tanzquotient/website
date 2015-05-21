@@ -1,17 +1,19 @@
 <div class="form-group has-feedback {% if field.errors %}has-error{% endif %}">
-  <label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}
-  	{% if star %}
-	    *
-	{% endif %}
-  </label>
-  <div class="col-sm-10">
-    <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
- 	{% if field.errors %}
-		<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-	{% endif %}
- 	{% if field.help_text %}
- 		<p class="help-block">{{ field.help_text}}</p>
- 	{% endif %}
-	{% include "courses/snippets/field_errors.html" %}
-  </div>
+    <label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}
+        {% if star %}
+            *
+        {% endif %}
+    </label>
+
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}"
+               placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
+        {% if field.errors %}
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+        {% endif %}
+        {% if field.help_text %}
+            <p class="help-block">{{ field.help_text }}</p>
+        {% endif %}
+        {% include "courses/snippets/field_errors.html" %}
+    </div>
 </div>

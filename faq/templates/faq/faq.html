@@ -1,20 +1,22 @@
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-	{% for q in questions %}
-		<div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="heading-{{ q.id }}">
-		      <h4 class="panel-title">
-		        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ q.id }}" aria-expanded="false" aria-controls="collapse-{{ q.id }}">
-		          {{ q.question_text }}
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapse-{{ q.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ q.id }}">
-		      <div class="panel-body">
-		        {{ q.answer_text }}
-		         </div>
-		    </div>
-		 </div>
-	{% empty %}
-		<div class="alert alert-info">No questions to be displayed.</div>
-	{% endfor %}
+    {% for q in questions %}
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-{{ q.id }}">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ q.id }}"
+                       aria-expanded="false" aria-controls="collapse-{{ q.id }}">
+                        {{ q.question_text }}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse-{{ q.id }}" class="panel-collapse collapse" role="tabpanel"
+                 aria-labelledby="heading-{{ q.id }}">
+                <div class="panel-body">
+                    {{ q.answer_text }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">No questions to be displayed.</div>
+    {% endfor %}
 </div>

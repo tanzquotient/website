@@ -1,21 +1,21 @@
 {% extends "template_basic.html" %}
 
 {% block header %}
-	<header id="header_courses">
-		<div class="container">
-			<div class="row">
-				<h1 class="lead">Kurse</h1>
-			</div>
-		</div>
-	</header>
+    <header id="header_courses">
+        <div class="container">
+            <div class="row">
+                <h1 class="lead">Kurse</h1>
+            </div>
+        </div>
+    </header>
 {% endblock header %}
 
 {% block content %}
-	<div class="container">
-		{% for o in offerings %}
-			<p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
-		{% empty %}
-			<div class="alert alert-info">Keine Kurse verfügbar.</div>
-		{% endfor %}
-	</div>
+    <div class="container">
+        {% for o in offerings %}
+            <p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
+            {% empty %}
+            <div class="alert alert-info">Keine Kurse verfügbar.</div>
+        {% endfor %}
+    </div>
 {% endblock content %}

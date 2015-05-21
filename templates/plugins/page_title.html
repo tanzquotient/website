@@ -1,16 +1,16 @@
 {% load cms_tags placeholder_tags %}
 <h1 class="lead">
-	{% if instance.title %}
-		{{ instance.title }}
-	{% else %}
-		{% page_attribute "page_title" %}
-	{% endif %}
+    {% if instance.title %}
+        {{ instance.title }}
+    {% else %}
+        {% page_attribute "page_title" %}
+    {% endif %}
 </h1>
 {% if instance.title %}
-	<p class="tagline">{{ instance.subtitle }}</p>
+    <p class="tagline">{{ instance.subtitle }}</p>
 {% endif %}
 <p>
-	{% for plugin in instance.child_plugin_instances %}
+    {% for plugin in instance.child_plugin_instances %}
         {% render_plugin plugin %} &#32;
     {% endfor %}
 </p>

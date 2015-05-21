@@ -1,7 +1,7 @@
 {% for user in users %}
-	{% if user.email %}
-		{{ user.email }}</br>
-	{% endif %}
-{% empty %}
-	No newsletter subscriptions exist at the moment.
+    {% if user.email %}
+        {{ user.email }}</br>
+    {% endif %}
+    {% empty %}
+    No newsletter subscriptions exist at the moment.
 {% endfor %}

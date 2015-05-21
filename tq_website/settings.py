@@ -15,6 +15,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -24,12 +25,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, "templates"),
-) 
+)
 
 ALLOWED_HOSTS = [
     # with . at beginning allows domain and subdomains
     # with . at end allows FQDN
-    '.tq.ethz.ch.',  
+    '.tq.ethz.ch.',
     '.tq.vseth.ch.',
     '.tq.vseth.ethz.ch.',
     '.tanzquotient.vseth.ethz.ch.',
@@ -57,7 +58,8 @@ INSTALLED_APPS = (
     'mptt',  # utilities for implementing a tree
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
-    'djangocms_admin_style',  # for the admin skin. You **must** add 'djangocms_admin_style' in the list **before** 'django.contrib.admin'.
+    'djangocms_admin_style',
+    # for the admin skin. You **must** add 'djangocms_admin_style' in the list **before** 'django.contrib.admin'.
     'django.contrib.messages',  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     'django.contrib.admin',
     'django.contrib.auth',
@@ -111,7 +113,7 @@ MIGRATION_MODULES = {
     'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
 }
 
-SITE_ID=1
+SITE_ID = 1
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -144,7 +146,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
-STATIC_URL = '/static/' 
+STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -178,8 +180,8 @@ THUMBNAIL_HIGH_RESOLUTION = True
 # Configuration of djangocms-text-ckeditor #
 ############################################
 CKEDITOR_UPLOAD_PATH = "uploads/"
-#CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
-CKEDITOR_IMAGE_BACKEND='pillow'
+# CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
+CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 CKEDITOR_SETTINGS = {
     'language': 'en',
@@ -187,8 +189,8 @@ CKEDITOR_SETTINGS = {
         ['Undo', 'Redo'],
         ['ShowBlocks'],
         ['Format', 'Styles'],
-        [ 'Link', 'Unlink' ],
-        ['Source',],
+        ['Link', 'Unlink'],
+        ['Source', ],
     ],
     'skin': 'moono',
 }
@@ -211,41 +213,40 @@ CMS_LANGUAGES = {
         {
             'code': 'de',
             'name': ugettext('Deutsch'),
-            'fallbacks': ['en',],
+            'fallbacks': ['en', ],
             'public': True,
             'hide_untranslated': False,
-            'redirect_on_fallback':False,
+            'redirect_on_fallback': False,
         },
         {
             'code': 'en',
             'name': ugettext('English'),
-            'fallbacks': ['de',],
+            'fallbacks': ['de', ],
             'public': True,
             'hide_untranslated': False,
-            'redirect_on_fallback':False,
+            'redirect_on_fallback': False,
         },
     ],
     'default': {
-        'fallbacks': ['en', 'de',],
-        'redirect_on_fallback':True,
+        'fallbacks': ['en', 'de', ],
+        'redirect_on_fallback': True,
         'public': True,
         'hide_untranslated': False,
     }
 }
 
-
 CMS_PLACEHOLDER_CONF = {
     'main_content': {
-        'name' : ugettext('Main content'),
-        'language_fallback' : True,
+        'name': ugettext('Main content'),
+        'language_fallback': True,
     },
     'side_content': {
-        'name' : ugettext('Side content'),
-        'language_fallback' : True,
+        'name': ugettext('Side content'),
+        'language_fallback': True,
     },
     'title': {
-        'name' : ugettext('Title'),
-        'language_fallback' : True,
+        'name': ugettext('Title'),
+        'language_fallback': True,
         'plugins': ['PageTitlePlugin'],
         'limits': {
             'PageTitlePlugin': 1,
@@ -257,7 +258,7 @@ CMS_PLACEHOLDER_CONF = {
             },
         ],
         'child_classes': {
-            'PageTitlePlugin': ['ButtonPlugin',],
+            'PageTitlePlugin': ['ButtonPlugin', ],
         },
         'parent_classes': {
             'ButtonPlugin': ['PageTitlePlugin'],
@@ -273,7 +274,7 @@ THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
     'easy_thumbnails.processors.autocrop',
-    #'easy_thumbnails.processors.scale_and_crop',
+    # 'easy_thumbnails.processors.scale_and_crop',
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
 )
@@ -281,16 +282,17 @@ THUMBNAIL_PROCESSORS = (
 ####################################
 # Configuration of cmsplugin-filer #
 ####################################
-TEXT_SAVE_IMAGE_FUNCTION='cmsplugin_filer_image.integrations.ckeditor.create_image_plugin'
+TEXT_SAVE_IMAGE_FUNCTION = 'cmsplugin_filer_image.integrations.ckeditor.create_image_plugin'
 
 ##################################################
 # Configuration of post_office plugin und celery #
 ##################################################
 # setup celery
 import djcelery
+
 djcelery.setup_loader()
 
-CELERYBEAT_SCHEDULER ='djcelery.schedulers.DatabaseScheduler'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
@@ -299,7 +301,7 @@ EMAIL_BACKEND = 'post_office.EmailBackend'
 POST_OFFICE_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 POST_OFFICE = {
-    'DEFAULT_PRIORITY' : 'now'
+    'DEFAULT_PRIORITY': 'now'
 }
 
 LOGGING = {
@@ -307,34 +309,34 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
-#         'logfile': {
-#             'level':'DEBUG',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': BASE_DIR + "/logfile",
-#             'maxBytes': 50000,
-#             'backupCount': 2,
-#             'formatter': 'standard',
-#         },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
+        #         'logfile': {
+        #             'level':'DEBUG',
+        #             'class':'logging.handlers.RotatingFileHandler',
+        #             'filename': BASE_DIR + "/logfile",
+        #             'maxBytes': 50000,
+        #             'backupCount': 2,
+        #             'formatter': 'standard',
+        #         },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
     },
     'loggers': {
         'django': {
-            'handlers':['console'],
+            'handlers': ['console'],
             'propagate': True,
-            'level':'WARN',
+            'level': 'WARN',
         },
         'django.db.backends': {
             'handlers': ['console'],
@@ -342,7 +344,7 @@ LOGGING = {
             'propagate': False,
         },
         'courses': {
-            'handlers': ['console'], # better: ['console', 'logfile']
+            'handlers': ['console'],  # better: ['console', 'logfile']
             'level': 'DEBUG',
         },
     }

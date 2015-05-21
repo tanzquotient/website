@@ -7,45 +7,69 @@ import services
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+
 def activate_courses(modeladmin, request, queryset):
     queryset.update(active=True)
+
+
 activate_courses.short_description = "Activate courses"
+
 
 def deactivate_courses(modeladmin, request, queryset):
     queryset.update(active=False)
+
+
 deactivate_courses.short_description = "Deactivate courses"
+
 
 def copy_courses(modeladmin, request, queryset):
     for c in queryset:
         services.copy_course(c)
+
+
 copy_courses.short_description = "Create copy of courses for the subsequent offering"
+
 
 def confirm_subscriptions(modeladmin, request, queryset):
     # this is directly executed with database query, does not trigger signals!
     queryset.update(confirmed=True)
-    
+
     # manually send confirmation mails
     services.confirm_subscriptions(queryset)
+
+
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
+
 
 def match_partners(modeladmin, request, queryset):
     services.match_partners(queryset)
-match_partners.short_description = "Match partners (chronologically, body height optimal)"   
+
+
+match_partners.short_description = "Match partners (chronologically, body height optimal)"
+
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
     queryset.update(payed=True)
+
+
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
+
 
 def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     ids = []
     for c in queryset:
         ids.append(c.id)
     return services.export_subscriptions(ids, 'csv')
+
+
 export_confirmed_subscriptions_csv.short_description = "Export confirmed subscriptions of selected course as CSV"
+
 
 def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
     ids = []
     for c in queryset:
         ids.append(c.id)
     return services.export_subscriptions(ids, 'xlsx')
+
+
 export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected course as XLSX"

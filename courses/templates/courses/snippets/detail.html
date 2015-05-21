@@ -1,47 +1,50 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-  	<h3 class="text-center thin">{{ course.type.name }}</h3>
-  </div>
-  <div class="panel-body">
-    <div class="row">
-			<div class="col-xs-12 col-sm-6 col-md-3">
-				<h4>Infos</h4>
-				<p><strong>{{ course.format_times|default:"Zeit noch unbekannt" }}</strong>,
-					{% if course.room %}
-						{% include "courses/snippets/room.html" with room=course.room only %}
-					{% else %}
-						Raum noch unbekannt
-					{% endif %}
-				</p>
-				<p>{{ course.get_period|default:'ganzes Jahr' }}</p>
-				<p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
-				{% if course.format_teachers %}
-					<p>Mit {{ course.format_teachers }}</p>
-				{% endif %}
-				<p>Kosten: {{ course.format_prices|default:"-" }}</p>
-			</div>
-			<div class="col-xs-12 col-sm-6 col-md-3">
-				{% if course.special %}
-					<h4>Weiteres</h4>
-					<p>{{ course.special|safe }}</p>
-				{% endif %}
-				{% if course.get_cancellation_dates %}
-					<h4>Ausfälle</h4>
-					<p>{{ course.format_cancellations }}</p>
-				{% endif %}
-			</div>
-			<div class="col-xs-12 col-sm-6 col-md-3">
-				{% if course.type.styles.all %}
-					<h4>Tanzstile</h4>
-					<p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
-				{% endif %}
-			</div>
-			<div class="col-xs-12 col-sm-6 col-md-3">
-				{% if course.type.description %}
-					<h4>Beschreibung</h4>
-					<p>{{ course.type.description|safe }}</p>
-				{% endif %}
-			</div>
-		</div>
-  </div>
+    <div class="panel-heading">
+        <h3 class="text-center thin">{{ course.type.name }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <h4>Infos</h4>
+
+                <p><strong>{{ course.format_times|default:"Zeit noch unbekannt" }}</strong>,
+                    {% if course.room %}
+                        {% include "courses/snippets/room.html" with room=course.room only %}
+                    {% else %}
+                        Raum noch unbekannt
+                    {% endif %}
+                </p>
+
+                <p>{{ course.get_period|default:'ganzes Jahr' }}</p>
+
+                <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
+                {% if course.format_teachers %}
+                    <p>Mit {{ course.format_teachers }}</p>
+                {% endif %}
+                <p>Kosten: {{ course.format_prices|default:"-" }}</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                {% if course.special %}
+                    <h4>Weiteres</h4>
+                    <p>{{ course.special|safe }}</p>
+                {% endif %}
+                {% if course.get_cancellation_dates %}
+                    <h4>Ausfälle</h4>
+                    <p>{{ course.format_cancellations }}</p>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                {% if course.type.styles.all %}
+                    <h4>Tanzstile</h4>
+                    <p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                {% if course.type.description %}
+                    <h4>Beschreibung</h4>
+                    <p>{{ course.type.description|safe }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>

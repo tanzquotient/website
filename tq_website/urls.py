@@ -10,21 +10,22 @@ import views
 import courses.views as courses_views
 
 urlpatterns = patterns('',
-    # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # TODO delete this robots or change it when site is finished
-    url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
-    url(r'^export/newsletter/$', views.newsletter_list, name="newsletter_list"),
-    url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
-    url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
-    url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
-)
+                       # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # TODO delete this robots or change it when site is finished
+                       url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
+                       url(r'^export/newsletter/$', views.newsletter_list, name="newsletter_list"),
+                       url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
+                       url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
+                       url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
+                       )
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns('',
-    # Examples:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
-    url(r'^', include('cms.urls')),
-)
+                             # Examples:
+                             url(r'^admin/', include(admin.site.urls)),
+                             url(r'^accounts/login/$', 'django.contrib.auth.views.login',
+                                 {'template_name': 'login.html'}, name="login"),
+                             url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
+                             url(r'^', include('cms.urls')),
+                             )

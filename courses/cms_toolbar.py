@@ -3,9 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from cms.toolbar_pool import toolbar_pool
 from cms.toolbar_base import CMSToolbar
 
+
 @toolbar_pool.register
 class CoursesToolbar(CMSToolbar):
-
     def populate(self):
         menu = self.toolbar.get_or_create_menu('courses-app', _('Courses'))
         if self.request.user.has_perm('courses.change_offering'):
@@ -17,9 +17,9 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_subscribe'):
             url = reverse('admin:courses_subscribe_changelist')
             menu.add_sideframe_item(_('Subscriptions'), url=url)
-        
+
         menu.add_break('courses-break')
-        
+
         if self.request.user.has_perm('courses.change_coursetype'):
             url = reverse('admin:courses_coursetype_changelist')
             menu.add_sideframe_item(_('Course types'), url=url)
@@ -38,16 +38,15 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_address'):
             url = reverse('admin:courses_address_changelist')
             menu.add_sideframe_item(_('Addresses'), url=url)
-        
+
         menu.add_break('courses-break2')
-        
+
         if self.request.user.has_perm('courses.change_confirmation'):
             url = reverse('admin:courses_confirmation_changelist')
             menu.add_sideframe_item(_('Confirmations'), url=url)
-            
+
         menu = self.toolbar.get_or_create_menu('tools', _('Tools'))
         url = reverse('duplicate_users')
         menu.add_modal_item(_('Merge duplicate users'), url=url)
         url = reverse('confirmation_check')
         menu.add_modal_item(_('Check confirmations'), url=url)
-
