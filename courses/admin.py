@@ -48,13 +48,18 @@ class SubscribeInlineForUser(admin.TabularInline):
     raw_id_fields = ('course', 'partner')
 
 
-class CourseCancellationInline(admin.TabularInline):
-    model = CourseCancellation
+class RegularLessonCancellationInline(admin.TabularInline):
+    model = RegularLessonCancellation
     extra = 1
 
 
-class CourseTimeInline(admin.TabularInline):
-    model = CourseTime
+class RegularLessonInline(admin.TabularInline):
+    model = RegularLesson
+    extra = 0
+
+
+class IrregularLessonInline(admin.TabularInline):
+    model = IrregularLesson
     extra = 0
 
 
@@ -77,11 +82,11 @@ class SongAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'offering', 'period', 'format_times', 'room', 'format_prices', 'format_teachers',
+        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices', 'format_teachers',
         'active')
     list_filter = ('offering', 'type', 'room', 'active')
     search_fields = ['name', 'type__name', ]
-    inlines = (CourseCancellationInline, CourseTimeInline, TeachInlineForCourse, SubscribeInlineForCourse,)
+    inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse, SubscribeInlineForCourse,)
 
     model = Course
     fieldsets = [

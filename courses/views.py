@@ -1,9 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.http import Http404
 from django.views.generic import TemplateView, ListView
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -29,37 +27,50 @@ log = logging.getLogger('courses')
 def course_list(request):
     template_name = "courses/list.html"
     context = {}
-    context.update({
-        'menu': "courses",
-    })
 
     offerings = services.get_offerings_to_display()
     c_offerings = []
     for offering in offerings:
-        weekday_list = []
+        offering_sections = []
         course_set = offering.course_set
-        for (w, w_name) in WEEKDAYS:
-            weekday_dict = {}
-            weekday_dict['weekday'] = WEEKDAYS_TRANS[w]
-            weekday_dict['courses'] = course_set.weekday(w)
-            if (w == 'sat' or w == 'sun') and weekday_dict['courses'].__len__() == 0:
-                pass
-            else:
-                weekday_list.append(weekday_dict)
 
-        # add courses that have no weekday entry yet
-        weekday_dict = {}
-        weekday_dict['weekday'] = _("Unknown weekday")
-        weekday_dict['courses'] = course_set.weekday(None)
-        if weekday_dict['courses'].__len__() != 0:
-            weekday_list.append(weekday_dict)
+        if offering.type == 'reg':
+            for (w, w_name) in WEEKDAYS:
+                section_dict = {}
+                section_dict['section_title'] = WEEKDAYS_TRANS[w]
+                section_dict['courses'] = course_set.weekday(w)
+                if (w == 'sat' or w == 'sun') and section_dict['courses'].__len__() == 0:
+                    pass
+                else:
+                    offering_sections.append(section_dict)
+
+            # add courses that have no weekday entry yet
+            section_dict = {}
+            section_dict['section_title'] = _("Unknown weekday")
+            section_dict['courses'] = course_set.weekday(None)
+            if section_dict['courses'].__len__() != 0:
+                offering_sections.append(section_dict)
+        elif offering.type == 'irr':
+            courses_by_month = course_set.by_month()
+            log.info(courses_by_month)
+            for (m,l) in courses_by_month.iteritems():
+                if 1 < m < 12:
+                    month = datetime.date(day=1,year=2000,month=m).strftime("%B")
+                else:
+                    month = ""
+                offering_sections.append({'section_title': month, 'courses': l})
+            log.info(offering_sections)
+
+        else:
+            m = "unsupported offering type"
+            log.error(m)
+            raise Http404(m)
 
         c_offerings.append({
             'offering': offering,
-            'weekday_list': weekday_list,
+            'sections': offering_sections,
         })
 
-    print len(c_offerings)
     context.update({
         'offerings': c_offerings,
     })
@@ -220,3 +231,7 @@ from django.template.defaulttags import register
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter
+def trans_weekday(key):
+    return WEEKDAYS_TRANS[key]

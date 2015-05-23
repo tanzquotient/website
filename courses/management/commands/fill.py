@@ -124,14 +124,14 @@ class Command(NoArgsCommand):
         c = Course.objects.get_or_create(name="Salsa Cubana 5",
                                          defaults={'type': CourseType.objects.get(name='Salsa Cubana 5'), 'offering': o,
                                                    'room': Room.objects.get(name=self.room_names[0])})[0]
-        CourseTime.objects.get_or_create(course=c, defaults={'weekday': 'mon', 'time_from': datetime.time(15, 00),
+        RegularLesson.objects.get_or_create(course=c, defaults={'weekday': 'mon', 'time_from': datetime.time(15, 00),
                                                              'time_to': datetime.time(16, 00)})
         c.type.styles.add(Style.objects.get(name='Salsa Cubana'))
 
         c = Course.objects.get_or_create(name="Social 3",
                                          defaults={'type': CourseType.objects.get(name='Social 3'), 'offering': o,
                                                    'room': Room.objects.get(name=self.room_names[1])})[0]
-        CourseTime.objects.get_or_create(course=c, defaults={'weekday': 'mon', 'time_from': datetime.time(16, 00),
+        RegularLesson.objects.get_or_create(course=c, defaults={'weekday': 'mon', 'time_from': datetime.time(16, 00),
                                                              'time_to': datetime.time(17, 30)})
         c.type.styles.add(Style.objects.get(name='Jive'))
         c.type.styles.add(Style.objects.get(name='Discofox'))
@@ -142,7 +142,7 @@ class Command(NoArgsCommand):
         c = Course.objects.get_or_create(name="Bachata 3",
                                          defaults={'type': CourseType.objects.get(name='Bachata 3'), 'offering': o,
                                                    'room': Room.objects.get(name=self.room_names[2])})[0]
-        CourseTime.objects.get_or_create(course=c, defaults={'weekday': 'thu', 'time_from': datetime.time(18, 15),
+        RegularLesson.objects.get_or_create(course=c, defaults={'weekday': 'thu', 'time_from': datetime.time(18, 15),
                                                              'time_to': datetime.time(19, 00)})
 
         c = Course.objects.get_or_create(name="Lindy Hop 1",

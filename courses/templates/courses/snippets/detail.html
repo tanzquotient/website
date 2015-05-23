@@ -7,15 +7,16 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h4>Infos</h4>
 
-                <p><strong>{{ course.format_times|default:"Zeit noch unbekannt" }}</strong>,
+                <p><strong>{% include "courses/snippets/lessons.html" with course=course only %}</strong></p>
+                <p>
                     {% if course.room %}
-                        {% include "courses/snippets/room.html" with room=course.room only %}
+                        Raum {% include "courses/snippets/room.html" with room=course.room only %}
                     {% else %}
                         Raum noch unbekannt
                     {% endif %}
                 </p>
 
-                <p>{{ course.get_period|default:'ganzes Jahr' }}</p>
+                <p>{{ course.get_period|default:'' }}</p>
 
                 <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
                 {% if course.format_teachers %}

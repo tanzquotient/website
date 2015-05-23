@@ -1,0 +1,15 @@
+{% for lesson in course.get_lessons %}
+    <em>
+        {% if lesson.date %}
+            {{ lesson.date|date:'d. M Y' }},
+        {% else %}
+            {{ lesson.weekday|trans_weekday }},
+        {% endif %}
+    </em>
+    {{ lesson.time_from|date:'H:i' }} - {{ lesson.time_to|date:'H:i' }}
+    {% if not forloop.last %}
+        <br/>
+    {% endif %}
+{%  empty %}
+    Zeit noch unbekannt
+{% endfor %}

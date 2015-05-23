@@ -24,6 +24,8 @@ WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
 WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
 
+OFFERING_TYPES = (('reg', u'Regular (weekly)'), ('irr', u'Irregular (Workshops)'),)
+
 LEVELS = ((1, u'beginner'), (2, u'intermediate'), (3, u'advanced'))
 
 GENDER = (('m', u'Men'), ('w', u'Woman'))
@@ -113,8 +115,8 @@ class Period(models.Model):
             return u"ganzjährlich"
 
 
-class CourseTime(models.Model):
-    course = models.ForeignKey('Course', related_name='times')
+class RegularLesson(models.Model):
+    course = models.ForeignKey('Course', related_name='regular_lessons')
     weekday = models.CharField(max_length=3,
                                choices=WEEKDAYS,
                                default=None)
@@ -124,6 +126,36 @@ class CourseTime(models.Model):
     def __unicode__(self):
         return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
                                    self.time_to.strftime("%H:%M"))
+
+
+class RegularLessonCancellation(models.Model):
+    course = models.ForeignKey('Course', related_name='cancellations')
+    date = models.DateField(blank=False, null=True)
+
+    class Meta:
+        ordering = ['date']
+
+    def __unicode__(self):
+        return u"{}".format(self.date.strftime('%d.%m.%Y'))
+
+
+class IrregularLesson(models.Model):
+    course = models.ForeignKey('Course', related_name='irregular_lessons')
+    date = models.DateField(blank=False, null=False)
+    time_from = models.TimeField()
+    time_to = models.TimeField()
+    room = models.ForeignKey(Room, related_name='irregular_lessons', blank=True, null=True, on_delete=models.SET_NULL)
+    room.help_text = "The room for this lesson. If left empty, the course room is assumed."
+
+    class Meta:
+        ordering = ['date', 'time_from']
+
+    def __unicode__(self):
+        s = u"{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
+                                self.time_to.strftime("%H:%M"))
+        if self.room:
+            s = s + u", {}".format(self.room)
+        return s
 
 
 class CourseType(models.Model):
@@ -147,14 +179,6 @@ class CourseType(models.Model):
 
 class PeriodCancellation(models.Model):
     course = models.ForeignKey('Period', related_name='cancellations')
-    date = models.DateField(blank=False, null=True)
-
-    def __unicode__(self):
-        return u"{}".format(self.date.strftime('%d.%m.%Y'))
-
-
-class CourseCancellation(models.Model):
-    course = models.ForeignKey('Course', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
 
     def __unicode__(self):
@@ -199,7 +223,7 @@ class Course(models.Model):
     format_prices.short_description = "Prices"
 
     def get_period(self):
-        if (self.period is None):
+        if self.period is None:
             return self.offering.period
         else:
             return self.period
@@ -207,7 +231,7 @@ class Course(models.Model):
     # only show free_places_count if it can be calculated and is below 10
     def show_free_places_count(self):
         r = self.get_free_places_count()
-        if r != None and r < 10 and r > 0:
+        if r is not None and 0 < r < 10:
             return r
         else:
             return None
@@ -243,16 +267,26 @@ class Course(models.Model):
             else:
                 return self.offering.active and self.active  # both must be true to allow subscription
 
-    def format_times(self):
-        return u' & '.join(map(str, self.times.all()))
+    def get_lessons(self):
+        lessons = []
+        lessons.extend(self.regular_lessons.all())
+        lessons.extend(self.irregular_lessons.all())
+        return lessons
 
-    format_times.short_description = "Times"
+    def get_lessons_as_strings(self):
+        return map(str, self.get_lessons())
+
+    def format_lessons(self):
+        return u' & '.join(self.get_lessons_as_strings())
+
+    format_lessons.short_description = "Lessons"
 
     def get_cancellation_dates(self):
         # take the union of the cancellations of this course and the period it belongs to
         dates = [c.date for c in self.cancellations.all()]
-        print dates
-        dates_offering = [c.date for c in self.offering.period.cancellations.all()]
+        dates_offering = []
+        if self.offering.period:
+            dates_offering = [c.date for c in self.offering.period.cancellations.all()]
         return sorted(dates + dates_offering)
 
     def format_cancellations(self):
@@ -261,11 +295,40 @@ class Course(models.Model):
 
     format_cancellations.short_description = "Cancellations"
 
-    def get_first_time(self):
-        if self.times.exists():
-            return self.times.all()[0]
+    def get_first_regular_lesson(self):
+        if self.regular_lessons.exists():
+            return self.regular_lessons.all()[0]
         else:
             return None
+
+    def get_first_irregular_lesson(self):
+        if self.irregular_lessons.exists():
+            return self.irregular_lessons.order_by('date', 'time_from').all()[0]
+        else:
+            return None
+
+    def get_first_lesson_date(self):
+        fil = self.get_first_irregular_lesson()
+        d1 = None
+        d2 = None
+        if fil is not None:
+            d1 = fil.date
+        if self.get_period() is not None:
+            d2 = self.get_period().date_from
+        if d1 is None:
+            if d2 is None:
+                return None
+            else:
+                return d2
+        else:
+            if d2 is None:
+                return d1
+            else:
+                if d1 < d2:
+                    return d1
+                else:
+                    return d2
+
 
     # create and stores identical copy of this course
     def copy(self):
@@ -273,11 +336,17 @@ class Course(models.Model):
         self.pk = None
         self.save()
 
-        # copy course times
-        for time in old.times.all():
-            time.pk = None
-            time.course = self
-            time.save()
+        # copy regular lessons
+        for lesson in old.regular_lessons.all():
+            lesson.pk = None
+            lesson.course = self
+            lesson.save()
+
+        # copy irregular lessons
+        for lesson in old.irregular_lessons.all():
+            lesson.pk = None
+            lesson.course = self
+            lesson.save()
 
         # copy teachers
         for teach in old.teaching.all():
@@ -393,6 +462,10 @@ class Teach(models.Model):
 class Offering(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
     period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
+    type = models.CharField(max_length=3,
+                            choices=OFFERING_TYPES,
+                            default='reg')
+    type.help_text = "The type of the offering influences how the offering is displayed."
     display = models.BooleanField(default=False)
     display.help_text = "Defines if the courses in this offering should be displayed on the Website."
     active = models.BooleanField(default=False)

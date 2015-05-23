@@ -13,7 +13,7 @@
 {% block content %}
     <div class="container">
         {% for o in offerings %}
-            <p>{% include "courses/snippets/offering.html" with offering=o.offering weekday_list=o.weekday_list only %}</p>
+            <p>{% include "courses/snippets/offering.html" with offering=o.offering sections=o.sections only %}</p>
             {% empty %}
             <div class="alert alert-info">Keine Kurse verfügbar.</div>
         {% endfor %}
