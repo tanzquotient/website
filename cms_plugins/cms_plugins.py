@@ -6,6 +6,7 @@ from django.db import models
 
 from djangocms_link.models import Link
 from djangocms_link.cms_plugins import LinkPlugin
+from filer.fields.image import FilerImageField
 
 
 class PageTitlePluginModel(CMSPlugin):
@@ -40,5 +41,41 @@ class ButtonPlugin(LinkPlugin):
     render_template = "plugins/button.html"
 
 
+class RowPlugin(CMSPluginBase):
+    name = _("Row")
+    render_template = "plugins/row.html"
+
+    text_enabled = True
+    allow_children = True
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'instance': instance
+        })
+        return context
+
+
+class ThumbnailPluginModel(CMSPlugin):
+    image = FilerImageField(blank=True, null=True)
+    image.help_text = u"Image to show thumbnail for."
+
+
+class ThumbnailPlugin(CMSPluginBase):
+    name = _("Thumbnail")
+    model = ThumbnailPluginModel
+    render_template = "plugins/thumbnail.html"
+
+    text_enabled = True
+    allow_children = True
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'instance': instance
+        })
+        return context
+
+
 plugin_pool.register_plugin(PageTitlePlugin)
 plugin_pool.register_plugin(ButtonPlugin)
+plugin_pool.register_plugin(RowPlugin)
+plugin_pool.register_plugin(ThumbnailPlugin)

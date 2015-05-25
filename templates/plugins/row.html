@@ -1,0 +1,8 @@
+{% load cms_tags placeholder_tags %}
+<div class="row">
+    {% for plugin in instance.child_plugin_instances %}
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            {% render_plugin plugin %} &#32;
+        </div>
+    {% endfor %}
+</div>
