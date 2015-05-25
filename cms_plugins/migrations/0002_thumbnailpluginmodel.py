@@ -8,7 +8,7 @@ import filer.fields.image
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cms', '0004_auto_20150326_1627'),
+        ('cms', '0001_initial'),
         ('filer', '0001_initial'),
         ('cms_plugins', '0001_initial'),
     ]
