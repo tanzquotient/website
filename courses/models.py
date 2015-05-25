@@ -329,7 +329,6 @@ class Course(models.Model):
                 else:
                     return d2
 
-
     # create and stores identical copy of this course
     def copy(self):
         old = Course.objects.get(pk=self.id)
@@ -347,6 +346,12 @@ class Course(models.Model):
             lesson.pk = None
             lesson.course = self
             lesson.save()
+
+        # copy cancellations
+        for c in old.cancellations.all():
+            c.pk = None
+            c.course = self
+            c.save()
 
         # copy teachers
         for teach in old.teaching.all():

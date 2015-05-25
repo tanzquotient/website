@@ -16,7 +16,9 @@
                         <th>Kurs</th>
                         <th>Ort</th>
                         <th>Zeit</th>
-                        <th>Kursperiode</th>
+                        {% if not d.hide_period_column %}
+                            <th>Kursperiode</th>
+                        {% endif %}
                         <th>Kosten</th>
                         <th>Anmelden / Freie Plätze</th>
                     </tr>
@@ -37,9 +39,11 @@
                                 {% endif %}
                             </td>
                             <td>{% include "courses/snippets/lessons.html" with course=c only %}</td>
-                            <td>
-                                {% include "courses/snippets/period.html" with course=c only %}
-                            </td>
+                            {% if not d.hide_period_column %}
+                                <td>
+                                    {% include "courses/snippets/period.html" with course=c only %}
+                                </td>
+                            {% endif %}
                             <td>{{ c.format_prices|default:"-" }}</td>
                             <td>
                                 {% include "courses/snippets/subscription_info.html" with course=c display_link=True only %}

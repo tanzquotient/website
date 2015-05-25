@@ -17,6 +17,7 @@ from forms import *
 import services
 
 from django.contrib.auth.models import User
+from django.utils import dateformat
 
 import logging
 
@@ -52,19 +53,23 @@ def course_list(request):
                 offering_sections.append(section_dict)
         elif offering.type == 'irr':
             courses_by_month = course_set.by_month()
-            log.info(courses_by_month)
-            for (m,l) in courses_by_month.iteritems():
-                if 1 < m < 12:
-                    month = datetime.date(day=1,year=2000,month=m).strftime("%B")
+            for (d,l) in sorted(courses_by_month.items()):
+                if 1 < d.month < 12:
+                    # use the django formatter for date objects
+                    section_title = dateformat.format(d, 'F Y')
                 else:
-                    month = ""
-                offering_sections.append({'section_title': month, 'courses': l})
-            log.info(offering_sections)
-
+                    section_title = ""
+                # tracks if at least one period of a course is set (it should be displayed on page)
+                deviating_period = False
+                for c in l:
+                    if c.period:
+                        deviating_period = True
+                        break
+                offering_sections.append({'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
         else:
-            m = "unsupported offering type"
-            log.error(m)
-            raise Http404(m)
+            message = "unsupported offering type"
+            log.error(message)
+            raise Http404(message)
 
         c_offerings.append({
             'offering': offering,

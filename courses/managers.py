@@ -23,28 +23,26 @@ class CourseManager(models.Manager):
         result_dict = {}
         courses = self.all()
         sorted_courses = sorted(courses, key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else datetime.date(day=1,month=1,year=9999))
-        print sorted_courses
-        current_month = None
+        current_date = datetime.date(year=1, month=1, day=1)
+        unknown_list = []
         month_list = []
         for c in sorted_courses:
             fid = c.get_first_lesson_date()
-            m = None
-            if fid is not None:
-                m = fid.month
+            if fid:
+                if current_date.year != fid.year or current_date.month != fid.month:
+                    if month_list:
+                        result_dict[current_date]=month_list
+                    # go to next month
+                    current_date = fid
+                    month_list = []
+                # just append to current month list
+                month_list.append(c)
             else:
-                m = -1
-
-            if current_month != m:
-                if month_list:
-                    result_dict[current_month]=month_list
-                # go to next month
-                current_month = m
-                month_list = []
-            # just append to current month list
-            month_list.append(c)
+                unknown_list.append(c)
         if month_list:
-            result_dict[current_month]=month_list
-        print result_dict
+            result_dict[current_date]=month_list
+        if unknown_list:
+            result_dict[datetime.date(year=9999,month=1,day=1)] = unknown_list
         return result_dict
 
 
