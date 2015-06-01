@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'events',
     'auditing',
     'cms_plugins',
+    'analytical',
 )
 
 MIDDLEWARE_CLASSES = (

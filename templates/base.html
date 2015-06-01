@@ -1,3 +1,4 @@
+{% load analytical %}
 <!DOCTYPE html>
 {% load cms_tags sekizai_tags menu_tags placeholder_tags %}
 
@@ -6,6 +7,7 @@
 {% load staticfiles %}
 
 <head>
+    {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -30,9 +32,11 @@
 	<![endif]-->
 
     {% render_block "css" %}
+    {% analytical_head_bottom %}
 </head>
 
 <body class="home">
+{% analytical_body_top %}
 {% cms_toolbar %}
 
 {% block menu %}
@@ -207,5 +211,6 @@
 <script src="{% static "js/jQuery.headroom.min.js" %}"></script>
 <script src="{% static "js/template.js" %}"></script>
 {% render_block "js" %}
+{% analytical_body_bottom %}
 </body>
 </html>
