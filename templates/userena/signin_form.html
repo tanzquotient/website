@@ -1,0 +1,46 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Signin" %}{% endblock %}
+
+{% block content %}
+
+    <h3 class="thin text-center">{% trans "Signin" %}</h3>
+
+    <p class="text-center text-muted">Das Einloggen ist momentatn nur für Admins möglich.</p>
+    <hr>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <fieldset>
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                {{ field.errors }}
+                {% comment %} Displaying checkboxes differently {% endcomment %}
+                {% if field.name == 'remember_me' %}
+                    <p class="checkbox">
+                        <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+                    </p>
+                {% else %}
+                    <div class="top-margin">
+                        <label for="{{ field.id_for_label }}">{{ field.label_tag }} <span
+                                class="text-danger">*</span></label>
+                        <input class="form-control" {% if field.html_name == 'password' %} type="password" {% else %}
+                               type="text" {% endif %} name="{{ field.html_name }}"
+                               value="{{ field.value|default:"" }}"/>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+        <div class="row">
+            <div class="col-lg-8">
+                <b><a href="{% url 'userena_password_reset' %}">{% trans 'Forgot your password?' %}</a></b>
+            </div>
+            <div class="col-lg-4 text-right">
+                <button class="btn btn-action" type="submit" value="login">{% trans "Signin" %}</button>
+            </div>
+        </div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
+    </form>
+{% endblock %}

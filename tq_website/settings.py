@@ -78,7 +78,10 @@ INSTALLED_APPS = (
     'events',
     'auditing',
     'cms_plugins',
+    'accounts',
     'analytical',
+    'userena',
+    'guardian',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -114,6 +117,16 @@ MIGRATION_MODULES = {
     'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
 }
 
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+ANONYMOUS_USER_ID = -1
+
+AUTH_PROFILE_MODULE = 'accounts.Profile'
+
 SITE_ID = 1
 
 ROOT_URLCONF = 'tq_website.urls'
@@ -136,7 +149,9 @@ USE_TZ = True
 # default redirect URL after login (if no GET parameter next is given)
 LOGIN_REDIRECT_URL = "/"
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
+USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

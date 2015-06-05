@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls admin_static admin_list %}
 
-{% block content %}
+{% block main_content %}
     <div id="content-main">
         {% if users %}
             <form action="" method="post">{% csrf_token %}
@@ -30,6 +30,6 @@
         {% endif %}
     </div>
 
-{% endblock %}
+{% endblock main_content %}
 
 

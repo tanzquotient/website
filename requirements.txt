@@ -17,12 +17,14 @@ django-celery-email==1.1.0
 django-classy-tags==0.6.1
 django-cms==3.0.12
 django-filer==0.9.9
+django-guardian==1.2.5
 django-mptt==0.6.1
 django-polymorphic==0.6.1
 django-post-office==1.1.1
 django-reversion==1.8.5
 django-sekizai==0.8.1
 django-tinymce==1.5.3
+django-userena==1.4.1
 djangocms-admin-style==0.2.5
 djangocms-googlemap==0.2
 djangocms-inherit==0.1
@@ -32,6 +34,7 @@ djangocms-text-ckeditor==2.4.3
 easy-thumbnails==2.2
 ecdsa==0.13
 gunicorn==19.3.0
+html2text==2014.12.29
 html5lib==0.999
 jdcal==1.0
 jsonfield==1.0.3
