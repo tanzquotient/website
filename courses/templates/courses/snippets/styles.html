@@ -1,7 +1,10 @@
 {% for s in type.styles.all %}
     <!-- Button trigger modal -->
-    <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>{% if not forloop.last %},
-{% endif %}
+    <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>
+    {% if s.url_video %}
+        (<a href="{{ s.url_video }}" target=”_blank”><span class="fa fa-youtube-play fa-lg"></span> Video</a>)
+    {% endif %}
+    {% if not forloop.last %},{% endif %}
 {% endfor %}
 
 {% for s in type.styles.all %}
@@ -16,13 +19,13 @@
                 </div>
                 <div class="modal-body">
                     {% if s.description %}
-                        <p>{{ s.description }}</p>
+                        <p>{{ s.description|safe }}</p>
                     {% endif %}
                     {% if s.url_info %}
                         <p><a href="{{ s.url_info }}" target=”_blank”>More Info</a></p>
                     {% endif %}
                     {% if s.url_video %}
-                        <p><a href="{{ s.url_video }}" target=”_blank”>Video</a></p>
+                        <p><a href="{{ s.url_video }}" target=”_blank”><span class="fa fa-youtube-play fa-lg"></span> Video</a></p>
                     {% endif %}
                     <h4>Songs</h4>
 
