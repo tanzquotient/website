@@ -46,8 +46,9 @@ class Address(models.Model):
     def __unicode__(self):
         return u"{}, {} {}".format(self.street, self.plz, self.city)
 
+from userena.models import UserenaLanguageBaseProfile
 
-class UserProfile(models.Model):
+class UserProfile(UserenaLanguageBaseProfile):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
     user.help_text = "The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)

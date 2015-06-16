@@ -71,6 +71,8 @@ INSTALLED_APPS = (
     'djcelery',
     'djcelery_email',
     'post_office',
+    'userena',
+    'guardian',
     'tq_website',
     'courses',
     'faq',
@@ -78,10 +80,7 @@ INSTALLED_APPS = (
     'events',
     'auditing',
     'cms_plugins',
-    'accounts',
     'analytical',
-    'userena',
-    'guardian',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -123,9 +122,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-ANONYMOUS_USER_ID = -1
 
-AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 SITE_ID = 1
 
@@ -149,6 +146,14 @@ USE_TZ = True
 # default redirect URL after login (if no GET parameter next is given)
 LOGIN_REDIRECT_URL = "/"
 
+###################################################
+# Configuration of userena and account management #
+###################################################
+ANONYMOUS_USER_ID = -1
+
+AUTH_PROFILE_MODULE = 'courses.UserProfile'
+
+USERENA_REGISTER_USER = False;
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
 USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
@@ -319,6 +324,7 @@ POST_OFFICE_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 POST_OFFICE = {
     'DEFAULT_PRIORITY': 'now'
 }
+
 
 LOGGING = {
     'version': 1,

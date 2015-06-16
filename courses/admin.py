@@ -176,11 +176,17 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
 
+from userena.admin import UserenaAdmin
+from userena.utils import get_profile_model, get_user_model
 
 # Define a new User admin
-class MyUserAdmin(UserAdmin):
-    inlines = (UserProfileInline, SubscribeInlineForUser)
+class MyUserAdmin(UserenaAdmin):
+    inlines = list(UserenaAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
+
 
 # Re-register UserAdmin
-admin.site.unregister(User)
-admin.site.register(User, MyUserAdmin)
+try:
+    admin.site.unregister(get_user_model())
+except admin.sites.NotRegistered:
+    pass
+admin.site.register(get_user_model(), MyUserAdmin)
