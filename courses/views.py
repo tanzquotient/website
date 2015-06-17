@@ -229,6 +229,43 @@ def duplicate_users(request):
     })
     return render(request, template_name, context)
 
+@login_required
+def subscription_overview(request):
+    template_name = "courses/auth/subscription_overview.html"
+    context = {}
+
+    offerings = services.get_offerings_to_display()
+    c_offerings = []
+    for offering in offerings:
+        labels = []
+        series_men_count = []
+        series_women_count = []
+        series_max = []
+        courses = offering.course_set.all()
+
+        for course in courses:
+            labels.append("'"+course.type.name+"'")
+            c=course.subscribers.count()
+            if course.max_subscribers:
+                m = course.max_subscribers-c
+            else:
+                m=0
+
+            series_men_count.append(str(course.men_count()))
+            series_women_count.append(str(course.women_count()))
+            series_max.append(str((course.max_subscribers or 0)/2))
+
+        c_offerings.append({
+            'offering': offering,
+            'labels': ','.join(labels),
+            'series': '['+','.join(series_men_count)+'],'+'['+','.join(series_women_count)+'],'+'['+','.join(series_max)+'],'
+        })
+
+    context.update({
+        'offerings': c_offerings,
+    })
+    return render(request, template_name, context)
+
 
 from django.template.defaulttags import register
 

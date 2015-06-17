@@ -247,6 +247,12 @@ class Course(models.Model):
         else:
             return None
 
+    def men_count(self):
+        return self.subscriptions.men().count()
+
+    def women_count(self):
+        return self.subscriptions.women().count()
+
     def single_men_count(self):
         return self.subscriptions.single_men().count()
 

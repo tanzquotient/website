@@ -10,4 +10,6 @@ urlpatterns = patterns('',
                        url(r'^detail/(?P<course_id>\d+)/subscription$', views.subscription_do, name='subscription_do'),
                        url(r'^detail/(?P<course_id>\d+)/subscription_done$', views.subscription_done,
                            name='subscription_done'),
+                       url(r'^auth$', views.subscription_overview,
+                           name='subscription_overview'),
                        )

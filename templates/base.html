@@ -24,6 +24,7 @@
     <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
 
     <!-- Custom styles for our template -->
     <link rel="stylesheet" href="{% static "css/bootstrap-theme.css" %}" media="screen">
@@ -34,6 +35,8 @@
 	<script src="{% static "js/html5shiv.js" %}"></script>
 	<script src="{% static "js/respond.min.js" %}"></script>
 	<![endif]-->
+
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 
     {% render_block "css" %}
     {% analytical_head_bottom %}
@@ -61,6 +64,9 @@
                             href="http://www.facebook.com/group.php?gid=181865511616" target="_blank"> <span
                             class="fa fa-facebook-square fa-lg"></span></a></li>
                     {% if user.is_authenticated %}
+                        <li><a
+                                href="{% url 'courses:subscription_overview' %}"> <span
+                                class="fa fa-bar-chart fa-lg"></span></a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                     class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
@@ -68,7 +74,7 @@
                                 <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
                                     area</a></li>
                                 <li><a href="{% url 'userena_profile_detail' user.username %}"><span
-                                    class="glyphicon glyphicon-user"></span>
+                                        class="glyphicon glyphicon-user"></span>
                                     {% trans "View profile" %}</a>
                                 </li>
                                 <li><a href="{% url 'userena_signout' %}"><span class="fa fa-sign-out fa-lg"></span>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content_title %}
+    <h1 class="lead">Subscription Overview</h1>
+{% endblock %}
+
+{% block main_content %}
+    <h2></h2>
+
+    <div class="container">
+        {% for o in offerings %}
+            <p>{% include "courses/auth/offering_overview.html" with item=o only %}</p>
+            {% empty %}
+            <div class="alert alert-info">Keine Kurse verfügbar.</div>
+        {% endfor %}
+    </div>
+
+{% endblock main_content %}

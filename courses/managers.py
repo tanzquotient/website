@@ -54,6 +54,12 @@ class AddressManager(models.Manager):
 
 
 class SubscribeManager(models.Manager):
+    def men(self):
+        return self.filter(user__profile__gender='m')
+
+    def women(self):
+        return self.filter(user__profile__gender='w')
+
     def single_men(self):
         return self.filter(partner__isnull=True, user__profile__gender='m')
 
