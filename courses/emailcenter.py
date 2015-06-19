@@ -76,7 +76,13 @@ def create_user_info(user):
 
 
 def create_course_info(course):
-    s = u'{}\n{}, {}\n{}\n'.format(course.type.name, course.format_lessons(), course.room, course.get_period())
+    s = u'{}\n{}'.format(course.type.name, course.format_lessons())
+    if course.room:
+        s += u', {}\n'.format(course.room)
+    else:
+        s += u'\n'
+    if course.get_period():
+        s += u'{}\n'.format(course.get_period())
     if course.format_cancellations():
         s += u'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
