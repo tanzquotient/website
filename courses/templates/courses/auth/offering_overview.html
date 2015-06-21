@@ -3,35 +3,45 @@
 </h2>
 
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded',function(){
-        new Chartist.Bar('.ct-chart', {
-              labels: [{{ item.labels|safe }}],
-              series: [
-                  {{ item.series|safe }}
-              ]
-            }, {
-              horizontalBars: true,
-            }).on('draw', function(data) {
-              if(data.type === 'bar') {
+    document.addEventListener('DOMContentLoaded', function () {
+        var data = {
+            labels: [{{ item.labels|safe }}],
+            series: [
+                {{ item.series|safe }}
+            ]
+        };
+        var options = {
+            horizontalBars: true,
+            // If high is specified then the axis will display values explicitly up to this value and the computed maximum from the data is ignored
+            high: 15,
+            // If low is specified then the axis will display values explicitly down to this value and the computed minimum from the data is ignored
+            low: 0,
+        };
+        var responsiveOptions = {};
+        chart = new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+        chart.on('draw', function (data) {
+            if (data.type === 'bar') {
                 data.element.attr({
-                  style: 'stroke-width: 10px'
+                    style: 'stroke-width: 10px'
                 });
-              }
-            });
+            }
+        });
     });
 </script>
 <style>
     .ct-series-a .ct-bar {
-      /* Colour of your bars */
-      stroke: #C51718;
+        /* Colour of your bars */
+        stroke: rgb(200, 200, 200);
     }
+
     .ct-series-b .ct-bar {
-      /* Colour of your bars */
-      stroke: rgb(220,220,220);
+        /* Colour of your bars */
+        stroke: rgb(220, 220, 220);
     }
+
     .ct-series-c .ct-bar {
-      /* Colour of your bars */
-      stroke: rgb(200,200,200);
+        /* Colour of your bars */
+        stroke: #C51718;
     }
 </style>
 <div class="ct-chart ct-perfect-fourth"></div>
