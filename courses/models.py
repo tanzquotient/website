@@ -63,6 +63,8 @@ class UserProfile(UserenaLanguageBaseProfile):
     body_height = models.IntegerField(blank=True, null=True)
     body_height.help_text = "The user's body height in cm."
     newsletter = models.BooleanField(default=True)
+    get_involved = models.BooleanField(default=False)
+    get_involved.help_text = "If this user is interested to get involved with our organisation."
 
     about_me = HTMLField(blank=True, null=True)
 

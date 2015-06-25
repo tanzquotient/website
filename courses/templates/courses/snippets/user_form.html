@@ -93,13 +93,5 @@
 {% include "courses/snippets/text_input.html" with field=form.experience only %}
 {% include "courses/snippets/text_area.html" with field=form.comment only %}
 
-<div class="form-group has-feedback">
-    <div class="col-sm-offset-2 col-sm-10">
-        <div class="checkbox">
-            <label>
-                {{ form.newsletter }} {{ form.newsletter.label }}
-            </label>
-        </div>
-        {% include "courses/snippets/field_errors.html" with field=form.newsletter %}
-    </div>
-</div>
+{% include "courses/snippets/boolean_input.html" with field=form.newsletter only %}
+{% include "courses/snippets/boolean_input.html" with field=form.get_involved only %}

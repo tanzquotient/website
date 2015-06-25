@@ -182,6 +182,7 @@ from userena.utils import get_profile_model, get_user_model
 # Define a new User admin
 class MyUserAdmin(UserenaAdmin):
     inlines = list(UserenaAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
+    list_filter = UserenaAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
 
 
 # Re-register UserAdmin

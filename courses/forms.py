@@ -39,6 +39,8 @@ class UserForm(forms.Form):
     comment.label = u'Kommentar'
     newsletter = forms.BooleanField(required=False)
     newsletter.label = u'Newsletter abonnieren'
+    get_involved = forms.BooleanField(required=False)
+    get_involved.label = u'Ich würde gerne ab und zu beim TQ mithelfen (Events etc.)'
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()

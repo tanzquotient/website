@@ -1,0 +1,13 @@
+<div class="form-group has-feedback">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+            <label>
+                {{ field }} {{ field.label }}
+            </label>
+        </div>
+        {% if field.help_text %}
+            <p class="help-block">{{ field.help_text }}</p>
+        {% endif %}
+        {% include "courses/snippets/field_errors.html" with field=form.newsletter %}
+    </div>
+</div>

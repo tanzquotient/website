@@ -61,6 +61,7 @@ def update_user(user, user_data):
     if user_data['body_height']:
         userprofile.body_height = user_data['body_height']
     userprofile.newsletter = user_data['newsletter']
+    userprofile.get_involved = user_data['get_involved']
     userprofile.save()
 
     return user
