@@ -71,6 +71,7 @@ INSTALLED_APPS = (
     'djcelery',
     'djcelery_email',
     'post_office',
+    'absolute',
     'userena',
     'guardian',
     'tq_website',
@@ -190,6 +191,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     "django.core.context_processors.request",
     'sekizai.context_processors.sekizai',
     'cms.context_processors.cms_settings',
+    'absolute.context_processors.absolute',
 )
 
 ##########################
