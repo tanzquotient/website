@@ -86,6 +86,7 @@ def create_user(user_data):
     fn = user_data['first_name']
     ln = user_data['last_name']
 
+    # use userena method to create user -> permissions are set correcly!
     user = UserenaSignup.objects.create_user(generate_username(fn, ln), email=user_data['email'],
                                     password=User.objects.make_random_password(), active=True, send_email=False)
     update_user(user, user_data)
