@@ -7,19 +7,22 @@ import services
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+def display(modeladmin, request, queryset):
+    queryset.update(display=True)
+display.short_description = "Set displayed"
 
-def activate_courses(modeladmin, request, queryset):
+def undisplay(modeladmin, request, queryset):
+    queryset.update(display=False)
+undisplay.short_description = "Set undisplayed"
+
+def activate(modeladmin, request, queryset):
     queryset.update(active=True)
+activate.short_description = "Activate"
 
 
-activate_courses.short_description = "Activate courses"
-
-
-def deactivate_courses(modeladmin, request, queryset):
+def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
-
-
-deactivate_courses.short_description = "Deactivate courses"
+deactivate.short_description = "Deactivate"
 
 
 def copy_courses(modeladmin, request, queryset):

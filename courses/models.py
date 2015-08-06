@@ -208,8 +208,10 @@ class Course(models.Model):
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses',
                                          through_fields=('course', 'user'))
     offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
+    display = models.BooleanField(default=True)
+    display.help_text = "Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed)."
     active = models.BooleanField(default=True)
-    active.help_text = "Defines if clients can subscribe to this course (if unchecked, course is active if offering is active)."
+    active.help_text = "Defines if clients can subscribe to this course (if checked, course is active if offering is active)."
     special = HTMLField(blank=True, null=True)
     special.help_text = 'Any special properties of this course.'
 
@@ -266,6 +268,12 @@ class Course(models.Model):
 
     def women_needed(self):
         return self.single_women_count() < self.single_men_count()
+
+    def is_displayed(self):
+        if self.offering is None:
+            return False
+        else:
+            return self.offering.display and self.display  # both must be true to be displayed
 
     def is_subscription_allowed(self):
         if self.open_class:

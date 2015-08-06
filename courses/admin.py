@@ -23,6 +23,8 @@ class OfferingAdmin(admin.ModelAdmin):
     list_display = ('name', 'period', 'display', 'active')
     inlines = (CourseInline,)
 
+    actions = [display, undisplay, activate, deactivate]
+
 
 class TeachInlineForCourse(admin.TabularInline):
     model = Teach
@@ -83,7 +85,7 @@ class SongAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices', 'format_teachers',
-        'active')
+        'display','active')
     list_filter = ('offering', 'type', 'room', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse, SubscribeInlineForCourse,)
@@ -99,10 +101,10 @@ class CourseAdmin(admin.ModelAdmin):
         ('Billing', {
             'fields': ['price_with_legi', 'price_without_legi', 'price_special']}),
         ('Admin', {
-            'fields': ['active']}),
+            'fields': ['display', 'active']}),
     ]
 
-    actions = [activate_courses, deactivate_courses, copy_courses, export_confirmed_subscriptions_csv,
+    actions = [display, undisplay, activate, deactivate, copy_courses, export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_xlsx, ]
 
 

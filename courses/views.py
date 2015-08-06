@@ -39,7 +39,7 @@ def course_list(request):
             for (w, w_name) in WEEKDAYS:
                 section_dict = {}
                 section_dict['section_title'] = WEEKDAYS_TRANS[w]
-                section_dict['courses'] = course_set.weekday(w)
+                section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed()]
                 if (w == 'sat' or w == 'sun') and section_dict['courses'].__len__() == 0:
                     pass
                 else:
