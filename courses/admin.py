@@ -120,7 +120,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'confirmed', 'get_offering', 'course', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
+        'id', 'confirmed', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
         'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, 'course', 'date', 'payed', 'confirmed')

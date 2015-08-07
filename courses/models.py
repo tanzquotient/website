@@ -32,6 +32,7 @@ GENDER = (('m', u'Men'), ('w', u'Woman'))
 
 STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
 
+MATCHING_STATE = (('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('matched', u'Matched'), ('not_required', u'Not required'))
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
@@ -395,6 +396,9 @@ class Subscribe(models.Model):
     date.help_text = "The date/time when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
                                 null=True)
+    matching_state = models.CharField(max_length=30,
+                                      choices=MATCHING_STATE, blank=False, null=False,
+                                      default='unknown')
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
@@ -454,10 +458,26 @@ class Subscribe(models.Model):
         else:
             return self.course.price_with_legi
 
+    # derives the matching state from the current information (if couple course and if partner set or not)
+    def derive_matching_state(self):
+        if self.course.type.couple_course:
+            if self.partner is None:
+                self.matching_state='to_match'
+            else:
+                if self.matching_state=='to_match':
+                    self.matching_state='matched'
+        else:
+            self.matching_state='not_required'
+        # DO NOT save here since this method is also called from save()
+
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
         if self.partner == self.user:
             raise ValidationError('Subscriptions with yourself as the partner are not allowed.')
+
+    def save(self, *args, **kwargs):
+        self.derive_matching_state()
+        super(Subscribe, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return u"{} subscribes to {}".format(self.user.get_full_name(), self.course)

@@ -129,12 +129,14 @@ def subscribe(course_id, user1_data, user2_data=None):
     else:
         subscription = mymodels.Subscribe(user=user1, course=course, partner=user2, experience=user1_data['experience'],
                                           comment=user1_data['comment'])
-        subscription.save();
+        subscription.derive_matching_state()
+        subscription.save()
         send_subscription_confirmation(subscription)
 
         if user2:
             subscription2 = mymodels.Subscribe(user=user2, course=course, partner=user1,
                                                experience=user2_data['experience'], comment=user2_data['comment'])
+            subscription2.derive_matching_state()
             subscription2.save()
             send_subscription_confirmation(subscription2)
 
@@ -174,8 +176,10 @@ def match_partners(subscriptions):
             m = sm[c]
             w = sw[c]
             m.partner = w.user
+            m.matching_state = 'matched'
             m.save()
             w.partner = m.user
+            w.matching_state = 'matched'
             w.save()
 
 
