@@ -75,6 +75,20 @@
 {% include "courses/snippets/text_input.html" with field=form.email star=True only %}
 {% include "courses/snippets/text_input.html" with field=form.email_repetition star=True only %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+$( "#id_student_status" ).change(function() {
+    if($("#id_student_status").find(':selected').val() == "no"){
+        $("#form-group-id_legi input").prop('disabled', true);
+        $("#form-group-id_legi input").val("");
+    }else{
+        $("#form-group-id_legi input").prop('disabled', false);
+    }
+});
+}); //end ready
+</script>
+
 <div class="form-group has-feedback {% if form.student_status.errors %}has-error{% endif %}">
     <label for="{{ form.student_status.id_for_label }}"
            class="col-sm-2 control-label">{{ form.student_status.label }}</label>
