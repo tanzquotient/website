@@ -46,5 +46,6 @@ pycrypto==2.6.1
 pytz==2014.10
 setproctitle==1.1.8
 six==1.9.0
+sqlparse==0.1.16
 unicodecsv==0.11.0
 wsgiref==0.1.2

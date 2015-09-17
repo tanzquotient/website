@@ -97,7 +97,7 @@ def create_user(user_data):
 def generate_username(first_name, last_name):
     username = u"{}_{}".format(first_name, last_name)
     un = username
-    i = 1;
+    i = 1
     while User.objects.filter(username=un).count() > 0:
         un = username + str(i)
         i += 1
@@ -122,7 +122,7 @@ def subscribe(course_id, user1_data, user2_data=None):
         res['tag'] = 'danger'
         res['text'] = u'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
         res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
-    elif user2 != None and mymodels.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
+    elif user2 is not None and mymodels.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
         res['text'] = u'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
         res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
@@ -134,9 +134,12 @@ def subscribe(course_id, user1_data, user2_data=None):
         send_subscription_confirmation(subscription)
 
         if user2:
+            subscription.matching_state = 'couple'
+            subscription.save()
+
             subscription2 = mymodels.Subscribe(user=user2, course=course, partner=user1,
                                                experience=user2_data['experience'], comment=user2_data['comment'])
-            subscription2.derive_matching_state()
+            subscription2.matching_state = 'couple'
             subscription2.save()
             send_subscription_confirmation(subscription2)
 
