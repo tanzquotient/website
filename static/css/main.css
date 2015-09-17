@@ -3,9 +3,9 @@ header {
 	background: #333 url(../elements/home-selfmade.jpg) no-repeat;
 	background-position: 100% 55%;
 	background-size: cover;
-	min-height: 520px;
+	min-height: 480px;
 	text-align: center;
-	padding-top: 240px;
+	padding-top: 200px;
 	color: white;
 	font-family: "Open sans", Helvetica, Arial;
 	font-weight: 450;
@@ -76,10 +76,20 @@ header .btn-default:active, header .btn-default.active {
 	box-shadow: inset 0px 0px 0px 3px #fff;
 }
 
+@media ( max-width : 1200px) {
+	header {
+		min-height: 300px;
+		padding-top: 140px;
+	}
+	header .lead {
+		font-size: 34px;
+	}
+}
+
 @media ( max-width : 767px) {
 	header {
-		min-height: 420px;
-		padding-top: 160px;
+		min-height: 250px;
+		padding-top: 120px;
 	}
 	header .lead {
 		font-size: 34px;
