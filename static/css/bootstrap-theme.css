@@ -20,8 +20,7 @@
 	}
 }
 
-.navbar-inverse .navbar-nav>li>a,.navbar-inverse i, .navbar-inverse .navbar-nav>.open ul>a
-	{
+.navbar-inverse .navbar-nav>li>a,.navbar-inverse i, .navbar-inverse .navbar-nav>.open ul>a {
 	color: rgba(255, 255, 255, .4);
 }
 

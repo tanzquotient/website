@@ -54,11 +54,52 @@
                 <!-- Button for smallest screens -->
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pages"><i class="fa fa-bars"></i></button>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#language"><i class="fa fa-flag"></i></button>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user"><span
-                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user"><i class="fa fa-user"></i></button>
                 <a class="navbar-brand" href="/"><img src="{% static "elements/logo_transparent.svg" %}" height="60px"
                                                       alt="TQ"></a>
             </div>
+            <div class=" hidden-xs">
+                <ul class="collapse navbar-collapse nav navbar-nav pull-right">
+                    {% if user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ user.first_name }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
+                                    area</a></li>
+                                <li><a href="{% url 'userena_profile_detail' user.username %}"><span
+                                        class="glyphicon glyphicon-user"></span>
+                                    {% trans "View profile" %}</a>
+                                </li>
+                                <li><a href="{% url 'userena_signout' %}"><span class="fa fa-sign-out fa-lg"></span>
+                                    Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'userena_signin' %}"><span class="glyphicon glyphicon-user"></span></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="visible-xs">
+                <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="user">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
+                            area</a></li>
+                        <li><a href="{% url 'userena_profile_detail' user.username %}"><span
+                                class="glyphicon glyphicon-user"></span>
+                            {% trans "View profile" %}</a>
+                        </li>
+                        <li><a href="{% url 'userena_signout' %}"><span class="fa fa-sign-out fa-lg"></span>
+                            Logout</a>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'userena_signin' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="language">
+                {% language_chooser %}
+            </ul>
             <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="pages">
                 {% show_menu 0 1 0 1 'menu.html' %}
                 <li><a
@@ -68,30 +109,6 @@
                     <li><a
                             href="{% url 'courses:subscription_overview' %}"> <span
                             class="fa fa-bar-chart fa-lg"></span></a></li>
-                {% endif %}
-            </ul>
-            <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="language">
-                {% language_chooser %}
-            </ul>
-            <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="user">
-                {% if user.is_authenticated %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
-                                class="glyphicon glyphicon-user"></span> {{ user.first_name }} <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
-                                area</a></li>
-                            <li><a href="{% url 'userena_profile_detail' user.username %}"><span
-                                    class="glyphicon glyphicon-user"></span>
-                                {% trans "View profile" %}</a>
-                            </li>
-                            <li><a href="{% url 'userena_signout' %}"><span class="fa fa-sign-out fa-lg"></span>
-                                Logout</a>
-                            </li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'userena_signin' %}"><span class="glyphicon glyphicon-user"></span></a></li>
                 {% endif %}
             </ul>
             <!--/.nav-collapse -->
