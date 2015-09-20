@@ -202,6 +202,22 @@ def confirm_subscriptions(subscriptions):
         confirm_subscription(subscription)
 
 
+# sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
+def reject_subscription(subscription):
+    if subscription.rejected and mymodels.Rejection.objects.filter(subscription=subscription).count() == 0:
+        # no subscription was send and the subscription is confirmed, so send one
+        reason = send_rejection(subscription)
+        # log that we sent the confirmation
+        c = mymodels.Rejection(subscription=subscription, reason=reason)
+        c.save()
+
+
+# same as reject_subscription, but for multiple subscriptions at once
+def reject_subscriptions(subscriptions):
+    for subscription in subscriptions:
+        reject_subscription(subscription)
+
+
 def get_or_create_userprofile(user):
     try:
         return mymodels.UserProfile.objects.get(user=user)

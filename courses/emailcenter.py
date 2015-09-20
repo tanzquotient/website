@@ -46,7 +46,7 @@ def send_participation_confirmation(subscription, connection=None):
         'course_info': create_course_info(subscription.course)
     }
 
-    if subscription.partner != None:
+    if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
         context.update({
             'partner_first_name': subscription.partner.first_name,
@@ -64,6 +64,36 @@ def send_participation_confirmation(subscription, connection=None):
         template=template,
         context=context,
     )
+
+
+def send_rejection(subscription, connection=None):
+    context = {
+        'first_name': subscription.user.first_name,
+        'last_name': subscription.user.last_name,
+        'course': subscription.course.type.name,
+        'offering': subscription.course.offering.name,
+        'course_info': create_course_info(subscription.course)
+    }
+
+    # detect the reason why the subscription is rejected
+    reason = 'unknown'
+    if subscription.course.get_free_places_count() == 0:
+        template = 'rejection_overbooked'
+        reason = 'overbooked'
+    elif subscription.course.type.couple_course and subscription.partner is None:
+        template = 'rejection_no_partner'
+        reason = 'no_partner'
+    else:
+        template = 'rejection_unknown_reason'
+
+    mail.send(
+        [subscription.user.email, my_settings.EMAIL_HOST_USER],
+        my_settings.DEFAULT_FROM_EMAIL,
+        template=template,
+        context=context,
+    )
+
+    return reason
 
 
 def create_user_info(user):

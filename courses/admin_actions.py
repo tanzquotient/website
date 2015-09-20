@@ -44,6 +44,17 @@ def confirm_subscriptions(modeladmin, request, queryset):
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 
+def reject_subscriptions(modeladmin, request, queryset):
+    # this is directly executed with database query, does not trigger signals!
+    queryset.update(rejected=True)
+
+    # manually send confirmation mails
+    services.reject_subscriptions(queryset)
+
+
+reject_subscriptions.short_description = "Reject selected subscriptions"
+
+
 def match_partners(modeladmin, request, queryset):
     services.match_partners(queryset)
 

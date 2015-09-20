@@ -14,3 +14,4 @@ logger = logging.getLogger('signals')
 def subscription_edit_handler(sender, **kwargs):
     subscription = kwargs.get('instance')
     services.confirm_subscription(subscription)
+    services.reject_subscription(subscription)

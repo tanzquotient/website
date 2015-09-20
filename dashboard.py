@@ -41,6 +41,12 @@ class CustomIndexDashboard(Dashboard):
             column=1,
             models=('courses.models.Confirmation',)
         ))
+
+        self.children.append(modules.ModelList(
+            title='Course Administration - Logs',
+            column=1,
+            models=('courses.models.Rejection',)
+        ))
         
         self.children.append(modules.ModelList(
             title='Events',

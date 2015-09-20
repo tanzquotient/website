@@ -34,6 +34,8 @@ STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'O
 
 MATCHING_STATE = (('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('matched', u'Matched'), ('not_required', u'Not required'))
 
+REJECTION_REASON = (('unknown', u'Unknown'), ('overbooked', u'Overbooked'), ('no_partner', u'No partner found'))
+
 class Address(models.Model):
     street = models.CharField(max_length=255)
     plz = models.IntegerField()
@@ -404,6 +406,8 @@ class Subscribe(models.Model):
     comment.help_text = "A optional comment made by the user during subscription."
     confirmed = models.BooleanField(blank=False, null=False, default=False)
     confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
+    rejected = models.BooleanField(blank=False, null=False, default=False)
+    rejected.help_text = "When this is checked, a rejection email is send (once) to the user while saving this form."
     payed = models.BooleanField(blank=False, null=False, default=False)
 
     objects = managers.SubscribeManager()
@@ -490,6 +494,18 @@ class Confirmation(models.Model):
 
     def __unicode__(self):
         return u"({}) confirmed at {}".format(self.subscription, self.date)
+
+
+class Rejection(models.Model):
+    subscription = models.ForeignKey(Subscribe, related_name='rejections')
+    date = models.DateField(blank=False, null=False, auto_now_add=True)
+    date.help_text = "The date when the rejection mail was sent to the subscriber."
+    reason = models.CharField(max_length=30,
+                                      choices=REJECTION_REASON, blank=False, null=False,
+                                      default='unknown')
+
+    def __unicode__(self):
+        return u"({}) rejected at {}".format(self.subscription, self.date)
 
 
 class Teach(models.Model):

@@ -120,7 +120,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'confirmed', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
+        'id', 'confirmed', 'rejected', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
         'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, 'course', 'date', 'payed', 'confirmed')
@@ -128,7 +128,7 @@ class SubscribeAdmin(admin.ModelAdmin):
 
     model = Subscribe
 
-    actions = [match_partners, confirm_subscriptions, set_subscriptions_as_payed]
+    actions = [match_partners, confirm_subscriptions, reject_subscriptions, set_subscriptions_as_payed]
 
     raw_id_fields = ('user', 'partner')
 
@@ -140,6 +140,17 @@ class ConfirmationAdmin(admin.ModelAdmin):
                      'subscription__user__first_name', 'subscription__user__last_name']
 
     model = Confirmation
+
+    raw_id_fields = ('subscription',)
+
+
+class RejectionAdmin(admin.ModelAdmin):
+    list_display = ('subscription', 'date', 'reason')
+    list_filter = ('subscription__course', 'date',)
+    search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
+                     'subscription__user__first_name', 'subscription__user__last_name']
+
+    model = Rejection
 
     raw_id_fields = ('subscription',)
 
@@ -172,6 +183,7 @@ admin.site.register(Style, StyleAdmin)
 admin.site.register(Teach, TeachAdmin)
 admin.site.register(Subscribe, SubscribeAdmin)
 admin.site.register(Confirmation, ConfirmationAdmin)
+admin.site.register(Rejection, RejectionAdmin)
 
 
 class UserProfileInline(admin.StackedInline):
