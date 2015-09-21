@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            r'''UPDATE courses_subscribe SET matching_state='couple' WHERE date >= DATE('2015-08-07');'''
+            r'''UPDATE courses_subscribe SET matching_state='couple' WHERE date >= DATE('2015-08-07') AND matching_state='unknown';'''
         ),
     ]
