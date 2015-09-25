@@ -26,6 +26,9 @@ def get_offerings_to_display():
     return mymodels.Offering.objects.filter(display=True).order_by('period__date_from')
 
 
+def get_current_active_offering():
+    return mymodels.Offering.objects.filter(active=True).order_by('period__date_from').first()
+
 def get_subsequent_offering():
     res = mymodels.Offering.objects.filter(period__date_from__gte=date.today()).order_by('period__date_from').all()
     if len(res) > 0:

@@ -10,7 +10,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
-from courses.filters import SubscribeOfferingListFilter
+from courses.filters import *
 
 
 class CourseInline(admin.TabularInline):
@@ -78,6 +78,7 @@ class SongInline(admin.TabularInline):
 
 class SongAdmin(admin.ModelAdmin):
     list_display = ['title', 'artist', 'length', 'speed', 'style']
+    list_filter = ('style',)
     search_fields = ['title', 'artist', 'style__name']
     model = Song
 
@@ -123,7 +124,7 @@ class SubscribeAdmin(admin.ModelAdmin):
         'id', 'confirmed', 'rejected', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
         'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
-    list_filter = (SubscribeOfferingListFilter, 'course', 'date', 'payed', 'confirmed')
+    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'payed', 'confirmed', 'rejected')
     search_fields = ['user__email', 'user__first_name', 'user__last_name']
 
     model = Subscribe
@@ -135,7 +136,7 @@ class SubscribeAdmin(admin.ModelAdmin):
 
 class ConfirmationAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date')
-    list_filter = ('subscription__course', 'date',)
+    list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
     search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
@@ -146,7 +147,7 @@ class ConfirmationAdmin(admin.ModelAdmin):
 
 class RejectionAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date', 'reason')
-    list_filter = ('subscription__course', 'date',)
+    list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
     search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
@@ -162,6 +163,7 @@ class PeriodAdmin(admin.ModelAdmin):
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ('teacher',)
     list_display = ('id', 'teacher', 'course',)
+    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter,)
     list_display_link = ('id',)
     search_fields = ['teacher__email', 'teacher__first_name', 'teacher__last_name', 'course__name',
                      'course__type__name']
