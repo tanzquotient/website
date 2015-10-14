@@ -74,13 +74,6 @@ class CustomIndexDashboard(Dashboard):
             models=('django.contrib.*',),
         ))
         
-        self.children.append(modules.ModelList(
-            _('Auditing'),
-            column=2,
-            collapsible=True,
-            models=('auditing.*',),
-        ))
-        
         # append a recent actions module
         self.children.append(modules.RecentActions(
             _('Recent Actions'),

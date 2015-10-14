@@ -166,7 +166,7 @@ class IrregularLesson(models.Model):
 
 class CourseType(models.Model):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    styles = models.ManyToManyField(Style, related_name='course_types', blank=True, null=True)
+    styles = models.ManyToManyField(Style, related_name='course_types', blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = HTMLField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)

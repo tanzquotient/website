@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+from operator import pos
 
 from django.conf import settings
 
 from tq_website import settings as my_settings
 
-from post_office import mail
+from post_office import mail, models as post_office_models
 
 KURSGELD = u'Bitte bring das Kursgeld in die erste Tanzstunde passend mit.'
 
@@ -18,7 +19,7 @@ def send_subscription_confirmation(subscription):
         'offering': subscription.course.offering.name,
     }
 
-    if subscription.partner != None:
+    if subscription.partner is not None:
         template = 'subscription_confirmation_with_partner'
         context.update({
             'partner_first_name': subscription.partner.first_name,
@@ -29,12 +30,7 @@ def send_subscription_confirmation(subscription):
     else:
         template = 'subscription_confirmation_without_partner_nocouple'
 
-    mail.send(
-        [subscription.user.email, my_settings.EMAIL_HOST_USER],
-        my_settings.DEFAULT_FROM_EMAIL,
-        template=template,
-        context=context,
-    )
+    _email_helper(subscription.user.email, template, context)
 
 
 def send_participation_confirmation(subscription, connection=None):
@@ -58,12 +54,7 @@ def send_participation_confirmation(subscription, connection=None):
     else:
         template = 'participation_confirmation_without_partner_nocouple'
 
-    mail.send(
-        [subscription.user.email, my_settings.EMAIL_HOST_USER],
-        my_settings.DEFAULT_FROM_EMAIL,
-        template=template,
-        context=context,
-    )
+    _email_helper(subscription.user.email, template, context)
 
 
 def send_rejection(subscription, connection=None):
@@ -86,14 +77,29 @@ def send_rejection(subscription, connection=None):
     else:
         template = 'rejection_unknown_reason'
 
-    mail.send(
-        [subscription.user.email, my_settings.EMAIL_HOST_USER],
-        my_settings.DEFAULT_FROM_EMAIL,
-        template=template,
-        context=context,
-    )
+    _email_helper(subscription.user.email, template, context)
 
     return reason
+
+
+def _email_helper(email, template, context):
+    """Sending facility. Catches errors due to not existent template."""
+    try:
+        mail.send(
+            [email, my_settings.EMAIL_HOST_USER],
+            my_settings.DEFAULT_FROM_EMAIL,
+            template=template,
+            context=context,
+        )
+    except post_office_models.EmailTemplate.DoesNotExist:
+        # since the post_office app does not check if a template exists, catch it here
+        mail.send(
+            [email, my_settings.EMAIL_HOST_USER],
+            my_settings.DEFAULT_FROM_EMAIL,
+            subject=u"Template missing!!!",
+            message=u"Template for this Email was not found.\n\nPlease contact the administrator and report this issue.",
+            context=context,
+        )
 
 
 def create_user_info(user):

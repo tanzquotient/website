@@ -1,0 +1,81 @@
+Uninstall south:
+
+pip uninstall south
+
+----
+
+Comment these lines in installed apps:
+    #'cmsplugin_filer_link',
+    #'cmsplugin_filer_image',
+
+-----
+
+Then run
+    python manage.py migrate --fake djcelery
+    python manage.py migrate --fake guardian
+
+-----
+
+Remove tables with upgrade problems (email log is LOST!!! -> Backup if you need it later):
+
+ALTER TABLE tq_website.post_office_log DROP FOREIGN KEY email_id_refs_id_3d87f587;
+ALTER TABLE tq_website.post_office_attachment_emails DROP FOREIGN KEY attachment_id_refs_id_2d59d8fc;
+ALTER TABLE tq_website.post_office_attachment_emails DROP FOREIGN KEY email_id_refs_id_061d81d8;
+ALTER TABLE tq_website.post_office_email DROP FOREIGN KEY template_id_refs_id_a5d97662;
+DROP TABLE tq_website.post_office_log;
+DROP TABLE tq_website.post_office_attachment_emails;
+DROP TABLE tq_website.post_office_email;
+DROP TABLE tq_website.post_office_emailtemplate;
+DROP TABLE tq_website.post_office_attachment;
+
+----
+
+Repopulate the post-office email templates with courses/management/sql/post_office_emailtemplate.sql
+
+----
+
+Remove tables not needed:
+
+ALTER TABLE tq_website.cmsplugin_filer_file_filerfile DROP FOREIGN KEY cmsplugin__cmsplugin_ptr_id_41d23fc2e948ebc9_fk_cms_cmsplugin_id;
+ALTER TABLE tq_website.cmsplugin_filer_file_filerfile DROP FOREIGN KEY cmsplugin_filer_file_f_file_id_4f255e59830018d3_fk_filer_file_id;
+ALTER TABLE tq_website.cmsplugin_filer_folder_filerfolder DROP FOREIGN KEY cmsplugin__cmsplugin_ptr_id_782af9abae289fc5_fk_cms_cmsplugin_id;
+ALTER TABLE tq_website.cmsplugin_filer_folder_filerfolder DROP FOREIGN KEY cmsplugin_filer_fo_folder_id_31ec3853b8645959_fk_filer_folder_id;
+ALTER TABLE tq_website.cmsplugin_filer_teaser_filerteaser DROP FOREIGN KEY cmsplugin__cmsplugin_ptr_id_2d10e765b846cb23_fk_cms_cmsplugin_id;
+ALTER TABLE tq_website.cmsplugin_filer_teaser_filerteaser DROP FOREIGN KEY cmsplugin_f_image_id_387b1e9575561a33_fk_filer_image_file_ptr_id;
+ALTER TABLE tq_website.cmsplugin_filer_teaser_filerteaser DROP FOREIGN KEY cmsplugin_filer_tea_page_link_id_34fe6184363424a2_fk_cms_page_id;
+ALTER TABLE tq_website.cmsplugin_filer_video_filervideo DROP FOREIGN KEY cmsplugin__cmsplugin_ptr_id_4eda37ff8e904ca3_fk_cms_cmsplugin_id;
+ALTER TABLE tq_website.cmsplugin_filer_video_filervideo DROP FOREIGN KEY cmsplugin_f_image_id_48044126e365ac6d_fk_filer_image_file_ptr_id;
+ALTER TABLE tq_website.cmsplugin_filer_video_filervideo DROP FOREIGN KEY cmsplugin_filer_video_movie_id_7a0479e25849fcac_fk_filer_file_id;
+DROP TABLE tq_website.cmsplugin_filer_file_filerfile;
+DROP TABLE tq_website.cmsplugin_filer_folder_filerfolder;
+DROP TABLE tq_website.cmsplugin_filer_teaser_filerteaser;
+DROP TABLE tq_website.cmsplugin_filer_video_filervideo;
+
+ALTER TABLE tq_website.djangocms_snippet_snippetptr DROP FOREIGN KEY djan_snippet_id_5c36edfcd7b7e868_fk_djangocms_snippet_snippet_id;
+ALTER TABLE tq_website.djangocms_snippet_snippetptr DROP FOREIGN KEY djangocms_s_cmsplugin_ptr_id_d41298032b1b800_fk_cms_cmsplugin_id;
+DROP TABLE tq_website.djangocms_snippet_snippetptr;
+DROP TABLE tq_website.djangocms_snippet_snippet;
+
+-----
+
+Run:
+    python manage.py migrate
+
+-----
+
+Uncomment the lines from above again:
+    'cmsplugin_filer_link',
+    'cmsplugin_filer_image',
+
+
+-----
+
+(OPTIONAL) Remove no longer needed migration entries from table django_migrations for following apps:
+
+cmsplugin_filer_file
+cmsplugin_filer_folder
+cmsplugin_filer_teaser
+cmsplugin_filer_video
+djangocms_link
+
+

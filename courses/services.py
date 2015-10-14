@@ -252,14 +252,6 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
     return r
 
 
-from auditing.models import Problem
-
-
-def audit_user_error(user, tag, message):
-    p = Problem(tag=tag, message=message, priority=Problem.PRIORITY_NORMAL, content_object=user)
-    p.save()
-
-
 import zipfile
 import unicodecsv
 from StringIO import StringIO
