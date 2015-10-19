@@ -12,15 +12,19 @@
                 </div>
             {% endif %}
         {% endif %}
-        {% if course.men_needed %}
-            <div class="alert alert-info"><i class="fa fa-mars fa-lg"></i> <em>Männer gesucht: </em>In diesem Kurs gibt
-                es noch Frauen ohne Partner. Du kannst dich trotzdem auch als Frau oder Paar anmelden.
-            </div>
-        {% endif %}
-        {% if course.women_needed %}
-            <div class="alert alert-info"><i class="fa fa-venus fa-lg"></i> <em>Frauen gesucht: </em>In diesem Kurs gibt
-                es noch Männer ohne Partner. Du kannst dich trotzdem auch als Mann oder Paar anmelden.
-            </div>
+        {% if course.type.couple_course %}
+            {% if course.men_needed %}
+                <div class="alert alert-info"><i class="fa fa-mars fa-lg"></i> <em>Männer gesucht: </em>In diesem Kurs
+                    gibt
+                    es noch Frauen ohne Partner. Du kannst dich trotzdem auch als Frau oder Paar anmelden.
+                </div>
+            {% endif %}
+            {% if course.women_needed %}
+                <div class="alert alert-info"><i class="fa fa-venus fa-lg"></i> <em>Frauen gesucht: </em>In diesem Kurs
+                    gibt
+                    es noch Männer ohne Partner. Du kannst dich trotzdem auch als Mann oder Paar anmelden.
+                </div>
+            {% endif %}
         {% endif %}
     {% else %}
         {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
@@ -47,11 +51,13 @@
                     {% endif %}
                 {% endif %}
             {% endwith %}
-            {% if course.men_needed %}
-                [<i class="fa fa-mars"></i> gesucht]
-            {% endif %}
-            {% if course.women_needed %}
-                [<i class="fa fa-venus fa-lg"></i> gesucht]
+            {% if course.type.couple_course %}
+                {% if course.men_needed %}
+                    [<i class="fa fa-mars"></i> gesucht]
+                {% endif %}
+                {% if course.women_needed %}
+                    [<i class="fa fa-venus fa-lg"></i> gesucht]
+                {% endif %}
             {% endif %}
         </div>
     {% else %}
