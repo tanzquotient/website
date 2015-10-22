@@ -23,7 +23,7 @@ from emailcenter import *
 
 def get_offerings_to_display():
     # return offerings that have display flag on and order them with increasing start
-    return mymodels.Offering.objects.filter(display=True).order_by('period__date_from')
+    return mymodels.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
 
 
 def get_current_active_offering():
