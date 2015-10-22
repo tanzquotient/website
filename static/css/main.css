@@ -280,6 +280,10 @@ img.pull-left {
     white-space:nowrap;
 }
 
+.sign_in {
+    color: #C51718;
+}
+
 /* Main content block */
 .maincontent {
 

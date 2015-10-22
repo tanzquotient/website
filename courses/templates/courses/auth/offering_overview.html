@@ -25,7 +25,7 @@
             seriesBarDistance: 8,
         };
         var responsiveOptions = {};
-        chart = new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+        chart = new Chartist.Bar('.ct-chart-{{ item.offering.id }}', data, options, responsiveOptions);
     });
 </script>
 <style>
@@ -57,5 +57,5 @@
       }
     }
 </style>
-<div class="ct-chart ct-perfect-fourth"></div>
+<div class="ct-chart-{{ item.offering.id }} ct-perfect-fourth"></div>
 

@@ -39,7 +39,7 @@
     {% endif %}
     {% if course.is_subscription_allowed %}
         {% if display_link %}
-            <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
+            <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden <i class="sign_in fa-pencil-square"></i></a>
         {% endif %}
         <div class="subscription_info">
             {% with count=course.get_free_places_count %}
@@ -60,6 +60,9 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% if not display_link %}
+            <i class="sign_in pull-right fa-pencil-square fa-2x"></i>
+        {% endif %}
     {% else %}
         {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
             <em>ausgebucht</em>
