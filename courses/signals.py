@@ -3,11 +3,10 @@ from django.dispatch import receiver
 import courses.models as my_models
 import services
 
-# import the logging library
 import logging
 
 # Get an instance of a logger
-logger = logging.getLogger('signals')
+logger = logging.getLogger('tq')
 
 
 @receiver(post_save, sender=my_models.Subscribe)

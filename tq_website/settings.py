@@ -18,7 +18,7 @@ import os
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-LOG_DIR = os.path.join(BASE_DIR,u'log')
+LOG_DIR = os.path.join(BASE_DIR, u'logs')
 
 
 # Quick-start development settings - unsuitable for production
@@ -333,24 +333,16 @@ LOGGING = {
         'file_django': {
             'level': 'WARN',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'django'),
-            'maxBytes': 1000000,
+            'filename': os.path.join(LOG_DIR, 'django.log'),
+            'maxBytes': 50000000,
             'backupCount': 2,
             'formatter': 'standard',
         },
         'file_tq': {
             'level': 'INFO',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'tq'),
-            'maxBytes': 1000000,
-            'backupCount': 2,
-            'formatter': 'standard',
-        },
-        'file_all': {
-            'level': 'ERROR',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'all'),
-            'maxBytes': 1000000,
+            'filename': os.path.join(LOG_DIR, 'tq.log'),
+            'maxBytes': 50000000,
             'backupCount': 2,
             'formatter': 'standard',
         },
@@ -363,16 +355,11 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['console', 'file_all'],
-            'propagate': True,
-            'level': 'WARN',
-        },
-        'django': {
             'handlers': ['console', 'file_django'],
-            'propagate': False,
-            'level': 'WARN',
+            'propagate': True,
+            'level': 'ERROR',
         },
-        'courses': {
+        'tq': {
             'handlers': ['console', 'file_tq'],
             'level': 'DEBUG',
         },

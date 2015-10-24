@@ -15,7 +15,7 @@ import logging
 from django.http.response import HttpResponse
 from datetime import date
 
-log = logging.getLogger('courses')
+log = logging.getLogger('tq')
 
 from emailcenter import *
 

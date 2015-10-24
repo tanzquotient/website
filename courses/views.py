@@ -21,7 +21,7 @@ from django.utils import dateformat
 
 import logging
 
-log = logging.getLogger('courses')
+log = logging.getLogger('tq')
 
 # Create your views here.
 

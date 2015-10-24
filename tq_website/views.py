@@ -10,7 +10,7 @@ import django.contrib.auth as auth
 import logging
 import datetime
 
-log = logging.getLogger('courses')
+log = logging.getLogger('tq')
 
 # Create your views here.
 
