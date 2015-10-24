@@ -18,6 +18,7 @@ import os
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+LOG_DIR = os.path.join(BASE_DIR,u'log')
 
 
 # Quick-start development settings - unsuitable for production
@@ -317,7 +318,7 @@ POST_OFFICE = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'standard': {
             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
@@ -329,33 +330,50 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
         },
-        #         'logfile': {
-        #             'level':'DEBUG',
-        #             'class':'logging.handlers.RotatingFileHandler',
-        #             'filename': BASE_DIR + "/logfile",
-        #             'maxBytes': 50000,
-        #             'backupCount': 2,
-        #             'formatter': 'standard',
-        #         },
-        'console': {
+        'file_django': {
+            'level': 'WARN',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'django'),
+            'maxBytes': 1000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'file_tq': {
             'level': 'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'tq'),
+            'maxBytes': 1000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'file_all': {
+            'level': 'ERROR',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'all'),
+            'maxBytes': 1000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['console'],
+        # this top level logger logs ALL messages
+        '': {
+            'handlers': ['console', 'file_all'],
             'propagate': True,
             'level': 'WARN',
         },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+        'django': {
+            'handlers': ['console', 'file_django'],
             'propagate': False,
+            'level': 'WARN',
         },
         'courses': {
-            'handlers': ['console'],  # better: ['console', 'logfile']
+            'handlers': ['console', 'file_tq'],
             'level': 'DEBUG',
         },
     }
