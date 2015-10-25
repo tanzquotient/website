@@ -75,6 +75,7 @@
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
                                 </small>
                             </h4>
+                            <span class="sign_in pull-right fa-pencil-square fa-2x"></span>
                             <p class="list-group-item-text"><strong>{% include "courses/snippets/lessons.html" with course=c only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.period %}
