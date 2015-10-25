@@ -182,10 +182,6 @@ TEMPLATES = [
 },
 ]
 
-##########################
-# Configuration of filer #
-##########################
-THUMBNAIL_HIGH_RESOLUTION = True
 
 ############################################
 # Configuration of djangocms-text-ckeditor #
@@ -308,13 +304,17 @@ CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
 
-# using djcelery's email backend as a backend for post office 
-POST_OFFICE_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-
 POST_OFFICE = {
+    'BACKENDS': {
+        # using djcelery's email backend as a backend for post office
+        'default': 'djcelery_email.backends.CeleryEmailBackend',
+    },
     'DEFAULT_PRIORITY': 'now'
 }
 
+###########
+# Logging #
+###########
 
 LOGGING = {
     'version': 1,
