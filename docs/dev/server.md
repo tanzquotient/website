@@ -1,0 +1,198 @@
+# Server setup, configuration and maintenance
+
+## Local testing (do *not* use in production)
+
+Run message passing server RabbitMQ
+
+	sudo rabbitmq-server
+	
+Run local test server:
+
+	python manage.py runserver
+
+Run celery:
+
+	python manage.py celeryd
+	
+There are some helpful *fabric* commands for handling the local test database. **They possibly destroy data**.
+See `fabfile.py`. Use the commands defined there with e.g.
+
+    python manage.py recreate_database
+    python manage.py fill
+	
+
+## Instructions for server setup (in production)
+
+Note: *In production* the setting is a bit different:
+
+* a dedicated application server called gunicorn is used instead of the Django development server and run via supervisor
+
+* as a webserver nginx is used
+
+* celery is also run via supervisor
+
+
+### Installation:
+
+We use a standard `Ubuntu 14.04.3 LTS`.
+
+Install the following packages with `sudo apt-get install ...`
+
+	virtualenv
+	pip
+	mysql
+	libmysqlclient-dev
+	python-dev
+	gcc
+	gcc-multilib
+	rabbitmq-server // used by celery (and celery is used by post_office)
+	libjpeg-dev // used by pillow for image handling
+	git
+
+maybe reinstall if already installed without libjpeg-dev
+
+	pip install -I pillow
+
+Setup is made along this instructions: [nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
+(Note that we use MySQL instead of Postgres)
+
+### virtualenv
+
+From within `webapps/tq_website` as user `django` run
+
+	create virtualenv env
+
+
+### Git
+
+	git init
+	git remote add origin PATH/TO/REPO
+	git fetch
+	git checkout -t origin/master
+
+If wrong path (only https works without public key) -> change with:
+
+	git remote set-url origin git://new.url.here
+	
+	
+### Configure supervisor
+Create a config file in `/etc/supervisor/conf.d/`, e.g. `tq_website.conf` with the following content:
+    
+    [program:tq_website]
+    command = /webapps/tq_website/bin/gunicorn_start                      ; Command to start app
+    user = django                                                         ; User to run as
+    stdout_logfile = /webapps/tq_website/logs/gunicorn_supervisor.log     ; Where to write log messages
+    redirect_stderr = true                                                ; Save stderr in the same log
+    environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                       ; Set UTF-8 as default encoding
+    
+    [program:tq_celery]
+    command = /webapps/tq_website/env/bin/python /webapps/tq_website/manage.py celeryd
+    directory = /webapps/tq_website/
+    user = django                                                         ; User to run as
+    stdout_logfile = /webapps/tq_website/logs/gunicorn_supervisor.log     ; Where to write log messages
+    redirect_stderr = true                                                ; Save stderr in the same log
+    environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                       ; Set UTF-8 as default encoding
+    
+    [program:tq_celerybeat]
+    command = /webapps/tq_website/env/bin/python /webapps/tq_website/manage.py celerybeat
+    directory = /webapps/tq_website/
+    user = django                                                         ; User to run as
+    stdout_logfile = /webapps/tq_website/logs/gunicorn_supervisor.log     ; Where to write log messages
+    redirect_stderr = true                                                ; Save stderr in the same log
+    environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                       ; Set UTF-8 as default encoding
+
+Double check that this config file is actually included from `/etc/supervisor/supervisord.conf`.
+
+Start supervisor (is automatically done in daemon process):
+
+	sudo supervisord
+
+Reload supervisor config files (this is **not** done automatically):
+
+    sudo supervisorctl reread
+    
+Start supervisor:
+
+    sudo service supervisor start
+    
+Start nginx:
+
+    sudo service nginx start
+
+
+### Apply code changes
+Change to the `django` user (sets working directory to `/webapps/tq_website/`:
+
+    su - django
+    
+Pull the changes from the correct branch (here the master):
+
+    git pull
+    
+Switch into virtualenv:
+
+    source env/bin/activate
+    
+If changes to installed python packages were made:
+
+    pip install -r requirements.txt
+    
+More clean, if there are already packages installed, remove them first.
+NOTE: this is better then deleting and recreating the virtualenv because it preserves other virtualenv configurations.
+
+	pip freeze | xargs pip uninstall -y
+	
+	
+Apply migrations
+
+    python manage.py migrate
+    
+Sometimes we have to separately migrate some apps previously not versioned, such as ckeditor.
+After this they should be migrated in the future with the migrate command above.
+
+	manage.py migrate djangocms_text_ckeditor
+    
+Change back to normal user
+
+    logout
+
+Restart supervisor:
+
+    sudo service supervisor restart
+    
+This is a shorthand for starting individual processes:
+
+    sudo supervisorctl restart tq_website
+    sudo supervisorctl restart tq_celery
+    sudo supervisorctl restart tq_celerybeat
+    
+Restart nginx:
+
+    sudo service nginx restart
+    
+	
+### Update server:
+
+    sudo apt-get update
+    sudo apt-get upgrade
+
+Old linux images are not automatically removed, regularly check free space in /boot/
+	
+	df -h
+
+Check wich kernel is currently used
+	
+	uname -r
+
+remove other kernels found in `/boot/` with
+
+    sudo apt-get autoremove linux-...
+    
+or automatically remove old kernels with this helper program from [Random tools](http://packages.ubuntu.com/de/precise/misc/bikeshed)
+	
+	sudo apt-get install bikeshed
+	sudo purge-old-kernels
+
+Don't forget to restart supervisor after updates
+
+	sudo supervisord
