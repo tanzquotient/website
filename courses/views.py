@@ -251,9 +251,9 @@ def subscription_overview(request):
             else:
                 m=0
 
-            series_men_count.append(str(course.men_count()))
-            series_women_count.append(str(course.women_count()))
-            series_max.append(str((course.max_subscribers or 0)/2))
+            series_men_count.append(unicode(course.men_count()))
+            series_women_count.append(unicode(course.women_count()))
+            series_max.append(unicode((course.max_subscribers or 0)/2))
 
         c_offerings.append({
             'offering': offering,

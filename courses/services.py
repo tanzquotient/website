@@ -102,7 +102,7 @@ def generate_username(first_name, last_name):
     un = username
     i = 1
     while User.objects.filter(username=un).count() > 0:
-        un = username + str(i)
+        un = username + unicode(i)
         i += 1
 
     return un.lower()

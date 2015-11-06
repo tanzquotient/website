@@ -175,7 +175,7 @@ class CourseType(models.Model):
         return self.level if self.level else "";
 
     def format_styles(self):
-        return ', '.join(map(str, self.styles.all()))
+        return ', '.join(map(unicode, self.styles.all()))
 
     format_styles.short_description = "Styles"
 
@@ -294,7 +294,7 @@ class Course(models.Model):
         return lessons
 
     def get_lessons_as_strings(self):
-        return map(str, self.get_lessons())
+        return map(unicode, self.get_lessons())
 
     def format_lessons(self):
         return u' & '.join(self.get_lessons_as_strings())
@@ -434,7 +434,7 @@ class Subscribe(models.Model):
 
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
-        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
+        return ', '.join(map(unicode, calculate_relevant_experience(self.user, self.course)))
 
     get_calculated_experience.short_description = "Calculated experience"
 
@@ -452,7 +452,7 @@ class Subscribe(models.Model):
             r += ', owes {} more'.format(c)
         return r
 
-        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
+        return ', '.join(map(unicode, calculate_relevant_experience(self.user, self.course)))
 
     get_payment_status.short_description = "Payed?"
 
