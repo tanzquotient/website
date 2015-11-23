@@ -1,36 +1,8 @@
 # Server setup, configuration and maintenance
 
-## Local testing (do *not* use in production)
+The setup instructions are divided into common steps, steps for local development and steps only necessary on a production server.
 
-Run message passing server RabbitMQ
-
-	sudo rabbitmq-server
-	
-Run local test server:
-
-	python manage.py runserver
-
-Run celery:
-
-	python manage.py celeryd
-	
-There are some helpful *fabric* commands for handling the local test database. **They possibly destroy data**.
-See `fabfile.py`. Use the commands defined there with e.g.
-
-    python manage.py recreate_database
-    python manage.py fill
-	
-
-## Instructions for server setup (in production)
-
-Note: *In production* the setting is a bit different:
-
-* a dedicated application server called gunicorn is used instead of the Django development server and run via supervisor
-
-* as a webserver nginx is used
-
-* celery is also run via supervisor
-
+## Common steps
 
 ### Installation:
 
@@ -52,10 +24,7 @@ Install the following packages with `sudo apt-get install ...`
 maybe reinstall if already installed without libjpeg-dev
 
 	pip install -I pillow
-
-Setup is made along this instructions: [nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
-(Note that we use MySQL instead of Postgres)
-
+	
 ### virtualenv
 
 From within `webapps/tq_website` as user `django` run
@@ -66,7 +35,7 @@ From within `webapps/tq_website` as user `django` run
 ### Git
 
 	git init
-	git remote add origin PATH/TO/REPO
+	git remote add origin git@github.com:gitsimon/tq_website.git
 	git fetch
 	git checkout -t origin/master
 
@@ -74,6 +43,72 @@ If wrong path (only https works without public key) -> change with:
 
 	git remote set-url origin git://new.url.here
 	
+
+## Local Development (do *not* use in production)
+
+Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). The full version only has Django support and
+is free for educational purposes
+.
+Run message passing server RabbitMQ (once started, it runs in background)
+
+	sudo rabbitmq-server
+	
+Run local test server:
+
+	python manage.py runserver
+
+Run celery (if you want to send out mails):
+
+	python manage.py celeryd
+	
+There are some helpful *fabric* commands for handling the local test database. **They possibly destroy data**.
+See `fabfile.py`. Use the commands defined there with e.g.
+
+    python manage.py recreate_database
+    python manage.py fill
+    
+### Apply code changes
+Pull the changes from the correct branch (here the master):
+
+    git pull
+    
+Switch into virtualenv:
+
+    source env/bin/activate
+    
+If changes to installed python packages were made:
+
+    pip install -r requirements.txt
+    
+More clean, if there are already packages installed, remove them first.
+NOTE: this is better then deleting and recreating the virtualenv because it preserves other virtualenv configurations.
+
+	pip freeze | xargs pip uninstall -y
+	
+	
+Apply migrations
+
+    python manage.py migrate
+    
+Sometimes we have to separately migrate some apps previously not versioned, such as ckeditor.
+After this they should be migrated in the future with the migrate command above.
+
+	manage.py migrate djangocms_text_ckeditor
+	
+
+## Instructions for server setup (in production)
+
+Note: *In production* the setting is a bit different:
+
+* a dedicated application server called gunicorn is used instead of the Django development server and run via supervisor
+
+* as a webserver nginx is used
+
+* celery is also run via supervisor
+
+Setup is made along this instructions: [nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
+(Note that we use MySQL instead of Postgres)
+
 	
 ### Configure supervisor
 Create a config file in `/etc/supervisor/conf.d/`, e.g. `tq_website.conf` with the following content:

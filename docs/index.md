@@ -2,11 +2,10 @@
 
 If you are a *user* of the system, here is the [user manual](user/manual.md).
 
-If you are a *developer*, here you find help for
+If you are a *developer*, you may start with [Setup](dev/setup.md) and than checkout
 
+* [Architecture](dev/architecture.md)
 * [User Interface](dev/ui.md)
-* [Design](dev/design.md)
-* [Server setup & management](dev/server.md)
 
 
 ## Bug Tracker
