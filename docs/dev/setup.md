@@ -9,6 +9,7 @@ The setup instructions are divided into common steps, steps for local developmen
 We use a standard `Ubuntu 14.04.3 LTS`.
 
 Install the following packages with `sudo apt-get install ...`
+Use one-line code below for convenience.
 
 	python-virtualenv
 	python-pip
@@ -21,13 +22,13 @@ Install the following packages with `sudo apt-get install ...`
 	libjpeg-dev // used by pillow for image handling
 	git
 	
-For convenience all in one line:
+All in one line:
 
 	sudo apt-get install python-virtualenv python-pip mysql-server libmysqlclient-dev python-dev gcc gcc-multilib rabbitmq-server libjpeg-dev git
 
 maybe reinstall if already installed without libjpeg-dev
 
-	pip install -I pillow
+	sudo pip install -I pillow
 	
 ### virtualenv
 
