@@ -9,6 +9,7 @@ The setup instructions are divided into common steps, steps for local developmen
 We use a standard `Ubuntu 14.04.3 LTS`.
 
 Install the following packages with `sudo apt-get install ...`
+
 Use one-line code below for convenience.
 
 	python-virtualenv
