@@ -4,7 +4,7 @@ The setup instructions are divided into common steps, steps for local developmen
 
 ## Common steps
 
-### Installation:
+### 1. Installation:
 
 We use a standard `Ubuntu 14.04.3 LTS`.
 
@@ -30,6 +30,25 @@ All in one line:
 maybe reinstall if already installed without libjpeg-dev
 
 	sudo pip install -I pillow
+
+
+### 2. Git
+
+Create a folder on your machine where you want to store the local copy of the repository. This could e.g. be in your home directory.
+
+	mkdir ~/Documents/tq_website`
+	
+Now cd into the newly created folder
+
+	cd ~/Documents/tq_website
+	
+and execute the following commands to tell git that your local copy of the repository now lives in this folder.
+
+	git init
+	git remote add origin https://github.com/gitsimon/tq_website.git
+	git fetch
+	git checkout -t origin/master
+	
 	
 ### virtualenv
 
@@ -37,18 +56,6 @@ From within `webapps/tq_website` as user `django` run
 
 	create virtualenv env
 
-
-### Git
-
-	git init
-	git remote add origin git@github.com:gitsimon/tq_website.git
-	git fetch
-	git checkout -t origin/master
-
-If wrong path (only https works without public key) -> change with:
-
-	git remote set-url origin git://new.url.here
-	
 
 ## Local Development (do *not* use in production)
 
