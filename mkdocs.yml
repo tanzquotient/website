@@ -2,10 +2,7 @@ site_name: TQ Website
 docs_dir: docs
 site_dir: docs_build
 
-pages:
-- Home: 'index.md'
-- User Manual: 'user/manual.md'
-- Developer Documentation:
-    - 'Setup': 'dev/setup.md'
-    - 'Architecture': 'dev/architecture.md'
-    - 'User Interface': 'dev/ui.md'
+site_url: http://tq.ethz.ch
+repo_url: https://github.com/gitsimon/tq_website/
+
+theme: readthedocs
