@@ -10,9 +10,9 @@ We use a standard `Ubuntu 14.04.3 LTS`.
 
 Install the following packages with `sudo apt-get install ...`
 
-	virtualenv
-	pip
-	mysql
+	python-virtualenv
+	python-pip
+	mysql-server
 	libmysqlclient-dev
 	python-dev
 	gcc
@@ -20,6 +20,10 @@ Install the following packages with `sudo apt-get install ...`
 	rabbitmq-server // used by celery (and celery is used by post_office)
 	libjpeg-dev // used by pillow for image handling
 	git
+	
+For convenience all in one line:
+
+	sudo apt-get install python-virtualenv python-pip mysql-server libmysqlclient-dev python-dev gcc gcc-multilib rabbitmq-server libjpeg-dev git
 
 maybe reinstall if already installed without libjpeg-dev
 
