@@ -15,9 +15,11 @@ We use a standard `Ubuntu 14.04.3 LTS`.
 
 Install the following packages with `sudo apt-get install ...`. Package names can deviate depending on your Linux distribution.
 
+Use one-line code below for convenience.
+
 	python-virtualenv
 	python-pip
-	mysql
+	mysql-server
 	libmysqlclient-dev
 	python-dev
 	gcc
@@ -25,22 +27,33 @@ Install the following packages with `sudo apt-get install ...`. Package names ca
 	rabbitmq-server // used by celery (and celery is used by post_office)
 	libjpeg-dev // used by pillow for image handling
 	git
+	
+	
+All in one line:
+
+	sudo apt-get install python-virtualenv python-pip mysql-server libmysqlclient-dev python-dev gcc gcc-multilib rabbitmq-server libjpeg-dev git
 
 maybe reinstall if already installed without libjpeg-dev
 
-	pip install -I pillow
+	sudo pip install -I pillow
 
 
 ### Git
 
+Create a folder on your machine where you want to store the local copy of the repository. This could e.g. be in your home directory.
+
+	mkdir ~/Documents/<project home>
+	
+Now cd into the newly created folder
+
+	cd ~/Documents/<project home>
+	
+and execute the following commands to tell git that your local copy of the repository now lives in this folder.
+
 	git init
-	git remote add origin git@github.com:gitsimon/tq_website.git
+	git remote add origin https://github.com/gitsimon/tq_website.git
 	git fetch
 	git checkout -t origin/master
-
-If wrong remote path (only https works without public key) -> change with:
-
-	git remote set-url origin git://new.url.here
 	
 
 ## Local Development (do *not* use in production)
@@ -51,8 +64,15 @@ Create MySQL-user `root` or `tq` and schema `tq_website` with a password you sel
 
 ### Editor
 
-Install a local IDE. We highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). Only the full version has Django support and
-is free for educational purposes.
+Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). The full version has Django support and is free for educational purposes.
+
+To get the educational version, go to [PyCharm Student](https://www.jetbrains.com/shop/eform/students) and fill out the form using an official @ethz.ch mail address. After completing, you will receive an e-mail from JetBrains with a link to confirm your request. If all works well, you will receive another e-mail with further instructions on how to set up a JetBrains user account.
+
+Finally you can download PyCharm Professional Edition, extract it and place it somewhere you want. There is no installation required. To start the program run
+
+	`<YourPyCharmFolder>/bin/pycharm.sh`
+
+Activation is easiest if you download the licence-file from your JetBrains account-page. When asked for activation, simply drag&drop the file into the activation-key textbox.
 
 ### virtualenv
 
