@@ -4,14 +4,19 @@ The setup instructions are divided into common steps, steps for local developmen
 
 ## Common steps
 
+First update your system:
+
+    sudo apt-get update
+    sudo apt-get upgrade
+
 ### Installation:
 
 We use a standard `Ubuntu 14.04.3 LTS`.
 
-Install the following packages with `sudo apt-get install ...`
+Install the following packages with `sudo apt-get install ...`. Package names can deviate depending on your Linux distribution.
 
-	virtualenv
-	pip
+	python-virtualenv
+	python-pip
 	mysql
 	libmysqlclient-dev
 	python-dev
@@ -24,12 +29,6 @@ Install the following packages with `sudo apt-get install ...`
 maybe reinstall if already installed without libjpeg-dev
 
 	pip install -I pillow
-	
-### virtualenv
-
-From within `webapps/tq_website` as user `django` run
-
-	create virtualenv env
 
 
 ### Git
@@ -39,25 +38,75 @@ From within `webapps/tq_website` as user `django` run
 	git fetch
 	git checkout -t origin/master
 
-If wrong path (only https works without public key) -> change with:
+If wrong remote path (only https works without public key) -> change with:
 
 	git remote set-url origin git://new.url.here
 	
 
 ## Local Development (do *not* use in production)
 
-Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). The full version only has Django support and
-is free for educational purposes
-.
+### Setup MySQL
+
+Create MySQL-user `root` or `tq` and schema `tq_website` with a password you select. 
+
+### Editor
+
+Install a local IDE. We highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). Only the full version has Django support and
+is free for educational purposes.
+
+### virtualenv
+
+From within your local development folder `<project home>/`, run from within that folder
+
+	create virtualenv env
+	
+Whenever you want to work on the project, first enter the virtualenv (do this in *each* terminal you want to execute project related commands):
+
+    source env/bin/activate
+
+
+### Initial Configuration
+
+Create the *secret* config file in the folder `<project home>/tq_website/settings_local.py`.
+This file is not under version control because it contains some secrets.
+Add something along these lines, replace all stars `****` with appropriate secrets:
+
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = '****'
+    
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
+    
+    # Configure the email host to send mails from
+    EMAIL_HOST = 'mailsrv.vseth.ethz.ch'
+    EMAIL_HOST_USER = 'informatik@tq.vseth.ch'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_PASSWORD = '****'
+    DEFAULT_FROM_EMAIL = 'informatik@tq.vseth.ch'
+    
+    # Database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'localhost',
+            'NAME': 'tq_website',
+            'USER': 'root',
+            'PASSWORD': '****',
+        }
+    }
+
 Run message passing server RabbitMQ (once started, it runs in background)
 
 	sudo rabbitmq-server
 	
-Run local test server:
+### Run website locally
+	
+Run local test server (*from within virtualenv*):
 
 	python manage.py runserver
 
-Run celery (if you want to send out mails):
+Run celery if you want to send out mails (*from within virtualenv*):
 
 	python manage.py celeryd
 	
@@ -66,6 +115,7 @@ See `fabfile.py`. Use the commands defined there with e.g.
 
     python manage.py recreate_database
     python manage.py fill
+    
     
 ### Apply code changes
 Pull the changes from the correct branch (here the master):
@@ -109,6 +159,15 @@ Note: *In production* the setting is a bit different:
 Setup is made along this instructions: [nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
 (Note that we use MySQL instead of Postgres)
 
+### Create user
+
+Create user `django` with home `/webapps/`.
+
+### virtualenv
+
+From within `/webapps/tq_website` as user `django` run
+
+	create virtualenv env
 	
 ### Configure supervisor
 Create a config file in `/etc/supervisor/conf.d/`, e.g. `tq_website.conf` with the following content:
