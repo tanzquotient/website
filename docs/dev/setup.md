@@ -65,7 +65,9 @@ Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.c
 
 To get the educational version, go to [PyCharm Student](https://www.jetbrains.com/shop/eform/students) and fill out the form using an official @ethz.ch mail address. After completing, you will receive an e-mail from JetBrains with a link to confirm your request. If all works well, you will receive another e-mail with further instructions on how to set up a JetBrains user account.
 
-Finally you can download PyCharm Professional Edition and activate it using your account.
+Finally you can download PyCharm Professional Edition, extract it and place it somewhere you want. There is no installation required. To start the program run <YourPyCharmFolder>/bin/pycharm.sh from the terminal.
+
+Activation is easiest if you download the licence-file from your JetBrains account-page. When asked for activation, simply drag&drop the file into the activation-key textbox.
 
 ### Start local server
 
