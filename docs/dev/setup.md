@@ -59,9 +59,16 @@ From within `webapps/tq_website` as user `django` run
 
 ## Local Development (do *not* use in production)
 
-Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). The full version only has Django support and
-is free for educational purposes
-.
+### PyCharm
+
+Install a local IDE. I highly recommend to use [PyCharm](https://www.jetbrains.com/pycharm/). The full version has Django support and is free for educational purposes.
+
+To get the educational version, go to [PyCharm Student](https://www.jetbrains.com/shop/eform/students) and fill out the form using an official @ethz.ch mail address. After completing, you will receive an e-mail from JetBrains with a link to confirm your request. If all works well, you will receive another e-mail with further instructions on how to set up a JetBrains user account.
+
+Finally you can download PyCharm Professional Edition and activate it using your account.
+
+### Start local server
+
 Run message passing server RabbitMQ (once started, it runs in background)
 
 	sudo rabbitmq-server
