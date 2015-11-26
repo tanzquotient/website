@@ -74,15 +74,25 @@ Finally you can download PyCharm Professional Edition, extract it and place it s
 
 Activation is easiest if you download the licence-file from your JetBrains account-page. When asked for activation, simply drag&drop the file into the activation-key textbox.
 
-### virtualenv
+### Virtual environment
 
 From within your local development folder `<project home>/`, run
 
 	virtualenv env
 	
-Whenever you want to work on the project, first enter the virtualenv (do this in *each* terminal you want to execute project related commands):
+This will set up a virtual environment to simulate the server. Whenever you want to work on the project, first enter the virtual environment (do this in *each* terminal you want to execute project related commands) using 
 
     source env/bin/activate
+    
+After creating this virtualenv, it is necessary to install all packages that are installed on the server. Therefore, from within the local development folder `<project home>/`, run
+
+	git pull
+	
+in order to get the newest files. Then enter the virtualenv as described above (you can see that you are inside the virtualenv if there is `(env)` prepended to the command prompt) and run
+
+	pip install -r requirements.txt
+
+[TODO]
 
 
 ### Initial Configuration
