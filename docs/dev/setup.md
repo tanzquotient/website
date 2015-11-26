@@ -60,7 +60,7 @@ and execute the following commands to tell git that your local copy of the repos
 
 ### Setup MySQL
 
-Create MySQL-user `root` or `tq` and schema `tq_website` with a password you select. 
+Create MySQL-user `root` or `tq` and schema `tq_website` with a password you select. This can easily be done using MySQL-Workbench.
 
 ### Editor
 
@@ -76,9 +76,9 @@ Activation is easiest if you download the licence-file from your JetBrains accou
 
 ### virtualenv
 
-From within your local development folder `<project home>/`, run from within that folder
+From within your local development folder `<project home>/`, run
 
-	create virtualenv env
+	virtualenv env
 	
 Whenever you want to work on the project, first enter the virtualenv (do this in *each* terminal you want to execute project related commands):
 
