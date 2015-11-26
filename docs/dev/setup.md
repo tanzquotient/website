@@ -92,7 +92,9 @@ in order to get the newest files. Then enter the virtualenv as described above (
 
 	pip install -r requirements.txt
 
-[TODO]
+*Change of version in `requirements.txt` from jdcal==1.0 zu jdcal==1.0.1 required for success!*
+
+This automatically download and install all required packages. 
 
 
 ### Initial Configuration
