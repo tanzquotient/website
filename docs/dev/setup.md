@@ -150,6 +150,10 @@ Run celery if you want to send out mails (*from within virtualenv*):
 
 	python manage.py celeryd
 	
+At this point setup is finished and you should be able to view the local website at `127.0.0.1:8000`. Congratulations! Below are some commands that are used to keep your local installation up to date with the server.
+
+--------------------------------------------------------------------------------------------------------------
+	
 There are some helpful *fabric* commands for handling the local test database. **They possibly destroy data**.
 See `fabfile.py`. Use the commands defined there with e.g.
 
