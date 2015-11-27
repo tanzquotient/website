@@ -92,12 +92,17 @@ in order to get the newest files. Then enter the virtualenv as described above (
 
 	pip install -r requirements.txt
 
-This will automatically download and install all required packages. The next step is executing `python manage.py migrate`, but there are some preparation needed. First, you will need to 
+This will automatically download and install all required packages.
 
-	Create the folder <project home>/log
-	Withing that new folder, create a new empty file django.log
+The next step *would* be running migrate, but currently this doesn't work. Therefore you have to download a database-backup from the server and apply it locally, using 
+
+	scp remoteuser@tqserver:/path/file /localpath/localfile
 	
-...
+The downloaded backup can then be applied to the database by either the mysql workbench or with
+
+	mysql -u root -p tq_website < backupfile
+	
+Get in touch with admin for further details.
 
 
 ### Initial Configuration
