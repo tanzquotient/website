@@ -170,7 +170,7 @@ class TeachAdmin(admin.ModelAdmin):
 
 
 class StyleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'url_info', 'url_video',)
+    list_display = ('name', 'url_info', 'url_video', 'url_playlist')
     inlines = (SongInline,)
 
 

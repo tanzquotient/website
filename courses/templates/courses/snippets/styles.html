@@ -1,10 +1,15 @@
 {% for s in type.styles.all %}
     <!-- Button trigger modal -->
-    <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>
-    {% if s.url_video %}
-        (<a href="{{ s.url_video }}" target=”_blank”><span class="fa fa-youtube-play fa-lg"></span> Video</a>)
-    {% endif %}
-    {% if not forloop.last %},{% endif %}
+    <p>
+        <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>
+        {% if s.url_video %}
+            (<a href="{{ s.url_video }}" target=”_blank”><span class="fa fa-youtube-play fa-lg"></span> Video</a>)
+        {% endif %}
+        {% if s.url_playlist %}
+            (<a href="{{ s.url_playlist }}" target=”_blank”><span class="fa fa-music fa-lg"></span> Playlist</a>)
+        {% endif %}
+        {% if not forloop.last %},{% endif %}
+    </p>
 {% endfor %}
 
 {% for s in type.styles.all %}
@@ -26,6 +31,9 @@
                     {% endif %}
                     {% if s.url_video %}
                         <p><a href="{{ s.url_video }}" target=”_blank”><span class="fa fa-youtube-play fa-lg"></span> Video</a></p>
+                    {% endif %}
+                    {% if s.url_playlist %}
+                        <p><a href="{{ s.url_playlist }}" target=”_blank”><span class="fa fa-music fa-lg"></span> Playlist</a></p>
                     {% endif %}
                     <h4>Songs</h4>
 
