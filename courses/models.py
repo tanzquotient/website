@@ -84,8 +84,6 @@ class Style(models.Model):
     url_video.help_text = "A url to a demo video (e.g Youtube)."
     url_playlist = models.URLField(max_length=500, blank=True, null=True)
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
-    uri_spotify = models.CharField(max_length=500, blank=True, null=True)
-    uri_spotify.help_text = "A Spotify URI."
 
     def __unicode__(self):
         return u"{}".format(self.name)
