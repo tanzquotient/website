@@ -71,11 +71,15 @@
                         <a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
                             <h4 class="list-group-item-heading">
                                 {{ c.type.name }}
-                                <small>
+                                <small class="pull-right">
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
+                                {% if c.is_subscription_allowed %}
+                                <i class="sign_in fa fa-pencil-square fa-lg"></i>
+                            {% endif %}
                                 </small>
+
                             </h4>
-                            <span class="sign_in pull-right fa-pencil-square fa-2x"></span>
+
                             <p class="list-group-item-text"><strong>{% include "courses/snippets/lessons.html" with course=c only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.period %}
