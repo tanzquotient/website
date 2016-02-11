@@ -18,7 +18,7 @@ The following picture sketches the setup. Some notes:
 
 * Some secrets (config file with login information, secret keys) are not synchronized via the repository. This secrets also differ from the one used on development machines.
 
-![Webstack](dev/webstack.svg)
+![Webstack](/dev/webstack.svg)
 
 ## Common steps
 
