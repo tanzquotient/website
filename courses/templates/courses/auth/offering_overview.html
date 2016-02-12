@@ -1,61 +1,83 @@
+{% load string_tags %}
+
 <h2>{{ item.offering.name }}
     <small>{{ item.offering.period|default:'' }}</small>
 </h2>
 
+{% autoescape off %}
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        var data = {
-            labels: [{{ item.labels|safe }}],
-            series: [
-                {{ item.series|safe }}
-            ]
-        };
-        var options = {
-            horizontalBars: true,
-            axisX: {
-                // If high is specified then the axis will display values explicitly up to this value and the computed maximum from the data is ignored
-                high: 15,
-                // If low is specified then the axis will display values explicitly down to this value and the computed minimum from the data is ignored
-                low: 0,
-                onlyInteger: true,
+        var trace1 = {
+            y: [{{ item.labels|fence:"'"|join:"," }}],
+            x: [{{ item.series_confirmed|join:"," }}],
+            orientation: 'h',
+            name: 'Confirmed',
+            type: 'bar',
+            marker: {
+                color: '#C51718',
             },
-            axisY: {
-                offset: 150
-            },
-            seriesBarDistance: 8,
         };
-        var responsiveOptions = {};
-        chart = new Chartist.Bar('.ct-chart-{{ item.offering.id }}', data, options, responsiveOptions);
+
+        var trace2 = {
+            y: [{{ item.labels|fence:"'"|join:"," }}],
+            x: [{{ item.series_men|join:"," }}],
+            orientation: 'h',
+            name: 'Men',
+            type: 'bar',
+            marker: {
+                color: '#99ccff',
+            },
+        };
+
+        var trace3 = {
+            y: [{{ item.labels|fence:"'"|join:"," }}],
+            x: [{{ item.series_women|join:"," }}],
+            orientation: 'h',
+            name: 'Women',
+            type: 'bar',
+            marker: {
+                color: '#00ff99',
+            },
+        };
+
+        var trace4 = {
+            y: [{{ item.labels|fence:"'"|join:"," }}],
+            x: [{{ item.series_free|join:"," }}],
+            orientation: 'h',
+            name: 'Free',
+            type: 'bar',
+            marker: {
+                color: 'rgba(200,200,200,0.5)',
+            },
+        };
+
+        var data = [trace1, trace2, trace3, trace4];
+
+        var layout = {
+            autosize: true,
+            height: {{ item.height }},
+            barmode: 'stack',
+            margin: {
+                l: 150,
+                b: 40,
+                t: 50,
+            },
+            xaxis1: {
+                title: 'subscribers',
+                autorange: false,
+                range: [0, 35],
+                domain: [0, 1],
+                zeroline: true,
+                showline: false,
+                showticklabels: true,
+                showgrid: true,
+                dtick: 5,
+            },
+        };
+
+        Plotly.newPlot(document.getElementById('chart-{{ item.offering.id }}'), data, layout);
     });
 </script>
-<style>
-    .ct-series-a .ct-bar {
-        /* Colour of your bars */
-        stroke: rgb(200, 200, 200);
-    }
-
-    .ct-series-b .ct-bar {
-        /* Colour of your bars */
-        stroke: rgb(220, 220, 220);
-    }
-
-    .ct-series-c .ct-bar {
-        /* Colour of your bars */
-        stroke: #C51718;
-        stroke-width: 2px;
-    }
-
-    .ct-label {
-        font-size: 1em;
-    }
-    .ct-series-a .ct-bar, .ct-series-b .ct-bar {
-        stroke-width: 10px;
-      }
-    @media screen and (max-width: 768px) {
-      .ct-series-a .ct-bar, .ct-series-b .ct-bar {
-        stroke-width: 4px;
-      }
-    }
-</style>
-<div class="ct-chart-{{ item.offering.id }} ct-perfect-fourth"></div>
+{% endautoescape %}
+<div class="chart" id="chart-{{ item.offering.id }}"></div>
 

@@ -256,6 +256,9 @@ class Course(models.Model):
         else:
             return None
 
+    def get_confirmed_count(self):
+        return self.subscriptions.filter(confirmed=True).count()
+
     def men_count(self):
         return self.subscriptions.men().count()
 

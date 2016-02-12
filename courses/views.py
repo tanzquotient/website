@@ -53,7 +53,7 @@ def course_list(request):
                 offering_sections.append(section_dict)
         elif offering.type == 'irr':
             courses_by_month = course_set.by_month()
-            for (d,l) in sorted(courses_by_month.items()):
+            for (d, l) in sorted(courses_by_month.items()):
                 if 1 < d.month < 12:
                     # use the django formatter for date objects
                     section_title = dateformat.format(d, 'F Y')
@@ -65,7 +65,8 @@ def course_list(request):
                     if c.period:
                         deviating_period = True
                         break
-                offering_sections.append({'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
+                offering_sections.append(
+                    {'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
         else:
             message = "unsupported offering type"
             log.error(message)
@@ -229,6 +230,7 @@ def duplicate_users(request):
     })
     return render(request, template_name, context)
 
+
 @login_required
 def subscription_overview(request):
     template_name = "courses/auth/subscription_overview.html"
@@ -238,27 +240,30 @@ def subscription_overview(request):
     c_offerings = []
     for offering in offerings:
         labels = []
+        series_confirmed = []
         series_men_count = []
         series_women_count = []
-        series_max = []
+        series_free = []
         courses = offering.course_set.all()
 
         for course in courses:
-            labels.append("'"+course.type.name+"'")
-            c=course.subscribers.count()
-            if course.max_subscribers:
-                m = course.max_subscribers-c
-            else:
-                m=0
-
-            series_men_count.append(unicode(course.men_count()))
-            series_women_count.append(unicode(course.women_count()))
-            series_max.append(unicode((course.max_subscribers or 0)/2))
+            labels.append(course.type.name)
+            series_confirmed.append(unicode(course.subscriptions.filter(confirmed=True).count()))
+            mc = course.subscriptions.men().filter(confirmed=False).count()
+            wc = course.subscriptions.women().filter(confirmed=False).count()
+            series_men_count.append(unicode(mc))
+            series_women_count.append(unicode(wc))
+            freec = course.get_free_places_count()
+            series_free.append(unicode(freec - mc - wc if freec else 0))
 
         c_offerings.append({
             'offering': offering,
-            'labels': ','.join(labels),
-            'series': '['+','.join(series_men_count)+'],'+'['+','.join(series_women_count)+'],'+'['+','.join(series_max)+'],'
+            'labels': labels,
+            'series_confirmed': series_confirmed,
+            'series_men': series_men_count,
+            'series_women': series_women_count,
+            'series_free': series_free,
+            'height': 25 * len(labels) + 90,
         })
 
     context.update({
@@ -273,6 +278,7 @@ from django.template.defaulttags import register
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
 
 @register.filter
 def trans_weekday(key):
