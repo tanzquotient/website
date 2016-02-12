@@ -1,0 +1,83 @@
+{% load basic_tags %}
+
+<h2>{{ course.name }}
+    <small>{{ course.offering.name }} ({{ course.offering.period|default:'' }})</small>
+</h2>
+
+{% autoescape off %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var y = ['>'];
+        var trace1 = {
+            y: y,
+            x: [{{ place_chart.confirmed }},],
+            orientation: 'h',
+            name: 'Confirmed',
+            type: 'bar',
+            marker: {
+                color: '#C51718',
+            },
+        };
+
+        var trace2 = {
+            y: y,
+            x: [{{ place_chart.men }},],
+            orientation: 'h',
+            name: 'Men',
+            type: 'bar',
+            marker: {
+                color: '#99ccff',
+            },
+        };
+
+        var trace3 = {
+            y: y,
+            x: [{{ place_chart.women }},],
+            orientation: 'h',
+            name: 'Women',
+            type: 'bar',
+            marker: {
+                color: '#00ff99',
+            },
+        };
+
+        var trace4 = {
+            y: y,
+            x: [{{ place_chart.free }},],
+            orientation: 'h',
+            name: 'Free',
+            type: 'bar',
+            marker: {
+                color: 'rgba(200,200,200,0.5)',
+            },
+        };
+
+        var data = [trace1, trace2, trace3, trace4];
+
+        var layout = {
+            autosize: true,
+            height: 200,
+            barmode: 'stack',
+            margin: {
+                l: 10,
+                b: 40,
+                t: 50,
+            },
+            xaxis1: {
+                title: 'places',
+                autorange: false,
+                range: [0, {{ place_chart.total }}],
+                domain: [0, 1],
+                zeroline: true,
+                showline: false,
+                showticklabels: true,
+                showgrid: true,
+                dtick: 2,
+            },
+        };
+
+        Plotly.newPlot(document.getElementById('chart-places'), data, layout);
+    });
+</script>
+{% endautoescape %}
+<div class="chart" id="chart-places"></div>

@@ -1,0 +1,84 @@
+{% load basic_tags %}
+
+<h2>{{ item.offering.name }}
+    <small>{{ item.offering.period|default:'' }}</small>
+</h2>
+
+{% autoescape off %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var y = [{{ item.labels|fence:"'"|join:"," }}];
+        var trace1 = {
+            y: y,
+            x: [{{ item.series_confirmed|join:"," }}],
+            orientation: 'h',
+            name: 'Confirmed',
+            type: 'bar',
+            marker: {
+                color: '#C51718',
+            },
+        };
+
+        var trace2 = {
+            y: y,
+            x: [{{ item.series_men|join:"," }}],
+            orientation: 'h',
+            name: 'Men',
+            type: 'bar',
+            marker: {
+                color: '#99ccff',
+            },
+        };
+
+        var trace3 = {
+            y: y,
+            x: [{{ item.series_women|join:"," }}],
+            orientation: 'h',
+            name: 'Women',
+            type: 'bar',
+            marker: {
+                color: '#00ff99',
+            },
+        };
+
+        var trace4 = {
+            y: y,
+            x: [{{ item.series_free|join:"," }}],
+            orientation: 'h',
+            name: 'Free',
+            type: 'bar',
+            marker: {
+                color: 'rgba(200,200,200,0.5)',
+            },
+        };
+
+        var data = [trace1, trace2, trace3, trace4];
+
+        var layout = {
+            autosize: true,
+            height: {{ item.height }},
+            barmode: 'stack',
+            margin: {
+                l: 150,
+                b: 40,
+                t: 50,
+            },
+            xaxis1: {
+                title: 'places',
+                autorange: false,
+                range: [0, 35],
+                domain: [0, 1],
+                zeroline: true,
+                showline: false,
+                showticklabels: true,
+                showgrid: true,
+                dtick: 5,
+            },
+        };
+
+        Plotly.newPlot(document.getElementById('chart-{{ item.offering.id }}'), data, layout);
+    });
+</script>
+{% endautoescape %}
+<div class="chart" id="chart-{{ item.offering.id }}"></div>
+

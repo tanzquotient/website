@@ -20,6 +20,8 @@ log = logging.getLogger('tq')
 from emailcenter import *
 
 # Create your services here.
+def get_all_offerings():
+    return mymodels.Offering.objects.order_by('period__date_from', '-active')
 
 def get_offerings_to_display():
     # return offerings that have display flag on and order them with increasing start

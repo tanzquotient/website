@@ -9,10 +9,17 @@
 
     <div class="container">
         {% for o in offerings %}
-            <p>{% include "courses/auth/offering_overview.html" with item=o only %}</p>
+            <p>{% include "courses/auth/offering_place_chart.html" with item=o only %}</p>
             {% empty %}
             <div class="alert alert-info">Keine Kurse verfügbar.</div>
         {% endfor %}
-    </div>
 
+
+        <h3>All Offerings</h3>
+        <ul>
+            {% for o in all_offerings %}
+                <li><a href="{% url "courses:offering_overview" o.id %}">{{ o.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock main_content %}

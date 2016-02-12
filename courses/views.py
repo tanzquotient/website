@@ -230,6 +230,34 @@ def duplicate_users(request):
     })
     return render(request, template_name, context)
 
+# helper function
+def offering_overview_dict(offering):
+    labels = []
+    series_confirmed = []
+    series_men_count = []
+    series_women_count = []
+    series_free = []
+    courses = offering.course_set.all()
+
+    for course in courses:
+        labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]), course.name))
+        series_confirmed.append(unicode(course.subscriptions.filter(confirmed=True).count()))
+        mc = course.subscriptions.men().filter(confirmed=False).count()
+        wc = course.subscriptions.women().filter(confirmed=False).count()
+        series_men_count.append(unicode(mc))
+        series_women_count.append(unicode(wc))
+        freec = course.get_free_places_count()
+        series_free.append(unicode(freec - mc - wc if freec else 0))
+
+    return {
+        'offering': offering,
+        'labels': labels,
+        'series_confirmed': series_confirmed,
+        'series_men': series_men_count,
+        'series_women': series_women_count,
+        'series_free': series_free,
+        'height': 25 * len(labels) + 90,
+    }
 
 @login_required
 def subscription_overview(request):
@@ -239,34 +267,44 @@ def subscription_overview(request):
     offerings = services.get_offerings_to_display()
     c_offerings = []
     for offering in offerings:
-        labels = []
-        series_confirmed = []
-        series_men_count = []
-        series_women_count = []
-        series_free = []
-        courses = offering.course_set.all()
-
-        for course in courses:
-            labels.append(course.type.name)
-            series_confirmed.append(unicode(course.subscriptions.filter(confirmed=True).count()))
-            mc = course.subscriptions.men().filter(confirmed=False).count()
-            wc = course.subscriptions.women().filter(confirmed=False).count()
-            series_men_count.append(unicode(mc))
-            series_women_count.append(unicode(wc))
-            freec = course.get_free_places_count()
-            series_free.append(unicode(freec - mc - wc if freec else 0))
-
-        c_offerings.append({
-            'offering': offering,
-            'labels': labels,
-            'series_confirmed': series_confirmed,
-            'series_men': series_men_count,
-            'series_women': series_women_count,
-            'series_free': series_free,
-            'height': 25 * len(labels) + 90,
-        })
+        c_offerings.append(offering_overview_dict(offering))
 
     context.update({
         'offerings': c_offerings,
+        'all_offerings': services.get_all_offerings()
     })
+    return render(request, template_name, context)
+
+@login_required
+def course_overview(request, course_id):
+    template_name = "courses/auth/course_overview.html"
+    context = {}
+
+    course = Course.objects.get(id=course_id)
+
+    cc = course.subscriptions.filter(confirmed=True).count()
+    mc = course.subscriptions.men().filter(confirmed=False).count()
+    wc = course.subscriptions.women().filter(confirmed=False).count()
+    freec = course.get_free_places_count()
+    fc = freec - mc - wc if freec else 0
+
+    context['course'] = course
+    context['place_chart'] = {
+        'label': course.name,
+        'confirmed': cc,
+        'men': mc,
+        'women': wc,
+        'free': fc,
+        'total': cc+mc+wc+fc
+    }
+    return render(request, template_name, context)
+
+@login_required
+def offering_overview(request, offering_id):
+    template_name = "courses/auth/offering_overview.html"
+    context = {}
+
+    o = Offering.objects.get(id=offering_id)
+
+    context['offering'] = offering_overview_dict(o)
     return render(request, template_name, context)

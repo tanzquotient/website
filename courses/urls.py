@@ -12,4 +12,8 @@ urlpatterns = patterns('',
                            name='subscription_done'),
                        url(r'^auth$', views.subscription_overview,
                            name='subscription_overview'),
+                       url(r'^auth/courses/(?P<course_id>\d+)/$', views.course_overview,
+                           name='course_overview'),
+                       url(r'^auth/offering/(?P<offering_id>\d+)/$', views.offering_overview,
+                           name='offering_overview'),
                        )
