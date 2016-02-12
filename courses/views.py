@@ -270,16 +270,3 @@ def subscription_overview(request):
         'offerings': c_offerings,
     })
     return render(request, template_name, context)
-
-
-from django.template.defaulttags import register
-
-
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
-
-
-@register.filter
-def trans_weekday(key):
-    return WEEKDAYS_TRANS[key]

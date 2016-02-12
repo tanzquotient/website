@@ -14,3 +14,7 @@ def fence(value, s):
         return map(lambda v: fence_helper(v, s), value)
     else:
         return fence_helper(unicode(value), s)
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
