@@ -1,0 +1,37 @@
+{% load basic_tags %}
+
+{% autoescape off %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for trace in chart.traces %}
+            var trace{{ forloop.counter }} = {
+                type: 'scatter',
+                name: '{{ trace.name }}',
+                x: [{{ trace.x|fence:"'"|join:"," }}],
+                y: [{{ trace.y|join:"," }}],
+                line: {shape: 'spline'},
+                mode: 'lines',
+            };
+        {% endfor %}
+
+
+        var data = [{% for trace in chart.traces %}trace{{ forloop.counter }},{% endfor %}];
+
+        var layout = {
+            title: 'Timeline',
+            height: 800,
+            xaxis: {
+                title: 'date',
+                type: 'date',
+            },
+            yaxis: {
+                title: 'total subscriptions',
+            }
+        };
+
+        Plotly.newPlot(document.getElementById('chart-time-{{ offering.id }}'), data, layout);
+    });
+</script>
+{% endautoescape %}
+<div class="chart" id="chart-time-{{ offering.id }}"></div>
+

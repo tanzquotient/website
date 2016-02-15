@@ -8,7 +8,12 @@
     <h2></h2>
 
     <div class="container">
-        <p>{% include "courses/auth/offering_place_chart.html" with item=offering only %}</p>
+        <h2>{{ offering.name }}
+            <small>{{ offering.offering.period|default:'' }}</small>
+        </h2>
+        <p>{% include "courses/auth/offering_place_chart.html" with chart=place_chart %}</p>
+
+        <p>{% include "courses/auth/offering_time_chart.html" with chart=time_chart %}</p>
     </div>
 
 {% endblock main_content %}

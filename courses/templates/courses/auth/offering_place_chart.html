@@ -1,16 +1,12 @@
 {% load basic_tags %}
 
-<h2>{{ item.offering.name }}
-    <small>{{ item.offering.period|default:'' }}</small>
-</h2>
-
 {% autoescape off %}
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        var y = [{{ item.labels|fence:"'"|join:"," }}];
+        var y = [{{ chart.labels|fence:"'"|join:"," }}];
         var trace1 = {
             y: y,
-            x: [{{ item.series_confirmed|join:"," }}],
+            x: [{{ chart.series_confirmed|join:"," }}],
             orientation: 'h',
             name: 'Confirmed',
             type: 'bar',
@@ -21,7 +17,7 @@
 
         var trace2 = {
             y: y,
-            x: [{{ item.series_men|join:"," }}],
+            x: [{{ chart.series_men|join:"," }}],
             orientation: 'h',
             name: 'Men',
             type: 'bar',
@@ -32,7 +28,7 @@
 
         var trace3 = {
             y: y,
-            x: [{{ item.series_women|join:"," }}],
+            x: [{{ chart.series_women|join:"," }}],
             orientation: 'h',
             name: 'Women',
             type: 'bar',
@@ -43,7 +39,7 @@
 
         var trace4 = {
             y: y,
-            x: [{{ item.series_free|join:"," }}],
+            x: [{{ chart.series_free|join:"," }}],
             orientation: 'h',
             name: 'Free',
             type: 'bar',
@@ -55,8 +51,9 @@
         var data = [trace1, trace2, trace3, trace4];
 
         var layout = {
+            title: 'Subscription state',
             autosize: true,
-            height: {{ item.height }},
+            height: {{ chart.height }},
             barmode: 'stack',
             margin: {
                 l: 150,
@@ -76,9 +73,9 @@
             },
         };
 
-        Plotly.newPlot(document.getElementById('chart-{{ item.offering.id }}'), data, layout);
+        Plotly.newPlot(document.getElementById('chart-place-{{ offering.id }}'), data, layout);
     });
 </script>
 {% endautoescape %}
-<div class="chart" id="chart-{{ item.offering.id }}"></div>
+<div class="chart" id="chart-place-{{ offering.id }}"></div>
 

@@ -8,8 +8,11 @@
     <h2></h2>
 
     <div class="container">
-        {% for o in offerings %}
-            <p>{% include "courses/auth/offering_place_chart.html" with item=o only %}</p>
+        {% for o in offering_charts %}
+            <h2>{{ o.offering.name }}
+                <small>{{ o.offering.period|default:'' }}</small>
+            </h2>
+            <p>{% include "courses/auth/offering_place_chart.html" with chart=o.place_chart offering=o.offering only %}</p>
             {% empty %}
             <div class="alert alert-info">Keine Kurse verfügbar.</div>
         {% endfor %}

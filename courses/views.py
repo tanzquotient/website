@@ -230,8 +230,9 @@ def duplicate_users(request):
     })
     return render(request, template_name, context)
 
+
 # helper function
-def offering_overview_dict(offering):
+def offering_place_chart_dict(offering):
     labels = []
     series_confirmed = []
     series_men_count = []
@@ -240,7 +241,8 @@ def offering_overview_dict(offering):
     courses = offering.course_set.all()
 
     for course in courses:
-        labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]), course.name))
+        labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
+                                                                   course.name))
         series_confirmed.append(unicode(course.subscriptions.filter(confirmed=True).count()))
         mc = course.subscriptions.men().filter(confirmed=False).count()
         wc = course.subscriptions.women().filter(confirmed=False).count()
@@ -250,7 +252,6 @@ def offering_overview_dict(offering):
         series_free.append(unicode(freec - mc - wc if freec else 0))
 
     return {
-        'offering': offering,
         'labels': labels,
         'series_confirmed': series_confirmed,
         'series_men': series_men_count,
@@ -259,21 +260,53 @@ def offering_overview_dict(offering):
         'height': 25 * len(labels) + 90,
     }
 
+
+# helper function
+def offering_time_chart_dict(offering):
+    traces = []
+    for c in offering.course_set.all():
+        trace = dict()
+        trace['name'] = c.name
+        trace['x'] = []
+        trace['y'] = []
+        total = 0
+        last = None
+        for s in c.subscriptions.order_by('date').all():
+            if last is None:
+                last = s.date.date()
+            if s.date.date() == last:
+                total += 1
+            else:
+                # save temp
+                trace['x'].append(unicode(s.date.date()))
+                trace['y'].append(total)
+                total += 1
+                last = s.date.date()
+        if last is not None:
+            trace['x'].append(unicode(last))
+            trace['y'].append(total)
+        traces.append(trace)
+
+    return {
+        'traces': traces,
+    }
+
+
 @login_required
 def subscription_overview(request):
     template_name = "courses/auth/subscription_overview.html"
     context = {}
 
-    offerings = services.get_offerings_to_display()
-    c_offerings = []
-    for offering in offerings:
-        c_offerings.append(offering_overview_dict(offering))
+    offering_charts = []
+    for o in services.get_offerings_to_display():
+        offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
     context.update({
-        'offerings': c_offerings,
+        'offering_charts': offering_charts,
         'all_offerings': services.get_all_offerings()
     })
     return render(request, template_name, context)
+
 
 @login_required
 def course_overview(request, course_id):
@@ -295,9 +328,10 @@ def course_overview(request, course_id):
         'men': mc,
         'women': wc,
         'free': fc,
-        'total': cc+mc+wc+fc
+        'total': cc + mc + wc + fc
     }
     return render(request, template_name, context)
+
 
 @login_required
 def offering_overview(request, offering_id):
@@ -306,5 +340,7 @@ def offering_overview(request, offering_id):
 
     o = Offering.objects.get(id=offering_id)
 
-    context['offering'] = offering_overview_dict(o)
+    context['offering'] = o
+    context['place_chart'] = offering_place_chart_dict(o)
+    context['time_chart'] = offering_time_chart_dict(o)
     return render(request, template_name, context)
