@@ -14,8 +14,18 @@
             };
         {% endfor %}
 
+        var trace_total = {
+            type: 'scatter',
+            name: 'TOTAl',
+            x: [{{ chart.trace_total.x|fence:"'"|join:"," }}],
+            y: [{{ chart.trace_total.y|join:"," }}],
+            yaxis: 'y2',
+            line: {shape: 'spline', color: '#000', width: 4,},
+            mode: 'lines',
+        };
 
-        var data = [{% for trace in chart.traces %}trace{{ forloop.counter }},{% endfor %}];
+
+        var data = [{% for trace in chart.traces %}trace{{ forloop.counter }},{% endfor %} trace_total];
 
         var layout = {
             title: 'Timeline',
@@ -25,8 +35,13 @@
                 type: 'date',
             },
             yaxis: {
-                title: 'total subscriptions',
-            }
+                title: 'individual course subscriptions',
+            },
+            yaxis2: {
+                title: 'TOTAL subscriptions',
+                side: 'right',
+                overlaying: 'y',
+            },
         };
 
         Plotly.newPlot(document.getElementById('chart-time-{{ offering.id }}'), data, layout);
