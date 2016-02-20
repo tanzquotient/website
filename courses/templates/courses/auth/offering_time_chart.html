@@ -16,7 +16,7 @@
 
         var trace_total = {
             type: 'scatter',
-            name: 'TOTAl',
+            name: 'TOTAL',
             x: [{{ chart.trace_total.x|fence:"'"|join:"," }}],
             y: [{{ chart.trace_total.y|join:"," }}],
             yaxis: 'y2',
@@ -42,6 +42,11 @@
                 side: 'right',
                 overlaying: 'y',
             },
+            legend: {
+                x: -0.2,
+                xanchor: 'right',
+                traceorder:"reversed",
+            }
         };
 
         Plotly.newPlot(document.getElementById('chart-time-{{ offering.id }}'), data, layout);

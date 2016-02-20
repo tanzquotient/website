@@ -348,7 +348,10 @@ def course_overview(request, course_id):
     mc = course.subscriptions.men().filter(confirmed=False).count()
     wc = course.subscriptions.women().filter(confirmed=False).count()
     freec = course.get_free_places_count()
-    fc = freec - mc - wc if freec else 0
+    if freec:
+        freec = max(0, freec - mc - wc)
+    else:
+        freec = 0
 
     context['course'] = course
     context['place_chart'] = {
@@ -356,8 +359,8 @@ def course_overview(request, course_id):
         'confirmed': cc,
         'men': mc,
         'women': wc,
-        'free': fc,
-        'total': cc + mc + wc + fc
+        'free': freec,
+        'total': cc + mc + wc + freec
     }
     return render(request, template_name, context)
 

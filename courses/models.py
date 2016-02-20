@@ -390,7 +390,7 @@ class Course(models.Model):
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     class Meta:
-        ordering = ['position']
+        ordering = ['position', 'type__name', 'name']
 
     def __unicode__(self):
         return u"{} ({})".format(self.name, self.offering)
