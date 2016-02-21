@@ -222,6 +222,9 @@ class Course(models.Model):
 
     objects = managers.CourseManager()
 
+    def participatory(self):
+        return self.subscriptions.filter(confirmed=True)
+
     def format_teachers(self):
         return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
 
@@ -533,9 +536,6 @@ class Offering(models.Model):
     display.help_text = "Defines if the courses in this offering should be displayed on the Website."
     active = models.BooleanField(default=False)
     active.help_text = "Defines if clients can subscribe to courses in this offering."
-
-    def format_period(self):
-        return self.period
 
     def __unicode__(self):
         return u"{}".format(self.name)

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
                        url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
                        url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
+                       url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
                        )
 
 urlpatterns += staticfiles_urlpatterns()
@@ -26,5 +27,4 @@ urlpatterns += i18n_patterns('',
                              url(r'^admin/', include(admin.site.urls)),
                              url(r'^accounts/', include('userena.urls')),
                              url(r'^', include('cms.urls')),
-
                              )

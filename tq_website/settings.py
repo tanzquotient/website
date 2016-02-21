@@ -75,6 +75,7 @@ INSTALLED_APPS = (
     'events',
     'cms_plugins',
     'analytical',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
