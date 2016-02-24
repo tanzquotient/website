@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 from rest_framework import generics, permissions
 
+from permissions import *
+
 from django.contrib import auth
 
 from .serializers import *
@@ -18,7 +20,7 @@ class OfferingDetail(generics.RetrieveAPIView):
     serializer_class = OfferingSerializer
     queryset = Offering.objects.all()
     permission_classes = [
-        permissions.AllowAny
+        permissions.IsAuthenticated
     ]
 
 
@@ -26,6 +28,9 @@ class UserDetail(generics.RetrieveAPIView):
     model = auth.get_user_model()
     serializer_class = UserSerializer
     queryset = auth.get_user_model().objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
 
 class CoursePaymentDetail(generics.RetrieveAPIView):
@@ -33,7 +38,7 @@ class CoursePaymentDetail(generics.RetrieveAPIView):
     serializer_class = CoursePaymentSerializer
     queryset = Course.objects.all()
     permission_classes = [
-        permissions.AllowAny
+        TeacherCanReadUpdateCoursePermission
     ]
 
 
@@ -41,11 +46,17 @@ class SubscriptionPayment(APIView):
     """
     Change if a subscription is payed/not payed
     """
+    permission_classes = [
+        TeacherCanReadUpdateSubscriptionPermission
+    ]
+
     def get_object(self, pk):
         try:
-            return Subscribe.objects.get(pk=pk)
+            s = Subscribe.objects.get(pk=pk)
         except Subscribe.DoesNotExist:
             raise Http404
+        self.check_object_permissions(self.request, s)
+        return s
 
     def get(self, request, pk, format=None):
         s = self.get_object(pk)

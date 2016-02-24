@@ -368,5 +368,15 @@ LOGGING = {
 }
 
 
+##################
+# REST FRAMEWORK #
+##################
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
 from settings_local import *

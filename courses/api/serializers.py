@@ -46,7 +46,6 @@ class SubscribePaymentUpdateSerializer(serializers.Serializer):
     payed = serializers.BooleanField()
 
     def update(self, instance, validated_data):
-        print "update with {}".format(validated_data.get('payed', instance.payed))
         instance.payed = validated_data.get('payed', instance.payed)
         instance.save()
         return instance
