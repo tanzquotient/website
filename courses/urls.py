@@ -16,5 +16,5 @@ urlpatterns = patterns('',
                            name='course_overview'),
                        url(r'^auth/offering/(?P<offering_id>\d+)/$', views.offering_overview,
                            name='offering_overview'),
-                       url(r'^api/', include('courses.api.urls')),
+                       url(r'^api/', include('courses.api.urls', namespace='api')),  # nested namespace 'api'
                        )

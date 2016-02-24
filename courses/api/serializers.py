@@ -7,10 +7,13 @@ from django.contrib import auth
 from courses.models import *
 
 
-class OfferingSerializer(serializers.ModelSerializer):
+class OfferingSerializer(serializers.HyperlinkedModelSerializer):
+    course_set = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='courses:api:course-payment-detail')
+    period = serializers.StringRelatedField()
+
     class Meta:
         model = Offering
-        fields = ('id', 'name',)
+        fields = ('id', 'name', 'period', 'course_set')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,25 +24,27 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'student_status')
 
 
-class SubscribePaymentSerializer(serializers.ModelSerializer):
+class SubscribePaymentSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer()
     partner = serializers.StringRelatedField()
     price_to_pay = serializers.FloatField(source='get_price_to_pay')
+    detail = serializers.HyperlinkedIdentityField(view_name='courses:api:subscription-payment')
 
     class Meta:
         model = Subscribe
-        fields = ('id', 'user', 'partner', 'price_to_pay', 'payed')
+        fields = ('id', 'user', 'partner', 'price_to_pay', 'payed', 'detail')
 
 
 class CoursePaymentSerializer(serializers.HyperlinkedModelSerializer):
-    offering = serializers.HyperlinkedRelatedField(view_name='courses:offering-detail', read_only=True)
-    type = serializers.StringRelatedField()
+    offering = serializers.HyperlinkedRelatedField(view_name='courses:api:offering-detail', read_only=True)
+    type_name = serializers.StringRelatedField(source='type')
+    type = serializers.HyperlinkedRelatedField(view_name='courses:api:coursetype-detail', read_only=True)
     # this calls the method participatory() and serializes the returned queryset
     participatory = SubscribePaymentSerializer(many=True)
 
     class Meta:
         model = Course
-        fields = ('id', 'name', 'type', 'offering', 'participatory',)
+        fields = ('id', 'name', 'type_name', 'type', 'offering', 'participatory')
 
 
 class SubscribePaymentUpdateSerializer(serializers.Serializer):
@@ -49,3 +54,16 @@ class SubscribePaymentUpdateSerializer(serializers.Serializer):
         instance.payed = validated_data.get('payed', instance.payed)
         instance.save()
         return instance
+
+
+class CourseTypeSerializer(serializers.HyperlinkedModelSerializer):
+    styles = serializers.HyperlinkedRelatedField(many=True, view_name='courses:api:style-detail', read_only=True)
+
+    class Meta:
+        model = CourseType
+        fields = ('name', 'styles', 'level', 'couple_course')
+
+
+class StyleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Style

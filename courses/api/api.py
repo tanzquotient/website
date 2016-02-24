@@ -15,6 +15,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+
+class OfferingList(generics.ListAPIView):
+    model = Offering
+    serializer_class = OfferingSerializer
+    queryset = Offering.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
 class OfferingDetail(generics.RetrieveAPIView):
     model = Offering
     serializer_class = OfferingSerializer
@@ -70,3 +80,21 @@ class SubscriptionPayment(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CourseTypeDetail(generics.RetrieveAPIView):
+    model = CourseType
+    serializer_class = CourseTypeSerializer
+    queryset = CourseType.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class StyleDetail(generics.RetrieveAPIView):
+    model = Style
+    serializer_class = StyleSerializer
+    queryset = Style.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
