@@ -1,7 +1,15 @@
-{% for user in users %}
-    {% if user.email %}
-        {{ user.email }}</br>
-    {% endif %}
-    {% empty %}
-    No newsletter subscriptions exist at the moment.
-{% endfor %}
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+{% load basic_tags %}
+
+{% block content %}
+    <div id="content-main">
+        {% for user in users %}
+            {% if user.email %}
+                {{ user.email }}</br>
+            {% endif %}
+            {% empty %}
+            No newsletter subscriptions exist at the moment.
+        {% endfor %}
+    </div>
+{% endblock content %}

@@ -1,6 +1,14 @@
-<h3>Confirmed subscriptions without a corresponding entry in confirmation log:</h3>
-{% for s in subscriptions %}
-    <p>{{ s }}</p>
-    {% empty %}
-    Everthing is fine here.
-{% endfor %}
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+{% load basic_tags %}
+
+{% block content %}
+    <div id="content-main">
+        <h3>Confirmed subscriptions without a corresponding entry in confirmation log:</h3>
+        {% for s in subscriptions %}
+            <p>{{ s }}</p>
+            {% empty %}
+            Everthing is fine here.
+        {% endfor %}
+    </div>
+{% endblock content %}
