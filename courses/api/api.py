@@ -124,10 +124,10 @@ class FilteredEmailList(generics.ListAPIView):
         queryset = auth.get_user_model().objects.all()
 
         # get URL arguments
-        newsletter = self.request.query_params.get('newsletter', None).lower()
+        newsletter = self.request.query_params.get('newsletter', None)
         style_id = self.request.query_params.get('style', None)
-        if newsletter is not None and (newsletter == "true" or newsletter == "false"):
-            queryset = queryset.filter(subscriptions__user__profile__newsletter=newsletter == "true")
+        if newsletter is not None and (newsletter.lower() == "true" or newsletter.lower() == "false"):
+            queryset = queryset.filter(subscriptions__user__profile__newsletter=newsletter.lower() == "true")
         if style_id is not None:
             queryset = queryset.filter(subscriptions__course__type__styles=style_id)
         return queryset.distinct()
