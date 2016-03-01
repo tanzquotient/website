@@ -4,12 +4,15 @@
 
 {% block content %}
     <div id="content-main">
-        {% for user in users %}
-            {% if user.email %}
-                {{ user.email }}</br>
-            {% endif %}
-            {% empty %}
-            No newsletter subscriptions exist at the moment.
-        {% endfor %}
+
+        <p>
+            {% for user in users %}
+                {% if user.email %}
+                    {{ user.email }}<br/>
+                {% endif %}
+                {% empty %}
+                No newsletter subscriptions exist at the moment.
+            {% endfor %}
+        </p>
     </div>
 {% endblock content %}

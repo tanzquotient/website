@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.get_user_model()
-        fields = ('id', 'username', 'first_name', 'last_name', 'student_status')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'student_status')
 
 
 class SubscribePaymentSerializer(serializers.HyperlinkedModelSerializer):

@@ -33,6 +33,8 @@ urlpatterns = patterns('',
                        url(r'^payment/', include(payment_urls)),
                        url(r'^offering/', include(offering_urls)),
                        url(r'^newsletter/', include(newsletter_urls)),
+                       url(r'^email_addresses/$', FilteredEmailList.as_view(), name='email_address-list'),
                        url(r'^coursetype/(?P<pk>\d+)/$', CourseTypeDetail.as_view(), name='coursetype-detail'),
+                       url(r'^style/$', StyleList.as_view(), name='style-list'),
                        url(r'^style/(?P<pk>\d+)/$', StyleDetail.as_view(), name='style-detail'),
                        )

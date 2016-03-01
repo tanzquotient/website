@@ -98,3 +98,36 @@ class StyleDetail(generics.RetrieveAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
+
+class StyleList(generics.ListAPIView):
+    model = Style
+    serializer_class = StyleSerializer
+    queryset = Style.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class FilteredEmailList(generics.ListAPIView):
+    model = auth.get_user_model()
+    serializer_class = UserSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = auth.get_user_model().objects.all()
+
+        # get URL arguments
+        newsletter = self.request.query_params.get('newsletter', None).lower()
+        style_id = self.request.query_params.get('style', None)
+        if newsletter is not None and (newsletter == "true" or newsletter == "false"):
+            queryset = queryset.filter(subscriptions__user__profile__newsletter=newsletter == "true")
+        if style_id is not None:
+            queryset = queryset.filter(subscriptions__course__type__styles=style_id)
+        return queryset.distinct()
