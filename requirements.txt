@@ -37,7 +37,7 @@ Fabric==1.10.2
 gunicorn==19.3.0
 html2text==2014.12.29
 html5lib==0.9999999
-jdcal==1.0
+jdcal==1.2
 jsonfield==1.0.3
 kombu==3.0.28
 Markdown==2.6.5
