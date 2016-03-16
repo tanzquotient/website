@@ -76,6 +76,8 @@ INSTALLED_APPS = (
     'cms_plugins',
     'analytical',
     'rest_framework',
+    'hvad',
+    'survey',
 )
 
 MIDDLEWARE_CLASSES = (
