@@ -64,3 +64,4 @@ celerybeat.*
 
 .idea/
 
+node_modules/

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def survey_invitation(request):
-    template_name = "survey.html"
+    template_name = "survey/survey.html"
     text = request.GET['t']
     checksum = request.GET['c']
     survey_instance_id = services.decode_data(text, checksum)
