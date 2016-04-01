@@ -23,6 +23,7 @@ from emailcenter import *
 def get_all_offerings():
     return mymodels.Offering.objects.order_by('period__date_from', '-active')
 
+
 def get_offerings_to_display():
     # return offerings that have display flag on and order them with increasing start
     return mymodels.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
@@ -30,6 +31,7 @@ def get_offerings_to_display():
 
 def get_current_active_offering():
     return mymodels.Offering.objects.filter(active=True).order_by('period__date_from').first()
+
 
 def get_subsequent_offering():
     res = mymodels.Offering.objects.filter(period__date_from__gte=date.today()).order_by('period__date_from').all()
@@ -94,7 +96,8 @@ def create_user(user_data):
 
     # use userena method to create user -> permissions are set correcly!
     user = UserenaSignup.objects.create_user(generate_username(fn, ln), email=user_data['email'],
-                                    password=User.objects.make_random_password(), active=True, send_email=False)
+                                             password=User.objects.make_random_password(), active=True,
+                                             send_email=False)
     update_user(user, user_data)
     return user
 
@@ -322,6 +325,24 @@ def export_subscriptions(course_ids, export_format):
                 writer.writerow(row)
 
             return response
+        if export_format == 'csv_google':
+            # Create the HttpResponse object with the appropriate CSV header.
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = u'attachment; filename="{}.csv"'.format(filename)
+
+            writer = unicodecsv.writer(response)
+
+            writer.writerow(
+                [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
+                 u'Phone 1 - Value'])
+            for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+                    'user__first_name'):
+                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
+                       u'* Private',
+                       s.user.profile.phone_number]
+                writer.writerow(row)
+
+            return response
         elif export_format == 'xlsx':
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = u'attachment; filename={}.xlsx'.format(filename)
@@ -351,6 +372,32 @@ def export_subscriptions(course_ids, export_format):
                         l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                              s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
                         writer.writerow(l)
+                    f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name),
+                               fileobj.getvalue())
+                    fileobj.seek(0)
+
+            zipped_file.seek(0)
+            response = HttpResponse(zipped_file, content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
+            response['Content-Length'] = zipped_file.tell()
+
+            return response
+        if export_format == 'csv_google':
+            zipped_file = StringIO()
+            with zipfile.ZipFile(zipped_file, 'w') as f:
+                for course_id in course_ids:
+                    fileobj = StringIO()
+                    writer = unicodecsv.writer(fileobj, encoding='utf-8')
+
+                    writer.writerow(
+                        [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
+                         u'Phone 1 - Value'])
+                    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+                            'user__first_name'):
+                        row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
+                               u'* Private',
+                               s.user.profile.phone_number]
+                        writer.writerow(row)
                     f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name),
                                fileobj.getvalue())
                     fileobj.seek(0)

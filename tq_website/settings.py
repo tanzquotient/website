@@ -246,7 +246,7 @@ CMS_LANGUAGES = {
 }
 
 CMS_PLACEHOLDER_CONF = {
-    'main_content': {
+    'cms_content': {
         'name': ugettext('Main content'),
         'language_fallback': True,
     },

@@ -26,5 +26,6 @@ urlpatterns += i18n_patterns('',
                              # Examples:
                              url(r'^admin/', include(admin.site.urls)),
                              url(r'^accounts/', include('userena.urls')),
+                             url(r'^survey/', include('survey.urls')),
                              url(r'^', include('cms.urls')),
                              )

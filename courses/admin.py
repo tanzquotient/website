@@ -85,11 +85,13 @@ class SongAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices', 'format_teachers',
-        'display','active')
+        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
+        'format_teachers',
+        'display', 'active')
     list_filter = ('offering', 'type', 'room', 'active')
     search_fields = ['name', 'type__name', ]
-    inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse, SubscribeInlineForCourse,)
+    inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
+               SubscribeInlineForCourse,)
 
     model = Course
     fieldsets = [
@@ -106,6 +108,7 @@ class CourseAdmin(admin.ModelAdmin):
     ]
 
     actions = [display, undisplay, activate, deactivate, copy_courses, export_confirmed_subscriptions_csv,
+               export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, ]
 
 
@@ -121,7 +124,8 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'confirmed', 'rejected', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender', 'get_user_body_height',
+        'id', 'confirmed', 'rejected', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
+        'get_user_body_height',
         'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'payed', 'confirmed', 'rejected')
@@ -192,15 +196,15 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
 
+
 from userena.admin import UserenaAdmin
 from userena.utils import get_profile_model, get_user_model
 
 # Define a new User admin
 class MyUserAdmin(UserenaAdmin):
-    list_display = ('id',)+UserenaAdmin.list_display
+    list_display = ('id',) + UserenaAdmin.list_display
     inlines = list(UserenaAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
     list_filter = UserenaAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
-
 
 # Re-register UserAdmin
 try:

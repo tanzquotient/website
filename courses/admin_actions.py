@@ -7,21 +7,32 @@ import services
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+
 def display(modeladmin, request, queryset):
     queryset.update(display=True)
+
+
 display.short_description = "Set displayed"
+
 
 def undisplay(modeladmin, request, queryset):
     queryset.update(display=False)
+
+
 undisplay.short_description = "Set undisplayed"
+
 
 def activate(modeladmin, request, queryset):
     queryset.update(active=True)
+
+
 activate.short_description = "Activate"
 
 
 def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
+
+
 deactivate.short_description = "Deactivate"
 
 
@@ -76,7 +87,17 @@ def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'csv')
 
 
-export_confirmed_subscriptions_csv.short_description = "Export confirmed subscriptions of selected course as CSV"
+export_confirmed_subscriptions_csv.short_description = "Export confirmed subscriptions of selected courses as CSV"
+
+
+def export_confirmed_subscriptions_csv_google(modeladmin, request, queryset):
+    ids = []
+    for c in queryset:
+        ids.append(c.id)
+    return services.export_subscriptions(ids, 'csv_google')
+
+
+export_confirmed_subscriptions_csv_google.short_description = "Export confirmed subscriptions of selected courses as Google Contacts readable CSV"
 
 
 def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
@@ -86,4 +107,4 @@ def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'xlsx')
 
 
-export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected course as XLSX"
+export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected courses as XLSX"
