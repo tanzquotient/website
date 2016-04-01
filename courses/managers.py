@@ -65,3 +65,9 @@ class SubscribeManager(models.Manager):
 
     def single_women(self):
         return self.filter(partner__isnull=True, user__profile__gender='w')
+
+    def accepted(self):
+        return self.filter(status__in=['confirmed', 'payed', 'completed'])
+
+    def new(self):
+        return self.filter(status='new')
