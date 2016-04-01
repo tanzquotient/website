@@ -54,3 +54,4 @@ sqlparse==0.1.16
 unicodecsv==0.11.0
 Unidecode==0.4.18
 django-bootstrap3
+base36

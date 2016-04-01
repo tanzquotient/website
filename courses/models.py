@@ -5,6 +5,7 @@ from django.db import models
 
 import datetime
 from django.utils.translation import ugettext as _
+import reversion
 
 from django.conf import settings
 
@@ -14,7 +15,9 @@ import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
-
+import base36
+import hashlib
+import random, string
 from django.db.models import Q
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
@@ -406,7 +409,7 @@ class Course(models.Model):
     def __unicode__(self):
         return u"{} ({})".format(self.name, self.offering)
 
-
+@reversion.register()
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions')
@@ -430,14 +433,15 @@ class Subscribe(models.Model):
     status = models.CharField(max_length=30,
                               choices=SUBSCRIPTION_STATE, blank=False, null=False,
                               default='new')
-    usi = models.CharField(max_length=6, blank=True, null=False, unique=True, default="------")
+    usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
     objects = managers.SubscribeManager()
 
     def generate_usi(self):
-        if not self.usi:
-            pass  # TODO
+        checksum = hashlib.md5()
+        checksum.update(str(self.id))
+        return (base36.dumps(self.id).zfill(4)[:4] + checksum.hexdigest()[:2]).lower()
 
     def get_offering(self):
         return self.course.offering
@@ -510,7 +514,7 @@ class Subscribe(models.Model):
     def save(self, *args, **kwargs):
         self.derive_matching_state()
         super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
-        self.generate_usi()
+        self.usi = self.generate_usi()
         super(Subscribe, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -549,7 +553,11 @@ class Voucher(models.Model):
         ordering = ['issued', 'expires']
 
     def generate_key(self):
-        pass  # TODO
+        voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
+        while Voucher.objects.filter(key=voucher_key).count() > 0:
+            voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
+        return voucher_key
+
 
     def save(self, *args, **kwargs):
         self.generate_key()

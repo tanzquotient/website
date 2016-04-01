@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+import hashlib, base36
 def populate_status(apps, schema_editor):
     Subscribe = apps.get_model("courses", "Subscribe")
     for s in Subscribe.objects.all():
@@ -13,11 +14,15 @@ def populate_status(apps, schema_editor):
                 s.status = "completed"
             else:
                 s.status = "confirmed"
+        s.save()
 
 def populate_usi(apps, schema_editor):
     Subscribe = apps.get_model("courses", "Subscribe")
     for s in Subscribe.objects.all():
-        s.generate_usi()
+        checksum = hashlib.md5()
+        checksum.update(str(s.id))
+        s.usi = (base36.dumps(s.id).zfill(4)[:4] + checksum.hexdigest()[:2]).lower()
+        s.save()
 
 
 
@@ -57,7 +62,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='subscribe',
             name='usi',
-            field=models.CharField(help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', unique=True, max_length=6, blank=True, default='------'),
+            field=models.CharField(help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6, blank=True, default='------'),
         ),
         migrations.AddField(
             model_name='voucher',
@@ -66,6 +71,7 @@ class Migration(migrations.Migration):
         ),
 
         migrations.RunPython(populate_status),
+        migrations.RunPython(populate_usi),
 
         migrations.RemoveField(
             model_name='subscribe',

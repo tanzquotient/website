@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
 from courses.filters import *
+from reversion.admin import VersionAdmin
 
 
 class CourseInline(admin.TabularInline):
@@ -122,7 +123,7 @@ class CourseTypeAdmin(admin.ModelAdmin):
     raw_id_fields = ('styles',)
 
 
-class SubscribeAdmin(admin.ModelAdmin):
+class SubscribeAdmin(VersionAdmin):
     list_display = (
         'id', 'status', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
         'get_user_body_height',
