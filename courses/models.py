@@ -420,7 +420,7 @@ class Subscribe(models.Model):
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
-    # TODO remove
+    # TODO remove after ensuring that all references are updated to use status field instead
     # confirmed = models.BooleanField(blank=False, null=False, default=False)
     # confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
     # rejected = models.BooleanField(blank=False, null=False, default=False)
@@ -430,7 +430,7 @@ class Subscribe(models.Model):
     status = models.CharField(max_length=30,
                               choices=SUBSCRIPTION_STATE, blank=False, null=False,
                               default='new')
-    usi = models.CharField(max_length=6, blank=True, null=False, unique=True)
+    usi = models.CharField(max_length=6, blank=True, null=False, unique=True, default="------")
     usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
     objects = managers.SubscribeManager()
@@ -509,6 +509,7 @@ class Subscribe(models.Model):
 
     def save(self, *args, **kwargs):
         self.derive_matching_state()
+        super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
         self.generate_usi()
         super(Subscribe, self).save(*args, **kwargs)
 
