@@ -45,9 +45,6 @@ copy_courses.short_description = "Create copy of courses for the subsequent offe
 
 
 def confirm_subscriptions(modeladmin, request, queryset):
-    # this is directly executed with database query, does not trigger signals!
-    queryset.update(confirmed=True)
-
     # manually send confirmation mails
     services.confirm_subscriptions(queryset)
 
@@ -56,9 +53,6 @@ confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 
 def reject_subscriptions(modeladmin, request, queryset):
-    # this is directly executed with database query, does not trigger signals!
-    queryset.update(rejected=True)
-
     # manually send confirmation mails
     services.reject_subscriptions(queryset)
 
@@ -74,7 +68,7 @@ match_partners.short_description = "Match partners (chronologically, body height
 
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
-    queryset.update(payed=True)
+    queryset.update(status='completed')
 
 
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"

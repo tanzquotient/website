@@ -188,7 +188,7 @@ def confirmation_check(request):
     context = {}
 
     context.update({
-        'subscriptions': Subscribe.objects.filter(confirmed=True).select_related().filter(
+        'subscriptions': Subscribe.objects.accepted().select_related().filter(
             confirmations__isnull=True).all()
     })
     return render(request, template_name, context)
@@ -243,9 +243,9 @@ def offering_place_chart_dict(offering):
     for course in courses:
         labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                                    course.name))
-        series_confirmed.append(unicode(course.subscriptions.filter(confirmed=True).count()))
-        mc = course.subscriptions.men().filter(confirmed=False).count()
-        wc = course.subscriptions.women().filter(confirmed=False).count()
+        series_confirmed.append(unicode(course.subscriptions.accepted().count()))
+        mc = course.subscriptions.men().new().count()
+        wc = course.subscriptions.women().new().count()
         series_men_count.append(unicode(mc))
         series_women_count.append(unicode(wc))
         freec = course.get_free_places_count()
@@ -344,9 +344,9 @@ def course_overview(request, course_id):
 
     course = Course.objects.get(id=course_id)
 
-    cc = course.subscriptions.filter(confirmed=True).count()
-    mc = course.subscriptions.men().filter(confirmed=False).count()
-    wc = course.subscriptions.women().filter(confirmed=False).count()
+    cc = course.subscriptions.accepted().count()
+    mc = course.subscriptions.men().new().count()
+    wc = course.subscriptions.women().new().count()
     freec = course.get_free_places_count()
     if freec:
         freec = max(0, freec - mc - wc)

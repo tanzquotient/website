@@ -196,7 +196,9 @@ def match_partners(subscriptions):
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
 def confirm_subscription(subscription):
-    if subscription.confirmed and mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
+    subscription.status = 'confirmed'
+    subscription.save()
+    if mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
         # no subscription was send and the subscription is confirmed, so send one
         send_participation_confirmation(subscription)
         # log that we sent the confirmation
@@ -212,7 +214,9 @@ def confirm_subscriptions(subscriptions):
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
 def reject_subscription(subscription):
-    if subscription.rejected and mymodels.Rejection.objects.filter(subscription=subscription).count() == 0:
+    subscription.status = 'rejected'
+    subscription.save()
+    if mymodels.Rejection.objects.filter(subscription=subscription).count() == 0:
         # no subscription was send and the subscription is confirmed, so send one
         reason = send_rejection(subscription)
         # log that we sent the confirmation
@@ -237,7 +241,7 @@ def get_or_create_userprofile(user):
 # finds a list of courses the 'user' did already and that are somehow relevant for 'course'
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
-    return [s.course for s in mymodels.Subscribe.objects.filter(user=user, confirmed=True,
+    return [s.course for s in mymodels.Subscribe.objects.filter(user=user, status__in=['confirmed', 'payed', 'completed'],
                                                                 course__type__styles__id__in=relevant_exp).exclude(
         course=course).order_by('course__type__level').distinct().all()]
 
@@ -293,7 +297,7 @@ def export_subscriptions(course_ids, export_format):
             # set column width
             ws.column_dimensions[get_column_letter(col_num + 1)].width = columns[col_num][1]
 
-        for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by('user__first_name'):
+        for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by('user__first_name'):
             row_num += 1
             row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                    s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
@@ -318,7 +322,7 @@ def export_subscriptions(course_ids, export_format):
 
             writer.writerow([u'Vorname', u'Nachname', u'Geschlecht', u'E-Mail', u'Mobile', u'Legi-Nr.', u'Zu bezahlen',
                              u'Erfahrung'])
-            for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+            for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
                 row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                        s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
@@ -335,7 +339,7 @@ def export_subscriptions(course_ids, export_format):
             writer.writerow(
                 [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
                  u'Phone 1 - Value'])
-            for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+            for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
                 row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
                        u'* Private',
@@ -367,7 +371,7 @@ def export_subscriptions(course_ids, export_format):
                     writer.writerow(
                         ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', u'Legi-Nr.', 'Zu bezahlen',
                          'Erfahrung'])
-                    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+                    for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
                         l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                              s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
@@ -392,7 +396,7 @@ def export_subscriptions(course_ids, export_format):
                     writer.writerow(
                         [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
                          u'Phone 1 - Value'])
-                    for s in mymodels.Subscribe.objects.filter(course__id=course_id, confirmed=True).order_by(
+                    for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
                         row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
                                u'* Private',

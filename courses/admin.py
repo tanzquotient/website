@@ -124,11 +124,11 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'confirmed', 'rejected', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
+        'id', 'status', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
         'get_user_body_height',
         'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
-    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'payed', 'confirmed', 'rejected')
+    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'status')
     search_fields = ['user__email', 'user__first_name', 'user__last_name']
 
     model = Subscribe
@@ -178,6 +178,16 @@ class StyleAdmin(admin.ModelAdmin):
     inlines = (SongInline,)
 
 
+@admin.register(Voucher)
+class VoucherAdmin(admin.ModelAdmin):
+    list_display = ('purpose', 'key', 'issued', 'expires', 'used')
+
+
+@admin.register(VoucherPurpose)
+class VoucherPurposeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+
+
 admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseType, CourseTypeAdmin)
@@ -200,11 +210,13 @@ class UserProfileInline(admin.StackedInline):
 from userena.admin import UserenaAdmin
 from userena.utils import get_profile_model, get_user_model
 
+
 # Define a new User admin
 class MyUserAdmin(UserenaAdmin):
     list_display = ('id',) + UserenaAdmin.list_display
     inlines = list(UserenaAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
     list_filter = UserenaAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
+
 
 # Re-register UserAdmin
 try:

@@ -32,9 +32,15 @@ GENDER = (('m', u'Men'), ('w', u'Woman'))
 
 STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
 
-MATCHING_STATE = (('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('matched', u'Matched'), ('not_required', u'Not required'))
+MATCHING_STATE = (('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('matched', u'Matched'),
+                  ('not_required', u'Not required'))
 
 REJECTION_REASON = (('unknown', u'Unknown'), ('overbooked', u'Overbooked'), ('no_partner', u'No partner found'))
+
+SUBSCRIPTION_STATE = (
+    ('new', u'new'), ('confirmed', u'confirmed (to pay)'), ('payed', u'payed'), ('completed', u'completed'),
+    ('rejected', u'rejected'), ('to_reimburse', u'to reimburse'))
+
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
@@ -49,7 +55,9 @@ class Address(models.Model):
     def __unicode__(self):
         return u"{}, {} {}".format(self.street, self.plz, self.city)
 
+
 from userena.models import UserenaLanguageBaseProfile
+
 
 class UserProfile(UserenaLanguageBaseProfile):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
@@ -223,7 +231,7 @@ class Course(models.Model):
     objects = managers.CourseManager()
 
     def participatory(self):
-        return self.subscriptions.filter(confirmed=True)
+        return self.subscriptions.accepted()
 
     def format_teachers(self):
         return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
@@ -251,7 +259,7 @@ class Course(models.Model):
 
     def get_free_places_count(self):
         if self.max_subscribers != None:
-            c = self.max_subscribers - self.subscriptions.filter(confirmed=True).count()
+            c = self.max_subscribers - self.subscriptions.accepted().count()
             if c > 0:
                 return c
             else:
@@ -260,7 +268,7 @@ class Course(models.Model):
             return None
 
     def get_confirmed_count(self):
-        return self.subscriptions.filter(confirmed=True).count()
+        return self.subscriptions.accepted().count()
 
     def men_count(self):
         return self.subscriptions.men().count()
@@ -412,13 +420,24 @@ class Subscribe(models.Model):
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
-    confirmed = models.BooleanField(blank=False, null=False, default=False)
-    confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
-    rejected = models.BooleanField(blank=False, null=False, default=False)
-    rejected.help_text = "When this is checked, a rejection email is send (once) to the user while saving this form."
-    payed = models.BooleanField(blank=False, null=False, default=False)
+    # TODO remove after ensuring that all references are updated to use status field instead
+    # confirmed = models.BooleanField(blank=False, null=False, default=False)
+    # confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
+    # rejected = models.BooleanField(blank=False, null=False, default=False)
+    # rejected.help_text = "When this is checked, a rejection email is send (once) to the user while saving this form."
+    # payed = models.BooleanField(blank=False, null=False, default=False)
+
+    status = models.CharField(max_length=30,
+                              choices=SUBSCRIPTION_STATE, blank=False, null=False,
+                              default='new')
+    usi = models.CharField(max_length=6, blank=True, null=False, unique=True, default="------")
+    usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
     objects = managers.SubscribeManager()
+
+    def generate_usi(self):
+        if not self.usi:
+            pass  # TODO
 
     def get_offering(self):
         return self.course.offering
@@ -446,11 +465,14 @@ class Subscribe(models.Model):
 
     get_calculated_experience.short_description = "Calculated experience"
 
+    def payed(self):
+        return self.status == 'payed' or self.status == 'to_reimburse' or self.status == 'completed'
+
     # returns similar courses that the user did before in the system
     def get_payment_status(self):
-        c = self.user.subscriptions.filter(payed=False, course__offering__active=False, confirmed=True).filter(
+        c = self.user.subscriptions.filter(status='confirmed', course__offering__active=False).filter(
             ~Q(course=self.course)).count()
-        if self.payed:
+        if self.payed():
             r = 'Yes'
         else:
             r = 'No'
@@ -459,8 +481,6 @@ class Subscribe(models.Model):
             # this user didn't payed for other courses
             r += ', owes {} more'.format(c)
         return r
-
-        return ', '.join(map(unicode, calculate_relevant_experience(self.user, self.course)))
 
     get_payment_status.short_description = "Payed?"
 
@@ -474,13 +494,13 @@ class Subscribe(models.Model):
     def derive_matching_state(self):
         if self.course.type.couple_course:
             if self.partner is None:
-                self.matching_state='to_match'
+                self.matching_state = 'to_match'
             else:
-                if self.matching_state=='to_match':
-                    self.matching_state='matched'
+                if self.matching_state == 'to_match':
+                    self.matching_state = 'matched'
         else:
-            self.matching_state='not_required'
-        # DO NOT save here since this method is also called from save()
+            self.matching_state = 'not_required'
+            # DO NOT save here since this method is also called from save()
 
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
@@ -489,6 +509,8 @@ class Subscribe(models.Model):
 
     def save(self, *args, **kwargs):
         self.derive_matching_state()
+        super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
+        self.generate_usi()
         super(Subscribe, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -509,11 +531,37 @@ class Rejection(models.Model):
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the rejection mail was sent to the subscriber."
     reason = models.CharField(max_length=30,
-                                      choices=REJECTION_REASON, blank=False, null=False,
-                                      default='unknown')
+                              choices=REJECTION_REASON, blank=False, null=False,
+                              default='unknown')
 
     def __unicode__(self):
         return u"({}) rejected at {}".format(self.subscription, self.date)
+
+
+class Voucher(models.Model):
+    purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers')
+    key = models.CharField(max_length=8, unique=True)
+    issued = models.DateField(blank=False, null=False, auto_now_add=True)
+    expires = models.DateField(blank=True, null=True)
+    used = models.BooleanField(blank=False, null=False, default=False)
+
+    class Meta:
+        ordering = ['issued', 'expires']
+
+    def generate_key(self):
+        pass  # TODO
+
+    def save(self, *args, **kwargs):
+        self.generate_key()
+        super(Voucher, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u"({}) rejected at {}".format(self.subscription, self.date)
+
+
+class VoucherPurpose(models.Model):
+    name = models.CharField(max_length=255, unique=True, blank=False)
+    description = models.TextField(blank=True, null=True)
 
 
 class Teach(models.Model):
