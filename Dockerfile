@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --force-yes python-virtualenv python-pi
 
 RUN pip install -I pillow
 
-ADD . ~/code
-WORKDIR ~/code
+ADD . /code/
+WORKDIR /code
 
 RUN pip install -r requirements.txt

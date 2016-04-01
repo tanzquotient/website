@@ -1,0 +1,20 @@
+db:
+  image: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: tq_website
+    MYSQL_USER: root
+    MYSQL_PASSWORD: root
+  ports:
+    - "3309:3306"
+  restart: always
+django:
+  build: .
+  volumes:
+    - .:/code  
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  restart: always
