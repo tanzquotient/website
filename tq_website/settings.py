@@ -74,7 +74,7 @@ INSTALLED_APPS = (
     'faq',
     'organisation',
     'events',
-    'counterpayment',
+    'payment',
     'cms_plugins',
     'analytical',
     'rest_framework',

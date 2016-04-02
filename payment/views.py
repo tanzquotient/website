@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView, FormView, RedirectView
-from counterpayment.forms import USIForm
+from payment.forms import USIForm
 from courses.models import Subscribe
 from django.contrib import messages
 from django.shortcuts import redirect
 
 import reversion
 from django.db import transaction
+
 
 class IndexView(FormView):
     template_name = 'counterpayment/form.html'
@@ -36,4 +37,4 @@ def mark_payed(request, **kwargs):
         reversion.set_user(request.user)
         reversion.set_comment("Payed on counter")
     messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + ' successfully marked as payed')
-    return redirect('counterpayment')
+    return redirect('counterpayment_index')
