@@ -9,7 +9,7 @@ from django.db import transaction
 
 
 class IndexView(FormView):
-    template_name = 'counterpayment/form.html'
+    template_name = 'payment/form.html'
     form_class = USIForm
 
     def form_valid(self, form):
@@ -26,8 +26,8 @@ import reversion
 from django.db import transaction
 
 
-class IndexView(FormView):
-    template_name = 'counterpayment/form.html'
+class VoucherPaymentIndexView(FormView):
+    template_name = 'payment/form.html'
     form_class = USIForm
 
     def form_valid(self, form):
@@ -35,7 +35,7 @@ class IndexView(FormView):
         return super(CounterPaymentIndexView, self).form_valid(form)
 
 class CounterPaymentIndexView(FormView):
-    template_name = 'counterpayment/form.html'
+    template_name = 'payment/form.html'
     form_class = USIForm
 
     def form_valid(self, form):
@@ -43,7 +43,7 @@ class CounterPaymentIndexView(FormView):
         return super(CounterPaymentIndexView, self).form_valid(form)
 
 class CounterPaymentDetailView(TemplateView):
-    template_name = 'counterpayment/details.html'
+    template_name = 'payment/details.html'
 
     def get_context_data(self, usi, **kwargs):
 
@@ -64,7 +64,7 @@ def counterpayment_mark_payed(request, **kwargs):
         reversion.set_comment("Payed on counter")
     messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + ' successfully marked as payed')
     return redirect('counterpayment_index')(FormView):
-    template_name = 'counterpayment/form.html'
+    template_name = 'payment/form.html'
     form_class = USIForm
 
     def form_valid(self, form):
@@ -72,7 +72,7 @@ def counterpayment_mark_payed(request, **kwargs):
         return super(CounterPaymentIndexView, self).form_valid(form)
 
 class DetailView(TemplateView):
-    template_name = 'counterpayment/details.html'
+    template_name = 'payment/details.html'
 
     def get_context_data(self, usi, **kwargs):
 
