@@ -438,7 +438,7 @@ class Subscribe(models.Model):
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
-    objects = managers.SubscribeManager()
+    objects = managers.SubscribeQuerySet.as_manager()
 
     def generate_usi(self):
         checksum = hashlib.md5()
