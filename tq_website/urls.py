@@ -31,9 +31,9 @@ urlpatterns += i18n_patterns('',
                              url(r'^admin/', include(admin.site.urls)),
                              url(r'^accounts/', include('userena.urls')),
                              url(r'^survey/', include('survey.urls')),
-                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/payed/$', permission_required('counterpayment')(payment.views.mark_payed), name='counterpayment_pay'),
-                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/$', permission_required('counterpayment')(payment.views.DetailView.as_view()), name='counterpayment_detail'),
-                             url(r'^auth/counterpayment/$', permission_required('counterpayment')(payment.views.IndexView.as_view()), name='counterpayment_index'),
+                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/payed/$', permission_required('counterpayment')(payment.views.counterpayment_mark_payed), name='counterpayment_pay'),
+                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/$', permission_required('counterpayment')(payment.views.CounterPaymentDetailView.as_view()), name='counterpayment_detail'),
+                             url(r'^auth/counterpayment/$', permission_required('counterpayment')(payment.views.CounterPaymentIndexView.as_view()), name='counterpayment_index'),
                              url(r'^', include('cms.urls')),
                              #TODO Create counterpayment permission at the right place
                              )
