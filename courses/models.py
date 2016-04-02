@@ -542,9 +542,17 @@ class Rejection(models.Model):
         return u"({}) rejected at {}".format(self.subscription, self.date)
 
 
+# not a class method and therefore outside
+def generate_key():
+    voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    while Voucher.objects.filter(key=voucher_key).count() > 0:
+        voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    return voucher_key
+
 class Voucher(models.Model):
+
     purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers')
-    key = models.CharField(max_length=8, unique=True)
+    key = models.CharField(max_length=8, unique=True, default=generate_key)
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
@@ -552,25 +560,19 @@ class Voucher(models.Model):
     class Meta:
         ordering = ['issued', 'expires']
 
-    def generate_key(self):
-        voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-        while Voucher.objects.filter(key=voucher_key).count() > 0:
-            voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
-        return voucher_key
-
-
-    def save(self, *args, **kwargs):
-        self.generate_key()
-        super(Voucher, self).save(*args, **kwargs)
-
     def __unicode__(self):
-        return u"({}) rejected at {}".format(self.subscription, self.date)
+        return u"#{} valid {} - {}".format(self.key, self.issued, self.expires)
 
 
 class VoucherPurpose(models.Model):
     name = models.CharField(max_length=255, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
 
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
 
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
