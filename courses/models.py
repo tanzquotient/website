@@ -19,6 +19,8 @@ import base36
 import hashlib
 import random, string
 from django.db.models import Q
+from django.db import transaction
+
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
             ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -488,6 +490,15 @@ class Subscribe(models.Model):
 
     get_payment_status.short_description = "Payed?"
 
+    def mark_as_payed(self, payment_method, user=None):
+        with transaction.atomic(), reversion.create_revision():
+            self.status = 'payed'
+            self.save()
+            if user is not None:
+                reversion.set_user(user)
+            reversion.set_comment("Payed using payment method " + payment_method )
+        return True
+
     def get_price_to_pay(self):
         if self.user.profile.student_status == 'no':
             return self.course.price_without_legi
@@ -549,6 +560,7 @@ def generate_key():
         voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     return voucher_key
 
+@reversion.register()
 class Voucher(models.Model):
 
     purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers')
@@ -556,6 +568,15 @@ class Voucher(models.Model):
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
+
+    def mark_as_used(self, user=None, comment=""):
+        with transaction.atomic(), reversion.create_revision():
+            self.used = True
+            self.save()
+            if user is not None:
+                reversion.set_user(user)
+            reversion.set_comment("Marked as used. " + comment )
+        return True
 
     class Meta:
         ordering = ['issued', 'expires']
