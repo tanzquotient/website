@@ -180,7 +180,7 @@ class StyleAdmin(admin.ModelAdmin):
 
 
 @admin.register(Voucher)
-class VoucherAdmin(admin.ModelAdmin):
+class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used')
     readonly_fields = ('key', )
 
