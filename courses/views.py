@@ -23,6 +23,7 @@ import logging
 
 log = logging.getLogger('tq')
 
+
 # Create your views here.
 
 def course_list(request):
@@ -241,11 +242,13 @@ def offering_place_chart_dict(offering):
     courses = offering.course_set.all()
 
     for course in courses:
+        # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
+        subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                                    course.name))
-        series_confirmed.append(unicode(course.subscriptions.accepted().count()))
-        mc = course.subscriptions.men().new().count()
-        wc = course.subscriptions.women().new().count()
+        series_confirmed.append(unicode(subscriptions.accepted().count()))
+        mc = subscriptions.new().men().count()
+        wc = subscriptions.new().women().count()
         series_men_count.append(unicode(mc))
         series_women_count.append(unicode(wc))
         freec = course.get_free_places_count()
@@ -343,10 +346,12 @@ def course_overview(request, course_id):
     context = {}
 
     course = Course.objects.get(id=course_id)
+    # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
+    subscriptions = Subscribe.objects.filter(course=course)
 
-    cc = course.subscriptions.accepted().count()
-    mc = course.subscriptions.men().new().count()
-    wc = course.subscriptions.women().new().count()
+    cc = subscriptions.accepted().count()
+    mc = subscriptions.new().men().count()
+    wc = subscriptions.new().women().count()
     freec = course.get_free_places_count()
     if freec:
         freec = max(0, freec - mc - wc)

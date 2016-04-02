@@ -22,7 +22,9 @@ class CourseManager(models.Manager):
     def by_month(self):
         result_dict = {}
         courses = self.all()
-        sorted_courses = sorted(courses, key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else datetime.date(day=1,month=1,year=9999))
+        sorted_courses = sorted(courses,
+                                key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else datetime.date(
+                                    day=1, month=1, year=9999))
         current_date = datetime.date(year=1, month=1, day=1)
         unknown_list = []
         month_list = []
@@ -31,7 +33,7 @@ class CourseManager(models.Manager):
             if fid:
                 if current_date.year != fid.year or current_date.month != fid.month:
                     if month_list:
-                        result_dict[current_date]=month_list
+                        result_dict[current_date] = month_list
                     # go to next month
                     current_date = fid
                     month_list = []
@@ -40,9 +42,9 @@ class CourseManager(models.Manager):
             else:
                 unknown_list.append(c)
         if month_list:
-            result_dict[current_date]=month_list
+            result_dict[current_date] = month_list
         if unknown_list:
-            result_dict[datetime.date(year=9999,month=1,day=1)] = unknown_list
+            result_dict[datetime.date(year=9999, month=1, day=1)] = unknown_list
         return result_dict
 
 
@@ -52,8 +54,17 @@ class AddressManager(models.Manager):
         address.save()
         return address
 
+    def live(self):
+        return self.filter(state='published')
 
-class SubscribeManager(models.Manager):
+    def interesting(self):
+        return self.filter(interesting=True)
+
+
+# construction to allow chaining of queryset methods (chaining manager methods is not possible)
+# read https://www.google.ch/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwjOlbrz1-_LAhVHPRQKHXkqD-EQygQIKjAB&url=https%3A%2F%2Fdocs.djangoproject.com%2Fen%2F1.9%2Ftopics%2Fdb%2Fmanagers%2F%23using-managers-for-related-object-access&usg=AFQjCNEJzw5qfnl5vQoOrHbtdK-iaxkG7g&sig2=lC0IkWiubBDk9C0iAjj7Iw
+# and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
+class SubscribeQuerySet(models.QuerySet):
     def men(self):
         return self.filter(user__profile__gender='m')
 
