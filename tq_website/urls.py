@@ -34,6 +34,8 @@ urlpatterns += i18n_patterns('',
                              url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/payed/$', permission_required('counterpayment')(payment.views.counterpayment_mark_payed), name='counterpayment_pay'),
                              url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/$', permission_required('counterpayment')(payment.views.CounterPaymentDetailView.as_view()), name='counterpayment_detail'),
                              url(r'^auth/counterpayment/$', permission_required('counterpayment')(payment.views.CounterPaymentIndexView.as_view()), name='counterpayment_index'),
+                             url(r'^payment/(?P<usi>[a-zA-Z0-9]{6})/payed/$', payment.views.VoucherPaymentSuccessView.as_view(), name='voucherpayment_success'),
+                             url(r'^payment/(?P<usi>[a-zA-Z0-9]{6})/$', payment.views.VoucherPaymentIndexView.as_view(), name='voucherpayment_index'),
                              url(r'^', include('cms.urls')),
                              #TODO Create counterpayment permission at the right place
                              )
