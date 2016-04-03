@@ -4,9 +4,11 @@ from courses.models import Subscribe, Voucher
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
 import reversion
 from django.db import transaction
+
 
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
@@ -19,13 +21,13 @@ class VoucherPaymentIndexView(FormView):
         context = super(VoucherPaymentIndexView, self).get_context_data(**kwargs)
         context['subscription'] = subscription
 
-        if subscription.payed() == True:
+        if subscription.payed():
             self.template_name = 'payment/voucher/payment_success.html'
 
         return context
 
     def form_valid(self, form):
-        self.success_url = './payed/'
+        self.success_url = reverse('payment:voucherpayment_success')
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
@@ -33,11 +35,12 @@ class VoucherPaymentIndexView(FormView):
         voucher.mark_as_used(self.request.user, comment="Used to pay course #" + subscription.usi + ".")
 
         if subscription.mark_as_payed('voucherpayment'):
-            messages.add_message(self.request, messages.SUCCESS, _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
+            messages.add_message(self.request, messages.SUCCESS,
+                                 _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
         return super(VoucherPaymentIndexView, self).form_valid(form)
 
-class VoucherPaymentSuccessView(TemplateView):
 
+class VoucherPaymentSuccessView(TemplateView):
     def get_context_data(self, usi, **kwargs):
         subscription = Subscribe.objects.filter(usi=usi).first()
 
@@ -51,19 +54,20 @@ class VoucherPaymentSuccessView(TemplateView):
 
         return context
 
+
 class CounterPaymentIndexView(FormView):
     template_name = 'payment/counter/form.html'
     form_class = USIForm
 
     def form_valid(self, form):
-        self.success_url = './' + form.data['usi'] + '/details/'
+        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi']})
         return super(CounterPaymentIndexView, self).form_valid(form)
+
 
 class CounterPaymentDetailView(TemplateView):
     template_name = 'payment/counter/details.html'
 
     def get_context_data(self, usi, **kwargs):
-
         subscription = Subscribe.objects.filter(usi=usi).first()
 
         context = super(CounterPaymentDetailView, self).get_context_data(**kwargs)
@@ -71,9 +75,10 @@ class CounterPaymentDetailView(TemplateView):
 
         return context
 
+
 def counterpayment_mark_payed(request, **kwargs):
     subscription = Subscribe.objects.filter(usi=kwargs['usi']).first()
 
     if subscription.mark_as_payed('counterpayment', request.user):
         messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
-    return redirect('counterpayment_index')
+    return redirect('payment:counterpayment_index')
