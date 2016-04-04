@@ -1,10 +1,11 @@
 from django.views.generic import TemplateView, FormView, RedirectView
-from payment.forms import USIForm, VoucherForm, UCIForm
-from courses.models import Subscribe, Voucher
+from payment.forms import USIForm, VoucherForm, CourseForm
+from courses.models import Subscribe, Voucher, Course
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django import forms
 
 
 
@@ -90,4 +91,42 @@ def counterpayment_mark_payed(request, **kwargs):
 
 class CoursePaymentIndexView(FormView):
     template_name = 'payment/course/form.html'
-    form_class = UCIForm
+    form_class = CourseForm
+
+    def form_valid(self, form):
+        self.success_url = reverse('payment:coursepayment_detail', kwargs={'course': form.data['course']})
+        return super(CoursePaymentIndexView, self).form_valid(form)
+
+
+class CoursePaymentDetailView(TemplateView):
+    template_name = 'payment/course/course.html'
+
+    def get_context_data(self, **kwargs):
+        course = Course.objects.filter(id=kwargs['course']).first()
+
+        context = super(CoursePaymentDetailView, self).get_context_data(**kwargs)
+        context['course'] = course
+        return context
+
+class CoursePaymentConfirm(FormView):
+    template_name = 'payment/course/confirm.html'
+    form_class = forms.Form
+
+    def get_context_data(self, **kwargs):
+        subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
+
+        context = super(CoursePaymentConfirm, self).get_context_data(**kwargs)
+        context['subscription'] = subscription
+        return context
+
+    def form_valid(self, form):
+        self.success_url = reverse('payment:coursepayment_detail', kwargs={'course' : self.kwargs['course']})
+        subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
+
+        # redirect and show message
+        if subscription.mark_as_payed('coursepayment', self.request.user):
+            messages.add_message(self.request, messages.SUCCESS, "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
+
+        return super(CoursePaymentConfirm, self).form_valid(form)
+
+

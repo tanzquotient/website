@@ -20,5 +20,11 @@ urlpatterns = patterns('',
                        url(r'^auth/coursepayment/$',
                            permission_required('coursepayment')(views.CoursePaymentIndexView.as_view()),
                            name='coursepayment_index'),
+                       url(r'^auth/coursepayment/(?P<course>[0-9]*)/$', views.CoursePaymentDetailView.as_view(),
+                           name='coursepayment_detail'),
+                       url(r'^auth/coursepayment/(?P<course>[0-9]*)/(?P<usi>[a-zA-Z0-9]{6})/$', views.CoursePaymentConfirm.as_view(),
+                           name='coursepayment_confirm'),
+                       url(r'^auth/coursepayment/(?P<course>[0-9]*)/(?P<usi>[a-zA-Z0-9]{6})/paid/$', views.CoursePaymentConfirm.as_view(),
+                           name='coursepayment_payed'),
                        # TODO Create counterpayment permission at the right place
                        )

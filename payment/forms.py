@@ -51,5 +51,5 @@ class USIForm(forms.Form):
 class VoucherForm(forms.Form):
     voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid, ])
 
-class UCIForm(forms.Form):
-    uci = forms.CharField(max_length=6, label=_("Unique Course Identifier"), validators=[validate_uci_exists, ])
+class CourseForm(forms.Form):
+    course = forms.ModelChoiceField(label=_("Select Course"), queryset=Course.objects.all())

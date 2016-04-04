@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content_title %}
+    <h1 class="lead">{% trans "Course Payment" %}</h1>
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <h2>{{ course }}</h2>
+        <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "E-Mail" %}</th>
+                    <th>{% trans "Amount Due" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                    </thead>
+                    <tbody>
+                    {% for subscription in course.participatory|dictsort:"payed" %}
+                        <tr>
+                            <td>{{ subscription.user.get_full_name }}</td>
+                            <td>{{ subscription.get_user_email }}</td>
+                            <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}0{% endif %}
+                                CHF
+                            </td>
+                            <td>{% if not subscription.payed %}
+                                <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
+                                   class="btn btn-default btn-xs">Pay</a>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
