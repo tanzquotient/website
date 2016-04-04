@@ -16,6 +16,7 @@
                     <thead>
                     <th>{% trans "Name" %}</th>
                     <th>{% trans "E-Mail" %}</th>
+                    <th>{% trans "Amount" %}</th>
                     <th>{% trans "Amount Due" %}</th>
                     <th>{% trans "Actions" %}</th>
                     </thead>
@@ -24,6 +25,7 @@
                         <tr>
                             <td>{{ subscription.user.get_full_name }}</td>
                             <td>{{ subscription.get_user_email }}</td>
+                            <td>{{ subscription.get_price_to_pay }} CHF</td>
                             <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}0{% endif %}
                                 CHF
                             </td>
@@ -33,8 +35,16 @@
                         </tr>
                     {% endfor %}
                     </tbody>
+                    <tfoot>
+                    <tr><td></td><th>Total:</th><th>{{ course.total_paid }} CHF</th><th>{{ course.total_unpaid }} CHF</th><th></th></tr>
+                    </tfoot>
+
                 </table>
             </div>
         </div>
+
+        <h2>{% trans "Course Information" %}</h2>
+        <p>{{ course.number_paid }} {% trans "people already paid the course." %}</p>
+
     </div>
 {% endblock main_content %}

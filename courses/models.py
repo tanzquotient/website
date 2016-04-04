@@ -238,6 +238,24 @@ class Course(models.Model):
     def participatory(self):
         return self.subscriptions.accepted()
 
+    def number_paid(self):
+        return self.subscriptions.accepted().paid().count()
+
+    def total_paid(self):
+        total = 0.0
+        for subscription in self.subscriptions.accepted().paid().all():
+            total += subscription.get_price_to_pay()
+        return total
+
+    def total_price(self):
+        total = 0.0
+        for subscription in self.subscriptions.accepted().all():
+            total += subscription.get_price_to_pay()
+        return total
+
+    def total_unpaid(self):
+        return self.total_price() - self.total_paid()
+
     def format_teachers(self):
         return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
 

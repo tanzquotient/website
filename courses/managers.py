@@ -80,5 +80,8 @@ class SubscribeQuerySet(models.QuerySet):
     def accepted(self):
         return self.filter(status__in=['confirmed', 'payed', 'completed'])
 
+    def paid(self):
+        return self.filter(status__in=['payed', 'to_reimburse', 'completed'])
+
     def new(self):
         return self.filter(status='new')
