@@ -516,6 +516,7 @@ class Subscribe(models.Model):
     def mark_as_payed(self, payment_method, user=None):
         with transaction.atomic(), reversion.create_revision():
             self.status = 'payed'
+            self.paymentmethod = payment_method
             self.save()
             if user is not None:
                 reversion.set_user(user)
