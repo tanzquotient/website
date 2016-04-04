@@ -425,12 +425,6 @@ class Subscribe(models.Model):
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
-    # TODO remove after ensuring that all references are updated to use status field instead
-    # confirmed = models.BooleanField(blank=False, null=False, default=False)
-    # confirmed.help_text = "When this is checked, a participation confirmation email is send (once) to the user while saving this form."
-    # rejected = models.BooleanField(blank=False, null=False, default=False)
-    # rejected.help_text = "When this is checked, a rejection email is send (once) to the user while saving this form."
-    # payed = models.BooleanField(blank=False, null=False, default=False)
 
     status = models.CharField(max_length=30,
                               choices=SUBSCRIPTION_STATE, blank=False, null=False,

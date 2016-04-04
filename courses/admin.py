@@ -41,6 +41,7 @@ class SubscribeInlineForCourse(admin.TabularInline):
     fk_name = 'course'
 
     raw_id_fields = ('user', 'partner')
+    readonly_fields = ('status', 'matching_state', 'usi',)
 
 
 class SubscribeInlineForUser(admin.TabularInline):
@@ -49,6 +50,7 @@ class SubscribeInlineForUser(admin.TabularInline):
     fk_name = 'user'
 
     raw_id_fields = ('course', 'partner')
+    readonly_fields = ('status', 'matching_state', 'usi',)
 
 
 class RegularLessonCancellationInline(admin.TabularInline):
@@ -131,6 +133,7 @@ class SubscribeAdmin(VersionAdmin):
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'status')
     search_fields = ['user__email', 'user__first_name', 'user__last_name']
+    readonly_fields = ('status', 'matching_state', 'usi',)
 
     model = Subscribe
 

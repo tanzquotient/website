@@ -8,10 +8,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 import views
 import courses.views as courses_views
-import payment.views
-from django.contrib.auth.decorators import login_required, permission_required
-
-
 
 urlpatterns = patterns('',
                        # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # comment out robots or change it when site is finished
@@ -31,12 +27,6 @@ urlpatterns += i18n_patterns('',
                              url(r'^admin/', include(admin.site.urls)),
                              url(r'^accounts/', include('userena.urls')),
                              url(r'^survey/', include('survey.urls')),
-                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/payed/$', permission_required('counterpayment')(payment.views.counterpayment_mark_payed), name='counterpayment_pay'),
-                             url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/$', permission_required('counterpayment')(payment.views.CounterPaymentDetailView.as_view()), name='counterpayment_detail'),
-                             url(r'^auth/counterpayment/$', permission_required('counterpayment')(payment.views.CounterPaymentIndexView.as_view()), name='counterpayment_index'),
-                             url(r'^payment/(?P<usi>[a-zA-Z0-9]{6})/payed/$', payment.views.VoucherPaymentSuccessView.as_view(), name='voucherpayment_success'),
-                             url(r'^payment/(?P<usi>[a-zA-Z0-9]{6})/$', payment.views.VoucherPaymentIndexView.as_view(), name='voucherpayment_index'),
-                             url(r'^auth/coursepayment/$', permission_required('coursepayment')(payment.views.CoursePaymentIndexView.as_view()), name='coursepayment_index'),
+                             url(r'^', include('payment.urls', namespace='payment')),
                              url(r'^', include('cms.urls')),
-                             #TODO Create counterpayment permission at the right place
                              )

@@ -4,6 +4,8 @@ from courses.models import Subscribe, Voucher
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+
 
 
 class VoucherPaymentIndexView(FormView):
@@ -16,17 +18,24 @@ class VoucherPaymentIndexView(FormView):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
         context['subscription'] = subscription
 
+<<<<<<< HEAD
         # if the user has already paid, show the payment-success view
+=======
+>>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
         if subscription.payed():
             self.template_name = 'payment/voucher/payment_success.html'
 
         return context
 
     def form_valid(self, form):
+<<<<<<< HEAD
         # if the user entered a vaild voucher code, mark the voucher as used and redirect the user to the payment successful page
 
         self.success_url = './payed/'
 
+=======
+        self.success_url = reverse('payment:voucherpayment_success')
+>>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
@@ -36,7 +45,10 @@ class VoucherPaymentIndexView(FormView):
         if subscription.mark_as_payed('voucherpayment'):
             messages.add_message(self.request, messages.SUCCESS,
                                  _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
+<<<<<<< HEAD
 
+=======
+>>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
         return super(VoucherPaymentIndexView, self).form_valid(form)
 
 
@@ -61,7 +73,7 @@ class CounterPaymentIndexView(FormView):
     form_class = USIForm
 
     def form_valid(self, form):
-        self.success_url = './' + form.data['usi'] + '/details/'
+        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi']})
         return super(CounterPaymentIndexView, self).form_valid(form)
 
 
@@ -83,7 +95,7 @@ def counterpayment_mark_payed(request, **kwargs):
     # redirect and show message
     if subscription.mark_as_payed('counterpayment', request.user):
         messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
-    return redirect('counterpayment_index')
+    return redirect('payment:counterpayment_index')
 
 
 class CoursePaymentIndexView(FormView):
