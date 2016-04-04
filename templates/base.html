@@ -71,7 +71,8 @@
                                     area</a></li>
                                 <li><a href="{% url 'courses:subscription_overview' %}"><span
                                         class="fa fa-bar-chart fa-lg"></span> Statistics</a></li>
-                                <li><a href="{% url 'payment:counterpayment_index' %}"><span class="fa fa-money fa-lg"></span> Payment</a>
+                                <li><a href="{% url 'payment:counterpayment_index' %}"><span
+                                        class="fa fa-money fa-lg"></span> Payment</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'userena_profile_detail' user.username %}"><span
@@ -121,14 +122,18 @@
 {% endblock menu %}
 
 {% block header %}
-    <header id="header_{% page_attribute "slug" %}">
+    <header class="light">
         <div class="container">
             <div class="row">
-                {% block content_title %}
-                    {% placeholder title or %}
-                        <h1 class="lead">{% page_attribute "page_title" %}</h1>
-                    {% endplaceholder %}
-                {% endblock %}
+                <h1 class="lead">
+                    {% block content_title %}
+
+                        {% placeholder title or %}
+                            {% page_attribute "page_title" %}
+                        {% endplaceholder %}
+
+                    {% endblock %}
+                </h1>
             </div>
         </div>
     </header>
