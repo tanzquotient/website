@@ -12,6 +12,13 @@ header {
     margin-bottom: 25px;
 }
 
+header.light{
+    background:none;
+    min-height: 0px;
+    padding-top: 70px;
+    margin-bottom: 0px;
+}
+
 header.secondary {
     height: 100px;
     min-height: 100px;
