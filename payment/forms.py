@@ -1,7 +1,9 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from courses.models import Subscribe, Voucher, Course
+from courses.models import Subscribe, Voucher, Course, Teach
+from django.contrib.auth.models import User
+
 import datetime
 from django.utils.translation import ugettext as _
 
@@ -52,4 +54,15 @@ class VoucherForm(forms.Form):
     voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid, ])
 
 class CourseForm(forms.Form):
-    course = forms.ModelChoiceField(label=_("Select Course"), queryset=Course.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        courses = []
+        if user is not None:
+            # if the user is a superuser we show him all courses, otherwise only the courses he teaches
+            if user.is_superuser:
+                courses = Course.objects.all()
+            else:
+                courses = [teach.course for teach in Teach.objects.filter(teacher=user).all()]
+        super(CourseForm, self).__init__(*args, **kwargs)
+        self.fields['course'] = forms.ChoiceField(label=_("Select Course"), choices=[(course.id, course) for course in courses])
+
