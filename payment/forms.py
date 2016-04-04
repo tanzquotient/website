@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from courses.models import Subscribe, Voucher
+from courses.models import Subscribe, Voucher, Course
 import datetime
 from django.utils.translation import ugettext as _
 
@@ -14,6 +14,16 @@ def validate_usi_exists(value):
     """
     if not Subscribe.objects.filter(usi=value).count() > 0:
         raise ValidationError(_('The specified USI does not exist'))
+
+
+def validate_uci_exists(value):
+    """
+    Validates if the specified UCI is a valid UCI
+    :param value: the uci to be validated
+    :return:
+    """
+    if not Course.objects.filter(uci=value).count() > 0:
+        raise ValidationError(_('The specified UCI does not exist'))
 
 
 def voucher_valid(value):
@@ -40,3 +50,6 @@ class USIForm(forms.Form):
 
 class VoucherForm(forms.Form):
     voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid, ])
+
+class UCIForm(forms.Form):
+    uci = forms.CharField(max_length=6, label=_("Unique Course Identifier"), validators=[validate_uci_exists, ])

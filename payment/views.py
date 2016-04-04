@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, FormView, RedirectView
-from payment.forms import USIForm, VoucherForm
+from payment.forms import USIForm, VoucherForm, UCIForm
 from courses.models import Subscribe, Voucher
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -84,3 +84,8 @@ def counterpayment_mark_payed(request, **kwargs):
     if subscription.mark_as_payed('counterpayment', request.user):
         messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
     return redirect('counterpayment_index')
+
+
+class CoursePaymentIndexView(FormView):
+    template_name = 'payment/course/form.html'
+    form_class = UCIForm

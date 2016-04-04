@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content_title %}
+    <h1 class="lead">{% trans "Course Payment" %}</h1>
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <h2>{% trans "Course Identifier" %}</h2>
+        <p>{% trans "Please enter the course identifier of your course." %}</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Submit" %}
+                        </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
