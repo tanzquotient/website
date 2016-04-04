@@ -18,24 +18,17 @@ class VoucherPaymentIndexView(FormView):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
         context['subscription'] = subscription
 
-<<<<<<< HEAD
         # if the user has already paid, show the payment-success view
-=======
->>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
         if subscription.payed():
             self.template_name = 'payment/voucher/payment_success.html'
 
         return context
 
     def form_valid(self, form):
-<<<<<<< HEAD
         # if the user entered a vaild voucher code, mark the voucher as used and redirect the user to the payment successful page
 
-        self.success_url = './payed/'
-
-=======
         self.success_url = reverse('payment:voucherpayment_success')
->>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
+
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
@@ -45,10 +38,7 @@ class VoucherPaymentIndexView(FormView):
         if subscription.mark_as_payed('voucherpayment'):
             messages.add_message(self.request, messages.SUCCESS,
                                  _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
-<<<<<<< HEAD
 
-=======
->>>>>>> 96e3841453f7dd3efd5b73201ac64cebcc3a19c4
         return super(VoucherPaymentIndexView, self).form_valid(form)
 
 
