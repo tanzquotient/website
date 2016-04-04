@@ -83,5 +83,11 @@ class SubscribeQuerySet(models.QuerySet):
     def paid(self):
         return self.filter(status__in=['payed', 'to_reimburse', 'completed'])
 
+    def course_payment(self):
+        return self.filter(paymentmethod='course')
+
+    def voucher_payment(self):
+        return self.filter(paymentmethod='voucher')
+
     def new(self):
         return self.filter(status='new')

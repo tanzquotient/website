@@ -36,7 +36,7 @@ class VoucherPaymentIndexView(FormView):
         voucher.mark_as_used(self.request.user, comment="Used to pay course #" + subscription.usi + ".")
 
         # show a message that the subscription has been payed (use django message passing framework)
-        if subscription.mark_as_payed('voucherpayment'):
+        if subscription.mark_as_payed('voucher'):
             messages.add_message(self.request, messages.SUCCESS,
                                  _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
@@ -84,7 +84,7 @@ def counterpayment_mark_payed(request, **kwargs):
     subscription = Subscribe.objects.filter(usi=kwargs['usi']).first()
 
     # redirect and show message
-    if subscription.mark_as_payed('counterpayment', request.user):
+    if subscription.mark_as_payed('counter', request.user):
         messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
     return redirect('payment:counterpayment_index')
 
@@ -129,7 +129,7 @@ class CoursePaymentConfirm(FormView):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         # redirect and show message
-        if subscription.mark_as_payed('coursepayment', self.request.user):
+        if subscription.mark_as_payed('course', self.request.user):
             messages.add_message(self.request, messages.SUCCESS, "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
         return super(CoursePaymentConfirm, self).form_valid(form)

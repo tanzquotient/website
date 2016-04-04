@@ -47,6 +47,9 @@ SUBSCRIPTION_STATE = (
     ('rejected', u'rejected'), ('to_reimburse', u'to reimburse'))
 
 
+PAYMENT_METHODS = (
+    ('counter', u'counter'), ('course', u'course'), ('online', u'online'), ('voucher', u'voucher'))
+
 class Address(models.Model):
     street = models.CharField(max_length=255)
     plz = models.IntegerField()
@@ -244,6 +247,12 @@ class Course(models.Model):
     def total_paid(self):
         total = 0.0
         for subscription in self.subscriptions.accepted().paid().all():
+            total += subscription.get_price_to_pay()
+        return total
+
+    def total_paid_course(self):
+        total = 0.0
+        for subscription in self.subscriptions.accepted().paid().course_payment().all():
             total += subscription.get_price_to_pay()
         return total
 
@@ -449,6 +458,8 @@ class Subscribe(models.Model):
                               default='new')
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
+
+    paymentmethod = models.CharField(max_length=30, choices=PAYMENT_METHODS, blank=True, null=True)
 
     objects = managers.SubscribeQuerySet.as_manager()
 

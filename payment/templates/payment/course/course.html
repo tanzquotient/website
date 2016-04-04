@@ -36,7 +36,9 @@
                     {% endfor %}
                     </tbody>
                     <tfoot>
-                    <tr><td></td><th>Total:</th><th>{{ course.total_paid }} CHF</th><th>{{ course.total_unpaid }} CHF</th><th></th></tr>
+                    <tr><td></td><th>{% trans "Total" %}:</th><th>{{ course.total_paid }} CHF</th><th>{{ course.total_unpaid }} CHF</th><th></th></tr>
+                    <tr><td></td><th>{% trans "thereof in course" %}:</th><th>{{ course.total_paid_course }} CHF</th><td>gi</td><th></th></tr>
+
                     </tfoot>
 
                 </table>
