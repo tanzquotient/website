@@ -93,6 +93,11 @@ class CoursePaymentIndexView(FormView):
     template_name = 'payment/course/form.html'
     form_class = CourseForm
 
+    def get_form_kwargs(self):
+        kwargs = super(CoursePaymentIndexView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_valid(self, form):
         self.success_url = reverse('payment:coursepayment_detail', kwargs={'course': form.data['course']})
         return super(CoursePaymentIndexView, self).form_valid(form)
