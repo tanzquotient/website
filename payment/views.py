@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, FormView, RedirectView
+from django.views.generic import TemplateView, FormView, RedirectView, View
 from payment.forms import USIForm, VoucherForm, CourseForm
 from courses.models import Subscribe, Voucher, Course
 from django.contrib import messages
@@ -6,7 +6,9 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django import forms
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import permission_required, login_required
+from django.core.exceptions import PermissionDenied
 
 
 class VoucherPaymentIndexView(FormView):
@@ -67,6 +69,10 @@ class CounterPaymentIndexView(FormView):
         self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi']})
         return super(CounterPaymentIndexView, self).form_valid(form)
 
+    @method_decorator(permission_required('courses.access_counterpayment'))
+    def dispatch(self, *args, **kwargs):
+        return super(CounterPaymentIndexView, self).dispatch(*args, **kwargs)
+
 
 class CounterPaymentDetailView(TemplateView):
     template_name = 'payment/counter/details.html'
@@ -79,7 +85,12 @@ class CounterPaymentDetailView(TemplateView):
 
         return context
 
+    @method_decorator(permission_required('courses.access_counterpayment'))
+    def dispatch(self, *args, **kwargs):
+        return super(CounterPaymentDetailView, self).dispatch(*args, **kwargs)
 
+
+@permission_required('courses.access_counterpayment')
 def counterpayment_mark_payed(request, **kwargs):
     subscription = Subscribe.objects.filter(usi=kwargs['usi']).first()
 
@@ -89,7 +100,37 @@ def counterpayment_mark_payed(request, **kwargs):
     return redirect('payment:counterpayment_index')
 
 
-class CoursePaymentIndexView(FormView):
+class TeacherOnly(View):
+    """
+    Mixin to ensure only teachers can access a view.
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        # check permissions not expressed by auth.perm
+        if not self.request.user.is_superuser and not self.request.user.profile.is_teacher():
+            raise PermissionDenied
+
+        return super(TeacherOnly, self).dispatch(*args, **kwargs)
+
+
+class TeacherOfCourseOnly(View):
+    """
+    Mixin to ensure only teachers of a specific course can access a course specific view.
+    The specific view is defined by course parameter in kwargs!
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        # check permissions not expressed by auth.perm
+        if not self.request.user.is_superuser and not self.request.user.teaching.filter(
+                course__id=kwargs['course']).count():
+            raise PermissionDenied
+
+        return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)
+
+
+class CoursePaymentIndexView(FormView, TeacherOnly):
     template_name = 'payment/course/form.html'
     form_class = CourseForm
 
@@ -103,7 +144,7 @@ class CoursePaymentIndexView(FormView):
         return super(CoursePaymentIndexView, self).form_valid(form)
 
 
-class CoursePaymentDetailView(TemplateView):
+class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
     template_name = 'payment/course/course.html'
 
     def get_context_data(self, **kwargs):
@@ -113,7 +154,8 @@ class CoursePaymentDetailView(TemplateView):
         context['course'] = course
         return context
 
-class CoursePaymentConfirm(FormView):
+
+class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
     template_name = 'payment/course/confirm.html'
     form_class = forms.Form
 
@@ -125,13 +167,12 @@ class CoursePaymentConfirm(FormView):
         return context
 
     def form_valid(self, form):
-        self.success_url = reverse('payment:coursepayment_detail', kwargs={'course' : self.kwargs['course']})
+        self.success_url = reverse('payment:coursepayment_detail', kwargs={'course': self.kwargs['course']})
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         # redirect and show message
         if subscription.mark_as_payed('course', self.request.user):
-            messages.add_message(self.request, messages.SUCCESS, "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
+            messages.add_message(self.request, messages.SUCCESS,
+                                 "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
         return super(CoursePaymentConfirm, self).form_valid(form)
-
-

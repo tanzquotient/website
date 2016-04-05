@@ -87,6 +87,15 @@ class UserProfile(UserenaLanguageBaseProfile):
 
     about_me = HTMLField(blank=True, null=True)
 
+    # convenience method for model user are added here
+    def is_teacher(self):
+        return self.user.teaching.count() > 0
+
+    class Meta:
+        permissions = (
+            ("access_counterpayment", "Can access counter payment"),
+        )
+
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name())
 
