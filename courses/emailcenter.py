@@ -127,6 +127,6 @@ def create_course_info(subscription):
         voucher_url = current_site+reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
 
         s += u'Kosten: {}\n'.format(course.format_prices())
-        s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? <a href="{}">Löse ihn vor Kursbeginn ein</a>.)\n'.format(
+        s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {} )\n'.format(
             voucher_url)
     return s.strip('\n')
