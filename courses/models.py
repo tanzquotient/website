@@ -21,7 +21,6 @@ import random, string
 from django.db.models import Q
 from django.db import transaction
 
-
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
             ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
             ('sun', u'Sunday'))
@@ -37,8 +36,10 @@ GENDER = (('m', u'Men'), ('w', u'Woman'))
 
 STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
 
-MATCHING_STATE = (('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('matched', u'Matched'),
-                  ('not_required', u'Not required'))
+MATCHING_STATE = (
+('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('to_rematch', u'To rematch'),
+('matched', u'Matched'),
+('not_required', u'Not required'))
 
 REJECTION_REASON = (('unknown', u'Unknown'), ('overbooked', u'Overbooked'), ('no_partner', u'No partner found'))
 
@@ -46,9 +47,9 @@ SUBSCRIPTION_STATE = (
     ('new', u'new'), ('confirmed', u'confirmed (to pay)'), ('payed', u'payed'), ('completed', u'completed'),
     ('rejected', u'rejected'), ('to_reimburse', u'to reimburse'))
 
-
 PAYMENT_METHODS = (
     ('counter', u'counter'), ('course', u'course'), ('online', u'online'), ('voucher', u'voucher'))
+
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
@@ -447,6 +448,7 @@ class Course(models.Model):
     def __unicode__(self):
         return u"{} ({})".format(self.name, self.offering)
 
+
 @reversion.register()
 class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
@@ -529,7 +531,7 @@ class Subscribe(models.Model):
             self.save()
             if user is not None:
                 reversion.set_user(user)
-            reversion.set_comment("Payed using payment method " + payment_method )
+            reversion.set_comment("Payed using payment method " + payment_method)
         return True
 
     def get_price_to_pay(self):
@@ -542,9 +544,10 @@ class Subscribe(models.Model):
     def derive_matching_state(self):
         if self.course.type.couple_course:
             if self.partner is None:
-                self.matching_state = 'to_match'
+                if self.matching_state not in ['to_match', 'to_rematch']:
+                    self.matching_state = 'to_match'
             else:
-                if self.matching_state == 'to_match':
+                if self.matching_state in ['to_match','to_rematch']:
                     self.matching_state = 'matched'
         else:
             self.matching_state = 'not_required'
@@ -593,9 +596,9 @@ def generate_key():
         voucher_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
     return voucher_key
 
+
 @reversion.register()
 class Voucher(models.Model):
-
     purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers')
     key = models.CharField(max_length=8, unique=True, default=generate_key)
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
@@ -608,7 +611,7 @@ class Voucher(models.Model):
             self.save()
             if user is not None:
                 reversion.set_user(user)
-            reversion.set_comment("Marked as used. " + comment )
+            reversion.set_comment("Marked as used. " + comment)
         return True
 
     class Meta:
@@ -627,6 +630,7 @@ class VoucherPurpose(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')

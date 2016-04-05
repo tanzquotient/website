@@ -67,8 +67,13 @@ def match_partners(modeladmin, request, queryset):
 match_partners.short_description = "Match partners (chronologically, body height optimal)"
 
 
+def unmatch_partners(modeladmin, request, queryset):
+    services.unmatch_partners(queryset)
+
+unmatch_partners.short_description = "Unmatch partners (both partners must be selected)"
+
 def set_subscriptions_as_payed(modeladmin, request, queryset):
-    queryset.update(status='completed')
+    queryset.filter(status='confirmed').update(status='completed')
 
 
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"

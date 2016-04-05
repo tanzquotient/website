@@ -19,6 +19,7 @@ log = logging.getLogger('tq')
 
 from emailcenter import *
 
+
 # Create your services here.
 def get_all_offerings():
     return mymodels.Offering.objects.order_by('period__date_from', '-active')
@@ -167,6 +168,7 @@ def copy_course(course):
     course.active = False
     course.save()
 
+
 # matches partners within the same course, considering their subscription time (fairness!) and respects also body_height (second criteria)
 DEFAULT_BODY_HEIGHT = 170
 
@@ -192,6 +194,21 @@ def match_partners(subscriptions):
             w.partner = m.user
             w.matching_state = 'matched'
             w.save()
+
+
+def unmatch_partners(subscriptions):
+    for s in subscriptions.all():
+        partner_subs = subscriptions.filter(user=s.partner, course=s.course)
+        if partner_subs.count() == 1:
+            _unmatch_person(s)
+            _unmatch_person(partner_subs.first())
+
+
+def _unmatch_person(subscription):
+    subscription.partner = None
+    subscription.matching_state = 'to_rematch'
+    subscription.save()
+    mymodels.Confirmation.objects.filter(subscription=subscription).delete()
 
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
@@ -241,9 +258,10 @@ def get_or_create_userprofile(user):
 # finds a list of courses the 'user' did already and that are somehow relevant for 'course'
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
-    return [s.course for s in mymodels.Subscribe.objects.filter(user=user, status__in=['confirmed', 'payed', 'completed'],
-                                                                course__type__styles__id__in=relevant_exp).exclude(
-        course=course).order_by('course__type__level').distinct().all()]
+    return [s.course for s in
+            mymodels.Subscribe.objects.filter(user=user, status__in=['confirmed', 'payed', 'completed'],
+                                              course__type__styles__id__in=relevant_exp).exclude(
+                course=course).order_by('course__type__level').distinct().all()]
 
 
 def format_prices(price_with_legi, price_without_legi, price_special=None):
@@ -269,6 +287,7 @@ import openpyxl
 from openpyxl.cell import get_column_letter
 from openpyxl.styles import Alignment
 from openpyxl.styles.fonts import Font
+
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_subscriptions(course_ids, export_format):
@@ -394,7 +413,8 @@ def export_subscriptions(course_ids, export_format):
                     writer = unicodecsv.writer(fileobj, encoding='utf-8')
 
                     writer.writerow(
-                        [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
+                        [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value',
+                         u'Phone 1 - Type',
                          u'Phone 1 - Value'])
                     for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
@@ -436,6 +456,7 @@ from django.contrib.contenttypes.generic import GenericForeignKey
 from django.db.models import Q
 
 from django.contrib.auth.models import User
+
 
 # find duplicates for all users in the system
 def find_duplicate_users():
