@@ -8,7 +8,8 @@ from tq_website import settings as my_settings
 
 from post_office import mail, models as post_office_models
 
-KURSGELD = u'Bitte bring das Kursgeld in die erste Tanzstunde passend mit.'
+from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
 
 
 def send_subscription_confirmation(subscription):
@@ -39,7 +40,7 @@ def send_participation_confirmation(subscription, connection=None):
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
-        'course_info': create_course_info(subscription.course)
+        'course_info': create_course_info(subscription)
     }
 
     if subscription.partner is not None:
@@ -63,7 +64,6 @@ def send_rejection(subscription, connection=None):
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
-        'course_info': create_course_info(subscription.course)
     }
 
     # detect the reason why the subscription is rejected
@@ -111,7 +111,8 @@ def create_user_info(user):
     return s.strip('\n')
 
 
-def create_course_info(course):
+def create_course_info(subscription):
+    course = subscription.course
     s = u'{}\n{}'.format(course.type.name, course.format_lessons())
     if course.room:
         s += u', {}\n'.format(course.room)
@@ -122,6 +123,10 @@ def create_course_info(course):
     if course.format_cancellations():
         s += u'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
+        current_site = Site.objects.get_current().domain
+        voucher_url = current_site+reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
+
         s += u'Kosten: {}\n'.format(course.format_prices())
-        s += u'({})\n'.format(KURSGELD)
+        s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? <a href="{}">Löse ihn vor Kursbeginn ein</a>.)\n'.format(
+            voucher_url)
     return s.strip('\n')
