@@ -185,7 +185,7 @@ class StyleAdmin(admin.ModelAdmin):
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used')
-    readonly_fields = ('key', )
+    exclude = ('key', )
 
 
 @admin.register(VoucherPurpose)
