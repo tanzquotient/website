@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -220,6 +221,13 @@ LANGUAGES = [
     ('en', ugettext('English')),
 ]
 
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'de',},
+        {'code': 'en',},
+    ),
+}
+
 CMS_LANGUAGES = {
     1: [
         {
@@ -380,6 +388,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+# Path for translation files
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, u'locale'),
+]
 
 
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
