@@ -30,7 +30,7 @@ class VoucherPaymentIndexView(FormView):
     def form_valid(self, form):
         # if the user entered a vaild voucher code, mark the voucher as used and redirect the user to the payment successful page
 
-        self.success_url = reverse('payment:voucherpayment_success')
+        self.success_url = reverse('payment:voucherpayment_success', kwargs={'usi': self.kwargs['usi']})
 
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
