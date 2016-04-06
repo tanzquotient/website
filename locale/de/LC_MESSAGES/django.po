@@ -1,0 +1,486 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TQ-Website\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-06 11:40+0100\n"
+"PO-Revision-Date: 2016-04-06 12:11+0100\n"
+"Last-Translator: Martin Zellner\n"
+"Language-Team: German (Switzerland)\n"
+"Language: de-CH\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco https://localise.biz\n"
+"X-Loco-Source-Locale: en-CH\n"
+"X-Loco-Project-Id: 14621\n"
+"X-Loco-Api-Version: 1.0.14"
+
+#: cms_plugins/cms_plugins.py:20 loco:5704ea4614d725842d8b4567
+msgid "Page title"
+msgstr "Titel der Seite"
+
+#: cms_plugins/cms_plugins.py:39 loco:5704ea4614d725842d8b4568
+msgid "Button"
+msgstr "Button"
+
+#: cms_plugins/cms_plugins.py:45 loco:5704ea4614d725842d8b4569
+msgid "Row"
+msgstr "Reihe"
+
+#: cms_plugins/cms_plugins.py:64 loco:5704ea4614d725842d8b456a
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+#: courses/cms_app.py:7 loco:5704ea4614d725842d8b456b
+msgid "Course Administration"
+msgstr "Kursadministration"
+
+#: courses/cms_plugins.py:16 loco:5704ea4614d725842d8b456c
+msgid "Music of dance styles"
+msgstr "Musik der verschiedenen Tanzstile"
+
+#: courses/cms_toolbar.py:10 courses/cms_toolbar.py:16 loco:#: 5704ea4614d725842d8b456d
+msgid "Courses"
+msgstr "Kurse"
+
+#: courses/cms_toolbar.py:13 loco:5704ea4614d725842d8b456e
+msgid "Offerings"
+msgstr "Kursangebote"
+
+#: courses/cms_toolbar.py:19 loco:5704ea4614d725842d8b456f
+msgid "Subscriptions"
+msgstr "Anmeldungen"
+
+#: courses/cms_toolbar.py:25 loco:5704ea4614d725842d8b4570
+msgid "Course types"
+msgstr "Kurstypen"
+
+#: courses/cms_toolbar.py:28 loco:5704ea4614d725842d8b4571
+msgid "Styles"
+msgstr "Stile"
+
+#: courses/cms_toolbar.py:31 loco:5704ea4614d725842d8b4572
+msgid "Songs"
+msgstr "Lieder"
+
+#: courses/cms_toolbar.py:34 loco:5704ea4614d725842d8b4573
+msgid "Periods"
+msgstr "Kursperioden"
+
+#: courses/cms_toolbar.py:37 loco:5704ea4614d725842d8b4574
+msgid "Rooms"
+msgstr "Räume"
+
+#: courses/cms_toolbar.py:40 loco:5704ea4614d725842d8b4575
+msgid "Addresses"
+msgstr "Adressen"
+
+#: courses/cms_toolbar.py:46 loco:5704ea4614d725842d8b4576
+msgid "Confirmations"
+msgstr "Bestätigungen"
+
+#: courses/cms_toolbar.py:50 loco:5704ea4614d725842d8b4577
+msgid "Rejections"
+msgstr "Ablehnungen"
+
+#: courses/cms_toolbar.py:52 loco:5704ea4614d725842d8b4578
+msgid "Tools"
+msgstr "Tools"
+
+#: courses/cms_toolbar.py:54 loco:5704ea4614d725842d8b4579
+msgid "Merge duplicate users"
+msgstr "Doppelte Benutzer zusammenführen"
+
+#: courses/cms_toolbar.py:56 loco:5704ea4614d725842d8b457a
+msgid "Check confirmations"
+msgstr "Überprüfe Bestätigungen"
+
+#: courses/templates/courses/duplicate_users.html:26 loco:5704ea4614d725842d8b457b
+msgid "Merge selected proposals"
+msgstr "Markierte Vorschläge zusammenführen"
+
+#: courses/views.py:51 loco:5704ea4614d725842d8b457c
+msgid "Unknown weekday"
+msgstr "Unbekannter Wochentag"
+
+#: events/cms_plugins.py:10 events/cms_toolbar.py:10 events/cms_toolbar.py:13 loco:#: 5704ea4614d725842d8b457d
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: events/cms_plugins.py:31 loco:5704ea4614d725842d8b457e
+msgid "Events Teaser"
+msgstr "Events Teaser"
+
+#: faq/cms_plugins.py:15 loco:5704ea4614d725842d8b457f
+msgid "FAQ"
+msgstr "FAQ"
+
+#: organisation/cms_plugins.py:11 loco:5704ea4614d725842d8b4580
+msgid "Managing Committee"
+msgstr "Vorstand"
+
+#: payment/forms.py:18 loco:5704ea4614d725842d8b4581
+msgid "The specified USI does not exist"
+msgstr "Die eingegebene USI existiert nicht"
+
+#: payment/forms.py:28 loco:5704ea4614d725842d8b4582
+msgid "The specified UCI does not exist"
+msgstr "Die eingegebene UCI existiert nicht"
+
+#: payment/forms.py:38 loco:5704ea4614d725842d8b4583
+msgid "The specified voucher code does not exist"
+msgstr "Der eingegebene Gutscheincode existiert nicht"
+
+#: payment/forms.py:41 loco:5704ea4614d725842d8b4584
+msgid "The specified voucher code has already been used"
+msgstr "Der eingegebene Gutscheincode wurde bereits verwendet"
+
+#: payment/forms.py:44 loco:5704ea4614d725842d8b4585
+msgid "The specified voucher code is expired"
+msgstr "Der eingegebene Gutscheincode ist abgelaufen"
+
+#: payment/forms.py:48 loco:5704ea4614d725842d8b4586
+msgid "Please enter a valid USI"
+msgstr "Bitte gib eine gültige USI ein"
+
+#: payment/forms.py:49 loco:5704ea4614d725842d8b4587
+msgid "Unique Course Identifier (USI)"
+msgstr "Eindeutige Kursnummer (USI)"
+
+#: payment/forms.py:54 loco:5704ea4614d725842d8b4588
+msgid "Voucher Code"
+msgstr "Gutscheincode"
+
+#: payment/forms.py:67 payment/templates/payment/course/form.html:11 loco:#: 5704ea4614d725842d8b4589
+msgid "Select Course"
+msgstr "Kurs auswählen"
+
+#: payment/templates/payment/counter/details.html:5
+#: payment/templates/payment/counter/form.html:6
+#: payment/templates/payment/counter/main.html:5 loco:5704ea4614d725842d8b458a
+msgid "Counter Payment"
+msgstr "Schalterzahlung"
+
+#: payment/templates/payment/counter/details.html:10
+#: payment/templates/payment/course/confirm.html:11
+#: payment/templates/payment/voucher/form.html:11 loco:5704ea4614d725842d8b458b
+msgid "Payment Details"
+msgstr "Zahlungsdetails"
+
+#: payment/templates/payment/counter/details.html:18
+#: payment/templates/payment/course/confirm.html:21
+#: payment/templates/payment/course/course.html:18
+#: payment/templates/payment/voucher/form.html:18
+#: payment/templates/payment/voucher/payment_failed.html:17
+#: payment/templates/payment/voucher/payment_success.html:17 loco:#: 5704ea4614d725842d8b458c
+msgid "Name"
+msgstr "Name"
+
+#: payment/templates/payment/counter/details.html:24
+#: payment/templates/payment/course/confirm.html:25
+#: payment/templates/payment/voucher/form.html:24
+#: payment/templates/payment/voucher/payment_failed.html:23
+#: payment/templates/payment/voucher/payment_success.html:23 loco:#: 5704ea4614d725842d8b458d
+msgid "Course"
+msgstr "Kurs"
+
+#: payment/templates/payment/counter/details.html:30
+#: payment/templates/payment/course/confirm.html:29
+#: payment/templates/payment/course/course.html:20 loco:5704ea4614d725842d8b458e
+msgid "Amount"
+msgstr "Betrag"
+
+#: payment/templates/payment/counter/details.html:37
+#: payment/templates/payment/course/confirm.html:35 loco:5704ea4614d725842d8b458f
+msgid "Mark as Paid"
+msgstr "Als bezahlt markieren"
+
+#: payment/templates/payment/counter/details.html:39
+#: payment/templates/payment/course/confirm.html:37 loco:5704ea4614d725842d8b4590
+msgid "Already Paid"
+msgstr "Bereits bezahlt"
+
+#: payment/templates/payment/counter/form.html:11 loco:5704ea4614d725842d8b4591
+msgid "Enter USI"
+msgstr "USI eingeben"
+
+#: payment/templates/payment/counter/form.html:17
+#: payment/templates/payment/course/form.html:20 loco:5704ea4614d725842d8b4592
+msgid "Submit"
+msgstr "Absenden"
+
+#: payment/templates/payment/course/confirm.html:6
+#: payment/templates/payment/course/course.html:6
+#: payment/templates/payment/course/form.html:6 loco:5704ea4614d725842d8b4593
+msgid "Course Payment"
+msgstr "Kursbezahlung"
+
+#: payment/templates/payment/course/course.html:12 loco:5704ea4614d725842d8b4594
+msgid "Please mark the students that paid in the course in cash."
+msgstr "Bitte markiere die Schüler welche den Kurs in Bar bezahlt haben."
+
+#: payment/templates/payment/course/course.html:17 loco:5704ea4614d725842d8b4595
+msgid "USI"
+msgstr "USI"
+
+#: payment/templates/payment/course/course.html:19 loco:5704ea4614d725842d8b4596
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: payment/templates/payment/course/course.html:21 loco:5704ea4614d725842d8b4597
+msgid "Amount Due"
+msgstr "Fälliger Betrag"
+
+#: payment/templates/payment/course/course.html:22 loco:5704ea4614d725842d8b4598
+msgid "Actions"
+msgstr "Aktionen"
+
+#: payment/templates/payment/course/course.html:41 loco:5704ea4614d725842d8b4599
+msgid "Total"
+msgstr "Total"
+
+#: payment/templates/payment/course/course.html:42 loco:5704ea4614d725842d8b459a
+msgid "thereof in course"
+msgstr "davon im Kurs"
+
+#: payment/templates/payment/course/course.html:50 loco:5704ea4614d725842d8b459b
+msgid "Course Information"
+msgstr "Kursinformation"
+
+#: payment/templates/payment/course/course.html:51 loco:5704ea4614d725842d8b459c
+msgid "people already paid the course."
+msgstr "Personen haben den Kurs bereits gezahlt. "
+
+#: payment/templates/payment/course/course.html:52 loco:5704ea4614d725842d8b459d
+msgid "You should have"
+msgstr "Du solltest"
+
+#: payment/templates/payment/course/course.html:52 loco:5704ea4614d725842d8b459e
+msgid "of collected money."
+msgstr "an eingesammeltem Geld haben."
+
+#: payment/templates/payment/course/form.html:12 loco:5704ea4614d725842d8b459f
+msgid "Please select the course you want to manage the payment for."
+msgstr "Bitte wähle den Kurs für welchen du die Zahlungen verwalten möchtest"
+
+#: payment/templates/payment/voucher/form.html:6
+#: payment/templates/payment/voucher/payment_success.html:5 loco:#: 5704ea4614d725842d8b45a0
+msgid "Payment Status"
+msgstr "Zahlungsstatus"
+
+#: payment/templates/payment/voucher/form.html:12 loco:5704ea4614d725842d8b45a1
+msgid "Please check the payment details so you make sure you pay the right course"
+msgstr ""
+"Bitte überprüfe die Zahlungsdetails und gehe sicher, dass du den richtigen "
+"Kurs bezahlst"
+
+#: payment/templates/payment/voucher/form.html:31 loco:5704ea4614d725842d8b45a2
+msgid "Enter Voucher Code"
+msgstr "Gutscheincode eingeben"
+
+#: payment/templates/payment/voucher/form.html:32 loco:5704ea4614d725842d8b45a3
+msgid ""
+"You can enter your voucher code here. If you use it to pay the course the "
+"voucher will be marked as used."
+msgstr ""
+"Hier kannst du einen Gutscheincode eingeben. Wenn du ihn benutzt um den Kurs "
+"zu zahlen wird der Gutschein als verwendet markiert."
+
+#: payment/templates/payment/voucher/form.html:40
+#: payment/templates/payment/voucher/payment_failed.html:5 loco:#: 5704ea4614d725842d8b45a4
+msgid "Pay With Voucher"
+msgstr "Mit Gutscheincode zahlen"
+
+#: payment/templates/payment/voucher/payment_failed.html:10 loco:#: 5704ea4614d725842d8b45a5
+msgid "Payment Failed"
+msgstr "Zahlung fehlgeschlagen"
+
+#: payment/templates/payment/voucher/payment_failed.html:11 loco:#: 5704ea4614d725842d8b45a6
+msgid "The course payment for the following course has failed. Please contact the TQ. "
+msgstr "Die Zahlung des folgenden Kurses ist fehlgeschlagen. Bitte kontaktiere den TQ."
+
+#: payment/templates/payment/voucher/payment_success.html:10 loco:#: 5704ea4614d725842d8b45a7
+msgid "Successfully Paid"
+msgstr "Zahlung erfolgreich"
+
+#: payment/templates/payment/voucher/payment_success.html:11 loco:#: 5704ea4614d725842d8b45a8
+msgid ""
+"The follwing course has been successfully paid. You will recieve an email "
+"that confirms your payment."
+msgstr ""
+"Der folgende Kurs wurde erfolgreich gezahlt. Du wirst eine E-Mail erhalten, "
+"welche deine Zahlung bestätigt."
+
+#: payment/views.py:43 loco:5704ea4614d725842d8b45a9
+msgid "Subscription #"
+msgstr "Anmeldung #"
+
+#: payment/views.py:43 payment/views.py:99 payment/views.py:176 loco:#: 5704ea4614d725842d8b45aa
+msgid " successfully marked as paid."
+msgstr "wurde erfolgreich als bezahlt markiert."
+
+#: templates/base.html:87 templates/base.html.py:106 loco:5704ea4614d725842d8b45ab
+msgid "View profile"
+msgstr "Profil ansehen"
+
+#: templates/userena/emails/activation_email_message.html:4
+#: templates/userena/emails/confirmation_email_message_new.html:4 loco:#: 5704ea4614d725842d8b45ac
+msgid "Dear %(username)s,</p>"
+msgstr "Liebe(r) %(username)s,</p>"
+
+#: templates/userena/emails/activation_email_message.html:5 loco:#: 5704ea4614d725842d8b45ad
+msgid "<p>Thank you for signing up at %(site)s.</p>"
+msgstr "<p>Vielen Dank für die Registrierung bei %(site)s.</p>"
+
+#: templates/userena/emails/activation_email_message.html:7
+#: templates/userena/emails/activation_email_message.txt:6 loco:#: 5704ea4614d725842d8b45ae
+msgid "To activate your account you should click on the link below:"
+msgstr "Um den Account to aktivieren, klicke bitte auf den unterstehenden Link:"
+
+#: templates/userena/emails/activation_email_message.html:11
+#: templates/userena/emails/activation_email_message.txt:10
+#: templates/userena/emails/confirmation_email_message_new.html:13
+#: templates/userena/emails/confirmation_email_message_new.txt:12
+#: templates/userena/emails/password_reset_message.html:18
+#: templates/userena/emails/password_reset_message.txt:14 loco:#: 5704ea4614d725842d8b45af
+msgid "Thanks for using our site!"
+msgstr "Vielen Dank für das Benutzen unserer Seite!"
+
+#: templates/userena/emails/activation_email_message.html:12
+#: templates/userena/emails/activation_email_message.txt:12
+#: templates/userena/emails/confirmation_email_message_new.html:14
+#: templates/userena/emails/confirmation_email_message_new.txt:14
+#: templates/userena/emails/password_reset_message.html:19
+#: templates/userena/emails/password_reset_message.txt:16 loco:#: 5704ea4614d725842d8b45b0
+msgid "Sincerely"
+msgstr "Viele Grüsse,"
+
+#: templates/userena/emails/activation_email_message.txt:2
+#: templates/userena/emails/confirmation_email_message_new.txt:2 loco:#: 5704ea4614d725842d8b45b1
+msgid "Dear %(username)s,"
+msgstr "Liebe(r) %(username)s,"
+
+#: templates/userena/emails/activation_email_message.txt:4 loco:#: 5704ea4614d725842d8b45b2
+msgid "Thank you for signing up at %(site)s."
+msgstr "<p>Vielen Dank für die Registrierung bei %(site)s.</p>"
+
+#: templates/userena/emails/confirmation_email_message_new.html:6
+#: templates/userena/emails/confirmation_email_message_new.txt:4 loco:#: 5704ea4614d725842d8b45b3
+msgid "You requested a change of your email address at %(site)s."
+msgstr "Du hast einen Wechsel der E-Mail Adresse auf %(site)s angefragt."
+
+#: templates/userena/emails/confirmation_email_message_new.html:9
+#: templates/userena/emails/confirmation_email_message_new.txt:7 loco:#: 5704ea4614d725842d8b45b4
+msgid "Please confirm this email address by clicking on the link below:"
+msgstr ""
+"Bitte bestätige diese E-Mail Adresse indem du auf den unterstehenden Link "
+"klickst:"
+
+#: templates/userena/emails/password_reset_message.html:5 loco:#: 5704ea4614d725842d8b45b5
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"            for your user account at %(site_name)s"
+msgstr ""
+"You're receiving this e-mail because you requested a password reset\n"
+"            for your user account at %(site_name)s"
+
+#: templates/userena/emails/password_reset_message.html:9
+#: templates/userena/emails/password_reset_message.txt:5 loco:#: 5704ea4614d725842d8b45b6
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.html:15 loco:#: 5704ea4614d725842d8b45b7
+msgid "Your username, in case you've forgotten: %(username)s"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.txt:2 loco:#: 5704ea4614d725842d8b45b8
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"for your user account at %(site_name)s"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.txt:10 loco:#: 5704ea4614d725842d8b45b9
+msgid ""
+"\n"
+"Your username, in case you've forgotten: %(username)s\n"
+msgstr ""
+
+#: templates/userena/signin_form.html:5 templates/userena/signin_form.html:9
+#: templates/userena/signin_form.html:42 loco:5704ea4614d725842d8b45ba
+msgid "Signin"
+msgstr "Einloggen"
+
+#: templates/userena/signin_form.html:39 loco:5704ea4614d725842d8b45bb
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+#: tq_website/cms_toolbar.py:10 loco:5704ea4614d725842d8b45bc
+msgid "Organisation"
+msgstr "Organisation"
+
+#: tq_website/cms_toolbar.py:13 loco:5704ea4614d725842d8b45bd
+msgid "Association functions"
+msgstr "Vorstandsposten"
+
+#: tq_website/cms_toolbar.py:19 loco:5704ea4614d725842d8b45be
+msgid "FAQ - Question groups"
+msgstr "FAQ - Question groups"
+
+#: tq_website/cms_toolbar.py:21 loco:5704ea4614d725842d8b45bf
+msgid "Email"
+msgstr "E-Mail"
+
+#: tq_website/cms_toolbar.py:24 loco:5704ea4614d725842d8b45c0
+msgid "Emails"
+msgstr "E-Mails"
+
+#: tq_website/cms_toolbar.py:27 loco:5704ea4614d725842d8b45c1
+msgid "Email templates"
+msgstr "E-Mail Vorlagen"
+
+#: tq_website/cms_toolbar.py:30 loco:5704ea4614d725842d8b45c2
+msgid "Log"
+msgstr "Log"
+
+#: tq_website/cms_toolbar.py:35 loco:5704ea4614d725842d8b45c3
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: tq_website/cms_toolbar.py:37 loco:5704ea4614d725842d8b45c4
+msgid "Show subscriptions"
+msgstr "Anmeldungen anzeigen"
+
+#: tq_website/cms_toolbar.py:40 loco:5704ea4614d725842d8b45c5
+msgid "Show non-subscriptions"
+msgstr "Nicht-Anmeldungen anzeigen"
+
+#: tq_website/cms_toolbar.py:43 tq_website/cms_toolbar.py:45 loco:#: 5704ea4614d725842d8b45c6
+msgid "Files"
+msgstr "Daten"
+
+#: tq_website/settings.py:220 tq_website/settings.py:228 loco:#: 5704ea4614d725842d8b45c7
+msgid "Deutsch"
+msgstr "Deutsch"
+
+#: tq_website/settings.py:221 tq_website/settings.py:236
+#: tq_website/settings.py:392 loco:5704ea4614d725842d8b45c8
+msgid "English"
+msgstr "Englisch"
+
+#: tq_website/settings.py:253 loco:5704ea4614d725842d8b45c9
+msgid "Main content"
+msgstr "Hauptinhalt"
+
+#: tq_website/settings.py:257 loco:5704ea4614d725842d8b45ca
+msgid "Side content"
+msgstr "Seiteninhalt"
+
+#: tq_website/settings.py:261 loco:5704ea4614d725842d8b45cb
+msgid "Title"
+msgstr "Titel"
+
+#: tq_website/settings.py:391 loco:5704ea4614d725842d8b45cc
+msgid "German"
+msgstr "Deutsch"

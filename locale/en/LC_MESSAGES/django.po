@@ -1,0 +1,488 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-06 12:50+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: cms_plugins/cms_plugins.py:20
+msgid "Page title"
+msgstr ""
+
+#: cms_plugins/cms_plugins.py:39
+msgid "Button"
+msgstr ""
+
+#: cms_plugins/cms_plugins.py:45
+msgid "Row"
+msgstr ""
+
+#: cms_plugins/cms_plugins.py:64
+msgid "Thumbnail"
+msgstr ""
+
+#: courses/cms_app.py:7
+msgid "Course Administration"
+msgstr ""
+
+#: courses/cms_plugins.py:16
+msgid "Music of dance styles"
+msgstr ""
+
+#: courses/cms_toolbar.py:10 courses/cms_toolbar.py:16
+msgid "Courses"
+msgstr ""
+
+#: courses/cms_toolbar.py:13
+msgid "Offerings"
+msgstr ""
+
+#: courses/cms_toolbar.py:19
+msgid "Subscriptions"
+msgstr ""
+
+#: courses/cms_toolbar.py:25
+msgid "Course types"
+msgstr ""
+
+#: courses/cms_toolbar.py:28
+msgid "Styles"
+msgstr ""
+
+#: courses/cms_toolbar.py:31
+msgid "Songs"
+msgstr ""
+
+#: courses/cms_toolbar.py:34
+msgid "Periods"
+msgstr ""
+
+#: courses/cms_toolbar.py:37
+msgid "Rooms"
+msgstr ""
+
+#: courses/cms_toolbar.py:40
+msgid "Addresses"
+msgstr ""
+
+#: courses/cms_toolbar.py:46
+msgid "Confirmations"
+msgstr ""
+
+#: courses/cms_toolbar.py:50
+msgid "Rejections"
+msgstr ""
+
+#: courses/cms_toolbar.py:52
+msgid "Tools"
+msgstr ""
+
+#: courses/cms_toolbar.py:54
+msgid "Merge duplicate users"
+msgstr ""
+
+#: courses/cms_toolbar.py:56
+msgid "Check confirmations"
+msgstr ""
+
+#: courses/templates/courses/duplicate_users.html:26
+msgid "Merge selected proposals"
+msgstr ""
+
+#: courses/views.py:51
+msgid "Unknown weekday"
+msgstr ""
+
+#: events/cms_plugins.py:10 events/cms_toolbar.py:10 events/cms_toolbar.py:13
+msgid "Events"
+msgstr ""
+
+#: events/cms_plugins.py:31
+msgid "Events Teaser"
+msgstr ""
+
+#: faq/cms_plugins.py:15
+msgid "FAQ"
+msgstr ""
+
+#: organisation/cms_plugins.py:11
+msgid "Managing Committee"
+msgstr ""
+
+#: payment/forms.py:18
+msgid "The specified USI does not exist"
+msgstr ""
+
+#: payment/forms.py:28
+msgid "The specified UCI does not exist"
+msgstr ""
+
+#: payment/forms.py:38
+msgid "The specified voucher code does not exist"
+msgstr ""
+
+#: payment/forms.py:41
+msgid "The specified voucher code has already been used"
+msgstr ""
+
+#: payment/forms.py:44
+msgid "The specified voucher code is expired"
+msgstr ""
+
+#: payment/forms.py:48
+msgid "Please enter a valid USI"
+msgstr ""
+
+#: payment/forms.py:49
+msgid "Unique Course Identifier (USI)"
+msgstr ""
+
+#: payment/forms.py:54
+msgid "Voucher Code"
+msgstr ""
+
+#: payment/forms.py:67 payment/templates/payment/course/form.html:11
+msgid "Select Course"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:5
+#: payment/templates/payment/counter/form.html:6
+#: payment/templates/payment/counter/main.html:5
+msgid "Counter Payment"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:10
+#: payment/templates/payment/course/confirm.html:11
+#: payment/templates/payment/voucher/form.html:11
+msgid "Payment Details"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:18
+#: payment/templates/payment/course/confirm.html:21
+#: payment/templates/payment/course/course.html:18
+#: payment/templates/payment/voucher/form.html:18
+#: payment/templates/payment/voucher/payment_failed.html:17
+#: payment/templates/payment/voucher/payment_success.html:17
+msgid "Name"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:24
+#: payment/templates/payment/course/confirm.html:25
+#: payment/templates/payment/voucher/form.html:24
+#: payment/templates/payment/voucher/payment_failed.html:23
+#: payment/templates/payment/voucher/payment_success.html:23
+msgid "Course"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:30
+#: payment/templates/payment/course/confirm.html:29
+#: payment/templates/payment/course/course.html:20
+msgid "Amount"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:37
+#: payment/templates/payment/course/confirm.html:35
+msgid "Mark as Paid"
+msgstr ""
+
+#: payment/templates/payment/counter/details.html:39
+#: payment/templates/payment/course/confirm.html:37
+msgid "Already Paid"
+msgstr ""
+
+#: payment/templates/payment/counter/form.html:11
+msgid "Enter USI"
+msgstr ""
+
+#: payment/templates/payment/counter/form.html:17
+#: payment/templates/payment/course/form.html:20
+msgid "Submit"
+msgstr ""
+
+#: payment/templates/payment/course/confirm.html:6
+#: payment/templates/payment/course/course.html:6
+#: payment/templates/payment/course/form.html:6
+msgid "Course Payment"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:12
+msgid "Please mark the students that paid in the course in cash."
+msgstr ""
+
+#: payment/templates/payment/course/course.html:17
+msgid "USI"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:19
+msgid "E-Mail"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:21
+msgid "Amount Due"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:22
+msgid "Actions"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:41
+msgid "Total"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:42
+msgid "thereof in course"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:50
+msgid "Course Information"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:51
+msgid "people already paid the course."
+msgstr ""
+
+#: payment/templates/payment/course/course.html:52
+msgid "You should have"
+msgstr ""
+
+#: payment/templates/payment/course/course.html:52
+msgid "of collected money."
+msgstr ""
+
+#: payment/templates/payment/course/form.html:12
+msgid "Please select the course you want to manage the payment for."
+msgstr ""
+
+#: payment/templates/payment/voucher/form.html:6
+#: payment/templates/payment/voucher/payment_success.html:5
+msgid "Payment Status"
+msgstr ""
+
+#: payment/templates/payment/voucher/form.html:12
+msgid ""
+"Please check the payment details so you make sure you pay the right course"
+msgstr ""
+
+#: payment/templates/payment/voucher/form.html:31
+msgid "Enter Voucher Code"
+msgstr ""
+
+#: payment/templates/payment/voucher/form.html:32
+msgid ""
+"You can enter your voucher code here. If you use it to pay the course the "
+"voucher will be marked as used."
+msgstr ""
+
+#: payment/templates/payment/voucher/form.html:40
+#: payment/templates/payment/voucher/payment_failed.html:5
+msgid "Pay With Voucher"
+msgstr ""
+
+#: payment/templates/payment/voucher/payment_failed.html:10
+msgid "Payment Failed"
+msgstr ""
+
+#: payment/templates/payment/voucher/payment_failed.html:11
+msgid ""
+"The course payment for the following course has failed. Please contact the "
+"TQ. "
+msgstr ""
+
+#: payment/templates/payment/voucher/payment_success.html:10
+msgid "Successfully Paid"
+msgstr ""
+
+#: payment/templates/payment/voucher/payment_success.html:11
+msgid ""
+"The follwing course has been successfully paid. You will recieve an email "
+"that confirms your payment."
+msgstr ""
+
+#: payment/views.py:43
+msgid "Subscription #"
+msgstr ""
+
+#: payment/views.py:43 payment/views.py:99 payment/views.py:176
+msgid " successfully marked as paid."
+msgstr ""
+
+#: templates/base.html:87 templates/base.html.py:106
+msgid "View profile"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.html:4
+#: templates/userena/emails/confirmation_email_message_new.html:4
+#, python-format
+msgid "Dear %(username)s,</p>"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.html:5
+#, python-format
+msgid "<p>Thank you for signing up at %(site)s.</p>"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.html:7
+#: templates/userena/emails/activation_email_message.txt:6
+msgid "To activate your account you should click on the link below:"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.html:11
+#: templates/userena/emails/activation_email_message.txt:10
+#: templates/userena/emails/confirmation_email_message_new.html:13
+#: templates/userena/emails/confirmation_email_message_new.txt:12
+#: templates/userena/emails/password_reset_message.html:18
+#: templates/userena/emails/password_reset_message.txt:14
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.html:12
+#: templates/userena/emails/activation_email_message.txt:12
+#: templates/userena/emails/confirmation_email_message_new.html:14
+#: templates/userena/emails/confirmation_email_message_new.txt:14
+#: templates/userena/emails/password_reset_message.html:19
+#: templates/userena/emails/password_reset_message.txt:16
+msgid "Sincerely"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.txt:2
+#: templates/userena/emails/confirmation_email_message_new.txt:2
+#, python-format
+msgid "Dear %(username)s,"
+msgstr ""
+
+#: templates/userena/emails/activation_email_message.txt:4
+#, python-format
+msgid "Thank you for signing up at %(site)s."
+msgstr ""
+
+#: templates/userena/emails/confirmation_email_message_new.html:6
+#: templates/userena/emails/confirmation_email_message_new.txt:4
+#, python-format
+msgid "You requested a change of your email address at %(site)s."
+msgstr ""
+
+#: templates/userena/emails/confirmation_email_message_new.html:9
+#: templates/userena/emails/confirmation_email_message_new.txt:7
+msgid "Please confirm this email address by clicking on the link below:"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.html:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"            for your user account at %(site_name)s"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.html:9
+#: templates/userena/emails/password_reset_message.txt:5
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.html:15
+#, python-format
+msgid "Your username, in case you've forgotten: %(username)s"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.txt:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset\n"
+"for your user account at %(site_name)s"
+msgstr ""
+
+#: templates/userena/emails/password_reset_message.txt:10
+#, python-format
+msgid ""
+"\n"
+"Your username, in case you've forgotten: %(username)s\n"
+msgstr ""
+
+#: templates/userena/signin_form.html:5 templates/userena/signin_form.html:9
+#: templates/userena/signin_form.html:42
+msgid "Signin"
+msgstr ""
+
+#: templates/userena/signin_form.html:39
+msgid "Forgot your password?"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:10
+msgid "Organisation"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:13
+msgid "Association functions"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:19
+msgid "FAQ - Question groups"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:21
+msgid "Email"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:24
+msgid "Emails"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:27
+msgid "Email templates"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:30
+msgid "Log"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:35
+msgid "Newsletter"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:37
+msgid "Show subscriptions"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:40
+msgid "Show non-subscriptions"
+msgstr ""
+
+#: tq_website/cms_toolbar.py:43 tq_website/cms_toolbar.py:45
+msgid "Files"
+msgstr ""
+
+#: tq_website/settings.py:220 tq_website/settings.py:228
+msgid "Deutsch"
+msgstr ""
+
+#: tq_website/settings.py:221 tq_website/settings.py:236
+#: tq_website/settings.py:392
+msgid "English"
+msgstr ""
+
+#: tq_website/settings.py:253
+msgid "Main content"
+msgstr ""
+
+#: tq_website/settings.py:257
+msgid "Side content"
+msgstr ""
+
+#: tq_website/settings.py:261
+msgid "Title"
+msgstr ""
+
+#: tq_website/settings.py:391
+msgid "German"
+msgstr ""
