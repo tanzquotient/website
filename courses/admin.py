@@ -186,6 +186,8 @@ class StyleAdmin(admin.ModelAdmin):
 class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used')
     exclude = ('key', )
+    actions = [mark_voucher_as_used, ]
+
 
 
 @admin.register(VoucherPurpose)

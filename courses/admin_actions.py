@@ -107,3 +107,11 @@ def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
 
 
 export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected courses as XLSX"
+
+def mark_voucher_as_used(modeladmin, request, queryset):
+    # mark vouchers as used
+    for voucher in queryset:
+        voucher.used = True
+        voucher.save()
+
+mark_voucher_as_used.short_description = "Mark selected vouchers as used."
