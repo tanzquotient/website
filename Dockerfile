@@ -10,3 +10,6 @@ ADD . /code/
 WORKDIR /code
 
 RUN pip install -r requirements.txt
+
+# Install gettext (needed for localization)
+RUN apt-get update && apt-get install -y --force-yes gettext
