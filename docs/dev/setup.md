@@ -92,6 +92,14 @@ git checkout -t origin/master
 
 *do not use in production*
 
+### Docker Development environment
+
+You can use [Docker](http://www.docker.com) to setup a development environment.
+
+Simply run
+	``docker-compose up``
+in the `tq_website` directory. It will fetch all required dependencies (except `settings_local.py` and the database) and start the development server on port 8000.
+
 ### Setup MySQL
 
 Create MySQL-user `root` or `tq` and schema `tq_website` with a password you select. This can easily be done using MySQL-Workbench. Don't forget to grant all privileges to the user for our table.
