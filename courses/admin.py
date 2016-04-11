@@ -12,7 +12,7 @@ from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
 from courses.filters import *
 from reversion.admin import VersionAdmin
-
+from payment.vouchergenerator import generate_pdf, join_pdfs
 
 class CourseInline(admin.TabularInline):
     model = Course
@@ -184,9 +184,10 @@ class StyleAdmin(admin.ModelAdmin):
 
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
-    list_display = ('purpose', 'key', 'issued', 'expires', 'used')
-    exclude = ('key', )
-    actions = [mark_voucher_as_used, ]
+    list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
+    exclude = ('key',)
+
+    actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
 
 
 
