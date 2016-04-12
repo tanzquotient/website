@@ -20,7 +20,19 @@ The following picture sketches the setup. Some notes:
 
 ![Webstack](webstack.svg)
 
-## Common steps
+## Docker Development environment
+
+You can use [Docker](http://www.docker.com) to setup a development environment.
+
+Simply run
+	``docker-compose up``
+in the `tq_website` directory. It will fetch all required dependencies (except `settings_local.py` and the database) and start the development server on port 8000.
+
+To setup a production environment you can simply run ``docker-compose -f docker-compose-production.yml up``.
+
+## Manual Setup
+
+### Common steps
 
 First update your system:
 
@@ -64,7 +76,7 @@ sudo pip install -I pillow
 
 (it is correct that `pillow` is installed outside the python virtual environment)
 
-### Git
+#### Git
 
 Create a folder on your machine where you want to store the local copy of the repository. This could e.g. be in your home directory.
 
@@ -88,11 +100,11 @@ git checkout -t origin/master
 ```
 	
 
-## Local Development
+### Local Development
 
 *do not use in production*
 
-### Setup MySQL
+#### Setup MySQL
 
 Create MySQL-user `root` or `tq` and schema `tq_website` with a password you select. This can easily be done using MySQL-Workbench. Don't forget to grant all privileges to the user for our table.
 
@@ -108,7 +120,7 @@ Finally you can download PyCharm Professional Edition, extract it and place it s
 
 Activation is easiest if you download the licence-file from your JetBrains account-page. When asked for activation, simply drag&drop the file into the activation-key textbox.
 
-### Virtual environment
+#### Virtual environment
 
 From within your local development folder `<project home>/`, run
 
@@ -151,7 +163,7 @@ mysql -u root -p tq_website < backupfile
 Get in touch with admin for further details.
 
 
-### Initial Configuration
+#### Initial Configuration
 
 Create the *secret* config file in the folder `<project home>/tq_website/settings_local.py`.
 This file is not under version control because it contains some secrets.
@@ -192,7 +204,7 @@ Run message passing server RabbitMQ (once started, it runs in background)
 sudo rabbitmq-server
 ```
 	
-### Run website locally
+#### Run website locally
 	
 Run local test server (*from within virtualenv*):
 
@@ -260,7 +272,7 @@ manage.py migrate djangocms_text_ckeditor
 ```
 
 
-## Instructions for server setup (in production)
+### Instructions for server setup (in production)
 
 Note: *In production* the setting is a bit different:
 
@@ -277,7 +289,7 @@ Setup is made along this instructions: [nginx, supervisor, gunicorn](http://mich
 
 Create user `django` with home `/webapps/`.
 
-### virtualenv
+#### virtualenv
 
 From within `/webapps/tq_website` as user `django` run
 
@@ -285,7 +297,7 @@ From within `/webapps/tq_website` as user `django` run
 create virtualenv env
 ```
 
-### Configure supervisor
+#### Configure supervisor
 Create a config file in `/etc/supervisor/conf.d/`, e.g. `tq_website.conf` with the following content:
     
 ```
@@ -415,7 +427,7 @@ sudo service supervisor start
 ```
  
 
-### Update server:
+#### Update server:
 
 ```shell
 sudo apt-get update

@@ -20,6 +20,7 @@ import hashlib
 import random, string
 from django.db.models import Q
 from django.db import transaction
+import payment.vouchergenerator
 
 WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
             ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
@@ -604,6 +605,7 @@ class Voucher(models.Model):
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
+    pdf_file = models.FileField(upload_to=settings.MEDIA_ROOT, null=True, blank=True)
 
     def mark_as_used(self, user=None, comment=""):
         with transaction.atomic(), reversion.create_revision():
