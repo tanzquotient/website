@@ -211,22 +211,60 @@ def _unmatch_person(subscription):
     mymodels.Confirmation.objects.filter(subscription=subscription).delete()
 
 
+class CourseException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __unicode__(self):
+        return self.value
+
+
+class NoPartnerException(CourseException):
+    def __init__(self):
+        super(NoPartnerException, self).__init__(_('This subscription has no partner set'))
+
+
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
-def confirm_subscription(subscription):
-    subscription.status = 'confirmed'
-    subscription.save()
-    if mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
-        # no subscription was send and the subscription is confirmed, so send one
-        send_participation_confirmation(subscription)
-        # log that we sent the confirmation
-        c = mymodels.Confirmation(subscription=subscription)
-        c.save()
+def confirm_subscription(subscription, request=None):
+    # check: only people with partner are confirmed (in couple courses)
+    if subscription.course.type.couple_course and subscription.partner is None:
+        raise NoPartnerException()
+
+    if subscription.status == 'new':
+        subscription.status = 'confirmed'
+        subscription.save()
+        if mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
+            # no subscription was send and the subscription is confirmed, so send one
+            send_participation_confirmation(subscription)
+            # log that we sent the confirmation
+            c = mymodels.Confirmation(subscription=subscription)
+            c.save()
+        return True
+    else:
+        return False
 
 
 # same as confirm_subscription, but for multiple subscriptions at once
-def confirm_subscriptions(subscriptions):
+MESSAGE_NO_PARTNER_SET = _(u'{} subscriptions were not confirmed because no partner set')
+
+
+def confirm_subscriptions(subscriptions, request=None):
+    no_partner_count = 0
+    confirmed_count = 0
     for subscription in subscriptions:
-        confirm_subscription(subscription)
+        try:
+            if confirm_subscription(subscription, request):
+                confirmed_count += 1
+        except NoPartnerException as e:
+            no_partner_count += 1
+
+    if no_partner_count:  # if any subscriptions not confirmed due to missing partner
+        log.warning(MESSAGE_NO_PARTNER_SET.format(no_partner_count))
+        if request:
+            messages.add_message(request, messages.WARNING, MESSAGE_NO_PARTNER_SET.format(no_partner_count))
+    if confirmed_count:
+        messages.add_message(request, messages.SUCCESS,
+                         _(u'{} of {} confirmed successfully').format(confirmed_count, len(subscriptions)))
 
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
