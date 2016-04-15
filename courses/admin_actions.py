@@ -46,7 +46,7 @@ copy_courses.short_description = "Create copy of courses for the subsequent offe
 
 def confirm_subscriptions(modeladmin, request, queryset):
     # manually send confirmation mails
-    services.confirm_subscriptions(queryset)
+    services.confirm_subscriptions(queryset, request)
 
 
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
@@ -73,7 +73,7 @@ def unmatch_partners(modeladmin, request, queryset):
 unmatch_partners.short_description = "Unmatch partners (both partners must be selected)"
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
-    queryset.filter(status='confirmed').update(status='completed')
+    queryset.filter(state=Subscribe.State.CONFIRMED).update(state=Subscribe.State.COMPLETED)
 
 
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"

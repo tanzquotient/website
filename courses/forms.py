@@ -3,8 +3,7 @@
 
 from django import forms
 
-from models import GENDER
-from models import STUDENT_STATUS
+from models import UserProfile
 
 
 class UserForm(forms.Form):
@@ -12,7 +11,7 @@ class UserForm(forms.Form):
     first_name.label = u'Vorname'
     last_name = forms.CharField(max_length=30)
     last_name.label = u'Nachname'
-    gender = forms.ChoiceField(choices=GENDER)
+    gender = forms.ChoiceField(choices=UserProfile.Gender.CHOICES)
     gender.label = u'Geschlecht'
     street = forms.CharField(max_length=255)
     street.label = u'Strasse'
@@ -26,7 +25,7 @@ class UserForm(forms.Form):
     email.label = u'E-Mail'
     email_repetition = forms.EmailField(max_length=75)
     email_repetition.label = u'E-Mail Wiederholung'
-    student_status = forms.ChoiceField(choices=STUDENT_STATUS)
+    student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
     student_status.label = u'Student'
     legi = forms.CharField(max_length=16, required=False)
     legi.label = u'Legi-Nummer'

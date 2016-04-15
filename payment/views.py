@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, FormView, RedirectView, View
 from payment.forms import USIForm, VoucherForm, CourseForm
-from courses.models import Subscribe, Voucher, Course
+from courses.models import Subscribe, Voucher, Course, PaymentMethod
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -95,7 +95,7 @@ def counterpayment_mark_payed(request, **kwargs):
     subscription = Subscribe.objects.filter(usi=kwargs['usi']).first()
 
     # redirect and show message
-    if subscription.mark_as_payed('counter', request.user):
+    if subscription.mark_as_payed(PaymentMethod.COUNTER, request.user):
         messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
     return redirect('payment:counterpayment_index')
 

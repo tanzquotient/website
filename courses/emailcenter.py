@@ -11,6 +11,8 @@ from post_office import mail, models as post_office_models
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
+import models as mm
+
 
 def send_subscription_confirmation(subscription):
     context = {
@@ -67,7 +69,7 @@ def send_rejection(subscription, connection=None):
     }
 
     # detect the reason why the subscription is rejected
-    reason = 'unknown'
+    reason = mm.Rejection.Reason.UNKNOWN
     if subscription.course.get_free_places_count() == 0:
         template = 'rejection_overbooked'
         reason = 'overbooked'

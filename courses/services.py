@@ -143,12 +143,12 @@ def subscribe(course_id, user1_data, user2_data=None):
         send_subscription_confirmation(subscription)
 
         if user2:
-            subscription.matching_state = 'couple'
+            subscription.matching_state = mymodels.Subscribe.MatchingState.COUPLE
             subscription.save()
 
             subscription2 = mymodels.Subscribe(user=user2, course=course, partner=user1,
                                                experience=user2_data['experience'], comment=user2_data['comment'])
-            subscription2.matching_state = 'couple'
+            subscription2.matching_state = mymodels.Subscribe.MatchingState.COUPLE
             subscription2.save()
             send_subscription_confirmation(subscription2)
 
@@ -177,8 +177,8 @@ def match_partners(subscriptions):
     courses = subscriptions.values_list('course', flat=True)
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all()
-        sm = single.filter(user__profile__gender='m').order_by('date').all()
-        sw = single.filter(user__profile__gender='w').order_by('date').all()
+        sm = single.filter(user__profile__gender=mymodels.UserProfile.Gender.MEN).order_by('date').all()
+        sw = single.filter(user__profile__gender=mymodels.UserProfile.Gender.WOMAN).order_by('date').all()
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])
@@ -189,10 +189,10 @@ def match_partners(subscriptions):
             m = sm[c]
             w = sw[c]
             m.partner = w.user
-            m.matching_state = 'matched'
+            m.matching_state = mymodels.Subscribe.MatchingState.MATCHED
             m.save()
             w.partner = m.user
-            w.matching_state = 'matched'
+            w.matching_state = mymodels.Subscribe.MatchingState.MATCHED
             w.save()
 
 
@@ -206,7 +206,7 @@ def unmatch_partners(subscriptions):
 
 def _unmatch_person(subscription):
     subscription.partner = None
-    subscription.matching_state = 'to_rematch'
+    subscription.matching_state = mymodels.Subscribe.MatchingState.TO_REMATCH
     subscription.save()
     mymodels.Confirmation.objects.filter(subscription=subscription).delete()
 
@@ -230,8 +230,8 @@ def confirm_subscription(subscription, request=None):
     if subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
-    if subscription.status == 'new':
-        subscription.status = 'confirmed'
+    if subscription.state == mymodels.Subscribe.State.NEW:
+        subscription.state = mymodels.Subscribe.State.CONFIRMED
         subscription.save()
         if mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
             # no subscription was send and the subscription is confirmed, so send one
@@ -269,7 +269,7 @@ def confirm_subscriptions(subscriptions, request=None):
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
 def reject_subscription(subscription):
-    subscription.status = 'rejected'
+    subscription.state = mymodels.Subscribe.State.REJECTED
     subscription.save()
     if mymodels.Rejection.objects.filter(subscription=subscription).count() == 0:
         # no subscription was send and the subscription is confirmed, so send one
@@ -297,7 +297,7 @@ def get_or_create_userprofile(user):
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
-            mymodels.Subscribe.objects.filter(user=user, status__in=['confirmed', 'payed', 'completed'],
+            mymodels.Subscribe.objects.filter(user=user, state__in=[mymodels.Subscribe.State.CONFIRMED, mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.COMPLETED],
                                               course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 

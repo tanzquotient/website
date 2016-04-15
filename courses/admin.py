@@ -41,7 +41,7 @@ class SubscribeInlineForCourse(admin.TabularInline):
     fk_name = 'course'
 
     raw_id_fields = ('user', 'partner')
-    readonly_fields = ('status', 'matching_state', 'usi',)
+    readonly_fields = ('state', 'matching_state', 'usi',)
 
 
 class SubscribeInlineForUser(admin.TabularInline):
@@ -50,7 +50,7 @@ class SubscribeInlineForUser(admin.TabularInline):
     fk_name = 'user'
 
     raw_id_fields = ('course', 'partner')
-    readonly_fields = ('status', 'matching_state', 'usi',)
+    readonly_fields = ('state', 'matching_state', 'usi',)
 
 
 class RegularLessonCancellationInline(admin.TabularInline):
@@ -127,13 +127,13 @@ class CourseTypeAdmin(admin.ModelAdmin):
 
 class SubscribeAdmin(VersionAdmin):
     list_display = (
-        'id', 'status', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
+        'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
         'get_user_body_height',
-        'get_user_email', 'experience', 'comment', 'get_payment_status', 'get_calculated_experience', 'date')
+        'get_user_email', 'experience', 'comment', 'get_payment_state', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
-    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'status')
+    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'state')
     search_fields = ['user__email', 'user__first_name', 'user__last_name']
-    readonly_fields = ('status', 'matching_state', 'usi',)
+    readonly_fields = ('state', 'matching_state', 'usi',)
 
     model = Subscribe
 
