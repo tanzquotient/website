@@ -8,6 +8,7 @@ from django.conf import settings
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from django.http import FileResponse
 
+
 def generate_pdf(modeladmin, request, queryset):
 
     basic_file = os.path.join(settings.BASE_DIR,'payment', 'Voucher.svg')
@@ -36,6 +37,9 @@ def append_pdf(input, output):
 
 
 def join_pdfs(modeladmin, request, queryset):
+    # first ensure pdfs are created for all vouchers in queryset
+    generate_pdf(modeladmin, request, queryset)
+
     # Creating an object where pdf pages are appended to
     output = PdfFileWriter()
     # Appending two pdf-pages from two different files
