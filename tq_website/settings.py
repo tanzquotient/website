@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 ]
 
 ADMINS = [('TQ IT',	'informatik@tq.vseth.ch'), ]
+SERVER_EMAIL = 'informatik@tq.vseth.ch'
 
 # Application definition
 
