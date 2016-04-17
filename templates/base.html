@@ -101,6 +101,18 @@
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
                             area</a></li>
+                        <li><a href="{% url 'courses:subscription_overview' %}"><span
+                                class="fa fa-bar-chart fa-lg"></span> Statistics</a></li>
+                        {% if user.is_superuser or user.profile.is_teacher %}
+                            <li><a href="{% url 'payment:coursepayment_index' %}"><span
+                                    class="fa fa-money fa-lg"></span> Course Payment</a>
+                            </li>
+                        {% endif %}
+                        {% if user.is_superuser or perms.courses.access_counterpayment %}
+                            <li><a href="{% url 'payment:counterpayment_index' %}"><span
+                                    class="fa fa-money fa-lg"></span> Counter Payment</a>
+                            </li>
+                        {% endif %}
                         <li><a href="{% url 'userena_profile_detail' user.username %}"><span
                                 class="glyphicon glyphicon-user"></span>
                             {% trans "View profile" %}</a>

@@ -11,6 +11,11 @@ from post_office import mail, models as post_office_models
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
+import models as mm
+
+import logging
+log = logging.getLogger('tq')
+
 
 def send_subscription_confirmation(subscription):
     context = {
@@ -58,7 +63,7 @@ def send_participation_confirmation(subscription, connection=None):
     _email_helper(subscription.user.email, template, context)
 
 
-def send_rejection(subscription, connection=None):
+def send_rejection(subscription, reason):
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
@@ -66,19 +71,21 @@ def send_rejection(subscription, connection=None):
         'offering': subscription.course.offering.name,
     }
 
-    # detect the reason why the subscription is rejected
-    reason = 'unknown'
+    template = 'rejection_{}'.format(reason)
+
+    return _email_helper(subscription.user.email, template, context)
+
+
+def detect_rejection_reason(subscription):
+    """
+    detect the reason why the subscription is rejected
+    :return: the reason as constant from Rejection.Reason
+    """
+    reason = mm.Rejection.Reason.UNKNOWN
     if subscription.course.get_free_places_count() == 0:
-        template = 'rejection_overbooked'
-        reason = 'overbooked'
+        reason = mm.Rejection.Reason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
-        template = 'rejection_no_partner'
-        reason = 'no_partner'
-    else:
-        template = 'rejection_unknown_reason'
-
-    _email_helper(subscription.user.email, template, context)
-
+        reason = mm.Rejection.Reason.NO_PARTNER
     return reason
 
 
@@ -91,15 +98,10 @@ def _email_helper(email, template, context):
             template=template,
             context=context,
         )
-    except post_office_models.EmailTemplate.DoesNotExist:
-        # since the post_office app does not check if a template exists, catch it here
-        mail.send(
-            [email, my_settings.EMAIL_HOST_USER],
-            my_settings.DEFAULT_FROM_EMAIL,
-            subject=u"Template missing!!!",
-            message=u"Template for this Email was not found.\n\nPlease contact the administrator and report this issue.",
-            context=context,
-        )
+        return True
+    except post_office_models.EmailTemplate.DoesNotExist as e:
+        log.error("Email Template missing with name: {}".format(template))
+        return False
 
 
 def create_user_info(user):

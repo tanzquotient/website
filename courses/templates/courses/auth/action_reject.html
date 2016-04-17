@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <p>
+        {{ reason_form }}
+    </p>
+    <p>The following subscriptions will be rejected:</p>
+
+    <ul>{{ subscriptions|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="reject_subscriptions" />
+    <input type="submit" name="reject" value="Reject" />
+</form>
+
+{% endblock %}

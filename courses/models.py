@@ -22,34 +22,35 @@ from django.db.models import Q
 from django.db import transaction
 import payment.vouchergenerator
 
-WEEKDAYS = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
-            ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
-            ('sun', u'Sunday'))
+
+class Weekday:
+    MONDAY = 'mon'
+    TUESDAY = 'tue'
+    WEDNESDAY = 'wed'
+    THURSDAY = 'thu'
+    FRIDAY = 'fri'
+    SATURDAY = 'sat'
+    SUNDAY = 'sun'
+
+    WEEKEND = [SATURDAY, SUNDAY]
+
+    CHOICES = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
+               ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
+               ('sun', u'Sunday'))
+
 
 WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
 
-OFFERING_TYPES = (('reg', u'Regular (weekly)'), ('irr', u'Irregular (Workshops)'),)
 
-LEVELS = ((1, u'beginner'), (2, u'intermediate'), (3, u'advanced'))
+class PaymentMethod:
+    COUNTER = 'counter'
+    COURSE = 'course'
+    ONLINE = 'online'
+    VOUCHER = 'voucher'
 
-GENDER = (('m', u'Men'), ('w', u'Woman'))
-
-STUDENT_STATUS = (('eth', u'ETH'), ('uni', u'Uni'), ('ph', u'PH'), ('other', u'Other'), ('no', u'Not a student'))
-
-MATCHING_STATE = (
-('unknown', u'Unknown'), ('couple', u'Couple'), ('to_match', u'To match'), ('to_rematch', u'To rematch'),
-('matched', u'Matched'),
-('not_required', u'Not required'))
-
-REJECTION_REASON = (('unknown', u'Unknown'), ('overbooked', u'Overbooked'), ('no_partner', u'No partner found'))
-
-SUBSCRIPTION_STATE = (
-    ('new', u'new'), ('confirmed', u'confirmed (to pay)'), ('payed', u'payed'), ('completed', u'completed'),
-    ('rejected', u'rejected'), ('to_reimburse', u'to reimburse'))
-
-PAYMENT_METHODS = (
-    ('counter', u'counter'), ('course', u'course'), ('online', u'online'), ('voucher', u'voucher'))
+    CHOICES = (
+        (COUNTER, u'counter'), (COURSE, u'course'), (ONLINE, u'online'), (VOUCHER, u'voucher'))
 
 
 class Address(models.Model):
@@ -70,17 +71,32 @@ from userena.models import UserenaLanguageBaseProfile
 
 
 class UserProfile(UserenaLanguageBaseProfile):
+    class Gender:
+        MEN = 'm'
+        WOMAN = 'w'
+
+        CHOICES = ((MEN, u'Men'), (WOMAN, u'Woman'))
+
+    class StudentStatus:
+        ETH = 'eth'
+        UNI = 'uni'
+        PH = 'ph'
+        OTHER = 'other'
+        NO = 'no'
+
+        CHOICES = ((ETH, u'ETH'), (UNI, u'Uni'), (PH, u'PH'), (OTHER, u'Other'), (NO, u'Not a student'))
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
     user.help_text = "The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
-                              choices=GENDER, blank=False, null=True,
+                              choices=Gender.CHOICES, blank=False, null=True,
                               default=None)
     address = models.ForeignKey(Address, blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     student_status = models.CharField(max_length=10,
-                                      choices=STUDENT_STATUS, blank=False, null=False,
-                                      default='no')
+                                      choices=StudentStatus.CHOICES, blank=False, null=False,
+                                      default=StudentStatus.NO)
     body_height = models.IntegerField(blank=True, null=True)
     body_height.help_text = "The user's body height in cm."
     newsletter = models.BooleanField(default=True)
@@ -153,7 +169,7 @@ class Period(models.Model):
 class RegularLesson(models.Model):
     course = models.ForeignKey('Course', related_name='regular_lessons')
     weekday = models.CharField(max_length=3,
-                               choices=WEEKDAYS,
+                               choices=Weekday.CHOICES,
                                default=None)
     time_from = models.TimeField()
     time_to = models.TimeField()
@@ -452,6 +468,29 @@ class Course(models.Model):
 
 @reversion.register()
 class Subscribe(models.Model):
+    class State:
+        NEW = 'new'
+        CONFIRMED = 'confirmed'
+        PAYED = 'payed'
+        COMPLETED = 'completed'
+        REJECTED = 'rejected'
+        TO_REIMBURSE = 'to_reimburse'
+        CHOICES = (
+            (NEW, u'new'), (CONFIRMED, u'confirmed (to pay)'), (PAYED, u'payed'), (COMPLETED, u'completed'),
+            (REJECTED, u'rejected'), (TO_REIMBURSE, u'to reimburse'))
+
+    class MatchingState:
+        UNKNOWN = 'unknown'
+        COUPLE = 'couple'
+        TO_MATCH = 'to_match'
+        TO_REMATCH = 'to_rematch'
+        MATCHED = 'matched'
+        NOT_REQUIRED = 'not_required'
+        CHOICES = (
+            (UNKNOWN, u'Unknown'), (COUPLE, u'Couple'), (TO_MATCH, u'To match'), (TO_REMATCH, u'To rematch'),
+            (MATCHED, u'Matched'),
+            (NOT_REQUIRED, u'Not required'))
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions')
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
@@ -459,19 +498,19 @@ class Subscribe(models.Model):
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
                                 null=True)
     matching_state = models.CharField(max_length=30,
-                                      choices=MATCHING_STATE, blank=False, null=False,
-                                      default='unknown')
+                                      choices=MatchingState.CHOICES, blank=False, null=False,
+                                      default=MatchingState.UNKNOWN)
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
 
-    status = models.CharField(max_length=30,
-                              choices=SUBSCRIPTION_STATE, blank=False, null=False,
-                              default='new')
+    state = models.CharField(max_length=30,
+                             choices=State.CHOICES, blank=False, null=False,
+                             default=State.NEW)
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
-    paymentmethod = models.CharField(max_length=30, choices=PAYMENT_METHODS, blank=True, null=True)
+    paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
     objects = managers.SubscribeQuerySet.as_manager()
 
@@ -507,11 +546,11 @@ class Subscribe(models.Model):
     get_calculated_experience.short_description = "Calculated experience"
 
     def payed(self):
-        return self.status == 'payed' or self.status == 'to_reimburse' or self.status == 'completed'
+        return self.state == Subscribe.State.PAYED or self.state == Subscribe.State.TO_REIMBURSE or self.state == Subscribe.State.COMPLETED
 
     # returns similar courses that the user did before in the system
-    def get_payment_status(self):
-        c = self.user.subscriptions.filter(status='confirmed', course__offering__active=False).filter(
+    def get_payment_state(self):
+        c = self.user.subscriptions.filter(state=Subscribe.State.CONFIRMED, course__offering__active=False).filter(
             ~Q(course=self.course)).count()
         if self.payed():
             r = 'Yes'
@@ -523,11 +562,11 @@ class Subscribe(models.Model):
             r += ', owes {} more'.format(c)
         return r
 
-    get_payment_status.short_description = "Payed?"
+    get_payment_state.short_description = "Payed?"
 
     def mark_as_payed(self, payment_method, user=None):
         with transaction.atomic(), reversion.create_revision():
-            self.status = 'payed'
+            self.state = Subscribe.State.PAYED
             self.paymentmethod = payment_method
             self.save()
             if user is not None:
@@ -545,11 +584,11 @@ class Subscribe(models.Model):
     def derive_matching_state(self):
         if self.course.type.couple_course:
             if self.partner is None:
-                if self.matching_state not in ['to_match', 'to_rematch']:
-                    self.matching_state = 'to_match'
+                if self.matching_state not in [Subscribe.MatchingState.TO_MATCH, Subscribe.MatchingState.TO_REMATCH]:
+                    self.matching_state = Subscribe.MatchingState.TO_MATCH
             else:
-                if self.matching_state in ['to_match','to_rematch']:
-                    self.matching_state = 'matched'
+                if self.matching_state in [Subscribe.MatchingState.TO_MATCH, Subscribe.MatchingState.TO_REMATCH]:
+                    self.matching_state = Subscribe.MatchingState.MATCHED
         else:
             self.matching_state = 'not_required'
             # DO NOT save here since this method is also called from save()
@@ -579,12 +618,28 @@ class Confirmation(models.Model):
 
 
 class Rejection(models.Model):
+    class Reason:
+        UNKNOWN = 'unknown'
+        OVERBOOKED = 'overbooked'
+        NO_PARTNER = 'no_partner'
+        USER_CANCELLED = 'user_cancelled'
+        ILLEGITIMATE = 'illegitimate'
+        BANNED = 'banned'
+        COURSE_CANCELLED = 'course_cancelled'
+
+        CHOICES = ((UNKNOWN, u'Unknown'), (OVERBOOKED, u'Overbooked'), (NO_PARTNER, u'No partner found'),
+                   (USER_CANCELLED, u'User cancelled the subscription'),
+                   (ILLEGITIMATE, u'Users subscription is illegitimate'), (BANNED, u'User is banned'),
+                   (COURSE_CANCELLED, u'Course was cancelled'))
+
     subscription = models.ForeignKey(Subscribe, related_name='rejections')
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the rejection mail was sent to the subscriber."
     reason = models.CharField(max_length=30,
-                              choices=REJECTION_REASON, blank=False, null=False,
-                              default='unknown')
+                              choices=Reason.CHOICES, blank=False, null=False,
+                              default=Subscribe.MatchingState.UNKNOWN)
+    mail_sent = models.BooleanField(blank=False, null=False, default=True)
+    mail_sent.help_text = "If this rejection was communicated to user by email."
 
     def __unicode__(self):
         return u"({}) rejected at {}".format(self.subscription, self.date)
@@ -605,7 +660,7 @@ class Voucher(models.Model):
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
-    pdf_file = models.FileField(upload_to=settings.MEDIA_ROOT, null=True, blank=True)
+    pdf_file = models.FileField(upload_to='/voucher/', null=True, blank=True)
 
     def mark_as_used(self, user=None, comment=""):
         with transaction.atomic(), reversion.create_revision():
@@ -644,11 +699,17 @@ class Teach(models.Model):
 
 # An offering is a list of courses to be offered in the given period
 class Offering(models.Model):
+    class Type:
+        REGULAR = 'reg'
+        IRREGULAR = 'irr'
+
+        CHOICES = ((REGULAR, u'Regular (weekly)'), (IRREGULAR, u'Irregular (Workshops)'))
+
     name = models.CharField(max_length=30, unique=True, blank=False)
     period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
     type = models.CharField(max_length=3,
-                            choices=OFFERING_TYPES,
-                            default='reg')
+                            choices=Type.CHOICES,
+                            default=Type.REGULAR)
     type.help_text = "The type of the offering influences how the offering is displayed."
     display = models.BooleanField(default=False)
     display.help_text = "Defines if the courses in this offering should be displayed on the Website."

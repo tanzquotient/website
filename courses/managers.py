@@ -7,8 +7,7 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
-import models as my_models
-
+import models as mymodels
 
 class CourseManager(models.Manager):
     def weekday(self, weekday):
@@ -50,7 +49,7 @@ class CourseManager(models.Manager):
 
 class AddressManager(models.Manager):
     def create_from_user_data(self, data):
-        address = my_models.Address(street=data['street'], plz=data['plz'], city=data['city'])
+        address = mymodels.Address(street=data['street'], plz=data['plz'], city=data['city'])
         address.save()
         return address
 
@@ -66,28 +65,28 @@ class AddressManager(models.Manager):
 # and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
 class SubscribeQuerySet(models.QuerySet):
     def men(self):
-        return self.filter(user__profile__gender='m')
+        return self.filter(user__profile__gender=mymodels.UserProfile.Gender.MEN)
 
     def women(self):
-        return self.filter(user__profile__gender='w')
+        return self.filter(user__profile__gender=mymodels.UserProfile.Gender.WOMAN)
 
     def single_men(self):
-        return self.filter(partner__isnull=True, user__profile__gender='m')
+        return self.filter(partner__isnull=True, user__profile__gender=mymodels.UserProfile.Gender.MEN)
 
     def single_women(self):
-        return self.filter(partner__isnull=True, user__profile__gender='w')
+        return self.filter(partner__isnull=True, user__profile__gender=mymodels.UserProfile.Gender.WOMAN)
 
     def accepted(self):
-        return self.filter(status__in=['confirmed', 'payed', 'completed'])
+        return self.filter(state__in=[mymodels.Subscribe.State.CONFIRMED, mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.COMPLETED])
 
     def paid(self):
-        return self.filter(status__in=['payed', 'to_reimburse', 'completed'])
+        return self.filter(state__in=[mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.TO_REIMBURSE, mymodels.Subscribe.State.COMPLETED])
 
     def course_payment(self):
-        return self.filter(paymentmethod='course')
+        return self.filter(paymentmethod=mymodels.PaymentMethod.COURSE)
 
     def voucher_payment(self):
-        return self.filter(paymentmethod='voucher')
+        return self.filter(paymentmethod=mymodels.PaymentMethod.VOUCHER)
 
     def new(self):
-        return self.filter(status='new')
+        return self.filter(state=mymodels.Subscribe.State.NEW)

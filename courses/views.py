@@ -36,12 +36,12 @@ def course_list(request):
         offering_sections = []
         course_set = offering.course_set
 
-        if offering.type == 'reg':
-            for (w, w_name) in WEEKDAYS:
+        if offering.type == Offering.Type.REGULAR:
+            for (w, w_name) in Weekday.CHOICES:
                 section_dict = {}
                 section_dict['section_title'] = WEEKDAYS_TRANS[w]
                 section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed()]
-                if (w == 'sat' or w == 'sun') and section_dict['courses'].__len__() == 0:
+                if (w in Weekday.WEEKEND) and section_dict['courses'].__len__() == 0:
                     pass
                 else:
                     offering_sections.append(section_dict)
@@ -52,7 +52,7 @@ def course_list(request):
             section_dict['courses'] = course_set.weekday(None)
             if section_dict['courses'].__len__() != 0:
                 offering_sections.append(section_dict)
-        elif offering.type == 'irr':
+        elif offering.type == Offering.Type.IRREGULAR:
             courses_by_month = course_set.by_month()
             for (d, l) in sorted(courses_by_month.items()):
                 if 1 < d.month < 12:
