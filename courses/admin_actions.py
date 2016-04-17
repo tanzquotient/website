@@ -92,7 +92,7 @@ reject_subscriptions.short_description = "Reject selected subscriptions"
 
 
 def match_partners(modeladmin, request, queryset):
-    services.match_partners(queryset)
+    services.match_partners(queryset, request)
 
 
 match_partners.short_description = "Match partners (chronologically, body height optimal)"

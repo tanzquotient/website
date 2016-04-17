@@ -173,8 +173,9 @@ def copy_course(course):
 DEFAULT_BODY_HEIGHT = 170
 
 
-def match_partners(subscriptions):
+def match_partners(subscriptions, request=None):
     courses = subscriptions.values_list('course', flat=True)
+    match_count = 0
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all()
         sm = single.filter(user__profile__gender=mymodels.UserProfile.Gender.MEN).order_by('date').all()
@@ -194,6 +195,10 @@ def match_partners(subscriptions):
             w.partner = m.user
             w.matching_state = mymodels.Subscribe.MatchingState.MATCHED
             w.save()
+            match_count += 1
+    if match_count:
+        messages.add_message(request, messages.SUCCESS,
+                             _(u'{} couples matched successfully').format(match_count))
 
 
 def unmatch_partners(subscriptions):
