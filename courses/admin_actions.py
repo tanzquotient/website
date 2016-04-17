@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 from courses.models import *
 
@@ -6,6 +8,10 @@ import services
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+
+from django import forms
+
+from django.utils.translation import ugettext as _
 
 
 def display(modeladmin, request, queryset):
@@ -52,12 +58,37 @@ def confirm_subscriptions(modeladmin, request, queryset):
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 
-def reject_subscriptions(modeladmin, request, queryset):
-    # manually send confirmation mails
-    services.reject_subscriptions(queryset)
+class RejectForm(forms.Form):
+    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+    reason = forms.ChoiceField(label=_("Select Reason"), choices=Rejection.Reason.CHOICES)
+
+
+def reject_subscriptions(self, request, queryset):
+    form = None
+
+    if 'reject' in request.POST:
+        form = RejectForm(request.POST)
+
+        if form.is_valid():
+            reason = form.cleaned_data['reason']
+
+            services.reject_subscriptions(queryset, reason)
+
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = RejectForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+
+    return render(request, 'courses/auth/action_reject.html', {'subscriptions': queryset,
+                                                     'reason_form': form,
+                                                     })
 
 
 reject_subscriptions.short_description = "Reject selected subscriptions"
+
+
+
+
 
 
 def match_partners(modeladmin, request, queryset):

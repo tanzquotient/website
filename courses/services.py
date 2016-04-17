@@ -264,25 +264,31 @@ def confirm_subscriptions(subscriptions, request=None):
             messages.add_message(request, messages.WARNING, MESSAGE_NO_PARTNER_SET.format(no_partner_count))
     if confirmed_count:
         messages.add_message(request, messages.SUCCESS,
-                         _(u'{} of {} confirmed successfully').format(confirmed_count, len(subscriptions)))
+                             _(u'{} of {} confirmed successfully').format(confirmed_count, len(subscriptions)))
 
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
-def reject_subscription(subscription):
+def reject_subscription(subscription, reason=None):
     subscription.state = mymodels.Subscribe.State.REJECTED
     subscription.save()
-    if mymodels.Rejection.objects.filter(subscription=subscription).count() == 0:
-        # no subscription was send and the subscription is confirmed, so send one
-        reason = send_rejection(subscription)
-        # log that we sent the confirmation
-        c = mymodels.Rejection(subscription=subscription, reason=reason)
+    if not reason:
+        reason = detect_rejection_reason(subscription)
+    c = mymodels.Rejection(subscription=subscription, reason=reason, mail_sent=False)
+    c.save()
+
+    send_mail = reason != mymodels.Rejection.Reason.USER_CANCELLED
+    if send_mail and mymodels.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
+        # if ensures that no mail was ever sent due to a rejection to this user
+
+        # save if we sent the mail
+        c.mail_sent = send_rejection(subscription, reason)
         c.save()
 
 
 # same as reject_subscription, but for multiple subscriptions at once
-def reject_subscriptions(subscriptions):
+def reject_subscriptions(subscriptions, reason=None):
     for subscription in subscriptions:
-        reject_subscription(subscription)
+        reject_subscription(subscription, reason)
 
 
 def get_or_create_userprofile(user):
@@ -297,7 +303,9 @@ def get_or_create_userprofile(user):
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
-            mymodels.Subscribe.objects.filter(user=user, state__in=[mymodels.Subscribe.State.CONFIRMED, mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.COMPLETED],
+            mymodels.Subscribe.objects.filter(user=user, state__in=[mymodels.Subscribe.State.CONFIRMED,
+                                                                    mymodels.Subscribe.State.PAYED,
+                                                                    mymodels.Subscribe.State.COMPLETED],
                                               course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 

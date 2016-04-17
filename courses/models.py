@@ -622,8 +622,15 @@ class Rejection(models.Model):
         UNKNOWN = 'unknown'
         OVERBOOKED = 'overbooked'
         NO_PARTNER = 'no_partner'
+        USER_CANCELLED = 'user_cancelled'
+        ILLEGITIMATE = 'illegitimate'
+        BANNED = 'banned'
+        COURSE_CANCELLED = 'course_cancelled'
 
-        CHOICES = ((UNKNOWN, u'Unknown'), (OVERBOOKED, u'Overbooked'), (NO_PARTNER, u'No partner found'))
+        CHOICES = ((UNKNOWN, u'Unknown'), (OVERBOOKED, u'Overbooked'), (NO_PARTNER, u'No partner found'),
+                   (USER_CANCELLED, u'User cancelled the subscription'),
+                   (ILLEGITIMATE, u'Users subscription is illegitimate'), (BANNED, u'User is banned'),
+                   (COURSE_CANCELLED, u'Course was cancelled'))
 
     subscription = models.ForeignKey(Subscribe, related_name='rejections')
     date = models.DateField(blank=False, null=False, auto_now_add=True)
@@ -631,6 +638,8 @@ class Rejection(models.Model):
     reason = models.CharField(max_length=30,
                               choices=Reason.CHOICES, blank=False, null=False,
                               default=Subscribe.MatchingState.UNKNOWN)
+    mail_sent = models.BooleanField(blank=False, null=False, default=True)
+    mail_sent.help_text = "If this rejection was communicated to user by email."
 
     def __unicode__(self):
         return u"({}) rejected at {}".format(self.subscription, self.date)
