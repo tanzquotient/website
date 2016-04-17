@@ -342,6 +342,11 @@ LOGGING = {
         },
     },
     'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
         'null': {
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
@@ -371,9 +376,9 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['console', 'file_django'],
+            'handlers': ['mail_admins', 'console', 'file_django'],
             'propagate': True,
-            'level': 'ERROR',
+            'level': 'WARNING',
         },
         'tq': {
             'handlers': ['console', 'file_tq'],
