@@ -54,3 +54,11 @@ class CoursesToolbar(CMSToolbar):
         menu.add_modal_item(_('Merge duplicate users'), url=url)
         url = reverse('confirmation_check')
         menu.add_modal_item(_('Check confirmations'), url=url)
+
+        menu = self.toolbar.get_or_create_menu('payment', _('Payment'))
+        if self.request.user.has_perm('courses.change_voucher'):
+            url = reverse('admin:courses_voucher_changelist')
+            menu.add_sideframe_item(_('Voucher'), url=url)
+        if self.request.user.has_perm('courses.change_voucher_purpose'):
+            url = reverse('admin:courses_voucherpurpose_changelist')
+            menu.add_sideframe_item(_('Voucher purposes'), url=url)
