@@ -37,9 +37,6 @@ ALLOWED_HOSTS = [
     # NOTE: we add '*' which is very bad, but it does not work otherwise when DEBUG = False (I don't know why...)
 ]
 
-ADMINS = [('TQ IT',	'informatik@tq.vseth.ch'), ]
-SERVER_EMAIL = 'informatik@tq.vseth.ch'
-
 # Application definition
 
 INSTALLED_APPS = (
