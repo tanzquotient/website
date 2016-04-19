@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
     '.tq.vseth.ch.',
     '.tq.vseth.ethz.ch.',
     '.tanzquotient.vseth.ethz.ch.',
-    '127.0.0.1', 'localhost',
+    '127.0.0.1', 'localhost', '*',
 ]
 # This should be set to true since we use NGINX as a proxy
 USE_X_FORWARDED_HOST = True
