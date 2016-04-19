@@ -10,7 +10,7 @@ http {
     server {
 
         listen   80;
-        server_name tq.ethz.ch;
+        server_name 46.231.204.51;
 
         client_max_body_size 4G;
 
