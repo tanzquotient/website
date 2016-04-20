@@ -235,15 +235,14 @@ def confirm_subscription(subscription, request=None):
     if subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
-    if subscription.state == mymodels.Subscribe.State.NEW:
+    if subscription.state in [mymodels.Subscribe.State.NEW, mymodels.Subscribe.State.REJECTED]:
         subscription.state = mymodels.Subscribe.State.CONFIRMED
         subscription.save()
-        if mymodels.Confirmation.objects.filter(subscription=subscription).count() == 0:
-            # no subscription was send and the subscription is confirmed, so send one
-            send_participation_confirmation(subscription)
-            # log that we sent the confirmation
-            c = mymodels.Confirmation(subscription=subscription)
-            c.save()
+
+        send_participation_confirmation(subscription)
+        # log that we sent the confirmation
+        c = mymodels.Confirmation(subscription=subscription)
+        c.save()
         return True
     else:
         return False
