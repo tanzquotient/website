@@ -1,3 +1,4 @@
+from django.contrib.sessions.exceptions import SuspiciousSession
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -126,6 +127,9 @@ def subscription(request, course_id):
 
 
 def subscription2(request, course_id):
+    if 'user1_data' not in request.session:
+        raise SuspiciousSession()
+
     template_name = "courses/subscription2.html"
     context = {}
 
@@ -156,6 +160,9 @@ def subscription2(request, course_id):
 
 
 def subscription_do(request, course_id):
+    if 'user1_data' not in request.session:
+        raise SuspiciousSession()
+
     if 'user2_data' in request.session:
         res = services.subscribe(course_id, request.session['user1_data'], request.session['user2_data'])
     else:
@@ -172,6 +179,9 @@ def subscription_do(request, course_id):
 
 
 def subscription_done(request, course_id):
+    if 'subscription_result' not in request.session:
+        raise SuspiciousSession()
+
     template_name = "courses/subscription_done.html"
     context = {}
 
