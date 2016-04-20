@@ -6,6 +6,8 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 import views
 import courses.views as courses_views
 
@@ -18,6 +20,15 @@ urlpatterns = patterns('',
                        url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        )
+
+# for testing error pages
+if settings.DEBUG:
+    urlpatterns += patterns('',
+                            (r'^400/$', TemplateView.as_view(template_name='400.html')),
+                            (r'^403/$', TemplateView.as_view(template_name='403.html')),
+                            (r'^404/$', TemplateView.as_view(template_name='404.html')),
+                            (r'^500/$', TemplateView.as_view(template_name='500.html')),
+                            )
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
