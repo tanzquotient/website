@@ -666,7 +666,7 @@ class Voucher(models.Model):
         with transaction.atomic(), reversion.create_revision():
             self.used = True
             self.save()
-            if user is not None:
+            if user is not None and not user.is_anonymous():
                 reversion.set_user(user)
             reversion.set_comment("Marked as used. " + comment)
         return True
