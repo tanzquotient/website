@@ -2,7 +2,7 @@ site_name: TQ Website
 docs_dir: docs
 site_dir: docs_build
 
-site_url: http://tq.ethz.ch
-repo_url: https://github.com/gitsimon/tq_website/
+site_url: //tq.ethz.ch
+repo_url: //github.com/gitsimon/tq_website/
 
 theme: readthedocs

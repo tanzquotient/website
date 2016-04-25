@@ -24,7 +24,7 @@ The following picture sketches the setup. Some notes:
 
 ## Setup basic tools
 
-You can use [git](https://git-scm.com/) for code management and [Docker](http://www.docker.com) for setup automation.
+You can use [git](https://git-scm.com/) for code management and [Docker](//www.docker.com) for setup automation.
 
 We use a standard `Debian 8` on the server. On development machines, any operating system can be used in principle. The instructions here are compiled for a **Debian/Ubuntu** installation.
 

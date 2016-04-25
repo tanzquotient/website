@@ -12,12 +12,12 @@ docs/
 ## Third-party apps
 
 ### Sending mails asynchronously
-[post_office plugin + celery](http://scanova.io/blog/engineering/2014/05/05/asynchronous-email-sending-using-django-post_office-celery/)
+[post_office plugin + celery](//scanova.io/blog/engineering/2014/05/05/asynchronous-email-sending-using-django-post_office-celery/)
 
 
 ## Read the docs
 
-For full documentation visit [mkdocs.org](http://mkdocs.org).
+For full documentation visit [mkdocs.org](//mkdocs.org).
 
 ### Commands
 

@@ -271,7 +271,7 @@ Note: *In production* the setting is a bit different:
 
 * celery is also run via supervisor
 
-Setup is made along this instructions: [nginx, supervisor, gunicorn](http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
+Setup is made along this instructions: [nginx, supervisor, gunicorn](//michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/)
 (Note that we use MySQL instead of Postgres)
 
 ### Create user
@@ -441,7 +441,7 @@ remove other kernels found in `/boot/` with
 sudo apt-get autoremove linux-...
 ```
    
-or automatically remove old kernels with this helper program from [Random tools](http://packages.ubuntu.com/de/precise/misc/bikeshed)
+or automatically remove old kernels with this helper program from [Random tools](//packages.ubuntu.com/de/precise/misc/bikeshed)
 
 ```shell
 sudo apt-get install bikeshed

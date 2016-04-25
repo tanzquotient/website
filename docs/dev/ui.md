@@ -1,4 +1,4 @@
 # User Interface
 
 ## Additional Icons:
-[Font-Awesome](http://fortawesome.github.io/Font-Awesome/icons/)
+[Font-Awesome](//fortawesome.github.io/Font-Awesome/icons/)
