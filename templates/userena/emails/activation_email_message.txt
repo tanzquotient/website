@@ -5,10 +5,8 @@
 
 {% trans "To activate your account you should click on the link below:" %}
 
-{{ protocol }}://{{ site.domain|slice:":-1" }}{% url 'userena_activate' activation_key %}
+{{ protocol }}://{{ site.domain }}{% url 'userena_activate' activation_key %}
 
-{% trans "Thanks for using our site!" %}
+{% trans "Your" %} TanzQuotient
 
-{% trans "Sincerely" %},
-{{ site.name }}
 {% endautoescape %}

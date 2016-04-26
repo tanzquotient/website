@@ -5,12 +5,10 @@
     {% blocktrans with site.name as site %}<p>Thank you for signing up at {{ site }}.</p>{% endblocktrans %}
     <p>
         {% trans "To activate your account you should click on the link below:" %}<br />
-        {{ protocol }}://{{ site.domain|slice:":-1" }}{% url 'userena_activate' activation_key %}
+        {{ protocol }}://{{ site.domain }}{% url 'userena_activate' activation_key %}
     </p>
     <p>
-        {% trans "Thanks for using our site!" %}<br />
-        {% trans "Sincerely" %},<br />
-        {{ site.name }}
+        {% trans "Your" %} TanzQuotient
     </p>
 </body>
 </html>
