@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views.generic import TemplateView, FormView, RedirectView, View
 from payment.forms import USIForm, VoucherForm, CourseForm
 from courses.models import Subscribe, Voucher, Course, PaymentMethod
@@ -19,6 +20,8 @@ class VoucherPaymentIndexView(FormView):
         context = super(VoucherPaymentIndexView, self).get_context_data(**kwargs)
 
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
+        if not subscription:
+            raise Http404("Subscription with this USI does not exist")
         context['subscription'] = subscription
 
         # if the user has already paid, show the payment-success view
