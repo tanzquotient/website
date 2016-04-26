@@ -122,7 +122,7 @@ def subscription(request, course_id):
 
     context.update({
         'menu': "courses",
-        'course': Course.objects.get(id=course_id),
+        'course': get_object_or_404(Course, id=course_id),
         'person': 1,
         'form': form
     })
