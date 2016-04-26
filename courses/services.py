@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-
+import unicodedata
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 
@@ -18,6 +18,8 @@ from datetime import date
 log = logging.getLogger('tq')
 
 from emailcenter import *
+
+import re
 
 
 # Create your services here.
@@ -105,13 +107,22 @@ def create_user(user_data):
 
 def generate_username(first_name, last_name):
     username = u"{}_{}".format(first_name, last_name)
-    un = username
-    i = 1
-    while User.objects.filter(username=un).count() > 0:
-        un = username + unicode(i)
-        i += 1
+    return find_unused_username_variant(clean_username(username)).lower()
 
-    return un.lower()
+
+def find_unused_username_variant(name, ignore=None):
+    un = name
+    i = 1
+    while User.objects.exclude(username=ignore).filter(username=un).count() > 0:
+        un = name + unicode(i)
+        i += 1
+    return un
+
+
+def clean_username(name):
+    """first try to find ascii similar character, then strip away disallowed characters still left"""
+    name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
+    return re.sub('[^0-9a-zA-Z+-.@_]+', '', name)
 
 
 def subscribe(course_id, user1_data, user2_data=None):
