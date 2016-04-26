@@ -20,6 +20,9 @@ import services
 from django.contrib.auth.models import User
 from django.utils import dateformat
 
+from django.contrib.admin.views.decorators import staff_member_required
+
+
 import logging
 
 log = logging.getLogger('tq')
@@ -193,7 +196,7 @@ def subscription_done(request, course_id):
     return render(request, template_name, context)
 
 
-@login_required
+@staff_member_required
 def confirmation_check(request):
     template_name = "courses/confirmation_check.html"
     context = {}
@@ -205,7 +208,7 @@ def confirmation_check(request):
     return render(request, template_name, context)
 
 
-@login_required
+@staff_member_required
 def duplicate_users(request):
     template_name = "courses/duplicate_users.html"
     context = {}
@@ -334,7 +337,7 @@ def offering_time_chart_dict(offering):
     }
 
 
-@login_required
+@staff_member_required
 def subscription_overview(request):
     template_name = "courses/auth/subscription_overview.html"
     context = {}
@@ -350,7 +353,7 @@ def subscription_overview(request):
     return render(request, template_name, context)
 
 
-@login_required
+@staff_member_required
 def course_overview(request, course_id):
     template_name = "courses/auth/course_overview.html"
     context = {}
@@ -380,7 +383,7 @@ def course_overview(request, course_id):
     return render(request, template_name, context)
 
 
-@login_required
+@staff_member_required
 def offering_overview(request, offering_id):
     template_name = "courses/auth/offering_overview.html"
     context = {}

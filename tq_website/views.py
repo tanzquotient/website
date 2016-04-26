@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 
 from django.contrib import messages
@@ -14,7 +15,7 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-@login_required
+@staff_member_required
 def newsletter_list(request, newsletter=True):
     template_name = "export/newsletter.html"
     context = {}
@@ -25,6 +26,6 @@ def newsletter_list(request, newsletter=True):
     return render(request, template_name, context)
 
 
-@login_required
+@staff_member_required
 def no_newsletter_list(request):
     return newsletter_list(request, False)
