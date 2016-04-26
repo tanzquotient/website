@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 
 from courses import views
+from courses import admin_views
 
 urlpatterns = patterns('',
                        url(r'^$', views.course_list, name='home'),
@@ -16,5 +17,7 @@ urlpatterns = patterns('',
                            name='course_overview'),
                        url(r'^auth/offering/(?P<offering_id>\d+)/$', views.offering_overview,
                            name='offering_overview'),
+                       url(r'^admin/voucher_generate/$', admin_views.voucher_generation_view,
+                           name='voucher_generation'),
                        url(r'^api/', include('courses.api.urls', namespace='api')),  # nested namespace 'api'
                        )
