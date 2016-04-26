@@ -10,8 +10,11 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 
 from django.utils.translation import ugettext as _
+
+import datetime
 
 
 def display(modeladmin, request, queryset):
@@ -146,3 +149,41 @@ def mark_voucher_as_used(modeladmin, request, queryset):
         voucher.save()
 
 mark_voucher_as_used.short_description = "Mark selected vouchers as used."
+
+
+class VoucherGenerationForm(forms.Form):
+    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+    amount = forms.IntegerField(label=_("Choose amount"), initial=20)
+    purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
+    expires_flag = forms.BooleanField(label=_("Set expire date?"), initial=False, required=False)
+    expires = forms.DateField(widget=SelectDateWidget, initial=datetime.date.today()+datetime.timedelta(days=365*2))
+
+
+def voucher_generation(modeladmin, request, queryset):
+    form = None
+
+    if 'generate' in request.POST:
+        form = VoucherGenerationForm(request.POST)
+
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            purpose = form.cleaned_data['purpose']
+            expires_flag = form.cleaned_data['expires_flag']
+            expires = form.cleaned_data['expires']
+
+            # generate amount many vouchers
+            for i in range(0,amount):
+                v = Voucher(purpose=purpose,expires=expires if expires_flag else None)
+                v.save()
+
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = VoucherGenerationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+
+    return render(request, 'courses/auth/action_voucher_generation.html', {
+                                                     'form': form,
+                                                     })
+
+
+voucher_generation.short_description = "Generate multiple vouchers"

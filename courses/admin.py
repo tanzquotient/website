@@ -187,7 +187,7 @@ class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
     exclude = ('key',)
 
-    actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
+    actions = [voucher_generation, mark_voucher_as_used, generate_pdf, join_pdfs]
 
 
 

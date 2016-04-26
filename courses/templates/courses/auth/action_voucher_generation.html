@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <p>
+        {{ form }}
+    </p>
+
+    <input type="hidden" name="action" value="voucher_generation" />
+    <input type="submit" name="generate" value="Generate" />
+</form>
+
+{% endblock %}
