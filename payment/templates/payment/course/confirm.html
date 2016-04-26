@@ -37,6 +37,10 @@
                                 <button disabled=true class="btn btn-success">{% trans "Already Paid" %}</button>
                             {% endif %}
                         {% endbuttons %}
+                        <div class="form-group">
+                            <a href="{% url 'payment:voucherpayment_index' subscription.usi %}">Pay with voucher
+                                instead</a>
+                        </div>
                     </div>
 
                 </form>
