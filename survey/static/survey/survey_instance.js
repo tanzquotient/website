@@ -37,7 +37,7 @@ var QuestionScale = React.createClass({
 });
 
 ReactDOM.render(
-    <h1>Hello, world!</h1>,
+    <h1>Hello, world you!</h1>,
     document.getElementById('survey')
 );
 

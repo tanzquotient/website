@@ -1,37 +1,41 @@
-db:
-  image: mysql
-  environment:
-    MYSQL_ROOT_USER: root
-    MYSQL_ROOT_PASSWORD: afByCK74NvgAfEt
-    MYSQL_DATABASE: tq_website
-  ports:
-    - "3309:3306"
-  restart: always
-django:
-  build: .
-  user: root
-  volumes:
-    - .:/webapps/tq_website
-    - ./configurations/tq_website.conf:/etc/supervisor/conf.d/tq_website.conf
-  command: /bin/bash -c "service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/tq_website.conf"
-  links:
-    - db
-  restart: always
+version: '2'
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: afByCK74NvgAfEt
+      MYSQL_DATABASE: tq_website
+    ports:
+      - "3309:3306"
+    restart: always
+  django:
+    build:
+      context: .
+      dockerfile: dockerfiles/django
+    user: root
+    volumes:
+      - .:/webapps/tq_website
+      - ./configurations/tq_website.conf:/etc/supervisor/conf.d/tq_website.conf
+    command: /bin/bash -c "service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/tq_website.conf"
+    links:
+      - db
+    restart: always
 
-nginx:
-  image: nginx:latest
-  volumes:
-    - ./configurations/tq_website.template:/etc/nginx/conf.d/tq_website.template
-    - ./static:/webapps/tq_website/static
-    - ./media:/webapps/tq_website/media
-    - /etc/letsencrypt:/etc/letsencrypt
-  command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
-  environment:
-    - NGINX_HOST=tq.ethz.ch
-    - NGINX_PORT=80
-  ports:
-    - "80:80"
-    - "443:443"
-  links:
-    - django
-  restart: always
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./configurations/tq_website.template:/etc/nginx/conf.d/tq_website.template
+      - ./static:/webapps/tq_website/static
+      - ./media:/webapps/tq_website/media
+      - /etc/letsencrypt:/etc/letsencrypt
+    command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
+    environment:
+      - NGINX_HOST=tq.ethz.ch
+      - NGINX_PORT=80
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - django
+    restart: always

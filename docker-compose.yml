@@ -1,19 +1,23 @@
-db:
-  image: mysql
-  environment:
-    MYSQL_ROOT_USER: root
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: tq_website
-  ports:
-    - "3309:3306"
-  restart: always
-django:
-  build: .
-  volumes:
-    - .:/webapps
-  command: ./scripts/wait-for-it.sh 172.17.0.2:3306 -- python manage.py runserver 0.0.0.0:8000
-  ports:
-    - "8000:8000"
-  links:
-    - db
-  restart: always
+version: '2'
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tq_website
+    ports:
+      - "3309:3306"
+    restart: always
+  django:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/django
+    volumes:
+      - .:/webapps
+    command: ./scripts/wait-for-it.sh 172.17.0.2:3306 -- python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    restart: always
