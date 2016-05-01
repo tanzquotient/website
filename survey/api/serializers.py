@@ -6,7 +6,8 @@ from django.contrib import auth
 
 from survey.models import *
 
-from hvad.contrib.restframework.serializers import TranslatableModelSerializer
+from parler_rest.serializers import TranslatableModelSerializer
+from parler_rest.fields import TranslatedFieldsField
 
 
 class ChoiceSerializer(TranslatableModelSerializer):

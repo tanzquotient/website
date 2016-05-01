@@ -1,0 +1,7 @@
+{% include "survey/components/question_multiplechoice.html"%}
+<div class="input-group">
+    <div class="input-group-addon">
+        <input type="checkbox" id="q-{{ question.id }}-checkbox-freeform" name="q-{{ question.id }}-checkbox-freeform">
+    </div>
+    <input type="text" class="form-control" name="q-{{ question.id }}-text-freeform"/>
+</div>

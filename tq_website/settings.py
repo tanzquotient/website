@@ -83,7 +83,7 @@ INSTALLED_APPS = (
     'cms_plugins',
     'analytical',
     'rest_framework',
-    'hvad',
+    'parler',
     'survey',
 )
 
@@ -395,6 +395,20 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
+}
+
+##########
+# PARLER #
+##########
+PARLER_LANGUAGES = {
+    SITE_ID: (
+        {'code': 'en',},
+        {'code': 'de',},
+    ),
+    'default': {
+        'fallbacks': ['de'],             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
+        'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
+    }
 }
 
 # Path for translation files

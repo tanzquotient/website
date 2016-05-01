@@ -1,0 +1,6 @@
+{% for choice in question.choice_set.all %}
+    <div class="input-group">
+        <input type="radio" id="q-{{ question.id }}-radio-{{ choice.id }}" name="q-{{ question.id }}-radio-{{ question.id }}">
+        <label for="q-{{ question.id }}-radio-{{ choice.id }}">{{ choice.label }}</label>
+    </div>
+{% endfor %}

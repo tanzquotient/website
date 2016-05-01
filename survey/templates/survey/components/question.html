@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-question-circle fa-lg" aria-hidden="true"></i>
+        <strong>{{ question.text }}</strong>
+    </div>
+    <div class="panel-body">
+        {% if question.type == 'c' %}
+            {% include "survey/components/question_singlechoice.html" with question=question only %}
+        {% elif question.type == 'cf' %}
+            {% include "survey/components/question_singlechoice_freeform.html" with question=question only %}
+        {% elif question.type == 'm' %}
+            {% include "survey/components/question_multiplechoice.html" with question=question only %}
+        {% elif question.type == 'mf' %}
+            {% include "survey/components/question_multiplechoice_freeform.html" with question=question only %}
+        {% elif question.type == 's' %}
+            {% include "survey/components/question_scale.html" with question=question only %}
+        {% elif question.type == 'f' %}
+            {% include "survey/components/question_freeform.html" with question=question only %}
+
+        {% endif %}
+        {% if question.note %}
+            <div class="alert alert-info" role="alert">{{ question.note }}</div>
+        {% endif %}
+    </div>
+</div>

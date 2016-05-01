@@ -1,0 +1,6 @@
+{% for choice in question.choice_set.all %}
+    <div class="input-group">
+        <input type="checkbox" id="q-{{ question.id }}-checkbox-{{ choice.id }}" name="q-{{ question.id }}-checkbox-{{ choice.id }}">
+        <label for="q-{{ question.id }}-checkbox-{{ choice.id }}">{{ choice.label }}</label>
+    </div>
+{% endfor %}

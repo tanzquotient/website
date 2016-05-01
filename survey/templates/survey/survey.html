@@ -10,68 +10,14 @@
     <h2></h2>
 
     <div class="container">
-        <h2>Survey with id {{ inst.id }}</h2>
-
         <div class="row">
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i> <strong>Question?</strong></div>
-                  <div class="panel-body">
-                      <div class="alert alert-info" role="alert">This is a hint</div>
-                    <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                    <strong><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i> Choose</strong><br/>
-                    <small>Hint to this question</small>
-                    <div class="input-group">
-
-                        <label>1 <input type="radio" aria-label="..."> </label>
-                        <label><input type="radio" aria-label="..."> </label>
-                        <label><input type="radio" aria-label="..."> </label>
-                        <label><input type="radio" aria-label="..."> 5</label>
-
-
-                    </div>
-                </div>
-
-                <div class="input-group">
-                        <input type="checkbox" aria-label="...">
-                    <label>Test</label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-addon">
-                        <input type="checkbox" aria-label="...">
-                    </div>
-                    <input type="text" class="form-control" aria-label="...">
-                </div>
+            <div class="col-md-8 col-md-offset-2">
+                <p>{{ inst.survey.intro_text }}</p>
+                {% for group in inst.survey.questiongroup_set.all %}
+                    {% include "survey/components/questiongroup.html" with group=group only %}
+                {% endfor %}
             </div>
-            <!-- /.col-lg-6 -->
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <div class="input-group-addon">
-                        <input type="radio" aria-label="...">
-                    </div>
-                    <input type="text" class="form-control" aria-label="...">
-                </div>
-                <!-- /input-group -->
-            </div>
-            <!-- /.col-lg-6 -->
         </div>
-        <!-- /.row -->
-
-        <div id="survey"></div>
-        <script type="text/babel" src="{% static "survey/survey_instance.js" %}"></script>
     </div>
 
 {% endblock main_content %}
-
-{% block extra_js %}
-    {{ block.super }}
-    <script src="{% static "js/vendors.js" %}"></script>
-    <script src="{% static "js/bundle.js" %}"></script>
-{% endblock extra_js %}
