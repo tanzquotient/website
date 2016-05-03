@@ -1,3 +1,5 @@
+<p>{{ group.intro_text }}</p>
 {% for question in group.question_set.all %}
     {% include "survey/components/question.html" with question=question only %}
 {% endfor %}
+<hr>

@@ -12,7 +12,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <p>{{ inst.survey.intro_text }}</p>
+                <strong>{{ intro_text }}</strong><br /><br />
+
                 {% for group in inst.survey.questiongroup_set.all %}
                     {% include "survey/components/questiongroup.html" with group=group only %}
                 {% endfor %}

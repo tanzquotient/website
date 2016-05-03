@@ -172,7 +172,7 @@
 	-webkit-box-shadow: inset 0px 0px 0px 3px #333;
 	-moz-box-shadow: inset 0px 0px 0px 3px #333;
 	box-shadow: inset 0px 0px 0px 3px #333;
-	background: transparent;
+	background: #FFEFD7;
 }
 
 .btn-action, .btn-primary {

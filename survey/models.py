@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
@@ -11,6 +12,10 @@ class Survey(TranslatableModel):
     translations = TranslatedFields(
         intro_text=models.TextField(blank=True, null=True),
     )
+
+    def get_test_url(self):
+        return reverse("survey:survey_test", kwargs={'survey_id': self.id})
+    get_test_url.short_description = u"Test url"
 
     def __unicode__(self):
         return self.name
@@ -63,6 +68,40 @@ class Question(TranslatableModel):
         note=models.TextField(blank=True, null=True),
     )
 
+    def scale_label(self, which):
+        if self.type != Question.Type.SCALE:
+            return None
+        if self.scale_template == None:
+            return str(which)
+
+        if which == 1:
+            return self.scale_template.low
+        elif which == 2:
+            return "-"
+        elif which == 3:
+            return self.scale_template.mid or "-"
+        elif which == 4:
+            return "-"
+        elif which == 5:
+            return self.scale_template.up
+        else:
+            return None
+
+    def scale_label1(self):
+        return self.scale_label(1)
+
+    def scale_label2(self):
+        return self.scale_label(2)
+
+    def scale_label3(self):
+        return self.scale_label(3)
+
+    def scale_label4(self):
+        return self.scale_label(4)
+
+    def scale_label5(self):
+        return self.scale_label(5)
+
     class Meta:
         ordering = ['position']
 
@@ -88,6 +127,11 @@ class Choice(TranslatableModel):
     translations = TranslatedFields(
         label=models.CharField(max_length=255)
     )
+
+    def get_question_name(self):
+        return self.question.name
+
+    get_question_name.short_description = "Question Name"
 
     class Meta:
         ordering = ['position']
