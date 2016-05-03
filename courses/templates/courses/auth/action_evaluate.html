@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <p>
+        {{ evaluate_form }}
+    </p>
+    <p>The following courses will be evaluated or prepared to do so:</p>
+
+    <ul>{{ courses|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="evaluate_course" />
+    <input type="submit" name="go" value="Go" />
+</form>
+
+{% endblock %}

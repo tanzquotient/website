@@ -262,6 +262,8 @@ class Course(models.Model):
     active.help_text = "Defines if clients can subscribe to this course (if checked, course is active if offering is active)."
     special = HTMLField(blank=True, null=True)
     special.help_text = 'Any special properties of this course.'
+    evaluated = models.BooleanField(default=False)
+    evaluated.help_text = "If this course was evaluated by a survey or another way."
 
     objects = managers.CourseManager()
 

@@ -1,5 +1,9 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
+
+from admin_actions import send_invitations
 from survey.models import *
 
 
@@ -50,9 +54,12 @@ class ChoiceAdmin(TranslatableAdmin):
 
 @admin.register(SurveyInstance)
 class SurveyInstanceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'invitation_sent', 'survey', 'user', 'course', 'date', 'last_update')
     model = SurveyInstance
-    raw_id_fields = ('courses',)
+    raw_id_fields = ('course',)
     readonly_fields = ('url_text', 'url_checksum')
+
+    actions = [send_invitations,]
 
 
 @admin.register(Answer)

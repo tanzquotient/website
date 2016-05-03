@@ -1,10 +1,10 @@
 {% for choice in question.choice_set.all %}
     <div class="form-group">
-        <label for="q-{{ question.id }}-text-{{ choice.id }}">{{ choice.label }}</label>
-        <input type="text" class="form-control" id="q-{{ question.id }}-text-{{ choice.id }}" name="q-{{ question.id }}-text-{{ choice.id }}"/>
+        <label for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
+        <input type="text" class="form-control" id="q{{ question.id }}-c{{ choice.id }}" name="q{{ question.id }}-c{{ choice.id }}"/>
     </div>
     {% empty %}
     <div class="form-group">
-        <input type="text" class="form-control" name="q-{{ question.id }}-text-default"/>
+        <input type="text" class="form-control" name="q{{ question.id }}-default"/>
     </div>
 {% endfor %}

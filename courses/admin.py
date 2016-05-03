@@ -14,6 +14,7 @@ from courses.filters import *
 from reversion.admin import VersionAdmin
 from payment.vouchergenerator import generate_pdf, join_pdfs
 
+
 class CourseInline(admin.TabularInline):
     model = Course
     fields = ('name', 'type', 'period', "position",)
@@ -88,7 +89,7 @@ class SongAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
+        'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
         'format_teachers',
         'display', 'active')
     list_filter = ('offering', 'type', 'room', 'active')
@@ -112,7 +113,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     actions = [display, undisplay, activate, deactivate, copy_courses, export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
-               export_confirmed_subscriptions_xlsx, ]
+               export_confirmed_subscriptions_xlsx, evaluate_course]
 
 
 class CourseTypeAdmin(admin.ModelAdmin):
@@ -137,7 +138,8 @@ class SubscribeAdmin(VersionAdmin):
 
     model = Subscribe
 
-    actions = [match_partners, unmatch_partners, confirm_subscriptions, reject_subscriptions, set_subscriptions_as_payed]
+    actions = [match_partners, unmatch_partners, confirm_subscriptions, reject_subscriptions,
+               set_subscriptions_as_payed]
 
     raw_id_fields = ('user', 'partner')
 
@@ -188,7 +190,6 @@ class VoucherAdmin(VersionAdmin):
     exclude = ('key',)
 
     actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
-
 
 
 @admin.register(VoucherPurpose)

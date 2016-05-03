@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
+{% load staticfiles i18n %}
 
 {% block content_title %}
     <h1 class="lead">Survey</h1>
@@ -12,11 +12,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <strong>{{ intro_text }}</strong><br /><br />
+                <form role="form" action="{% url 'survey:survey_invitation'%}"
+                      method="post">
+                    {% csrf_token %}
+                    <strong>{{ intro_text }}</strong><br/><br/>
 
-                {% for group in inst.survey.questiongroup_set.all %}
-                    {% include "survey/components/questiongroup.html" with group=group only %}
-                {% endfor %}
+                    {% for group in inst.survey.questiongroup_set.all %}
+                        {% include "survey/components/questiongroup.html" with group=group only %}
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-default center-block" name="send" value="send">
+                        {% trans "Senden" %}
+                    </button>
+                </form>
             </div>
         </div>
     </div>

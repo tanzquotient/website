@@ -15,6 +15,7 @@ class Survey(TranslatableModel):
 
     def get_test_url(self):
         return reverse("survey:survey_test", kwargs={'survey_id': self.id})
+
     get_test_url.short_description = u"Test url"
 
     def __unicode__(self):
@@ -142,11 +143,13 @@ class SurveyInstance(models.Model):
                                null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='survey_instances', blank=False,
                              null=False)
-    courses = models.ManyToManyField('courses.Course', related_name='survey_instances', blank=True)
+    course = models.ForeignKey('courses.Course', related_name='survey_instances', blank=True, null=True)
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    last_update = models.DateTimeField(blank=True, null=True, auto_now_add=False)
     url_text = models.CharField(blank=True, null=False, max_length=100, unique=True)
     url_checksum = models.CharField(blank=True, null=False, max_length=12)
     url_expire_date = models.DateTimeField(blank=True, null=True, auto_now_add=False)
+    invitation_sent = models.BooleanField(blank=False, null=False, default=False)
 
     def save(self, *args, **kwargs):
         super(SurveyInstance, self).save(*args, **kwargs)  # save here to ensure id is set by database
@@ -154,7 +157,6 @@ class SurveyInstance(models.Model):
             text, checksum = services.encode_data(self.id)
             self.url_text = text
             self.url_checksum = checksum
-        print services.create_url(self)
         super(SurveyInstance, self).save(*args, **kwargs)
 
 
@@ -164,7 +166,6 @@ class Answer(models.Model):
     question = models.ForeignKey('Question', related_name='answers', blank=False, null=True, on_delete=models.SET_NULL)
     choice = models.ForeignKey('Choice', blank=True, null=True, on_delete=models.SET_NULL)
     text = models.TextField(blank=True, null=True)
-    value = models.IntegerField(blank=True, null=True)
 
     @classmethod
     def create(klass, survey_inst, question, choice_id, choice_input=None):
@@ -185,3 +186,6 @@ class Answer(models.Model):
             return klass(survey_instance=survey_inst, question=question, text=int(choice_input))
         if question.type == Question.Type.FREE_FORM:
             return klass(survey_instance=survey_inst, question=question, text=choice_input)
+
+    def __unicode__(self):
+        return u"q({})-c({}): {}".format(self.question, self.choice, self.text)

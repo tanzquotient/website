@@ -1,7 +1,7 @@
 {% include "survey/components/question_singlechoice.html"%}
 <div class="input-group">
     <div class="input-group-addon">
-        <input type="radio" id="q-{{ question.id }}-radio-freeform" name="q-{{ question.id }}-radio-{{ question.id }}">
+        <input type="radio" id="q{{ question.id }}-freechoice" name="q{{ question.id }}" value="free">
     </div>
-    <input type="text" class="form-control" name="q-{{ question.id }}-text-freeform"/>
+    <input type="text" class="form-control" name="q{{ question.id }}-freeform"/>
 </div>
