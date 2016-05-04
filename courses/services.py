@@ -250,11 +250,13 @@ def confirm_subscription(subscription, request=None):
         subscription.state = mymodels.Subscribe.State.CONFIRMED
         subscription.save()
 
-        send_participation_confirmation(subscription)
-        # log that we sent the confirmation
-        c = mymodels.Confirmation(subscription=subscription)
-        c.save()
-        return True
+        if send_participation_confirmation(subscription):
+            # log that we sent the confirmation
+            c = mymodels.Confirmation(subscription=subscription)
+            c.save()
+            return True
+        else:
+            return False
     else:
         return False
 

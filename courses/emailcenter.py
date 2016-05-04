@@ -36,7 +36,7 @@ def send_subscription_confirmation(subscription):
     else:
         template = 'subscription_confirmation_without_partner_nocouple'
 
-    _email_helper(subscription.user.email, template, context)
+    return _email_helper(subscription.user.email, template, context)
 
 
 def send_participation_confirmation(subscription, connection=None):
@@ -60,7 +60,7 @@ def send_participation_confirmation(subscription, connection=None):
     else:
         template = 'participation_confirmation_without_partner_nocouple'
 
-    _email_helper(subscription.user.email, template, context)
+    return _email_helper(subscription.user.email, template, context)
 
 
 def send_rejection(subscription, reason):
