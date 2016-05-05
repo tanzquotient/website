@@ -159,6 +159,12 @@ class SurveyInstance(models.Model):
             self.url_checksum = checksum
         super(SurveyInstance, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        if self.course:
+            return u"{} for {} of {}".format(self.survey, self.course, self.user)
+        else:
+            return u"{} of {}".format(self.survey, self.user)
+
 
 class Answer(models.Model):
     survey_instance = models.ForeignKey('SurveyInstance', related_name='answers', blank=False, null=True,
@@ -168,24 +174,30 @@ class Answer(models.Model):
     text = models.TextField(blank=True, null=True)
 
     @classmethod
-    def create(klass, survey_inst, question, choice_id, choice_input=None):
+    def create(klass, survey_inst, question_id, choice, choice_input=None):
         """Creates Answer parsing input and deciding which fields to set, depending on question type"""
+        question = get_object_or_404(Question, pk=int(question_id))
         if question.type in [Question.Type.SINGLE_CHOICE, Question.Type.MULTIPLE_CHOICE]:
-            choice = get_object_or_404(Choice, pk=choice_id)
+            # here we expect choice to be a valid id
+            choice = get_object_or_404(Choice, pk=choice)
             return klass(survey_instance=survey_inst, question=question, choice=choice,
                          text=choice.language('en').label)
         if question.type in [Question.Type.SINGLE_CHOICE_WITH_FREE_FORM, Question.Type.MULTIPLE_CHOICE_WITH_FREE_FORM]:
-            if choice_input:
+            if choice == 'freeform':
                 return klass(survey_instance=survey_inst, question=question,
-                             text=choice_input)
+                                 text=choice_input)
             else:
-                choice = get_object_or_404(Choice, pk=choice_id)
+                choice = get_object_or_404(Choice, pk=choice)
                 return klass(survey_instance=survey_inst, question=question, choice=choice,
                              text=choice.language('en').label)
         if question.type == Question.Type.SCALE:
             return klass(survey_instance=survey_inst, question=question, text=int(choice_input))
         if question.type == Question.Type.FREE_FORM:
-            return klass(survey_instance=survey_inst, question=question, text=choice_input)
+            if choice == 'default':
+                return klass(survey_instance=survey_inst, question=question, text=choice_input)
+            else:
+                choice = get_object_or_404(Choice, pk=choice)
+                return klass(survey_instance=survey_inst, question=question, choice=choice, text=choice_input)
 
     def __unicode__(self):
         return u"q({})-c({}): {}".format(self.question, self.choice, self.text)

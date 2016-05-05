@@ -3,7 +3,7 @@
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
-from admin_actions import send_invitations
+from admin_actions import *
 from survey.models import *
 
 
@@ -25,6 +25,8 @@ class SurveyAdmin(TranslatableAdmin):
     list_display = ('name', 'get_test_url')
     model = Survey
     inlines = (QuestionGroupInline,)
+
+    actions = [export_surveys_xlsx, ]
 
 
 @admin.register(QuestionGroup)
@@ -64,5 +66,6 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('id','survey_instance', 'question', 'choice', 'text')
     model = Answer
     raw_id_fields = ('question', 'survey_instance')
