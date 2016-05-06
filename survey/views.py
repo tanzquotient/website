@@ -38,17 +38,26 @@ def survey_invitation(request):
                 continue
 
             question = get_object_or_404(models.Question, pk=int(q))
-            if question.type in [models.Question.Type.SINGLE_CHOICE,models.Question.Type.SINGLE_CHOICE_WITH_FREE_FORM]:
-                if c:
-                    a = models.Answer.create(survey_instance, question, c, value)
+            try:
+                if question.type in [models.Question.Type.SINGLE_CHOICE,
+                                     models.Question.Type.SINGLE_CHOICE_WITH_FREE_FORM]:
+                    if c=='freechoice':
+                        continue
+                    if c:
+                        a = models.Answer.create(survey_instance, question, c, value)
+                    else:
+                        a = models.Answer.create(survey_instance, question, int(value))
                 else:
-                    a = models.Answer.create(survey_instance, question, int(value))
-            else:
-                if not c:
-                    log.error("Fatal programming error: answer of survey not in correct format")
-                    continue
-                a = models.Answer.create(survey_instance, question, c, value)
-            a.save()
+                    if not c:
+                        log.error("Fatal programming error: answer of survey not in correct format")
+                        continue
+                    if c == 'freechoice':
+                        # ignore
+                        continue
+                    a = models.Answer.create(survey_instance, question, c, value)
+                a.save()
+            except Exception as e:
+                log.error("Fatal programming error: {}".format(e.message))
 
         survey_instance.last_update = datetime.datetime.now()
         survey_instance.save()
