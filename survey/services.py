@@ -36,6 +36,7 @@ def decode_data(text, checksum):
     c = hashlib.md5(SALT + text).hexdigest()[:12]
     log.debug(u"{} --- {}".format(text,c))
     if c != checksum:
+        pass
         # TODO remove quickfix
         #  raise Exception("Bad hash!")
     data = pickle.loads(zlib.decompress(text.decode('base64')))
