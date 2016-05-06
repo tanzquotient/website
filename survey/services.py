@@ -131,7 +131,6 @@ def export_surveys(surveys):
             # set column width
             ws.column_dimensions[get_column_letter(col_num + 1)].width = 50
 
-        log.debug("START")
         for inst in instances:
             # only take the newest answer for all questions
             answers = models.Answer.objects.filter(survey_instance__survey=survey,
@@ -139,7 +138,6 @@ def export_surveys(surveys):
 
             row_num += 1
             for col_num in xrange(len(columns)):
-                log.debug(row_num+1)
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 res = answers.filter(question=questions[col_num])
                 c.value = res[0].text if res else ""

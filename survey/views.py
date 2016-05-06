@@ -22,18 +22,32 @@ def survey_invitation(request):
         del request.session['inst_id']
         survey_instance = get_object_or_404(models.SurveyInstance, pk=inst_id)
 
-        prog = re.compile(r'^q(?P<question>\d+)-c?(?P<choice>\S+)$')
+        prog = re.compile(r'^q(?P<question>\d+)-?c?(?P<choice>\S+)?$')
         for key, value in request.POST.iteritems():
             if not key:
+                log.debug(u"ignore {}".format(key))
                 continue
             m = prog.match(key)
             if not m:
+                log.debug(u"no match {}".format(key))
                 continue
             q = m.group('question')
             c = m.group('choice')
-            if not q or not c:
+            if not q:
+                log.debug(u"question could not be parsed in {}".format(key))
                 continue
-            a = models.Answer.create(survey_instance, q, c, request.POST[key])
+
+            question = get_object_or_404(models.Question, pk=int(q))
+            if question.type in [models.Question.Type.SINGLE_CHOICE,models.Question.Type.SINGLE_CHOICE_WITH_FREE_FORM]:
+                if c:
+                    a = models.Answer.create(survey_instance, question, c, value)
+                else:
+                    a = models.Answer.create(survey_instance, question, int(value))
+            else:
+                if not c:
+                    log.error("Fatal programming error: answer of survey not in correct format")
+                    continue
+                a = models.Answer.create(survey_instance, question, c, value)
             a.save()
 
         survey_instance.last_update = datetime.datetime.now()

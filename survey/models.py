@@ -174,24 +174,25 @@ class Answer(models.Model):
     text = models.TextField(blank=True, null=True)
 
     @classmethod
-    def create(klass, survey_inst, question_id, choice, choice_input=None):
+    def create(klass, survey_inst, question, choice, choice_input=None):
         """Creates Answer parsing input and deciding which fields to set, depending on question type"""
-        question = get_object_or_404(Question, pk=int(question_id))
         if question.type in [Question.Type.SINGLE_CHOICE, Question.Type.MULTIPLE_CHOICE]:
             # here we expect choice to be a valid id
             choice = get_object_or_404(Choice, pk=choice)
+            choice.set_current_language('en')
             return klass(survey_instance=survey_inst, question=question, choice=choice,
-                         text=choice.language('en').label)
+                         text=choice.label)
         if question.type in [Question.Type.SINGLE_CHOICE_WITH_FREE_FORM, Question.Type.MULTIPLE_CHOICE_WITH_FREE_FORM]:
             if choice == 'freeform':
                 return klass(survey_instance=survey_inst, question=question,
                                  text=choice_input)
             else:
                 choice = get_object_or_404(Choice, pk=choice)
+                choice.set_current_language('en')
                 return klass(survey_instance=survey_inst, question=question, choice=choice,
-                             text=choice.language('en').label)
+                             text=choice.label)
         if question.type == Question.Type.SCALE:
-            return klass(survey_instance=survey_inst, question=question, text=int(choice_input))
+            return klass(survey_instance=survey_inst, question=question, text=choice_input)
         if question.type == Question.Type.FREE_FORM:
             if choice == 'default':
                 return klass(survey_instance=survey_inst, question=question, text=choice_input)
