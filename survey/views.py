@@ -72,7 +72,12 @@ def survey_invitation(request):
         if 't' in request.GET and 'c' in request.GET:
             text = request.GET['t']
             checksum = request.GET['c']
-            survey_instance_id = services.decode_data(text, checksum)
+            try:
+                survey_instance_id = services.decode_data(text, checksum)
+            except Exception as e:
+                request.session['msg'] = _("There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey")
+                return redirect('survey:survey_error')
+
             survey_instance = get_object_or_404(models.SurveyInstance, pk=survey_instance_id)
 
             request.session['inst_id'] = survey_instance_id

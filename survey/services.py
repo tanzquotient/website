@@ -32,15 +32,22 @@ def encode_data(data):
 
 def decode_data(text, checksum):
     """The inverse of `encode_data`."""
-    text = urllib.unquote(text)
-    c = hashlib.md5(SALT + text).hexdigest()[:12]
-    log.debug(u"{} --- {}".format(text,c))
-    if c != checksum:
-        pass
-        # TODO remove quickfix
-        #  raise Exception("Bad hash!")
-    data = pickle.loads(zlib.decompress(text.decode('base64')))
-    return data
+    # TODO remove this dirty quickfix (because of padding errors in buggy encode in else branch)
+    rtext = models.SurveyInstance.objects.filter(url_text=text).all()
+    ctext = models.SurveyInstance.objects.filter(url_checksum=checksum).all()
+    if len(rtext) == 1:
+        return rtext[0].id
+    elif len(ctext) == 1:
+        return ctext[0].id
+    else:
+        # buggy TODO remove later
+        text_unquoted = urllib.unquote(text)
+        c = hashlib.md5(SALT + text_unquoted).hexdigest()[:12]
+        log.debug(u"{} --- {}".format(text_unquoted,c))
+        if c != checksum:
+            raise Exception("Bad hash!")
+        data = pickle.loads(zlib.decompress(text.decode('base64')))
+        return data
 
 
 def create_url(survey_inst):
