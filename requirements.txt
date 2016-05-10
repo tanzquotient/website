@@ -19,13 +19,13 @@ django-parler==1.6.2
 django-parler-rest==1.3.0
 django-mptt==0.7.4
 django-polymorphic==0.7.2
-django-post-office==2.0.2
+django-post-office==2.0.7
 django-reversion==1.8.5
 django-sekizai==0.8.2
 Django-Select2==4.3.2
 django-tinymce==1.5.3
 django-treebeard==3.0
-django-userena==1.4.1
+django-userena==1.5.1
 djangocms-admin-style==1.0.6
 djangocms-googlemap==0.3
 djangocms-inherit==0.1
@@ -33,9 +33,8 @@ djangocms-link==1.7.1
 djangocms-snippet==1.5
 djangocms-text-ckeditor==2.8.0
 djangorestframework==3.3.2
-easy-thumbnails==2.2
+easy-thumbnails
 ecdsa==0.13
-Fabric==1.10.2
 gunicorn==19.3.0
 html2text==2014.12.29
 html5lib==0.9999999
@@ -43,7 +42,7 @@ jdcal==1.2
 jsonfield==1.0.3
 kombu==3.0.28
 Markdown==2.6.5
-MySQL-python==1.2.5
+mysqlclient==1.3.7
 openpyxl==2.2.6
 paramiko==1.15.3
 Pillow==3.0.0
@@ -52,7 +51,7 @@ pytz==2015.6
 setproctitle==1.1.9
 six==1.10.0
 sqlparse==0.1.16
-unicodecsv==0.11.0
+unicodecsv==0.14.1
 Unidecode==0.4.18
 django-bootstrap3
 base36
