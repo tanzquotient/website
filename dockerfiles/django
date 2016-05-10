@@ -4,15 +4,15 @@ MAINTAINER martin.zellner@gmail.com
 # Install Package Dependencies
 RUN apt-get update && apt-get install -y --force-yes \
     gettext \
-    python-pip \
+    python3-pip \
     libmysqlclient-dev \
-    python-dev \
+    python3-dev \
     gcc \
     gcc-multilib \
     rabbitmq-server \
     libjpeg-dev \
     libffi-dev \
-    python-cairo
+    python3-cairo
 
 # Install supervisor (needed for production)
 RUN apt-get update && apt-get install -y --force-yes \
@@ -25,7 +25,7 @@ ADD requirements.txt /webapps/tq_website/requirements.txt
 WORKDIR /webapps
 
 USER  root
-RUN pip install -r tq_website/requirements.txt
+RUN pip3 install -r tq_website/requirements.txt
 
 
 
