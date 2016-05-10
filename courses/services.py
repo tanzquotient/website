@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from userena.models import UserenaSignup
-import models as mymodels
+import courses.models
 
 import logging
 
@@ -17,27 +17,27 @@ from datetime import date
 
 log = logging.getLogger('tq')
 
-from emailcenter import *
+from .emailcenter import *
 
 import re
 
 
 # Create your services here.
 def get_all_offerings():
-    return mymodels.Offering.objects.order_by('period__date_from', '-active')
+    return courses.models.Offering.objects.order_by('period__date_from', '-active')
 
 
 def get_offerings_to_display():
     # return offerings that have display flag on and order them with increasing start
-    return mymodels.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
+    return courses.models.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
 
 
 def get_current_active_offering():
-    return mymodels.Offering.objects.filter(active=True).order_by('period__date_from').first()
+    return courses.models.Offering.objects.filter(active=True).order_by('period__date_from').first()
 
 
 def get_subsequent_offering():
-    res = mymodels.Offering.objects.filter(period__date_from__gte=date.today()).order_by('period__date_from').all()
+    res = courses.models.Offering.objects.filter(period__date_from__gte=date.today()).order_by('period__date_from').all()
     if len(res) > 0:
         return res[0]
     else:
@@ -64,7 +64,7 @@ def update_user(user, user_data):
     userprofile = get_or_create_userprofile(user)
     userprofile.legi = user_data['legi']
     userprofile.gender = user_data['gender']
-    userprofile.address = mymodels.Address.objects.create_from_user_data(user_data)
+    userprofile.address = courses.models.Address.objects.create_from_user_data(user_data)
     if user_data['phone_number']:
         userprofile.phone_number = user_data['phone_number']
     userprofile.student_status = user_data['student_status']
@@ -128,7 +128,7 @@ def clean_username(name):
 def subscribe(course_id, user1_data, user2_data=None):
     res = dict()
 
-    course = mymodels.Course.objects.get(id=course_id)
+    course = courses.models.Course.objects.get(id=course_id)
     user1 = get_or_create_user(user1_data)
     if user2_data:
         user2 = get_or_create_user(user2_data)
@@ -138,28 +138,28 @@ def subscribe(course_id, user1_data, user2_data=None):
     if user1 == user2:
         res['tag'] = 'danger'
         res['text'] = u'Du kannst dich nicht mit dir selbst anmelden!'
-    elif mymodels.Subscribe.objects.filter(user=user1, course__id=course_id).count() > 0:
+    elif courses.models.Subscribe.objects.filter(user=user1, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
         res['text'] = u'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
         res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
-    elif user2 is not None and mymodels.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
+    elif user2 is not None and courses.models.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
         res['text'] = u'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
         res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
     else:
-        subscription = mymodels.Subscribe(user=user1, course=course, partner=user2, experience=user1_data['experience'],
+        subscription = courses.models.Subscribe(user=user1, course=course, partner=user2, experience=user1_data['experience'],
                                           comment=user1_data['comment'])
         subscription.derive_matching_state()
         subscription.save()
         send_subscription_confirmation(subscription)
 
         if user2:
-            subscription.matching_state = mymodels.Subscribe.MatchingState.COUPLE
+            subscription.matching_state = courses.models.Subscribe.MatchingState.COUPLE
             subscription.save()
 
-            subscription2 = mymodels.Subscribe(user=user2, course=course, partner=user1,
+            subscription2 = courses.models.Subscribe(user=user2, course=course, partner=user1,
                                                experience=user2_data['experience'], comment=user2_data['comment'])
-            subscription2.matching_state = mymodels.Subscribe.MatchingState.COUPLE
+            subscription2.matching_state = courses.models.Subscribe.MatchingState.COUPLE
             subscription2.save()
             send_subscription_confirmation(subscription2)
 
@@ -189,8 +189,8 @@ def match_partners(subscriptions, request=None):
     match_count = 0
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all()
-        sm = single.filter(user__profile__gender=mymodels.UserProfile.Gender.MEN).order_by('date').all()
-        sw = single.filter(user__profile__gender=mymodels.UserProfile.Gender.WOMAN).order_by('date').all()
+        sm = single.filter(user__profile__gender=courses.models.UserProfile.Gender.MEN).order_by('date').all()
+        sw = single.filter(user__profile__gender=courses.models.UserProfile.Gender.WOMAN).order_by('date').all()
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])
@@ -201,10 +201,10 @@ def match_partners(subscriptions, request=None):
             m = sm[c]
             w = sw[c]
             m.partner = w.user
-            m.matching_state = mymodels.Subscribe.MatchingState.MATCHED
+            m.matching_state = courses.models.Subscribe.MatchingState.MATCHED
             m.save()
             w.partner = m.user
-            w.matching_state = mymodels.Subscribe.MatchingState.MATCHED
+            w.matching_state = courses.models.Subscribe.MatchingState.MATCHED
             w.save()
             match_count += 1
     if match_count:
@@ -222,9 +222,9 @@ def unmatch_partners(subscriptions):
 
 def _unmatch_person(subscription):
     subscription.partner = None
-    subscription.matching_state = mymodels.Subscribe.MatchingState.TO_REMATCH
+    subscription.matching_state = courses.models.Subscribe.MatchingState.TO_REMATCH
     subscription.save()
-    mymodels.Confirmation.objects.filter(subscription=subscription).delete()
+    courses.models.Confirmation.objects.filter(subscription=subscription).delete()
 
 
 class CourseException(Exception):
@@ -246,13 +246,13 @@ def confirm_subscription(subscription, request=None):
     if subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
-    if subscription.state in [mymodels.Subscribe.State.NEW, mymodels.Subscribe.State.REJECTED]:
-        subscription.state = mymodels.Subscribe.State.CONFIRMED
+    if subscription.state in [courses.models.Subscribe.State.NEW, courses.models.Subscribe.State.REJECTED]:
+        subscription.state = courses.models.Subscribe.State.CONFIRMED
         subscription.save()
 
         if send_participation_confirmation(subscription):
             # log that we sent the confirmation
-            c = mymodels.Confirmation(subscription=subscription)
+            c = courses.models.Confirmation(subscription=subscription)
             c.save()
             return True
         else:
@@ -286,15 +286,15 @@ def confirm_subscriptions(subscriptions, request=None):
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
 def reject_subscription(subscription, reason=None):
-    subscription.state = mymodels.Subscribe.State.REJECTED
+    subscription.state = courses.models.Subscribe.State.REJECTED
     subscription.save()
     if not reason:
         reason = detect_rejection_reason(subscription)
-    c = mymodels.Rejection(subscription=subscription, reason=reason, mail_sent=False)
+    c = courses.models.Rejection(subscription=subscription, reason=reason, mail_sent=False)
     c.save()
 
-    send_mail = reason != mymodels.Rejection.Reason.USER_CANCELLED
-    if send_mail and mymodels.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
+    send_mail = reason != courses.models.Rejection.Reason.USER_CANCELLED
+    if send_mail and courses.models.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
         # if ensures that no mail was ever sent due to a rejection to this user
 
         # save if we sent the mail
@@ -310,9 +310,9 @@ def reject_subscriptions(subscriptions, reason=None):
 
 def get_or_create_userprofile(user):
     try:
-        return mymodels.UserProfile.objects.get(user=user)
+        return courses.models.UserProfile.objects.get(user=user)
     except ObjectDoesNotExist:
-        userprofile = mymodels.UserProfile(user=user)
+        userprofile = courses.models.UserProfile(user=user)
         return userprofile
 
 
@@ -320,9 +320,9 @@ def get_or_create_userprofile(user):
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
-            mymodels.Subscribe.objects.filter(user=user, state__in=[mymodels.Subscribe.State.CONFIRMED,
-                                                                    mymodels.Subscribe.State.PAYED,
-                                                                    mymodels.Subscribe.State.COMPLETED],
+            courses.models.Subscribe.objects.filter(user=user, state__in=[courses.models.Subscribe.State.CONFIRMED,
+                                                                    courses.models.Subscribe.State.PAYED,
+                                                                    courses.models.Subscribe.State.COMPLETED],
                                               course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 
@@ -344,7 +344,7 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
 
 import zipfile
 import unicodecsv
-from StringIO import StringIO
+from io import StringIO
 
 import openpyxl
 from openpyxl.cell import get_column_letter
@@ -379,7 +379,7 @@ def export_subscriptions(course_ids, export_format):
             # set column width
             ws.column_dimensions[get_column_letter(col_num + 1)].width = columns[col_num][1]
 
-        for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by('user__first_name'):
+        for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by('user__first_name'):
             row_num += 1
             row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                    s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
@@ -393,7 +393,7 @@ def export_subscriptions(course_ids, export_format):
 
     if len(course_ids) == 1:
         course_id = course_ids[0]
-        course_name = mymodels.Course.objects.get(id=course_id).name
+        course_name = courses.models.Course.objects.get(id=course_id).name
         filename = u'Kursteilnehmer-{}'.format(course_name)
         if export_format == 'csv':
             # Create the HttpResponse object with the appropriate CSV header.
@@ -404,7 +404,7 @@ def export_subscriptions(course_ids, export_format):
 
             writer.writerow([u'Vorname', u'Nachname', u'Geschlecht', u'E-Mail', u'Mobile', u'Legi-Nr.', u'Zu bezahlen',
                              u'Erfahrung'])
-            for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
+            for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
                 row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                        s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
@@ -421,7 +421,7 @@ def export_subscriptions(course_ids, export_format):
             writer.writerow(
                 [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
                  u'Phone 1 - Value'])
-            for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
+            for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
                 row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
                        u'* Private',
@@ -453,12 +453,12 @@ def export_subscriptions(course_ids, export_format):
                     writer.writerow(
                         ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', u'Legi-Nr.', 'Zu bezahlen',
                          'Erfahrung'])
-                    for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
+                    for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
                         l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                              s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
                         writer.writerow(l)
-                    f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name),
+                    f.writestr(u'Kursteilnehmer/{}.csv'.format(courses.models.Course.objects.get(id=course_id).name),
                                fileobj.getvalue())
                     fileobj.seek(0)
 
@@ -479,13 +479,13 @@ def export_subscriptions(course_ids, export_format):
                         [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value',
                          u'Phone 1 - Type',
                          u'Phone 1 - Value'])
-                    for s in mymodels.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
+                    for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
                         row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
                                u'* Private',
                                s.user.profile.phone_number]
                         writer.writerow(row)
-                    f.writestr(u'Kursteilnehmer/{}.csv'.format(mymodels.Course.objects.get(id=course_id).name),
+                    f.writestr(u'Kursteilnehmer/{}.csv'.format(courses.models.Course.objects.get(id=course_id).name),
                                fileobj.getvalue())
                     fileobj.seek(0)
 
@@ -503,7 +503,7 @@ def export_subscriptions(course_ids, export_format):
             wb.remove_sheet(wb.get_active_sheet())
 
             for course_id in course_ids:
-                create_xlsx_sheet(wb, course_id, mymodels.Course.objects.get(id=course_id).name)
+                create_xlsx_sheet(wb, course_id, courses.models.Course.objects.get(id=course_id).name)
 
             wb.save(response)
             return response

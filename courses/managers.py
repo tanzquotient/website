@@ -1,5 +1,7 @@
 from django.db import models
 
+import courses.models
+
 import datetime
 import calendar
 
@@ -7,7 +9,6 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
-import models as mymodels
 
 class CourseManager(models.Manager):
     def weekday(self, weekday):

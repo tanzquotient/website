@@ -3,7 +3,7 @@
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
-from admin_actions import *
+from .admin_actions import *
 from survey.models import *
 
 

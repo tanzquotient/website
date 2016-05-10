@@ -2,7 +2,7 @@ from django.db import models
 
 from django.conf import settings
 
-import managers
+from . import managers
 
 # Create your models here.
 class Function(models.Model):

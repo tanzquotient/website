@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
-import services
+from . import services
 from django.shortcuts import get_object_or_404
 
 

@@ -1,6 +1,6 @@
 from django.db import models
 
-import managers
+from . import managers
 
 # Create your models here.
 class QuestionGroup(models.Model):
