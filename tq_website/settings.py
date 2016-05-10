@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '.tanzquotient.vseth.ethz.ch.',
     '.tanzquotient.org',
     '46.231.204.51',
+    '192.168.99.100',
     '127.0.0.1', 'localhost',
 ]
 # This should be set to true since we use NGINX as a proxy
@@ -43,7 +44,7 @@ USE_X_FORWARDED_HOST = True
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'treebeard',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
@@ -85,7 +86,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'parler',
     'survey',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -177,7 +178,7 @@ TEMPLATES = [
         'context_processors':
             TCP + (
                 "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.debug",
+                "django.core.context_processors.aug",
                 "django.core.context_processors.i18n",
                 "django.core.context_processors.media",
                 "django.core.context_processors.static",
@@ -418,4 +419,4 @@ LOCALE_PATHS = [
 
 
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
-from settings_local import *
+from .settings_local import *
