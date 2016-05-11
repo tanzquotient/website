@@ -317,6 +317,7 @@ import djcelery
 djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
@@ -394,7 +395,7 @@ LOGGING = {
         },
         'payment' : {
             'level': 'DEBUG',
-            'handlers' : ['console', 'file_payment'],
+            'handlers' : ['console', 'file_payment',],
         }
     }
 }
