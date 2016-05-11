@@ -15,7 +15,7 @@ services:
       dockerfile: ./dockerfiles/django
     volumes:
       - .:/webapps
-    command: ./scripts/wait-for-it.sh 172.17.0.2:3306 -- python manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     links:
