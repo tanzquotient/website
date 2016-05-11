@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Zahlungsdatei mit IBAN-Zahlungen -->
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd" xsi:schemaLocation="http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd pain.001.001.03.ch.02.xsd">
+	<CstmrCdtTrfInitn>
+		<GrpHdr>
+			<MsgId>MsgId-C003</MsgId>
+			<CreDtTm>2015-04-01T00:00:00</CreDtTm>
+			<NbOfTxs>5</NbOfTxs>
+			<CtrlSum>15000.00</CtrlSum>
+			<InitgPty>
+				<Nm>Max Muster</Nm>
+				<CtctDtls>
+					<Nm>PF Testplattform</Nm>
+					<Othr>Version 1.0</Othr>
+				</CtctDtls>
+			</InitgPty>
+		</GrpHdr>
+		<PmtInf>
+			<PmtInfId>PmtInfId-C003-01</PmtInfId>
+			<PmtMtd>TRF</PmtMtd>
+			<BtchBookg>true</BtchBookg>
+			<ReqdExctnDt>2016-04-01</ReqdExctnDt>
+			<Dbtr>
+				<Nm>Max Muster</Nm>
+			</Dbtr>
+			<DbtrAcct>
+				<Id>
+					<IBAN>CH6309000000250097798</IBAN>
+				</Id>
+				<Tp>
+					<Prtry>CWD</Prtry>
+				</Tp>
+			</DbtrAcct>
+			<DbtrAgt>
+				<FinInstnId>
+					<BIC>POFICHBEXXX</BIC>
+				</FinInstnId>
+			</DbtrAgt>
+			<ChrgBr>CRED</ChrgBr>
+			<CdtTrfTxInf>
+				<PmtId>
+					<InstrId>InstrId-C003-01-01</InstrId>
+					<EndToEndId>EndToEndId-C003-01-01</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="EUR">1000.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<ClrSysMmbId>
+							<ClrSysId>
+								<Cd>CHBCC</Cd>
+							</ClrSysId>
+							<MmbId>77814</MmbId>
+						</ClrSysMmbId>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>C003</Nm>
+					<PstlAdr>
+						<AdrLine>Musterstrasse 1</AdrLine>
+						<AdrLine>12345 Musterstadt</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<Othr>
+							<Id>0A1024502601</Id>
+						</Othr>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Kd-Nr.1234567890, Rg.-Nr. 1234567890</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+			<CdtTrfTxInf>
+				<PmtId>
+					<InstrId>InstrId-C003-01-02</InstrId>
+					<EndToEndId>EndToEndId-C003-01-02</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="EUR">2000.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<ClrSysMmbId>
+							<ClrSysId>
+								<Cd>CHBCC</Cd>
+							</ClrSysId>
+							<MmbId>77814</MmbId>
+						</ClrSysMmbId>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>C003</Nm>
+					<PstlAdr>
+						<AdrLine>Musterstrasse 2</AdrLine>
+						<AdrLine>12345 Musterstadt</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<IBAN>CH3908704016075473007</IBAN>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Kd-Nr.1234567890, Rg.-Nr. 1234567890</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+		</PmtInf>
+		<PmtInf>
+			<PmtInfId>PmtInfId-C003-02</PmtInfId>
+			<PmtMtd>TRF</PmtMtd>
+			<BtchBookg>true</BtchBookg>
+			<ReqdExctnDt>2016-04-01</ReqdExctnDt>
+			<Dbtr>
+				<Nm>Max Muster</Nm>
+			</Dbtr>
+			<DbtrAcct>
+				<Id>
+					<IBAN>CH6309000000250097798</IBAN>
+				</Id>
+				<Tp>
+					<Prtry>CWD</Prtry>
+				</Tp>
+			</DbtrAcct>
+			<DbtrAgt>
+				<FinInstnId>
+					<BIC>POFICHBEXXX</BIC>
+				</FinInstnId>
+			</DbtrAgt>
+			<ChrgBr>CRED</ChrgBr>
+			<CdtTrfTxInf>
+				<PmtId>
+					<InstrId>InstrId-C003-02-01</InstrId>
+					<EndToEndId>EndToEndId-C003-02-01</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="CHF">3000.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<ClrSysMmbId>
+							<ClrSysId>
+								<Cd>CHBCC</Cd>
+							</ClrSysId>
+							<MmbId>77814</MmbId>
+						</ClrSysMmbId>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>C003</Nm>
+					<PstlAdr>
+						<AdrLine>Musterstrasse 3</AdrLine>
+						<AdrLine>54321 Musterstadt</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<Othr>
+							<Id>0A1024502601</Id>
+						</Othr>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Kd-Nr.0987654321, Rg.-Nr. 0987654321</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+			<CdtTrfTxInf>
+				<PmtId>
+					<InstrId>InstrId-C003-02-02</InstrId>
+					<EndToEndId>EndToEndId-C003-02-02</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="CHF">4000.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<ClrSysMmbId>
+							<ClrSysId>
+								<Cd>CHBCC</Cd>
+							</ClrSysId>
+							<MmbId>77814</MmbId>
+						</ClrSysMmbId>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>C003</Nm>
+					<PstlAdr>
+						<AdrLine>Musterstrasse 4</AdrLine>
+						<AdrLine>54321 Musterstadt</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<IBAN>CH3908704016075473007</IBAN>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Kd-Nr.0987654321, Rg.-Nr. 0987654321</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+			<CdtTrfTxInf>
+				<PmtId>
+					<InstrId>InstrId-C003-02-03</InstrId>
+					<EndToEndId>EndToEndId-C003-02-03</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="CHF">5000.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<ClrSysMmbId>
+							<ClrSysId>
+								<Cd>CHBCC</Cd>
+							</ClrSysId>
+							<MmbId>77814</MmbId>
+						</ClrSysMmbId>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>C003</Nm>
+					<PstlAdr>
+						<AdrLine>Musterstrasse 5</AdrLine>
+						<AdrLine>54321 Musterstadt</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<IBAN>CH3908704016075473007</IBAN>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Kd-Nr.0987654321, Rg.-Nr. 0987654321</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+		</PmtInf>
+	</CstmrCdtTrfInitn>
+</Document>
