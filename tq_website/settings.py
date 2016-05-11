@@ -367,6 +367,14 @@ LOGGING = {
             'backupCount': 2,
             'formatter': 'standard',
         },
+        'file_payment': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'payment.log'),
+            'maxBytes': 50000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -384,6 +392,10 @@ LOGGING = {
             'handlers': ['console', 'file_tq'],
             'level': 'DEBUG',
         },
+        'payment' : {
+            'level': 'DEBUG',
+            'handlers' : ['console', 'file_payment'],
+        }
     }
 }
 

@@ -19,17 +19,21 @@ from payment.postfinance_connector import FDSConnection, ISO2022Parser
 TASK_CONFIG = {'name': 'post_office_send_queued_emails', 'ignore_result': True}
 TASK_CONFIG.update(settings.CELERY_EMAIL_TASK_CONFIG)
 
-
 @shared_task(**TASK_CONFIG)
 def send_queued_emails():
     return send_queued()
 
-@shared_task(**TASK_CONFIG)
+
+TASK_CONFIG_FDS = {'name': 'payment_get_fds_files', 'ignore_result': True}
+
+@shared_task(**TASK_CONFIG_FDS)
 def get_fds_files():
     fds_connector = FDSConnection()
     return fds_connector.get_files()
 
-@shared_task(**TASK_CONFIG)
+TASK_CONFIG_PARSE = {'name': 'payment_parse_fds_files', 'ignore_result': True}
+
+@shared_task(**TASK_CONFIG_PARSE)
 def parse_iso_20022_files():
     parser = ISO2022Parser()
     return parser.parse()
