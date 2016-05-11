@@ -12,6 +12,7 @@ class FDSConnection():
         pass
 
     def get_files(self):
+        log.debug("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
         with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, password=settings.FDS_PASSWORD, port=settings.FDS_PORT) as sftp:
             sftp.get_r('.', fds_data_path)
