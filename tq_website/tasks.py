@@ -11,6 +11,7 @@ import djcelery_email.conf  # noqa
 
 from post_office.mail import send_queued
 from payment.postfinance_connector import FDSConnection, ISO2022Parser
+from payment.payment_processor import PaymentProcessor
 
 # Messages *must* be dicts, not instances of the EmailMessage class
 # This is because we expect Celery to use JSON encoding, and we want to prevent
@@ -37,3 +38,11 @@ TASK_CONFIG_PARSE = {'name': 'payment_parse_fds_files', 'ignore_result': True}
 def parse_iso_20022_files():
     parser = ISO2022Parser()
     return parser.parse()
+
+
+TASK_CONFIG_MATCH = {'name': 'payment_match', 'ignore_result': True}
+
+@shared_task(**TASK_CONFIG_MATCH)
+def match_payments():
+    payment_processor = PaymentProcessor()
+    return payment_processor.match_payments()
