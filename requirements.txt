@@ -58,3 +58,4 @@ django-bootstrap3
 base36
 cairosvg
 PyPDF2
+pysftp==0.2.8
