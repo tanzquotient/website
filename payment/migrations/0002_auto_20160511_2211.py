@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='payment',
             name='transaction_id',
-            field=models.CharField(default='none', max_length=100),
+            field=models.CharField(max_length=100),
             preserve_default=False,
         ),
         migrations.AlterField(
