@@ -40,30 +40,27 @@ class ISO2022Parser:
         root = tree.getroot()
         payments = []
 
-        ns = {'pf': 'http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd'}
+        ns = {'pf': 'urn:iso:std:iso:20022:tech:xsd:camt.053.001.04'}
 
         def find_or_empty(transaction, name):
             e = transaction.find(".//pf:{}".format(name),ns)
             return e.text if e is not None else ""
 
-        for transaction in root.findall(".//pf:CdtTrfTxInf",ns):
+        for transaction in root.findall(".//pf:TxDtls",ns):
             log.debug("Processing Payment...")
             payment = Payment()
-            payment.bic = find_or_empty(transaction, 'BIC')
-            payment.name = find_or_empty(transaction, 'Nm')
-            payment.iban = find_or_empty(transaction, 'IBAN')
-            payment.amount = float(find_or_empty(transaction, 'InstdAmt') or 0.0)
-            payment.currency_code = transaction.find('.//pf:InstdAmt', ns).get('Ccy')
+            debitor = transaction.find(".//pf:Dbtr", ns)
+            payment.bic = find_or_empty(transaction, 'BICFI')
+            payment.name = find_or_empty(debitor, 'Nm')
+            payment.iban = find_or_empty(transaction, 'DbtrAcct')
+            payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
+            payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
             payment.remittance_user_string = find_or_empty(transaction, 'Ustrd')
             payment.state = Payment.State.NEW
-            postal_address = transaction.find(".//pf:PstlAdr",ns)
+            postal_address = debitor.find(".//pf:PstlAdr",ns)
             if postal_address:
-                street_name = find_or_empty(postal_address, 'StrtNm')
-                street_number = find_or_empty(postal_address, 'BldgNb')
-                post_code = find_or_empty(postal_address, 'PstCd')
-                city = find_or_empty(postal_address, 'TwnNm')
-                country = find_or_empty(postal_address, 'Ctry')
-                payment.address = "{0} {1}, {2} {3}, {4}".format(street_name, street_number, post_code, city, country)
+                addresses = debitor.findall(".//pf:AdrLine", ns)
+                payment.address = ", ".join([adr.text for adr in addresses])
             payment.date = datetime.today() # TODO not exactly elegant
             payment.filename = os.path.split(filename)[-1]
             payments.append(payment)

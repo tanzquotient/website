@@ -17,7 +17,7 @@ class Payment(models.Model):
     name = models.CharField(max_length=200)
     date = models.DateTimeField()
     address = models.TextField(null=True, blank=True)
-    iban = models.CharField(max_length=34)
+    iban = models.CharField(max_length=34, null=True, blank=True)
     bic = models.CharField(max_length=11, null=True, blank=True)
     amount = models.FloatField()
     currency_code = models.CharField(max_length=3)
