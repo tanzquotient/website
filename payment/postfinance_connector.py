@@ -30,7 +30,7 @@ class ISO2022Parser:
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
         log.debug("parse")
         for file in os.listdir(fds_data_path):
-            if not 'processed' in file:
+            if ('.xml' in file) and ('processed' not in file):
                 filepath = os.path.join(fds_data_path, file)
                 self.parse_file(filepath)
 
