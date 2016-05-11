@@ -13,7 +13,7 @@ class FDSConnection():
 
     def get_files(self):
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-        with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, password=settings.FDS_PASSWORD) as sftp:
+        with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, password=settings.FDS_PASSWORD, port=settings.FDS_PORT) as sftp:
             sftp.get_r('.', fds_data_path)
 
 import xml.etree.ElementTree as ET
