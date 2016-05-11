@@ -8,7 +8,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-import views
+from . import views
 import courses.views as courses_views
 
 urlpatterns = patterns('',

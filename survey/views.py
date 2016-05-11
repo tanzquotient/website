@@ -1,8 +1,8 @@
 import datetime
 from django.http import Http404
 from django.shortcuts import render, redirect
-import services
-import models
+from . import services
+from . import models
 from django.shortcuts import get_object_or_404
 import re
 import logging
