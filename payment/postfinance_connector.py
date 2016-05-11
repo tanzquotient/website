@@ -56,6 +56,7 @@ class ISO2022Parser:
             payment.bic = find_or_empty(transaction, 'BICFI')
             payment.name = find_or_empty(debitor, 'Nm')
             payment.iban = find_or_empty(transaction, 'DbtrAcct')
+            payment.transaction_id = find_or_empty(transaction, 'AcctSvcrRef') # unique reference number by postfinance
             payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
             payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
             payment.remittance_user_string = find_or_empty(transaction, 'Ustrd')

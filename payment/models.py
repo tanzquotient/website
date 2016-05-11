@@ -19,6 +19,7 @@ class Payment(models.Model):
     address = models.TextField(null=True, blank=True)
     iban = models.CharField(max_length=34, null=True, blank=True)
     bic = models.CharField(max_length=11, null=True, blank=True)
+    transaction_id = models.CharField(max_length=100)
     amount = models.FloatField()
     currency_code = models.CharField(max_length=3)
     remittance_user_string = models.CharField(max_length=300)
