@@ -15,7 +15,9 @@ class FDSConnection():
         log.debug("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
         with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, password=settings.FDS_PASSWORD, port=settings.FDS_PORT) as sftp:
-            sftp.get_r('.', fds_data_path)
+            for file in sftp.listdir('.'):
+                sftp.get(file, os.path.join(fds_data_path, file))
+                sftp.remove(file)
 
 import xml.etree.ElementTree as ET
 from payment.models import Payment
