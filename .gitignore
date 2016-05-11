@@ -65,3 +65,6 @@ celerybeat.*
 .idea/
 
 node_modules/
+
+
+fds_data/
