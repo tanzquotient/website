@@ -86,6 +86,9 @@ def survey_invitation(request):
             if survey_instance.last_update is not None:
                 request.session['msg'] = _("This survey was already filled out")
                 return redirect('survey:survey_error')
+            if survey_instance.url_expire_date is not None and survey_instance.url_expire_date <= datetime.datetime.now():
+                request.session['msg'] = _("This survey link has expired")
+                return redirect('survey:survey_error')
 
             intro_text = survey_instance.survey.intro_text or ""
             intro_text = re.sub(r"\{\{\s*name\s*\}\}", survey_instance.user.first_name, intro_text)
