@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import render, redirect
 import services
@@ -59,7 +59,7 @@ def survey_invitation(request):
             except Exception as e:
                 log.error("Fatal programming error: {}".format(e.message))
 
-        survey_instance.last_update = datetime.datetime.now()
+        survey_instance.last_update = timezone.now()
         survey_instance.save()
 
         return redirect('survey:survey_done')
@@ -86,7 +86,7 @@ def survey_invitation(request):
             if survey_instance.last_update is not None:
                 request.session['msg'] = _("This survey was already filled out")
                 return redirect('survey:survey_error')
-            if survey_instance.url_expire_date is not None and survey_instance.url_expire_date <= datetime.datetime.now():
+            if survey_instance.url_expire_date is not None and survey_instance.url_expire_date <= timezone.now():
                 request.session['msg'] = _("This survey link has expired")
                 return redirect('survey:survey_error')
 

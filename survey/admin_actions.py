@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import datetime
+from django.utils import timezone
 
 import services
 
@@ -20,6 +20,6 @@ export_surveys_xlsx.short_description = "Export selected surveys as several XLSX
 
 
 def let_url_expire_now(modeladmin, request, queryset):
-    queryset.update(url_expire_date=datetime.datetime.now())
+    queryset.update(url_expire_date=timezone.now())
 
 let_url_expire_now.short_description = "Let selected survey instances expire now"
