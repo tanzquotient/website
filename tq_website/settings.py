@@ -378,12 +378,16 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['mail_admins', 'console', 'file_django'],
+            'handlers': ['mail_admins', 'console'],
             'propagate': True,
-            'level': 'WARNING',
+            'level': 'DEBUG',
         },
         'tq': {
-            'handlers': ['console', 'file_tq'],
+            'handlers': ['file_tq'],
+            'level': 'DEBUG',
+        },
+        'django': {
+            'handlers': ['file_django'],
             'level': 'DEBUG',
         },
     }
