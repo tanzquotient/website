@@ -369,6 +369,14 @@ LOGGING = {
             'backupCount': 2,
             'formatter': 'standard',
         },
+        'file_errors': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'errors.log'),
+            'maxBytes': 50000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -378,17 +386,17 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['mail_admins', 'console'],
+            'handlers': ['mail_admins','file_errors'],
             'propagate': True,
             'level': 'DEBUG',
         },
         'tq': {
-            'handlers': ['file_tq'],
+            'handlers': ['file_tq', 'console'],
             'level': 'DEBUG',
         },
         'django': {
-            'handlers': ['file_django'],
-            'level': 'DEBUG',
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
         },
     }
 }
