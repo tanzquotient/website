@@ -58,3 +58,4 @@ django-bootstrap3
 base36
 cairosvg
 PyPDF2
+django-sslify>=0.2.0
