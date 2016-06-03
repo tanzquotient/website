@@ -6,6 +6,7 @@ from courses import admin_views
 urlpatterns = patterns('',
                        url(r'^$', views.course_list, name='home'),
                        url(r'^list/$', views.course_list, name='list'),
+                       url(r'^preview/$', views.course_list_preview, name='list_preview'),
                        url(r'^detail/(?P<course_id>\d+)/$', views.subscription, name='subscription'),
                        url(r'^detail/(?P<course_id>\d+)/second$', views.subscription2, name='subscription2'),
                        url(r'^detail/(?P<course_id>\d+)/subscription$', views.subscription_do, name='subscription_do'),

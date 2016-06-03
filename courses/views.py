@@ -22,7 +22,6 @@ from django.utils import dateformat
 
 from django.contrib.admin.views.decorators import staff_member_required
 
-
 import logging
 
 log = logging.getLogger('tq')
@@ -30,11 +29,11 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request):
+def course_list(request, preview=False):
     template_name = "courses/list.html"
     context = {}
 
-    offerings = services.get_offerings_to_display(request)
+    offerings = services.get_offerings_to_display(request, preview)
     c_offerings = []
     for offering in offerings:
         offering_sections = []
@@ -65,7 +64,7 @@ def course_list(request):
                 else:
                     section_title = ""
                 # filter out undisplayed courses if not staff user
-                if not request.user.is_staff:
+                if not preview and not request.user.is_staff:
                     l = [c for c in l if c.is_displayed()]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
@@ -90,6 +89,10 @@ def course_list(request):
         'offerings': c_offerings,
     })
     return render(request, template_name, context)
+
+
+def course_list_preview(request):
+    return course_list(request, preview=True)
 
 
 def subscription(request, course_id):

@@ -27,9 +27,9 @@ def get_all_offerings():
     return mymodels.Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display(request=None):
+def get_offerings_to_display(request=None, force_preview=False):
     # return offerings that have display flag on and order them with increasing start
-    if request and request.user.is_staff:
+    if force_preview or (request and request.user.is_staff):
         return mymodels.Offering.objects.filter(Q(display=True) | Q(period__date_to__gte=date.today())).order_by(
             'period__date_from')
     else:
