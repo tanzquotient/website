@@ -64,12 +64,16 @@ def course_list(request):
                     section_title = dateformat.format(d, 'F Y')
                 else:
                     section_title = ""
+                # filter out undisplayed courses if not staff user
+                if not request.user.is_staff:
+                    l = [c for c in l if c.is_displayed()]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
                 for c in l:
                     if c.period:
                         deviating_period = True
                         break
+
                 offering_sections.append(
                     {'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
         else:
