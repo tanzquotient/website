@@ -34,7 +34,7 @@ def course_list(request):
     template_name = "courses/list.html"
     context = {}
 
-    offerings = services.get_offerings_to_display()
+    offerings = services.get_offerings_to_display(request)
     c_offerings = []
     for offering in offerings:
         offering_sections = []
@@ -343,7 +343,7 @@ def subscription_overview(request):
     context = {}
 
     offering_charts = []
-    for o in services.get_offerings_to_display():
+    for o in services.get_offerings_to_display(request):
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
     context.update({
