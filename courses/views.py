@@ -57,8 +57,10 @@ def course_list(request, preview=False):
                 offering_sections.append(section_dict)
         elif offering.type == Offering.Type.IRREGULAR:
             courses_by_month = course_set.by_month()
-            for (d, l) in sorted(courses_by_month.items()):
-                if 1 < d.month < 12:
+            for (d, l) in courses_by_month:
+                if d is None:
+                    section_title=_("Unknown month")
+                elif 1 < d.month < 12:
                     # use the django formatter for date objects
                     section_title = dateformat.format(d, 'F Y')
                 else:
