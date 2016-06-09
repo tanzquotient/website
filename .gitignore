@@ -62,9 +62,22 @@ media/
 
 celerybeat.*
 
+# PyCharm Project Files
 .idea/
 
 node_modules/
 
 
 fds_data/
+
+# Static Files
+static/
+
+# Settings Local (Private Information)
+settings_local.py
+
+# SQL Dumps
+*.sql
+
+# Testdata
+payment/testdata
