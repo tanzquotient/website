@@ -62,6 +62,25 @@ media/
 
 celerybeat.*
 
+# PyCharm Project Files
 .idea/
 
 node_modules/
+<<<<<<< HEAD
+=======
+
+
+fds_data/
+
+# Static Files
+static/
+
+# Settings Local (Private Information)
+settings_local.py
+
+# SQL Dumps
+*.sql
+
+# Testdata
+payment/testdata
+>>>>>>> ee64f1a... Changes in Gitignore
