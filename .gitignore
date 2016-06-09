@@ -66,9 +66,6 @@ celerybeat.*
 .idea/
 
 node_modules/
-<<<<<<< HEAD
-=======
-
 
 fds_data/
 
@@ -83,4 +80,3 @@ settings_local.py
 
 # Testdata
 payment/testdata
->>>>>>> ee64f1a... Changes in Gitignore
