@@ -97,6 +97,7 @@ SECRET_KEY = '****'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+SSLIFY_DISABLE = True
 
 # Configure the email host to send mails from
 EMAIL_HOST = 'mailsrv.vseth.ethz.ch'
@@ -116,6 +117,12 @@ DATABASES = {
         'PASSWORD': 'root',
     }
 }
+```
+
+On the server with SSL change these lines to
+```python
+DEBUG = False
+SSLIFY_DISABLE = False
 ```
 
 *Attention*: The configured mail account is used to - depending on the action - send huge amounts of auto-generated mails. Configure a test mail server before starting the `celery` task that sends out mails.

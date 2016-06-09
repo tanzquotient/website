@@ -17,6 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import logging
+
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, u'logs')
@@ -350,7 +352,7 @@ LOGGING = {
         },
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'file_django': {
             'level': 'WARN',
@@ -372,6 +374,11 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'payment.log'),
+        },
+        'file_errors': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'errors.log'),
             'maxBytes': 50000000,
             'backupCount': 2,
             'formatter': 'standard',
@@ -385,18 +392,22 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['mail_admins', 'console', 'file_django'],
+            'handlers': ['mail_admins','file_errors'],
             'propagate': True,
-            'level': 'WARNING',
+            'level': 'DEBUG',
         },
         'tq': {
-            'handlers': ['console', 'file_tq'],
+            'handlers': ['file_tq', 'console'],
             'level': 'DEBUG',
         },
         'payment' : {
             'level': 'DEBUG',
             'handlers' : ['console', 'file_payment',],
         }
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+        },
     }
 }
 

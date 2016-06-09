@@ -1,4 +1,6 @@
-<h2>{{ offering.name }}
+<h2>
+    {% if not offering.display %}<span class="label label-info">Preview</span>{% endif %}
+    {{ offering.name }}
     <small>{{ offering.period|default:'' }}</small>
 </h2>
 
@@ -28,6 +30,7 @@
                         <tr>
                             <td>
                                 <a href="{% url 'courses:subscription' c.id %}">
+                                    {% if not c.display %}<span class="label label-info">Preview</span>{% endif %}
                                     {{ c.type.name }}
                                 </a>
                             </td>
@@ -70,17 +73,19 @@
                     {% for c in d.courses %}
                         <a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
                             <h4 class="list-group-item-heading">
+                                {% if not c.display %}<span class="label label-info">Preview</span>{% endif %}
                                 {{ c.type.name }}
                                 <small class="pull-right">
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
-                                {% if c.is_subscription_allowed %}
-                                <i class="sign_in fa fa-pencil-square fa-lg"></i>
-                            {% endif %}
+                                    {% if c.is_subscription_allowed %}
+                                        <i class="sign_in fa fa-pencil-square fa-lg"></i>
+                                    {% endif %}
                                 </small>
 
                             </h4>
 
-                            <p class="list-group-item-text"><strong>{% include "courses/snippets/lessons.html" with course=c only %}</strong></p>
+                            <p class="list-group-item-text">
+                                <strong>{% include "courses/snippets/lessons.html" with course=c only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.period %}
                                 <p class="list-group-item-text">{% include "courses/snippets/period.html" with course=c only %}</p>
