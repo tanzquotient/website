@@ -14,10 +14,10 @@ class FDSConnection():
     def get_files(self):
         log.debug("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-        with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, password=settings.FDS_PASSWORD, port=settings.FDS_PORT) as sftp:
-            for file in sftp.listdir('.'):
+        with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, private_key=settings.FDS_PRIVATE_KEY, port=settings.FDS_PORT) as sftp:
+            for file in sftp.listdir('yellow-net-reports'):
                 sftp.get(file, os.path.join(fds_data_path, file))
-                sftp.remove(file)
+                #sftp.remove(file)
 
 import xml.etree.ElementTree as ET
 from payment.models import Payment
