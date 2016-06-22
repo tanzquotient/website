@@ -12,11 +12,12 @@ class FDSConnection():
         pass
 
     def get_files(self):
-        log.debug("Receiving files from FDS...")
+        log.info("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
         with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, private_key=settings.FDS_PRIVATE_KEY, port=settings.FDS_PORT) as sftp:
             for file in sftp.listdir('yellow-net-reports'):
-                sftp.get(file, os.path.join(fds_data_path, file))
+                log.info("Receiving {}".format(file))
+                sftp.get('yellow-net-reports/' + file, os.path.join(fds_data_path, file))
                 #sftp.remove(file)
 
 import xml.etree.ElementTree as ET
@@ -49,22 +50,23 @@ class ISO2022Parser:
             e = transaction.find(".//pf:{}".format(name),ns)
             return e.text if e is not None else ""
 
-        for transaction in root.findall(".//pf:TxDtls",ns):
+        for transaction in root.findall(".//pf:Ntry",ns):
             log.debug("Processing Payment...")
             payment = Payment()
-            debitor = transaction.find(".//pf:Dbtr", ns)
+            #debitor = find_or_empty(transaction, "Dbtr")
             payment.bic = find_or_empty(transaction, 'BICFI')
-            payment.name = find_or_empty(debitor, 'Nm')
+            #payment.name = find_or_empty(debitor, 'Nm')
+            payment.name = ""
             payment.iban = find_or_empty(transaction, 'DbtrAcct')
             payment.transaction_id = find_or_empty(transaction, 'AcctSvcrRef') # unique reference number by postfinance
             payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
             payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
-            payment.remittance_user_string = find_or_empty(transaction, 'Ustrd')
+            payment.remittance_user_string = find_or_empty(transaction, 'AddtlNtryInf')
             payment.state = Payment.State.NEW
-            postal_address = debitor.find(".//pf:PstlAdr",ns)
-            if postal_address:
-                addresses = debitor.findall(".//pf:AdrLine", ns)
-                payment.address = ", ".join([adr.text for adr in addresses])
+            #postal_address = debitor.find(".//pf:PstlAdr",ns)
+            #if postal_address:
+            #    addresses = debitor.findall(".//pf:AdrLine", ns)
+            #    payment.address = ", ".join([adr.text for adr in addresses])
             payment.date = datetime.today() # TODO not exactly elegant
             payment.filename = os.path.split(filename)[-1]
             payments.append(payment)
