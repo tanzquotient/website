@@ -403,7 +403,7 @@ LOGGING = {
         'payment' : {
             'level': 'DEBUG',
             'handlers' : ['console', 'file_payment',],
-        }
+        },
         'django': {
             'handlers': ['file_django', 'console'],
             'level': 'INFO',
