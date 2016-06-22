@@ -319,6 +319,7 @@ import djcelery
 djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
@@ -369,6 +370,11 @@ LOGGING = {
             'backupCount': 2,
             'formatter': 'standard',
         },
+        'file_payment': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'payment.log'),
+        },
         'file_errors': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -393,6 +399,10 @@ LOGGING = {
         'tq': {
             'handlers': ['file_tq', 'console'],
             'level': 'DEBUG',
+        },
+        'payment' : {
+            'level': 'DEBUG',
+            'handlers' : ['console', 'file_payment',],
         },
         'django': {
             'handlers': ['file_django', 'console'],
