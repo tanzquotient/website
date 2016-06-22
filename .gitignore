@@ -81,3 +81,6 @@ settings_local.py
 
 # Testdata
 payment/testdata
+
+# Postfinance Keys
+credentials/
