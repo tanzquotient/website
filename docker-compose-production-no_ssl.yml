@@ -4,7 +4,7 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: afByCK74NvgAfEt
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tq_website
     ports:
       - "3309:3306"
@@ -25,17 +25,15 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./configurations/tq_website.template:/etc/nginx/conf.d/tq_website.template
+      - ./configurations/tq_website-no_ssl.template:/etc/nginx/conf.d/tq_website.template
       - ./collected_static:/webapps/tq_website/collected_static
       - ./media:/webapps/tq_website/media
-      - /etc/letsencrypt:/etc/letsencrypt
     command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
     environment:
       - NGINX_HOST=tq.ethz.ch
       - NGINX_PORT=80
     ports:
       - "80:80"
-      - "443:443"
     links:
       - django
     restart: always

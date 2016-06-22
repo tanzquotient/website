@@ -67,10 +67,9 @@ celerybeat.*
 
 node_modules/
 
+
 fds_data/
 
-# Static Files
-static/
 
 # Settings Local (Private Information)
 settings_local.py
@@ -80,3 +79,6 @@ settings_local.py
 
 # Testdata
 payment/testdata
+
+# Postfinance Keys
+credentials/
