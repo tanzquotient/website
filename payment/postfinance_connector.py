@@ -1,5 +1,5 @@
 from django.conf import settings
-import pysftp
+from paramiko.client import SSHClient
 import os
 
 import logging
@@ -9,16 +9,21 @@ log = logging.getLogger('payment')
 class FDSConnection():
 
     def __init__(self):
-        pass
+        self.client = SSHClient()
+        self.client.load_host_keys(settings.FDS_HOST_KEY)
+        self.client.connect(settings.FDS_HOST, username=settings.FDS_USER, key_filename=settings.FDS_PRIVATE_KEY, port=settings.FDS_PORT)
+        self.sftp = self.client.open_sftp()
+        log.info("Connected to FDS")
 
     def get_files(self):
         log.info("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-        with pysftp.Connection(settings.FDS_HOST, username=settings.FDS_USER, private_key=settings.FDS_PRIVATE_KEY, port=settings.FDS_PORT) as sftp:
-            for file in sftp.listdir('yellow-net-reports'):
-                log.info("Receiving {}".format(file))
-                sftp.get('yellow-net-reports/' + file, os.path.join(fds_data_path, file))
-                #sftp.remove(file)
+
+        self.sftp.chdir('yellow-net-reports')
+        for file in self.sftp.listdir('.'):
+            log.info("Receiving {}".format(file))
+            self.sftp.get(file, os.path.join(fds_data_path, file))
+            #self.sftp.remove(file)
 
 import xml.etree.ElementTree as ET
 from payment.models import Payment
