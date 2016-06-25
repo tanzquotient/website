@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y --force-yes \
     rabbitmq-server \
     libjpeg-dev \
     libffi-dev \
-    python-cairo
+    python-cairo \
+    libssl-dev
 
 # Install supervisor (needed for production)
 RUN apt-get update && apt-get install -y --force-yes \
