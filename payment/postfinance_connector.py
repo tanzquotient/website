@@ -1,7 +1,7 @@
 from django.conf import settings
 from paramiko.client import SSHClient
 import os
-
+import re
 import logging
 log = logging.getLogger('payment')
 
@@ -19,11 +19,17 @@ class FDSConnection():
         log.info("Receiving files from FDS...")
         fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
 
+        local_files = os.listdir(fds_data_path)
+
         self.sftp.chdir('yellow-net-reports')
-        for file in self.sftp.listdir('.'):
-            log.info("Receiving {}".format(file))
-            self.sftp.get(file, os.path.join(fds_data_path, file))
-            #self.sftp.remove(file)
+        for file in self.sftp.listdir():
+            if file not in local_files and file + '.processed' not in local_files:
+                log.info("Receiving {}".format(file))
+                self.sftp.get(file, os.path.join(fds_data_path, file))
+                #self.sftp.remove(file)
+            else:
+                log.debug("Skipping already present file: {}".format(file))
+
 
 import xml.etree.ElementTree as ET
 from payment.models import Payment
@@ -42,6 +48,25 @@ class ISO2022Parser:
                 filepath = os.path.join(fds_data_path, file)
                 self.parse_file(filepath)
 
+
+    def parse_user_string(self, string):
+
+        prog = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN: (?P<note>.*)")
+        match_obj = prog.match(string)
+        if match_obj:
+            data = {'account_nr' : match_obj.group('account_nr'),
+                    'name' : match_obj.group('name'),
+                    'street': match_obj.group('street'),
+                    'plz': match_obj.group('plz'),
+                    'city': match_obj.group('city'),
+                    'note': match_obj.group('note')}
+            log.debug(data)
+
+            return data
+        else:
+            return None
+
+
     def parse_file(self, filename):
         log.debug("parse file")
 
@@ -57,16 +82,27 @@ class ISO2022Parser:
 
         for transaction in root.findall(".//pf:Ntry",ns):
             log.debug("Processing Payment...")
+
             payment = Payment()
-            #debitor = find_or_empty(transaction, "Dbtr")
+
+            # for IBAN transactions
             payment.bic = find_or_empty(transaction, 'BICFI')
-            #payment.name = find_or_empty(debitor, 'Nm')
-            payment.name = ""
             payment.iban = find_or_empty(transaction, 'DbtrAcct')
-            payment.transaction_id = find_or_empty(transaction, 'AcctSvcrRef') # unique reference number by postfinance
+
+            # unique reference number by postfinance
+            payment.transaction_id = find_or_empty(transaction, 'AcctSvcrRef')
             payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
             payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
+
+            # remittance user string
             payment.remittance_user_string = find_or_empty(transaction, 'AddtlNtryInf')
+
+            user_data = self.parse_user_string(payment.remittance_user_string)
+            if user_data is not None:
+                payment.name = user_data['name']
+                payment.address = u"{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
+                payment.remittance_user_string = user_data['note']
+
             payment.state = Payment.State.NEW
             #postal_address = debitor.find(".//pf:PstlAdr",ns)
             #if postal_address:
@@ -75,7 +111,7 @@ class ISO2022Parser:
             payment.date = datetime.today() # TODO not exactly elegant
             payment.filename = os.path.split(filename)[-1]
             payments.append(payment)
-            log.info('Received payment by {}'.format(payment.name))
+            log.info('Received payment {}'.format(payment.name))
 
         for payment in payments:
             payment.save()
