@@ -45,6 +45,7 @@ kombu==3.0.28
 Markdown==2.6.5
 MySQL-python==1.2.5
 openpyxl==2.2.6
+paramiko
 Pillow==3.0.0
 pycrypto==2.6.1
 pytz==2015.6
@@ -58,4 +59,3 @@ base36
 cairosvg
 PyPDF2
 django-sslify>=0.2.0
-paramiko
