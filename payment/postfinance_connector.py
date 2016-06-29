@@ -60,26 +60,26 @@ class ISO2022Parser:
         postfinance_regex = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:")
         postfinance_matches = postfinance_regex.match(string)
         if postfinance_matches:
-            data['account_nr'] = postfinance_matches.group('account_nr'),
-            data['name'] = postfinance_matches.group('name'),
-            data['street'] = postfinance_matches.group('street'),
-            data['plz'] = postfinance_matches.group('plz'),
-            data['city'] = postfinance_matches.group('city'),
+            data['account_nr'] = postfinance_matches.group('account_nr')
+            data['name'] = postfinance_matches.group('name')
+            data['street'] = postfinance_matches.group('street')
+            data['plz'] = postfinance_matches.group('plz')
+            data['city'] = postfinance_matches.group('city')
             data['note'] = postfinance_matches.group('note')
 
         absender_matches = re.compile(r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))").search(string)
         if absender_matches:
-            data['name'] = absender_matches.group('name'),
-            data['plz'] = absender_matches.group('plz'),
-            data['city'] = absender_matches.group('city'),
+            data['name'] = absender_matches.group('name')
+            data['plz'] = absender_matches.group('plz')
+            data['city'] = absender_matches.group('city')
             
         auftraggeber_regex = re.compile(r"AUFTRAGGEBER:\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))")
         auftraggeber_matches = auftraggeber_regex.search(string)
         if auftraggeber_matches:
-            data['name'] = auftraggeber_matches.group('name'),
-            data['street'] = auftraggeber_matches.group('street'),
-            data['plz'] = auftraggeber_matches.group('plz'),
-            data['city'] = auftraggeber_matches.group('city'),
+            data['name'] = auftraggeber_matches.group('name')
+            data['street'] = auftraggeber_matches.group('street')
+            data['plz'] = auftraggeber_matches.group('plz')
+            data['city'] = auftraggeber_matches.group('city')
 
         mitteilungen_matches = re.compile(r"MITTEILUNGEN:(?P<note>.*)").search(string)
         if mitteilungen_matches:
