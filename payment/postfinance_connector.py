@@ -81,7 +81,7 @@ class ISO2022Parser:
             data['plz'] = auftraggeber_matches.group('plz'),
             data['city'] = auftraggeber_matches.group('city'),
 
-        mitteilungen_matches = re.compile(r"MITTEILUNGEN: (?P<note>.*)").match(string)
+        mitteilungen_matches = re.compile(r"MITTEILUNGEN:(?P<note>.*)").match(string)
         if mitteilungen_matches:
             data['note'] = mitteilungen_matches.group('note')
 
