@@ -50,21 +50,45 @@ class ISO2022Parser:
 
 
     def parse_user_string(self, string):
+        data = {'account_nr': "",
+                'name': "",
+                'street': "",
+                'plz': "",
+                'city': "",
+                'note': ""}
 
-        prog = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN: (?P<note>.*)")
-        match_obj = prog.match(string)
-        if match_obj:
-            data = {'account_nr' : match_obj.group('account_nr'),
-                    'name' : match_obj.group('name'),
-                    'street': match_obj.group('street'),
-                    'plz': match_obj.group('plz'),
-                    'city': match_obj.group('city'),
-                    'note': match_obj.group('note')}
-            log.debug(data)
+        postfinance_regex = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:")
+        postfinance_matches = postfinance_regex.match(string)
+        if postfinance_matches:
+            data['account_nr'] = postfinance_matches.group('account_nr'),
+            data['name'] = postfinance_matches.group('name'),
+            data['street'] = postfinance_matches.group('street'),
+            data['plz'] = postfinance_matches.group('plz'),
+            data['city'] = postfinance_matches.group('city'),
+            data['note'] = postfinance_matches.group('note')
 
-            return data
-        else:
-            return None
+        absender_regex = re.compile(r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))")
+        matches = absender_regex.match(string)
+        if matches:
+            data['name'] = postfinance_matches.group('name'),
+            data['plz'] = postfinance_matches.group('plz'),
+            data['city'] = postfinance_matches.group('city'),
+            
+        auftraggeber_regex = re.compile(r"AUFTRAGGEBER:\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))")
+        matches = auftraggeber_regex.match(string)
+        if matches:
+            data['name'] = postfinance_matches.group('name'),
+            data['street'] = postfinance_matches.group('street'),
+            data['plz'] = postfinance_matches.group('plz'),
+            data['city'] = postfinance_matches.group('city'),
+
+        mitteilungen_regex = re.compile(r"MITTEILUNGEN: (?P<note>.*)")
+        mitteilungen_matches = mitteilungen_regex.match(string)
+        if mitteilungen_matches:
+            data['note'] = mitteilungen_matches.group('note')
+
+        return data
+
 
 
     def parse_file(self, filename):
