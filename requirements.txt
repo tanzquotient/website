@@ -45,6 +45,7 @@ kombu==3.0.28
 Markdown==2.6.5
 MySQL-python==1.2.5
 openpyxl==2.2.6
+cryptography==1.2.1
 paramiko==2.0.1
 Pillow==3.0.0
 pycrypto==2.6.1
