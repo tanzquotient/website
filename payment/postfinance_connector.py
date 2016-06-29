@@ -67,21 +67,21 @@ class ISO2022Parser:
             data['city'] = postfinance_matches.group('city'),
             data['note'] = postfinance_matches.group('note')
 
-        absender_matches = re.compile(r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))").match(string)
+        absender_matches = re.compile(r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))").search(string)
         if absender_matches:
             data['name'] = absender_matches.group('name'),
             data['plz'] = absender_matches.group('plz'),
             data['city'] = absender_matches.group('city'),
             
         auftraggeber_regex = re.compile(r"AUFTRAGGEBER:\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))")
-        auftraggeber_matches = auftraggeber_regex.match(string)
+        auftraggeber_matches = auftraggeber_regex.search(string)
         if auftraggeber_matches:
             data['name'] = auftraggeber_matches.group('name'),
             data['street'] = auftraggeber_matches.group('street'),
             data['plz'] = auftraggeber_matches.group('plz'),
             data['city'] = auftraggeber_matches.group('city'),
 
-        mitteilungen_matches = re.compile(r"MITTEILUNGEN:(?P<note>.*)").match(string)
+        mitteilungen_matches = re.compile(r"MITTEILUNGEN:(?P<note>.*)").search(string)
         if mitteilungen_matches:
             data['note'] = mitteilungen_matches.group('note')
 
