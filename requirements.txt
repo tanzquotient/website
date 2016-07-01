@@ -55,8 +55,8 @@ six==1.10.0
 sqlparse==0.1.16
 unicodecsv==0.11.0
 Unidecode==0.4.18
-django-bootstrap3
-base36
-cairosvg
-PyPDF2
+django-bootstrap3==7.0.1
+base36==0.1.1
+cairosvg==1.0.22
+PyPDF2==1.26.0
 django-sslify>=0.2.0
