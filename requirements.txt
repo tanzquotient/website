@@ -25,7 +25,7 @@ django-sekizai==0.9.0
 Django-Select2==4.3.2
 django-tinymce==1.5.3
 django-treebeard==3.0
-django-userena==1.4.1
+django-userena==1.4.4
 djangocms-admin-style==1.0.6
 djangocms-googlemap==0.3
 djangocms-inherit==0.2.1
