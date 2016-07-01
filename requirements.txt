@@ -28,7 +28,7 @@ django-treebeard==3.0
 django-userena==1.4.1
 djangocms-admin-style==1.0.6
 djangocms-googlemap==0.3
-djangocms-inherit==0.1
+djangocms-inherit==0.2.1
 djangocms-link==1.7.1
 djangocms-snippet==1.5
 djangocms-text-ckeditor==2.8.0
