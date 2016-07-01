@@ -30,7 +30,6 @@ djangocms-admin-style==1.0.6
 djangocms-googlemap==0.3
 djangocms-inherit==0.2.1
 djangocms-link==1.8.1
-djangocms-snippet==1.5
 djangocms-text-ckeditor==2.8.0
 djangorestframework==3.3.2
 easy-thumbnails==2.3
