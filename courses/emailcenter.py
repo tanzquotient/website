@@ -13,7 +13,10 @@ from django.contrib.sites.models import Site
 
 import models as mm
 
+from tq_website import settings as my_settings
+
 import logging
+
 log = logging.getLogger('tq')
 
 
@@ -50,10 +53,16 @@ def send_participation_confirmation(subscription, connection=None):
 
     if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
+        conf = my_settings.PAYMENT_ACCOUNT['default']
         context.update({
             'partner_first_name': subscription.partner.first_name,
             'partner_last_name': subscription.partner.last_name,
             'partner_info': create_user_info(subscription.partner),
+            'usi': subscription.usi,
+            'account_IBAN': conf['IBAN'],
+            'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
+                'recipient'],
+            'account_post_number': conf['post_number'] or '-',
         })
     elif subscription.course.type.couple_course:
         template = 'participation_confirmation_without_partner'
@@ -126,7 +135,7 @@ def create_course_info(subscription):
         s += u'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
         current_site = Site.objects.get_current().domain
-        voucher_url = current_site+reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
+        voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
 
         s += u'Kosten: {}\n'.format(course.format_prices())
         s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {} )\n'.format(

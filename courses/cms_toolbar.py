@@ -62,8 +62,11 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_voucher_purpose'):
             url = reverse('admin:courses_voucherpurpose_changelist')
             menu.add_sideframe_item(_('Voucher purposes'), url=url)
-        menu.add_break('voucher-break')
         if self.request.user.has_perm('courses.change_voucher'):
             url = reverse('courses:voucher_generation')
             menu.add_sideframe_item(_('Generate multiple vouchers'), url=url)
+        menu.add_break('payment-break')
+        if self.request.user.has_perm('payment.change_payment'):
+            url = reverse('admin:payment_payment_changelist')
+            menu.add_sideframe_item(_('Online Payments'), url=url)
 
