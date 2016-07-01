@@ -32,7 +32,7 @@ djangorestframework==3.3.2
 easy-thumbnails==2.3
 ecdsa==0.13
 Fabric==1.10.2
-gunicorn==19.3.0
+gunicorn==19.6.0
 MySQL-python==1.2.5
 openpyxl==2.2.6
 paramiko==2.0.1
