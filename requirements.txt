@@ -19,7 +19,6 @@ django-polymorphic==0.7.2
 django-post-office==2.0.2
 django-reversion==1.9.3
 django-sekizai==0.9.0
-django-tinymce==1.5.3
 django-treebeard==3.0
 django-userena==2.0.1
 djangocms-admin-style==1.0.6
