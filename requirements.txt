@@ -6,7 +6,7 @@ cmsplugin-filer==1.1.1
 Django==1.8.7
 django-absolute==0.3
 django-analytical==2.2.1
-django-appconf==1.0.1
+django-appconf==1.0.2
 django-celery==3.1.17
 django-celery-email==1.1.0
 django-classy-tags==0.6.2
