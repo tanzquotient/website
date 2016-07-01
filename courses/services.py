@@ -519,7 +519,7 @@ def export_subscriptions(course_ids, export_format):
 
 from django.db import transaction
 from django.db.models import get_models, Model
-from django.contrib.contenttypes.generic import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Q
 
 from django.contrib.auth.models import User
