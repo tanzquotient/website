@@ -5,7 +5,7 @@ from django.db import models
 
 import datetime
 from django.utils.translation import ugettext as _
-import reversion
+from reversion import revisions as reversion
 
 from django.conf import settings
 
