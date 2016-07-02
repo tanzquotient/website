@@ -45,7 +45,7 @@ USE_X_FORWARDED_HOST = True
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'treebeard',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
@@ -87,9 +87,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'parler',
     'survey',
-]
+)
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,13 +103,13 @@ MIDDLEWARE_CLASSES = [
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
-]
+)
 
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
-]
+)
 
 
 
@@ -158,10 +158,10 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, "collected_static")
 STATIC_URL = '/static/'
 
-STATICFILES_FINDERS = [
+STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
-]
+)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
@@ -297,13 +297,13 @@ CMS_PLACEHOLDER_CONF = {
 ##########################
 THUMBNAIL_HIGH_RESOLUTION = True
 
-THUMBNAIL_PROCESSORS = [
+THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
     'easy_thumbnails.processors.autocrop',
     # 'easy_thumbnails.processors.scale_and_crop',
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
-]
+)
 
 ####################################
 # Configuration of cmsplugin-filer #
