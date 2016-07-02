@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import render, redirect
 from . import services
@@ -59,7 +59,7 @@ def survey_invitation(request):
             except Exception as e:
                 log.error("Fatal programming error: {}".format(e.message))
 
-        survey_instance.last_update = datetime.datetime.now()
+        survey_instance.last_update = timezone.now()
         survey_instance.save()
 
         return redirect('survey:survey_done')
@@ -69,22 +69,28 @@ def survey_invitation(request):
             del request.session['inst_id']
 
         template_name = "survey/survey.html"
-        if 't' in request.GET and 'c' in request.GET:
-            text = request.GET['t']
-            checksum = request.GET['c']
-            try:
-                survey_instance_id = services.decode_data(text, checksum)
-            except Exception as e:
+        if 't' in request.GET:
+            # old format: for backwards compatibility, show a message to user
+            request.session['msg'] = _("This survey link has expired (format has changed)")
+            return redirect('survey:survey_error')
+        if 'id' in request.GET and 'c' in request.GET:
+            id_str = request.GET['id']
+            c = request.GET['c']
+            inst_id = services.decode_id(id_str, c)
+            if not inst_id:
                 request.session['msg'] = _("There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey")
                 return redirect('survey:survey_error')
+            log.debug( inst_id)
+            survey_instance = get_object_or_404(models.SurveyInstance, pk=inst_id)
 
-            survey_instance = get_object_or_404(models.SurveyInstance, pk=survey_instance_id)
-
-            request.session['inst_id'] = survey_instance_id
+            request.session['inst_id'] = inst_id
 
             # check if survey was already filled out -> show error message
             if survey_instance.last_update is not None:
                 request.session['msg'] = _("This survey was already filled out")
+                return redirect('survey:survey_error')
+            if survey_instance.url_expire_date is not None and survey_instance.url_expire_date <= timezone.now():
+                request.session['msg'] = _("This survey link has expired")
                 return redirect('survey:survey_error')
 
             intro_text = survey_instance.survey.intro_text or ""
@@ -112,10 +118,8 @@ def survey_error(request):
     template_name = "survey/survey_error.html"
 
     message = request.session.get('msg', _("Error"))
-    inst_id = request.session.get('inst_id')
-    survey_inst = get_object_or_404(models.SurveyInstance, pk=inst_id)
 
-    return render(request, template_name, {'message': message, 'inst': survey_inst})
+    return render(request, template_name, {'message': message})
 
 
 def survey_test(request, survey_id):

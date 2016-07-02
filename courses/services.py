@@ -27,9 +27,13 @@ def get_all_offerings():
     return courses.models.Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display():
+def get_offerings_to_display(request=None, force_preview=False):
     # return offerings that have display flag on and order them with increasing start
-    return courses.models.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
+    if force_preview or (request and request.user.is_staff):
+        return courses.models.Offering.objects.filter(Q(display=True) | Q(period__date_to__gte=date.today())).order_by(
+            'period__date_from')
+    else:
+        return courses.models.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
 
 
 def get_current_active_offering():
@@ -514,8 +518,9 @@ def export_subscriptions(course_ids, export_format):
 
 
 from django.db import transaction
-from django.db.models import get_models, Model
-from django.contrib.contenttypes.generic import GenericForeignKey
+from django.apps import apps
+from django.db.models import Model
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Q
 
 from django.contrib.auth.models import User
@@ -588,7 +593,7 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
     # TODO: this is a bit of a hack, since the generics framework should provide a similar
     # method to the ForeignKey field for accessing the generic related fields.
     generic_fields = []
-    for model in get_models():
+    for model in apps.get_models():
         for field_name, field in filter(lambda x: isinstance(x[1], GenericForeignKey), model.__dict__.iteritems()):
             generic_fields.append(field)
 

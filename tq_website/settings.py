@@ -17,6 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import logging
+
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, u'logs')
@@ -176,7 +178,7 @@ TEMPLATES = [
     'APP_DIRS': True,
     'OPTIONS': {
         'context_processors':
-            TCP + (
+            TCP + [
                 "django.contrib.auth.context_processors.auth",
                 "django.core.context_processors.debug",
                 "django.core.context_processors.i18n",
@@ -188,7 +190,7 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
                 'absolute.context_processors.absolute',
-            )
+            ]
     }
 },
 ]
@@ -318,6 +320,7 @@ import djcelery
 djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
@@ -350,7 +353,7 @@ LOGGING = {
         },
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'file_django': {
             'level': 'WARN',
@@ -368,6 +371,19 @@ LOGGING = {
             'backupCount': 2,
             'formatter': 'standard',
         },
+        'file_payment': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'payment.log'),
+        },
+        'file_errors': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'errors.log'),
+            'maxBytes': 50000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -377,13 +393,21 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['mail_admins', 'console', 'file_django'],
+            'handlers': ['mail_admins','file_errors'],
             'propagate': True,
-            'level': 'WARNING',
+            'level': 'DEBUG',
         },
         'tq': {
-            'handlers': ['console', 'file_tq'],
+            'handlers': ['file_tq', 'console'],
             'level': 'DEBUG',
+        },
+        'payment' : {
+            'level': 'DEBUG',
+            'handlers' : ['console', 'file_payment',],
+        },
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
         },
     }
 }

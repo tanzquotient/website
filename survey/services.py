@@ -27,36 +27,38 @@ log = logging.getLogger('tq')
 SALT = "lkd$lrn&"
 
 
-def encode_data(data):
-    """Turn `data` into a hash and an encoded string, suitable for use with `decode_data`."""
-    text = zlib.compress(pickle.dumps(data, 0)).encode('base64').replace('\n', '')
-    checksum = hashlib.md5(SALT + text).hexdigest()[:12]
-    return text, checksum
+def calc_checksum(id_str):
+    checksum = hashlib.md5()
+    checksum.update(id_str)
+    checksum.update(SALT)
+    return checksum.hexdigest()[:4].lower()
 
 
-def decode_data(text, checksum):
-    """The inverse of `encode_data`."""
-    # TODO remove this dirty quickfix (because of padding errors in buggy encode in else branch)
-    rtext = survey.models.SurveyInstance.objects.filter(url_text=text).all()
-    ctext = survey.models.SurveyInstance.objects.filter(url_checksum=checksum).all()
-    if len(rtext) == 1:
-        return rtext[0].id
-    elif len(ctext) == 1:
-        return ctext[0].id
-    else:
-        # buggy TODO remove later
-        text_unquoted = urllib.unquote(text)
-        c = hashlib.md5(SALT + text_unquoted).hexdigest()[:12]
-        log.debug(u"{} --- {}".format(text_unquoted,c))
-        if c != checksum:
-            raise Exception("Bad hash!")
-        data = pickle.loads(zlib.decompress(text.decode('base64')))
-        return data
+def encode_id(id):
+    id_str = str(id)
+    return id_str, calc_checksum(id_str)
+
+
+def decode_id(id_str, checksum):
+    try:
+        id = int(id_str)
+    except ValueError:
+        log.warning(
+            "The id of survey link with id='{}' and checksum='{}' could not be decoded".format(id_str, checksum))
+        return False
+    real_checksum = calc_checksum(id_str)  # use the string here, not the int
+    if real_checksum != checksum.lower():
+        log.warning(
+            "The checksum of survey link with id='{}' and checksum='{}' does not match the real checksum='{}'".format(
+                id_str, checksum, real_checksum))
+        return False
+    return int(id_str)
 
 
 def create_url(survey_inst):
-    return u"{}?t={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(survey_inst.url_text),
-                                  escape_uri_path(survey_inst.url_checksum))
+    id_str, c = encode_id(survey_inst.id)
+    return u"{}?id={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(id_str),
+                                   escape_uri_path(c))
 
 
 def create_full_url(survey_inst):
@@ -174,9 +176,12 @@ def export_surveys(surveys):
                 course_id = d['course']  # get the courses out of dict returned by values
                 if course_id:
                     course = Course.objects.get(pk=course_id)
-                    create_xlsx_sheet(wb, survey, survey.survey_instances.exclude(last_update=None).filter(course=course_id).all(), course.name)
+                    create_xlsx_sheet(wb, survey,
+                                      survey.survey_instances.exclude(last_update=None).filter(course=course_id).all(),
+                                      course.name)
                 else:  # course_id is None
-                    create_xlsx_sheet(wb, survey, survey.survey_instances.exclude(last_update=None).all(), "COURSE UNSPECIFIC")
+                    create_xlsx_sheet(wb, survey, survey.survey_instances.exclude(last_update=None).all(),
+                                      "COURSE UNSPECIFIC")
 
             wb.save(fileobj)
             #####################################

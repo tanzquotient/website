@@ -33,7 +33,7 @@ http {
 
         location /static/ {
             include /etc/nginx/mime.types;
-            alias   /webapps/tq_website/static/;
+            alias   /webapps/tq_website/collected_static/;
         }
 
         location /media/ {

@@ -5,7 +5,7 @@ from django.db import models
 
 import datetime
 from django.utils.translation import ugettext as _
-import reversion
+from reversion import revisions as reversion
 
 from django.conf import settings
 
@@ -37,6 +37,7 @@ class Weekday:
     CHOICES = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
                ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
                ('sun', u'Sunday'))
+    NUMBERS = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6}
 
 
 WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
@@ -174,6 +175,9 @@ class RegularLesson(models.Model):
     time_from = models.TimeField()
     time_to = models.TimeField()
 
+    def get_weekday_number(self):
+        return Weekday.NUMBERS[self.weekday]
+
     def __unicode__(self):
         return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
                                    self.time_to.strftime("%H:%M"))
@@ -210,7 +214,7 @@ class IrregularLesson(models.Model):
 
 
 class CourseType(models.Model):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     description = HTMLField(blank=True, null=True)
@@ -404,14 +408,30 @@ class Course(models.Model):
         else:
             return None
 
-    def get_first_lesson_date(self):
+    def get_first_regular_lesson_date(self):
+        def next_weekday(d, weekday):
+            days_ahead = weekday - d.weekday()
+            if days_ahead < 0:  # Target day already happened this week
+                days_ahead += 7
+            return d + datetime.timedelta(days_ahead)
+
+        frl = self.get_first_regular_lesson()
+        period = self.get_period()
+        if frl is not None and period is not None:
+            return next_weekday(period.date_from, frl.get_weekday_number())
+        else:
+            return None
+
+    def get_first_irregular_lesson_date(self):
         fil = self.get_first_irregular_lesson()
-        d1 = None
-        d2 = None
         if fil is not None:
-            d1 = fil.date
-        if self.get_period() is not None:
-            d2 = self.get_period().date_from
+            return fil.date
+        else:
+            return None
+
+    def get_first_lesson_date(self):
+        d1 = self.get_first_irregular_lesson_date()
+        d2 = self.get_first_regular_lesson_date()
         if d1 is None:
             if d2 is None:
                 return None

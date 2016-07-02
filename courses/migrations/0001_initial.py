@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import tinymce.models
+import djangocms_text_ckeditor.fields
 import django.db.models.deletion
 from django.conf import settings
 
@@ -192,7 +192,7 @@ class Migration(migrations.Migration):
                 ('phone_number', models.CharField(max_length=255, null=True, blank=True)),
                 ('student_status', models.CharField(default=b'no', max_length=10, choices=[(b'eth', 'ETH'), (b'uni', 'Uni'), (b'ph', 'PH'), (b'other', 'Other'), (b'no', 'Not a student')])),
                 ('newsletter', models.BooleanField(default=True)),
-                ('about_me', tinymce.models.HTMLField(null=True, blank=True)),
+                ('about_me', djangocms_text_ckeditor.fields.HTMLField(null=True, blank=True)),
                 ('address', models.OneToOneField(null=True, blank=True, to='courses.Address')),
             ],
             options={

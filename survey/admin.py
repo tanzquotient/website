@@ -3,7 +3,8 @@
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
-from .admin_actions import *
+import courses
+from admin_actions import *
 from survey.models import *
 
 
@@ -56,12 +57,12 @@ class ChoiceAdmin(TranslatableAdmin):
 
 @admin.register(SurveyInstance)
 class SurveyInstanceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'invitation_sent', 'survey', 'user', 'course', 'date', 'last_update')
+    list_display = ('id', 'invitation_sent', 'survey', 'user', 'course', 'date', 'url_expire_date','last_update','get_url')
     model = SurveyInstance
     raw_id_fields = ('course',)
-    readonly_fields = ('url_text', 'url_checksum')
+    list_filter = (courses.filters.SubscribeOfferingListFilter, courses.filters.SubscribeCourseListFilter, 'url_expire_date', 'last_update','invitation_sent')
 
-    actions = [send_invitations,]
+    actions = [send_invitations,let_url_expire_now]
 
 
 @admin.register(Answer)

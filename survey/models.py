@@ -146,18 +146,11 @@ class SurveyInstance(models.Model):
     course = models.ForeignKey('courses.Course', related_name='survey_instances', blank=True, null=True)
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True, auto_now_add=False)
-    url_text = models.CharField(blank=True, null=False, max_length=100, unique=True)
-    url_checksum = models.CharField(blank=True, null=False, max_length=12)
     url_expire_date = models.DateTimeField(blank=True, null=True, auto_now_add=False)
     invitation_sent = models.BooleanField(blank=False, null=False, default=False)
 
-    def save(self, *args, **kwargs):
-        super(SurveyInstance, self).save(*args, **kwargs)  # save here to ensure id is set by database
-        if not self.url_checksum:
-            text, checksum = services.encode_data(self.id)
-            self.url_text = text
-            self.url_checksum = checksum
-        super(SurveyInstance, self).save(*args, **kwargs)
+    def get_url(self):
+        return services.create_url(self)
 
     def __unicode__(self):
         if self.course:

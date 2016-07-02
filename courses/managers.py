@@ -20,7 +20,7 @@ class CourseManager(models.Manager):
         return result_list
 
     def by_month(self):
-        result_dict = {}
+        result = []
         courses = self.all()
         sorted_courses = sorted(courses,
                                 key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else datetime.date(
@@ -33,7 +33,7 @@ class CourseManager(models.Manager):
             if fid:
                 if current_date.year != fid.year or current_date.month != fid.month:
                     if month_list:
-                        result_dict[current_date] = month_list
+                        result.append((current_date,month_list))
                     # go to next month
                     current_date = fid
                     month_list = []
@@ -42,10 +42,10 @@ class CourseManager(models.Manager):
             else:
                 unknown_list.append(c)
         if month_list:
-            result_dict[current_date] = month_list
+            result.append((current_date, month_list))
         if unknown_list:
-            result_dict[datetime.date(year=9999, month=1, day=1)] = unknown_list
-        return result_dict
+            result.append((None, unknown_list))
+        return result
 
 
 class AddressManager(models.Manager):

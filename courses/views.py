@@ -22,7 +22,6 @@ from django.utils import dateformat
 
 from django.contrib.admin.views.decorators import staff_member_required
 
-
 import logging
 
 log = logging.getLogger('tq')
@@ -30,11 +29,11 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request):
+def course_list(request, preview=False):
     template_name = "courses/list.html"
     context = {}
 
-    offerings = services.get_offerings_to_display()
+    offerings = services.get_offerings_to_display(request, preview)
     c_offerings = []
     for offering in offerings:
         offering_sections = []
@@ -58,18 +57,24 @@ def course_list(request):
                 offering_sections.append(section_dict)
         elif offering.type == Offering.Type.IRREGULAR:
             courses_by_month = course_set.by_month()
-            for (d, l) in sorted(courses_by_month.items()):
-                if 1 < d.month < 12:
+            for (d, l) in courses_by_month:
+                if d is None:
+                    section_title=_("Unknown month")
+                elif 1 < d.month < 12:
                     # use the django formatter for date objects
                     section_title = dateformat.format(d, 'F Y')
                 else:
                     section_title = ""
+                # filter out undisplayed courses if not staff user
+                if not preview and not request.user.is_staff:
+                    l = [c for c in l if c.is_displayed()]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
                 for c in l:
                     if c.period:
                         deviating_period = True
                         break
+
                 offering_sections.append(
                     {'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
         else:
@@ -86,6 +91,10 @@ def course_list(request):
         'offerings': c_offerings,
     })
     return render(request, template_name, context)
+
+
+def course_list_preview(request):
+    return course_list(request, preview=True)
 
 
 def subscription(request, course_id):
@@ -343,7 +352,7 @@ def subscription_overview(request):
     context = {}
 
     offering_charts = []
-    for o in services.get_offerings_to_display():
+    for o in services.get_offerings_to_display(request):
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
     context.update({
