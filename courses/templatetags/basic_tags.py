@@ -8,12 +8,12 @@ def fence_helper(value, s):
 
 @register.filter(needs_autoescape=False)
 def fence(value, s):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         return fence_helper(value, s)
     elif isinstance(value, list):
         return map(lambda v: fence_helper(v, s), value)
     else:
-        return fence_helper(unicode(value), s)
+        return fence_helper(str(value), s)
 
 @register.filter
 def get_item(dictionary, key):

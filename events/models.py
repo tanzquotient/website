@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 from django.db import models
 from courses.models import Room
 from django.db.models.fields import BooleanField
@@ -11,7 +8,7 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
-import managers
+from . import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
@@ -22,7 +19,7 @@ class Organise(models.Model):
     organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
     event = models.ForeignKey('Event', related_name='organising')
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} organises {}".format(self.organiser, self.event)
 
 
@@ -73,7 +70,7 @@ class Event(models.Model):
 
     format_time.short_description = "Time"
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
     class Meta:

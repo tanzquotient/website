@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 from rest_framework import permissions
 
 
@@ -21,7 +19,7 @@ class TeacherCanReadUpdateCoursePermission(permissions.IsAuthenticated):
     """Allow only teachers to read and update existing instances (no creation/deletion is allowed)"""
 
     def has_object_permission(self, request, view, obj=None):
-        print "check"
+        print("check")
         if not super(TeacherCanReadUpdateCoursePermission, self).has_object_permission(request, view, obj):
             return False
         if obj is None:

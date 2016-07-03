@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 from rest_framework import serializers
 
 from django.contrib import auth

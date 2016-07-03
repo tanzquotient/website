@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 from operator import pos
 
 from django.conf import settings
@@ -11,9 +9,12 @@ from post_office import mail, models as post_office_models
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
-import models as mm
+import courses.models
+
+from tq_website import settings as my_settings
 
 import logging
+
 log = logging.getLogger('tq')
 
 
@@ -50,10 +51,16 @@ def send_participation_confirmation(subscription, connection=None):
 
     if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
+        conf = my_settings.PAYMENT_ACCOUNT['default']
         context.update({
             'partner_first_name': subscription.partner.first_name,
             'partner_last_name': subscription.partner.last_name,
             'partner_info': create_user_info(subscription.partner),
+            'usi': subscription.usi,
+            'account_IBAN': conf['IBAN'],
+            'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
+                'recipient'],
+            'account_post_number': conf['post_number'] or '-',
         })
     elif subscription.course.type.couple_course:
         template = 'participation_confirmation_without_partner'
@@ -81,11 +88,11 @@ def detect_rejection_reason(subscription):
     detect the reason why the subscription is rejected
     :return: the reason as constant from Rejection.Reason
     """
-    reason = mm.Rejection.Reason.UNKNOWN
+    reason = courses.models.Rejection.Reason.UNKNOWN
     if subscription.course.get_free_places_count() == 0:
-        reason = mm.Rejection.Reason.OVERBOOKED
+        reason = courses.models.Rejection.Reason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
-        reason = mm.Rejection.Reason.NO_PARTNER
+        reason = courses.models.Rejection.Reason.NO_PARTNER
     return reason
 
 
@@ -93,7 +100,7 @@ def _email_helper(email, template, context):
     """Sending facility. Catches errors due to not existent template."""
     try:
         mail.send(
-            [email, my_settings.EMAIL_HOST_USER],
+            [email, my_settings.DEFAULT_FROM_EMAIL],
             my_settings.DEFAULT_FROM_EMAIL,
             template=template,
             context=context,
@@ -126,7 +133,7 @@ def create_course_info(subscription):
         s += u'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
         current_site = Site.objects.get_current().domain
-        voucher_url = current_site+reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
+        voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
 
         s += u'Kosten: {}\n'.format(course.format_prices())
         s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {} )\n'.format(

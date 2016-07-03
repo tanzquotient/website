@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import django.db.models.deletion
-import tinymce.models
+import djangocms_text_ckeditor.fields
 from django.conf import settings
 
 
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('price_with_legi', models.FloatField(help_text=b'Leave this empty for free entrance', null=True, blank=True)),
                 ('price_without_legi', models.FloatField(help_text=b'If this is a special event that should be emphasized on website', null=True, blank=True)),
                 ('comment', models.TextField(null=True, blank=True)),
-                ('description', tinymce.models.HTMLField(null=True, blank=True)),
+                ('description', djangocms_text_ckeditor.fields.HTMLField(null=True, blank=True)),
                 ('special', models.BooleanField(default=False)),
             ],
             options={

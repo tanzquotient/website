@@ -1,12 +1,12 @@
 from django.db import models
 
-import managers
+from . import managers
 
 # Create your models here.
 class QuestionGroup(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -24,5 +24,5 @@ class Question(models.Model):
 
     objects = managers.QuestionManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.question_text)

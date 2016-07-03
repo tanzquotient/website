@@ -1,17 +1,13 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 from django.db import models
 
 import datetime
-from django.utils.translation import ugettext as _
-import reversion
+from reversion import revisions as reversion
 
 from django.conf import settings
 
 import django.contrib.auth as auth
 
-import managers
+from courses import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
@@ -64,7 +60,7 @@ class Address(models.Model):
     def equals(self, a):
         return self.street == a.street and self.plz == a.plz and self.city == a.city
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}, {} {}".format(self.street, self.plz, self.city)
 
 
@@ -115,7 +111,7 @@ class UserProfile(UserenaLanguageBaseProfile):
             ("access_counterpayment", "Can access counter payment"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.user.get_full_name())
 
 
@@ -129,7 +125,7 @@ class Style(models.Model):
     url_playlist = models.URLField(max_length=500, blank=True, null=True)
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -141,7 +137,7 @@ class Room(models.Model):
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -156,7 +152,7 @@ class Period(models.Model):
 
     format_date.short_description = 'Period from/to'
 
-    def __unicode__(self):
+    def __str__(self):
         if self.date_from and self.date_to:
             return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
         elif self.date_from:
@@ -178,7 +174,7 @@ class RegularLesson(models.Model):
     def get_weekday_number(self):
         return Weekday.NUMBERS[self.weekday]
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
                                    self.time_to.strftime("%H:%M"))
 
@@ -190,7 +186,7 @@ class RegularLessonCancellation(models.Model):
     class Meta:
         ordering = ['date']
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
 
 
@@ -205,7 +201,7 @@ class IrregularLesson(models.Model):
     class Meta:
         ordering = ['date', 'time_from']
 
-    def __unicode__(self):
+    def __str__(self):
         s = u"{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
                                 self.time_to.strftime("%H:%M"))
         if self.room:
@@ -224,11 +220,11 @@ class CourseType(models.Model):
         return self.level if self.level else "";
 
     def format_styles(self):
-        return ', '.join(map(unicode, self.styles.all()))
+        return ', '.join(map(str, self.styles.all()))
 
     format_styles.short_description = "Styles"
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -236,7 +232,7 @@ class PeriodCancellation(models.Model):
     course = models.ForeignKey('Period', related_name='cancellations')
     date = models.DateField(blank=False, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.date.strftime('%d.%m.%Y'))
 
 
@@ -375,7 +371,7 @@ class Course(models.Model):
         return lessons
 
     def get_lessons_as_strings(self):
-        return map(unicode, self.get_lessons())
+        return map(str, self.get_lessons())
 
     def format_lessons(self):
         return u' & '.join(self.get_lessons_as_strings())
@@ -484,7 +480,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['position', 'type__name', 'name']
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} ({})".format(self.name, self.offering)
 
 
@@ -538,7 +534,7 @@ class Subscribe(models.Model):
 
     def generate_usi(self):
         checksum = hashlib.md5()
-        checksum.update(str(self.id))
+        checksum.update(str(self.id).encode('utf-8'))
         return (base36.dumps(self.id).zfill(4)[:4] + checksum.hexdigest()[:2]).lower()
 
     def get_offering(self):
@@ -563,7 +559,7 @@ class Subscribe(models.Model):
 
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
-        return ', '.join(map(unicode, calculate_relevant_experience(self.user, self.course)))
+        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
 
     get_calculated_experience.short_description = "Calculated experience"
 
@@ -626,7 +622,7 @@ class Subscribe(models.Model):
         self.usi = self.generate_usi()
         super(Subscribe, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} subscribes to {}".format(self.user.get_full_name(), self.course)
 
 
@@ -635,7 +631,7 @@ class Confirmation(models.Model):
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
 
-    def __unicode__(self):
+    def __str__(self):
         return u"({}) confirmed at {}".format(self.subscription, self.date)
 
 
@@ -663,7 +659,7 @@ class Rejection(models.Model):
     mail_sent = models.BooleanField(blank=False, null=False, default=True)
     mail_sent.help_text = "If this rejection was communicated to user by email."
 
-    def __unicode__(self):
+    def __str__(self):
         return u"({}) rejected at {}".format(self.subscription, self.date)
 
 
@@ -696,7 +692,7 @@ class Voucher(models.Model):
     class Meta:
         ordering = ['issued', 'expires']
 
-    def __unicode__(self):
+    def __str__(self):
         return u"#{} valid {} - {}".format(self.key, self.issued, self.expires)
 
 
@@ -707,15 +703,12 @@ class VoucherPurpose(models.Model):
     def __unicode__(self):
         return self.name
 
-    def __str__(self):
-        return self.name
-
 
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
     course = models.ForeignKey('Course', related_name='teaching')
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} teaches {}".format(self.teacher, self.course)
 
 
@@ -738,7 +731,7 @@ class Offering(models.Model):
     active = models.BooleanField(default=False)
     active.help_text = "Defines if clients can subscribe to courses in this offering."
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -752,7 +745,7 @@ class Song(models.Model):
     url_video = models.URLField(max_length=500, blank=True, null=True)
     url_video.help_text = "A url to a demo video (e.g Youtube)."
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} - {}".format(self.title, self.artist)
 
     class Meta:

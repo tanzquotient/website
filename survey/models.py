@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
-import services
+from . import services
 from django.shortcuts import get_object_or_404
 
 
@@ -18,7 +18,7 @@ class Survey(TranslatableModel):
 
     get_test_url.short_description = u"Test url"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -34,7 +34,7 @@ class QuestionGroup(TranslatableModel):
     class Meta:
         ordering = ['position']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -106,7 +106,7 @@ class Question(TranslatableModel):
     class Meta:
         ordering = ['position']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -117,7 +117,7 @@ class ScaleTemplate(TranslatableModel):
         up=models.CharField(max_length=30)
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} - {} - {}".format(self.low, self.mid, self.up)
 
 
@@ -152,7 +152,7 @@ class SurveyInstance(models.Model):
     def get_url(self):
         return services.create_url(self)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.course:
             return u"{} for {} of {}".format(self.survey, self.course, self.user)
         else:
@@ -193,5 +193,5 @@ class Answer(models.Model):
                 choice = get_object_or_404(Choice, pk=choice)
                 return klass(survey_instance=survey_inst, question=question, choice=choice, text=choice_input)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"q({})-c({}): {}".format(self.question, self.choice, self.text)

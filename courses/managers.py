@@ -1,13 +1,7 @@
 from django.db import models
 
 import datetime
-import calendar
 
-from django.conf import settings
-
-import django.contrib.auth as auth
-
-import models as mymodels
 
 class CourseManager(models.Manager):
     def weekday(self, weekday):
@@ -32,7 +26,7 @@ class CourseManager(models.Manager):
             if fid:
                 if current_date.year != fid.year or current_date.month != fid.month:
                     if month_list:
-                        result.append((current_date,month_list))
+                        result.append((current_date, month_list))
                     # go to next month
                     current_date = fid
                     month_list = []
@@ -49,7 +43,8 @@ class CourseManager(models.Manager):
 
 class AddressManager(models.Manager):
     def create_from_user_data(self, data):
-        address = mymodels.Address(street=data['street'], plz=data['plz'], city=data['city'])
+        from courses.models import Address
+        address = Address(street=data['street'], plz=data['plz'], city=data['city'])
         address.save()
         return address
 
@@ -65,28 +60,37 @@ class AddressManager(models.Manager):
 # and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
 class SubscribeQuerySet(models.QuerySet):
     def men(self):
-        return self.filter(user__profile__gender=mymodels.UserProfile.Gender.MEN)
+        from courses.models import UserProfile
+        return self.filter(user__profile__gender=UserProfile.Gender.MEN)
 
     def women(self):
-        return self.filter(user__profile__gender=mymodels.UserProfile.Gender.WOMAN)
+        from courses.models import UserProfile
+        return self.filter(user__profile__gender=UserProfile.Gender.WOMAN)
 
     def single_men(self):
-        return self.filter(partner__isnull=True, user__profile__gender=mymodels.UserProfile.Gender.MEN)
+        from courses.models import UserProfile
+        return self.filter(partner__isnull=True, user__profile__gender=UserProfile.Gender.MEN)
 
     def single_women(self):
-        return self.filter(partner__isnull=True, user__profile__gender=mymodels.UserProfile.Gender.WOMAN)
+        from courses.models import UserProfile
+        return self.filter(partner__isnull=True, user__profile__gender=UserProfile.Gender.WOMAN)
 
     def accepted(self):
-        return self.filter(state__in=[mymodels.Subscribe.State.CONFIRMED, mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.COMPLETED])
+        from courses.models import Subscribe
+        return self.filter(state__in=[Subscribe.State.CONFIRMED, Subscribe.State.PAYED, Subscribe.State.COMPLETED])
 
     def paid(self):
-        return self.filter(state__in=[mymodels.Subscribe.State.PAYED, mymodels.Subscribe.State.TO_REIMBURSE, mymodels.Subscribe.State.COMPLETED])
+        from courses.models import Subscribe
+        return self.filter(state__in=[Subscribe.State.PAYED, Subscribe.State.TO_REIMBURSE, Subscribe.State.COMPLETED])
 
     def course_payment(self):
-        return self.filter(paymentmethod=mymodels.PaymentMethod.COURSE)
+        from courses.models import PaymentMethod
+        return self.filter(paymentmethod=PaymentMethod.COURSE)
 
     def voucher_payment(self):
-        return self.filter(paymentmethod=mymodels.PaymentMethod.VOUCHER)
+        from courses.models import PaymentMethod
+        return self.filter(paymentmethod=PaymentMethod.VOUCHER)
 
     def new(self):
-        return self.filter(state=mymodels.Subscribe.State.NEW)
+        from courses.models import Subscribe
+        return self.filter(state=Subscribe.State.NEW)

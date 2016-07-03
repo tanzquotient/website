@@ -2,7 +2,7 @@ from django.db import models
 
 from django.conf import settings
 
-import managers
+from . import managers
 
 # Create your models here.
 class Function(models.Model):
@@ -19,5 +19,5 @@ class Function(models.Model):
 
     objects = managers.FunctionManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)

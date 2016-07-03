@@ -1,8 +1,6 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 from django.utils import timezone
 
-import services
+from . import services
 
 def send_invitations(modeladmin, request, queryset):
     for survey_inst in queryset:

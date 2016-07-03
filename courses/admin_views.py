@@ -13,7 +13,7 @@ from django.shortcuts import render
 
 from courses.models import *
 
-import services
+from . import services
 
 class VoucherGenerationForm(forms.Form):
     amount = forms.IntegerField(label=_("Choose amount"), initial=20)
