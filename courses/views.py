@@ -268,17 +268,17 @@ def offering_place_chart_dict(offering):
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                                    course.name))
-        series_confirmed.append(unicode(subscriptions.accepted().count()))
+        series_confirmed.append(str(subscriptions.accepted().count()))
         mc = subscriptions.new().men().count()
         wc = subscriptions.new().women().count()
-        series_men_count.append(unicode(mc))
-        series_women_count.append(unicode(wc))
+        series_men_count.append(str(mc))
+        series_women_count.append(str(wc))
         freec = course.get_free_places_count()
         if freec:
             freec = max(0, freec - mc - wc)
         else:
             freec = 0
-        series_free.append(unicode(freec))
+        series_free.append(str(freec))
 
     return {
         'labels': labels,
@@ -307,12 +307,12 @@ def offering_time_chart_dict(offering):
                 counter += 1
             else:
                 # save temp
-                trace['x'].append(unicode(s.date.date()))
+                trace['x'].append(str(s.date.date()))
                 trace['y'].append(counter)
                 counter += 1
                 last = s.date.date()
         if last is not None:
-            trace['x'].append(unicode(last))
+            trace['x'].append(str(last))
             trace['y'].append(counter)
         traces.append(trace)
 
@@ -329,12 +329,12 @@ def offering_time_chart_dict(offering):
         else:
             # save temp
             print("add counter {}".format(counter))
-            trace_total['x'].append(unicode(s.date.date()))
+            trace_total['x'].append(str(s.date.date()))
             trace_total['y'].append(counter)
             counter += 1
             last = s.date.date()
     if last is not None:
-        trace_total['x'].append(unicode(last))
+        trace_total['x'].append(str(last))
         trace_total['y'].append(counter)
 
     print(trace_total['x'])

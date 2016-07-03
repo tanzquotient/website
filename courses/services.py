@@ -118,14 +118,14 @@ def find_unused_username_variant(name, ignore=None):
     un = name
     i = 1
     while User.objects.exclude(username=ignore).filter(username=un).count() > 0:
-        un = name + unicode(i)
+        un = name + str(i)
         i += 1
     return un
 
 
 def clean_username(name):
     """first try to find ascii similar character, then strip away disallowed characters still left"""
-    name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore')
+    name = unicodedata.normalize('NFKD', name)
     return re.sub('[^0-9a-zA-Z+-.@_]+', '', name)
 
 
@@ -235,7 +235,7 @@ class CourseException(Exception):
     def __init__(self, value):
         self.value = value
 
-    def __unicode__(self):
+    def __str__(self):
         return self.value
 
 

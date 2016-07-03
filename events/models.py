@@ -22,7 +22,7 @@ class Organise(models.Model):
     organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
     event = models.ForeignKey('Event', related_name='organising')
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{} organises {}".format(self.organiser, self.event)
 
 
@@ -73,7 +73,7 @@ class Event(models.Model):
 
     format_time.short_description = "Time"
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
     class Meta:

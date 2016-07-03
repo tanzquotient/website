@@ -6,7 +6,7 @@ from . import managers
 class QuestionGroup(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.name)
 
 
@@ -24,5 +24,5 @@ class Question(models.Model):
 
     objects = managers.QuestionManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{}".format(self.question_text)
