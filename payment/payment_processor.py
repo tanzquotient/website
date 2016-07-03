@@ -47,8 +47,11 @@ class PaymentProcessor:
                             payment.state = Payment.State.MANUAL
                             break
                     payment.amount_to_reimburse = remaining_amount
-                    if payment.state == Payment.State.NEW and remaining_amount == 0:
-                        payment.state = Payment.State.DONE
+                    if payment.state == Payment.State.NEW:
+                        if remaining_amount == 0:
+                            payment.state = Payment.State.DONE
+                        else:
+                            payment.state = Payment.State.MANUAL
                 else:
                     log.info("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
