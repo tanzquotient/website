@@ -6,7 +6,7 @@ from survey.models import Survey, SurveyInstance
 import survey.services as survey_services
 from courses.models import *
 
-import services
+from . import services
 
 from django import forms
 

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from rest_framework import generics, permissions
 
-from permissions import *
+from .permissions import *
 
 from django.contrib import auth
 

@@ -11,7 +11,7 @@ from post_office import mail, models as post_office_models
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
-import models as mm
+import courses.models
 
 from tq_website import settings as my_settings
 
@@ -90,11 +90,11 @@ def detect_rejection_reason(subscription):
     detect the reason why the subscription is rejected
     :return: the reason as constant from Rejection.Reason
     """
-    reason = mm.Rejection.Reason.UNKNOWN
+    reason = courses.models.Rejection.Reason.UNKNOWN
     if subscription.course.get_free_places_count() == 0:
-        reason = mm.Rejection.Reason.OVERBOOKED
+        reason = courses.models.Rejection.Reason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
-        reason = mm.Rejection.Reason.NO_PARTNER
+        reason = courses.models.Rejection.Reason.NO_PARTNER
     return reason
 
 

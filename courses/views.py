@@ -11,11 +11,11 @@ from django.utils.translation import ugettext as _
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from models import *
+from .models import *
 
-from forms import *
+from .forms import *
 
-import services
+from . import services
 
 from django.contrib.auth.models import User
 from django.utils import dateformat
@@ -328,7 +328,7 @@ def offering_time_chart_dict(offering):
             counter += 1
         else:
             # save temp
-            print "add counter {}".format(counter)
+            print("add counter {}".format(counter))
             trace_total['x'].append(unicode(s.date.date()))
             trace_total['y'].append(counter)
             counter += 1
@@ -337,8 +337,8 @@ def offering_time_chart_dict(offering):
         trace_total['x'].append(unicode(last))
         trace_total['y'].append(counter)
 
-    print trace_total['x']
-    print trace_total['y']
+    print(trace_total['x'])
+    print(trace_total['y'])
 
     return {
         'traces': traces,

@@ -1,4 +1,9 @@
 import hashlib, zlib
+try:
+    import pickle
+except ImportError:
+    import cPickle as pickle
+
 import urllib
 
 from django.conf import settings
@@ -12,7 +17,7 @@ from tq_website import settings as my_settings
 from post_office import mail, models as post_office_models
 import logging
 
-import models
+import survey.models
 from courses.models import Course
 
 from django.utils import translation
@@ -109,7 +114,7 @@ def _email_helper(email, template, context):
 
 import zipfile
 import unicodecsv
-from StringIO import StringIO
+from io import StringIO
 
 import openpyxl
 from openpyxl.cell import get_column_letter
@@ -144,7 +149,7 @@ def export_surveys(surveys):
 
         for inst in instances:
             # only take the newest answer for all questions
-            answers = models.Answer.objects.filter(survey_instance__survey=survey,
+            answers = survey.models.Answer.objects.filter(survey_instance__survey=survey,
                                                    survey_instance__user=inst.user).order_by('-id')
 
             row_num += 1

@@ -11,7 +11,7 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
-import managers
+from . import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
