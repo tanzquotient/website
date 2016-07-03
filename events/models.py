@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-
 from django.db import models
 from courses.models import Room
 from django.db.models.fields import BooleanField

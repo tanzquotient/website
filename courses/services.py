@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 import unicodedata
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _

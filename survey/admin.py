@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
