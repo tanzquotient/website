@@ -41,26 +41,26 @@ def send_subscription_confirmation(subscription):
 
 
 def send_participation_confirmation(subscription, connection=None):
+    conf = my_settings.PAYMENT_ACCOUNT['default']
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
-        'course_info': create_course_info(subscription)
+        'course_info': create_course_info(subscription),
+        'usi': subscription.usi,
+        'account_IBAN': conf['IBAN'],
+        'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
+            'recipient'],
+        'account_post_number': conf['post_number'] or '-',
     }
 
     if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
-        conf = my_settings.PAYMENT_ACCOUNT['default']
         context.update({
             'partner_first_name': subscription.partner.first_name,
             'partner_last_name': subscription.partner.last_name,
             'partner_info': create_user_info(subscription.partner),
-            'usi': subscription.usi,
-            'account_IBAN': conf['IBAN'],
-            'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
-                'recipient'],
-            'account_post_number': conf['post_number'] or '-',
         })
     elif subscription.course.type.couple_course:
         template = 'participation_confirmation_without_partner'
