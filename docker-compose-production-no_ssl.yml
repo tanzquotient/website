@@ -17,7 +17,7 @@ services:
     volumes:
       - .:/webapps/tq_website
       - ./configurations/tq_website.conf:/etc/supervisor/conf.d/tq_website.conf
-    command: /bin/bash -c "python /webapps/tq_website/manage.py collectstatic --noinput && service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/tq_website.conf"
+    command: /bin/bash -c "python3 /webapps/tq_website/manage.py collectstatic --noinput && service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/tq_website.conf"
     links:
       - db
     restart: always
