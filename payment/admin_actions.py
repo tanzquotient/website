@@ -1,4 +1,4 @@
-from payment_processor import PaymentProcessor
+from payment.payment_processor import PaymentProcessor
 
 def process_payments(modeladmin, request, queryset):
     payment_processor = PaymentProcessor()

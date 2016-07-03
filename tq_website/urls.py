@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 
 from . import views
 import django.views.i18n
-import views
+from tq_website import views
 import courses.views as courses_views
 import rest_framework.urls
 import userena.urls

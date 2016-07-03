@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from payment.models import *
-from admin_actions import process_payments
+from payment.admin_actions import process_payments
 
 
 class SubscriptionPaymentInline(admin.TabularInline):
