@@ -16,7 +16,7 @@ class Survey(TranslatableModel):
     def get_test_url(self):
         return reverse("survey:survey_test", kwargs={'survey_id': self.id})
 
-    get_test_url.short_description = u"Test url"
+    get_test_url.short_description ="Test url"
 
     def __str__(self):
         return self.name
@@ -47,12 +47,12 @@ class Question(TranslatableModel):
         SCALE = 's'
         FREE_FORM = 'f'
 
-        CHOICES = ((SINGLE_CHOICE, u'single choice'),
-                   (SINGLE_CHOICE_WITH_FREE_FORM, u'single choice with free form'),
-                   (MULTIPLE_CHOICE, u'multiple choice'),
-                   (MULTIPLE_CHOICE_WITH_FREE_FORM, u'multiple choice with free form'),
-                   (SCALE, u'scale'),
-                   (FREE_FORM, u'free form'))
+        CHOICES = ((SINGLE_CHOICE,'single choice'),
+                   (SINGLE_CHOICE_WITH_FREE_FORM,'single choice with free form'),
+                   (MULTIPLE_CHOICE,'multiple choice'),
+                   (MULTIPLE_CHOICE_WITH_FREE_FORM,'multiple choice with free form'),
+                   (SCALE,'scale'),
+                   (FREE_FORM,'free form'))
 
     name = models.CharField(max_length=255, unique=True)
     question_group = models.ForeignKey('QuestionGroup', blank=False, null=True, on_delete=models.SET_NULL)
@@ -118,7 +118,7 @@ class ScaleTemplate(TranslatableModel):
     )
 
     def __str__(self):
-        return u"{} - {} - {}".format(self.low, self.mid, self.up)
+        return"{} - {} - {}".format(self.low, self.mid, self.up)
 
 
 class Choice(TranslatableModel):
@@ -154,9 +154,9 @@ class SurveyInstance(models.Model):
 
     def __str__(self):
         if self.course:
-            return u"{} for {} of {}".format(self.survey, self.course, self.user)
+            return"{} for {} of {}".format(self.survey, self.course, self.user)
         else:
-            return u"{} of {}".format(self.survey, self.user)
+            return"{} of {}".format(self.survey, self.user)
 
 
 class Answer(models.Model):
@@ -194,4 +194,4 @@ class Answer(models.Model):
                 return klass(survey_instance=survey_inst, question=question, choice=choice, text=choice_input)
 
     def __str__(self):
-        return u"q({})-c({}): {}".format(self.question, self.choice, self.text)
+        return"q({})-c({}): {}".format(self.question, self.choice, self.text)

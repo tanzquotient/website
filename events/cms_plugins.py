@@ -22,9 +22,9 @@ class EventsPlugin(CMSPluginBase):
 
 class EventsTeaserPluginModel(CMSPlugin):
     delta_days = models.IntegerField(blank=True, null=True)
-    delta_days.help_text = u"Events within the time delta (in days) from now on are shown. Leave empty to make no restrictions."
+    delta_days.help_text ="Events within the time delta (in days) from now on are shown. Leave empty to make no restrictions."
     max_displayed = models.IntegerField(blank=True, null=True)
-    max_displayed.help_text = u"Maximum number of events to be displayed. Leave empty to make no restrictions."
+    max_displayed.help_text ="Maximum number of events to be displayed. Leave empty to make no restrictions."
 
 
 class EventsTeaserPlugin(CMSPluginBase):

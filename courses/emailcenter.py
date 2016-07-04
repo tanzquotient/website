@@ -129,7 +129,7 @@ def _email_helper(email, template, context):
 
 
 def create_user_info(user):
-    s = u'{}\n'.format(user.get_full_name())
+    s ='{}\n'.format(user.get_full_name())
     if user.email:
         s += user.email + "\n"
     if user.profile.phone_number:
@@ -139,15 +139,15 @@ def create_user_info(user):
 
 def create_course_info(subscription):
     course = subscription.course
-    s = u'{}\n{}'.format(course.type.name, course.format_lessons())
+    s ='{}\n{}'.format(course.type.name, course.format_lessons())
     if course.room:
-        s += u', {}\n'.format(course.room)
+        s +=', {}\n'.format(course.room)
     else:
-        s += u'\n'
+        s +='\n'
     if course.get_period():
-        s += u'{}\n'.format(course.get_period())
+        s +='{}\n'.format(course.get_period())
     if course.format_cancellations():
-        s += u'Ausfälle: {}\n'.format(course.format_cancellations())
+        s +='Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
-        s += u'Kosten: {}\n'.format(course.format_prices())
+        s +='Kosten: {}\n'.format(course.format_prices())
     return s.strip('\n')

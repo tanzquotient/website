@@ -9,7 +9,7 @@ from courses.models import Style
 
 class MusicPluginModel(CMSPlugin):
     styles = models.ManyToManyField(Style, blank=True)
-    styles.help_text = u"Styles to be displayed in this plugin. Leave empty to show all styles."
+    styles.help_text ="Styles to be displayed in this plugin. Leave empty to show all styles."
 
 
 class MusicPlugin(CMSPluginBase):

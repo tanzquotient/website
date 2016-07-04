@@ -122,7 +122,7 @@ class ISO2022Parser:
             user_data = self.parse_user_string(payment.remittance_user_string)
             if user_data is not None:
                 payment.name = user_data['name']
-                payment.address = u"{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
+                payment.address ="{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
                 payment.remittance_user_string = user_data['note']
 
             payment.state = Payment.State.NEW

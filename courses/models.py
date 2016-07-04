@@ -31,13 +31,13 @@ class Weekday:
 
     WEEKEND = [SATURDAY, SUNDAY]
 
-    CHOICES = (('mon', u'Monday'), ('tue', u'Tuesday'), ('wed', u'Wednesday'),
-               ('thu', u'Thursday'), ('fri', u'Friday'), ('sat', u'Saturday'),
-               ('sun', u'Sunday'))
+    CHOICES = (('mon','Monday'), ('tue','Tuesday'), ('wed','Wednesday'),
+               ('thu','Thursday'), ('fri','Friday'), ('sat','Saturday'),
+               ('sun','Sunday'))
     NUMBERS = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6}
 
 
-WEEKDAYS_TRANS = {'mon': u'Montag', 'tue': u'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
+WEEKDAYS_TRANS = {'mon':'Montag', 'tue':'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
 
 
@@ -48,7 +48,7 @@ class PaymentMethod:
     VOUCHER = 'voucher'
 
     CHOICES = (
-        (COUNTER, u'counter'), (COURSE, u'course'), (ONLINE, u'online'), (VOUCHER, u'voucher'))
+        (COUNTER,'counter'), (COURSE,'course'), (ONLINE,'online'), (VOUCHER,'voucher'))
 
 
 class Address(models.Model):
@@ -62,7 +62,7 @@ class Address(models.Model):
         return self.street == a.street and self.plz == a.plz and self.city == a.city
 
     def __str__(self):
-        return u"{}, {} {}".format(self.street, self.plz, self.city)
+        return"{}, {} {}".format(self.street, self.plz, self.city)
 
 
 from userena.models import UserenaLanguageBaseProfile
@@ -73,7 +73,7 @@ class UserProfile(UserenaLanguageBaseProfile):
         MEN = 'm'
         WOMAN = 'w'
 
-        CHOICES = ((MEN, u'Men'), (WOMAN, u'Woman'))
+        CHOICES = ((MEN,'Men'), (WOMAN,'Woman'))
 
     class StudentStatus:
         ETH = 'eth'
@@ -82,7 +82,7 @@ class UserProfile(UserenaLanguageBaseProfile):
         OTHER = 'other'
         NO = 'no'
 
-        CHOICES = ((ETH, u'ETH'), (UNI, u'Uni'), (PH, u'PH'), (OTHER, u'Other'), (NO, u'Not a student'))
+        CHOICES = ((ETH,'ETH'), (UNI,'Uni'), (PH,'PH'), (OTHER,'Other'), (NO,'Not a student'))
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
     user.help_text = "The user which is matched to this user profile."
@@ -113,7 +113,7 @@ class UserProfile(UserenaLanguageBaseProfile):
         )
 
     def __str__(self):
-        return u"{}".format(self.user.get_full_name())
+        return"{}".format(self.user.get_full_name())
 
 
 class Style(models.Model):
@@ -127,7 +127,7 @@ class Style(models.Model):
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)
 
 
 class Room(models.Model):
@@ -139,14 +139,14 @@ class Room(models.Model):
     contact_info = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)
 
 
 class Period(models.Model):
     date_from = models.DateField(blank=True, null=True)
-    date_from.help_text = u"The start date of this period. Can be left empty."
+    date_from.help_text ="The start date of this period. Can be left empty."
     date_to = models.DateField(blank=True, null=True)
-    date_to.help_text = u"The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'."
+    date_to.help_text ="The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'."
 
     def format_date(self, d):
         return d.strftime('%d. %b %Y')
@@ -155,13 +155,13 @@ class Period(models.Model):
 
     def __str__(self):
         if self.date_from and self.date_to:
-            return u"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
+            return"{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
         elif self.date_from:
-            return u"ab {}".format(self.format_date(self.date_from))
+            return"ab {}".format(self.format_date(self.date_from))
         elif self.date_to:
-            return u"bis {}".format(self.format_date(self.date_to))
+            return"bis {}".format(self.format_date(self.date_to))
         else:
-            return u"ganzjährlich"
+            return"ganzjährlich"
 
 
 class RegularLesson(models.Model):
@@ -176,7 +176,7 @@ class RegularLesson(models.Model):
         return Weekday.NUMBERS[self.weekday]
 
     def __str__(self):
-        return u"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
+        return"{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
                                    self.time_to.strftime("%H:%M"))
 
 
@@ -188,7 +188,7 @@ class RegularLessonCancellation(models.Model):
         ordering = ['date']
 
     def __str__(self):
-        return u"{}".format(self.date.strftime('%d.%m.%Y'))
+        return"{}".format(self.date.strftime('%d.%m.%Y'))
 
 
 class IrregularLesson(models.Model):
@@ -203,10 +203,10 @@ class IrregularLesson(models.Model):
         ordering = ['date', 'time_from']
 
     def __str__(self):
-        s = u"{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
+        s ="{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
                                 self.time_to.strftime("%H:%M"))
         if self.room:
-            s = s + u", {}".format(self.room)
+            s = s +", {}".format(self.room)
         return s
 
 
@@ -226,7 +226,7 @@ class CourseType(models.Model):
     format_styles.short_description = "Styles"
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)
 
 
 class PeriodCancellation(models.Model):
@@ -234,7 +234,7 @@ class PeriodCancellation(models.Model):
     date = models.DateField(blank=False, null=True)
 
     def __str__(self):
-        return u"{}".format(self.date.strftime('%d.%m.%Y'))
+        return"{}".format(self.date.strftime('%d.%m.%Y'))
 
 
 class Course(models.Model):
@@ -248,7 +248,7 @@ class Course(models.Model):
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
     price_without_legi = models.FloatField(blank=True, null=True, default=70)
     price_special = models.CharField(max_length=255, blank=True, null=True)
-    price_special.help_text = u"Set this only if you want a different price schema."
+    price_special.help_text ="Set this only if you want a different price schema."
     open_class = models.BooleanField(blank=True, null=False, default=False)
     open_class.help_text = "Open classes do not require a subscription or subscription is done via a different channel."
     period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
@@ -375,7 +375,7 @@ class Course(models.Model):
         return map(str, self.get_lessons())
 
     def format_lessons(self):
-        return u' & '.join(self.get_lessons_as_strings())
+        return' & '.join(self.get_lessons_as_strings())
 
     format_lessons.short_description = "Lessons"
 
@@ -389,7 +389,7 @@ class Course(models.Model):
 
     def format_cancellations(self):
         dates = [d.strftime('%d.%m.%Y') for d in self.get_cancellation_dates()]
-        return u' / '.join(dates)
+        return' / '.join(dates)
 
     format_cancellations.short_description = "Cancellations"
 
@@ -482,7 +482,7 @@ class Course(models.Model):
         ordering = ['position', 'type__name', 'name']
 
     def __str__(self):
-        return u"{} ({})".format(self.name, self.offering)
+        return"{} ({})".format(self.name, self.offering)
 
 
 @reversion.register()
@@ -495,8 +495,8 @@ class Subscribe(models.Model):
         REJECTED = 'rejected'
         TO_REIMBURSE = 'to_reimburse'
         CHOICES = (
-            (NEW, u'new'), (CONFIRMED, u'confirmed (to pay)'), (PAYED, u'payed'), (COMPLETED, u'completed'),
-            (REJECTED, u'rejected'), (TO_REIMBURSE, u'to reimburse'))
+            (NEW,'new'), (CONFIRMED,'confirmed (to pay)'), (PAYED,'payed'), (COMPLETED,'completed'),
+            (REJECTED,'rejected'), (TO_REIMBURSE,'to reimburse'))
 
     class MatchingState:
         UNKNOWN = 'unknown'
@@ -506,9 +506,9 @@ class Subscribe(models.Model):
         MATCHED = 'matched'
         NOT_REQUIRED = 'not_required'
         CHOICES = (
-            (UNKNOWN, u'Unknown'), (COUPLE, u'Couple'), (TO_MATCH, u'To match'), (TO_REMATCH, u'To rematch'),
-            (MATCHED, u'Matched'),
-            (NOT_REQUIRED, u'Not required'))
+            (UNKNOWN,'Unknown'), (COUPLE,'Couple'), (TO_MATCH,'To match'), (TO_REMATCH,'To rematch'),
+            (MATCHED,'Matched'),
+            (NOT_REQUIRED,'Not required'))
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
     course = models.ForeignKey(Course, related_name='subscriptions')
@@ -527,7 +527,7 @@ class Subscribe(models.Model):
                              choices=State.CHOICES, blank=False, null=False,
                              default=State.NEW)
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
-    usi.help_text = u"Unique subscription identifier: 4 characters identifier, 2 characters checksum"
+    usi.help_text ="Unique subscription identifier: 4 characters identifier, 2 characters checksum"
 
     paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
@@ -626,7 +626,7 @@ class Subscribe(models.Model):
         super(Subscribe, self).save(*args, **kwargs)
 
     def __str__(self):
-        return u"{} subscribes to {}".format(self.user.get_full_name(), self.course)
+        return"{} subscribes to {}".format(self.user.get_full_name(), self.course)
 
 
 class Confirmation(models.Model):
@@ -635,7 +635,7 @@ class Confirmation(models.Model):
     date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
 
     def __str__(self):
-        return u"({}) confirmed at {}".format(self.subscription, self.date)
+        return"({}) confirmed at {}".format(self.subscription, self.date)
 
 
 class Rejection(models.Model):
@@ -648,10 +648,10 @@ class Rejection(models.Model):
         BANNED = 'banned'
         COURSE_CANCELLED = 'course_cancelled'
 
-        CHOICES = ((UNKNOWN, u'Unknown'), (OVERBOOKED, u'Overbooked'), (NO_PARTNER, u'No partner found'),
-                   (USER_CANCELLED, u'User cancelled the subscription'),
-                   (ILLEGITIMATE, u'Users subscription is illegitimate'), (BANNED, u'User is banned'),
-                   (COURSE_CANCELLED, u'Course was cancelled'))
+        CHOICES = ((UNKNOWN,'Unknown'), (OVERBOOKED,'Overbooked'), (NO_PARTNER,'No partner found'),
+                   (USER_CANCELLED,'User cancelled the subscription'),
+                   (ILLEGITIMATE,'Users subscription is illegitimate'), (BANNED,'User is banned'),
+                   (COURSE_CANCELLED,'Course was cancelled'))
 
     subscription = models.ForeignKey(Subscribe, related_name='rejections')
     date = models.DateField(blank=False, null=False, auto_now_add=True)
@@ -663,7 +663,7 @@ class Rejection(models.Model):
     mail_sent.help_text = "If this rejection was communicated to user by email."
 
     def __str__(self):
-        return u"({}) rejected at {}".format(self.subscription, self.date)
+        return"({}) rejected at {}".format(self.subscription, self.date)
 
 
 # not a class method and therefore outside
@@ -696,7 +696,7 @@ class Voucher(models.Model):
         ordering = ['issued', 'expires']
 
     def __str__(self):
-        return u"#{} valid {} - {}".format(self.key, self.issued, self.expires)
+        return"#{} valid {} - {}".format(self.key, self.issued, self.expires)
 
 
 class VoucherPurpose(models.Model):
@@ -712,7 +712,7 @@ class Teach(models.Model):
     course = models.ForeignKey('Course', related_name='teaching')
 
     def __str__(self):
-        return u"{} teaches {}".format(self.teacher, self.course)
+        return"{} teaches {}".format(self.teacher, self.course)
 
 
 # An offering is a list of courses to be offered in the given period
@@ -721,7 +721,7 @@ class Offering(models.Model):
         REGULAR = 'reg'
         IRREGULAR = 'irr'
 
-        CHOICES = ((REGULAR, u'Regular (weekly)'), (IRREGULAR, u'Irregular (Workshops)'))
+        CHOICES = ((REGULAR,'Regular (weekly)'), (IRREGULAR,'Irregular (Workshops)'))
 
     name = models.CharField(max_length=30, unique=True, blank=False)
     period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
@@ -735,7 +735,7 @@ class Offering(models.Model):
     active.help_text = "Defines if clients can subscribe to courses in this offering."
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)
 
 
 class Song(models.Model):
@@ -749,7 +749,7 @@ class Song(models.Model):
     url_video.help_text = "A url to a demo video (e.g Youtube)."
 
     def __str__(self):
-        return u"{} - {}".format(self.title, self.artist)
+        return"{} - {}".format(self.title, self.artist)
 
     class Meta:
         ordering = ['speed', 'length', ]

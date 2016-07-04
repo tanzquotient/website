@@ -57,12 +57,12 @@ def decode_id(id_str, checksum):
 
 def create_url(survey_inst):
     id_str, c = encode_id(survey_inst.id)
-    return u"{}?id={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(id_str),
+    return"{}?id={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(id_str),
                                    escape_uri_path(c))
 
 
 def create_full_url(survey_inst):
-    return u"https://{}{}".format(Site.objects.get(id=settings.SITE_ID).domain, create_url(survey_inst))
+    return"https://{}{}".format(Site.objects.get(id=settings.SITE_ID).domain, create_url(survey_inst))
 
 
 def send_invitation(survey_inst):
