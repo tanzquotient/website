@@ -8,7 +8,7 @@ from faq.models import QuestionGroup
 
 class FaqPluginModel(CMSPlugin):
     question_group = models.ForeignKey(QuestionGroup)
-    question_group.help_text = u"Question group with questions to be displayed in this plugin."
+    question_group.help_text ="Question group with questions to be displayed in this plugin."
 
 
 class FaqPlugin(CMSPluginBase):

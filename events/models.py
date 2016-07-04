@@ -20,7 +20,7 @@ class Organise(models.Model):
     event = models.ForeignKey('Event', related_name='organising')
 
     def __str__(self):
-        return u"{} organises {}".format(self.organiser, self.event)
+        return"{} organises {}".format(self.organiser, self.event)
 
 
 # Create your models here.
@@ -36,7 +36,7 @@ class Event(models.Model):
     price_without_legi = models.FloatField(blank=True, null=True)
     price_without_legi.help_text = "Leave this empty for free entrance"
     price_special = models.CharField(max_length=255, blank=True, null=True)
-    price_special.help_text = u"Set this only if you want a different price schema."
+    price_special.help_text ="Set this only if you want a different price schema."
     organisators = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Organise, related_name='organising_events')
     description = HTMLField(blank=True, null=True)
     special = BooleanField(blank=True, null=False, default=False)
@@ -44,7 +44,7 @@ class Event(models.Model):
     display = models.BooleanField(default=True)
     display.help_text = "Defines if this event should be displayed on the website."
     image = FilerImageField(blank=True, null=True)
-    image.help_text = u"Advertising image for this event."
+    image.help_text ="Advertising image for this event."
 
     objects = models.Manager()
     displayed_events = managers.DisplayedEventManager()
@@ -62,16 +62,16 @@ class Event(models.Model):
 
     def format_time(self):
         if self.time_from and self.time_to:
-            return u"{}-{}".format(self.time_from.strftime("%H:%M"), self.time_to.strftime("%H:%M"))
+            return"{}-{}".format(self.time_from.strftime("%H:%M"), self.time_to.strftime("%H:%M"))
         elif self.time_from:
-            return u"ab {}".format(self.time_from.strftime("%H:%M"))
+            return"ab {}".format(self.time_from.strftime("%H:%M"))
         else:
-            return u"unbekannt"
+            return"unbekannt"
 
     format_time.short_description = "Time"
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)
 
     class Meta:
         ordering = ['date', 'time_from', 'room']

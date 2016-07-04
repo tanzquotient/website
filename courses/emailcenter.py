@@ -40,7 +40,7 @@ def send_subscription_confirmation(subscription):
     return _email_helper(subscription.user.email, template, context)
 
 
-def send_participation_confirmation(subscription, connection=None):
+def send_participation_confirmation(subscription):
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = Site.objects.get_current().domain
     voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
@@ -70,6 +70,19 @@ def send_participation_confirmation(subscription, connection=None):
         template = 'participation_confirmation_without_partner'
     else:
         template = 'participation_confirmation_without_partner_nocouple'
+
+    return _email_helper(subscription.user.email, template, context)
+
+
+def send_online_payment_successful(subscription):
+    context = {
+        'first_name': subscription.user.first_name,
+        'last_name': subscription.user.last_name,
+        'course': subscription.course.type.name,
+        'offering': subscription.course.offering.name,
+    }
+
+    template = 'online_payment_successful'
 
     return _email_helper(subscription.user.email, template, context)
 
@@ -116,7 +129,7 @@ def _email_helper(email, template, context):
 
 
 def create_user_info(user):
-    s = u'{}\n'.format(user.get_full_name())
+    s ='{}\n'.format(user.get_full_name())
     if user.email:
         s += user.email + "\n"
     if user.profile.phone_number:
@@ -126,15 +139,15 @@ def create_user_info(user):
 
 def create_course_info(subscription):
     course = subscription.course
-    s = u'{}\n{}'.format(course.type.name, course.format_lessons())
+    s ='{}\n{}'.format(course.type.name, course.format_lessons())
     if course.room:
-        s += u', {}\n'.format(course.room)
+        s +=', {}\n'.format(course.room)
     else:
-        s += u'\n'
+        s +='\n'
     if course.get_period():
-        s += u'{}\n'.format(course.get_period())
+        s +='{}\n'.format(course.get_period())
     if course.format_cancellations():
-        s += u'Ausfälle: {}\n'.format(course.format_cancellations())
+        s +='Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
-        s += u'Kosten: {}\n'.format(course.format_prices())
+        s +='Kosten: {}\n'.format(course.format_prices())
     return s.strip('\n')

@@ -108,7 +108,7 @@ def create_user(user_data):
 
 
 def generate_username(first_name, last_name):
-    username = u"{}_{}".format(first_name, last_name)
+    username ="{}_{}".format(first_name, last_name)
     return find_unused_username_variant(clean_username(username)).lower()
 
 
@@ -139,15 +139,15 @@ def subscribe(course_id, user1_data, user2_data=None):
 
     if user1 == user2:
         res['tag'] = 'danger'
-        res['text'] = u'Du kannst dich nicht mit dir selbst anmelden!'
+        res['text'] ='Du kannst dich nicht mit dir selbst anmelden!'
     elif courses.models.Subscribe.objects.filter(user=user1, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
-        res['text'] = u'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
-        res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
+        res['text'] ='Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
+        res['long_text'] ='Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
     elif user2 is not None and courses.models.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
-        res['text'] = u'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
-        res['long_text'] = u'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
+        res['text'] ='Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
+        res['long_text'] ='Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
     else:
         subscription = courses.models.Subscribe(user=user1, course=course, partner=user2, experience=user1_data['experience'],
                                           comment=user1_data['comment'])
@@ -166,8 +166,8 @@ def subscribe(course_id, user1_data, user2_data=None):
             send_subscription_confirmation(subscription2)
 
         res['tag'] = 'info'
-        res['text'] = u'Anmeldung erfolgreich.'
-        res['long_text'] = u'Du erhältst in Kürze eine Emailbestätigung.'
+        res['text'] ='Anmeldung erfolgreich.'
+        res['long_text'] ='Du erhältst in Kürze eine Emailbestätigung.'
 
     return res
 
@@ -334,11 +334,11 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
         return price_special
     elif price_with_legi and price_without_legi:
         if price_with_legi == price_without_legi:
-            r = u"{} CHF".format(price_with_legi.__str__())
+            r ="{} CHF".format(price_with_legi.__str__())
         else:
-            r = u"mit Legi {} / sonst {} CHF".format(price_with_legi.__str__(), price_without_legi.__str__())
+            r ="mit Legi {} / sonst {} CHF".format(price_with_legi.__str__(), price_without_legi.__str__())
     elif price_without_legi:
-        r = u"mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
+        r ="mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
     else:
         r = None  # handle this case in template!
     return r
@@ -396,16 +396,16 @@ def export_subscriptions(course_ids, export_format):
     if len(course_ids) == 1:
         course_id = course_ids[0]
         course_name = courses.models.Course.objects.get(id=course_id).name
-        filename = u'Kursteilnehmer-{}'.format(course_name)
+        filename ='Kursteilnehmer-{}'.format(course_name)
         if export_format == 'csv':
             # Create the HttpResponse object with the appropriate CSV header.
             response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = u'attachment; filename="{}.csv"'.format(filename)
+            response['Content-Disposition'] ='attachment; filename="{}.csv"'.format(filename)
 
             writer = unicodecsv.writer(response)
 
-            writer.writerow([u'Vorname', u'Nachname', u'Geschlecht', u'E-Mail', u'Mobile', u'Legi-Nr.', u'Zu bezahlen',
-                             u'Erfahrung'])
+            writer.writerow([u'Vorname','Nachname','Geschlecht','E-Mail','Mobile','Legi-Nr.','Zu bezahlen',
+                            'Erfahrung'])
             for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
                 row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
@@ -416,24 +416,24 @@ def export_subscriptions(course_ids, export_format):
         if export_format == 'csv_google':
             # Create the HttpResponse object with the appropriate CSV header.
             response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = u'attachment; filename="{}.csv"'.format(filename)
+            response['Content-Disposition'] ='attachment; filename="{}.csv"'.format(filename)
 
             writer = unicodecsv.writer(response)
 
             writer.writerow(
-                [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value', u'Phone 1 - Type',
-                 u'Phone 1 - Value'])
+                [u'Given Name','Family Name','Gender','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type',
+                'Phone 1 - Value'])
             for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                     'user__first_name'):
-                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
-                       u'* Private',
+                row = [s.user.first_name, s.user.last_name, s.user.profile.gender,'* Private', s.user.email,
+                      '* Private',
                        s.user.profile.phone_number]
                 writer.writerow(row)
 
             return response
         elif export_format == 'xlsx':
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = u'attachment; filename={}.xlsx'.format(filename)
+            response['Content-Disposition'] ='attachment; filename={}.xlsx'.format(filename)
             wb = openpyxl.Workbook()
             # remove preinitialized sheet
             wb.remove_sheet(wb.get_active_sheet())
@@ -453,7 +453,7 @@ def export_subscriptions(course_ids, export_format):
                     writer = unicodecsv.writer(fileobj, encoding='utf-8')
 
                     writer.writerow(
-                        ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', u'Legi-Nr.', 'Zu bezahlen',
+                        ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile','Legi-Nr.', 'Zu bezahlen',
                          'Erfahrung'])
                     for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
@@ -478,13 +478,13 @@ def export_subscriptions(course_ids, export_format):
                     writer = unicodecsv.writer(fileobj, encoding='utf-8')
 
                     writer.writerow(
-                        [u'Given Name', u'Family Name', u'Gender', u'E-mail 1 - Type', u'E-mail 1 - Value',
-                         u'Phone 1 - Type',
-                         u'Phone 1 - Value'])
+                        [u'Given Name','Family Name','Gender','E-mail 1 - Type','E-mail 1 - Value',
+                        'Phone 1 - Type',
+                        'Phone 1 - Value'])
                     for s in courses.models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
                             'user__first_name'):
-                        row = [s.user.first_name, s.user.last_name, s.user.profile.gender, u'* Private', s.user.email,
-                               u'* Private',
+                        row = [s.user.first_name, s.user.last_name, s.user.profile.gender,'* Private', s.user.email,
+                              '* Private',
                                s.user.profile.phone_number]
                         writer.writerow(row)
                     f.writestr(u'Kursteilnehmer/{}.csv'.format(courses.models.Course.objects.get(id=course_id).name),
@@ -499,7 +499,7 @@ def export_subscriptions(course_ids, export_format):
             return response
         elif export_format == 'xlsx':
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = u'attachment; filename=Kursteilnehmer.xlsx'
+            response['Content-Disposition'] ='attachment; filename=Kursteilnehmer.xlsx'
             wb = openpyxl.Workbook()
             # remove preinitialized sheet
             wb.remove_sheet(wb.get_active_sheet())

@@ -13,7 +13,7 @@ class Payment(models.Model):
         MANUAL = 'manual'
         PROCESSED = 'processed'
 
-        CHOICES = ((NEW, u'new'), (MANUAL, u'manual'), (PROCESSED, u'processed'))
+        CHOICES = ((NEW,'new'), (MANUAL,'manual'), (PROCESSED,'processed'))
 
     class Type:
         SUBSCRIPTION_PAYMENT = 'subscription_payment'
@@ -22,10 +22,10 @@ class Payment(models.Model):
         IRRELEVANT = 'irrelevant'
         UNKNOWN = 'unknown'
 
-        CHOICES = ((SUBSCRIPTION_PAYMENT, u'subscription payment'),
-                   (SUBSCRIPTION_PAYMENT_TO_REIMBURSE, u'subscription payment (to reimburse)'),
-                   (COURSE_PAYMENT_TRANSFER, u'course payment transfer'), (IRRELEVANT, u'irrelevant'),
-                   (UNKNOWN, u'unknown'))
+        CHOICES = ((SUBSCRIPTION_PAYMENT,'subscription payment'),
+                   (SUBSCRIPTION_PAYMENT_TO_REIMBURSE,'subscription payment (to reimburse)'),
+                   (COURSE_PAYMENT_TRANSFER,'course payment transfer'), (IRRELEVANT,'irrelevant'),
+                   (UNKNOWN,'unknown'))
 
     name = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateTimeField()

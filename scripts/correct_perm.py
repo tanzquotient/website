@@ -11,7 +11,7 @@ parser.add_argument("-d", "--dryrun", help="only show files that would get modif
 args = parser.parse_args()
 uid = pwd.getpwnam(args.user).pw_uid
 gid = grp.getgrnam(args.user).gr_gid
-print('We change the permissions to {}:{}').format(uid,gid)
+print('We change the permissions to {}:{}'.format(uid,gid))
 for file in glob.glob('./**/migrations/*.py'):
     print(file)
     if not args.dryrun:

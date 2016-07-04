@@ -20,4 +20,4 @@ class Function(models.Model):
     objects = managers.FunctionManager()
 
     def __str__(self):
-        return u"{}".format(self.name)
+        return"{}".format(self.name)

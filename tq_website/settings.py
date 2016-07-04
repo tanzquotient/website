@@ -18,7 +18,7 @@ import logging
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-LOG_DIR = os.path.join(BASE_DIR, u'logs')
+LOG_DIR = os.path.join(BASE_DIR,'logs')
 
 
 # Quick-start development settings - unsuitable for production
@@ -435,7 +435,7 @@ PARLER_LANGUAGES = {
 
 # Path for translation files
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, u'locale'),
+    os.path.join(BASE_DIR,'locale'),
 ]
 
 
