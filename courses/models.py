@@ -17,6 +17,7 @@ import random, string
 from django.db.models import Q
 from django.db import transaction
 import payment.vouchergenerator
+from courses.emailcenter import send_online_payment_successful
 
 
 class Weekday:
@@ -590,6 +591,8 @@ class Subscribe(models.Model):
             if user is not None:
                 reversion.set_user(user)
             reversion.set_comment("Payed using payment method " + payment_method)
+        if payment_method == PaymentMethod.ONLINE:
+            send_online_payment_successful(self)
         return True
 
     def get_price_to_pay(self):

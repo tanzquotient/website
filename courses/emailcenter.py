@@ -40,7 +40,7 @@ def send_subscription_confirmation(subscription):
     return _email_helper(subscription.user.email, template, context)
 
 
-def send_participation_confirmation(subscription, connection=None):
+def send_participation_confirmation(subscription):
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = Site.objects.get_current().domain
     voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
@@ -70,6 +70,19 @@ def send_participation_confirmation(subscription, connection=None):
         template = 'participation_confirmation_without_partner'
     else:
         template = 'participation_confirmation_without_partner_nocouple'
+
+    return _email_helper(subscription.user.email, template, context)
+
+
+def send_online_payment_successful(subscription):
+    context = {
+        'first_name': subscription.user.first_name,
+        'last_name': subscription.user.last_name,
+        'course': subscription.course.type.name,
+        'offering': subscription.course.offering.name,
+    }
+
+    template = 'online_payment_successful'
 
     return _email_helper(subscription.user.email, template, context)
 
