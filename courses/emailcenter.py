@@ -42,6 +42,9 @@ def send_subscription_confirmation(subscription):
 
 def send_participation_confirmation(subscription, connection=None):
     conf = my_settings.PAYMENT_ACCOUNT['default']
+    current_site = Site.objects.get_current().domain
+    voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
+
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
@@ -53,6 +56,7 @@ def send_participation_confirmation(subscription, connection=None):
         'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
             'recipient'],
         'account_post_number': conf['post_number'] or '-',
+        'voucher_url': voucher_url
     }
 
     if subscription.partner is not None:
@@ -132,10 +136,5 @@ def create_course_info(subscription):
     if course.format_cancellations():
         s += u'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
-        current_site = Site.objects.get_current().domain
-        voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
-
         s += u'Kosten: {}\n'.format(course.format_prices())
-        s += u'(Bitte bring das Kursgeld in die erste Tanzstunde passend mit. Hast du einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {} )\n'.format(
-            voucher_url)
     return s.strip('\n')
