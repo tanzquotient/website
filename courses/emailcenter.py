@@ -144,7 +144,7 @@ def create_course_info(subscription):
         s +=', {}\n'.format(course.room)
     else:
         s +='\n'
-    if course.get_period():
+    if course.get_period() and course.offering and course.offering.type==courses.models.Offering.Type.REGULAR:
         s +='{}\n'.format(course.get_period())
     if course.format_cancellations():
         s +='Ausfälle: {}\n'.format(course.format_cancellations())
