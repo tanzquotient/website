@@ -14,18 +14,8 @@ def validate_usi_exists(value):
     :param value: the usi to be validated
     :return:
     """
-    if not Subscribe.objects.filter(usi=value).count() > 0:
+    if Subscribe.objects.filter(usi=value.strip('#')).count() == 0:
         raise ValidationError(_('The specified USI does not exist'))
-
-
-def validate_uci_exists(value):
-    """
-    Validates if the specified UCI is a valid UCI
-    :param value: the uci to be validated
-    :return:
-    """
-    if not Course.objects.filter(uci=value).count() > 0:
-        raise ValidationError(_('The specified UCI does not exist'))
 
 
 def voucher_valid(value):
@@ -45,8 +35,8 @@ def voucher_valid(value):
 
 
 class USIForm(forms.Form):
-    usi_validator = RegexValidator(regex='[a-zA-Z0-9]{6}', message=_("Please enter a valid USI"))
-    usi = forms.CharField(max_length=6, label=_("Unique Course Identifier (USI)"),
+    usi_validator = RegexValidator(regex='#?[a-zA-Z0-9]{6}', message=_("Please enter a valid USI"))
+    usi = forms.CharField(max_length=7, label=_("Unique Course Identifier (USI)"),
                           validators=[usi_validator, validate_usi_exists, ])
 
 

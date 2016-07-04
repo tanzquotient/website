@@ -69,7 +69,7 @@ class CounterPaymentIndexView(FormView):
     form_class = USIForm
 
     def form_valid(self, form):
-        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi']})
+        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi'].strip('#')})
         return super(CounterPaymentIndexView, self).form_valid(form)
 
     @method_decorator(permission_required('courses.access_counterpayment'))
