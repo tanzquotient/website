@@ -1,6 +1,8 @@
 from django.db import models
 
+from parler.managers import TranslatableManager
 
-class QuestionManager(models.Manager):
+
+class QuestionManager(TranslatableManager):
     def displayed(self):
         return self.all().filter(display=True).order_by("position")

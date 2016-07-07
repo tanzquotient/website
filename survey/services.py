@@ -17,7 +17,7 @@ from tq_website import settings as my_settings
 from post_office import mail, models as post_office_models
 import logging
 
-import survey.models
+from survey.models import Answer
 from courses.models import Course
 
 from django.utils import translation
@@ -114,7 +114,7 @@ def _email_helper(email, template, context):
 
 import zipfile
 import unicodecsv
-from io import StringIO
+from io import BytesIO
 
 import openpyxl
 from openpyxl.cell import get_column_letter
@@ -138,7 +138,7 @@ def export_surveys(surveys):
         for q in questions:
             columns.append(q.name)
 
-        for col_num in xrange(len(columns)):
+        for col_num in range(len(columns)):
             c = ws.cell(row=row_num + 1, column=col_num + 1)
             c.value = columns[col_num]
             font = c.font.copy()
@@ -149,11 +149,11 @@ def export_surveys(surveys):
 
         for inst in instances:
             # only take the newest answer for all questions
-            answers = survey.models.Answer.objects.filter(survey_instance__survey=survey,
+            answers = Answer.objects.filter(survey_instance__survey=survey,
                                                    survey_instance__user=inst.user).order_by('-id')
 
             row_num += 1
-            for col_num in xrange(len(columns)):
+            for col_num in range(len(columns)):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 res = answers.filter(question=questions[col_num])
                 c.value = res[0].text if res else ""
@@ -162,17 +162,19 @@ def export_surveys(surveys):
                 alignment.wrap_text = True
                 c.alignment = alignment
 
-    zipped_file = StringIO()
+    zipped_file = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
     with zipfile.ZipFile(zipped_file, 'w') as f:
         for survey in surveys:
-            fileobj = StringIO()
+            fileobj = BytesIO()    # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
 
             #####################################
+            survey_inst = survey.survey_instances.values('course').distinct()
             wb = openpyxl.Workbook()
-            # remove preinitialized sheet
-            wb.remove_sheet(wb.get_active_sheet())
+            if survey_inst.count():
+                # remove preinitialized sheet (only if we later add same, no sheets in the end lead to error!)
+                wb.remove_sheet(wb.get_active_sheet())
 
-            for d in survey.survey_instances.values('course').distinct():
+            for d in survey_inst:
                 course_id = d['course']  # get the courses out of dict returned by values
                 if course_id:
                     course = Course.objects.get(pk=course_id)

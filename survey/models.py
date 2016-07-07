@@ -2,7 +2,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
-from . import services
 from django.shortcuts import get_object_or_404
 
 
@@ -150,6 +149,7 @@ class SurveyInstance(models.Model):
     invitation_sent = models.BooleanField(blank=False, null=False, default=False)
 
     def get_url(self):
+        from . import services
         return services.create_url(self)
 
     def __str__(self):
