@@ -9,7 +9,6 @@ import django.contrib.auth as auth
 
 from courses import managers
 from django.core.exceptions import ValidationError
-from courses.services import calculate_relevant_experience, format_prices
 from djangocms_text_ckeditor.fields import HTMLField
 import base36
 import hashlib
@@ -301,6 +300,7 @@ class Course(models.Model):
     format_teachers.short_description = "Teachers"
 
     def format_prices(self):
+        from courses.services import format_prices
         return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
 
     format_prices.short_description = "Prices"
@@ -560,6 +560,7 @@ class Subscribe(models.Model):
 
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
+        from courses.services import calculate_relevant_experience
         return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
 
     get_calculated_experience.short_description = "Calculated experience"
