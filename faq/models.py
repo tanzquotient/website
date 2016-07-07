@@ -2,17 +2,23 @@ from django.db import models
 
 from . import managers
 
+from parler.models import TranslatableModel, TranslatedFields
+
+
 # Create your models here.
 class QuestionGroup(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
     def __str__(self):
-        return"{}".format(self.name)
+        return "{}".format(self.name)
 
 
-class Question(models.Model):
-    question_text = models.TextField()
-    answer_text = models.TextField()
+class Question(TranslatableModel):
+    translations = TranslatedFields(
+        question_text=models.TextField(blank=True, null=True),
+        answer_text=models.TextField(blank=True, null=True)
+    )
+
     display = models.BooleanField(default=True)
     question_group = models.ForeignKey('QuestionGroup', related_name='questions')
 
@@ -25,4 +31,4 @@ class Question(models.Model):
     objects = managers.QuestionManager()
 
     def __str__(self):
-        return"{}".format(self.question_text)
+        return self.safe_translation_getter('question_text', any_language=True) or "-"
