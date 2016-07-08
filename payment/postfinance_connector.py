@@ -57,8 +57,8 @@ class ISO2022Parser:
                 'city': "",
                 'note': string}
 
-        postfinance_regex = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:")
-        postfinance_matches = postfinance_regex.match(string)
+        postfinance_regex = re.compile(r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:(?P<note>.*)")
+        postfinance_matches = postfinance_regex.search(string)
         if postfinance_matches:
             data['account_nr'] = postfinance_matches.group('account_nr')
             data['name'] = postfinance_matches.group('name')
