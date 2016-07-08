@@ -49,7 +49,7 @@ class PaymentProcessor:
                     payment.amount_to_reimburse = remaining_amount
                     if payment.state == Payment.State.NEW:
                         if remaining_amount == 0:
-                            payment.state = Payment.State.DONE
+                            payment.state = Payment.State.PROCESSED
                         else:
                             payment.state = Payment.State.MANUAL
                 else:
