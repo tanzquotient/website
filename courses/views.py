@@ -192,7 +192,7 @@ def subscription_do(request, course_id):
 
 def subscription_done(request, course_id):
     if 'subscription_result' not in request.session:
-        raise SuspiciousSession()
+        return redirect('courses:subscription', course_id)
 
     template_name = "courses/subscription_done.html"
     context = {}
