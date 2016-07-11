@@ -245,9 +245,9 @@ class NoPartnerException(CourseException):
 
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
-def confirm_subscription(subscription, request=None):
+def confirm_subscription(subscription, request=None, allow_single_in_couple_course=False):
     # check: only people with partner are confirmed (in couple courses)
-    if subscription.course.type.couple_course and subscription.partner is None:
+    if not allow_single_in_couple_course and subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
     if subscription.state in [models.Subscribe.State.NEW, models.Subscribe.State.REJECTED]:
@@ -269,12 +269,12 @@ def confirm_subscription(subscription, request=None):
 MESSAGE_NO_PARTNER_SET = _(u'{} subscriptions were not confirmed because no partner set')
 
 
-def confirm_subscriptions(subscriptions, request=None):
+def confirm_subscriptions(subscriptions, request=None, allow_single_in_couple_course=False):
     no_partner_count = 0
     confirmed_count = 0
     for subscription in subscriptions:
         try:
-            if confirm_subscription(subscription, request):
+            if confirm_subscription(subscription, request, allow_single_in_couple_course):
                 confirmed_count += 1
         except NoPartnerException as e:
             no_partner_count += 1

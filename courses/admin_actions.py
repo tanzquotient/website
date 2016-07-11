@@ -57,6 +57,14 @@ def confirm_subscriptions(modeladmin, request, queryset):
 confirm_subscriptions.short_description = "Confirm selected subscriptions"
 
 
+def confirm_subscriptions_allow_singles(modeladmin, request, queryset):
+    # manually send confirmation mails
+    services.confirm_subscriptions(queryset, request, True)
+
+
+confirm_subscriptions_allow_singles.short_description = "Confirm selected subscriptions (allow singles in couple courses)"
+
+
 class RejectForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     reason = forms.ChoiceField(label=_("Select Reason"), choices=Rejection.Reason.CHOICES)
@@ -185,8 +193,8 @@ def evaluate_course(self, request, queryset):
         form = EvaluateForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
     return render(request, 'courses/auth/action_evaluate.html', {'courses': queryset,
-                                                                  'evaluate_form': form,
-                                                                  })
+                                                                 'evaluate_form': form,
+                                                                 })
 
 
 evaluate_course.short_description = "Configure evaluation of selected courses"
