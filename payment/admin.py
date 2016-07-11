@@ -9,6 +9,7 @@ class SubscriptionPaymentInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'state', 'type', 'name', 'date', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                     'amount_to_reimburse',
@@ -20,5 +21,9 @@ class PaymentAdmin(admin.ModelAdmin):
     actions = [process_payments]
 
 
-# Register your models here.
-admin.site.register(Payment, PaymentAdmin)
+@admin.register(SubscriptionPayment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'payment', 'subscription', 'amount']
+    raw_id_fields = ['payment', 'subscription']
+    search_fields = ['id', 'payment', 'subscription', 'amount']
+
