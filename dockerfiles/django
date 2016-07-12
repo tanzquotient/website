@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER martin.zellner@gmail.com
 
 # Install Package Dependencies
@@ -13,7 +13,9 @@ RUN apt-get update && apt-get install -y --force-yes \
     libjpeg-dev \
     libffi-dev \
     libssl-dev \
-    python3-cairo
+    python3-cairo \
+    python3-crypto \
+    wget
 
 # Install supervisor (needed for production)
 RUN apt-get update && apt-get install -y --force-yes \
@@ -26,7 +28,7 @@ ADD requirements.txt /webapps/tq_website/requirements.txt
 WORKDIR /webapps
 
 USER  root
-RUN pip3 install -r tq_website/requirements.txt
+RUN pip3 install --upgrade -r tq_website/requirements.txt
 
 
 

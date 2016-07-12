@@ -31,7 +31,6 @@ ecdsa==0.13
 gunicorn==19.6.0
 openpyxl==2.2.6
 mysqlclient==1.3.7
-paramiko==2.0.1
 Pillow==3.2.0
 unicodecsv==0.14.1
 django-bootstrap3==7.0.1
@@ -39,3 +38,4 @@ base36==0.1.1
 cairosvg==1.0.22
 PyPDF2==1.26.0
 django-sslify>=0.2.0
+paramiko>=1.15
