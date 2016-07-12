@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'djcelery_email',
     'post_office',
     'absolute',
+    'daterange_filter',
     'userena',
     'guardian',
     'tq_website',

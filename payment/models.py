@@ -46,6 +46,9 @@ class Payment(models.Model):
     def __str__(self):
         return "Payment of {0} by {1}".format(self.amount, self.name)
 
+    def courses(self):
+        return [subscription.course for subscription in self.subscriptions.all()]
+
 
 class SubscriptionPayment(models.Model):
     """

@@ -39,3 +39,4 @@ cairosvg==1.0.22
 PyPDF2==1.26.0
 django-sslify>=0.2.0
 paramiko>=1.15
+django-daterange-filter==1.3.0
