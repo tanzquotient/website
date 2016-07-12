@@ -24,12 +24,12 @@ from django.utils import translation
 
 log = logging.getLogger('tq')
 
-SALT = "lkd$lrn&"
+SALT = b"lkd$lrn&"
 
 
 def calc_checksum(id_str):
     checksum = hashlib.md5()
-    checksum.update(id_str)
+    checksum.update(id_str.encode())
     checksum.update(SALT)
     return checksum.hexdigest()[:4].lower()
 
