@@ -439,6 +439,13 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR,'locale'),
 ]
 
+# Caching
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'tq_cache_table',
+    }
+}
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
 from .settings_local import *
