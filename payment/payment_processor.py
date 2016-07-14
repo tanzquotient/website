@@ -10,7 +10,7 @@ class PaymentProcessor:
     def match_payments(self, queryset=Payment.objects):
         new_payments = queryset.filter(state=Payment.State.NEW).all()
 
-        prog = re.compile(r"#(?P<usi>[a-zA-Z0-9]{6,6})")
+        prog = re.compile(r"\s?#?(?P<usi>[a-zA-Z0-9]{6,6})\s?")
         for payment in new_payments:
             if payment.remittance_user_string:
                 matches = prog.findall(payment.remittance_user_string)
