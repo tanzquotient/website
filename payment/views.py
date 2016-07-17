@@ -5,7 +5,7 @@ from courses.models import Subscribe, Voucher, Course, PaymentMethod
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django import forms
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
@@ -77,10 +77,13 @@ class CounterPaymentIndexView(FormView):
         return super(CounterPaymentIndexView, self).dispatch(*args, **kwargs)
 
 
-class CounterPaymentDetailView(TemplateView):
+class CounterPaymentDetailView(FormView):
+    form_class = forms.Form
     template_name = 'payment/counter/details.html'
+    success_url = reverse_lazy('payment:counterpayment_index')
 
-    def get_context_data(self, usi, **kwargs):
+    def get_context_data(self,  **kwargs):
+        usi = self.kwargs['usi']
         subscription = Subscribe.objects.filter(usi=usi).first()
 
         context = super(CounterPaymentDetailView, self).get_context_data(**kwargs)
@@ -92,15 +95,17 @@ class CounterPaymentDetailView(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super(CounterPaymentDetailView, self).dispatch(*args, **kwargs)
 
+    def form_valid(self, form, **kwargs):
+        usi = self.kwargs['usi']
+        subscription = Subscribe.objects.filter(usi=usi).first()
 
-@permission_required('courses.access_counterpayment')
-def counterpayment_mark_payed(request, **kwargs):
-    subscription = Subscribe.objects.filter(usi=kwargs['usi']).first()
+        # redirect and show message
+        if subscription.mark_as_payed(PaymentMethod.COUNTER, self.request.user):
+            messages.add_message(self.request, messages.SUCCESS,
+                                 "USI #" + usi + " " + _('successfully marked as paid.'))
 
-    # redirect and show message
-    if subscription.mark_as_payed(PaymentMethod.COUNTER, request.user):
-        messages.add_message(request, messages.SUCCESS, "USI #" + kwargs['usi'] + _(' successfully marked as paid.'))
-    return redirect('payment:counterpayment_index')
+        return super(CounterPaymentDetailView, self).form_valid(form)
+
 
 
 class TeacherOnly(View):

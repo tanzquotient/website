@@ -3,9 +3,6 @@ from django.conf.urls import url
 from payment import views
 
 urlpatterns = [
-    url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/payed/$',
-        views.counterpayment_mark_payed,
-        name='counterpayment_pay'),
     url(r'^auth/counterpayment/(?P<usi>[a-zA-Z0-9]{6})/details/$',
         views.CounterPaymentDetailView.as_view(),
         name='counterpayment_detail'),
