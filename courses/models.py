@@ -704,9 +704,8 @@ class VoucherPurpose(models.Model):
     name = models.CharField(max_length=255, unique=True, blank=False)
     description = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
-
 
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
