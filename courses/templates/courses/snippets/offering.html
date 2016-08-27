@@ -1,5 +1,5 @@
 <h2>
-    {% if not offering.display %}<span class="label label-info">Preview</span>{% endif %}
+    {% if offering.is_preview %}<span class="label label-info">Preview</span>{% endif %}
     {{ offering.name }}
     <small>{{ offering.period|default:'' }}</small>
 </h2>
@@ -30,7 +30,7 @@
                         <tr>
                             <td>
                                 <a href="{% url 'courses:subscription' c.id %}">
-                                    {% if not c.display %}<span class="label label-info">Preview</span>{% endif %}
+                                    {% if c.is_preview %}<span class="label label-info">Preview</span>{% endif %}
                                     {{ c.type.name }}
                                 </a>
                             </td>
@@ -73,7 +73,7 @@
                     {% for c in d.courses %}
                         <a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
                             <h4 class="list-group-item-heading">
-                                {% if not c.display %}<span class="label label-info">Preview</span>{% endif %}
+                                {% if c.is_preview %}<span class="label label-info">Preview</span>{% endif %}
                                 {{ c.type.name }}
                                 <small class="pull-right">
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}

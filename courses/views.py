@@ -29,11 +29,14 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request, preview=False):
+def course_list(request, force_preview=False):
     template_name = "courses/list.html"
     context = {}
 
-    offerings = services.get_offerings_to_display(request, preview)
+    # if unpublished courses should be shown with a preview marker
+    preview_mode = request and request.user.is_staff or force_preview
+
+    offerings = services.get_offerings_to_display(request, preview_mode)
     c_offerings = []
     for offering in offerings:
         offering_sections = []
@@ -43,7 +46,7 @@ def course_list(request, preview=False):
             for (w, w_name) in Weekday.CHOICES:
                 section_dict = {}
                 section_dict['section_title'] = WEEKDAYS_TRANS[w]
-                section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed()]
+                section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed(preview_mode)]
                 if (w in Weekday.WEEKEND) and section_dict['courses'].__len__() == 0:
                     pass
                 else:
@@ -94,7 +97,7 @@ def course_list(request, preview=False):
 
 
 def course_list_preview(request):
-    return course_list(request, preview=True)
+    return course_list(request, force_preview=True)
 
 
 def subscription(request, course_id):
