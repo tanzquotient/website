@@ -6,6 +6,7 @@
 <html lang="de">
 
 {% load staticfiles %}
+{% load account %}
 
 <head>
     {% analytical_head_top %}
@@ -64,7 +65,7 @@
                     {% if user.is_authenticated %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
-                                    class="fa fa-user"></i> {{ user.first_name }} <b class="caret"></b></a>
+                                    class="fa fa-user"></i> {% user_display user %} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
                                     area</a></li>
@@ -81,7 +82,7 @@
                                     </li>
                                 {% endif %}
                                 <li role="separator" class="divider"></li>
-                                <li><a href="/"><span
+                                <li><a href="{% url 'account_email' %}"><span
                                         class="glyphicon glyphicon-user"></span>
                                     {% trans "View profile" %}</a>
                                 </li>
@@ -112,7 +113,7 @@
                                     class="fa fa-money fa-lg"></span> Counter Payment</a>
                             </li>
                         {% endif %}
-                        <li><a href="/"><span
+                        <li><a href="{% url 'account_email' %}"><span
                                 class="glyphicon glyphicon-user"></span>
                             {% trans "View profile" %}</a>
                         </li>
