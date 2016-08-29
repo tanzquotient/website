@@ -129,8 +129,12 @@ def subscription(request, course_id):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        initial = {'newsletter': True}
-        form = UserForm(initial=initial)
+        if request.user.is_authenticated():
+            # overwrite initial values with those of the user and his profile
+            initial = create_initial_from_user(request.user)
+            form = UserForm(initial=initial)
+        else:
+            form = UserForm()
 
     context.update({
         'menu': "courses",

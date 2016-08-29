@@ -64,16 +64,25 @@ def update_user(user, user_data):
     user.save()
 
     userprofile = get_or_create_userprofile(user)
-    userprofile.legi = user_data['legi']
-    userprofile.gender = user_data['gender']
-    userprofile.address = models.Address.objects.create_from_user_data(user_data)
-    if user_data['phone_number']:
-        userprofile.phone_number = user_data['phone_number']
-    userprofile.student_status = user_data['student_status']
-    if user_data['body_height']:
-        userprofile.body_height = user_data['body_height']
-    userprofile.newsletter = user_data['newsletter']
-    userprofile.get_involved = user_data['get_involved']
+
+    # convenience method. if key is not given, assume same as attr
+    def set_if_given(attr, key=None):
+        if not key:
+            key = attr
+        if key in user_data:
+            setattr(userprofile, attr, user_data[key])
+
+    set_if_given('legi')
+    set_if_given('gender')
+    set_if_given('phone_number')
+    set_if_given('student_status')
+    set_if_given('body_height')
+    set_if_given('newsletter')
+    set_if_given('get_involved')
+
+    if all((key in user_data) for key in ['street', 'plz', 'city']):
+        userprofile.address = models.Address.objects.create_from_user_data(user_data)
+
     userprofile.save()
 
     return user
@@ -100,7 +109,7 @@ def create_user(user_data):
     ln = user_data['last_name']
 
     user = User.objects.create_user(generate_username(fn, ln), email=user_data['email'],
-                                             password=User.objects.make_random_password(), active=True)
+                                    password=User.objects.make_random_password())
 
     update_user(user, user_data)
     return user
@@ -149,8 +158,8 @@ def subscribe(course_id, user1_data, user2_data=None):
         res['long_text'] = 'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
     else:
         subscription = models.Subscribe(user=user1, course=course, partner=user2,
-                                                experience=user1_data['experience'],
-                                                comment=user1_data['comment'])
+                                        experience=user1_data['experience'],
+                                        comment=user1_data['comment'])
         subscription.derive_matching_state()
         subscription.save()
         send_subscription_confirmation(subscription)
@@ -160,7 +169,7 @@ def subscribe(course_id, user1_data, user2_data=None):
             subscription.save()
 
             subscription2 = models.Subscribe(user=user2, course=course, partner=user1,
-                                                     experience=user2_data['experience'], comment=user2_data['comment'])
+                                             experience=user2_data['experience'], comment=user2_data['comment'])
             subscription2.matching_state = models.Subscribe.MatchingState.COUPLE
             subscription2.save()
             send_subscription_confirmation(subscription2)
@@ -323,9 +332,9 @@ def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
             models.Subscribe.objects.filter(user=user, state__in=[models.Subscribe.State.CONFIRMED,
-                                                                          models.Subscribe.State.PAYED,
-                                                                          models.Subscribe.State.COMPLETED],
-                                                    course__type__styles__id__in=relevant_exp).exclude(
+                                                                  models.Subscribe.State.PAYED,
+                                                                  models.Subscribe.State.COMPLETED],
+                                            course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 
 
