@@ -13,7 +13,6 @@ import django.views.i18n
 from tq_website import views
 import courses.views as courses_views
 import rest_framework.urls
-import userena.urls
 import survey.urls
 import payment.urls
 import cms.urls
@@ -27,6 +26,12 @@ urlpatterns = [
     url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
     url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework'))
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
 
 # for testing error pages
 if settings.DEBUG:
@@ -42,7 +47,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += i18n_patterns(
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/', include(userena.urls)),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^survey/', include(survey.urls, namespace='survey')),
     url(r'^', include(payment.urls, namespace='payment')),
     url(r'^', include(cms.urls))

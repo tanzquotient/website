@@ -213,20 +213,19 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
 
 
-from userena.admin import UserenaAdmin
-from userena.utils import get_profile_model, get_user_model
-
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 
 # Define a new User admin
-class MyUserAdmin(UserenaAdmin):
-    list_display = ('id',) + UserenaAdmin.list_display
-    inlines = list(UserenaAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
-    list_filter = UserenaAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
+class MyUserAdmin(UserAdmin):
+    list_display = ('id',) + UserAdmin.list_display
+    inlines = list(UserAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
+    list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
 
 
 # Re-register UserAdmin
 try:
-    admin.site.unregister(get_user_model())
+    admin.site.unregister(User)
 except admin.sites.NotRegistered:
     pass
-admin.site.register(get_user_model(), MyUserAdmin)
+admin.site.register(User, MyUserAdmin)

@@ -18,8 +18,7 @@ import logging
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-LOG_DIR = os.path.join(BASE_DIR,'logs')
-
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -39,7 +38,6 @@ ALLOWED_HOSTS = [
 ]
 # This should be set to true since we use NGINX as a proxy
 USE_X_FORWARDED_HOST = True
-
 
 # Application definition
 
@@ -73,8 +71,10 @@ INSTALLED_APPS = [
     'post_office',
     'absolute',
     'daterange_filter',
-    'userena',
     'guardian',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'tq_website',
     'courses',
     'faq',
@@ -86,9 +86,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'parler',
     'survey',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -105,12 +107,10 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
-
-
 
 SITE_ID = 1
 
@@ -131,20 +131,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+INTERNAL_IPS=['127.0.0.1','172.21.0.1','::1']
+
+
+###############################################
+# Configuration of allauth account management #
+###############################################
+ANONYMOUS_USER_ID = -1
+
+LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 # default redirect URL after login (if no GET parameter next is given)
 LOGIN_REDIRECT_URL = "/"
 
-###################################################
-# Configuration of userena and account management #
-###################################################
-ANONYMOUS_USER_ID = -1
-
-AUTH_PROFILE_MODULE = 'courses.UserProfile'
-
-USERENA_REGISTER_USER = False;
-LOGIN_URL = '/accounts/signin/'
-LOGOUT_URL = '/accounts/signout/'
-USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_VERIFICATION ='optional'
+ACCOUNT_EMAIL_SUBJECT_PREFIX='TQ'
+ACCOUNT_LOGIN_ON_PASSWORD_RESET=True
+ACCOUNT_USERNAME_REQUIRED=False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
+ACCOUNT_LOGOUT_REDIRECT_URL='/accounts/login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -168,31 +175,30 @@ MEDIA_URL = '/media/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 TEMPLATES = [
-{
-    'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    'DIRS': [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
             os.path.join(BASE_DIR, "templates"),
-            ],
-    'APP_DIRS': True,
-    'OPTIONS': {
-        'context_processors':
-            TCP + [
-                "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.debug",
-                "django.core.context_processors.i18n",
-                "django.core.context_processors.media",
-                "django.core.context_processors.static",
-                "django.core.context_processors.tz",
-                "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.request",
-                'sekizai.context_processors.sekizai',
-                'cms.context_processors.cms_settings',
-                'absolute.context_processors.absolute',
-            ]
-    }
-},
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors':
+                TCP + [
+                    "django.contrib.auth.context_processors.auth",
+                    "django.core.context_processors.debug",
+                    "django.core.context_processors.i18n",
+                    "django.core.context_processors.media",
+                    "django.core.context_processors.static",
+                    "django.core.context_processors.tz",
+                    "django.contrib.messages.context_processors.messages",
+                    "django.template.context_processors.request",
+                    'sekizai.context_processors.sekizai',
+                    'cms.context_processors.cms_settings',
+                    'absolute.context_processors.absolute',
+                ]
+        }
+    },
 ]
-
 
 ############################################
 # Configuration of djangocms-text-ckeditor #
@@ -363,7 +369,7 @@ LOGGING = {
         },
         'file_tq': {
             'level': 'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'tq.log'),
             'maxBytes': 50000000,
             'backupCount': 2,
@@ -391,7 +397,7 @@ LOGGING = {
     'loggers': {
         # this top level logger logs ALL messages
         '': {
-            'handlers': ['mail_admins','file_errors'],
+            'handlers': ['mail_admins', 'file_errors'],
             'propagate': True,
             'level': 'DEBUG',
         },
@@ -399,9 +405,9 @@ LOGGING = {
             'handlers': ['file_tq', 'console'],
             'level': 'DEBUG',
         },
-        'payment' : {
+        'payment': {
             'level': 'DEBUG',
-            'handlers' : ['console', 'file_payment',],
+            'handlers': ['console', 'file_payment', ],
         },
         'django': {
             'handlers': ['file_django', 'console'],
@@ -409,7 +415,6 @@ LOGGING = {
         },
     }
 }
-
 
 ##################
 # REST FRAMEWORK #
@@ -429,14 +434,14 @@ PARLER_LANGUAGES = {
         {'code': 'de',},
     ),
     'default': {
-        'fallbacks': ['de'],             # defaults to PARLER_DEFAULT_LANGUAGE_CODE
-        'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
+        'fallbacks': ['de'],  # defaults to PARLER_DEFAULT_LANGUAGE_CODE
+        'hide_untranslated': False,  # the default; let .active_translations() return fallbacks too.
     }
 }
 
 # Path for translation files
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR,'locale'),
+    os.path.join(BASE_DIR, 'locale'),
 ]
 
 # Caching
@@ -447,5 +452,12 @@ CACHES = {
         'LOCATION': 'tq_cache_table',
     }
 }
+
+#################
+# Debug Toolbar #
+#################
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-toolbar autopatch my settings!
+
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
 from .settings_local import *

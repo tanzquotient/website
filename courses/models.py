@@ -64,10 +64,7 @@ class Address(models.Model):
         return "{}, {} {}".format(self.street, self.plz, self.city)
 
 
-from userena.models import UserenaLanguageBaseProfile
-
-
-class UserProfile(UserenaLanguageBaseProfile):
+class UserProfile(models.Model):
     class Gender:
         MEN = 'm'
         WOMAN = 'w'
