@@ -1,0 +1,23 @@
+{% load account %}
+{% user_display user as user_display %}
+{% autoescape off %}
+Hallo {{ user_display }}
+Eine neue E-Mail-Adresse wurde deinem TQ-Konto hinzugefügt. Bitte bestätige sie unter {{ activate_url }}
+
+Liebe Grüsse
+
+Dein TQ
+tanzquotient.org
+Bei Fragen wende dich an informatik@tq.vseth.ch
+
+________________
+
+Hi {{ user_display }},
+A new email address has been added to your TQ account. Please confirm it under {{ activate_url }}
+
+Best regards,
+
+Your TQ
+tanzquotient.org
+If you have any questions, contact us: informatik@tq.vseth.ch
+{% endautoescape %}
