@@ -24,11 +24,11 @@ RUN apt-get update && apt-get install -y --force-yes \
 RUN groupadd --system webapps && useradd  -ms /bin/bash --system --gid webapps --shell /bin/bash --home /webapps django
 
 USER django
-ADD requirements.txt /webapps/tq_website/requirements.txt
+ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
 WORKDIR /webapps
 
 USER  root
-RUN pip3 install --upgrade -r tq_website/requirements.txt
+RUN pip3 install --upgrade -r tq_website/configurations/python-requirements.txt
 
 
 

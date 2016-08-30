@@ -12,12 +12,12 @@ services:
   django:
     build:
       context: .
-      dockerfile: dockerfiles/django
+      dockerfile: configurations/dockerfile
     user: root
     volumes:
       - .:/webapps/tq_website
-      - ./configurations/tq_website.conf:/etc/supervisor/conf.d/tq_website.conf
-    command: /bin/bash -c "python3 /webapps/tq_website/manage.py collectstatic --noinput && service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/tq_website.conf"
+      - ./configurations/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    command: /bin/bash -c "python3 /webapps/tq_website/manage.py collectstatic --noinput && service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/supervisord.conf"
     links:
       - db
     restart: always
@@ -25,7 +25,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./configurations/tq_website-no_ssl.template:/etc/nginx/conf.d/tq_website.template
+      - ./configurations/nginx-no_ssl.conf:/etc/nginx/conf.d/tq_website.template
       - ./collected_static:/webapps/tq_website/collected_static
       - ./media:/webapps/tq_website/media
     command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'

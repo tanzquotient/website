@@ -123,7 +123,7 @@ This creates a virtual environment for you python packages, such that they do no
 source env/bin/activate
 ```
     
-Now we have to install all required packages, since the virtual environment cannot itself be distributed with git. A file named `requirements.txt` lists all required packages. First get the newest files by running from within the local development folder `<project home>/`
+Now we have to install all required packages, since the virtual environment cannot itself be distributed with git. A file named `configurations/python-requirements.txt` lists all required packages. First get the newest files by running from within the local development folder `<project home>/`
 
 ```shell
 git pull
@@ -132,7 +132,7 @@ git pull
 Then enter the virtualenv as described above (you can see that you are inside the virtualenv if there is `(env)` prepended to the command prompt) and run
 
 ```shell
-pip install -r requirements.txt
+pip install -r configurations/python-requirements.txt
 ```
 
 This will automatically download and install all required packages.
@@ -236,7 +236,7 @@ source env/bin/activate
 If changes to installed python packages were made:
 
 ```shell
-pip install -r requirements.txt
+pip install -r configurations/python-requirements.txt
 ```
     
 More clean, if there are already packages installed, remove them first.
@@ -363,7 +363,7 @@ source env/bin/activate
 If changes to installed python packages were made:
 
 ```shell
-pip install -r requirements.txt
+pip install -r configurations/python-requirements.txt
 ```
     
 More clean, if there are already packages installed, remove them first.
