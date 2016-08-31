@@ -131,8 +131,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-INTERNAL_IPS=['127.0.0.1','172.21.0.1','::1']
-
+INTERNAL_IPS = ['127.0.0.1', '172.21.0.1', '::1']
 
 ###############################################
 # Configuration of allauth account management #
@@ -142,20 +141,21 @@ ANONYMOUS_USER_ID = -1
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 # default redirect URL after login (if no GET parameter next is given)
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/accounts/email"
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED=True
-ACCOUNT_EMAIL_VERIFICATION ='mandatory'
-ACCOUNT_EMAIL_SUBJECT_PREFIX='TQ '
-#ACCOUNT_LOGIN_ON_PASSWORD_RESET=True
-ACCOUNT_USERNAME_REQUIRED=False
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE=False
-ACCOUNT_LOGOUT_REDIRECT_URL='/accounts/login'
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION=True
-ACCOUNT_SESSION_REMEMBER=False
-ACCOUNT_USER_DISPLAY=lambda user: user.first_name if user.first_name else user.email
-ACCOUNT_SIGNUP_FORM_CLASS='courses.forms.CustomSignupForm'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'TQ '
+# ACCOUNT_LOGIN_ON_PASSWORD_RESET=True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_SESSION_REMEMBER = False
+ACCOUNT_USER_DISPLAY = lambda user: user.first_name if user.first_name else user.email
+ACCOUNT_SIGNUP_FORM_CLASS = 'courses.forms.CustomSignupForm'
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

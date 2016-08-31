@@ -82,6 +82,7 @@ def create_initial_from_user(user, initial={}):
     initial['student_status'] = user.profile.student_status
     initial['legi'] = user.profile.legi
     initial['newsletter'] = user.profile.newsletter
+    initial['get_involved'] = user.profile.get_involved
     if user.profile.address:
         initial['street'] = user.profile.address.street
         initial['plz'] = user.profile.address.plz
