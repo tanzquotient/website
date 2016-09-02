@@ -17,6 +17,7 @@ from django.db.models import Q
 from django.db import transaction
 import payment.vouchergenerator
 from courses.emailcenter import send_online_payment_successful
+from parler.models import TranslatableModel, TranslatedFields
 
 
 class Weekday:
@@ -112,9 +113,8 @@ class UserProfile(models.Model):
         return "{}".format(self.user.get_full_name())
 
 
-class Style(models.Model):
+class Style(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    description = HTMLField(blank=True, null=True)
     url_info = models.URLField(max_length=500, blank=True, null=True)
     url_info.help_text = "A url to an information page (e.g. Wikipedia)."
     url_video = models.URLField(max_length=500, blank=True, null=True)
@@ -122,17 +122,26 @@ class Style(models.Model):
     url_playlist = models.URLField(max_length=500, blank=True, null=True)
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
 
+    translations = TranslatedFields(
+        description=HTMLField(blank=True, null=True)
+    )
+
     def __str__(self):
         return "{}".format(self.name)
 
 
-class Room(models.Model):
+class Room(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    description = HTMLField(blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
     url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
+
+    translations = TranslatedFields(
+        description=HTMLField(blank=True, null=True),
+        teacher_info=models.TextField(blank=True, null=True,
+                                      help_text="Information for the teachers only (e.g. how to prepare the room for courses)")
+    )
 
     def __str__(self):
         return "{}".format(self.name)
@@ -206,12 +215,16 @@ class IrregularLesson(models.Model):
         return s
 
 
-class CourseType(models.Model):
+class CourseType(TranslatableModel):
     name = models.CharField(max_length=255, unique=True, blank=False)
     styles = models.ManyToManyField(Style, related_name='course_types', blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
-    description = HTMLField(blank=True, null=True)
     couple_course = models.BooleanField(default=True)
+
+    translations = TranslatedFields(
+        description=HTMLField(blank=True, null=True,
+                              help_text="This text is added to the description of each course instance.")
+    )
 
     def get_level(self):
         return self.level if self.level else "";
@@ -233,7 +246,7 @@ class PeriodCancellation(models.Model):
         return "{}".format(self.date.strftime('%d.%m.%Y'))
 
 
-class Course(models.Model):
+class Course(TranslatableModel):
     name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
     type = models.ForeignKey(CourseType, related_name='courses', blank=False, null=False)
@@ -257,10 +270,13 @@ class Course(models.Model):
     display.help_text = "Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed)."
     active = models.BooleanField(default=True)
     active.help_text = "Defines if clients can subscribe to this course (if checked, course is active if offering is active)."
-    special = HTMLField(blank=True, null=True)
-    special.help_text = 'Any special properties of this course.'
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
+
+    translations = TranslatedFields(
+        description=HTMLField(blank=True, null=True,
+                              help_text="Description specific for this course. (Gets displayed combined with the description of the course style)")
+    )
 
     objects = managers.CourseManager()
 

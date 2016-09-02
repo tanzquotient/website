@@ -34,11 +34,11 @@
                 {% endif %}
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
-                {% if course.special or course.type.description %}
+                {% if course.description or course.type.description %}
                     <h4>Beschreibung</h4>
                 {% endif %}
-                {% if course.special %}
-                    <p>{{ course.special|safe }}</p>
+                {% if course.description %}
+                    <p>{{ course.description|safe }}</p>
                 {% endif %}
                 {% if course.type.description %}
                     <p>{{ course.type.description|safe }}</p>

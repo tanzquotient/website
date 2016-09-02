@@ -1,9 +1,9 @@
 from django.db import models
 
 import datetime
+from parler.managers import TranslatableManager
 
-
-class CourseManager(models.Manager):
+class CourseManager(TranslatableManager):
     def weekday(self, weekday):
         result_list = []
         for c in self.all():

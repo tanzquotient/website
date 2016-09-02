@@ -10,6 +10,7 @@ from django.contrib.admin.filters import SimpleListFilter
 from courses.filters import *
 from reversion.admin import VersionAdmin
 from payment.vouchergenerator import generate_pdf, join_pdfs
+from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 
 
 class CourseInline(admin.TabularInline):
@@ -84,7 +85,7 @@ class SongAdmin(admin.ModelAdmin):
     model = Song
 
 
-class CourseAdmin(admin.ModelAdmin):
+class CourseAdmin(TranslatableAdmin):
     list_display = (
         'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
         'format_teachers',
@@ -97,7 +98,7 @@ class CourseAdmin(admin.ModelAdmin):
     model = Course
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'type', 'open_class', 'min_subscribers', 'max_subscribers', 'special']}),
+            'fields': ['name', 'type', 'open_class', 'min_subscribers', 'max_subscribers', 'description']}),
         ('When?', {
             'fields': ['offering', 'period', ]}),
         ('Where?', {
@@ -113,7 +114,7 @@ class CourseAdmin(admin.ModelAdmin):
                export_confirmed_subscriptions_xlsx, evaluate_course]
 
 
-class CourseTypeAdmin(admin.ModelAdmin):
+class CourseTypeAdmin(TranslatableAdmin):
     list_display = ('name', 'format_styles', 'level', 'couple_course',)
     list_filter = ('level', 'couple_course')
     search_fields = ['name', ]
@@ -176,9 +177,14 @@ class TeachAdmin(admin.ModelAdmin):
                      'course__type__name']
 
 
-class StyleAdmin(admin.ModelAdmin):
+class StyleAdmin(TranslatableAdmin):
     list_display = ('name', 'url_info', 'url_video', 'url_playlist')
     inlines = (SongInline,)
+
+
+@admin.register(Room)
+class RoomAdmin(TranslatableAdmin):
+    pass
 
 
 @admin.register(Voucher)
@@ -197,7 +203,6 @@ class VoucherPurposeAdmin(admin.ModelAdmin):
 admin.site.register(Offering, OfferingAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseType, CourseTypeAdmin)
-admin.site.register(Room)
 admin.site.register(Song, SongAdmin)
 admin.site.register(Address)
 admin.site.register(Period, PeriodAdmin)

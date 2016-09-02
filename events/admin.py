@@ -2,6 +2,7 @@ from django.contrib import admin
 from events.models import *
 
 from events.admin_actions import *
+from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 
 # Register your models here.
 
@@ -13,7 +14,7 @@ class OrganisatorInline(admin.TabularInline):
     raw_id_fields = ('organiser',)
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(TranslatableAdmin):
     list_display = ('name', 'date', 'format_time', 'room', 'format_prices', 'format_organisators', 'special', 'display')
     list_filter = ('date', 'room',)
     inlines = (OrganisatorInline,)
