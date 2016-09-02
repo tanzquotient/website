@@ -273,7 +273,7 @@ def offering_place_chart_dict(offering):
     for course in courses:
         # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
         subscriptions = Subscribe.objects.filter(course=course)
-        labels.append(u'<a href="{}" target="_self">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
+        labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                                    course.name))
         series_confirmed.append(str(subscriptions.accepted().count()))
         mc = subscriptions.new().men().count()
