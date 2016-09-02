@@ -4,7 +4,6 @@ from events.models import *
 from events.admin_actions import *
 from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 
-# Register your models here.
 
 class OrganisatorInline(admin.TabularInline):
     model = Organise
@@ -14,6 +13,7 @@ class OrganisatorInline(admin.TabularInline):
     raw_id_fields = ('organiser',)
 
 
+@admin.register(Event)
 class EventAdmin(TranslatableAdmin):
     list_display = ('name', 'date', 'format_time', 'room', 'format_prices', 'format_organisators', 'special', 'display')
     list_filter = ('date', 'room',)
@@ -33,8 +33,5 @@ class EventAdmin(TranslatableAdmin):
         ('Billing', {
             'fields': ['price_with_legi', 'price_without_legi', 'price_special', ]}),
         ('Admin', {
-            'fields': ['special', 'display'], }),
+            'fields': ['special', 'display'],}),
     ]
-
-
-admin.site.register(Event, EventAdmin)

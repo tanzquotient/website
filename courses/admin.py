@@ -19,6 +19,7 @@ class CourseInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Offering)
 class OfferingAdmin(admin.ModelAdmin):
     list_display = ('name', 'period', 'display', 'active')
     inlines = (CourseInline,)
@@ -78,6 +79,7 @@ class SongInline(admin.TabularInline):
     extra = 5
 
 
+@admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
     list_display = ['title', 'artist', 'length', 'speed', 'style']
     list_filter = ('style',)
@@ -85,6 +87,7 @@ class SongAdmin(admin.ModelAdmin):
     model = Song
 
 
+@admin.register(Course)
 class CourseAdmin(TranslatableAdmin):
     list_display = (
         'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
@@ -114,6 +117,7 @@ class CourseAdmin(TranslatableAdmin):
                export_confirmed_subscriptions_xlsx, evaluate_course]
 
 
+@admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
     list_display = ('name', 'format_styles', 'level', 'couple_course',)
     list_filter = ('level', 'couple_course')
@@ -124,6 +128,7 @@ class CourseTypeAdmin(TranslatableAdmin):
     raw_id_fields = ('styles',)
 
 
+@admin.register(Subscribe)
 class SubscribeAdmin(VersionAdmin):
     list_display = (
         'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
@@ -136,12 +141,14 @@ class SubscribeAdmin(VersionAdmin):
 
     model = Subscribe
 
-    actions = [match_partners, unmatch_partners, confirm_subscriptions, confirm_subscriptions_allow_singles, reject_subscriptions,
+    actions = [match_partners, unmatch_partners, confirm_subscriptions, confirm_subscriptions_allow_singles,
+               reject_subscriptions,
                set_subscriptions_as_payed]
 
     raw_id_fields = ('user', 'partner')
 
 
+@admin.register(Confirmation)
 class ConfirmationAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
@@ -153,6 +160,7 @@ class ConfirmationAdmin(admin.ModelAdmin):
     raw_id_fields = ('subscription',)
 
 
+@admin.register(Rejection)
 class RejectionAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date', 'reason')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
@@ -164,10 +172,12 @@ class RejectionAdmin(admin.ModelAdmin):
     raw_id_fields = ('subscription',)
 
 
+@admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
     inlines = (PeriodCancellationInline,)
 
 
+@admin.register(Teach)
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ('teacher',)
     list_display = ('id', 'teacher', 'course',)
@@ -177,6 +187,7 @@ class TeachAdmin(admin.ModelAdmin):
                      'course__type__name']
 
 
+@admin.register(Style)
 class StyleAdmin(TranslatableAdmin):
     list_display = ('name', 'url_info', 'url_video', 'url_playlist')
     inlines = (SongInline,)
@@ -184,6 +195,11 @@ class StyleAdmin(TranslatableAdmin):
 
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
+    pass
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
     pass
 
 
@@ -200,19 +216,6 @@ class VoucherPurposeAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 
-admin.site.register(Offering, OfferingAdmin)
-admin.site.register(Course, CourseAdmin)
-admin.site.register(CourseType, CourseTypeAdmin)
-admin.site.register(Song, SongAdmin)
-admin.site.register(Address)
-admin.site.register(Period, PeriodAdmin)
-admin.site.register(Style, StyleAdmin)
-admin.site.register(Teach, TeachAdmin)
-admin.site.register(Subscribe, SubscribeAdmin)
-admin.site.register(Confirmation, ConfirmationAdmin)
-admin.site.register(Rejection, RejectionAdmin)
-
-
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
@@ -220,6 +223,7 @@ class UserProfileInline(admin.StackedInline):
 
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+
 
 # Define a new User admin
 class MyUserAdmin(UserAdmin):
