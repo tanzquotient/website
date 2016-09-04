@@ -93,7 +93,7 @@ class CourseAdmin(TranslatableAdmin):
         'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
         'format_teachers',
         'display', 'active')
-    list_filter = ('offering', 'type', 'room', 'active')
+    list_filter = ('offering', 'type', 'room', 'display', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
                SubscribeInlineForCourse,)
@@ -115,6 +115,25 @@ class CourseAdmin(TranslatableAdmin):
     actions = [display, undisplay, activate, deactivate, copy_courses, export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, evaluate_course]
+
+
+@admin.register(PlannedCourse)
+class PlannedCourseAdmin(CourseAdmin):
+    list_display = (
+        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
+        'format_teachers')
+    list_filter = ()
+    pass
+
+
+@admin.register(CurrentCourse)
+class CurrentCourseAdmin(CourseAdmin):
+    list_display = (
+        'name', 'type', 'open_class', 'evaluated', 'offering',
+        'format_teachers',
+        'display', 'active')
+    list_filter = ('display', 'active')
+    pass
 
 
 @admin.register(CourseType)

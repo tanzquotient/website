@@ -12,8 +12,12 @@ class CoursesToolbar(CMSToolbar):
             url = reverse('admin:courses_offering_changelist')
             menu.add_sideframe_item(_('Offerings'), url=url)
         if self.request.user.has_perm('courses.change_course'):
+            url = reverse('admin:courses_plannedcourse_changelist')
+            menu.add_sideframe_item(_('Course Planning'), url=url)
+            url = reverse('admin:courses_currentcourse_changelist')
+            menu.add_sideframe_item(_('Current Courses Management'), url=url)
             url = reverse('admin:courses_course_changelist')
-            menu.add_sideframe_item(_('Courses'), url=url)
+            menu.add_sideframe_item(_('All Courses'), url=url)
         if self.request.user.has_perm('courses.change_subscribe'):
             url = reverse('admin:courses_subscribe_changelist')
             menu.add_sideframe_item(_('Subscriptions'), url=url)

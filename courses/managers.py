@@ -1,7 +1,8 @@
 from django.db import models
 
-import datetime
+from datetime import date
 from parler.managers import TranslatableManager
+from django.db.models import Q
 
 class CourseManager(TranslatableManager):
     def weekday(self, weekday):
@@ -16,9 +17,9 @@ class CourseManager(TranslatableManager):
         result = []
         courses = self.all()
         sorted_courses = sorted(courses,
-                                key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else datetime.date(
+                                key=lambda c: c.get_first_lesson_date() if c.get_first_lesson_date() else date(
                                     day=1, month=1, year=9999))
-        current_date = datetime.date(year=1, month=1, day=1)
+        current_date = date(year=1, month=1, day=1)
         unknown_list = []
         month_list = []
         for c in sorted_courses:
@@ -39,6 +40,18 @@ class CourseManager(TranslatableManager):
         if unknown_list:
             result.append((None, unknown_list))
         return result
+
+
+class PlannedCourseManager(CourseManager):
+    def get_queryset(self):
+        from courses.services import get_subsequent_offering
+        return super(PlannedCourseManager, self).get_queryset().filter(offering=get_subsequent_offering())
+
+
+class CurrentCourseManager(CourseManager):
+    def get_queryset(self):
+        from courses.services import get_current_active_offering
+        return super(CurrentCourseManager, self).get_queryset().filter(offering=get_current_active_offering())
 
 
 class AddressManager(models.Manager):

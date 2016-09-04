@@ -501,6 +501,20 @@ class Course(TranslatableModel):
         return "{} ({})".format(self.name, self.offering)
 
 
+class PlannedCourse(Course):
+    objects = managers.PlannedCourseManager()
+
+    class Meta:
+        proxy = True
+
+
+class CurrentCourse(Course):
+    objects = managers.CurrentCourseManager()
+
+    class Meta:
+        proxy = True
+
+
 @reversion.register()
 class Subscribe(models.Model):
     class State:
