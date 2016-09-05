@@ -139,8 +139,8 @@ class Room(TranslatableModel):
 
     translations = TranslatedFields(
         description=HTMLField(blank=True, null=True),
-        teacher_info=models.TextField(blank=True, null=True,
-                                      help_text="Information for the teachers only (e.g. how to prepare the room for courses)")
+        instructions=models.TextField(blank=True, null=True,
+                                      help_text="Instructions to prepare the room (for teachers/staff only)")
     )
 
     def __str__(self):
