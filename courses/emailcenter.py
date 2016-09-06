@@ -50,7 +50,7 @@ def send_participation_confirmation(subscription):
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
-        'course_info': create_course_info(subscription),
+        'course_info': create_course_info(subscription.course),
         'usi': subscription.usi,
         'account_IBAN': conf['IBAN'],
         'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
@@ -100,6 +100,26 @@ def send_rejection(subscription, reason):
     return _email_helper(subscription.user.email, template, context)
 
 
+def send_teacher_welcome(teach):
+    teacher=teach.teacher
+    course=teach.course
+    context = {
+        'first_name': teacher.first_name,
+        'last_name': teacher.last_name,
+        'course': course.type.name,
+        'offering': course.offering.name,
+        'course_info': create_course_info(course),
+        'room_info': course.room.description,
+        'room_instructions': course.room.instructions,
+        'coursepayment_url': reverse('payment:coursepayment_detail', kwargs={'course': course.id}),
+        'login_url': reverse('account_login'),
+    }
+
+    template = 'teacher_welcome'
+
+    return _email_helper(teacher.email, template, context)
+
+
 def detect_rejection_reason(subscription):
     """
     detect the reason why the subscription is rejected
@@ -116,20 +136,19 @@ def detect_rejection_reason(subscription):
 def _email_helper(email, template, context):
     """Sending facility. Catches errors due to not existent template."""
     try:
-        mail.send(
+        return mail.send(
             [email, my_settings.DEFAULT_FROM_EMAIL],
             my_settings.DEFAULT_FROM_EMAIL,
             template=template,
             context=context,
         )
-        return True
     except post_office_models.EmailTemplate.DoesNotExist as e:
         log.error("Email Template missing with name: {}".format(template))
-        return False
+        return None
 
 
 def create_user_info(user):
-    s ='{}\n'.format(user.get_full_name())
+    s = '{}\n'.format(user.get_full_name())
     if user.email:
         s += user.email + "\n"
     if user.profile.phone_number:
@@ -137,17 +156,16 @@ def create_user_info(user):
     return s.strip('\n')
 
 
-def create_course_info(subscription):
-    course = subscription.course
-    s ='{}\n{}'.format(course.type.name, course.format_lessons())
+def create_course_info(course):
+    s = '{}\n{}'.format(course.type.name, course.format_lessons())
     if course.room:
-        s +=', {}\n'.format(course.room)
+        s += ', {}\n'.format(course.room)
     else:
-        s +='\n'
-    if course.get_period() and course.offering and course.offering.type==courses.models.Offering.Type.REGULAR:
-        s +='{}\n'.format(course.get_period())
+        s += '\n'
+    if course.get_period() and course.offering and course.offering.type == courses.models.Offering.Type.REGULAR:
+        s += '{}\n'.format(course.get_period())
     if course.format_cancellations():
-        s +='Ausfälle: {}\n'.format(course.format_cancellations())
+        s += 'Ausfälle: {}\n'.format(course.format_cancellations())
     if course.format_prices:
-        s +='Kosten: {}\n'.format(course.format_prices())
+        s += 'Kosten: {}\n'.format(course.format_prices())
     return s.strip('\n')

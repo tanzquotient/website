@@ -92,7 +92,7 @@ class CourseAdmin(TranslatableAdmin):
     list_display = (
         'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
         'format_teachers',
-        'display', 'active')
+        'display', 'active', 'get_teachers_welcomed')
     list_filter = ('offering', 'type', 'room', 'display', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
@@ -112,7 +112,7 @@ class CourseAdmin(TranslatableAdmin):
             'fields': ['display', 'active']}),
     ]
 
-    actions = [display, undisplay, activate, deactivate, copy_courses, export_confirmed_subscriptions_csv,
+    actions = [display, undisplay, activate, deactivate, welcome_teachers, copy_courses, export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, evaluate_course]
 
@@ -131,7 +131,7 @@ class CurrentCourseAdmin(CourseAdmin):
     list_display = (
         'name', 'type', 'open_class', 'evaluated', 'offering',
         'format_teachers',
-        'display', 'active')
+        'display', 'active', 'get_teachers_welcomed')
     list_filter = ('display', 'active')
     pass
 
@@ -176,7 +176,7 @@ class ConfirmationAdmin(admin.ModelAdmin):
 
     model = Confirmation
 
-    raw_id_fields = ('subscription',)
+    raw_id_fields = ('subscription', 'mail')
 
 
 @admin.register(Rejection)
@@ -188,7 +188,18 @@ class RejectionAdmin(admin.ModelAdmin):
 
     model = Rejection
 
-    raw_id_fields = ('subscription',)
+    raw_id_fields = ('subscription', 'mail')
+
+
+@admin.register(TeacherWelcome)
+class TeacherWelcomeAdmin(admin.ModelAdmin):
+    list_display = ('teach', 'date')
+    search_fields = ['teach__teacher__first_name', 'teach__teacher__last_name', 'teach__course__name',
+                     'teach__course__type__name']
+
+    model = TeacherWelcome
+
+    raw_id_fields = ('teach', 'mail')
 
 
 @admin.register(Period)
@@ -199,7 +210,7 @@ class PeriodAdmin(admin.ModelAdmin):
 @admin.register(Teach)
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ('teacher',)
-    list_display = ('id', 'teacher', 'course',)
+    list_display = ('id', 'teacher', 'course', 'welcomed')
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter,)
     list_display_link = ('id',)
     search_fields = ['teacher__email', 'teacher__first_name', 'teacher__last_name', 'course__name',

@@ -108,6 +108,10 @@ def unmatch_partners(modeladmin, request, queryset):
 unmatch_partners.short_description = "Unmatch partners (both partners must be selected)"
 
 
+def welcome_teachers(modeladmin, request, queryset):
+    services.welcome_teachers(queryset)
+
+
 def set_subscriptions_as_payed(modeladmin, request, queryset):
     queryset.filter(state=Subscribe.State.CONFIRMED).update(state=Subscribe.State.COMPLETED)
 

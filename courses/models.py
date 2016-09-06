@@ -18,6 +18,7 @@ from django.db import transaction
 import payment.vouchergenerator
 from courses.emailcenter import send_online_payment_successful
 from parler.models import TranslatableModel, TranslatedFields
+from post_office.models import Email
 
 
 class Weekday:
@@ -459,6 +460,12 @@ class Course(TranslatableModel):
                 else:
                     return d2
 
+    def get_teachers_welcomed(self):
+        return self.teaching.filter(welcomed=True).count() > 0
+
+    get_teachers_welcomed.short_description = "Teachers welcomed"
+    get_teachers_welcomed.boolean = True
+
     # create and stores identical copy of this course
     def copy(self):
         old = Course.objects.get(pk=self.id)
@@ -664,6 +671,7 @@ class Confirmation(models.Model):
     subscription = models.ForeignKey(Subscribe, related_name='confirmations')
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
+    mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return "({}) confirmed at {}".format(self.subscription, self.date)
@@ -692,9 +700,20 @@ class Rejection(models.Model):
                               default=Subscribe.MatchingState.UNKNOWN)
     mail_sent = models.BooleanField(blank=False, null=False, default=True)
     mail_sent.help_text = "If this rejection was communicated to user by email."
+    mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return "({}) rejected at {}".format(self.subscription, self.date)
+
+
+class TeacherWelcome(models.Model):
+    teach = models.ForeignKey('Teach', related_name='teacher_welcomes')
+    date = models.DateField(blank=False, null=False, auto_now_add=True)
+    date.help_text = "The date when the welcome mail was sent to the teacher."
+    mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return "({}) welcomed at {}".format(self.teach, self.date)
 
 
 # not a class method and therefore outside
@@ -741,6 +760,7 @@ class VoucherPurpose(models.Model):
 class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
     course = models.ForeignKey('Course', related_name='teaching')
+    welcomed = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} teaches {}".format(self.teacher, self.course)

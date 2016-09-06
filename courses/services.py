@@ -261,9 +261,10 @@ def confirm_subscription(subscription, request=None, allow_single_in_couple_cour
         subscription.state = models.Subscribe.State.CONFIRMED
         subscription.save()
 
-        if send_participation_confirmation(subscription):
+        m = send_participation_confirmation(subscription)
+        if m:
             # log that we sent the confirmation
-            c = models.Confirmation(subscription=subscription)
+            c = models.Confirmation(subscription=subscription, mail=m)
             c.save()
             return True
         else:
@@ -309,7 +310,8 @@ def reject_subscription(subscription, reason=None):
         # if ensures that no mail was ever sent due to a rejection to this user
 
         # save if we sent the mail
-        c.mail_sent = send_rejection(subscription, reason)
+        c.mail = send_rejection(subscription, reason)
+        c.mail_sent = c.mail is not None
         c.save()
 
 
@@ -317,6 +319,29 @@ def reject_subscription(subscription, reason=None):
 def reject_subscriptions(subscriptions, reason=None):
     for subscription in subscriptions:
         reject_subscription(subscription, reason)
+
+
+def welcome_teacher(teach):
+    if not teach.welcomed:
+        teach.welcomed=True
+        teach.save()
+
+        m = send_teacher_welcome(teach)
+        if m:
+            # log that we sent the confirmation
+            c = models.TeacherWelcome(teach=teach, mail=m)
+            c.save()
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def welcome_teachers(courses):
+    for course in courses:
+        for teach in course.teaching.all():
+            welcome_teacher(teach)
 
 
 def get_or_create_userprofile(user):
