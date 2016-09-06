@@ -109,6 +109,7 @@ def send_teacher_welcome(teach):
         'course': course.type.name,
         'offering': course.offering.name,
         'course_info': create_course_info(course),
+        'room_url': reverse('courses:subscription', kwargs={'course_id': course.id}),
         'room_info': course.room.description,
         'room_instructions': course.room.instructions,
         'coursepayment_url': reverse('payment:coursepayment_detail', kwargs={'course': course.id}),

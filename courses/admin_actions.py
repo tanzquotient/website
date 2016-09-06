@@ -109,7 +109,7 @@ unmatch_partners.short_description = "Unmatch partners (both partners must be se
 
 
 def welcome_teachers(modeladmin, request, queryset):
-    services.welcome_teachers(queryset)
+    services.welcome_teachers(queryset, request)
 
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
