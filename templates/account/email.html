@@ -59,7 +59,7 @@
         {% with field=form.email %}
             <div id="form-group-{{ field.id_for_label }}"
                  class="form-group has-feedback {% if field.errors %}has-error{% endif %}">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-offset-2 col-sm-6">
                     <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}"
                            placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
                     {% if field.errors %}
@@ -70,7 +70,7 @@
                     {% endif %}
                     {% include "courses/snippets/field_errors.html" %}
                 </div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
                 <button class="btn btn-default" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
             </div>
             </div>
