@@ -12,7 +12,6 @@
 
     <form class="form-horizontal" role="form" id="signup_form" method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
-
         {% include "courses/snippets/signup_user_form.html" with form=form only %}
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
