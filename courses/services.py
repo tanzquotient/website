@@ -55,12 +55,12 @@ def get_or_create_user(user_data):
 
 
 def update_user(user, user_data):
-    fn = user_data['first_name']
-    ln = user_data['last_name']
-
-    user.email = user_data['email']
-    user.first_name = fn
-    user.last_name = ln
+    if 'email' in user_data:
+        user.email = user_data['email']
+    if 'first_name' in user_data:
+        user.first_name = user_data['first_name']
+    if 'last_name' in user_data:
+        user.last_name = user_data['last_name']
     user.save()
 
     userprofile = get_or_create_userprofile(user)

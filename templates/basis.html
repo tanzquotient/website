@@ -88,7 +88,7 @@
                                 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
                                     <li role="separator" class="divider"></li>
                                 {% endif %}
-                                <li><a href="{% url 'account_email' %}"><span
+                                <li><a href="{% url 'auth_profile' %}"><span
                                         class="glyphicon glyphicon-user"></span>
                                     {% trans "View profile" %}</a>
                                 </li>

@@ -1,0 +1,97 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account" %}{% endblock %}
+
+{% block content %}
+    {% url 'auth_profile' as auth_profile %}
+    <p>{% blocktrans %}<a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to my profile</a>{% endblocktrans %}
+    </p>
+    <h2>{% trans "E-mail Addresses" %}</h2>
+    {% if user.emailaddress_set.all %}
+        <p>{% trans 'The following e-mail addresses are associated with your account:' %}</p>
+
+        <form class="form-horizontal" role="form" action="{% url 'account_email' %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {% for emailaddress in user.emailaddress_set.all %}
+                    <label for="email_radio_{{ forloop.counter }}"
+                           class="col-sm-offset-2 col-sm-10 {% if emailaddress.primary %}primary_email{% endif %}">
+
+                        <input id="email_radio_{{ forloop.counter }}" type="radio" name="email"
+                               {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %}
+                               value="{{ emailaddress.email }}"/>
+
+                        {{ emailaddress.email }}
+                        {% if emailaddress.verified %}
+                            <span class="label label-success">{% trans "Verified" %}</span>
+                        {% else %}
+                            <span class="label label-default">{% trans "Unverified" %}</span>
+                        {% endif %}
+                        {% if emailaddress.primary %}<span class="label label-primary">{% trans "Primary" %}</span>{% endif %}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-default" type="submit"
+                            name="action_primary">{% trans 'Make Primary' %}</button>
+                    <button class="btn btn-default" type="submit"
+                            name="action_send">{% trans 'Re-send Verification' %}</button>
+                    <button class="btn btn-default" type="submit" name="action_remove">{% trans 'Remove' %}</button>
+                </div>
+            </div>
+        </form>
+
+    {% else %}
+        <p>
+            <strong>{% trans 'Warning:' %}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}
+        </p>
+
+    {% endif %}
+
+
+    <form class="form-horizontal" role="form" method="post" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        {% with field=form.email %}
+            <div id="form-group-{{ field.id_for_label }}"
+                 class="form-group has-feedback {% if field.errors %}has-error{% endif %}">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}"
+                           placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
+                    {% if field.errors %}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <p class="help-block">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% include "courses/snippets/field_errors.html" %}
+                </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+            </div>
+            </div>
+        {% endwith %}
+    </form>
+
+{% endblock %}
+
+
+{% block extra_body %}
+    <script type="text/javascript">
+        (function () {
+            var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
+            var actions = document.getElementsByName('action_remove');
+            if (actions.length) {
+                actions[0].addEventListener("click", function (e) {
+                    if (!confirm(message)) {
+                        e.preventDefault();
+                    }
+                });
+            }
+        })();
+    </script>
+{% endblock %}

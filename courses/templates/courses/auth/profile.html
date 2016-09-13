@@ -1,0 +1,31 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Profile of" %} {{ request.user.get_full_name }} {% if gender_icon %}<i class="fa fa-{{ gender_icon }} fa"></i>{% endif %}</h1>
+
+    {% url 'account_email' as account_email %}
+    <p>{% blocktrans %}Manage your <a href="{{ account_email }}">email addresses</a>.{% endblocktrans %}
+    </p>
+
+    <form class="form-horizontal" role="form" id="signup_form" method="post" action="{% url 'auth_profile' %}">
+        {% csrf_token %}
+
+        {% include "courses/snippets/user_profile_form.html" with form=form only %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">
+                    {% trans "Update Profile" %}
+                </button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

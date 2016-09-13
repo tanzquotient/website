@@ -17,21 +17,12 @@
 {% block main_content %}
     <div class="container">
         <div class="row">
-            <!-- Article main content -->
-            <article class="col-xs-12 maincontent">
-                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {% block content %}
-                            {% endblock content %}
-                        </div>
-                    </div>
-
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% block content %}
+                    {% endblock content %}
                 </div>
-
-            </article>
-            <!-- /Article -->
-
+            </div>
         </div>
     </div>
 {% endblock main_content %}

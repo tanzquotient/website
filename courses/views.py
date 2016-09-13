@@ -2,7 +2,7 @@ from django.contrib.sessions.exceptions import SuspiciousSession
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -10,10 +10,8 @@ from django.utils.translation import ugettext as _
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.utils.decorators import method_decorator
 from .models import *
-
-from .forms import *
 
 from . import services
 
@@ -21,6 +19,8 @@ from django.contrib.auth.models import User
 from django.utils import dateformat
 
 from django.contrib.admin.views.decorators import staff_member_required
+
+from django.views.generic.edit import FormView
 
 import logging
 
@@ -62,7 +62,7 @@ def course_list(request, force_preview=False):
             courses_by_month = course_set.by_month()
             for (d, l) in courses_by_month:
                 if d is None:
-                    section_title=_("Unknown month")
+                    section_title = _("Unknown month")
                 elif 1 < d.month < 12:
                     # use the django formatter for date objects
                     section_title = dateformat.format(d, 'F Y')
@@ -101,6 +101,7 @@ def course_list_preview(request):
 
 
 def subscription(request, course_id):
+    from .forms import UserForm, create_initial_from_user
     template_name = "courses/subscription.html"
     context = {}
 
@@ -146,6 +147,7 @@ def subscription(request, course_id):
 
 
 def subscription2(request, course_id):
+    from .forms import UserForm
     if 'user1_data' not in request.session:
         raise SuspiciousSession()
 
@@ -274,7 +276,7 @@ def offering_place_chart_dict(offering):
         # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
-                                                                   course.name))
+                                                    course.name))
         series_confirmed.append(str(subscriptions.accepted().count()))
         mc = subscriptions.new().men().count()
         wc = subscriptions.new().women().count()
@@ -410,3 +412,30 @@ def offering_overview(request, offering_id):
     context['place_chart'] = offering_place_chart_dict(o)
     context['time_chart'] = offering_time_chart_dict(o)
     return render(request, template_name, context)
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileView(FormView):
+    from .forms import UserEditForm
+    template_name = 'courses/auth/profile.html'
+    form_class = UserEditForm
+    success_url = reverse_lazy('auth_profile')
+
+    def get_initial(self):
+        from .forms import create_initial_from_user
+        initial = create_initial_from_user(self.request.user)
+
+        return initial
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(ProfileView, self).get_context_data(**kwargs)
+
+        user = self.request.user
+        if user.profile.gender:
+            context['gender_icon'] = 'mars' if user.profile.gender == 'm' else 'venus'
+        return context
+
+    def form_valid(self, form):
+        services.update_user(self.request.user, form.cleaned_data)
+        return super(ProfileView, self).form_valid(form)

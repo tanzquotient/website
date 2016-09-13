@@ -8,13 +8,7 @@ import logging
 log = logging.getLogger('tq')
 
 
-class CustomSignupForm(forms.Form):
-    first_name = forms.CharField(max_length=30)
-    first_name.label = 'Vorname'
-    last_name = forms.CharField(max_length=30)
-    last_name.label = 'Nachname'
-    gender = forms.ChoiceField(choices=UserProfile.Gender.CHOICES)
-    gender.label = 'Geschlecht'
+class UserEditForm(forms.Form):
     phone_number = forms.CharField(max_length=255, required=False)
     phone_number.label = 'Telefonnummer (Mobile)'
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
@@ -27,7 +21,7 @@ class CustomSignupForm(forms.Form):
     get_involved.label = 'Ich würde gerne ab und zu beim TQ mithelfen (Events etc.)'
 
     def clean(self):
-        cleaned_data = super(CustomSignupForm, self).clean()
+        cleaned_data = super(UserEditForm, self).clean()
 
         # if a student, the legi must be set
         if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
@@ -36,6 +30,18 @@ class CustomSignupForm(forms.Form):
             raise forms.ValidationError(msg)
 
         return cleaned_data
+
+
+class CustomSignupForm(UserEditForm):
+    first_name = forms.CharField(max_length=30)
+    first_name.label = 'Vorname'
+    last_name = forms.CharField(max_length=30)
+    last_name.label = 'Nachname'
+    gender = forms.ChoiceField(choices=UserProfile.Gender.CHOICES)
+    gender.label = 'Geschlecht'
+
+    class Meta:
+        fields=['first_name', 'last_name','gender','phone_number','student_status','legi','newsletter','get_involved']
 
     def signup(self, request, user):
         log.info("signup new user with email {}".format(user.email))
