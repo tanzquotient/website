@@ -1,6 +1,13 @@
 {% extends "courses/subscription_template.html" %}
 
+{% load i18n %}
+
 {% block user_form %}
+
+    <p><a href="{% url 'courses:subscription' course.id %}"><i
+            class="fa fa-arrow-circle-left fa-lg"></i> {% trans 'Go back' %}</a>
+    </p>
+
     <h3>Anmeldung der {{ person }}. Person</h3>
 
     <form class="form-horizontal" role="form" action="{% url 'courses:subscription2' course.id %}" method="post">

@@ -105,11 +105,7 @@ def subscription(request, course_id):
     template_name = "courses/subscription.html"
     context = {}
 
-    # clear session keys
-    if 'user1_data' in request.session:
-        del request.session['user1_data']
-    if 'user2_data' in request.session:
-        del request.session['user2_data']
+    # do not clear session keys
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -149,7 +145,14 @@ def subscription(request, course_id):
 def subscription2(request, course_id):
     from .forms import UserForm
     if 'user1_data' not in request.session:
-        raise SuspiciousSession()
+        # This can happen if a client does reload the page after the session was reset
+        # -> Redirect to a page with an error message
+        res = dict()
+        res['tag'] = 'danger'
+        res['text'] = _('The session is no longer valid. Please start over with the subscription.')
+        res['long_text'] = None
+        request.session['subscription_result'] = res
+        return redirect('courses:subscription_message', course_id)
 
     template_name = "courses/subscription2.html"
     context = {}
@@ -196,14 +199,14 @@ def subscription_do(request, course_id):
         del request.session['user2_data']
 
     request.session['subscription_result'] = res
-    return redirect('courses:subscription_done', course_id)
+    return redirect('courses:subscription_message', course_id)
 
 
-def subscription_done(request, course_id):
+def subscription_message(request, course_id):
     if 'subscription_result' not in request.session:
         return redirect('courses:subscription', course_id)
 
-    template_name = "courses/subscription_done.html"
+    template_name = "courses/subscription_message.html"
     context = {}
 
     context.update({
