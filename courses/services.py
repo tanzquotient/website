@@ -205,8 +205,8 @@ def match_partners(subscriptions, request=None):
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])
-        sm.sort(key=lambda x: x.user.profile.body_height if x else DEFAULT_BODY_HEIGHT)
-        sw.sort(key=lambda x: x.user.profile.body_height if x else DEFAULT_BODY_HEIGHT)
+        sm.sort(key=lambda x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
+        sw.sort(key=lambda x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
         while c > 0:
             c = c - 1
             m = sm[c]

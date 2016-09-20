@@ -335,11 +335,10 @@ class Course(TranslatableModel):
 
     def get_free_places_count(self):
         if self.max_subscribers != None:
-            c = self.max_subscribers - self.subscriptions.accepted().count()
-            if c > 0:
-                return c
-            else:
-                return 0
+            m = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
+            w = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
+            c = self.max_subscribers - min(m,w)
+            return max(c,0)
         else:
             return None
 
