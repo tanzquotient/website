@@ -327,18 +327,40 @@ class Course(TranslatableModel):
 
     # only show free_places_count if it can be calculated and is below 10
     def show_free_places_count(self):
-        r = self.get_free_places_count()
-        if r is not None and 0 < r < 10:
-            return r
+        BOUND = 10
+        counts = self.get_free_places_count()
+        if counts is not None:
+            return {
+                'total': 0 < counts['total'] < BOUND,
+                'man': 0 < counts['man'] < BOUND,
+                'woman': 0 < counts['woman'] < BOUND
+            }
         else:
             return None
 
     def get_free_places_count(self):
+        """
+        Creates a dict with the free places totally and for men/women separately
+        """
         if self.max_subscribers != None:
             m = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
             w = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
-            c = self.max_subscribers - min(m,w)
-            return max(c,0)
+
+            c = self.max_subscribers - self.subscriptions.count()
+            if self.type.couple_course:
+                cm = self.max_subscribers / 2 - m
+                cw = self.max_subscribers / 2 - w
+            else:
+                cm = c
+                cw = c
+            c = int(max(c, 0))
+            cm = int(max(cm, 0))
+            cw = int(max(cw, 0))
+            return {
+                'total': c,
+                'man': cm,
+                'woman': cw
+            }
         else:
             return None
 
@@ -371,7 +393,7 @@ class Course(TranslatableModel):
 
     def is_preview(self):
         return False
-        #return not self.display or ((self.offering is not None) and self.offering.is_preview)
+        # return not self.display or ((self.offering is not None) and self.offering.is_preview)
 
     def is_subscription_allowed(self):
         if self.open_class:

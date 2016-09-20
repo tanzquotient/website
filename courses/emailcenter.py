@@ -127,7 +127,8 @@ def detect_rejection_reason(subscription):
     :return: the reason as constant from Rejection.Reason
     """
     reason = courses.models.Rejection.Reason.UNKNOWN
-    if subscription.course.get_free_places_count() == 0:
+    counts = subscription.course.get_free_places_count()
+    if counts and counts['total'] == 0:
         reason = courses.models.Rejection.Reason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
         reason = courses.models.Rejection.Reason.NO_PARTNER

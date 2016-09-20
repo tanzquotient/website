@@ -280,14 +280,15 @@ def offering_place_chart_dict(offering):
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                     course.name))
-        series_confirmed.append(str(subscriptions.accepted().count()))
+        accepted_count = subscriptions.accepted().count()
+        series_confirmed.append(str(accepted_count))
         mc = subscriptions.new().men().count()
         wc = subscriptions.new().women().count()
         series_men_count.append(str(mc))
         series_women_count.append(str(wc))
-        freec = course.get_free_places_count()
-        if freec:
-            freec = max(0, freec - mc - wc)
+        maximum = course.max_subscribers
+        if maximum:
+            freec = max(0, maximum - accepted_count - mc - wc)
         else:
             freec = 0
         series_free.append(str(freec))
@@ -386,9 +387,9 @@ def course_overview(request, course_id):
     cc = subscriptions.accepted().count()
     mc = subscriptions.new().men().count()
     wc = subscriptions.new().women().count()
-    freec = course.get_free_places_count()
-    if freec:
-        freec = max(0, freec - mc - wc)
+    maximum = course.max_subscribers
+    if maximum:
+        freec = max(0, maximum - cc - mc - wc)
     else:
         freec = 0
 

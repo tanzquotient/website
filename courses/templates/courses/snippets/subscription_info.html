@@ -1,7 +1,6 @@
 {% if long %}
     {% if course.open_class %}
-        <div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen Kurs
-            kann man sich nicht hier anmelden.
+
         </div>
     {% endif %}
     {% if course.is_subscription_allowed %}
@@ -35,30 +34,76 @@
     {% endif %}
 {% else %}
     {% if course.open_class %}
-        <i class="fa fa-connectdevelop fa-lg"></i> Open Class
+        {% if long %}
+            <div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen
+            Kurs
+            kann man sich nicht hier anmelden.
+        {% else %}
+            <i class="fa fa-connectdevelop fa-lg"></i> Open Class
+        {% endif %}
     {% endif %}
     {% if course.is_subscription_allowed %}
         {% if display_link %}
             <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
         {% endif %}
         <div class="subscription_info">
-            {% with count=course.get_free_places_count %}
-                {% if count != None %}
-                    {% if course.show_free_places_count %}
-                        <span class="badge">{{ course.get_free_places_count }}</span>
-                    {% elif count <= 0 %}
-                        <em>(Warteliste)</em>
+            {% with count=course.get_free_places_count show=course.show_free_places_count %}
+                {{ count }}
+                {{ show }}
+                {% if course.type.couple_course %}
+                    {% if count != None %}
+                        {% if count.man <= 0 %}
+                            <em>(<i class="fa fa-mars"></i> Warteliste)</em>
+                        {% else %}
+                            {% if show.man or course.men_needed %}
+                                [
+                            {% endif %}
+                            <i class="fa fa-mars"></i>
+                            {% if course.men_needed %}
+                                gesucht
+                            {% endif %}
+                            {% if show.man %}
+                                <span class="badge">{{ count.man }}</span>
+                            {% endif %}
+                            {% if show.man or course.men_needed %}
+                                ]
+                            {% endif %}
+                        {% endif %}
+                        {% if count.woman <= 0 %}
+                            <em>(<i class="fa fa-venus"></i> Warteliste)</em>
+                        {% else %}
+                            {% if show.woman or course.women_needed %}
+                                [
+                            {% endif %}
+                            <i class="fa fa-venus"></i>
+                            {% if course.women_needed %}
+                                gesucht
+                            {% endif %}
+                            {% if show.woman %}
+                                <span class="badge">{{ count.woman }}</span>
+                            {% endif %}
+                            {% if show.woman or course.women_needed %}
+                                ]
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if course.men_needed %}
+                            [<i class="fa fa-mars"></i> gesucht]
+                        {% endif %}
+                        {% if course.women_needed %}
+                            [<i class="fa fa-venus fa-lg"></i> gesucht]
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if count != None %}
+                        {% if show.total %}
+                            <span class="badge">{{ count.total }}</span>
+                        {% elif count.total <= 0 %}
+                            <em>(Warteliste)</em>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endwith %}
-            {% if course.type.couple_course %}
-                {% if course.men_needed %}
-                    [<i class="fa fa-mars"></i> gesucht]
-                {% endif %}
-                {% if course.women_needed %}
-                    [<i class="fa fa-venus fa-lg"></i> gesucht]
-                {% endif %}
-            {% endif %}
         </div>
     {% else %}
         {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
