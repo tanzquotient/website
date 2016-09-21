@@ -1,0 +1,11 @@
+{% if long %}
+    <em>Warteliste {{ gender_plural }}: </em>
+        Dieser Kurs ist schon voll. Du kannst dich trotzdem gerne anmelden und wirst auf die Warteliste gesetzt.
+    <br />
+{% else %}
+    {% if gender_icon %}
+        <em>(<i class="fa fa-{{ gender_icon }}"></i> Warteliste)</em>
+    {% else %}
+        <em>(Warteliste)</em>
+    {% endif %}
+{% endif %}

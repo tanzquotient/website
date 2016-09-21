@@ -1,113 +1,79 @@
 {% if long %}
-    {% if course.open_class %}
-
-        </div>
-    {% endif %}
-    {% if course.is_subscription_allowed %}
-        {% if course.get_free_places_count != None %}
-            {% if course.get_free_places_count <= 0 %}
-                <div class="alert alert-info"><i class="fa fa-info-circle fa-lg"></i> <em>Warteliste: </em>Dieser Kurs
-                    ist schon voll. Du kannst dich trotzdem gerne anmelden und wirst auf die Warteliste gesetzt.
-                </div>
-            {% endif %}
-        {% endif %}
-        {% if course.type.couple_course %}
-            {% if course.men_needed %}
-                <div class="alert alert-info"><i class="fa fa-mars fa-lg"></i> <em>Männer gesucht: </em>In diesem Kurs
-                    gibt
-                    es noch Frauen ohne Partner. Du kannst dich trotzdem auch als Frau oder Paar anmelden.
-                </div>
-            {% endif %}
-            {% if course.women_needed %}
-                <div class="alert alert-info"><i class="fa fa-venus fa-lg"></i> <em>Frauen gesucht: </em>In diesem Kurs
-                    gibt
-                    es noch Männer ohne Partner. Du kannst dich trotzdem auch als Mann oder Paar anmelden.
-                </div>
-            {% endif %}
-        {% endif %}
+    <div class="alert alert-info">
+{% endif %}
+{% if course.open_class %}
+    {% if long %}
+        <div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen
+        Kurs kann man sich nicht hier anmelden.
     {% else %}
-        {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
-            <div class="alert alert-danger"><i class="fa fa-exclamation-triangle fa-lg"></i> <em>Ausgebucht: </em>Dieser
-                Kurs ist ausgebucht. Die Anmeldung ist leider nicht mehr möglich.
-            </div>
-        {% endif %}
+        <i class="fa fa-connectdevelop fa-lg"></i> Open Class
     {% endif %}
-{% else %}
-    {% if course.open_class %}
-        {% if long %}
-            <div class="alert alert-info"><i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen
-            Kurs
-            kann man sich nicht hier anmelden.
-        {% else %}
-            <i class="fa fa-connectdevelop fa-lg"></i> Open Class
-        {% endif %}
+{% endif %}
+{% if course.is_subscription_allowed %}
+    {% if display_link %}
+        <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
     {% endif %}
-    {% if course.is_subscription_allowed %}
-        {% if display_link %}
-            <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
-        {% endif %}
-        <div class="subscription_info">
-            {% with count=course.get_free_places_count show=course.show_free_places_count %}
-                {{ count }}
-                {{ show }}
-                {% if course.type.couple_course %}
-                    {% if count != None %}
-                        {% if count.man <= 0 %}
-                            <em>(<i class="fa fa-mars"></i> Warteliste)</em>
-                        {% else %}
-                            {% if show.man or course.men_needed %}
-                                [
-                            {% endif %}
-                            <i class="fa fa-mars"></i>
-                            {% if course.men_needed %}
-                                gesucht
-                            {% endif %}
-                            {% if show.man %}
-                                <span class="badge">{{ count.man }}</span>
-                            {% endif %}
-                            {% if show.man or course.men_needed %}
-                                ]
-                            {% endif %}
-                        {% endif %}
-                        {% if count.woman <= 0 %}
-                            <em>(<i class="fa fa-venus"></i> Warteliste)</em>
-                        {% else %}
-                            {% if show.woman or course.women_needed %}
-                                [
-                            {% endif %}
-                            <i class="fa fa-venus"></i>
-                            {% if course.women_needed %}
-                                gesucht
-                            {% endif %}
-                            {% if show.woman %}
-                                <span class="badge">{{ count.woman }}</span>
-                            {% endif %}
-                            {% if show.woman or course.women_needed %}
-                                ]
-                            {% endif %}
-                        {% endif %}
+    <div class="subscription_info">
+        {% with count=course.get_free_places_count show=course.show_free_places_count %}
+            {% if course.type.couple_course %}
+                {% if count != None %}
+                    {% if count.man <= 0 %}
+                        {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='mars' gender_plural='Männer' %}
                     {% else %}
-                        {% if course.men_needed %}
-                            [<i class="fa fa-mars"></i> gesucht]
+                        {% if show.man or course.men_needed %}
+                            [ <i class="fa fa-mars"></i>
                         {% endif %}
+                        {% if course.men_needed %}
+                            gesucht
+                        {% endif %}
+                        {% if show.man %}
+                            <span class="badge">{{ count.man }} frei</span>
+                        {% endif %}
+                        {% if show.man or course.men_needed %}
+                            ]
+                        {% endif %}
+                    {% endif %}
+                    {% if count.woman <= 0 %}
+                        {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='venus' gender_plural='Frauen' %}
+                    {% else %}
+                        {% if show.woman or course.women_needed %}
+                            [
+                        {% endif %}
+                        <i class="fa fa-venus"></i>
                         {% if course.women_needed %}
-                            [<i class="fa fa-venus fa-lg"></i> gesucht]
+                            gesucht
+                        {% endif %}
+                        {% if show.woman %}
+                            <span class="badge">{{ count.woman }} frei</span>
+                        {% endif %}
+                        {% if show.woman or course.women_needed %}
+                            ]
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    {% if count != None %}
-                        {% if show.total %}
-                            <span class="badge">{{ count.total }}</span>
-                        {% elif count.total <= 0 %}
-                            <em>(Warteliste)</em>
-                        {% endif %}
+                    {% if course.men_needed %}
+                        {% include "courses/snippets/subscription_info_missing_gender.html" with gender_icon='mars' gender_singular='Mann' gender_plural='Männer' gender_op_singular='Frau' gender_op_plural='Frauen' %}
+                    {% endif %}
+                    {% if course.women_needed %}
+                        {% include "courses/snippets/subscription_info_missing_gender.html" with gender_icon='venus' gender_singular='Frau' gender_plural='Frauen' gender_op_singular='Mann' gender_op_plural='Männer' %}
                     {% endif %}
                 {% endif %}
-            {% endwith %}
-        </div>
-    {% else %}
-        {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
-            <em>ausgebucht</em>
-        {% endif %}
+            {% else %}
+                {% if count != None %}
+                    {% if show.total %}
+                        <span class="badge">{{ count.total }} frei</span>
+                    {% elif count.total <= 0 %}
+                        <em>(Warteliste)</em>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endwith %}
+    </div>
+{% else %}
+    {% if course.get_free_places_count != None and course.get_free_places_count <= 0 %}
+        {% include "courses/snippets/subscription_info_overbooked.html" %}
     {% endif %}
+{% endif %}
+{% if long %}
+    </div>
 {% endif %}
