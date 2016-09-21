@@ -327,7 +327,7 @@ class Course(TranslatableModel):
 
     # only show free_places_count if it can be calculated and is below 10
     def show_free_places_count(self):
-        BOUND = 10
+        BOUND = 6
         counts = self.get_free_places_count()
         if counts is not None:
             return {

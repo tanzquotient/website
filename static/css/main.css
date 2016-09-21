@@ -287,6 +287,11 @@ img.pull-left {
     white-space:nowrap;
 }
 
+.subscription_info_item {
+    display:inline-block;
+    padding-left: 12px;
+}
+
 .sign_in {
     color: #C51718;
 }

@@ -90,7 +90,8 @@ class SongAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(TranslatableAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
+        'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'format_cancellations',
+        'room', 'format_prices',
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed')
     list_filter = ('offering', 'type', 'room', 'display', 'active')
@@ -112,7 +113,8 @@ class CourseAdmin(TranslatableAdmin):
             'fields': ['display', 'active']}),
     ]
 
-    actions = [display, undisplay, activate, deactivate, welcome_teachers, copy_courses, export_confirmed_subscriptions_csv,
+    actions = [display, undisplay, activate, deactivate, welcome_teachers, copy_courses,
+               export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, evaluate_course]
 
@@ -120,7 +122,8 @@ class CourseAdmin(TranslatableAdmin):
 @admin.register(PlannedCourse)
 class PlannedCourseAdmin(CourseAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'room', 'format_prices',
+        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'format_cancellations', 'room',
+        'format_prices',
         'format_teachers')
     list_filter = ()
     pass
