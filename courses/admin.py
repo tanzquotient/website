@@ -11,6 +11,7 @@ from courses.filters import *
 from reversion.admin import VersionAdmin
 from payment.vouchergenerator import generate_pdf, join_pdfs
 from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
+from django.contrib.admin.views.main import ChangeList
 
 
 class CourseInline(admin.TabularInline):
@@ -150,6 +151,31 @@ class CourseTypeAdmin(TranslatableAdmin):
     raw_id_fields = ('styles',)
 
 
+class SubscribeChangeList(ChangeList):
+    def get_results(self, *args, **kwargs):
+        super(SubscribeChangeList, self).get_results(*args, **kwargs)
+
+        self.info = {
+            'total': self.result_list.count(),
+            'confirmed': 0,
+            'rejected': 0,
+            'max_subscribers': None
+        }
+        course_consistent = True
+        course = None
+        for s in self.result_list:
+            if s.state == Subscribe.State.CONFIRMED:
+                self.info['confirmed'] += 1
+            if s.state == Subscribe.State.REJECTED:
+                self.info['rejected'] += 1
+            if course_consistent:
+                if course is None:
+                    course = s.course
+                if s.course != course:
+                    course_consistent = False
+        if course_consistent and course is not None:
+            self.info['max_subscribers'] = course.max_subscribers
+
 @admin.register(Subscribe)
 class SubscribeAdmin(VersionAdmin):
     list_display = (
@@ -168,6 +194,11 @@ class SubscribeAdmin(VersionAdmin):
                set_subscriptions_as_payed]
 
     raw_id_fields = ('user', 'partner')
+
+    change_list_template = 'courses/admin/subscribe_change_list.html'
+
+    def get_changelist(self, request):
+        return SubscribeChangeList
 
 
 @admin.register(Confirmation)
