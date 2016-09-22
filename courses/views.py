@@ -303,6 +303,31 @@ def offering_place_chart_dict(offering):
     }
 
 
+def progress_chart_dict():
+    labels = []
+    series_couple = []
+    series_single = []
+
+    for o in Offering.objects.filter(type=Offering.Type.REGULAR).all():
+        subscriptions = Subscribe.objects.filter(course__offering=o)
+        labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
+                                                    o.name))
+        accepted = subscriptions.accepted()
+        total_count = accepted.count()
+        couple_count =accepted.filter(matching_state=Subscribe.MatchingState.COUPLE).count()
+        single_count = total_count-couple_count
+
+        series_couple.append(str(couple_count))
+        series_single.append(str(single_count))
+
+    return {
+        'labels': labels,
+        'series_couple': series_couple,
+        'series_single': series_single,
+        'height': 25 * len(labels) + 90,
+    }
+
+
 # helper function
 def offering_time_chart_dict(offering):
     traces = []
@@ -369,6 +394,7 @@ def subscription_overview(request):
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
     context.update({
+        'progress_chart': progress_chart_dict(),
         'offering_charts': offering_charts,
         'all_offerings': services.get_all_offerings()
     })

@@ -8,6 +8,10 @@
     <h2></h2>
 
     <div class="container">
+        <h2>Overall Progress</h2>
+
+        <p>{% include "courses/auth/progress_chart.html" with chart=progress_chart only %}</p>
+
         {% for o in offering_charts %}
             <h2>{{ o.offering.name }}
                 <small>{{ o.offering.period|default:'' }}

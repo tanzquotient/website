@@ -1,0 +1,56 @@
+{% load basic_tags %}
+
+{% autoescape off %}
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var y = [{{ chart.labels|fence:"'"|join:"," }}];
+        var trace1 = {
+            y: y,
+            x: [{{ chart.series_couple|join:"," }}],
+            orientation: 'h',
+            name: 'Couple subscriptions',
+            type: 'bar',
+            marker: {
+                color: '#C51718',
+            },
+        };
+
+        var trace2 = {
+            y: y,
+            x: [{{ chart.series_single|join:"," }}],
+            orientation: 'h',
+            name: 'Single subscriptions',
+            type: 'bar',
+            marker: {
+                color: '#dc7374',
+            },
+        };
+
+        var data = [trace1, trace2];
+
+        var layout = {
+            title: 'Subscriptions over regular offerings',
+            autosize: true,
+            height: {{ chart.height }},
+            barmode: 'stack',
+            margin: {
+                l: 150,
+                b: 40,
+                t: 50,
+            },
+            xaxis1: {
+                title: 'confirmed participants',
+                autorange: true,
+                zeroline: true,
+                showline: false,
+                showticklabels: true,
+                showgrid: true,
+            },
+        };
+
+        Plotly.newPlot(document.getElementById('chart-progress'), data, layout);
+    });
+</script>
+{% endautoescape %}
+<div class="chart" id="chart-progress"></div>
+
