@@ -205,8 +205,10 @@ def match_partners(subscriptions, request=None):
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])
-        sm.sort(key=lambda x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
-        sw.sort(key=lambda x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
+        sm.sort(key=lambda
+            x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
+        sw.sort(key=lambda
+            x: x.user.profile.body_height if x.user.profile and x.user.profile.body_height else DEFAULT_BODY_HEIGHT)
         while c > 0:
             c = c - 1
             m = sm[c]
@@ -257,7 +259,7 @@ def confirm_subscription(subscription, request=None, allow_single_in_couple_cour
     if not allow_single_in_couple_course and subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
-    if subscription.state in [models.Subscribe.State.NEW, models.Subscribe.State.REJECTED]:
+    if subscription.state == models.Subscribe.State.NEW:
         subscription.state = models.Subscribe.State.CONFIRMED
         subscription.save()
 
@@ -319,6 +321,18 @@ def reject_subscription(subscription, reason=None):
 def reject_subscriptions(subscriptions, reason=None):
     for subscription in subscriptions:
         reject_subscription(subscription, reason)
+
+
+def unreject_subscriptions(subscriptions, request=None):
+    unrejected_count = 0
+    for subscription in subscriptions:
+        if subscription.state == models.Subscribe.State.REJECTED:
+            subscription.state = models.Subscribe.State.NEW
+            subscription.save()
+            unrejected_count += 1
+    if unrejected_count:
+        messages.add_message(request, messages.SUCCESS,
+                             _(u'{} unrejected successfully').format(unrejected_count))
 
 
 def welcome_teacher(teach):

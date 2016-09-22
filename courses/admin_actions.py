@@ -94,6 +94,14 @@ def reject_subscriptions(self, request, queryset):
 reject_subscriptions.short_description = "Reject selected subscriptions"
 
 
+def unreject_subscriptions(modeladmin, request, queryset):
+    # manually send confirmation mails
+    services.unreject_subscriptions(queryset, request)
+
+
+unreject_subscriptions.short_description = "Unreject subscriptions"
+
+
 def match_partners(modeladmin, request, queryset):
     services.match_partners(queryset, request)
 
