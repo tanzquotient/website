@@ -189,7 +189,7 @@ class SubscribeAdmin(VersionAdmin):
 
     model = Subscribe
 
-    actions = [match_partners, unmatch_partners, confirm_subscriptions, confirm_subscriptions_allow_singles,
+    actions = [match_partners, unmatch_partners, confirm_subscriptions, unconfirm_subscriptions, confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions,
                set_subscriptions_as_payed]
 

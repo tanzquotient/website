@@ -65,6 +65,14 @@ def confirm_subscriptions_allow_singles(modeladmin, request, queryset):
 confirm_subscriptions_allow_singles.short_description = "Confirm selected subscriptions (allow singles in couple courses)"
 
 
+def unconfirm_subscriptions(modeladmin, request, queryset):
+    # manually send confirmation mails
+    services.unconfirm_subscriptions(queryset, request)
+
+
+unconfirm_subscriptions.short_description = "Unconfirm subscriptions (be sure to reconfirm them later!)"
+
+
 class RejectForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     reason = forms.ChoiceField(label=_("Select Reason"), choices=Rejection.Reason.CHOICES)
@@ -113,7 +121,7 @@ def unmatch_partners(modeladmin, request, queryset):
     services.unmatch_partners(queryset)
 
 
-unmatch_partners.short_description = "Unmatch partners (both partners must be selected)"
+unmatch_partners.short_description = "Unmatch partners (both partners must be selected and unconfirmed)"
 
 
 def welcome_teachers(modeladmin, request, queryset):

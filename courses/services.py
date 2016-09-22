@@ -227,17 +227,18 @@ def match_partners(subscriptions, request=None):
 
 def unmatch_partners(subscriptions):
     for s in subscriptions.all():
-        partner_subs = subscriptions.filter(user=s.partner, course=s.course)
-        if partner_subs.count() == 1:
-            _unmatch_person(s)
-            _unmatch_person(partner_subs.first())
+        if s.state == models.Subscribe.State.NEW:
+            allowed_states = [models.Subscribe.MatchingState.MATCHED, models.Subscribe.MatchingState.COUPLE]
+            partner_subs = subscriptions.filter(user=s.partner, course=s.course)
+            if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
+                _unmatch_person(s)
+                _unmatch_person(partner_subs.first())
 
 
 def _unmatch_person(subscription):
     subscription.partner = None
     subscription.matching_state = models.Subscribe.MatchingState.TO_REMATCH
     subscription.save()
-    models.Confirmation.objects.filter(subscription=subscription).delete()
 
 
 class CourseException(Exception):
@@ -296,6 +297,13 @@ def confirm_subscriptions(subscriptions, request=None, allow_single_in_couple_co
     if confirmed_count:
         messages.add_message(request, messages.SUCCESS,
                              _(u'{} of {} confirmed successfully').format(confirmed_count, len(subscriptions)))
+
+
+def unconfirm_subscriptions(subscriptions, request=None):
+    for s in subscriptions.all():
+        if s.state == models.Subscribe.State.CONFIRMED:
+            s.state = models.Subscribe.State.NEW
+            s.save()
 
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
