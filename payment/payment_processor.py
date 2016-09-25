@@ -10,7 +10,7 @@ class PaymentProcessor:
     def match_payments(self, queryset=Payment.objects):
         new_payments = queryset.filter(state=Payment.State.NEW).all()
 
-        prog = re.compile(r"\s?#?(?P<usi>[a-zA-Z0-9]{6,6})\s?")
+        prog = re.compile(r"\s#?(?P<usi>[a-zA-Z0-9]{6,6})\s")
         for payment in new_payments:
             if payment.remittance_user_string:
                 matches = prog.findall(payment.remittance_user_string)
@@ -44,8 +44,8 @@ class PaymentProcessor:
                             break
                         else:
                             log.warning("USI #{0} was not found for payment {1}.".format(usi, payment))
-                            payment.state = Payment.State.MANUAL
-                            break
+                            #payment.state = Payment.State.MANUAL
+                            #break
                     payment.amount_to_reimburse = remaining_amount
                     if payment.state == Payment.State.NEW:
                         if remaining_amount == 0:
