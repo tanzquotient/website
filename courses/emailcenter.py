@@ -24,6 +24,7 @@ def send_subscription_confirmation(subscription):
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
+        'course_info': create_course_info(subscription.course),
     }
 
     if subscription.partner is not None:
@@ -101,19 +102,25 @@ def send_rejection(subscription, reason):
 
 
 def send_teacher_welcome(teach):
-    teacher=teach.teacher
-    course=teach.course
+    teacher = teach.teacher
+    course = teach.course
+
+    current_site = Site.objects.get_current().domain
+    room_url = current_site + reverse('courses:subscription', kwargs={'course_id': course.id})
+    coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
+    login_url = current_site + reverse('account_login')
+
     context = {
         'first_name': teacher.first_name,
         'last_name': teacher.last_name,
         'course': course.type.name,
         'offering': course.offering.name,
         'course_info': create_course_info(course),
-        'room_url': reverse('courses:subscription', kwargs={'course_id': course.id}),
+        'room_url': room_url,
         'room_info': course.room.description,
         'room_instructions': course.room.instructions,
-        'coursepayment_url': reverse('payment:coursepayment_detail', kwargs={'course': course.id}),
-        'login_url': reverse('account_login'),
+        'coursepayment_url': coursepayment_url,
+        'login_url': login_url,
     }
 
     template = 'teacher_welcome'
