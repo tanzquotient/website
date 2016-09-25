@@ -103,6 +103,8 @@ def send_rejection(subscription, reason):
 
 def send_teacher_welcome(teach):
     teacher = teach.teacher
+    if not teacher.email:
+        return None
     course = teach.course
 
     current_site = Site.objects.get_current().domain
