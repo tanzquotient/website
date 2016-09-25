@@ -184,3 +184,9 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
                                  "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
         return super(CoursePaymentConfirm, self).form_valid(form)
+
+
+class CoursePaymentExport(TeacherOfCourseOnly):
+    def get(self, request, *args, **kwargs):
+        from courses import services
+        return services.export_subscriptions([kwargs.get('course_id', None)], 'xlsx')

@@ -430,7 +430,8 @@ def export_subscriptions(course_ids, export_format):
             (u"E-Mail", 50),
             (u"Mobile", 30),
             (u"Legi-Nr.", 30),
-            (u"Zu bezahlen", 10),
+            (u"Preis", 10),
+            (u"Noch zu bezahlen", 10),
             (u"Erfahrung", 60),
         ]
 
@@ -446,7 +447,8 @@ def export_subscriptions(course_ids, export_format):
         for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by('user__first_name'):
             row_num += 1
             row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
-                   s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
+                   s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(),
+                   0 if s.payed() else s.get_price_to_pay(), s.experience]
             for col_num in range(len(row)):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 c.value = row[col_num]
