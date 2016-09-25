@@ -3,7 +3,7 @@ from daterange_filter.filter import DateRangeFilter
 from django.contrib import admin
 
 from payment.models import *
-from payment.admin_actions import process_payments
+from payment.admin_actions import process_payments, mark_payments_as_new
 
 class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
@@ -19,7 +19,7 @@ class PaymentAdmin(admin.ModelAdmin):
     search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                      'currency_code', 'remittance_user_string', 'filename']
     inlines = [SubscriptionPaymentInline]
-    actions = [process_payments]
+    actions = [process_payments, mark_payments_as_new]
 
 @admin.register(SubscriptionPayment)
 class SubscriptionPaymentAdmin(admin.ModelAdmin):
