@@ -113,7 +113,7 @@ def send_teacher_welcome(teach):
     context = {
         'first_name': teacher.first_name,
         'last_name': teacher.last_name,
-        'course': course.type.name,
+        'course': course.name,
         'offering': course.offering.name,
         'course_info': create_course_info(course),
         'room_url': room_url,
