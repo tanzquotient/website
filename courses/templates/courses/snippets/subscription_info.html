@@ -17,6 +17,9 @@
     <div class="subscription_info">
         {% if course.type.couple_course %}
             {% if count != None %}
+                {{ count }}
+                Single_men: {{ course.single_men_count }}
+                Single_women: {{ course.single_women_count }}
                 {% if count.man <= 0 %}
                     {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='mars' gender_singular='Mann' gender_plural='Männer' %}
                 {% else %}

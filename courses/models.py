@@ -343,10 +343,11 @@ class Course(TranslatableModel):
         Creates a dict with the free places totally and for men/women separately
         """
         if self.max_subscribers != None:
-            m = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
-            w = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
+            subscriptions = self.subscriptions.active()
+            m = subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
+            w = subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
 
-            c = self.max_subscribers - self.subscriptions.count()
+            c = self.max_subscribers - subscriptions.count()
             if self.type.couple_course:
                 cm = self.max_subscribers / 2 - m
                 cw = self.max_subscribers / 2 - w
@@ -368,16 +369,16 @@ class Course(TranslatableModel):
         return self.subscriptions.accepted().count()
 
     def men_count(self):
-        return self.subscriptions.men().count()
+        return self.subscriptions.active().men().count()
 
     def women_count(self):
-        return self.subscriptions.women().count()
+        return self.subscriptions.active().women().count()
 
     def single_men_count(self):
-        return self.subscriptions.single_men().count()
+        return self.subscriptions.active().single_men().count()
 
     def single_women_count(self):
-        return self.subscriptions.single_women().count()
+        return self.subscriptions.active().single_women().count()
 
     def men_needed(self):
         return self.single_men_count() < self.single_women_count()
@@ -556,6 +557,10 @@ class Subscribe(models.Model):
         CHOICES = (
             (NEW, 'new'), (CONFIRMED, 'confirmed (to pay)'), (PAYED, 'payed'), (COMPLETED, 'completed'),
             (REJECTED, 'rejected'), (TO_REIMBURSE, 'to reimburse'))
+
+        ACCEPTED_STATES=[CONFIRMED,PAYED,COMPLETED]
+        REJECTED_STATES = [REJECTED, TO_REIMBURSE]
+        PAID_STATES = [PAYED, TO_REIMBURSE, COMPLETED]
 
     class MatchingState:
         UNKNOWN = 'unknown'
