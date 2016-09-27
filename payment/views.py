@@ -38,7 +38,7 @@ class VoucherPaymentIndexView(FormView):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
-        voucher.mark_as_used(self.request.user, comment="Used to pay course #" + subscription.usi + ".")
+        voucher.mark_as_used(self.request.user, comment="Used to pay course #" + subscription.usi + ".", subscription=subscription)
 
         # show a message that the subscription has been payed (use django message passing framework)
         if subscription.mark_as_payed('voucher'):
@@ -82,7 +82,7 @@ class CounterPaymentDetailView(FormView):
     template_name = 'payment/counter/details.html'
     success_url = reverse_lazy('payment:counterpayment_index')
 
-    def get_context_data(self,  **kwargs):
+    def get_context_data(self, **kwargs):
         usi = self.kwargs['usi']
         subscription = Subscribe.objects.filter(usi=usi).first()
 
@@ -105,7 +105,6 @@ class CounterPaymentDetailView(FormView):
                                  "USI #" + usi + " " + _('successfully marked as paid.'))
 
         return super(CounterPaymentDetailView, self).form_valid(form)
-
 
 
 class TeacherOnly(View):

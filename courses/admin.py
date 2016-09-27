@@ -191,7 +191,7 @@ class SubscribeAdmin(VersionAdmin):
 
     actions = [match_partners, unmatch_partners, confirm_subscriptions, unconfirm_subscriptions, confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions,
-               set_subscriptions_as_payed]
+               set_subscriptions_as_payed, undo_voucher_payment]
 
     raw_id_fields = ('user', 'partner')
 
@@ -273,6 +273,8 @@ class VoucherAdmin(VersionAdmin):
     exclude = ('key',)
 
     actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
+
+    raw_id_fields = ('subscription',)
 
 
 @admin.register(VoucherPurpose)
