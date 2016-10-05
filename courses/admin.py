@@ -184,7 +184,7 @@ class SubscribeAdmin(VersionAdmin):
         'get_user_email', 'experience', 'comment', 'get_payment_state', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'state')
-    search_fields = ['user__email', 'user__first_name', 'user__last_name']
+    search_fields = ['user__email', 'user__first_name', 'user__last_name', 'usi']
     readonly_fields = ('state', 'matching_state', 'usi',)
 
     model = Subscribe
