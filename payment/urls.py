@@ -27,4 +27,8 @@ urlpatterns = [
     url(r'^auth/coursepayment/(?P<course>[0-9]*)/(?P<usi>[a-zA-Z0-9]{6})/paid/$',
         views.CoursePaymentConfirm.as_view(),
         name='coursepayment_payed'),
+    url(r'^auth/finance/(?P<offering>[0-9]*)/detail/$', views.QuarterPaymentDetailView.as_view(),
+        name='finance_quarter_detail'),
+    url(r'^auth/finance/(?P<offering>[0-9]*)/courses/$', views.QuarterPaymentCoursesView.as_view(),
+        name='finance_quarter_courses'),
 ]

@@ -299,6 +299,7 @@ class Course(TranslatableModel):
             total += subscription.get_price_to_pay()
         return total
 
+
     def total_price(self):
         total = 0.0
         for subscription in self.subscriptions.accepted().all():
@@ -812,6 +813,10 @@ class Offering(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+
+    @property
+    def courses(self):
+        return Course.objects.filter(offering=self).all()
 
 
 class Song(models.Model):

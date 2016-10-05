@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.views.generic import TemplateView, FormView, RedirectView, View
 from payment.forms import USIForm, VoucherForm, CourseForm
-from courses.models import Subscribe, Voucher, Course, PaymentMethod
+from courses.models import Subscribe, Voucher, Course, PaymentMethod, Offering
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -190,3 +190,21 @@ class CoursePaymentExport(TeacherOfCourseOnly):
     def get(self, request, *args, **kwargs):
         from courses import services
         return services.export_subscriptions([kwargs.get('course_id', None)], 'xlsx')
+
+class QuarterPaymentDetailView(TemplateView):
+    template_name = 'payment/finance/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
+        context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering']).all()
+        return context
+
+class QuarterPaymentCoursesView(TemplateView):
+    template_name = 'payment/finance/courses.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
+        context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering']).all()
+        return context

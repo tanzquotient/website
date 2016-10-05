@@ -1,0 +1,36 @@
+{% extends "basis.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content_title %}
+    {{ offering }}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+
+        <h2>Courses</h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <th>{% trans "Course" %}</th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Unpaid" %}</th>
+                    <th>{% trans "In Course" %}</th>
+                    </thead>
+                    <tbody>
+                    {% for course in offering.courses %}
+                        <tr>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.total_price }}</td>
+                            <td>{{ course.total_unpaid }}</td>
+                            <td>{{ course.total_paid_course }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
