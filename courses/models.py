@@ -344,10 +344,11 @@ class Course(TranslatableModel):
         Creates a dict with the free places totally and for men/women separately
         """
         if self.max_subscribers != None:
-            m = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
-            w = self.subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
+            subscriptions = self.subscriptions.active()
+            m = subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
+            w = subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
 
-            c = self.max_subscribers - self.subscriptions.count()
+            c = self.max_subscribers - subscriptions.count()
             if self.type.couple_course:
                 cm = self.max_subscribers / 2 - m
                 cw = self.max_subscribers / 2 - w
@@ -369,16 +370,16 @@ class Course(TranslatableModel):
         return self.subscriptions.accepted().count()
 
     def men_count(self):
-        return self.subscriptions.men().count()
+        return self.subscriptions.active().men().count()
 
     def women_count(self):
-        return self.subscriptions.women().count()
+        return self.subscriptions.active().women().count()
 
     def single_men_count(self):
-        return self.subscriptions.single_men().count()
+        return self.subscriptions.active().single_men().count()
 
     def single_women_count(self):
-        return self.subscriptions.single_women().count()
+        return self.subscriptions.active().single_women().count()
 
     def men_needed(self):
         return self.single_men_count() < self.single_women_count()
@@ -558,6 +559,10 @@ class Subscribe(models.Model):
             (NEW, 'new'), (CONFIRMED, 'confirmed (to pay)'), (PAYED, 'payed'), (COMPLETED, 'completed'),
             (REJECTED, 'rejected'), (TO_REIMBURSE, 'to reimburse'))
 
+        ACCEPTED_STATES = [CONFIRMED, PAYED, COMPLETED]
+        REJECTED_STATES = [REJECTED, TO_REIMBURSE]
+        PAID_STATES = [PAYED, TO_REIMBURSE, COMPLETED]
+
     class MatchingState:
         UNKNOWN = 'unknown'
         COUPLE = 'couple'
@@ -626,7 +631,7 @@ class Subscribe(models.Model):
     get_calculated_experience.short_description = "Calculated experience"
 
     def payed(self):
-        return self.state == Subscribe.State.PAYED or self.state == Subscribe.State.TO_REIMBURSE or self.state == Subscribe.State.COMPLETED
+        return self.state in self.State.PAID_STATES
 
     # returns similar courses that the user did before in the system
     def get_payment_state(self):
@@ -755,15 +760,21 @@ class Voucher(models.Model):
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
     pdf_file = models.FileField(upload_to='/voucher/', null=True, blank=True)
+    subscription = models.ForeignKey('Subscribe', blank=True, null=True)
+    subscription.help_text = "subscription that was paid with this voucher"
 
-    def mark_as_used(self, user=None, comment=""):
-        with transaction.atomic(), reversion.create_revision():
-            self.used = True
-            self.save()
-            if user is not None and not user.is_anonymous():
-                reversion.set_user(user)
-            reversion.set_comment("Marked as used. " + comment)
-        return True
+    def mark_as_used(self, user=None, comment="", subscription=None):
+        if not self.used:
+            with transaction.atomic(), reversion.create_revision():
+                self.used = True
+                self.subscription = subscription  # which subscription was paid
+                self.save()
+                if user is not None and not user.is_anonymous():
+                    reversion.set_user(user)
+                reversion.set_comment("Marked as used. " + comment)
+            return True
+        else:
+            return False
 
     class Meta:
         ordering = ['issued', 'expires']

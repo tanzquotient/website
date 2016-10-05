@@ -157,16 +157,16 @@ class SubscribeChangeList(ChangeList):
 
         self.info = {
             'total': self.result_list.count(),
-            'confirmed': 0,
+            'accepted': 0,
             'rejected': 0,
             'max_subscribers': None
         }
         course_consistent = True
         course = None
         for s in self.result_list:
-            if s.state == Subscribe.State.CONFIRMED:
-                self.info['confirmed'] += 1
-            if s.state == Subscribe.State.REJECTED:
+            if s.state in Subscribe.State.ACCEPTED_STATES:
+                self.info['accepted'] += 1
+            if s.state == Subscribe.State.REJECTED_STATES:
                 self.info['rejected'] += 1
             if course_consistent:
                 if course is None:
@@ -191,7 +191,7 @@ class SubscribeAdmin(VersionAdmin):
 
     actions = [match_partners, unmatch_partners, confirm_subscriptions, unconfirm_subscriptions, confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions,
-               set_subscriptions_as_payed]
+               set_subscriptions_as_payed, undo_voucher_payment]
 
     raw_id_fields = ('user', 'partner')
 
@@ -273,6 +273,8 @@ class VoucherAdmin(VersionAdmin):
     exclude = ('key',)
 
     actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
+
+    raw_id_fields = ('subscription',)
 
 
 @admin.register(VoucherPurpose)

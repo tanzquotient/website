@@ -4,7 +4,7 @@
 {% block result_list %}
     {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
     <p class="paginator">
-        <strong>Summary of subscriptions on this page:</strong> Total {{ cl.info.total }} | Confirmed {{ cl.info.confirmed }} (of {{ cl.info.max_subscribers|default:"unknown" }} maximum) | Rejected {{ cl.info.rejected }}
+        <strong>Summary of subscriptions on this page:</strong> Total {{ cl.info.total }} | Accepted {{ cl.info.accepted }} (of {{ cl.info.max_subscribers|default:"unknown" }} maximum) | Rejected {{ cl.info.rejected }}
     </p>
     {% result_list cl %}
     {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}

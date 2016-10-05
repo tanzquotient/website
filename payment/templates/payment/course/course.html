@@ -11,7 +11,8 @@
         <h2>{{ course }}</h2>
         <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
 
-        <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %} <a href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a></p>
+        <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %} <a
+                href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a></p>
 
         <div class="visible-xs">
             <div class="panel panel-default">
@@ -24,13 +25,15 @@
                 <div class="list-group">
                     {% for subscription in course.participatory|dictsort:"payed" %}
                         <a {% if not subscription.payed %}href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
-                           class="list-group-item">
+                           class="list-group-item {% if subscription.payed %}disabled{% endif %}">
                             <h4 class="list-group-item-heading">
                                 {{ subscription.user.get_full_name }}
                                 <small>
                                     {{ subscription.usi }}
                                 </small>
-
+                                {% if subscription.payed %}
+                                    <span class="label label-default pull-right">{{ subscription.paymentmethod }}</span>
+                                {% endif %}
                             </h4>
 
                             <p class="list-group-item-text">{{ subscription.get_user_email }}</p>
@@ -77,9 +80,14 @@
                                     0{% endif %}
                                     CHF
                                 </td>
-                                <td>{% if not subscription.payed %}
-                                    <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
-                                       class="btn btn-default btn-xs">Pay</a>{% endif %}</td>
+                                <td>
+                                    {% if not subscription.payed %}
+                                        <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
+                                           class="btn btn-default btn-xs">Pay</a>
+                                    {% else %}
+                                        <span class="label label-default">{{ subscription.paymentmethod }}</span>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -95,7 +103,7 @@
                         <tr>
                             <td></td>
                             <td></td>
-                            <th>{% trans "thereof in course" %}:</th>
+                            <th>{% trans "paid in course" %}:</th>
                             <th>{{ course.total_paid_course }} CHF</th>
                             <td></td>
                             <th></th>

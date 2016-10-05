@@ -168,11 +168,10 @@ export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscr
 def mark_voucher_as_used(modeladmin, request, queryset):
     # mark vouchers as used
     for voucher in queryset:
-        voucher.used = True
-        voucher.save()
+        voucher.mark_as_used(user=request.user, comment="by admin action")
 
 
-mark_voucher_as_used.short_description = "Mark selected vouchers as used."
+mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 
 
 class EvaluateForm(forms.Form):
@@ -218,3 +217,18 @@ def evaluate_course(self, request, queryset):
 
 
 evaluate_course.short_description = "Configure evaluation of selected courses"
+
+
+def undo_voucher_payment(modeladmin, request, queryset):
+    for subscription in queryset:
+        if subscription.state in [Subscribe.State.PAYED,
+                                  Subscribe.State.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
+            subscription.state = Subscribe.State.CONFIRMED
+            for voucher in Voucher.objects.filter(subscription=subscription).all():
+                voucher.subscription=None
+                voucher.used=False
+                voucher.save()
+            subscription.save()
+
+
+undo_voucher_payment.short_description = "Undo voucher payment"

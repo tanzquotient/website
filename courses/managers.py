@@ -90,11 +90,15 @@ class SubscribeQuerySet(models.QuerySet):
 
     def accepted(self):
         from courses.models import Subscribe
-        return self.filter(state__in=[Subscribe.State.CONFIRMED, Subscribe.State.PAYED, Subscribe.State.COMPLETED])
+        return self.filter(state__in=Subscribe.State.ACCEPTED_STATES)
+
+    def active(self):
+        from courses.models import Subscribe
+        return self.exclude(state__in=Subscribe.State.REJECTED_STATES)
 
     def paid(self):
         from courses.models import Subscribe
-        return self.filter(state__in=[Subscribe.State.PAYED, Subscribe.State.TO_REIMBURSE, Subscribe.State.COMPLETED])
+        return self.filter(state__in=Subscribe.State.PAID_STATES)
 
     def course_payment(self):
         from courses.models import PaymentMethod
