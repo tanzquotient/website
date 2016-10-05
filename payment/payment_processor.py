@@ -1,5 +1,5 @@
-from payment.models import Payment, SubscriptionPayment
-from courses.models import Subscribe, PaymentMethod
+from payment.models import Payment, SubscriptionPayment, CoursePayment
+from courses.models import Subscribe, PaymentMethod, Course
 import re
 import logging
 
@@ -20,6 +20,7 @@ class PaymentProcessor:
                     remaining_amount = payment.amount
                     for usi in matches:
                         subscription_query = Subscribe.objects.filter(usi=usi)
+#                        course_query = Course.objects.filter(name=usi)
                         if subscription_query.count() == 1:
                             matched_subscription = subscription_query.first()
 
@@ -42,10 +43,16 @@ class PaymentProcessor:
                             # should never happen since USI is unique
                             log.error("Implementation Error: Payment {0} is not related to a unique Subscription".format(payment))
                             break
+                        #elif course_query.count() == 1:
+                        #    course = course_query.first()
+                        #    log.info("Matched payment to course payment {}".format(course))
+                        #    CoursePayment(course=course, payment=payment, amount=payment.amount).save()
+                        #    payment.type = payment.Type.COURSE_PAYMENT_TRANSFER
+                        #    payment.state = payment.State.PROCESSED
+                        #    payment.save()
+                        #    break
                         else:
                             log.warning("USI #{0} was not found for payment {1}.".format(usi, payment))
-                            #payment.state = Payment.State.MANUAL
-                            #break
                     payment.amount_to_reimburse = remaining_amount
                     if payment.state == Payment.State.NEW:
                         if remaining_amount == 0:
@@ -56,12 +63,8 @@ class PaymentProcessor:
                     log.info("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
                     # TODO improve this with a code for teachers when they transfer course payments
-                    if payment.amount >= 200:
-                        payment.type = payment.Type.IRRELEVANT
-                        payment.state = payment.State.PROCESSED
-                    else:
-                        payment.state = payment.State.MANUAL
+                    payment.state = payment.State.MANUAL
             else:
-                log.info("No user remittance was found for payment {0}.".format(payment))
+                log.warning("No user remittance was found for payment {0}.".format(payment))
                 payment.state = Payment.State.MANUAL
             payment.save()

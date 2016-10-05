@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from courses.models import Subscribe
+from courses.models import Subscribe, Course
 
 
 class Payment(models.Model):
@@ -57,4 +57,12 @@ class SubscriptionPayment(models.Model):
     """
     payment = models.ForeignKey(Payment, related_name='subscription_payments')
     subscription = models.ForeignKey(Subscribe, related_name='subscription_payments')
+    amount = models.FloatField()
+
+class CoursePayment(models.Model):
+    """
+    A Course Payment is a matched intermediate object.
+    """
+    payment = models.ForeignKey(Payment, related_name='course_payments')
+    course = models.ForeignKey(Course, related_name='course_payments')
     amount = models.FloatField()
