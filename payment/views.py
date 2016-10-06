@@ -10,7 +10,7 @@ from django import forms
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
@@ -190,8 +190,9 @@ class CoursePaymentExport(TeacherOfCourseOnly):
         from courses import services
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
 
-class QuarterPaymentDetailView(TemplateView):
+class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/detail.html'
+    permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
@@ -199,8 +200,9 @@ class QuarterPaymentDetailView(TemplateView):
         context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering']).all()
         return context
 
-class QuarterPaymentCoursesView(TemplateView):
+class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/courses.html'
+    permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
