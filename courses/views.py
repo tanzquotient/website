@@ -69,8 +69,7 @@ def course_list(request, force_preview=False):
                 else:
                     section_title = ""
                 # filter out undisplayed courses if not staff user
-                if not preview and not request.user.is_staff:
-                    l = [c for c in l if c.is_displayed()]
+                l = [c for c in l if c.is_displayed(preview_mode)]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
                 for c in l:
