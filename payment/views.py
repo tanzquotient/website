@@ -207,5 +207,5 @@ class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
         context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering']).all()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'], state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context
