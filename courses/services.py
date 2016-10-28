@@ -307,7 +307,7 @@ def unconfirm_subscriptions(subscriptions, request=None):
 
 
 # sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
-def reject_subscription(subscription, reason=None):
+def reject_subscription(subscription, reason=None, send_email=True):
     subscription.state = models.Subscribe.State.REJECTED
     subscription.save()
     if not reason:
@@ -315,7 +315,7 @@ def reject_subscription(subscription, reason=None):
     c = models.Rejection(subscription=subscription, reason=reason, mail_sent=False)
     c.save()
 
-    if models.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
+    if send_email and models.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
         # if ensures that no mail was ever sent due to a rejection to this user
 
         # save if we sent the mail
@@ -325,9 +325,9 @@ def reject_subscription(subscription, reason=None):
 
 
 # same as reject_subscription, but for multiple subscriptions at once
-def reject_subscriptions(subscriptions, reason=None):
+def reject_subscriptions(subscriptions, reason=None, send_email=True):
     for subscription in subscriptions:
-        reject_subscription(subscription, reason)
+        reject_subscription(subscription, reason, send_email)
 
 
 def unreject_subscriptions(subscriptions, request=None):

@@ -76,6 +76,7 @@ unconfirm_subscriptions.short_description = "Unconfirm subscriptions (be sure to
 class RejectForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     reason = forms.ChoiceField(label=_("Select Reason"), choices=Rejection.Reason.CHOICES)
+    send_email = forms.BooleanField(label=_("Inform subscriber about cancellation"), required=False)
 
 
 def reject_subscriptions(self, request, queryset):
@@ -87,12 +88,13 @@ def reject_subscriptions(self, request, queryset):
         if form.is_valid():
             reason = form.cleaned_data['reason']
 
-            services.reject_subscriptions(queryset, reason)
+            services.reject_subscriptions(queryset, reason, form.cleaned_data['send_email'])
 
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = RejectForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        form = RejectForm(
+            initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME), 'send_email': True})
 
     return render(request, 'courses/auth/action_reject.html', {'subscriptions': queryset,
                                                                'reason_form': form,
@@ -225,8 +227,8 @@ def undo_voucher_payment(modeladmin, request, queryset):
                                   Subscribe.State.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
             subscription.state = Subscribe.State.CONFIRMED
             for voucher in Voucher.objects.filter(subscription=subscription).all():
-                voucher.subscription=None
-                voucher.used=False
+                voucher.subscription = None
+                voucher.used = False
                 voucher.save()
             subscription.save()
 
