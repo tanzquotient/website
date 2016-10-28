@@ -315,8 +315,7 @@ def reject_subscription(subscription, reason=None):
     c = models.Rejection(subscription=subscription, reason=reason, mail_sent=False)
     c.save()
 
-    send_mail = reason != models.Rejection.Reason.USER_CANCELLED
-    if send_mail and models.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
+    if models.Rejection.objects.filter(subscription=subscription, mail_sent=True).count() == 0:
         # if ensures that no mail was ever sent due to a rejection to this user
 
         # save if we sent the mail
