@@ -6,27 +6,32 @@ from django.contrib.auth.models import User
 
 import datetime
 from django.utils.translation import ugettext as _
+import re
+
+RE_USI = r"([USIusi]{0,3}-)?(?P<usi>[a-zA-Z0-9]{6,6})"
+PROG_USI = re.compile(RE_USI)
 
 
-def validate_usi_exists(value):
+def validate_usi_exists(raw_usi):
     """
     Validates if the specified USI is a valid USI
     :param value: the usi to be validated
     :return:
     """
-    if Subscribe.objects.filter(usi=value.strip('#')).count() == 0:
+    matches = PROG_USI.match(raw_usi)
+    if Subscribe.objects.filter(usi=matches.group('usi')).count() == 0:
         raise ValidationError(_('The specified USI does not exist'))
 
 
-def voucher_valid(value):
+def voucher_valid(code):
     """
     Validates if a voucher is valid
-    :param value: the voucher key to be validated
+    :param code: the voucher key to be validated
     :return:
     """
-    if not Voucher.objects.filter(key=value).count() > 0:
+    if not Voucher.objects.filter(key=code).count() > 0:
         raise ValidationError(_('The specified voucher code does not exist'))
-    voucher = Voucher.objects.filter(key=value).first()
+    voucher = Voucher.objects.filter(key=code).first()
     if voucher.used:
         raise ValidationError(_('The specified voucher code has already been used'))
     if voucher.expires:
@@ -35,9 +40,14 @@ def voucher_valid(value):
 
 
 class USIForm(forms.Form):
-    usi_validator = RegexValidator(regex='#?[a-zA-Z0-9]{6}', message=_("Please enter a valid USI"))
-    usi = forms.CharField(max_length=7, label=_("Unique Course Identifier (USI)"),
+    usi_validator = RegexValidator(regex=RE_USI, message=_("Please enter a valid USI"))
+    usi = forms.CharField(max_length=10, label=_("Unique Course Identifier (USI)"),
                           validators=[usi_validator, validate_usi_exists, ])
+
+    def clean_usi(self):
+        data = self.cleaned_data['usi']
+        match = PROG_USI.match(data)
+        return match.group('usi')
 
 
 class VoucherForm(forms.Form):
@@ -55,8 +65,10 @@ class CourseForm(forms.Form):
                 courses = [teach.course for teach in Teach.objects.filter(teacher=user).all()]
         courses = list(courses)
         courses.sort(
-            key=lambda course: course.get_period().date_from if course.get_period() and course.get_period().date_from else datetime.date(year=1990, month=
-            1, day=1), reverse=True)
+            key=lambda
+                course: course.get_period().date_from if course.get_period() and course.get_period().date_from else datetime.date(
+                year=1990, month=
+                1, day=1), reverse=True)
         super(CourseForm, self).__init__(*args, **kwargs)
         self.fields['course'] = forms.ChoiceField(label=_("Select Course"),
                                                   choices=[(course.id, course) for course in courses])

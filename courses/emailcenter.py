@@ -42,6 +42,7 @@ def send_subscription_confirmation(subscription):
 
 
 def send_participation_confirmation(subscription):
+    from payment import payment_processor
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = Site.objects.get_current().domain
     voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
@@ -52,7 +53,7 @@ def send_participation_confirmation(subscription):
         'course': subscription.course.type.name,
         'offering': subscription.course.offering.name,
         'course_info': create_course_info(subscription.course),
-        'usi': subscription.usi,
+        'usi': payment_processor.USI_PREFIX + subscription.usi,
         'account_IBAN': conf['IBAN'],
         'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
             'recipient'],

@@ -5,22 +5,26 @@ import logging
 
 log = logging.getLogger('payment')
 
+USI_PREFIX = "USI-"
+RE_USI_STRICT = re.compile(r"[USIusi]{3,3}-(?P<usi>[a-zA-Z0-9]{6,6})")
+RE_USI = re.compile(r"[\s^]?#?(?P<usi>[a-zA-Z0-9]{6,6})[\s$]?")  # remove this unstrict regex in a while
 
 class PaymentProcessor:
     def match_payments(self, queryset=Payment.objects):
         new_payments = queryset.filter(state=Payment.State.NEW).all()
 
-        prog = re.compile(r"[\s^]?#?(?P<usi>[a-zA-Z0-9]{6,6})[\s$]?")
         for payment in new_payments:
             if payment.remittance_user_string:
-                matches = prog.findall(payment.remittance_user_string)
+                matches = RE_USI_STRICT.findall(payment.remittance_user_string)
+                if not matches:
+                    # fallback: non strict regex
+                    matches = RE_USI.findall(payment.remittance_user_string)
                 if matches:
                     payment.type = Payment.Type.SUBSCRIPTION_PAYMENT
 
                     remaining_amount = payment.amount
                     for usi in matches:
                         subscription_query = Subscribe.objects.filter(usi=usi)
-#                        course_query = Course.objects.filter(name=usi)
                         if subscription_query.count() == 1:
                             matched_subscription = subscription_query.first()
 
@@ -41,9 +45,11 @@ class PaymentProcessor:
                             log.info('Matched payment {0} to subscription {1}'.format(payment, subscription_query))
                         elif subscription_query.count() > 1:
                             # should never happen since USI is unique
-                            log.error("Implementation Error: Payment {0} is not related to a unique Subscription".format(payment))
+                            log.error(
+                                "Implementation Error: Payment {0} is not related to a unique Subscription".format(
+                                    payment))
                             break
-                        #elif course_query.count() == 1:
+                        # elif course_query.count() == 1:
                         #    course = course_query.first()
                         #    log.info("Matched payment to course payment {}".format(course))
                         #    CoursePayment(course=course, payment=payment, amount=payment.amount).save()
@@ -52,7 +58,7 @@ class PaymentProcessor:
                         #    payment.save()
                         #    break
                         else:
-                            log.warning("USI #{0} was not found for payment {1}.".format(usi, payment))
+                            log.warning("USI {0} was not found for payment {1}.".format(usi, payment))
                     payment.amount_to_reimburse = remaining_amount
                     if payment.state == Payment.State.NEW:
                         if remaining_amount == 0:

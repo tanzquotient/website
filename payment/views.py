@@ -1,6 +1,8 @@
 from django.http import Http404
 from django.views.generic import TemplateView, FormView, RedirectView, View
-from payment.forms import USIForm, VoucherForm, CourseForm
+
+from payment import payment_processor
+from payment.forms import USIForm, VoucherForm, CourseForm, PROG_USI
 from courses.models import Subscribe, Voucher, Course, PaymentMethod, Offering
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -12,6 +14,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
     form_class = VoucherForm
@@ -19,7 +22,10 @@ class VoucherPaymentIndexView(FormView):
     def get_context_data(self, **kwargs):
         context = super(VoucherPaymentIndexView, self).get_context_data(**kwargs)
 
-        subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
+        matches = PROG_USI.match(self.kwargs['usi'])
+        if not matches:
+            raise Http404("USI is of invalid format")
+        subscription = Subscribe.objects.filter(usi=matches.group('usi')).first()
         if not subscription:
             raise Http404("Subscription with this USI does not exist")
         context['subscription'] = subscription
@@ -38,12 +44,17 @@ class VoucherPaymentIndexView(FormView):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
-        voucher.mark_as_used(self.request.user, comment="Used to pay course #" + subscription.usi + ".", subscription=subscription)
+        if not voucher:
+            raise Http404("Voucher with this code does not exist")
+        if not voucher.mark_as_used(self.request.user,
+                                    comment="Used to pay subscription " + payment_processor.USI_PREFIX + subscription.usi + ".",
+                                    subscription=subscription):
+            raise Http404("Voucher was already used")
 
         # show a message that the subscription has been payed (use django message passing framework)
         if subscription.mark_as_payed('voucher'):
             messages.add_message(self.request, messages.SUCCESS,
-                                 _("Subscription #") + self.kwargs['usi'] + _(' successfully marked as paid.'))
+                                 _("Subscription ") + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
         return super(VoucherPaymentIndexView, self).form_valid(form)
 
@@ -69,7 +80,7 @@ class CounterPaymentIndexView(FormView):
     form_class = USIForm
 
     def form_valid(self, form):
-        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.data['usi'].strip('#')})
+        self.success_url = reverse('payment:counterpayment_detail', kwargs={'usi': form.cleaned_data['usi']})
         return super(CounterPaymentIndexView, self).form_valid(form)
 
     @method_decorator(permission_required('courses.access_counterpayment'))
@@ -102,7 +113,7 @@ class CounterPaymentDetailView(FormView):
         # redirect and show message
         if subscription.mark_as_payed(PaymentMethod.COUNTER, self.request.user):
             messages.add_message(self.request, messages.SUCCESS,
-                                 "USI #" + usi + " " + _('successfully marked as paid.'))
+                                 "USI " + usi + " " + _('successfully marked as paid.'))
 
         return super(CounterPaymentDetailView, self).form_valid(form)
 
@@ -180,7 +191,7 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
         # redirect and show message
         if subscription.mark_as_payed('course', self.request.user):
             messages.add_message(self.request, messages.SUCCESS,
-                                 "USI #" + self.kwargs['usi'] + _(' successfully marked as paid.'))
+                                 "USI " + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
         return super(CoursePaymentConfirm, self).form_valid(form)
 
@@ -190,6 +201,7 @@ class CoursePaymentExport(TeacherOfCourseOnly):
         from courses import services
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
 
+
 class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/detail.html'
     permission_required = 'payment.payment.change'
@@ -197,8 +209,10 @@ class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
         context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'], state__in=Subscribe.State.ACCEPTED_STATES).all()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'],
+                                                            state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context
+
 
 class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/courses.html'
@@ -207,5 +221,6 @@ class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
         context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'], state__in=Subscribe.State.ACCEPTED_STATES).all()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'],
+                                                            state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context
