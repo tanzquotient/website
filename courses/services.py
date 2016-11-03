@@ -419,7 +419,8 @@ INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_subscriptions(course_ids, export_format):
     def create_xlsx_sheet(wb, course_id, course_name):
-        ws = wb.create_sheet(title=INVALID_TITLE_CHARS.sub("", course_name))
+        # strip away unallowed characters and restrict to 30 characters
+        ws = wb.create_sheet(title=INVALID_TITLE_CHARS.sub("", course_name)[:30])
 
         row_num = 0
 
