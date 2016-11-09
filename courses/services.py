@@ -182,13 +182,14 @@ def subscribe(course_id, user1_data, user2_data=None):
 
 
 # creates a copy of course and sets its offering to the next offering in the future
-def copy_course(course):
-    course = course.copy()
-    o = get_subsequent_offering()
-    if o is not None:
-        course.offering = o
-    course.active = False
-    course.save()
+def copy_course(course, to=None):
+    if to is None:
+        to = get_subsequent_offering()
+    if to is not None:
+        course = course.copy()
+        course.offering = to
+        course.active = False
+        course.save()
 
 
 # matches partners within the same course, considering their subscription time (fairness!) and respects also body_height (second criteria)

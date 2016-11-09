@@ -41,12 +41,37 @@ def deactivate(modeladmin, request, queryset):
 deactivate.short_description = "Deactivate"
 
 
+
+class CopyCourseForm(forms.Form):
+    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+    offering = forms.ModelChoiceField(queryset=Offering.objects.all(), label=_("Offering to copy into"))
+
+
 def copy_courses(modeladmin, request, queryset):
-    for c in queryset:
-        services.copy_course(c)
+    form = None
+
+    if 'copy' in request.POST:
+        form = CopyCourseForm(request.POST)
+
+        if form.is_valid():
+            offering = form.cleaned_data['offering']
+
+            for c in queryset:
+                services.copy_course(c, to=offering)
+
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = CopyCourseForm(
+            initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME),
+                     'offering': services.get_subsequent_offering()})
+
+    return render(request, 'courses/auth/action_copy_course.html', {'courses': queryset,
+                                                               'copy_form': form,
+                                                               })
 
 
-copy_courses.short_description = "Create copy of courses for the subsequent offering"
+copy_courses.short_description = "Create copy of courses in another offering"
 
 
 def confirm_subscriptions(modeladmin, request, queryset):

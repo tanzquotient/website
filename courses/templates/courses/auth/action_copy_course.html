@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <p>
+        {{ copy_form }}
+    </p>
+    <p>The following subscriptions will be copied to the selected offering:</p>
+
+    <ul>{{ courses|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="copy_courses" />
+    <input type="submit" name="copy" value="Copy" />
+</form>
+
+{% endblock %}
