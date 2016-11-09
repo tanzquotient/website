@@ -114,7 +114,7 @@ class CourseAdmin(TranslatableAdmin):
             'fields': ['display', 'active']}),
     ]
 
-    actions = [display, undisplay, activate, deactivate, welcome_teachers, copy_courses,
+    actions = [display, undisplay, activate, deactivate, welcome_teachers, welcome_teachers_reset_flag, copy_courses,
                export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, evaluate_course]

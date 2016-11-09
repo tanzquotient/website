@@ -371,6 +371,20 @@ def welcome_teachers(courses, request):
                          _(u'{} of {} welcomed successfully').format(count, total))
 
 
+def welcome_teachers_reset_flag(courses, request):
+    count = 0
+    total = 0
+    for course in courses:
+        for teach in course.teaching.all():
+            if teach.welcomed:
+                count += 1
+                teach.welcomed = False
+                teach.save()
+            total += 1
+    messages.add_message(request, messages.SUCCESS,
+                         _(u'{} of {} teachers reset successfully').format(count, total))
+
+
 def get_or_create_userprofile(user):
     try:
         return models.UserProfile.objects.get(user=user)
@@ -415,6 +429,7 @@ from openpyxl.styles import Alignment
 from openpyxl.styles.fonts import Font
 
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
+
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_subscriptions(course_ids, export_format):

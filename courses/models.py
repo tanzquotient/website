@@ -299,7 +299,6 @@ class Course(TranslatableModel):
             total += subscription.get_price_to_pay()
         return total
 
-
     def total_price(self):
         total = 0.0
         for subscription in self.subscriptions.accepted().all():
@@ -517,6 +516,7 @@ class Course(TranslatableModel):
         # copy teachers
         for teach in old.teaching.all():
             teach.pk = None
+            teach.welcomed = False
             teach.course = self
             teach.save()
 

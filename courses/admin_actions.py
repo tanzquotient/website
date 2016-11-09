@@ -130,6 +130,10 @@ def welcome_teachers(modeladmin, request, queryset):
     services.welcome_teachers(queryset, request)
 
 
+def welcome_teachers_reset_flag(modeladmin, request, queryset):
+    services.welcome_teachers_reset_flag(queryset, request)
+
+
 def set_subscriptions_as_payed(modeladmin, request, queryset):
     queryset.filter(state=Subscribe.State.CONFIRMED).update(state=Subscribe.State.COMPLETED)
 
