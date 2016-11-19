@@ -31,4 +31,8 @@ urlpatterns = [
         name='finance_quarter_detail'),
     url(r'^auth/finance/(?P<offering>[0-9]*)/courses/$', views.QuarterPaymentCoursesView.as_view(),
         name='finance_quarter_courses'),
+    url(r'^auth/finance/current/detail/$', views.QuarterPaymentDetailView.as_view(),
+        name='finance_current_quarter_detail'),
+    url(r'^auth/finance/current/courses/$', views.QuarterPaymentCoursesView.as_view(),
+        name='finance_current_quarter_courses'),
 ]

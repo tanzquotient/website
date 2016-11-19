@@ -208,11 +208,13 @@ class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
-        context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'],
-                                                            state__in=Subscribe.State.ACCEPTED_STATES).all()
+        if 'offering' in kwargs:
+            offering = Offering.objects.get(id=kwargs['offering'])
+        else:
+            offering = Offering.objects.filter(active=True).first()
+        context['offering'] = offering
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=offering, state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context
-
 
 class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/courses.html'
@@ -220,7 +222,10 @@ class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
-        context['offering'] = Offering.objects.filter(id=kwargs['offering']).first()
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=kwargs['offering'],
-                                                            state__in=Subscribe.State.ACCEPTED_STATES).all()
+        if 'offering' in kwargs:
+            offering = Offering.objects.get(id=kwargs['offering'])
+        else:
+            offering = Offering.objects.filter(active=True).first()
+        context['offering'] = offering
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=offering, state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context

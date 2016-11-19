@@ -85,6 +85,16 @@
                                             class="fa fa-money fa-lg"></span> Counter Payment</a>
                                     </li>
                                 {% endif %}
+                                {% if user.is_superuser or perms.payment.change_payment %}
+                                    <li><a href="{% url 'payment:finance_current_quarter_courses' %}"><span
+                                            class="fa fa-money fa-lg"></span> Quarter Overview</a>
+                                    </li>
+                                {% endif %}
+                                {% if user.is_superuser or perms.payment.change_payment %}
+                                    <li><a href="{% url 'payment:finance_current_quarter_detail' %}"><span
+                                            class="fa fa-money fa-lg"></span> Unpaid Subscriptions</a>
+                                    </li>
+                                {% endif %}
                                 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
                                     <li role="separator" class="divider"></li>
                                 {% endif %}

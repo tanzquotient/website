@@ -49,6 +49,8 @@ class Payment(models.Model):
     def courses(self):
         return [subscription.course for subscription in self.subscriptions.all()]
 
+    def list_subscriptions(self):
+        return [subscription_payment.subscription.__str__() for subscription_payment in SubscriptionPayment.objects.filter(payment=self).all()]
 
 class SubscriptionPayment(models.Model):
     """

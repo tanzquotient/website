@@ -77,4 +77,9 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('payment.change_payment'):
             url = reverse('admin:payment_payment_changelist')
             menu.add_sideframe_item(_('Online Payments'), url=url)
-
+        if self.request.user.has_perm('payment.change_subscriptionpayment'):
+            url = reverse('admin:payment_subscriptionpayment_changelist')
+            menu.add_sideframe_item(_('Subscription Payments'), url=url)
+        if self.request.user.has_perm('payment.change_coursepayment'):
+            url = reverse('admin:payment_coursepayment_changelist')
+            menu.add_sideframe_item(_('Course Payments'), url=url)
