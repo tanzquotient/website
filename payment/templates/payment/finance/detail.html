@@ -34,6 +34,17 @@
                                     CHF
                                 </td>
                                 <td>{{ subscription.course }}</td>
+                                <td>
+                                     <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="subscription" value="{{ subscription.id }}">
+                                        {% buttons %}
+                                            <button type="submit" class="btn btn-default btn-sm">
+                                                {% trans "Send Reminder" %}
+                                            </button>
+                                        {% endbuttons %}
+                                    </form>
+                                </td>
                             </tr>
                         {% endif %}
                     {% endfor %}

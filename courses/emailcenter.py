@@ -88,6 +88,9 @@ def send_online_payment_successful(subscription):
 
     return _email_helper(subscription.user.email, template, context)
 
+def send_payment_reminder(subscription):
+    log.warning("Not Implemented: This should send a payment reminder to {}".format(subscription))
+    pass
 
 def send_rejection(subscription, reason):
     context = {

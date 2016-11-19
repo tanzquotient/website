@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.views.generic import TemplateView, FormView, RedirectView, View
+from django.views.generic.edit import ProcessFormView, FormMixin
 
 from payment import payment_processor
 from payment.forms import USIForm, VoucherForm, CourseForm, PROG_USI
@@ -13,7 +14,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import PermissionRequiredMixin
-
+from courses.emailcenter import send_payment_reminder
 
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
@@ -202,9 +203,10 @@ class CoursePaymentExport(TeacherOfCourseOnly):
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
 
 
-class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
+class QuarterPaymentDetailView(PermissionRequiredMixin, ProcessFormView, FormMixin, TemplateView):
     template_name = 'payment/finance/detail.html'
     permission_required = 'payment.payment.change'
+    form_class = forms.Form
 
     def get_context_data(self, **kwargs):
         context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
@@ -215,6 +217,19 @@ class QuarterPaymentDetailView(PermissionRequiredMixin, TemplateView):
         context['offering'] = offering
         context['subscriptions'] = Subscribe.objects.filter(course__offering=offering, state__in=Subscribe.State.ACCEPTED_STATES).all()
         return context
+
+
+    def post(self, request, **kwargs):
+        if 'offering' in self.kwargs:
+            offering = Offering.objects.get(id=self.kwargs['offering'])
+        else:
+            offering = Offering.objects.filter(active=True).first()
+        self.success_url = reverse('payment:finance_quarter_detail', kwargs={'offering': offering.id})
+
+        subscription = Subscribe.objects.get(id=request.POST['subscription'])
+        send_payment_reminder(subscription)
+
+        return super(QuarterPaymentDetailView, self).post(request)
 
 class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/courses.html'
