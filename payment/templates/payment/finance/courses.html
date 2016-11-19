@@ -17,7 +17,8 @@
                     <th>{% trans "Course" %}</th>
                     <th>{% trans "Total" %}</th>
                     <th>{% trans "Unpaid" %}</th>
-                    <th>{% trans "In Course" %}</th>
+                    <th>Paid</th>
+                    <th>{% trans "Cash" %} / {% trans "Voucher" %} / {% trans "Online" %}</th>
                     </thead>
                     <tbody>
                     {% for course in offering.courses %}
@@ -25,7 +26,8 @@
                             <td>{{ course.name }}</td>
                             <td>{{ course.total_price }}</td>
                             <td>{{ course.total_unpaid }}</td>
-                            <td>{{ course.total_paid_course }}</td>
+                            <td>{{ course.total_paid }}</td>
+                            <td>{{ course.total_paid_course }} / {{ course.total_paid_voucher }} / {{ course.total_paid_online }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -108,6 +108,10 @@ class SubscribeQuerySet(models.QuerySet):
         from courses.models import PaymentMethod
         return self.filter(paymentmethod=PaymentMethod.VOUCHER)
 
+    def online_payment(self):
+        from courses.models import PaymentMethod
+        return self.filter(paymentmethod=PaymentMethod.ONLINE)
+
     def new(self):
         from courses.models import Subscribe
         return self.filter(state=Subscribe.State.NEW)

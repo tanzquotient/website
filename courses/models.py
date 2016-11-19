@@ -299,6 +299,18 @@ class Course(TranslatableModel):
             total += subscription.get_price_to_pay()
         return total
 
+    def total_paid_voucher(self):
+        total = 0.0
+        for subscription in self.subscriptions.accepted().paid().voucher_payment().all():
+            total += subscription.get_price_to_pay()
+        return total
+
+    def total_paid_online(self):
+        total = 0.0
+        for subscription in self.subscriptions.accepted().paid().online_payment().all():
+            total += subscription.get_price_to_pay()
+        return total
+
     def total_price(self):
         total = 0.0
         for subscription in self.subscriptions.accepted().all():
