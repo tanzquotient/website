@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from courses.emailcenter import send_payment_reminder
-
+from .services import *
 
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
@@ -219,14 +219,14 @@ class OfferingFinanceDetailView(PermissionRequiredMixin, ProcessFormView, FormMi
         context['offering'] = offering
         context['subscriptions'] = Subscribe.objects.filter(course__offering=offering,
                                                             state__in=Subscribe.State.ACCEPTED_STATES).select_related(
-            'user', 'user__profile', 'course', 'course__offering').all()
+            'user', 'user__profile', 'course', 'course__offering').prefetch_related('payment_reminders').all()
         return context
 
     def post(self, request, **kwargs):
         self.success_url = reverse('payment:offering_finance_detail_view', kwargs=kwargs)
 
         subscription = Subscribe.objects.get(id=request.POST['subscription'])
-        send_payment_reminder(subscription)
+        remind_of_payment(subscription)
 
         return super(OfferingFinanceDetailView, self).post(request)
 

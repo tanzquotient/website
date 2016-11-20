@@ -11,7 +11,7 @@ from . import services
 from django import forms
 
 from django.utils.translation import ugettext as _
-
+from payment.services import remind_of_payments
 
 def display(modeladmin, request, queryset):
     queryset.update(display=True)
@@ -41,7 +41,6 @@ def deactivate(modeladmin, request, queryset):
 deactivate.short_description = "Deactivate"
 
 
-
 class CopyCourseForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     offering = forms.ModelChoiceField(queryset=Offering.objects.all(), label=_("Offering to copy into"))
@@ -67,8 +66,8 @@ def copy_courses(modeladmin, request, queryset):
                      'offering': services.get_subsequent_offering()})
 
     return render(request, 'courses/auth/action_copy_course.html', {'courses': queryset,
-                                                               'copy_form': form,
-                                                               })
+                                                                    'copy_form': form,
+                                                                    })
 
 
 copy_courses.short_description = "Create copy of courses in another offering"
@@ -96,6 +95,13 @@ def unconfirm_subscriptions(modeladmin, request, queryset):
 
 
 unconfirm_subscriptions.short_description = "Unconfirm subscriptions (be sure to reconfirm them later!)"
+
+
+def payment_reminder(modeladmin, request, queryset):
+    remind_of_payments(queryset, request)
+
+
+payment_reminder.short_description = "Send payment reminder to the selected subscriptions (which are in TO_PAY state)"
 
 
 class RejectForm(forms.Form):

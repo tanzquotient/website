@@ -191,7 +191,7 @@ class SubscribeAdmin(VersionAdmin):
 
     actions = [match_partners, unmatch_partners, confirm_subscriptions, unconfirm_subscriptions, confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions,
-               set_subscriptions_as_payed, undo_voucher_payment]
+               set_subscriptions_as_payed, undo_voucher_payment, payment_reminder]
 
     raw_id_fields = ('user', 'partner')
 

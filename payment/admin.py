@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from payment.models import *
 from payment.admin_actions import *
+from courses.filters import *
 
 class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
@@ -35,3 +36,15 @@ class CoursePaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'payment', 'course', 'amount']
     raw_id_fields = ['payment', 'course']
     search_fields = ['id', 'payment', 'course', 'amount']
+
+
+@admin.register(PaymentReminder)
+class PaymentReminderAdmin(admin.ModelAdmin):
+    list_display = ('subscription', 'date')
+    list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
+    search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
+                     'subscription__user__first_name', 'subscription__user__last_name']
+
+    model = PaymentReminder
+
+    raw_id_fields = ('subscription', 'mail')

@@ -698,6 +698,13 @@ class Subscribe(models.Model):
             self.matching_state = 'not_required'
             # DO NOT save here since this method is also called from save()
 
+    def get_last_payment_reminder(self):
+        q = self.payment_reminders
+        if q.count():
+            return q.first().date
+        else:
+            return None
+
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
         if self.partner == self.user:

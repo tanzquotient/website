@@ -83,3 +83,6 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('payment.change_coursepayment'):
             url = reverse('admin:payment_coursepayment_changelist')
             menu.add_sideframe_item(_('Course Payments'), url=url)
+        if self.request.user.has_perm('payment.change_paymentreminder'):
+            url = reverse('admin:payment_paymentreminder_changelist')
+            menu.add_sideframe_item(_('Payment Reminders'), url=url)

@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from courses.models import Subscribe, Course
-
+from post_office.models import Email
 
 class Payment(models.Model):
     """
@@ -68,3 +68,16 @@ class CoursePayment(models.Model):
     payment = models.ForeignKey(Payment, related_name='course_payments')
     course = models.ForeignKey(Course, related_name='course_payments')
     amount = models.FloatField()
+
+
+class PaymentReminder(models.Model):
+    subscription = models.ForeignKey(Subscribe, related_name='payment_reminders')
+    date = models.DateField(blank=False, null=False, auto_now_add=True)
+    date.help_text = "The date when the reminder mail was sent to the subscriber."
+    mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return "({}) reminded of missing payment at {}".format(self.subscription, self.date)

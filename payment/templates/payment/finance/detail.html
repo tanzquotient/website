@@ -9,7 +9,9 @@
 {% block main_content %}
     <div class="container">
         {% url 'payment:offering_finance_index_view' as offering_finance_index_view %}
-        <p>{% blocktrans %}<a href="{{ offering_finance_index_view }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to offering overviews</a>{% endblocktrans %}
+        <p>{% blocktrans %}
+            <a href="{{ offering_finance_index_view }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to
+                offering overviews</a>{% endblocktrans %}
         </p>
         <h2>Unpaid Subscriptions in {{ offering }}
             <small>{{ offering.period|default:'' }}</small>
@@ -25,6 +27,8 @@
                     <th>{% trans "Amount" %}</th>
                     <th>{% trans "Amount Due" %}</th>
                     <th>{% trans "Course" %}</th>
+                    <th>{% trans "Last reminded" %}</th>
+                    <th></th>
                     </thead>
                     <tbody>
                     {% for subscription in subscriptions %}
@@ -39,12 +43,14 @@
                                     CHF
                                 </td>
                                 <td>{{ subscription.course }}</td>
+                                <td>{{ subscription.get_last_payment_reminder|default:'' }}</td>
                                 <td>
                                     <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="subscription" value="{{ subscription.id }}">
                                         {% buttons %}
-                                            <button type="submit" class="btn btn-default btn-sm">
+                                            <button type="submit"
+                                                    class="btn {% if subscription.get_last_payment_reminder %}btn-default{% else %}btn-primary{% endif %} btn-sm">
                                                 {% trans "Send Reminder" %}
                                             </button>
                                         {% endbuttons %}
