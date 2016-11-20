@@ -172,6 +172,7 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
 
         context = super(CoursePaymentDetailView, self).get_context_data(**kwargs)
         context['course'] = course
+        context['participatory'] = course.subscriptions.accepted().select_related('user')
         return context
 
 
