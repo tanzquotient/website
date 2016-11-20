@@ -284,41 +284,39 @@ class Course(TranslatableModel):
     def participatory(self):
         return self.subscriptions.accepted()
 
-    def number_paid(self):
-        return self.subscriptions.accepted().paid().count()
+    # calculate different statistics in one method (performance optimization)
+    def payment_totals(self):
+        totals = {
+            'to_pay': 0,
+            'paid': 0,
+            'unpaid': 0,
+            'paid_count': 0,
+            'paid_course': 0,
+            'paid_voucher': 0,
+            'paid_online': 0,
+            'paid_counter': 0,
+        }
+        accepted = self.subscriptions.accepted()
+        for s in accepted.all():
+            price = s.get_price_to_pay()
+            totals['to_pay'] += price
 
-    def total_paid(self):
-        total = 0.0
-        for subscription in self.subscriptions.accepted().paid().all():
-            total += subscription.get_price_to_pay()
-        return total
+        paid = accepted.paid()
+        totals['paid_count'] = paid.count()
+        for s in paid.all():
+            price = s.get_price_to_pay()
+            totals['paid'] += price
+            if s.paymentmethod == PaymentMethod.ONLINE:
+                totals['paid_online'] += price
+            if s.paymentmethod == PaymentMethod.VOUCHER:
+                totals['paid_voucher'] += price
+            if s.paymentmethod == PaymentMethod.COURSE:
+                totals['paid_course'] += price
+            if s.paymentmethod == PaymentMethod.COUNTER:
+                totals['paid_counter'] += price
+        totals['unpaid'] = totals['to_pay'] - totals['paid']
 
-    def total_paid_course(self):
-        total = 0.0
-        for subscription in self.subscriptions.accepted().paid().course_payment().all():
-            total += subscription.get_price_to_pay()
-        return total
-
-    def total_paid_voucher(self):
-        total = 0.0
-        for subscription in self.subscriptions.accepted().paid().voucher_payment().all():
-            total += subscription.get_price_to_pay()
-        return total
-
-    def total_paid_online(self):
-        total = 0.0
-        for subscription in self.subscriptions.accepted().paid().online_payment().all():
-            total += subscription.get_price_to_pay()
-        return total
-
-    def total_price(self):
-        total = 0.0
-        for subscription in self.subscriptions.accepted().all():
-            total += subscription.get_price_to_pay()
-        return total
-
-    def total_unpaid(self):
-        return self.total_price() - self.total_paid()
+        return totals
 
     def format_teachers(self):
         return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
@@ -595,16 +593,17 @@ class Subscribe(models.Model):
                                 null=True)
     matching_state = models.CharField(max_length=30,
                                       choices=MatchingState.CHOICES, blank=False, null=False,
-                                      default=MatchingState.UNKNOWN)
+                                      default=MatchingState.UNKNOWN, db_index=True)
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = "A optional comment made by the user during subscription."
 
     state = models.CharField(max_length=30,
                              choices=State.CHOICES, blank=False, null=False,
-                             default=State.NEW)
+                             default=State.NEW, db_index=True)
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = "Unique subscription identifier: 4 characters identifier, 2 characters checksum"
+    price_to_pay = models.FloatField(blank=True, null=True, default=None)
 
     paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
@@ -645,7 +644,7 @@ class Subscribe(models.Model):
     def payed(self):
         return self.state in self.State.PAID_STATES
 
-    # returns similar courses that the user did before in the system
+    # searches for courses that the user did before in the system
     def get_payment_state(self):
         c = self.user.subscriptions.filter(state=Subscribe.State.CONFIRMED, course__offering__active=False).filter(
             ~Q(course=self.course)).count()
@@ -673,11 +672,18 @@ class Subscribe(models.Model):
             send_online_payment_successful(self)
         return True
 
-    def get_price_to_pay(self):
+    def generate_price_to_pay(self):
         if self.user.profile.student_status == 'no':
-            return self.course.price_without_legi
+            self.price_to_pay = self.course.price_without_legi
         else:
-            return self.course.price_with_legi
+            self.price_to_pay = self.course.price_with_legi
+        self.save()
+        return self.price_to_pay
+
+    def get_price_to_pay(self):
+        if not self.price_to_pay:
+            self.generate_price_to_pay()
+        return self.price_to_pay
 
     # derives the matching state from the current information (if couple course and if partner set or not)
     def derive_matching_state(self):
@@ -836,10 +842,6 @@ class Offering(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
-
-    @property
-    def courses(self):
-        return Course.objects.filter(offering=self).all()
 
 
 class Song(models.Model):

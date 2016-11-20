@@ -3,36 +3,46 @@
 {% load bootstrap3 %}
 
 {% block content_title %}
-    {{ offering }}
+    {% trans "Finance" %}
 {% endblock %}
 
 {% block main_content %}
     <div class="container">
 
-        <h2>Courses</h2>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                    <th>{% trans "Course" %}</th>
-                    <th>{% trans "Total" %}</th>
-                    <th>{% trans "Unpaid" %}</th>
-                    <th>Paid</th>
-                    <th>{% trans "Cash" %} / {% trans "Voucher" %} / {% trans "Online" %}</th>
-                    </thead>
-                    <tbody>
-                    {% for course in offering.courses %}
-                        <tr>
-                            <td>{{ course.name }}</td>
-                            <td>{{ course.total_price }}</td>
-                            <td>{{ course.total_unpaid }}</td>
-                            <td>{{ course.total_paid }}</td>
-                            <td>{{ course.total_paid_course }} / {{ course.total_paid_voucher }} / {{ course.total_paid_online }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+        {% for offering in offerings %}
+            <h2>{{ offering.name }}
+                <small>{{ offering.period|default:'' }}</small>
+            </h2>
+            <a href="{% url "payment:offering_finance_detail_view" offering.id %}">(show unpaid subscription)</a>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <th>{% trans "Course" %}</th>
+                        <th>{% trans "Total" %}</th>
+                        <th>{% trans "Unpaid" %}</th>
+                        <th>Paid</th>
+                        <th>{% trans "Cash" %} / {% trans "Voucher" %} / {% trans "Online" %} / {% trans "Counter" %}</th>
+                        </thead>
+                        <tbody>
+                        {% for course in offering.course_set.all %}
+                            {% with course.payment_totals as payment_totals %}
+                                <tr>
+
+                                    <td>{{ course.name }}</td>
+                                    <td>{{ payment_totals.to_pay }}</td>
+                                    <td>{{ payment_totals.unpaid }}</td>
+                                    <td>{{ payment_totals.paid }}</td>
+                                    <td>{{ payment_totals.paid_course }} / {{ payment_totals.paid_voucher }}
+                                        / {{ payment_totals.paid_online }} / {{ payment_totals.paid_counter }}</td>
+
+                                </tr>
+                            {% endwith %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock main_content %}

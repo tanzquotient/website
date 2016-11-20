@@ -3,12 +3,17 @@
 {% load bootstrap3 %}
 
 {% block content_title %}
-    {{ offering }}
+    {% trans "Finance" %}
 {% endblock %}
 
 {% block main_content %}
     <div class="container">
-        <h2>Unpaid Subscriptions</h2>
+        {% url 'payment:offering_finance_index_view' as offering_finance_index_view %}
+        <p>{% blocktrans %}<a href="{{ offering_finance_index_view }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to offering overviews</a>{% endblocktrans %}
+        </p>
+        <h2>Unpaid Subscriptions in {{ offering }}
+            <small>{{ offering.period|default:'' }}</small>
+        </h2>
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -35,7 +40,7 @@
                                 </td>
                                 <td>{{ subscription.course }}</td>
                                 <td>
-                                     <form method="post">
+                                    <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="subscription" value="{{ subscription.id }}">
                                         {% buttons %}

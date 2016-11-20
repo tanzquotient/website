@@ -16,6 +16,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from courses.emailcenter import send_payment_reminder
 
+
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
     form_class = VoucherForm
@@ -203,44 +204,40 @@ class CoursePaymentExport(TeacherOfCourseOnly):
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
 
 
-class QuarterPaymentDetailView(PermissionRequiredMixin, ProcessFormView, FormMixin, TemplateView):
+class OfferingFinanceDetailView(PermissionRequiredMixin, ProcessFormView, FormMixin, TemplateView):
     template_name = 'payment/finance/detail.html'
     permission_required = 'payment.payment.change'
     form_class = forms.Form
 
     def get_context_data(self, **kwargs):
-        context = super(QuarterPaymentDetailView, self).get_context_data(**kwargs)
+        context = super(OfferingFinanceDetailView, self).get_context_data(**kwargs)
         if 'offering' in kwargs:
             offering = Offering.objects.get(id=kwargs['offering'])
         else:
             offering = Offering.objects.filter(active=True).first()
         context['offering'] = offering
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=offering, state__in=Subscribe.State.ACCEPTED_STATES).all()
+        context['subscriptions'] = Subscribe.objects.filter(course__offering=offering,
+                                                            state__in=Subscribe.State.ACCEPTED_STATES).select_related(
+            'user', 'user__profile', 'course', 'course__offering').all()
         return context
 
-
     def post(self, request, **kwargs):
-        if 'offering' in self.kwargs:
-            offering = Offering.objects.get(id=self.kwargs['offering'])
-        else:
-            offering = Offering.objects.filter(active=True).first()
-        self.success_url = reverse('payment:finance_quarter_detail', kwargs={'offering': offering.id})
+        self.success_url = reverse('payment:offering_finance_detail_view', kwargs=kwargs)
 
         subscription = Subscribe.objects.get(id=request.POST['subscription'])
         send_payment_reminder(subscription)
 
-        return super(QuarterPaymentDetailView, self).post(request)
+        return super(OfferingFinanceDetailView, self).post(request)
 
-class QuarterPaymentCoursesView(PermissionRequiredMixin, TemplateView):
+
+class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
     template_name = 'payment/finance/courses.html'
     permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):
-        context = super(QuarterPaymentCoursesView, self).get_context_data(**kwargs)
-        if 'offering' in kwargs:
-            offering = Offering.objects.get(id=kwargs['offering'])
-        else:
-            offering = Offering.objects.filter(active=True).first()
-        context['offering'] = offering
-        context['subscriptions'] = Subscribe.objects.filter(course__offering=offering, state__in=Subscribe.State.ACCEPTED_STATES).all()
+        context = super(OfferingFinanceIndexView, self).get_context_data(**kwargs)
+        offerings = Offering.objects.filter(active=True).prefetch_related('course_set', 'course_set__subscriptions',
+                                                                          'course_set__subscriptions__user',
+                                                                          'course_set__subscriptions__user__profile').all()
+        context['offerings'] = offerings
         return context

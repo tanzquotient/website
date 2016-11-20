@@ -93,7 +93,7 @@ def send_online_payment_successful(subscription):
 
 
 def send_payment_reminder(subscription):
-    context = _build_subscription_context()
+    context = _build_subscription_context(subscription)
 
     template = 'payment_reminder'
 

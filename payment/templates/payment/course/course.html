@@ -7,117 +7,120 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="container">
-        <h2>{{ course }}</h2>
-        <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
+    {% with course.payment_totals as payment_totals %}
+        <div class="container">
+            <h2>{{ course }}</h2>
+            <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
 
-        <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %} <a
-                href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a></p>
+            <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %}
+                <a
+                        href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a></p>
 
-        <div class="visible-xs">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% trans "Amount" %}
-                    <small class="pull-right">
-                        <strong>{% trans "Amount Due" %}</strong>
-                    </small>
-                </div>
-                <div class="list-group">
-                    {% for subscription in course.participatory|dictsort:"payed" %}
-                        <a {% if not subscription.payed %}href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
-                           class="list-group-item {% if subscription.payed %}disabled{% endif %}">
-                            <h4 class="list-group-item-heading">
-                                {{ subscription.user.get_full_name }}
-                                <small>
-                                    {{ subscription.usi }}
-                                </small>
-                                {% if subscription.payed %}
-                                    <span class="label label-default pull-right">{{ subscription.paymentmethod }}</span>
-                                {% endif %}
-                            </h4>
-
-                            <p class="list-group-item-text">{{ subscription.get_user_email }}</p>
-                            <p class="list-group-item-text">{{ subscription.get_price_to_pay }}
-                                CHF
-                                <small class="pull-right">{% if not subscription.payed %}
-                                    <strong>{{ subscription.get_price_to_pay }} CHF</strong>{% else %}
-                                    0 CHF{% endif %}
-                                </small>
-                            </p>
-                        </a>
-                    {% endfor %}
-                </div>
-                <div class="panel-footer">
-                    <p>{% trans "Total" %}</p>
-                    <p>{{ course.total_paid }} CHF
+            <div class="visible-xs">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {% trans "Amount" %}
                         <small class="pull-right">
-                            <strong>{{ course.total_unpaid }} CHF</strong>
+                            <strong>{% trans "Amount Due" %}</strong>
                         </small>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="hidden-xs">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table">
-                        <thead>
-                        <th>{% trans "USI" %}</th>
-                        <th>{% trans "Name" %}</th>
-                        <th>{% trans "E-Mail" %}</th>
-                        <th>{% trans "Amount" %}</th>
-                        <th>{% trans "Amount Due" %}</th>
-                        <th>{% trans "Actions" %}</th>
-                        </thead>
-                        <tbody>
+                    </div>
+                    <div class="list-group">
                         {% for subscription in course.participatory|dictsort:"payed" %}
-                            <tr>
-                                <td>{{ subscription.usi }}</td>
-                                <td>{{ subscription.user.get_full_name }}</td>
-                                <td>{{ subscription.get_user_email }}</td>
-                                <td>{{ subscription.get_price_to_pay }} CHF</td>
-                                <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}
-                                    0{% endif %}
-                                    CHF
-                                </td>
-                                <td>
-                                    {% if not subscription.payed %}
-                                        <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
-                                           class="btn btn-default btn-xs">Pay</a>
-                                    {% else %}
-                                        <span class="label label-default">{{ subscription.paymentmethod }}</span>
+                            <a {% if not subscription.payed %}href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
+                               class="list-group-item {% if subscription.payed %}disabled{% endif %}">
+                                <h4 class="list-group-item-heading">
+                                    {{ subscription.user.get_full_name }}
+                                    <small>
+                                        {{ subscription.usi }}
+                                    </small>
+                                    {% if subscription.payed %}
+                                        <span class="label label-default pull-right">{{ subscription.paymentmethod }}</span>
                                     {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <th>{% trans "Total" %}:</th>
-                            <th>{{ course.total_paid }} CHF</th>
-                            <th>{{ course.total_unpaid }} CHF</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <th>{% trans "paid in course" %}:</th>
-                            <th>{{ course.total_paid_course }} CHF</th>
-                            <td></td>
-                            <th></th>
-                        </tr>
+                                </h4>
 
-                        </tfoot>
-                    </table>
+                                <p class="list-group-item-text">{{ subscription.get_user_email }}</p>
+                                <p class="list-group-item-text">{{ subscription.get_price_to_pay }}
+                                    CHF
+                                    <small class="pull-right">{% if not subscription.payed %}
+                                        <strong>{{ subscription.get_price_to_pay }} CHF</strong>{% else %}
+                                        0 CHF{% endif %}
+                                    </small>
+                                </p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="panel-footer">
+                        <p>{% trans "Total" %}</p>
+                        <p>{{ payment_totals.paid }} CHF
+                            <small class="pull-right">
+                                <strong>{{ course.total_unpaid }} CHF</strong>
+                            </small>
+                        </p>
+                    </div>
                 </div>
             </div>
+            <div class="hidden-xs">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <th>{% trans "USI" %}</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "E-Mail" %}</th>
+                            <th>{% trans "Amount" %}</th>
+                            <th>{% trans "Amount Due" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                            </thead>
+                            <tbody>
+                            {% for subscription in course.participatory|dictsort:"payed" %}
+                                <tr>
+                                    <td>{{ subscription.usi }}</td>
+                                    <td>{{ subscription.user.get_full_name }}</td>
+                                    <td>{{ subscription.get_user_email }}</td>
+                                    <td>{{ subscription.get_price_to_pay }} CHF</td>
+                                    <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}
+                                        0{% endif %}
+                                        CHF
+                                    </td>
+                                    <td>
+                                        {% if not subscription.payed %}
+                                            <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
+                                               class="btn btn-default btn-xs">Pay</a>
+                                        {% else %}
+                                            <span class="label label-default">{{ subscription.paymentmethod }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <th>{% trans "Total" %}:</th>
+                                <th>{{ payment_totals.paid }} CHF</th>
+                                <th>{{ payment_totals.unpaid }} CHF</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <th>{% trans "paid in course" %}:</th>
+                                <th>{{ payment_totals.paid_course }} CHF</th>
+                                <td></td>
+                                <th></th>
+                            </tr>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h2>{% trans "Course Information" %}</h2>
+            <p>{{ course.number_paid }} {% trans "people already paid the course." %}</p>
+            <p>{% trans "You should have" %} {{ payment_totals.paid_course }} CHF {% trans 'of collected money.' %}</p>
+
         </div>
-
-        <h2>{% trans "Course Information" %}</h2>
-        <p>{{ course.number_paid }} {% trans "people already paid the course." %}</p>
-        <p>{% trans "You should have" %} {{ course.total_paid_course }} CHF {% trans 'of collected money.' %}</p>
-
-    </div>
+    {% endwith %}
 {% endblock main_content %}
