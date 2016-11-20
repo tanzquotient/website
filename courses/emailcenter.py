@@ -41,13 +41,12 @@ def send_subscription_confirmation(subscription):
     return _email_helper(subscription.user.email, template, context)
 
 
-def send_participation_confirmation(subscription):
+def _build_subscription_context(subscription):
     from payment import payment_processor
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = Site.objects.get_current().domain
     voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
-
-    context = {
+    return {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
@@ -60,6 +59,10 @@ def send_participation_confirmation(subscription):
         'account_post_number': conf['post_number'] or '-',
         'voucher_url': voucher_url
     }
+
+
+def send_participation_confirmation(subscription):
+    context = _build_subscription_context()
 
     if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
@@ -88,9 +91,14 @@ def send_online_payment_successful(subscription):
 
     return _email_helper(subscription.user.email, template, context)
 
+
 def send_payment_reminder(subscription):
-    log.warning("Not Implemented: This should send a payment reminder to {}".format(subscription))
-    pass
+    context = _build_subscription_context()
+
+    template = 'payment_reminder'
+
+    return _email_helper(subscription.user.email, template, context)
+
 
 def send_rejection(subscription, reason):
     context = {
