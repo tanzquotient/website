@@ -10,6 +10,8 @@ class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
     extra = 0
 
+    raw_id_fields = ['subscription']
+
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
@@ -20,7 +22,7 @@ class PaymentAdmin(admin.ModelAdmin):
     search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                      'currency_code', 'remittance_user_string', 'filename']
 
-    #inlines = [SubscriptionPaymentInline]
+    inlines = [SubscriptionPaymentInline]
     actions = [process_payments, mark_payments_as_new, mark_payment_as_processed, mark_payment_as_irrelevant, mark_payment_as_course_payment]
 
 @admin.register(SubscriptionPayment)

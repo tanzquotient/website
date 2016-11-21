@@ -11,6 +11,8 @@ def mark_payments_as_new(modeladmin, request, queryset):
     for payment in queryset:
         payment.state = Payment.State.NEW
         payment.save()
+        for sp in payment.subscription_payments.all():
+            sp.delete()
 
 mark_payments_as_new.short_description = "Mark selected payments as new (will be reprocessed)"
 
