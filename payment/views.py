@@ -205,14 +205,14 @@ class CoursePaymentExport(TeacherOfCourseOnly):
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
 
 
-class OfferingFinanceDetailView(PermissionRequiredMixin, ProcessFormView, FormMixin, TemplateView):
+class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):
     template_name = 'payment/finance/detail.html'
     permission_required = 'payment.payment.change'
     form_class = forms.Form
 
     def get_context_data(self, **kwargs):
         context = super(OfferingFinanceDetailView, self).get_context_data(**kwargs)
-        if 'offering' in kwargs:
+        if 'offering' in kwargs.keys():
             offering = Offering.objects.get(id=kwargs['offering'])
         else:
             offering = Offering.objects.filter(active=True).first()
