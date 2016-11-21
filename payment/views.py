@@ -237,7 +237,7 @@ class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(OfferingFinanceIndexView, self).get_context_data(**kwargs)
-        offerings = Offering.objects.filter(active=True).prefetch_related('course_set', 'course_set__subscriptions',
+        offerings = Offering.objects.filter(display=True).prefetch_related('course_set', 'course_set__subscriptions',
                                                                           'course_set__subscriptions__user',
                                                                           'course_set__subscriptions__user__profile').all()
         context['offerings'] = offerings
