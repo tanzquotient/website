@@ -218,7 +218,7 @@ class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFo
             offering = Offering.objects.filter(active=True).first()
         context['offering'] = offering
         context['subscriptions'] = Subscribe.objects.filter(course__offering=offering,
-                                                            state__in=Subscribe.State.ACCEPTED_STATES).select_related(
+                                                            state=Subscribe.State.CONFIRMED).select_related(
             'user', 'user__profile', 'course', 'course__offering').prefetch_related('payment_reminders').all()
         return context
 

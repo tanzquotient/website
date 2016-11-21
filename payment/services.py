@@ -5,8 +5,9 @@ from django.contrib import messages
 from django.utils.translation import ugettext as _
 import datetime
 
+
 def remind_of_payment(subscription):
-    if subscription.get_last_payment_reminder() != datetime.date.today():
+    if subscription.state == Subscribe.State.CONFIRMED and subscription.get_last_payment_reminder() != datetime.date.today():
         m = send_payment_reminder(subscription)
         if m:
             # log that we sent the reminder
