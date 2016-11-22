@@ -92,6 +92,14 @@ def send_online_payment_successful(subscription):
     return _email_helper(subscription.user.email, template, context)
 
 
+def send_sorry_for_incorrect_reminder(subscription):
+    context = _build_subscription_context(subscription)
+
+    template = 'sorry_incorrect_payment_reminder'
+
+    return _email_helper(subscription.user.email, template, context)
+
+
 def send_payment_reminder(subscription):
     context = _build_subscription_context(subscription)
 
