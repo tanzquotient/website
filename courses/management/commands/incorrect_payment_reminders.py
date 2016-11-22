@@ -20,7 +20,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--sorry',
             action='store_true',
-            dest='delete',
+            dest='sorry',
             default=False,
             help='Send mail to say sorry',
         )
