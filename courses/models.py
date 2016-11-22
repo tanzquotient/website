@@ -668,7 +668,7 @@ class Subscribe(models.Model):
             if user is not None:
                 reversion.set_user(user)
             reversion.set_comment("Payed using payment method " + payment_method)
-        if self.payment_method == PaymentMethod.ONLINE:
+        if self.paymentmethod == PaymentMethod.ONLINE:
             send_online_payment_successful(self)
         return True
 
