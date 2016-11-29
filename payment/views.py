@@ -146,7 +146,8 @@ class TeacherOfCourseOnly(View):
     def dispatch(self, *args, **kwargs):
         # check permissions not expressed by auth.perm
         if not self.request.user.is_staff and not self.request.user.teaching.filter(
-                course__id=kwargs['course']).count() and not self.request.user.has_perm('courses.change_subscribe'):
+                course__id=kwargs['course']).count() \
+                and not self.request.user.has_perm('courses.change_subscribe'):
             raise PermissionDenied
 
         return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)
