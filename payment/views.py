@@ -17,6 +17,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from courses.emailcenter import send_payment_reminder
 from .services import *
 
+
 class VoucherPaymentIndexView(FormView):
     template_name = 'payment/voucher/form.html'
     form_class = VoucherForm
@@ -128,7 +129,8 @@ class TeacherOnly(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         # check permissions not expressed by auth.perm
-        if not self.request.user.is_staff and not self.request.user.profile.is_teacher():
+        if not self.request.user.is_staff and not self.request.user.profile.is_teacher() and not self.request.user.has_perm(
+                'courses.change_subscribe'):
             raise PermissionDenied
 
         return super(TeacherOnly, self).dispatch(*args, **kwargs)
@@ -144,7 +146,7 @@ class TeacherOfCourseOnly(View):
     def dispatch(self, *args, **kwargs):
         # check permissions not expressed by auth.perm
         if not self.request.user.is_staff and not self.request.user.teaching.filter(
-                course__id=kwargs['course']).count():
+                course__id=kwargs['course']).count() and not self.request.user.has_perm('courses.change_subscribe'):
             raise PermissionDenied
 
         return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)
@@ -238,7 +240,7 @@ class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(OfferingFinanceIndexView, self).get_context_data(**kwargs)
         offerings = Offering.objects.filter(display=True).prefetch_related('course_set', 'course_set__subscriptions',
-                                                                          'course_set__subscriptions__user',
-                                                                          'course_set__subscriptions__user__profile').all()
+                                                                           'course_set__subscriptions__user',
+                                                                           'course_set__subscriptions__user__profile').all()
         context['offerings'] = offerings
         return context
