@@ -25,13 +25,15 @@ class SurveyAdmin(TranslatableAdmin):
     model = Survey
     inlines = (QuestionGroupInline,)
 
-    actions = [export_surveys_xlsx, ]
+    actions = [export_surveys_xlsx, copy_survey]
 
 
 @admin.register(QuestionGroup)
 class QuestionGroupAdmin(TranslatableAdmin):
+    list_display = ('name', 'survey')
     model = QuestionGroup
     inlines = (QuestionInline,)
+    list_filter = ('survey', )
 
 
 @admin.register(Question)
@@ -39,6 +41,7 @@ class QuestionAdmin(TranslatableAdmin):
     list_display = ('name', 'type')
     model = Question
     inlines = (ChoiceInline,)
+    list_filter = ('question_group__survey', )
 
 
 @admin.register(ScaleTemplate)
@@ -51,6 +54,7 @@ class ChoiceAdmin(TranslatableAdmin):
     list_display = ('get_question_name', 'label', 'position')
     model = Choice
     raw_id_fields = ('question',)
+    list_filter = ('question__question_group__survey',)
 
 
 @admin.register(SurveyInstance)

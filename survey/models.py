@@ -15,14 +15,30 @@ class Survey(TranslatableModel):
     def get_test_url(self):
         return reverse("survey:survey_test", kwargs={'survey_id': self.id})
 
-    get_test_url.short_description ="Test url"
+    get_test_url.short_description = "Test url"
+
+    def copy(self):
+        old = Survey.objects.get(pk=self.id)
+        self.pk = None
+        i = 1
+        while True:
+            self.name = old.name + "(Copy {})".format(i)
+            if not Survey.objects.filter(name=self.name).exists():
+                break
+            i += 1
+        self.save()
+
+        for qg in old.questiongroup_set.all():
+            qg.copy(self)
+
+        return self
 
     def __str__(self):
         return self.name
 
 
 class QuestionGroup(TranslatableModel):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     survey = models.ForeignKey('Survey', blank=False, null=True, on_delete=models.SET_NULL)
     position = models.PositiveSmallIntegerField("Position", default=0)
 
@@ -32,6 +48,18 @@ class QuestionGroup(TranslatableModel):
 
     class Meta:
         ordering = ['position']
+        unique_together = (('name', 'survey'),)
+
+    def copy(self, survey):
+        old = QuestionGroup.objects.get(pk=self.id)
+        self.pk = None
+        self.survey = survey
+        self.save()
+
+        for question in old.question_set.all():
+            question.copy(self)
+
+        return self
 
     def __str__(self):
         return self.name
@@ -46,14 +74,14 @@ class Question(TranslatableModel):
         SCALE = 's'
         FREE_FORM = 'f'
 
-        CHOICES = ((SINGLE_CHOICE,'single choice'),
-                   (SINGLE_CHOICE_WITH_FREE_FORM,'single choice with free form'),
-                   (MULTIPLE_CHOICE,'multiple choice'),
-                   (MULTIPLE_CHOICE_WITH_FREE_FORM,'multiple choice with free form'),
-                   (SCALE,'scale'),
-                   (FREE_FORM,'free form'))
+        CHOICES = ((SINGLE_CHOICE, 'single choice'),
+                   (SINGLE_CHOICE_WITH_FREE_FORM, 'single choice with free form'),
+                   (MULTIPLE_CHOICE, 'multiple choice'),
+                   (MULTIPLE_CHOICE_WITH_FREE_FORM, 'multiple choice with free form'),
+                   (SCALE, 'scale'),
+                   (FREE_FORM, 'free form'))
 
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     question_group = models.ForeignKey('QuestionGroup', blank=False, null=True, on_delete=models.SET_NULL)
     type = models.CharField(max_length=3,
                             choices=Type.CHOICES,
@@ -104,6 +132,18 @@ class Question(TranslatableModel):
 
     class Meta:
         ordering = ['position']
+        unique_together = (('name', 'question_group'),)
+
+    def copy(self, question_group):
+        old = Question.objects.get(pk=self.id)
+        self.pk = None
+        self.question_group = question_group
+        self.save()
+
+        for choice in old.choice_set.all():
+            choice.copy(self)
+
+        return self
 
     def __str__(self):
         return self.name
@@ -117,7 +157,7 @@ class ScaleTemplate(TranslatableModel):
     )
 
     def __str__(self):
-        return"{} - {} - {}".format(self.low, self.mid, self.up)
+        return "{} - {} - {}".format(self.low, self.mid, self.up)
 
 
 class Choice(TranslatableModel):
@@ -135,6 +175,13 @@ class Choice(TranslatableModel):
 
     class Meta:
         ordering = ['position']
+
+    def copy(self, question):
+        old = Choice.objects.get(pk=self.id)
+        self.pk = None
+        self.question = question
+        self.save()
+        return self
 
 
 class SurveyInstance(models.Model):
@@ -154,9 +201,9 @@ class SurveyInstance(models.Model):
 
     def __str__(self):
         if self.course:
-            return"{} for {} of {}".format(self.survey, self.course, self.user)
+            return "{} for {} of {}".format(self.survey, self.course, self.user)
         else:
-            return"{} of {}".format(self.survey, self.user)
+            return "{} of {}".format(self.survey, self.user)
 
 
 class Answer(models.Model):
@@ -178,7 +225,7 @@ class Answer(models.Model):
         if question.type in [Question.Type.SINGLE_CHOICE_WITH_FREE_FORM, Question.Type.MULTIPLE_CHOICE_WITH_FREE_FORM]:
             if choice == 'freeform':
                 return klass(survey_instance=survey_inst, question=question,
-                                 text=choice_input)
+                             text=choice_input)
             else:
                 choice = get_object_or_404(Choice, pk=choice)
                 choice.set_current_language('en')
@@ -194,4 +241,4 @@ class Answer(models.Model):
                 return klass(survey_instance=survey_inst, question=question, choice=choice, text=choice_input)
 
     def __str__(self):
-        return"q({})-c({}): {}".format(self.question, self.choice, self.text)
+        return "q({})-c({}): {}".format(self.question, self.choice, self.text)
