@@ -5,6 +5,13 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 
 
+def _copy_translations(old, new):
+    for t in old.translations.all():
+        t.pk = None
+        t.master = new
+        t.save()
+
+
 class Survey(TranslatableModel):
     name = models.CharField(max_length=255, blank=False)
 
@@ -27,6 +34,8 @@ class Survey(TranslatableModel):
                 break
             i += 1
         self.save()
+
+        _copy_translations(old,self)
 
         for qg in old.questiongroup_set.all():
             qg.copy(self)
@@ -55,6 +64,8 @@ class QuestionGroup(TranslatableModel):
         self.pk = None
         self.survey = survey
         self.save()
+
+        _copy_translations(old, self)
 
         for question in old.question_set.all():
             question.copy(self)
@@ -140,6 +151,8 @@ class Question(TranslatableModel):
         self.question_group = question_group
         self.save()
 
+        _copy_translations(old, self)
+
         for choice in old.choice_set.all():
             choice.copy(self)
 
@@ -181,6 +194,7 @@ class Choice(TranslatableModel):
         self.pk = None
         self.question = question
         self.save()
+        _copy_translations(old, self)
         return self
 
 
