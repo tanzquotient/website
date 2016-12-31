@@ -35,7 +35,7 @@ class Survey(TranslatableModel):
             i += 1
         self.save()
 
-        _copy_translations(old,self)
+        _copy_translations(old, self)
 
         for qg in old.questiongroup_set.all():
             qg.copy(self)
@@ -73,7 +73,7 @@ class QuestionGroup(TranslatableModel):
         return self
 
     def __str__(self):
-        return self.name
+        return "{} ({})".format(self.name, self.survey.name if self.survey else "<unset survey>")
 
 
 class Question(TranslatableModel):
