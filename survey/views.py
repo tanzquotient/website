@@ -101,6 +101,7 @@ def survey_invitation(request):
 
             intro_text = survey_instance.survey.intro_text or ""
             intro_text = re.sub(r"\{\{\s*name\s*\}\}", survey_instance.user.first_name, intro_text)
+            intro_text = re.sub(r"\{\{\s*offering\s*\}\}", str(survey_instance.course.offering), intro_text)
             intro_text = re.sub(r"\{\{\s*course\s*\}\}", str(survey_instance.course) or "",
                                 intro_text)
             intro_text = re.sub(r"\{\{\s*teachers\s*\}\}",

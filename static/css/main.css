@@ -398,3 +398,7 @@ img.pull-left {
 .widget-simplenav a {
     margin: 0 5px;
 }
+
+.alert-empty {
+    background-color: transparent;
+}

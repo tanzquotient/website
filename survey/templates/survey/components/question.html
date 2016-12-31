@@ -4,6 +4,9 @@
         <strong>{{ question.text }}</strong>
     </div>
     <div class="panel-body">
+        {% if question.note %}
+            <div class="alert alert-info alert-empty" role="alert">{{ question.note }}</div>
+        {% endif %}
         {% if question.type == 'c' %}
             {% include "survey/components/question_singlechoice.html" with question=question only %}
         {% elif question.type == 'cf' %}
@@ -16,10 +19,6 @@
             {% include "survey/components/question_scale.html" with question=question only %}
         {% elif question.type == 'f' %}
             {% include "survey/components/question_freeform.html" with question=question only %}
-
-        {% endif %}
-        {% if question.note %}
-            <div class="alert alert-info" role="alert">{{ question.note }}</div>
         {% endif %}
     </div>
 </div>
