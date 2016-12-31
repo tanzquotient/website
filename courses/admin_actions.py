@@ -214,7 +214,7 @@ mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 class EvaluateForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     survey = forms.ModelChoiceField(label=_("Select Survey"), queryset=Survey.objects.all())
-    send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True)
+    send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True, required=False)
     url_expires = forms.BooleanField(label=_("Should invitation url expire?"), initial=False, required=False)
     url_expire_date = forms.DateTimeField(label=_("URL expire date"),
                                           initial=datetime.date.today() + datetime.timedelta(days=30))
