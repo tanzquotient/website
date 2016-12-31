@@ -9,6 +9,9 @@ services:
     ports:
       - "3309:3306"
     restart: always
+  memcached:
+    image: memcached:1.4
+    restart: always
   django:
     build:
       context: .
