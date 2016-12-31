@@ -452,6 +452,10 @@ LOCALE_PATHS = [
 
 CACHES = {
     'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'memcached:{}'.format(os.environ.get("TQ_MEMCACHED_PORT", '')),
+    },
+    'db': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         'LOCATION': 'tq_cache_table',
     }
