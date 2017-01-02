@@ -1,0 +1,42 @@
+FROM python:3.5-alpine
+MAINTAINER martin.zellner@gmail.com
+
+# MySQL
+RUN apk add --no-cache mariadb-client-libs && \
+    apk add --no-cache --virtual .build-deps \
+    build-base mariadb-dev && \
+    pip3 install mysqlclient==1.3.7 && \
+    apk del .build-deps
+
+# Pillow
+RUN apk add --no-cache zlib jpeg && \
+    apk add --no-cache --virtual .build-deps \
+    build-base jpeg-dev zlib-dev && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==3.2.0 && \
+    apk del .build-deps
+
+# Cryptography
+RUN apk add --no-cache openssl && \
+    apk add --no-cache --virtual .build-deps \
+    build-base openssl-dev libffi-dev && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==1.7.1 && \
+    apk del .build-deps
+
+# Cairo (cairocffi 0.7.2 does not work!!)
+RUN apk add --no-cache libffi cairo && \
+    apk add --no-cache --virtual .build-deps \
+    build-base libffi-dev && \
+    pip3 install cairocffi==0.7.1 && \
+    apk del .build-deps
+
+# Cairo
+RUN apk add --no-cache libxml2 libxslt && \
+    apk add --no-cache --virtual .build-deps \
+    build-base libxml2-dev libxslt-dev && \
+    pip3 install cairosvg==2.0 && \
+    apk del .build-deps
+
+ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
+WORKDIR /webapps
+
+RUN pip3 install --upgrade -r tq_website/configurations/python-requirements.txt

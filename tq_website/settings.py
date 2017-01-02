@@ -42,6 +42,7 @@ USE_X_FORWARDED_HOST = True
 # Application definition
 
 INSTALLED_APPS = [
+    'raven.contrib.django.raven_compat',
     'treebeard',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
@@ -66,7 +67,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'reversion',
-    'djcelery',
+    'django_celery_beat',
+    'django_celery_results',
     'djcelery_email',
     'post_office',
     'absolute',
@@ -322,13 +324,13 @@ TEXT_SAVE_IMAGE_FUNCTION = 'cmsplugin_filer_image.integrations.ckeditor.create_i
 ##################################################
 # Configuration of post_office plugin und celery #
 ##################################################
-# setup celery
-import djcelery
 
-djcelery.setup_loader()
-
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+# Celery
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+CELERY_RESULT_BACKEND = 'django-db'
+BROKER_URL = "redis://redis/"
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # using post office as the default email backend 
 EMAIL_BACKEND = 'post_office.EmailBackend'
@@ -463,5 +465,18 @@ CACHES = {
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-toolbar autopatch my settings!
 
+# Internal IPs for Debug Toolbar
+INTERNAL_IPS = ['127.0.0.1', '192.168.99.100', '192.168.99.1']
+
 # import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
 from .settings_local import *
+
+import os
+import raven
+
+RAVEN_CONFIG = {
+    'dsn': 'https://883ad6a3790e48aea0291f4a0d1d89c4:339fab1993244b4e9d414ebcef70cee0@sentry.io/124755',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+}

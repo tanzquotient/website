@@ -1,0 +1,64 @@
+version: '2'
+services:
+
+  # Database (MySQL)
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: ${TQ_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: tq_website
+
+  # Django (serving with gunicorn)
+  django:
+    image: tq_website_django_new
+    user: root
+    volumes:
+      - .:/webapps/tq_website
+    command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
+    links:
+      - db
+
+  # Webserver
+  nginx:
+    image: nginx:mainline-alpine
+    volumes:
+      - ./configurations/nginx-no_ssl.conf:/etc/nginx/conf.d/tq_website.template
+      - ./collected_static:/webapps/tq_website/collected_static
+      - ./media:/webapps/tq_website/media
+    command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
+    environment:
+      - NGINX_HOST=tq.ethz.ch
+      - NGINX_PORT=80
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - django
+
+  # Message Broker for Celery (handles background tasks)
+  redis:
+    image: redis:3.2-alpine
+
+  # Celery Beat
+  beat:
+    image: tq_website_django_new
+    working_dir: /webapps/tq_website
+    volumes:
+      - .:/webapps/tq_website
+    command: celery -A tq_website beat -l info -S django
+    links:
+      - db
+      - redis
+
+  worker:
+    image: tq_website_django_new
+    working_dir: /webapps/tq_website
+    environment:
+      C_FORCE_ROOT: 1
+    volumes:
+      - .:/webapps/tq_website
+    command: celery -A tq_website worker -l info
+    links:
+      - db
+      - redis
