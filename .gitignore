@@ -85,3 +85,6 @@ credentials/
 
 # docker-compose environment variables
 .env
+
+# Database dumps
+database_*
