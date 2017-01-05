@@ -13,6 +13,14 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
+
+def _get_survey_inst(inst_id):
+    get_object_or_404(models.SurveyInstance, pk=inst_id)
+    return models.SurveyInstance.objects.filter(pk=inst_id).prefetch_related('survey__questiongroup_set',
+                                                                             'survey__questiongroup_set__question_set',
+                                                                             'survey__questiongroup_set__question_set__scale_template').first()
+
+
 def survey_invitation(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST' and 'send' in request.POST:
@@ -20,10 +28,10 @@ def survey_invitation(request):
             raise Http404()
         inst_id = request.session['inst_id']
         del request.session['inst_id']
-        survey_instance = get_object_or_404(models.SurveyInstance, pk=inst_id)
+        survey_instance = _get_survey_inst(inst_id)
 
         prog = re.compile(r'^q(?P<question>\d+)-?c?(?P<choice>\S+)?$')
-        for key, value in request.POST.iteritems():
+        for key, value in request.POST.items():
             if not key:
                 log.debug(u"ignore {}".format(key))
                 continue
@@ -41,7 +49,7 @@ def survey_invitation(request):
             try:
                 if question.type in [models.Question.Type.SINGLE_CHOICE,
                                      models.Question.Type.SINGLE_CHOICE_WITH_FREE_FORM]:
-                    if c=='freechoice':
+                    if c == 'freechoice':
                         continue
                     if c:
                         a = models.Answer.create(survey_instance, question, c, value)
@@ -69,19 +77,16 @@ def survey_invitation(request):
             del request.session['inst_id']
 
         template_name = "survey/survey.html"
-        if 't' in request.GET:
-            # old format: for backwards compatibility, show a message to user
-            request.session['msg'] = _("This survey link has expired (format has changed)")
-            return redirect('survey:survey_error')
         if 'id' in request.GET and 'c' in request.GET:
             id_str = request.GET['id']
             c = request.GET['c']
             inst_id = services.decode_id(id_str, c)
             if not inst_id:
-                request.session['msg'] = _("There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey")
+                request.session['msg'] = _(
+                    "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey")
                 return redirect('survey:survey_error')
-            log.debug( inst_id)
-            survey_instance = get_object_or_404(models.SurveyInstance, pk=inst_id)
+            log.debug(inst_id)
+            survey_instance = _get_survey_inst(inst_id)
 
             request.session['inst_id'] = inst_id
 
@@ -95,6 +100,7 @@ def survey_invitation(request):
 
             intro_text = survey_instance.survey.intro_text or ""
             intro_text = re.sub(r"\{\{\s*name\s*\}\}", survey_instance.user.first_name, intro_text)
+            intro_text = re.sub(r"\{\{\s*offering\s*\}\}", str(survey_instance.course.offering), intro_text)
             intro_text = re.sub(r"\{\{\s*course\s*\}\}", str(survey_instance.course) or "",
                                 intro_text)
             intro_text = re.sub(r"\{\{\s*teachers\s*\}\}",
@@ -125,7 +131,10 @@ def survey_error(request):
 def survey_test(request, survey_id):
     template_name = "survey/survey.html"
 
-    survey = get_object_or_404(models.Survey, pk=survey_id)
+    get_object_or_404(models.Survey, pk=survey_id)
+    survey = models.Survey.objects.filter(pk=survey_id).prefetch_related('questiongroup_set',
+                                                                         'questiongroup_set__question_set',
+                                                                         'questiongroup_set__question_set__scale_template').first()
     context = {'inst': models.SurveyInstance(survey=survey),
                'intro_text': survey.intro_text}
 

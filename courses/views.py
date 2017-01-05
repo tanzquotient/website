@@ -239,7 +239,7 @@ def duplicate_users(request):
     if request.method == 'POST' and 'post' in request.POST and request.POST['post'] == 'yes':
         duplicates_ids = request.session['duplicates']
         to_merge = dict()
-        for primary_id, aliases_ids in duplicates_ids.iteritems():
+        for primary_id, aliases_ids in duplicates_ids.items():
             to_merge_aliases = []
             for alias_id in aliases_ids:
                 key = '{}-{}'.format(primary_id, alias_id)
@@ -251,7 +251,7 @@ def duplicate_users(request):
         services.merge_duplicate_users_by_ids(to_merge)
     else:
         duplicates = services.find_duplicate_users()
-        for primary, aliases in duplicates.iteritems():
+        for primary, aliases in duplicates.items():
             users.append(User.objects.get(id=primary))
             user_aliases[primary] = list(User.objects.filter(id__in=aliases))
 

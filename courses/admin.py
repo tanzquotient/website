@@ -111,7 +111,7 @@ class CourseAdmin(TranslatableAdmin):
         ('Billing', {
             'fields': ['price_with_legi', 'price_without_legi', 'price_special']}),
         ('Admin', {
-            'fields': ['display', 'active']}),
+            'fields': ['display', 'active', 'evaluated']}),
     ]
 
     actions = [display, undisplay, activate, deactivate, welcome_teachers, welcome_teachers_reset_flag, copy_courses,

@@ -38,7 +38,7 @@ class QuestionGroupAdmin(TranslatableAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(TranslatableAdmin):
-    list_display = ('name', 'type')
+    list_display = ('id', 'name', 'type')
     model = Question
     inlines = (ChoiceInline,)
     list_filter = ('question_group__survey', )

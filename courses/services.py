@@ -631,12 +631,12 @@ def find_user_duplicates_ids(user):
 
 
 def merge_duplicate_users(to_merge):
-    for (primary, aliases) in to_merge.iteritems():
+    for primary, aliases in to_merge.items():
         merge_model_objects(primary, aliases, False)
 
 
 def merge_duplicate_users_by_ids(to_merge):
-    for (primary, aliases) in to_merge.iteritems():
+    for primary, aliases in to_merge.items():
         merge_model_objects(User.objects.get(id=primary), list(User.objects.filter(id__in=aliases)), False)
 
 
@@ -673,7 +673,7 @@ def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
     # method to the ForeignKey field for accessing the generic related fields.
     generic_fields = []
     for model in apps.get_models():
-        for field_name, field in filter(lambda x: isinstance(x[1], GenericForeignKey), model.__dict__.iteritems()):
+        for field_name, field in filter(lambda x: isinstance(x[1], GenericForeignKey), model.__dict__.items()):
             generic_fields.append(field)
 
     blank_local_fields = set([field.attname for field in primary_object._meta.local_fields if

@@ -9,10 +9,15 @@ services:
     ports:
       - "3309:3306"
     restart: always
+  memcached:
+    image: memcached:1.4
+    restart: always
   django:
     build:
       context: .
       dockerfile: configurations/dockerfile
+    env_file:
+      - .env
     volumes:
       - .:/webapps
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -20,4 +25,5 @@ services:
       - "8000:8000"
     links:
       - db
+      - memcached
     restart: always

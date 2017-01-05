@@ -1,4 +1,6 @@
-<p>{{ group.intro_text }}</p>
+{% if group.intro_text %}
+    <div class="alert alert-info" role="alert">{{ group.intro_text }}</div>
+{% endif %}
 {% for question in group.question_set.all %}
     {% include "survey/components/question.html" with question=question only %}
 {% endfor %}
