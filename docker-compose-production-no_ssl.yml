@@ -1,5 +1,7 @@
 version: '2'
 services:
+
+  # Database (MySQL)
   db:
     image: mysql
     environment:
@@ -9,26 +11,32 @@ services:
     ports:
       - "3309:3306"
     restart: always
+
+  # Cache
   memcached:
     image: memcached:1.4
     restart: always
+
+  # Django (serving with gunicorn)
   django:
     build:
       context: .
-      dockerfile: configurations/dockerfile
-    user: root
+      dockerfile: configurations/dockerfile-new
+    image: tq_website_django # give this built image a name to use it below
     env_file:
       - .env
+    user: root
     volumes:
       - .:/webapps/tq_website
-      - ./configurations/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
-    command: /bin/bash -c "python3 /webapps/tq_website/manage.py collectstatic --noinput && service rabbitmq-server start && supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+    command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
     links:
       - db
+      - memcached
     restart: always
 
+  # Webserver
   nginx:
-    image: nginx:latest
+    image: nginx:mainline-alpine
     volumes:
       - ./configurations/nginx-no_ssl.conf:/etc/nginx/conf.d/tq_website.template
       - ./collected_static:/webapps/tq_website/collected_static
@@ -39,6 +47,43 @@ services:
       - NGINX_PORT=80
     ports:
       - "80:80"
+      - "443:443"
     links:
       - django
+    restart: always
+
+  # Message Broker for Celery (handles background tasks)
+  redis:
+    image: redis:3.2-alpine
+    restart: always
+
+  # Celery Beat
+  beat:
+    depends_on:
+      - django # ensure the image is built before running this container
+    image: tq_website_django
+    working_dir: /webapps/tq_website
+    volumes:
+      - .:/webapps/tq_website
+    command: celery -A tq_website beat -l info -S django
+    links:
+      - db
+      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
+      - redis
+    restart: always
+
+  worker:
+    depends_on:
+      - django # ensure the image is built before running this container
+    image: tq_website_django
+    working_dir: /webapps/tq_website
+    environment:
+      C_FORCE_ROOT: 1
+    volumes:
+      - .:/webapps/tq_website
+    command: celery -A tq_website worker -l info
+    links:
+      - db
+      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
+      - redis
     restart: always
