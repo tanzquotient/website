@@ -62,6 +62,8 @@ services:
     depends_on:
       - django # ensure the image is built before running this container
     image: tq_website_django
+    env_file:
+      - .env
     working_dir: /webapps/tq_website
     volumes:
       - .:/webapps/tq_website
@@ -76,6 +78,8 @@ services:
     depends_on:
       - django # ensure the image is built before running this container
     image: tq_website_django
+    env_file:
+      - .env
     working_dir: /webapps/tq_website
     environment:
       C_FORCE_ROOT: 1

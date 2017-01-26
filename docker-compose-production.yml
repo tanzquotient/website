@@ -63,12 +63,15 @@ services:
     depends_on:
       - django # ensure the image is built before running this container
     image: tq_website_django
+    env_file:
+      - .env
     working_dir: /webapps/tq_website
     volumes:
       - .:/webapps/tq_website
     command: celery -A tq_website beat -l info -S django
     links:
       - db
+      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
       - redis
     restart: always
 
@@ -76,6 +79,8 @@ services:
     depends_on:
       - django # ensure the image is built before running this container
     image: tq_website_django
+    env_file:
+      - .env
     working_dir: /webapps/tq_website
     environment:
       C_FORCE_ROOT: 1
@@ -84,5 +89,6 @@ services:
     command: celery -A tq_website worker -l info
     links:
       - db
+      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
       - redis
     restart: always

@@ -1,5 +1,7 @@
 version: '2'
 services:
+
+  # Database (MySQL)
   db:
     image: mysql
     environment:
@@ -9,9 +11,13 @@ services:
     ports:
       - "3309:3306"
     restart: always
+
+  # Cache
   memcached:
     image: memcached:1.4
     restart: always
+
+  # Django (serving with gunicorn)
   django:
     build:
       context: .
