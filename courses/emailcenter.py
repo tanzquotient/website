@@ -62,7 +62,7 @@ def _build_subscription_context(subscription):
 
 
 def send_participation_confirmation(subscription):
-    context = _build_subscription_context()
+    context = _build_subscription_context(subscription)
 
     if subscription.partner is not None:
         template = 'participation_confirmation_with_partner'
