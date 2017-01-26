@@ -30,11 +30,14 @@ RUN apk add --no-cache libffi cairo && \
     apk del .build-deps
 
 # Cairo
-RUN apk add --no-cache libxml2 libxslt && \
+RUN apk add --no-cache libxml2-dev libxslt-dev && \
     apk add --no-cache --virtual .build-deps \
     build-base libxml2-dev libxslt-dev && \
     pip3 install cairosvg==2.0 && \
     apk del .build-deps
+
+# Python3
+RUN apk add --no-cache python3-dev
 
 ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
 WORKDIR /webapps

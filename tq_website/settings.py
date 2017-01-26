@@ -8,7 +8,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -189,13 +188,13 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors':
-                TCP + [
+                [
+                    "django.template.context_processors.debug",
+                    "django.template.context_processors.i18n",
+                    "django.template.context_processors.media",
+                    "django.template.context_processors.static",
+                    "django.template.context_processors.tz",
                     "django.contrib.auth.context_processors.auth",
-                    "django.core.context_processors.debug",
-                    "django.core.context_processors.i18n",
-                    "django.core.context_processors.media",
-                    "django.core.context_processors.static",
-                    "django.core.context_processors.tz",
                     "django.contrib.messages.context_processors.messages",
                     "django.template.context_processors.request",
                     'sekizai.context_processors.sekizai',
