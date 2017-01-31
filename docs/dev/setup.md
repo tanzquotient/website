@@ -87,6 +87,18 @@ git checkout -t origin/master
 
 ### Initial Configuration
 
+We have to create 2 files manually.
+
+First create a file `<project home>/maintenance.config` in the root folder of the project with the content
+
+```shell
+set $maintenance 0;
+```
+
+Alternatively you can just execute the script `./scripts/stop_maintenance.sh` which will also create file if it does not exist.
+
+(Whenever doing maintance, switch this flag to 1 (and back again), and restart docker-compose to make nginx reload this config)
+
 Create the *secret* config file in the folder `<project home>/tq_website/settings_local.py`.
 This file is not under version control because it contains some secrets.
 Add something along these lines, replace all stars `****` with appropriate secrets:

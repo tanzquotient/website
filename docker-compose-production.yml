@@ -41,6 +41,7 @@ services:
       - ./configurations/nginx-ssl.conf:/etc/nginx/conf.d/tq_website.template
       - ./collected_static:/webapps/tq_website/collected_static
       - ./media:/webapps/tq_website/media
+      - ./maintenance.conf:/webapps/tq_website/maintenance.conf
       - /etc/letsencrypt:/etc/letsencrypt
     command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
     environment:
