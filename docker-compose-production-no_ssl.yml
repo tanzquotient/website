@@ -6,10 +6,10 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: ${TQ_MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
       MYSQL_DATABASE: tq_website
     ports:
-      - "3309:3306"
+      - "${TQ_DB_PORT}:3306"
     restart: always
 
   # Cache
@@ -44,11 +44,11 @@ services:
       - ./maintenance.conf:/webapps/tq_website/maintenance.conf
     command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
     environment:
-      - NGINX_HOST=tq.ethz.ch
-      - NGINX_PORT=80
+      - NGINX_HOST=${TQ_NGINX_HOST}
+      - NGINX_PORT=${TQ_NGINX_PORT}
     ports:
-      - "80:80"
-      - "443:443"
+      - "${TQ_NGINX_PORT}:80"
+      - "${TQ_SSL_PORT}:443"
     links:
       - django
     restart: always

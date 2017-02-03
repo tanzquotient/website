@@ -99,42 +99,55 @@ Alternatively you can just execute the script `./scripts/stop_maintenance.sh` wh
 
 (Whenever doing maintance, switch this flag to 1 (and back again), and restart docker-compose to make nginx reload this config)
 
-Create the *secret* config file in the folder `<project home>/tq_website/settings_local.py`.
+Create the *secret* environment file `<project home>/.env`.
 This file is not under version control because it contains some secrets.
-Add something along these lines, replace all stars `****` with appropriate secrets:
 
-```python
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '****'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-SSLIFY_DISABLE = True
-
-# Configure the email host to send mails from
-EMAIL_HOST = 'mailsrv.vseth.ethz.ch'
-EMAIL_HOST_USER = 'informatik@tq.vseth.ch'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = '****'
-DEFAULT_FROM_EMAIL = 'informatik@tq.vseth.ch'
-
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'db',
-        'NAME': 'tq_website',
-        'USER': 'root',
-        'PASSWORD': 'root',
-    }
-}
 ```
+# This file defines environment variables which are used in docker-compose files (and by docker-compose itself)
 
-On the server with SSL change these lines to
-```python
-DEBUG = False
-SSLIFY_DISABLE = False
+# docker-compose default overwrites (see https://docs.docker.com/compose/reference/envvars/)
+COMPOSE_FILE=docker-compose.yml
+
+# Secrets
+TQ_DB_ROOT_PASSWORD=root
+TQ_DB_USER=root
+TQ_DB_PASSWORD=root
+TQ_SECRET_KEY=lsdkjflkjdsf3424234lkjölkjölkj3424324lkjöljölkjlkj23
+
+# Deployment dependent configurations
+TQ_SITE_ID=1
+TQ_DEBUG=True
+
+# Email
+TQ_EMAIL_HOST=mailsrv.vseth.ethz.ch
+TQ_EMAIL_HOST_USER=
+TQ_EMAIL_HOST_PASSWORD=
+TQ_DEFAULT_FROM_EMAIL=
+
+# Admins
+TQ_ADMINS=[]
+TQ_SERVER_EMAIL=
+
+# Analytics
+TQ_GOOGLE_ANALYTICS_PROPERTY_ID=
+
+# FDS
+TQ_FDS_USER=
+
+# Account details
+TQ_PAYMENT_ACCOUNT_IBAN=
+TQ_PAYMENT_ACCOUNT_POST_NUMBER=
+TQ_PAYMENT_ACCOUNT_RECIPIENT=
+TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY=
+
+TQ_NGINX_HOST=localhost
+
+# Ports
+TQ_DB_PORT=3309
+TQ_NGINX_PORT=8001
+TQ_DJANGO_PORT=8000
+TQ_SSL_PORT=443
+TQ_MEMCACHED_PORT=11211
 ```
 
 *Attention*: The configured mail account is used to - depending on the action - send huge amounts of auto-generated mails. Configure a test mail server before starting the `celery` task that sends out mails.

@@ -1,2 +1,0 @@
-# local settings file may contain secrets, so DO NOT PUT IT UNDER VERSION CONTROL!
-settings_local.py

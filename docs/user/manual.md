@@ -21,7 +21,7 @@ Ein Offering definiert auch die Zeitspanne (des Quartals) und der darin enthalte
 * *Courses*: Ein Course ist ein Kurs in einer bestimmten Zeitspanne, für den man sich anmelden kann. Er definiert Zeit, Ort und Typ des Kurses. Der Typ wird jedoch separat verwaltet, weil immer wieder Kurse vom gleichen Typ durchgeführt werden.
 * *Course Types*: Ein Course Type ist der Typ eines Kurses. Er enthält die (statischen) Information die sich von einer Durchführung eines Kurses zur nächsten nicht ändern. So enthält er etwa die Tanzstile die unterrichtet werden und eine generelle Beschreibung.
 * *Rooms*: Hier verwaltet man die Räume und ihre Beschreibung sowie den Link zur Karte (z.B. Google Maps).
-* *Styles*: Hier verwaltet man die Tanzstile, die in der Beschreibung der *Course Types* aufgelistet werden können. Insbesondere können hier auch passende Songs eingetragen werden. Die Songs werden auf der Detailansicht des Kurses angezeigt aber auch auf der [Seite mit der Musikzusammenstellung](//tq.ethz.ch/courses/music/) aller Tanzstilen!
+* *Styles*: Hier verwaltet man die Tanzstile, die in der Beschreibung der *Course Types* aufgelistet werden können. Insbesondere können hier auch passende Songs eingetragen werden. Die Songs werden auf der Detailansicht des Kurses angezeigt aber auch auf der [Seite mit der Musikzusammenstellung](//tanzquotient.org/courses/music/) aller Tanzstilen!
 
 Generell ist wichtig zu verstehen, dass Daten an mehreren Orten editiert werden können. Zum Beispiel kann man in *Subscribes* die Anmeldungen verwalten. Mann kann teile davon aber auch sehen, wenn man einen Kurs editiert (nämlich alle Anmeldungen für diesen bestimmten Kurs) oder wenn man einen User editiert (nämlich alle Anmeldungen dieses Users).
 

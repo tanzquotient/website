@@ -6,10 +6,10 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: ${TQ_MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
       MYSQL_DATABASE: tq_website
     ports:
-      - "3309:3306"
+      - "${TQ_DB_PORT}:3306"
     restart: always
 
   # Cache
@@ -29,7 +29,7 @@ services:
       - .:/webapps
     command: python3 manage.py runserver 0.0.0.0:8000
     ports:
-      - "8000:8000"
+      - "${TQ_DJANGO_PORT}:8000"
     links:
       - db
       - memcached

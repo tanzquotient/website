@@ -2,7 +2,7 @@ site_name: TQ Website
 docs_dir: docs
 site_dir: docs_build
 
-site_url: //tq.ethz.ch
+site_url: //tanzquotient.org
 repo_url: //github.com/gitsimon/tq_website/
 
 theme: readthedocs

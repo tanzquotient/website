@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 import os
 
 import logging
+import raven
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -113,7 +114,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-SITE_ID = 1
+SITE_ID = int(os.environ.get("TQ_SITE_ID", 100))
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -239,8 +240,8 @@ LANGUAGES = [
 
 PARLER_LANGUAGES = {
     None: (
-        {'code': 'de',},
-        {'code': 'en',},
+        {'code': 'de', },
+        {'code': 'en', },
     ),
 }
 
@@ -435,8 +436,8 @@ REST_FRAMEWORK = {
 ##########
 PARLER_LANGUAGES = {
     SITE_ID: (
-        {'code': 'en',},
-        {'code': 'de',},
+        {'code': 'en', },
+        {'code': 'de', },
     ),
     'default': {
         'fallbacks': ['de'],  # defaults to PARLER_DEFAULT_LANGUAGE_CODE
@@ -471,11 +472,53 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-
 # Internal IPs for Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', '192.168.99.100', '192.168.99.1']
 
-# import local settings (includes secrets, thats why settings_local MUST NOT BE UNDER VERSION CONTROL!!!)
-from .settings_local import *
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
-import os
-import raven
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get("TQ_DEBUG", False)
+
+# Configure the email host to send mails from
+EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')
+EMAIL_HOST_USER = os.environ.get("TQ_EMAIL_HOST_USER", '')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = os.environ.get("TQ_EMAIL_HOST_PASSWORD", '')
+DEFAULT_FROM_EMAIL = os.environ.get("TQ_DEFAULT_FROM_EMAIL", '')
+
+ADMINS = eval(os.environ.get("TQ_ADMINS", '[]'))
+SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", ''),
+
+# Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'db',
+        'NAME': 'tq_website',
+        'USER': os.environ.get("TQ_DB_USER", ''),
+        'PASSWORD': os.environ.get("TQ_DB_PASSWORD", ''),
+    }
+}
+
+GOOGLE_ANALYTICS_PROPERTY_ID = os.environ.get("TQ_GOOGLE_ANALYTICS_PROPERTY_ID", '')
+
+# Postfinance Backend
+FDS_HOST = 'fdsbc.post.ch'
+FDS_USER = os.environ.get("TQ_FDS_USER", '')
+FDS_PRIVATE_KEY = os.path.join(BASE_DIR, 'credentials', 'tq')
+FDS_HOST_KEY = os.path.join(BASE_DIR, u'credentials', u'host_key')
+FDS_DATA_PATH = 'fds_data'
+FDS_PORT = 22
+
+# Postfinance Account
+PAYMENT_ACCOUNT = {
+    'default': {
+        'IBAN': os.environ.get("TQ_PAYMENT_ACCOUNT_IBAN", ''),
+        'post_number': os.environ.get("TQ_PAYMENT_ACCOUNT_POST_NUMBER", ''),
+        'recipient': [os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT", ''),
+                      os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY", '')]
+    }
+}
 
 RAVEN_CONFIG = {
     'dsn': 'https://883ad6a3790e48aea0291f4a0d1d89c4:339fab1993244b4e9d414ebcef70cee0@sentry.io/124755',
