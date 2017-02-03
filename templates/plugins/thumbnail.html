@@ -1,9 +1,18 @@
-{% load cms_tags placeholder_tags thumbnail %}
+{% load cms_tags thumbnail %}
+
 <div class="thumbnail">
     {% if instance.image %}
-        <img data-holder-rendered="true"
-             src="{% thumbnail event.image 350x150 crop upscale subject_location=event.image.subject_location %}"
-             style="height: 100%; width: 100%; display: block;">
+        <a href="{{ instance.url|default:'' }}">
+            {% if instance.crop %}
+                <img data-holder-rendered="true"
+                     src="{% thumbnail instance.image 350x350 crop upscale subject_location=event.image.subject_location %}"
+                     style="height: 100%; width: 100%; display: block;">
+            {% else %}
+                <img data-holder-rendered="true"
+                     src="{% thumbnail instance.image 350x350 upscale subject_location=event.image.subject_location %}"
+                     style="height: 100%; width: 100%; display: block;">
+            {% endif %}
+        </a>
     {% endif %}
     <div class="caption">
         {% for plugin in instance.child_plugin_instances %}

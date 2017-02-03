@@ -11,9 +11,9 @@ from filer.fields.image import FilerImageField
 
 class PageTitlePluginModel(CMSPlugin):
     title = models.CharField(max_length=30, blank=True, null=True)
-    title.help_text ="The title to be displayed. Leave empty to display the page's title."
+    title.help_text = "The title to be displayed. Leave empty to display the page's title."
     subtitle = models.CharField(max_length=50, blank=True, null=True)
-    subtitle.help_text ="The subtitle to be displayed."
+    subtitle.help_text = "The subtitle to be displayed."
 
 
 class PageTitlePlugin(CMSPluginBase):
@@ -32,7 +32,7 @@ class PageTitlePlugin(CMSPluginBase):
 
 class ButtonPluginModel(Link):
     emphasize = models.BooleanField(blank=False, null=False, default=False)
-    emphasize.help_text ="If this button should be visually emphasized."
+    emphasize.help_text = "If this button should be visually emphasized."
 
 
 class ButtonPlugin(LinkPlugin):
@@ -57,7 +57,11 @@ class RowPlugin(CMSPluginBase):
 
 class ThumbnailPluginModel(CMSPlugin):
     image = FilerImageField(blank=True, null=True)
-    image.help_text ="Image to show thumbnail for."
+    image.help_text = "Image to show thumbnail for."
+    crop = models.BooleanField(blank=True, null=False, default=False)
+    crop.help_text = "If this thumbnail should be cropped to fit given size."
+    url = models.URLField(max_length=500, blank=True, null=True)
+    url.help_text = "URL to display on image click."
 
 
 class ThumbnailPlugin(CMSPluginBase):
