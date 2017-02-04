@@ -476,7 +476,7 @@ INTERNAL_IPS = ['127.0.0.1', '192.168.99.100', '192.168.99.1']
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("TQ_DEBUG", False)
+DEBUG = bool(os.environ.get("TQ_DEBUG", False))
 
 # Configure the email host to send mails from
 EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')
