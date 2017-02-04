@@ -47,3 +47,4 @@ django-debug-toolbar==1.6
 python-memcached==1.58
 raven==5.32.0
 redis==2.10.5
+cryptography==1.7.1
