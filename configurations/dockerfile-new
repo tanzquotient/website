@@ -40,6 +40,7 @@ RUN apk add --no-cache libxml2-dev libxslt-dev && \
 RUN apk add --no-cache python3-dev
 
 ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
-WORKDIR /webapps
 
-RUN pip3 install --upgrade -r tq_website/configurations/python-requirements.txt
+RUN pip3 install --upgrade -r /webapps/tq_website/configurations/python-requirements.txt
+
+WORKDIR /webapps/tq_website/
