@@ -8,11 +8,12 @@
 
 {% block main_content %}
     <div class="container">
-        {% url 'payment:offering_finance_index_view' as offering_finance_index_view %}
-        <p>{% blocktrans %}
-            <a href="{{ offering_finance_index_view }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to
-                offering overviews</a>{% endblocktrans %}
-        </p>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'payment:offering_finance_index_view' %}">Offerings</a></li>
+            <li><a href="{% url 'payment:offering_finance_overview' offering.pk %}">{{ offering.name }}</a></li>
+            <li class="active">Unpaid Subscriptions</li>
+        </ol>
+
         <h2>Unpaid Subscriptions in {{ offering }}
             <small>{{ offering.period|default:'' }}</small>
         </h2>

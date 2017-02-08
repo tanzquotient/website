@@ -209,7 +209,7 @@ class CoursePaymentExport(TeacherOfCourseOnly):
 
 
 class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):
-    template_name = 'payment/finance/detail.html'
+    template_name = 'payment/finance/offering_detail.html'
     permission_required = 'payment.payment.change'
     form_class = forms.Form
 
@@ -234,14 +234,25 @@ class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFo
         return super(OfferingFinanceDetailView, self).post(request)
 
 
+class OfferingFinanceOverview(PermissionRequiredMixin, TemplateView):
+    template_name = 'payment/finance/offering_overview.html'
+    permission_required = 'payment.payment.change'
+
+    def get_context_data(self, **kwargs):
+        offering = Offering.objects.get(
+            id=kwargs['offering'])
+
+        context = super(OfferingFinanceOverview, self).get_context_data(**kwargs)
+        context['offering'] = offering
+        return context
+
+
 class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
-    template_name = 'payment/finance/courses.html'
+    template_name = 'payment/finance/index.html'
     permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):
         context = super(OfferingFinanceIndexView, self).get_context_data(**kwargs)
-        offerings = Offering.objects.filter(display=True).prefetch_related('course_set', 'course_set__subscriptions',
-                                                                           'course_set__subscriptions__user',
-                                                                           'course_set__subscriptions__user__profile').all()
+        offerings = Offering.objects.order_by('-active', '-period__date_from').all()
         context['offerings'] = offerings
         return context

@@ -87,7 +87,7 @@
                                 {% endif %}
                                 {% if user.is_superuser or perms.payment.change_payment %}
                                     <li><a href="{% url 'payment:offering_finance_index_view' %}"><span
-                                            class="fa fa-money fa-lg"></span> Finance Overview</a>
+                                            class="fa fa-money fa-lg"></span> Finance</a>
                                     </li>
                                 {% endif %}
                                 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}

@@ -29,8 +29,8 @@ urlpatterns = [
         name='coursepayment_payed'),
     url(r'^auth/finance/(?P<offering>[0-9]*)/detail/$', views.OfferingFinanceDetailView.as_view(),
         name='offering_finance_detail_view'),
-    url(r'^auth/finance/current/detail/$', views.OfferingFinanceDetailView.as_view(),
-        name='current_offering_finance_detail_view'),
-    url(r'^auth/finance/current/courses/$', views.OfferingFinanceIndexView.as_view(),
+    url(r'^auth/finance/(?P<offering>[0-9]*)/index/$', views.OfferingFinanceOverview.as_view(),
+        name='offering_finance_overview'),
+    url(r'^auth/finance/$', views.OfferingFinanceIndexView.as_view(),
         name='offering_finance_index_view'),
 ]

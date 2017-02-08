@@ -298,13 +298,13 @@ class Course(TranslatableModel):
         }
         accepted = self.subscriptions.accepted()
         for s in accepted.all():
-            price = s.get_price_to_pay()
+            price = s.get_price_to_pay() or 0
             totals['to_pay'] += price
 
         paid = accepted.paid()
         totals['paid_count'] = paid.count()
         for s in paid.all():
-            price = s.get_price_to_pay()
+            price = s.get_price_to_pay() or 0
             totals['paid'] += price
             if s.paymentmethod == PaymentMethod.ONLINE:
                 totals['paid_online'] += price
