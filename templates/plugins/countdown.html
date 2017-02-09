@@ -1,0 +1,87 @@
+{% load cms_tags thumbnail sekizai_tags %}
+
+<div class="counter">
+    <h3>{{ instance.text|default:'' }}</h3>
+    <div id="countdown">
+
+    </div><!-- /#Countdown Div -->
+</div>
+
+<style>
+    .counter {
+        background: #2C2C2C;
+        -moz-box-shadow: inset 0 0 5px #000000;
+        -webkit-box-shadow: inset 0 0 5px #000000;
+        box-shadow: inset 0 0 5px #000000;
+        min-height: 150px;
+        text-align: center;
+    }
+
+    .counter h3 {
+        color: #E5E5E5;
+        font-size: 14px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: lighter;
+        letter-spacing: 1px;
+        padding-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    #countdown {
+        color: #FFFFFF;
+    }
+
+    #countdown span {
+        color: #E5E5E5;
+        font-size: 26px;
+        font-weight: normal;
+        margin-left: 20px;
+        margin-right: 20px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    // set the date we're counting down to
+    var target_date = new Date('{{ instance.finish_datetime.isoformat }}').getTime();
+
+    // variables for time units
+    var days, hours, minutes, seconds;
+
+    // get tag element
+    var countdown = document.getElementById('countdown');
+
+    var hide = {{ instance.hide|yesno:"true,false" }};
+
+    // update the tag with id "countdown" every 1 second
+    setInterval(function () {
+
+            // find the amount of "seconds" between now and target
+            var current_date = new Date().getTime();
+            var seconds_left = (target_date - current_date) / 1000;
+
+            // do some time calculations
+            days = parseInt(seconds_left / 86400);
+            seconds_left = seconds_left % 86400;
+
+            hours = parseInt(seconds_left / 3600);
+            seconds_left = seconds_left % 3600;
+
+            minutes = parseInt(seconds_left / 60);
+            seconds = parseInt(seconds_left % 60);
+
+            if (hide && seconds_left < 0) {
+                countdown.innerHTML = '<span>{{ instance.finish_text|default:"" }}</span>';
+            }
+            else {
+                // format countdown string + set tag value
+                countdown.innerHTML = '<span class="days">' + days + ' <b>Days</b></span> <span class="hours">' + hours + ' <b>Hours</b></span> <span class="minutes">'
+                    + minutes + ' <b>Minutes</b></span> <span class="seconds">' + seconds + ' <b>Seconds</b></span>';
+            }
+
+        },
+        1000
+    )
+    ;
+</script>

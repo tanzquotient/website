@@ -7,6 +7,7 @@ from django.db import models
 from djangocms_link.models import Link
 from djangocms_link.cms_plugins import LinkPlugin
 from filer.fields.image import FilerImageField
+from datetime import datetime
 
 
 class PageTitlePluginModel(CMSPlugin):
@@ -79,7 +80,31 @@ class ThumbnailPlugin(CMSPluginBase):
         return context
 
 
+class CountdownPluginModel(CMSPlugin):
+    text = models.TextField(max_length=255, blank=True, null=True)
+    finish_text = models.CharField(max_length=255, blank=True, null=True)
+    finish_datetime = models.DateTimeField()
+    finish_datetime.help_text = "Countdown finish date and time."
+    hide = models.BooleanField(default=True)
+    hide.help_text = "Hide Countdown after finished."
+
+
+class CountdownPlugin(CMSPluginBase):
+    name = _("Countdown")
+    model = CountdownPluginModel
+    render_template = "plugins/countdown.html"
+
+    text_enabled = True
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'instance': instance
+        })
+        return context
+
+
 plugin_pool.register_plugin(PageTitlePlugin)
 plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
 plugin_pool.register_plugin(ThumbnailPlugin)
+plugin_pool.register_plugin(CountdownPlugin)
