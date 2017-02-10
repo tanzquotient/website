@@ -33,7 +33,7 @@ def course_list(request, force_preview=False):
     template_name = "courses/list.html"
     context = {}
 
-    # if unpublished courses should be shown with a preview marker
+    # unpublished courses should be shown with a preview marker
     preview_mode = request and request.user.is_staff or force_preview
 
     offerings = services.get_offerings_to_display(request, preview_mode)
@@ -54,7 +54,7 @@ def course_list(request, force_preview=False):
 
             # add courses that have no weekday entry yet
             section_dict = {}
-            section_dict['section_title'] = _("Unknown weekday")
+            section_dict['section_title'] = _("Irregular weekday")
             section_dict['courses'] = course_set.weekday(None)
             if section_dict['courses'].__len__() != 0:
                 offering_sections.append(section_dict)

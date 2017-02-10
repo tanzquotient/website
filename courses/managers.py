@@ -4,12 +4,22 @@ from datetime import date
 from parler.managers import TranslatableManager
 from django.db.models import Q
 
+
 class CourseManager(TranslatableManager):
     def weekday(self, weekday):
         result_list = []
         for c in self.all():
             t = c.get_first_regular_lesson()
-            if (weekday == None and t == None) or (t != None and t.weekday == weekday):
+            common_irr_weekday = c.get_common_irregular_weekday()
+
+            weekday_to_add = None
+            if t is not None:
+                weekday_to_add = t.weekday
+            else:
+                if common_irr_weekday is not None:
+                    weekday_to_add = common_irr_weekday
+
+            if weekday_to_add == weekday:
                 result_list.append(c)
         return result_list
 

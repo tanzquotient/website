@@ -36,7 +36,7 @@ class Weekday:
                ('thu', 'Thursday'), ('fri', 'Friday'), ('sat', 'Saturday'),
                ('sun', 'Sunday'))
     NUMBERS = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6}
-
+    NUMBER_2_SLUG = {y: x for x, y in NUMBERS.items()}
 
 WEEKDAYS_TRANS = {'mon': 'Montag', 'tue': 'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
@@ -492,6 +492,18 @@ class Course(TranslatableModel):
                     return d1
                 else:
                     return d2
+
+    def get_common_irregular_weekday(self):
+        """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
+        if self.irregular_lessons.exists():
+            weekdays = [lesson.date.weekday() for lesson in self.irregular_lessons.all()]
+            weekdays_unique = list(set(weekdays))
+            if len(weekdays_unique) == 1:
+                return Weekday.NUMBER_2_SLUG[weekdays_unique[0]]
+            else:
+                return None
+        else:
+            return None
 
     def get_teachers_welcomed(self):
         return self.teaching.filter(welcomed=True).count() > 0
