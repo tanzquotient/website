@@ -487,7 +487,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("TQ_EMAIL_HOST_PASSWORD", '')
 DEFAULT_FROM_EMAIL = os.environ.get("TQ_DEFAULT_FROM_EMAIL", '')
 
 ADMINS = eval(os.environ.get("TQ_ADMINS", '[]'))
-SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", ''),
+SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", 'test@example.com'),
 
 # Database
 DATABASES = {
