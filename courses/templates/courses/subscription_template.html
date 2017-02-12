@@ -17,7 +17,7 @@
         <a id="subscription"></a>
 
         <p>{% include "courses/snippets/detail.html" with course=course only %}</p>
-        {% include "courses/snippets/subscription_info.html" with course=course long=True only %}
+        <p>{% include "courses/snippets/subscription_info.html" with course=course long=True only %}</p>
     </div>
 
     {% if course.is_subscription_allowed %}
