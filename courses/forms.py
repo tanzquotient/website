@@ -57,6 +57,7 @@ class UserForm(CustomSignupForm):
     city.label = 'Ort'
     email = forms.EmailField(max_length=75)
     email.label = 'E-Mail'
+    email.help_text = 'Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat an!'
     email_repetition = forms.EmailField(max_length=75)
     email_repetition.label = 'E-Mail Wiederholung'
     body_height = forms.IntegerField(max_value=400, required=False)
