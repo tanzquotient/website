@@ -646,6 +646,11 @@ class Subscribe(models.Model):
 
     get_user_body_height.short_description = "Body height"
 
+    def get_user_student_status(self):
+        return self.user.profile.student_status
+
+    get_user_student_status.short_description = "Student"
+
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
         from courses.services import calculate_relevant_experience
