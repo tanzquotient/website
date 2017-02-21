@@ -226,6 +226,26 @@ def match_partners(subscriptions, request=None):
                              _(u'{} couples matched successfully').format(match_count))
 
 
+def correct_matching_state_to_couple(subscriptions, request=None):
+    corrected_count = 0
+
+    for s in subscriptions.all():
+        partner_subs = subscriptions.filter(user=s.partner, course=s.course)
+        if partner_subs.count() == 1:
+            partner_sub = partner_subs.first()
+            # because we update matching state iteratively, we have to allow also COUPLE State
+            allowed_states = [models.Subscribe.MatchingState.MATCHED, models.Subscribe.MatchingState.COUPLE]
+            if s.matching_state == models.Subscribe.MatchingState.MATCHED and partner_sub.matching_state in allowed_states:
+                s.matching_state = models.Subscribe.MatchingState.COUPLE
+                s.save()
+                corrected_count += 1
+
+    if corrected_count:
+        messages.add_message(request, messages.SUCCESS,
+                             _(u'{} subscriptions ({} couples) corrected successfully').format(corrected_count,
+                                                                                               corrected_count / 2))
+
+
 def unmatch_partners(subscriptions):
     for s in subscriptions.all():
         if s.state == models.Subscribe.State.NEW:

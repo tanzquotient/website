@@ -157,6 +157,13 @@ def unmatch_partners(modeladmin, request, queryset):
 unmatch_partners.short_description = "Unmatch partners (both partners must be selected and unconfirmed)"
 
 
+def correct_matching_state_to_couple(modeladmin, request, queryset):
+    services.correct_matching_state_to_couple(queryset, request)
+
+
+correct_matching_state_to_couple.short_description = "Correct matching_state to COUPLE (both partners must be matched together, can already be confirmed)"
+
+
 def welcome_teachers(modeladmin, request, queryset):
     services.welcome_teachers(queryset, request)
 
