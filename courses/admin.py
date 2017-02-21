@@ -176,12 +176,14 @@ class SubscribeChangeList(ChangeList):
         if course_consistent and course is not None:
             self.info['max_subscribers'] = course.max_subscribers
 
+
 @admin.register(Subscribe)
 class SubscribeAdmin(VersionAdmin):
     list_display = (
         'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
         'get_user_body_height',
-        'get_user_email', 'get_user_student_status', 'experience', 'comment', 'get_payment_state', 'get_calculated_experience', 'date')
+        'get_user_email', 'get_user_student_status', 'experience', 'comment', 'get_payment_state',
+        'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'state')
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'usi']
@@ -189,7 +191,8 @@ class SubscribeAdmin(VersionAdmin):
 
     model = Subscribe
 
-    actions = [match_partners, unmatch_partners, confirm_subscriptions, unconfirm_subscriptions, confirm_subscriptions_allow_singles,
+    actions = [match_partners, unmatch_partners, breakup_couple, confirm_subscriptions, unconfirm_subscriptions,
+               confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions, correct_matching_state_to_couple,
                set_subscriptions_as_payed, undo_voucher_payment, payment_reminder]
 

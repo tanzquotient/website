@@ -13,6 +13,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 from payment.services import remind_of_payments
 
+
 def display(modeladmin, request, queryset):
     queryset.update(display=True)
 
@@ -151,10 +152,17 @@ match_partners.short_description = "Match partners (chronologically, body height
 
 
 def unmatch_partners(modeladmin, request, queryset):
-    services.unmatch_partners(queryset)
+    services.unmatch_partners(queryset, request)
 
 
 unmatch_partners.short_description = "Unmatch partners (both partners must be selected and unconfirmed)"
+
+
+def breakup_couple(modeladmin, request, queryset):
+    services.breakup_couple(queryset, request)
+
+
+breakup_couple.short_description = "Break up (unmatch) couple (both couple partners must be selected and unconfirmed)"
 
 
 def correct_matching_state_to_couple(modeladmin, request, queryset):
@@ -221,7 +229,8 @@ mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 class EvaluateForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     survey = forms.ModelChoiceField(label=_("Select Survey"), queryset=Survey.objects.all())
-    send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True, required=False)
+    send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True,
+                                          required=False)
     url_expires = forms.BooleanField(label=_("Should invitation url expire?"), initial=False, required=False)
     url_expire_date = forms.DateTimeField(label=_("URL expire date"),
                                           initial=datetime.date.today() + datetime.timedelta(days=30))

@@ -246,14 +246,68 @@ def correct_matching_state_to_couple(subscriptions, request=None):
                                                                                                corrected_count / 2))
 
 
-def unmatch_partners(subscriptions):
+def unmatch_partners(subscriptions, request):
+    corrected_count = 0
+    invalid_state_count = 0
+    invalid_matching_state_count = 0
     for s in subscriptions.all():
         if s.state == models.Subscribe.State.NEW:
-            allowed_states = [models.Subscribe.MatchingState.MATCHED, models.Subscribe.MatchingState.COUPLE]
+            allowed_states = [models.Subscribe.MatchingState.MATCHED]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
                 _unmatch_person(s)
                 _unmatch_person(partner_subs.first())
+                corrected_count += 1
+            else:
+                invalid_matching_state_count += 1
+        else:
+            invalid_state_count += 1
+
+    invalid_matching_state_count -= corrected_count  # subtract wrongly counted errors
+
+    if corrected_count:
+        messages.add_message(request, messages.SUCCESS,
+                             _(u'{} couples unmatched successfully').format(corrected_count))
+    if invalid_state_count:
+        messages.add_message(request, messages.WARNING,
+                             _(u'{} subscriptions can not be unmatched because already CONFIRMED').format(
+                                 invalid_state_count))
+    if invalid_matching_state_count:
+        messages.add_message(request, messages.WARNING,
+                             _(u'{} subscriptions can not be unmatched because invalid matching state').format(
+                                 invalid_matching_state_count))
+
+
+def breakup_couple(subscriptions, request):
+    corrected_count = 0
+    invalid_state_count = 0
+    invalid_matching_state_count = 0
+    for s in subscriptions.all():
+        if s.state == models.Subscribe.State.NEW:
+            allowed_states = [models.Subscribe.MatchingState.COUPLE]
+            partner_subs = subscriptions.filter(user=s.partner, course=s.course)
+            if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
+                _unmatch_person(s)
+                _unmatch_person(partner_subs.first())
+                corrected_count += 1
+            else:
+                invalid_matching_state_count += 1
+        else:
+            invalid_state_count += 1
+
+    invalid_matching_state_count -= corrected_count  # subtract wrongly counted errors
+
+    if corrected_count:
+        messages.add_message(request, messages.SUCCESS,
+                             _(u'{} couples broken up successfully').format(corrected_count))
+    if invalid_state_count:
+        messages.add_message(request, messages.WARNING,
+                             _(u'{} couples can not be broken up because already CONFIRMED').format(
+                                 invalid_state_count))
+    if invalid_matching_state_count:
+        messages.add_message(request, messages.WARNING,
+                             _(u'{} couples can not be broken up because invalid matching state').format(
+                                 invalid_matching_state_count))
 
 
 def _unmatch_person(subscription):
