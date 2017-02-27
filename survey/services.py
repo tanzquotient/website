@@ -192,9 +192,10 @@ def export_surveys(surveys):
                        fileobj.getvalue())
             fileobj.seek(0)
 
+    content_length = zipped_file.tell()
     zipped_file.seek(0)
     response = HttpResponse(zipped_file, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename=Surveys.zip'
-    response['Content-Length'] = zipped_file.tell()
+    response['Content-Length'] = content_length
 
     return response
