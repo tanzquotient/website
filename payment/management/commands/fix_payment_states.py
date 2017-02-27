@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
-from django.contrib.auth.models import User, Group, Permission
-
-from courses import services
 from payment.models import *
 from courses.models import *
 
@@ -12,11 +8,11 @@ import logging
 log = logging.getLogger('tq')
 
 
-class Command(NoArgsCommand):
-    def handle_noargs(self, **options):
+class Command(BaseCommand):
+    def handle(self, *args, **options):
         log.info('run management command: {}'.format(__file__))
         print(
-        'the following subscriptions have the incorrect state CONFIRMED eventhough there is a valid subscription payment entry:')
+            'the following subscriptions have the incorrect state CONFIRMED eventhough there is a valid subscription payment entry:')
         count = 0
         for sp in SubscriptionPayment.objects.all():
             s = sp.subscription

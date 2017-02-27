@@ -285,3 +285,14 @@ def undo_voucher_payment(modeladmin, request, queryset):
 
 
 undo_voucher_payment.short_description = "Undo voucher payment"
+
+
+def raise_price_to_pay(modeladmin, request, queryset):
+    for subscription_payment in queryset:
+        if subscription_payment.balance() > 0:
+            s = subscription_payment.subscription
+            s.price_to_pay = subscription_payment.amount;
+            s.save()
+
+
+raise_price_to_pay.short_description = "raise price to pay to fit amount"

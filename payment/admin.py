@@ -5,6 +5,7 @@ from django.contrib import admin
 from payment.models import *
 from payment.admin_actions import *
 from courses.filters import *
+from payment.filters import *
 
 class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
@@ -15,22 +16,24 @@ class SubscriptionPaymentInline(admin.TabularInline):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'state',  'type', 'name', 'date', 'address', 'transaction_id',  'amount',
+    list_display = ['id', 'state', 'type', 'name', 'date', 'address', 'transaction_id', 'amount',
                     'amount_to_reimburse',
-                    'currency_code', 'remittance_user_string',  'list_subscriptions']
-    list_filter = ['state', 'type',  ('date', DateRangeFilter)]
+                    'currency_code', 'remittance_user_string', 'subscription_payments_amount_sum', 'list_subscriptions']
+    list_filter = ['state', 'type', ('date', DateRangeFilter)]
     search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                      'currency_code', 'remittance_user_string', 'filename']
 
     inlines = [SubscriptionPaymentInline]
-    actions = [process_payments, mark_payments_as_new, mark_payment_as_processed, mark_payment_as_irrelevant, mark_payment_as_course_payment]
+    actions = [process_payments, check_balance, mark_payment_as_irrelevant, mark_payment_as_course_payment]
+
 
 @admin.register(SubscriptionPayment)
 class SubscriptionPaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'payment', 'subscription', 'amount']
+    list_display = ['id', 'payment', 'subscription', 'amount', 'balance']
     raw_id_fields = ['payment', 'subscription']
+    list_filter = [SubscriptionPaymentFilter]
     search_fields = ['id', 'amount']
-
+    actions = [raise_price_to_pay]
 
 
 @admin.register(CoursePayment)

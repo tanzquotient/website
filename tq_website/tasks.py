@@ -44,5 +44,4 @@ TASK_CONFIG_MATCH = {'name': 'payment_match', 'ignore_result': True}
 
 @shared_task(**TASK_CONFIG_MATCH)
 def match_payments():
-    payment_processor = PaymentProcessor()
-    return payment_processor.match_payments()
+    PaymentProcessor().process_payments()

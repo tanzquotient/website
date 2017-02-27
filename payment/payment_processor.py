@@ -7,22 +7,23 @@ log = logging.getLogger('payment')
 
 USI_PREFIX = "USI-"
 RE_USI_STRICT = re.compile(r"[USIusi]{3,3}-(?P<usi>[a-zA-Z0-9]{6,6})")
-RE_USI = re.compile(r"[\s^]?#?(?P<usi>[a-zA-Z0-9]{6,6})[\s$]?")  # remove this unstrict regex in a while
+
 
 class PaymentProcessor:
+    def process_payments(self, queryset=Payment.objects):
+        self.match_payments(queryset)
+        self.finalize_payments(queryset)
+
     def match_payments(self, queryset=Payment.objects):
         new_payments = queryset.filter(state=Payment.State.NEW).all()
 
         for payment in new_payments:
             if payment.remittance_user_string:
                 matches = RE_USI_STRICT.findall(payment.remittance_user_string)
-                if not matches:
-                    # fallback: non strict regex
-                    matches = RE_USI.findall(payment.remittance_user_string)
                 if matches:
                     payment.type = Payment.Type.SUBSCRIPTION_PAYMENT
+                    payment.save()
 
-                    remaining_amount = payment.amount
                     for usi in matches:
                         subscription_query = Subscribe.objects.filter(usi=usi)
                         if subscription_query.count() == 1:
@@ -35,13 +36,12 @@ class PaymentProcessor:
                                     "Received payment {} which is related to a course with undefined prices.".format(
                                         payment))
                                 payment.state = Payment.State.MANUAL
+                                payment.save()
                                 break
-                            if to_pay <= remaining_amount:
-                                sp = SubscriptionPayment(payment=payment, subscription=matched_subscription,
-                                                         amount=to_pay)
-                                sp.save()
-                                remaining_amount -= to_pay
-                                matched_subscription.mark_as_payed(PaymentMethod.ONLINE)
+
+                            sp = SubscriptionPayment(payment=payment, subscription=matched_subscription,
+                                                     amount=to_pay)
+                            sp.save()
                             log.info('Matched payment {0} to subscription {1}'.format(payment, subscription_query))
                         elif subscription_query.count() > 1:
                             # should never happen since USI is unique
@@ -59,18 +59,46 @@ class PaymentProcessor:
                         #    break
                         else:
                             log.warning("USI {0} was not found for payment {1}.".format(usi, payment))
-                    payment.amount_to_reimburse = remaining_amount
-                    if payment.state == Payment.State.NEW:
-                        if remaining_amount == 0:
-                            payment.state = Payment.State.PROCESSED
-                        else:
-                            payment.state = Payment.State.MANUAL
+                    self.check_balance(payment)
                 else:
                     log.info("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
                     # TODO improve this with a code for teachers when they transfer course payments
                     payment.state = payment.State.MANUAL
+                    payment.save()
             else:
                 log.warning("No user remittance was found for payment {0}.".format(payment))
                 payment.state = Payment.State.MANUAL
+                payment.save()
+
+    def finalize_payments(self, queryset=Payment.objects):
+        matched_payments = queryset.filter(state=Payment.State.MATCHED).all()
+
+        for payment in matched_payments:
+            for s in payment.subscriptions.all():
+                s.mark_as_payed(PaymentMethod.ONLINE)
+            payment.state = Payment.State.PROCESSED
             payment.save()
+
+    def check_balance(self, payment):
+        """
+        Updates the payment according to currently linked subscriptions.
+
+        Returns true if the payment's amount is equals to the sum of the matched subscriptions.
+        """
+        if payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
+            remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
+
+            if remaining_amount == 0:
+                payment.state = Payment.State.MATCHED
+                payment.save()
+                return True
+            elif remaining_amount > 0:
+                payment.amount_to_reimburse = remaining_amount
+                payment.state = Payment.State.MANUAL
+                payment.save()
+                return False
+            else:
+                payment.state = Payment.State.MANUAL
+                payment.save()
+                return False

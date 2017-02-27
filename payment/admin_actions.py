@@ -1,26 +1,35 @@
 from payment.payment_processor import PaymentProcessor
 from payment.models import Payment
 
+
 def process_payments(modeladmin, request, queryset):
-    payment_processor = PaymentProcessor()
-    return payment_processor.match_payments(queryset)
+    PaymentProcessor().process_payments(queryset)
+
 
 process_payments.short_description = "Process selected payments"
 
-def mark_payments_as_new(modeladmin, request, queryset):
-    for payment in queryset:
-        payment.state = Payment.State.NEW
-        payment.save()
-        for sp in payment.subscription_payments.all():
-            sp.delete()
 
-mark_payments_as_new.short_description = "Mark selected payments as new (will be reprocessed)"
+def match_payments(modeladmin, request, queryset):
+    PaymentProcessor().match_payments(queryset)
 
-def mark_payment_as_processed(modeladmin, request, queryset):
-    short_description = "Mark selected payments as processed"
+
+match_payments.short_description = "Only match selected payments"
+
+
+def finalize_payments(modeladmin, request, queryset):
+    PaymentProcessor().finalize_payments(queryset)
+
+
+finalize_payments.short_description = "Finalize selected payments (set payment method and send payment confirmation)"
+
+
+def check_balance(modeladmin, request, queryset):
     for payment in queryset:
-        payment.state = Payment.State.PROCESSED
-        payment.save()
+        PaymentProcessor().check_balance(payment)
+
+
+check_balance.short_description = "Check balance and if ok mark selected payments as matched (will be finalized automatically)"
+
 
 def mark_payment_as_irrelevant(modeladmin, request, queryset):
     short_description = "Mark selected payments as irrelevant"
@@ -28,6 +37,7 @@ def mark_payment_as_irrelevant(modeladmin, request, queryset):
         payment.state = Payment.State.PROCESSED
         payment.type = Payment.Type.IRRELEVANT
         payment.save()
+
 
 def mark_payment_as_course_payment(modeladmin, request, queryset):
     short_description = "Mark selected payments as Course Payment Transfer"

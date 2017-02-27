@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from courses.models import Subscribe, Course
 from post_office.models import Email
+from django.core.exceptions import ValidationError
+
 
 class Payment(models.Model):
     """
@@ -11,9 +13,10 @@ class Payment(models.Model):
     class State:
         NEW = 'new'
         MANUAL = 'manual'
+        MATCHED = 'matched'
         PROCESSED = 'processed'
 
-        CHOICES = ((NEW,'new'), (MANUAL,'manual'), (PROCESSED,'processed'))
+        CHOICES = ((NEW, 'new'), (MANUAL, 'manual'), (MATCHED, 'matched'), (PROCESSED, 'processed'))
 
     class Type:
         SUBSCRIPTION_PAYMENT = 'subscription_payment'
@@ -22,10 +25,10 @@ class Payment(models.Model):
         IRRELEVANT = 'irrelevant'
         UNKNOWN = 'unknown'
 
-        CHOICES = ((SUBSCRIPTION_PAYMENT,'subscription payment'),
-                   (SUBSCRIPTION_PAYMENT_TO_REIMBURSE,'subscription payment (to reimburse)'),
-                   (COURSE_PAYMENT_TRANSFER,'course payment transfer'), (IRRELEVANT,'irrelevant'),
-                   (UNKNOWN,'unknown'))
+        CHOICES = ((SUBSCRIPTION_PAYMENT, 'subscription payment'),
+                   (SUBSCRIPTION_PAYMENT_TO_REIMBURSE, 'subscription payment (to reimburse)'),
+                   (COURSE_PAYMENT_TRANSFER, 'course payment transfer'), (IRRELEVANT, 'irrelevant'),
+                   (UNKNOWN, 'unknown'))
 
     name = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateTimeField()
@@ -50,7 +53,15 @@ class Payment(models.Model):
         return [subscription.course for subscription in self.subscriptions.all()]
 
     def list_subscriptions(self):
-        return [subscription_payment.subscription.__str__() for subscription_payment in SubscriptionPayment.objects.filter(payment=self).all()]
+        return [subscription_payment.subscription.__str__() for subscription_payment in
+                SubscriptionPayment.objects.filter(payment=self).all()]
+
+    def subscription_payments_amount_sum(self):
+        sum = 0
+        for sp in self.subscription_payments.all():
+            sum += sp.amount
+        return sum
+
 
 class SubscriptionPayment(models.Model):
     """
@@ -60,6 +71,15 @@ class SubscriptionPayment(models.Model):
     payment = models.ForeignKey(Payment, related_name='subscription_payments')
     subscription = models.ForeignKey(Subscribe, related_name='subscription_payments')
     amount = models.FloatField()
+
+    def balance(self):
+        return self.amount - self.subscription.get_price_to_pay()
+
+    def clean(self):
+        # Don't allow smaller amount then price_to_pay of linked subscription
+        if self.amount < self.subscription.get_price_to_pay():
+            raise ValidationError('The amount is not sufficient to cover price to pay of subscription.')
+
 
 class CoursePayment(models.Model):
     """

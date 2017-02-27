@@ -55,7 +55,7 @@ class VoucherPaymentIndexView(FormView):
             raise Http404("Voucher was already used")
 
         # show a message that the subscription has been payed (use django message passing framework)
-        if subscription.mark_as_payed('voucher'):
+        if subscription.mark_as_payed(PaymentMethod.VOUCHER):
             messages.add_message(self.request, messages.SUCCESS,
                                  _("Subscription ") + self.kwargs['usi'] + _(' successfully marked as paid.'))
 
@@ -195,7 +195,7 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
         # redirect and show message
-        if subscription.mark_as_payed('course', self.request.user):
+        if subscription.mark_as_payed(PaymentMethod.COURSE, self.request.user):
             messages.add_message(self.request, messages.SUCCESS,
                                  "USI " + self.kwargs['usi'] + _(' successfully marked as paid.'))
 

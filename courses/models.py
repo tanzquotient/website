@@ -678,16 +678,19 @@ class Subscribe(models.Model):
     get_payment_state.short_description = "Payed?"
 
     def mark_as_payed(self, payment_method, user=None):
-        with reversion.create_revision():
-            self.state = Subscribe.State.PAYED
-            self.paymentmethod = payment_method
-            self.save()
-            if user is not None:
-                reversion.set_user(user)
-            reversion.set_comment("Payed using payment method " + payment_method)
-        if self.paymentmethod == PaymentMethod.ONLINE:
-            send_online_payment_successful(self)
-        return True
+        if self.state == Subscribe.State.CONFIRMED:
+            with reversion.create_revision():
+                self.state = Subscribe.State.PAYED
+                self.paymentmethod = payment_method
+                self.save()
+                if user is not None:
+                    reversion.set_user(user)
+                reversion.set_comment("Payed using payment method " + payment_method)
+            if self.paymentmethod == PaymentMethod.ONLINE:
+                send_online_payment_successful(self)
+            return True
+        else:
+            return False
 
     def generate_price_to_pay(self):
         if self.user.profile.student_status == 'no':
