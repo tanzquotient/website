@@ -697,12 +697,11 @@ class Subscribe(models.Model):
             self.price_to_pay = self.course.price_without_legi
         else:
             self.price_to_pay = self.course.price_with_legi
-        self.save()
-        return self.price_to_pay
 
     def get_price_to_pay(self):
         if not self.price_to_pay:
             self.generate_price_to_pay()
+            self.save()
         return self.price_to_pay
 
     # derives the matching state from the current information (if couple course and if partner set or not)
@@ -734,6 +733,7 @@ class Subscribe(models.Model):
         self.derive_matching_state()
         super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
         self.usi = self.generate_usi()
+        self.generate_price_to_pay()
         super(Subscribe, self).save(*args, **kwargs)
 
     def __str__(self):
