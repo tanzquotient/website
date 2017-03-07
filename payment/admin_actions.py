@@ -24,8 +24,7 @@ finalize_payments.short_description = "Finalize selected payments (set payment m
 
 
 def check_balance(modeladmin, request, queryset):
-    for payment in queryset:
-        PaymentProcessor().check_balance(payment)
+    PaymentProcessor().check_balance(queryset)
 
 
 check_balance.short_description = "Check balance and if ok mark selected payments as matched (will be finalized automatically)"

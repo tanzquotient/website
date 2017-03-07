@@ -733,7 +733,8 @@ class Subscribe(models.Model):
         self.derive_matching_state()
         super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
         self.usi = self.generate_usi()
-        self.generate_price_to_pay()
+        if not self.price_to_pay:
+            self.generate_price_to_pay()
         super(Subscribe, self).save(*args, **kwargs)
 
     def __str__(self):

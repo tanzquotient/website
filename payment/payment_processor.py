@@ -59,7 +59,7 @@ class PaymentProcessor:
                         #    break
                         else:
                             log.warning("USI {0} was not found for payment {1}.".format(usi, payment))
-                    self.check_balance(payment)
+                    self._check_balance(payment)
                 else:
                     log.info("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
@@ -80,13 +80,18 @@ class PaymentProcessor:
             payment.state = Payment.State.PROCESSED
             payment.save()
 
-    def check_balance(self, payment):
+    def check_balance(self, payments):
+        for payment in payments.filter(state__in=[Payment.State.NEW, Payment.State.MANUAL]).all():
+            self._check_balance(payment)
+
+    def _check_balance(self, payment):
         """
         Updates the payment according to currently linked subscriptions.
 
         Returns true if the payment's amount is equals to the sum of the matched subscriptions.
         """
-        if payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
+        if payment.state in [Payment.State.NEW,
+                              Payment.State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
             remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
 
             if remaining_amount == 0:
