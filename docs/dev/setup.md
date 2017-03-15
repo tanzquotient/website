@@ -160,6 +160,10 @@ Simply run
 	``docker-compose up``
 in the `tq_website` directory. It will fetch all required dependencies (except `settings_local.py` and the database setup previously) and start the development server on port 8000.
 
+Afterwards, load a database dump and create a local user with administrator privileges:
+   
+    docker-compose run --rm django python3 manage.py createsuperuser
+
 **In production environment**:
 To setup a production environment you can simply run ``docker-compose -f docker-compose-production.yml up``.
 
