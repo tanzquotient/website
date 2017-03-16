@@ -5,6 +5,7 @@ from django.shortcuts import render
 from survey.models import Survey, SurveyInstance
 import survey.services as survey_services
 from courses.models import *
+from django.contrib.auth.models import User, Group
 
 from . import services
 
@@ -12,6 +13,8 @@ from django import forms
 
 from django.utils.translation import ugettext as _
 from payment.services import remind_of_payments
+
+from django.contrib import messages
 
 
 def display(modeladmin, request, queryset):
@@ -296,3 +299,25 @@ def raise_price_to_pay(modeladmin, request, queryset):
 
 
 raise_price_to_pay.short_description = "raise price to pay to fit amount"
+
+
+def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
+    # ignore the queryset parameter
+    teachers = Group.objects.filter(name__in=['Tanzlehrer', 'Dance Teachers', 'Teachers', 'Lehrer'])
+    if teachers.count() == 0:
+        messages.add_message(request, messages.WARNING,
+                             u'No suitable "Dance Teachers"-group found -> Group is automatically created')
+        group = Group.objects.create(name='Dance Teachers')
+    elif teachers.count() > 1:
+        messages.add_message(request, messages.ERROR,
+                             u'More than one "Dance Teachers"-group found -> Nothing done')
+        return
+    else:
+        group = teachers.first()
+
+    group.user_set.clear()
+    for teach in Teach.objects.all():
+        if not group.user_set.filter(pk=teach.teacher.id).exists():
+            group.user_set.add(teach.teacher)
+    messages.add_message(request, messages.SUCCESS,
+                         u'{} teachers added to group {}'.format(group.user_set.count(), group.name))

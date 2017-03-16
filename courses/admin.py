@@ -3,8 +3,8 @@ from django.contrib import admin
 # Register your models here.
 from courses.models import *
 
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import User, Group
 from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
 from courses.filters import *
@@ -301,9 +301,21 @@ class MyUserAdmin(UserAdmin):
     list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
 
 
+# Define a new Group admin
+class MyGroupAdmin(GroupAdmin):
+    actions = GroupAdmin.actions + [update_dance_teacher_group]
+
+
 # Re-register UserAdmin
 try:
     admin.site.unregister(User)
 except admin.sites.NotRegistered:
     pass
 admin.site.register(User, MyUserAdmin)
+
+# Re-register GroupAdmin
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass
+admin.site.register(Group, MyGroupAdmin)

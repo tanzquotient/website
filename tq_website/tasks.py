@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import EmailMessage, get_connection
+from courses.admin_actions import update_dance_teacher_group
 
 try:
     from celery import shared_task
@@ -17,10 +18,10 @@ from payment.payment_processor import PaymentProcessor
 # This is because we expect Celery to use JSON encoding, and we want to prevent
 # code assuming otherwise.
 
-TASK_CONFIG = {'name': 'post_office_send_queued_emails', 'ignore_result': True}
-TASK_CONFIG.update(settings.CELERY_EMAIL_TASK_CONFIG)
+TASK_CONFIG_EMAILS = {'name': 'post_office_send_queued_emails', 'ignore_result': True}
+TASK_CONFIG_EMAILS.update(settings.CELERY_EMAIL_TASK_CONFIG)
 
-@shared_task(**TASK_CONFIG)
+@shared_task(**TASK_CONFIG_EMAILS)
 def send_queued_emails():
     return send_queued()
 
@@ -45,3 +46,10 @@ TASK_CONFIG_MATCH = {'name': 'payment_match', 'ignore_result': True}
 @shared_task(**TASK_CONFIG_MATCH)
 def match_payments():
     PaymentProcessor().process_payments()
+
+
+TASK_CONFIG_TEACHER_GROUP = {'name': 'update_teacher_group', 'ignore_result': True}
+
+@shared_task(**TASK_CONFIG_TEACHER_GROUP)
+def update_teacher_group():
+    update_dance_teacher_group()
