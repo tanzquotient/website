@@ -321,3 +321,29 @@ def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
             group.user_set.add(teach.teacher)
     messages.add_message(request, messages.SUCCESS,
                          u'{} teachers added to group {}'.format(group.user_set.count(), group.name))
+
+
+
+class EmailListForm(forms.Form):
+    pass
+
+
+def emaillist(modeladmin, request, queryset):
+    form = None
+
+    if 'ok' in request.POST:
+        form = EmailListForm(request.POST)
+
+        if form.is_valid():
+            return HttpResponseRedirect(reverse('admin:courses_subscribe_changelist'))
+
+    if not form:
+        form = EmailListForm()
+
+    return render(request, 'courses/auth/action_emaillist.html', {
+        'form': form,
+        'emails': [s.user.email for s in queryset.all()],
+    })
+
+
+emaillist.short_description = "List emails of selected subscribers"

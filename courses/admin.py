@@ -13,7 +13,6 @@ from payment.vouchergenerator import generate_pdf, join_pdfs
 from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 from django.contrib.admin.views.main import ChangeList
 
-
 class CourseInline(admin.TabularInline):
     model = Course
     fields = ('name', 'type', 'period', "position",)
@@ -194,7 +193,7 @@ class SubscribeAdmin(VersionAdmin):
     actions = [match_partners, unmatch_partners, breakup_couple, confirm_subscriptions, unconfirm_subscriptions,
                confirm_subscriptions_allow_singles,
                reject_subscriptions, unreject_subscriptions, correct_matching_state_to_couple,
-               set_subscriptions_as_payed, undo_voucher_payment, payment_reminder]
+               set_subscriptions_as_payed, undo_voucher_payment, payment_reminder, emaillist]
 
     raw_id_fields = ('user', 'partner')
 
