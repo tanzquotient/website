@@ -76,9 +76,9 @@ class SubscriptionPayment(models.Model):
         return self.amount - self.subscription.get_price_to_pay()
 
     def clean(self):
-        # Don't allow smaller amount then price_to_pay of linked subscription
-        if self.amount < self.subscription.get_price_to_pay():
-            raise ValidationError('The amount is not sufficient to cover price to pay of subscription.')
+        # Don't allow larger amount then available amount of payment
+        if self.amount > self.payment.amount:
+            raise ValidationError('The available payment amount is not sufficient to allow the association of {}.'.format(self.amount))
 
 
 class CoursePayment(models.Model):
