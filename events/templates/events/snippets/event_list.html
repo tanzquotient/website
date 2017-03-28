@@ -39,7 +39,13 @@
                     </td>
                     <td>{{ event.date }}</td>
                     <td>{{ event.format_time }}</td>
-                    <td>{{ event.room.name|default:"Raum noch unbekannt" }}</td>
+                    <td>
+                        {% if event.room %}
+                            {% include "courses/snippets/room.html" with room=event.room only %}
+                        {% else %}
+                            noch unbekannt
+                        {% endif %}
+                    </td>
                     <td>{{ event.format_prices|default:"frei" }}</td>
                     <td>{{ event.format_organisators }}</td>
                     <td>

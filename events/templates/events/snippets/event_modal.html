@@ -12,7 +12,11 @@
             </div>
             <div class="modal-body">
                 <p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>,
-                    {{ event.room|default:"Raum noch unbekannt" }}</p>
+                    {% if event.room %}
+                            <a href="{{ event.room.url }}" target="_blank">{{ event.room.name }}</a>
+                        {% else %}
+                            Ort noch unbekannt
+                        {% endif %}</p>
 
                 <p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
                 {% if event.format_organisators %}

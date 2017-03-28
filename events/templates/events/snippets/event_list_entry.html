@@ -18,7 +18,7 @@
                 <small> {{ event.date }}</small>
             </h4>
             <p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>,
-                {{ event.room|default:"Raum noch unbekannt" }}</p>
+                {{ event.room|default:"Ort noch unbekannt" }}</p>
 
             <p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
             {% if event.format_organisators %}
