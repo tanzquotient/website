@@ -27,7 +27,7 @@ services:
       - .env
     user: root
     volumes:
-      - .:/webapps/tq_website
+      - .:/webapps/tq_website:Z
     command: python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "${TQ_DJANGO_PORT}:8000"
