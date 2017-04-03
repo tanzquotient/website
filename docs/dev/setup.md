@@ -48,6 +48,12 @@ sudo apt-get install docker-engine
 sudo curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
+### Setup basic tools with Fedora
+The above instructions are basically the same with Fedora, except that you have have to use dnf instead of apt. Altogether, the following instructions install everything one needs:
+```shell
+sudo dnf update
+sudo dnf install git mysql docker docker-compose
+```
 
 ### IDE
 
