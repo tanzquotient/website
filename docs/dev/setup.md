@@ -1,6 +1,6 @@
 # Server setup, configuration and maintenance
 
-This file contains setup with docker. Earlier a [manual setup](setup_virtualenv.md) was used. Many of the manual steps are now described in the `Dockerfile`.
+This file contains setup with docker. Many of the steps you may expect to setup a webstack are automatized. You can still look them up in the [Dockerfile](../../configurations/dockerfile-new).
 
 The setup instructions are divided into:
 
@@ -20,13 +20,13 @@ The following picture sketches the setup. Some notes:
 
 * Some secrets (config file with login information, secret keys) are not synchronized via the repository. This secrets also differ from the one used on development machines.
 
-![Webstack](webstack.svg)
+![Webstack](webstack.png)
 
 ## Setup basic tools
 
-You can use [git](https://git-scm.com/) for code management and [Docker](//www.docker.com) for setup automation.
+You must use [git](https://git-scm.com/) for code management and [Docker](https://www.docker.com/) for setup automation.
 
-We use a standard `Debian 8` on the server. On development machines, any operating system can be used in principle. The instructions here are compiled for a **Debian/Ubuntu** installation.
+We use a standard `Debian 8` on the server. On development machines, any operating system can be used in principle (we know that many Linux und Mac OS versions works). The instructions here are compiled for a **Debian/Ubuntu** installation.
 
 First update your system:
 
@@ -41,13 +41,14 @@ sudo apt-get upgrade
 sudo apt-get install git mysql-client
 ```
 
-We need [docker-engine](https://docs.docker.com/engine/installation/linux/ubuntulinux/) and [docker-compose](https://docs.docker.com/compose/install/). With prerequisites satisfied, it boils down to
+We need [Docker Community Edition (CE)](https://docs.docker.com/engine/installation/linux/ubuntu/) and [docker-compose](https://docs.docker.com/compose/install/). With prerequisites satisfied, it boils down to
 
 ```shell
-sudo apt-get install docker-engine
-sudo curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+sudo apt-get install docker-ce
+sudo curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
+
 ### Setup basic tools with Fedora
 The above instructions are basically the same with Fedora, except that you have have to use dnf instead of apt. Altogether, the following instructions install everything one needs:
 ```shell
@@ -93,112 +94,146 @@ git checkout -t origin/master
 
 ### Initial Configuration
 
-We have to create 2 files manually.
+We have to create 2 files, that are not under version control, manually:
 
-First create a file `<project home>/maintenance.config` in the root folder of the project with the content
+Create the maintenance file `<project home>/maintenance.conf`. You can use the provided template file and copy it with
 
 ```shell
-set $maintenance 0;
+cp configurations/maintenance-template.conf maintenance.conf
 ```
 
-Alternatively you can just execute the script `./scripts/stop_maintenance.sh` which will also create file if it does not exist.
+(Whenever doing maintenance on a live server, switch the flag in this file to 1 (and back again), and restart docker-compose to make nginx reload the config and display a maintenance message)
 
-(Whenever doing maintance, switch this flag to 1 (and back again), and restart docker-compose to make nginx reload this config)
+Create the *secret* environment file `<project home>/.env`. You can use the provided template file and copy it with
 
-Create the *secret* environment file `<project home>/.env`.
-This file is not under version control because it contains some secrets.
-
-```
-# This file defines environment variables which are used in docker-compose files (and by docker-compose itself)
-
-# docker-compose default overwrites (see https://docs.docker.com/compose/reference/envvars/)
-COMPOSE_FILE=docker-compose.yml
-
-# Secrets
-TQ_DB_ROOT_PASSWORD=root
-TQ_DB_USER=root
-TQ_DB_PASSWORD=root
-TQ_SECRET_KEY=lsdkjflkjdsf3424234lkjölkjölkj3424324lkjöljölkjlkj23
-
-# Deployment dependent configurations
-TQ_SITE_ID=1
-TQ_DEBUG=True
-
-# Email
-TQ_EMAIL_HOST=mailsrv.vseth.ethz.ch
-TQ_EMAIL_HOST_USER=
-TQ_EMAIL_HOST_PASSWORD=
-TQ_DEFAULT_FROM_EMAIL=test@example.com
-
-# Admins
-TQ_ADMINS=[]
-TQ_SERVER_EMAIL=
-
-# Analytics
-TQ_GOOGLE_ANALYTICS_PROPERTY_ID=
-
-# FDS
-TQ_FDS_USER=
-
-# Account details
-TQ_PAYMENT_ACCOUNT_IBAN=
-TQ_PAYMENT_ACCOUNT_POST_NUMBER=
-TQ_PAYMENT_ACCOUNT_RECIPIENT=
-TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY=
-
-TQ_NGINX_HOST=localhost
-
-# Ports
-TQ_DB_PORT=3309
-TQ_NGINX_PORT=8001
-TQ_DJANGO_PORT=8000
-TQ_SSL_PORT=443
-TQ_MEMCACHED_PORT=11211
+```shell
+cp configurations/.env-template .env
 ```
 
-*Attention*: The configured mail account is used to - depending on the action - send huge amounts of auto-generated mails. Configure a test mail server before starting the `celery` task that sends out mails.
+This files are not under version control because it contains some secrets and machine dependent configurations and secrets.
+
+*Attention*: The configured mail account is used to - depending on the action - send huge amounts of auto-generated mails. Leave the mail settings empty (as it is in the template) or configure a test mail server before starting a production-like docker configuration (which will actually send out mails!).
 
 
-## Let Docker do the hard part for you!
+## Let docker install all development dependencies
 
 **On development machine**:
-Simply run
-	``docker-compose up``
-in the `tq_website` directory. It will fetch all required dependencies (except `settings_local.py` and the database setup previously) and start the development server on port 8000.
 
-Afterwards, load a database dump and create a local user with administrator privileges:
-   
-    docker-compose run --rm django python3 manage.py createsuperuser
+Run in the `<project home>` directory:
+```shell
+docker-compose build
+```
+It will fetch all required dependencies and install it for you.
 
-**In production environment**:
-To setup a production environment you can simply run ``docker-compose -f docker-compose-production.yml up``.
 
-## Get Data
+*Note*: This can take some minutes
+
+*Note*: If you encounter a problem because some ports are already in use, you can choose your preferred development ports in the `.env`-file.
+
+**In production environment** (or to setup a production-like stack on development machine):
+
+```shell
+docker-compose -f docker-compose-production.yml build
+```
+
+**Simulated production environment** (to setup a production-like stack on development machine):
+
+```shell
+docker-compose -f docker-compose-production-no_ssl.yml build
+```
+
+
+## Load test data into database
 
 Get in touch with admin to get a backup of live database (with removed personal data).
 The backup can then be applied to the database with (while docker is running the containers)
 
 ```shell
-mysql -h 127.0.0.1 --port=3309 -u root -proot -t tq_website < database_backup.sql
+mysql -h 127.0.0.1 --port=3309 -u root -proot -t tq_website < database_dump.sql
 ```
-	
-
-
-
-	
-At this point setup is finished and you should be able to view the local website at `127.0.0.1:8000`. Congratulations!
 
     
-    
-## Apply code changes
+## Create super user
+
+Create a superuser with your favorite name and password:
+
+```shell
+./scripts/create_superuser.sh
+```
+
+*Note*: This are the credentials to login anywhere on the frontend/backend.
+
+*Note*: Even if the loaded database dump contains a user representing you you have to repeat that step since the dump has different salted passwords, so your password will be considered invalid.
+
+## Test the website locally
+
+Whenever working on the project, run the following command in the `<project home>` directory primarily:
+```shell
+docker-compose up --build
+```
+
+While this command is running you should be able to view the local, full-stack website at this addresses:
+
+* `localhost:8000` or `127.0.0.1:8000`
+
+* `localhost:8001` or `127.0.0.1:8001` (if you started with `-f docker-compose-production-no_ssl.yml`)
+
+# Apply code changes
+
+*Note*: This method of applying code changes does not destroy your test data, but gradually migrates the database.
+
 Pull the changes from the correct branch (here the master):
 
 ```shell
 git pull
 ```
 
-Apply migrations
+If you are working on your own developper branch, pull the changes of the master branch explicitely:
 
 ```shell
-./django-admin migrate
+git pull origin master
 ```
+
+It's a good idea to rebase your branch on the master from time to time. While your branch is checked out, run:
+
+```shell
+git rebase master
+```
+
+*Apply migrations* to your test database by entering in a shell
+
+```shell
+./scripts/migrate.sh
+```
+
+Then cancel (`Ctrl + C`) and restart the `docker-compose` command to ensure changes in configuration are reflected. Docker will detect configuration changes with that option and rebuild containers if necessary.
+
+```shell
+docker-compose up --build
+```
+
+*Note*: If desired, see the above how to reset the database and reload a database dump. Not however, that the migrate command still has to be run because the dump can be a little outdated compared to the newest code.
+
+
+## Troubleshooting
+
+### What often helps
+
+Docker is complicate to predict. Some config files are not loaded ad-hoc. Whenever there is a problem, try to restart the containers all together with
+
+```shell
+docker-compose restart
+```
+
+or
+
+```shell
+docker-compose stop
+docker-compose up
+```
+
+(with the second option you will be directly attached to the containers and you see the output)
+
+### Page reload
+
+Some assets files are cached by the browser: ensure that you make a full page reload (`Ctrl + F5`) or you even delete all session cockies.

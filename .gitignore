@@ -84,7 +84,7 @@ payment/testdata
 credentials/
 
 # docker-compose environment variables
-.env
+/.env
 
 # nginx maintenance file
 maintenance.conf
