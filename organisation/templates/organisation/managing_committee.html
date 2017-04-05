@@ -7,7 +7,6 @@
             <th>Ressort</th>
             <th>Name</th>
             <th>Mail</th>
-            <th></th>
         </tr>
         </thead>
         {% if functions %}
@@ -16,18 +15,21 @@
                 <tr>
                     <td>{{ function.name }}</td>
                     <td>
-                        {% if function.user %}
-                            {{ function.user.get_full_name }}
+                        {% if function.users %}
+                            {% for user in function.users.all %}
+                                <!-- Button trigger modal -->
+                                <a href="#" data-toggle="modal"
+                                   data-target="#modal_profile-{{ user.id }}">{{ user.get_full_name }}</a>
+                                {% include "organisation/snippets/function_modal.html" with user=user function=function modal_name="modal_profile" only %}
+                                {% if not forloop.last %}
+                                    /
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
                             vakant
                         {% endif %}
                     </td>
                     <td><a href="mailto:{{ function.email }}">{{ function.email|default:"-" }}</a></td>
-                    <td>
-                        <!-- Button trigger modal -->
-                        <a href="#" data-toggle="modal" data-target="#modal_profile-{{ function.id }}">Profil</a>
-                        {% include "organisation/snippets/function_modal.html" with function=function modal_name="modal_profile" only %}
-                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -39,19 +41,25 @@
     {% if functions %}
         <div class="list-group">
             {% for function in functions %}
-                <a href="#" data-toggle="modal" data-target="#modal_profile_xs-{{ function.id }}"
-                   class="list-group-item">
-                    <h4 class="list-group-item-heading">
-                        {% if function.user %}
-                            {{ function.user.get_full_name }}
-                        {% else %}
+                {% for user in function.users.all %}
+                    <a href="#" data-toggle="modal" data-target="#modal_profile_xs-{{ user.id }}"
+                       class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            {{ user.get_full_name }}
+                            <small> {{ function.name }}</small>
+                        </h4>
+                        <p class="list-group-item-text">{{ function.email }}</p>
+                    </a>
+                    {% include "organisation/snippets/function_modal.html" with user=user function=function modal_name="modal_profile_xs" only %}
+                    {% empty %}
+                    <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading">
                             vakant
-                        {% endif %}
-                        <small> {{ function.name }}</small>
-                    </h4>
-                    <p class="list-group-item-text">{{ function.email }}</p>
-                </a>
-                {% include "organisation/snippets/function_modal.html" with function=function modal_name="modal_profile_xs" only %}
+                            <small> {{ function.name }}</small>
+                        </h4>
+                        <p class="list-group-item-text">{{ function.email }}</p>
+                    </a>
+                {% endfor %}
             {% endfor %}
         </div>
     {% endif %}

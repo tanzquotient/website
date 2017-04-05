@@ -1,19 +1,19 @@
 <!-- Modal -->
-<div class="modal fade" id="{{ modal_name }}-{{ function.id }}" tabindex="-1" role="dialog" aria-labelledby="Profile"
+<div class="modal fade" id="{{ modal_name }}-{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="Profile"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"
-                    id="modal_label_profile-{{ function.id }}">{{ function.user.get_full_name }}</h4>
+                    id="modal_label_profile-{{ user.id }}">{{ user.user.get_full_name }}</h4>
                 <h4>
                     <small>{{ function.name }}</small>
                 </h4>
             </div>
             <div class="modal-body">
-                {% if function.user.profile %}
-                    <p>{{ function.user.profile.about_me|safe }}</p>
+                {% if user.profile %}
+                    <p>{{ user.profile.about_me|default:''|safe }}</p>
                 {% endif %}
                 {% if function.email %}
                     <br/>
