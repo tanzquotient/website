@@ -1,15 +1,33 @@
 {% extends "basis.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load sekizai_tags %}
+
 
 {% block content_title %}
-    {% trans "Course Payment" %}
+    {% trans "Course Management" %}
 {% endblock %}
 
 {% block main_content %}
     {% with course.payment_totals as payment_totals %}
         <div class="container">
             <h2>{{ course }}</h2>
+
+            <h3>Description</h3>
+            <form>
+                <textarea name="editor1" id="editor1" rows="10" cols="80">
+                    {{ course.description|safe }}
+                </textarea>
+                {% addtoblock "js" %}
+                    <script>
+                        CKEDITOR.replace('editor1');
+                    </script>
+                {% endaddtoblock %}
+
+            </form>
+
+            <h3>Participants</h3>
+
             <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
 
             <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %}
@@ -26,7 +44,8 @@
                     </div>
                     <div class="list-group">
                         {% for subscription in participatory|dictsort:"payed" %}
-                            <a {% if not subscription.payed %}href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
+                            <a {% if not subscription.payed %}href=
+                                   "{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
                                class="list-group-item {% if subscription.payed %}disabled{% endif %}">
                                 <h4 class="list-group-item-heading">
                                     {{ subscription.user.get_full_name }}
@@ -117,7 +136,7 @@
                 </div>
             </div>
 
-            <h2>{% trans "Course Information" %}</h2>
+            <h4>{% trans "Payment Summary" %}</h4>
             <p>{{ course.number_paid }} {% trans "people already paid the course." %}</p>
             <p>{% trans "You should have" %} {{ payment_totals.paid_course }} CHF {% trans 'of collected money.' %}</p>
 
