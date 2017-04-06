@@ -49,6 +49,12 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
+Start the docker daemon:
+
+```shell
+sudo service docker start
+```
+
 ### Setup basic tools with Fedora
 The above instructions are basically the same with Fedora, except that you have have to use dnf instead of apt. Altogether, the following instructions install everything one needs:
 ```shell
@@ -67,7 +73,7 @@ Finally you can download PyCharm Professional Edition, extract it and place it s
 Activation is easiest if you download the licence-file from your JetBrains account-page. When asked for activation, simply drag&drop the file into the activation-key textbox.
 
 
-## Setup local files
+## Setup local project folder
 
 ### Pull files with git
 
@@ -91,6 +97,36 @@ git remote add origin https://github.com/gitsimon/tq_website.git
 git fetch
 git checkout -t origin/master
 ```
+
+If you want to work on your own branch, create it and check it out
+
+```shell
+git branch dev-<your name>
+git checkout dev-<your name>
+```
+
+You can push it to the server and setup push/pull by
+
+```shell
+git push -u origin <branch>
+```
+
+It's a good idea to rebase your branch on the master from time to time. While your branch is checked out, run:
+
+```shell
+git rebase master
+```
+
+Git is a powerful tool. Have a look at the [official documentation](//git-scm.com/doc), especially on [branching](https://git-scm.com/book/it/v2/Git-Branching-Remote-Branches).
+
+### Make helper scripts executable
+
+Since file permissions are not synchronized with git, you have to make the helper scripts executable:
+
+```shell
+sudo chmod +x scripts/*
+```
+
 
 ### Initial Configuration
 
