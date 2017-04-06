@@ -23,17 +23,18 @@ RUN apk add --no-cache openssl && \
     apk del .build-deps
 
 # Cairo (cairocffi 0.7.2 does not work!!)
-RUN apk add --no-cache libffi cairo && \
+RUN apk add --no-cache py-cffi libffi cairo && \
     apk add --no-cache --virtual .build-deps \
     build-base libffi-dev && \
-    pip3 install cairocffi==0.7.1 && \
+    pip3 install cffi==1.10.0 && \
+    pip3 install cairocffi==0.8.0 && \
     apk del .build-deps
 
 # Cairo
 RUN apk add --no-cache libxml2-dev libxslt-dev && \
     apk add --no-cache --virtual .build-deps \
     build-base libxml2-dev libxslt-dev && \
-    pip3 install cairosvg==2.0 && \
+    pip3 install cairosvg==2.0.2 && \
     apk del .build-deps
 
 # Python3
