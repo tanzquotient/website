@@ -3,8 +3,8 @@ from django.views.generic import TemplateView, FormView, RedirectView, View
 from django.views.generic.edit import ProcessFormView, FormMixin
 
 from payment import payment_processor
-from payment.forms import USIForm, VoucherForm, CourseForm, PROG_USI
-from courses.models import Subscribe, Voucher, Course, PaymentMethod, Offering
+from payment.forms import USIForm, VoucherForm, PROG_USI
+from courses.models import PaymentMethod, Offering, Voucher, Course, Teach
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -14,8 +14,9 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from courses.emailcenter import send_payment_reminder
 from .services import *
+import json
+from datetime import date
 
 
 class VoucherPaymentIndexView(FormView):
@@ -153,18 +154,47 @@ class TeacherOfCourseOnly(View):
         return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)
 
 
-class CoursePaymentIndexView(FormView, TeacherOnly):
+class CoursePaymentIndexView(TemplateView, TeacherOnly):
     template_name = 'payment/course/form.html'
-    form_class = CourseForm
 
-    def get_form_kwargs(self):
-        kwargs = super(CoursePaymentIndexView, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
+    def get_context_data(self, **kwargs):
+        context = super(CoursePaymentIndexView, self).get_context_data(**kwargs)
+        user = self.request.user
 
-    def form_valid(self, form):
-        self.success_url = reverse('payment:coursepayment_detail', kwargs={'course': form.data['course']})
-        return super(CoursePaymentIndexView, self).form_valid(form)
+        tree = []
+        for o in Offering.objects.order_by('-period__date_from').all():
+            courses = []
+            if user is not None:
+                # if the user is a superuser we show him all courses, otherwise only the courses he teaches
+                if user.is_superuser:
+                    courses += list(o.course_set.all())
+                else:
+                    courses = [teach.course for teach in Teach.objects.filter(course__offering=o, teacher=user).all()]
+            courses.sort(
+                key=lambda
+                    course: course.get_period().date_from if course.get_period() and course.get_period().date_from else datetime.date(
+                    year=1990, month=
+                    1, day=1), reverse=True)
+            nodes = [{'text': c.name, 'href': reverse('payment:coursepayment_detail', kwargs={'course': c.id})} for c in
+                     courses]
+            if o.period and o.period.date_from > date.today():
+                color = "#5bc0de"
+            elif o.period and o.period.date_to < date.today():
+                color = "#DDDDDD"
+            else:
+                color = "#FFFFFF"
+            tree.append({
+                'text': o.name,
+                'nodes': nodes,
+                'state': {
+                    'expanded': False,
+                },
+                'selectable': False,
+                'backColor': color,
+            })
+
+        context['tree'] = json.dumps(tree)
+        return context
 
 
 class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):

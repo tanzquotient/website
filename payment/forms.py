@@ -1,8 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from courses.models import Subscribe, Voucher, Course, Teach
-from django.contrib.auth.models import User
+from courses.models import Subscribe, Voucher
 
 import datetime
 from django.utils.translation import ugettext as _
@@ -52,23 +51,3 @@ class USIForm(forms.Form):
 
 class VoucherForm(forms.Form):
     voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid, ])
-
-
-class CourseForm(forms.Form):
-    def __init__(self, user, *args, **kwargs):
-        courses = []
-        if user is not None:
-            # if the user is a superuser we show him all courses, otherwise only the courses he teaches
-            if user.is_superuser:
-                courses = Course.objects.all()
-            else:
-                courses = [teach.course for teach in Teach.objects.filter(teacher=user).all()]
-        courses = list(courses)
-        courses.sort(
-            key=lambda
-                course: course.get_period().date_from if course.get_period() and course.get_period().date_from else datetime.date(
-                year=1990, month=
-                1, day=1), reverse=True)
-        super(CourseForm, self).__init__(*args, **kwargs)
-        self.fields['course'] = forms.ChoiceField(label=_("Select Course"),
-                                                  choices=[(course.id, course) for course in courses])

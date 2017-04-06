@@ -1,6 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load sekizai_tags %}
 
 {% block content_title %}
     {% trans "Course Payment" %}
@@ -9,19 +10,20 @@
 {% block main_content %}
     <div class="container">
         <h2>{% trans "Select Course" %}</h2>
-        <p>{% trans "Please select the course you want to manage the payment for." %}</p>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    {% buttons %}
-                        <button type="submit" class="btn btn-primary">
-                            {% trans "Submit" %}
-                        </button>
-                    {% endbuttons %}
-                </form>
-            </div>
-        </div>
+        <p>{% trans "Please select the course you want to manage." %}</p>
+        <div id="offering-tree"></div>
     </div>
+    {% addtoblock "js" %}
+        <script>
+            function getTree() {
+                return {{ tree|safe }};
+            }
+            $('#offering-tree').treeview({
+                data: getTree(),
+                enableLinks: true
+            });
+        </script>
+    {% endaddtoblock %}
 {% endblock main_content %}
+
+
