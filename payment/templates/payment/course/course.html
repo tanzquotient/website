@@ -31,13 +31,26 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="editor-de">
                             <textarea name="ckeditor-de" id="ckeditor-de" rows="20" cols="80">
-                    {{ description_de|safe }}
+                    {{ description_de|default:""|safe }}
                 </textarea>
+
+                            The description will be displayed together with this general course type information:
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    {{ type_description_de|default:"<no description>"|safe }}
+                                </div>
+                            </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="editor-en">
                             <textarea name="ckeditor-en" id="ckeditor-en" rows="20" cols="80">
-                    {{ description_en|safe }}
+                    {{ description_en|default:""|safe }}
                 </textarea>
+                            The description will be displayed together with this general course type information:
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    {{ type_description_en|default:"<no description>"|safe }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -51,10 +64,10 @@
                     </script>
                 {% endaddtoblock %}
 
-                <br/>
                 <button type="submit" class="btn btn-default" name="save" value="save">
                     Save
-                </button><span class="help-block">(You can save both language versions at once)</span>
+                </button>
+                <span class="help-block">(You can save both language versions at once)</span>
             </form>
 
             <h3>Participants</h3>

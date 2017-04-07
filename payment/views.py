@@ -208,6 +208,8 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         context['course'] = course
         context['description_de'] = course.safe_translation_getter('description', language_code='de')
         context['description_en'] = course.safe_translation_getter('description', language_code='en')
+        context['type_description_de'] = course.type.safe_translation_getter('description', language_code='de')
+        context['type_description_en'] = course.type.safe_translation_getter('description', language_code='en')
         context['participatory'] = course.subscriptions.accepted().select_related('user')
         return context
 
