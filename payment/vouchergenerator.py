@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from io import open
-import cairosvg
 import os
 import datetime
 from django.core.files import File
@@ -16,15 +15,16 @@ def generate_pdf(modeladmin, request, queryset):
         content = f.read()
 
     for voucher in queryset:
-        filename = "Voucher-" + voucher.key + ".pdf"
+        filename = "Voucher-" + voucher.key + ".svg"
         path = os.path.join(settings.MEDIA_ROOT, filename)
+
         if voucher.expires:
             date_string = "valid through " + voucher.expires.strftime("%m/%Y")
         else:
             date_string = ""
-        with open(path, "wb") as output_file:
-            cairosvg.svg2pdf(bytestring=content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string).encode('utf-8'), write_to=output_file)
 
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string))
 
         voucher.pdf_file.name = filename
         voucher.save()
