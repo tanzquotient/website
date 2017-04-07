@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.views.generic import TemplateView, FormView, RedirectView, View
 from django.views.generic.edit import ProcessFormView, FormMixin
+from django.http import HttpResponseRedirect
 
 from payment import payment_processor
 from payment.forms import USIForm, VoucherForm, PROG_USI
@@ -205,8 +206,26 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
 
         context = super(CoursePaymentDetailView, self).get_context_data(**kwargs)
         context['course'] = course
+        context['description_de'] = course.safe_translation_getter('description', language_code='de')
+        context['description_en'] = course.safe_translation_getter('description', language_code='en')
         context['participatory'] = course.subscriptions.accepted().select_related('user')
         return context
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+
+        c = Course.objects.filter(id=kwargs['course']).first()
+        c.set_current_language('de')
+        c.description = request.POST['ckeditor-de']
+        c.set_current_language('en')
+        c.description = request.POST['ckeditor-en']
+        c.save()
+
+        return HttpResponseRedirect(reverse('payment:coursepayment_detail', kwargs={'course': self.kwargs['course']}))
+
 
 
 class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):

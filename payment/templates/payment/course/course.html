@@ -14,16 +14,47 @@
             <h2>{{ course }}</h2>
 
             <h3>Description</h3>
-            <form>
-                <textarea name="editor1" id="editor1" rows="10" cols="80">
-                    {{ course.description|safe }}
+            <form class="form-horizontal" role="form" action="{% url 'payment:coursepayment_detail' course.id %}"
+                  method="post">
+                {% csrf_token %}
+                <div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#editor-de" aria-controls="editor-de" role="tab"
+                                                                  data-toggle="tab">Deutsch</a></li>
+                        <li role="presentation"><a href="#editor-en" aria-controls="editor-en" role="tab"
+                                                   data-toggle="tab">English</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="editor-de">
+                            <textarea name="ckeditor-de" id="ckeditor-de" rows="20" cols="80">
+                    {{ description_de|safe }}
                 </textarea>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="editor-en">
+                            <textarea name="ckeditor-en" id="ckeditor-en" rows="20" cols="80">
+                    {{ description_en|safe }}
+                </textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+
                 {% addtoblock "js" %}
                     <script>
-                        CKEDITOR.replace('editor1');
+                        CKEDITOR.replace('ckeditor-de', {'height': 300});
+                        CKEDITOR.replace('ckeditor-en', {'height': 300});
                     </script>
                 {% endaddtoblock %}
 
+                <br/>
+                <button type="submit" class="btn btn-default" name="save" value="save">
+                    Save
+                </button><span class="help-block">(You can save both language versions at once)</span>
             </form>
 
             <h3>Participants</h3>
