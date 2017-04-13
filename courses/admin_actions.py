@@ -48,6 +48,8 @@ deactivate.short_description = "Deactivate"
 class CopyCourseForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     offering = forms.ModelChoiceField(queryset=Offering.objects.all(), label=_("Offering to copy into"))
+    set_preceeding_course = forms.BooleanField(required=False)
+    set_preceeding_course.help_text = "Should the copy of the course link to the original course as a predecessor?"
 
 
 def copy_courses(modeladmin, request, queryset):
@@ -60,14 +62,15 @@ def copy_courses(modeladmin, request, queryset):
             offering = form.cleaned_data['offering']
 
             for c in queryset:
-                services.copy_course(c, to=offering)
+                services.copy_course(c, to=offering, set_preceeding_course=form.cleaned_data['set_preceeding_course'])
 
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
         form = CopyCourseForm(
             initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME),
-                     'offering': services.get_subsequent_offering()})
+                     'offering': services.get_subsequent_offering(),
+                     'set_preceeding_course': True})
 
     return render(request, 'courses/auth/action_copy_course.html', {'courses': queryset,
                                                                     'copy_form': form,
@@ -321,7 +324,6 @@ def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
             group.user_set.add(teach.teacher)
     messages.add_message(request, messages.SUCCESS,
                          u'{} teachers added to group {}'.format(group.user_set.count(), group.name))
-
 
 
 class EmailListForm(forms.Form):

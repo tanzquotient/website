@@ -13,6 +13,7 @@ from payment.vouchergenerator import generate_pdf, join_pdfs
 from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 from django.contrib.admin.views.main import ChangeList
 
+
 class CourseInline(admin.TabularInline):
     model = Course
     fields = ('name', 'type', 'period', "position",)
@@ -73,6 +74,12 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
 
 
+class PredecessorCoursesInline(admin.TabularInline):
+    model = CourseSuccession
+    fk_name = 'successor'
+    extra = 0
+
+
 class SongInline(admin.TabularInline):
     search_fields = ['title', ]
     model = Song
@@ -93,11 +100,11 @@ class CourseAdmin(TranslatableAdmin):
         'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'format_cancellations',
         'room', 'format_prices',
         'format_teachers',
-        'display', 'active', 'get_teachers_welcomed')
+        'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
     list_filter = ('offering', 'type', 'room', 'display', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
-               SubscribeInlineForCourse,)
+               PredecessorCoursesInline, SubscribeInlineForCourse)
 
     model = Course
     fieldsets = [
@@ -117,6 +124,12 @@ class CourseAdmin(TranslatableAdmin):
                export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_xlsx, evaluate_course]
+
+
+@admin.register(CourseSuccession)
+class CourseSuccession(admin.ModelAdmin):
+    list_display = ['predecessor', 'successor']
+    model = CourseSuccession
 
 
 @admin.register(PlannedCourse)

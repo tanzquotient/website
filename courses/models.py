@@ -248,6 +248,14 @@ class PeriodCancellation(models.Model):
         return "{}".format(self.date.strftime('%d.%m.%Y'))
 
 
+class CourseSuccession(models.Model):
+    predecessor = models.ForeignKey('Course', related_name="successing_courses_through")
+    successor = models.ForeignKey('Course', related_name="preceding_courses_through")
+
+    def __str__(self):
+        return "{} precedes {}".format(self.predecessor, self.successor)
+
+
 class Course(TranslatableModel):
     name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
@@ -274,6 +282,9 @@ class Course(TranslatableModel):
     active.help_text = "Defines if clients can subscribe to this course (if checked, course is active if offering is active)."
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
+    preceding_courses = models.ManyToManyField('Course', related_name='succeeding_courses', through=CourseSuccession,
+                                               through_fields=('predecessor', 'successor'))
+    preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
 
     translations = TranslatedFields(
         description=HTMLField(blank=True, null=True,
@@ -452,6 +463,11 @@ class Course(TranslatableModel):
         return ' / '.join(dates)
 
     format_cancellations.short_description = "Cancellations"
+
+    def format_preceeding_courses(self):
+        return ' / '.join(map(str, self.preceding_courses.all()))
+
+    format_preceeding_courses.short_description = "Predecessors"
 
     def get_first_regular_lesson(self):
         if self.regular_lessons.exists():
