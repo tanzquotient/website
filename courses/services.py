@@ -494,6 +494,14 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
     return r
 
 
+def model_attribute_language_fallback(model, attribute):
+    for lang in [model.get_current_language()] + settings.PARLER_LANGUAGES['default']['fallbacks']:
+        val = model.safe_translation_getter(attribute, language_code=lang)
+        if val:
+            return val
+    return None
+
+
 import zipfile
 import unicodecsv
 from io import BytesIO

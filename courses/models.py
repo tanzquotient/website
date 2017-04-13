@@ -38,6 +38,7 @@ class Weekday:
     NUMBERS = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6}
     NUMBER_2_SLUG = {y: x for x, y in NUMBERS.items()}
 
+
 WEEKDAYS_TRANS = {'mon': 'Montag', 'tue': 'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
 
@@ -328,6 +329,15 @@ class Course(TranslatableModel):
         return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
 
     format_prices.short_description = "Prices"
+
+    def format_description(self):
+        from courses.services import model_attribute_language_fallback
+        desc = ""
+        desc += model_attribute_language_fallback(self, 'description')
+        desc += model_attribute_language_fallback(self.type, 'description')
+        return desc
+
+    format_description.short_description = "Description"
 
     def get_period(self):
         if self.period is None:

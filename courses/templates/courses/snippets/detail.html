@@ -34,15 +34,12 @@
                 {% endif %}
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
-                {% if course.description or course.type.description %}
-                    <h4>Beschreibung</h4>
-                {% endif %}
-                {% if course.description %}
-                    <p>{{ course.description|safe }}</p>
-                {% endif %}
-                {% if course.type.description %}
-                    <p>{{ course.type.description|safe }}</p>
-                {% endif %}
+                {% with desc=course.format_description|safe %}
+                    {% if desc %}
+                        <h4>Beschreibung</h4>
+                        <p>{{ desc }}</p>
+                    {% endif %}
+                {% endwith %}
                 {% if course.get_cancellation_dates %}
                     <h4>Ausfälle</h4>
                     <p>{{ course.format_cancellations }}</p>
