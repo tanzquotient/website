@@ -477,9 +477,7 @@ def get_or_create_userprofile(user):
 def calculate_relevant_experience(user, course):
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
-            models.Subscribe.objects.filter(user=user, state__in=[models.Subscribe.State.CONFIRMED,
-                                                                  models.Subscribe.State.PAYED,
-                                                                  models.Subscribe.State.COMPLETED],
+            models.Subscribe.objects.filter(user=user, state__in=models.Subscribe.State.ACCEPTED_STATES,
                                             course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 

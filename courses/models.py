@@ -283,7 +283,7 @@ class Course(TranslatableModel):
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
     preceding_courses = models.ManyToManyField('Course', related_name='succeeding_courses', through=CourseSuccession,
-                                               through_fields=('predecessor', 'successor'))
+                                               through_fields=('successor', 'predecessor'))
     preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
 
     translations = TranslatedFields(
@@ -680,7 +680,15 @@ class Subscribe(models.Model):
     # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
         from courses.services import calculate_relevant_experience
-        return ', '.join(map(str, calculate_relevant_experience(self.user, self.course)))
+
+        preceding_courses_done = []
+        for predecessor in self.course.preceding_courses.all():
+            preceding_courses_done += [s.course for s in predecessor.subscriptions.accepted().filter(user=self.user).all()]
+        relevant_courses_done = [c for c in calculate_relevant_experience(self.user, self.course) if c not in preceding_courses_done]
+
+        preceding_courses_str = ', '.join(map(str, preceding_courses_done))
+        relevant_courses_str = ', '.join(map(str, relevant_courses_done))
+        return "{} / ...{}".format(preceding_courses_str, relevant_courses_str)
 
     get_calculated_experience.short_description = "Calculated experience"
 
