@@ -344,8 +344,8 @@ class Course(TranslatableModel):
     def format_description(self):
         from courses.services import model_attribute_language_fallback
         desc = ""
-        desc += model_attribute_language_fallback(self, 'description')
-        desc += model_attribute_language_fallback(self.type, 'description')
+        desc += model_attribute_language_fallback(self, 'description') or ""
+        desc += model_attribute_language_fallback(self.type, 'description') or ""
         return desc
 
     format_description.short_description = "Description"
