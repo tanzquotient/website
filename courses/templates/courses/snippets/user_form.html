@@ -43,37 +43,10 @@
         {% include "courses/snippets/field_errors.html" with field=form.gender %}
     </div>
 </div>
-<div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
-    <label for="{{ form.address.id_for_label }}" class="col-sm-2 control-label">Adresse*</label>
-
-    <div class="col-sm-10">
-        <input type="text" class="form-control" id="{{ form.street.id_for_label }}" name="{{ form.street.html_name }}"
-               placeholder="{{ form.street.label }}" value="{{ form.street.value|default:'' }}">
-        {% if form.street.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {% endif %}
-        {% include "courses/snippets/field_errors.html" with field=form.street %}
-    </div>
-    <div class="col-sm-3 col-sm-offset-2">
-        <input type="text" class="form-control" id="{{ form.plz.id_for_label }}" name="{{ form.plz.html_name }}"
-               placeholder="{{ form.plz.label }}" value="{{ form.plz.value|default:'' }}">
-        {% if form.plz.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {% endif %}
-        {% include "courses/snippets/field_errors.html" with field=form.plz %}
-    </div>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" id="{{ form.city.id_for_label }}" name="{{ form.city.html_name }}"
-               placeholder="{{ form.city.label }}" value="{{ form.city.value|default:'' }}">
-        {% if form.city.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {% endif %}
-        {% include "courses/snippets/field_errors.html" with field=form.city %}
-    </div>
-</div>
+{% include "courses/snippets/address_input.html" with form=form only %}
 {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
-{% include "courses/snippets/text_input.html" with field=form.email star=True only %}
-{% include "courses/snippets/text_input.html" with field=form.email_repetition star=True only %}
+{% include "courses/snippets/text_input.html" with field=form.email only %}
+{% include "courses/snippets/text_input.html" with field=form.email_repetition only %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript">
@@ -89,19 +62,7 @@ $( "#id_student_status" ).change(function() {
 }); //end ready
 </script>
 
-<div class="form-group has-feedback {% if form.student_status.errors %}has-error{% endif %}">
-    <label for="{{ form.student_status.id_for_label }}"
-           class="col-sm-2 control-label">{{ form.student_status.label }}</label>
-
-    <div class="col-sm-10">
-        {{ form.student_status }}
-        {% if form.student_status.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {% endif %}
-        {% include "courses/snippets/field_errors.html" with field=form.student_status %}
-    </div>
-</div>
-
+{% include "courses/snippets/generic_input.html" with field=form.student_status only %}
 {% include "courses/snippets/text_input.html" with field=form.legi only %}
 {% include "courses/snippets/text_input.html" with field=form.body_height only %}
 {% include "courses/snippets/text_input.html" with field=form.experience only %}

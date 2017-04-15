@@ -6,8 +6,7 @@
     </label>
 
     <div class="col-sm-10">
-        <input type="{% if type %}{{ type }}{% else %}text{% endif %}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}"
-               placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
+        {{ field }}
         {% if field.errors %}
             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
         {% endif %}

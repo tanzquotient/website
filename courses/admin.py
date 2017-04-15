@@ -282,6 +282,11 @@ class AddressAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(BankAccount)
+class BankAccountAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')

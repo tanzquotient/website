@@ -80,8 +80,32 @@ def update_user(user, user_data):
     set_if_given('newsletter')
     set_if_given('get_involved')
 
+    set_if_given('about_me')
+
+    set_if_given('birthdate')
+    set_if_given('nationality')
+    set_if_given('residence_permit')
+    set_if_given('ahv_number')
+
     if all((key in user_data) for key in ['street', 'plz', 'city']):
-        userprofile.address = models.Address.objects.create_from_user_data(user_data)
+        if userprofile.address:
+            userprofile.address.street = user_data['street']
+            userprofile.address.plz = user_data['plz']
+            userprofile.address.city = user_data['city']
+            userprofile.save()
+        else:
+            userprofile.address = models.Address.objects.create_from_user_data(user_data)
+
+    if all((key in user_data) for key in ['iban']):
+        if userprofile.bank_account:
+            userprofile.bank_account.iban = user_data['iban']
+            userprofile.bank_account.bank_name = user_data['bank_name']
+            userprofile.bank_account.bank_zip_code = user_data['bank_zip_code']
+            userprofile.bank_account.bank_city = user_data['bank_city']
+            userprofile.bank_account.bank_country = user_data['bank_country']
+            userprofile.bank_account.save()
+        else:
+            userprofile.bank_account = models.BankAccount.objects.create_from_user_data(user_data)
 
     userprofile.save()
 

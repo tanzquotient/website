@@ -131,6 +131,7 @@ def send_teacher_welcome(teach):
     room_url = current_site + reverse('courses:subscription', kwargs={'course_id': course.id})
     coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
     login_url = current_site + reverse('account_login')
+    profile_url = current_site + reverse('auth_profile')
 
     context = {
         'first_name': teacher.first_name,
@@ -144,6 +145,7 @@ def send_teacher_welcome(teach):
         'room_instructions': course.room.instructions,
         'coursepayment_url': coursepayment_url,
         'login_url': login_url,
+        'profile_url': profile_url,
     }
 
     template = 'teacher_welcome'

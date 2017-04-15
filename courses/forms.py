@@ -2,8 +2,10 @@ from django import forms
 
 from .models import UserProfile
 from .services import update_user
-
+from django_countries.fields import LazyTypedChoiceField
+from django_countries import countries
 import logging
+from datetime import date
 
 log = logging.getLogger('tq')
 
@@ -11,6 +13,7 @@ log = logging.getLogger('tq')
 class UserEditForm(forms.Form):
     phone_number = forms.CharField(max_length=255, required=False)
     phone_number.label = 'Telefonnummer (Mobile)'
+    phone_number.help_text = 'Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das Teilen von Kursinhalten weitergegeben!'
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
     student_status.label = 'Student'
     legi = forms.CharField(max_length=16, required=False)
@@ -19,6 +22,23 @@ class UserEditForm(forms.Form):
     newsletter.label = 'Newsletter abonnieren'
     get_involved = forms.BooleanField(required=False)
     get_involved.label = 'Ich würde gerne ab und zu beim TQ mithelfen (Events etc.)'
+    street = forms.CharField(max_length=255)
+    street.label = 'Strasse'
+    plz = forms.IntegerField()
+    plz.label = 'PLZ'
+    city = forms.CharField(max_length=255)
+    city.label = 'Ort'
+
+    birthdate = forms.DateField(required=False, widget=forms.widgets.SelectDateWidget(
+        empty_label=("Choose Year", "Choose Month", "Choose Day"), years=range(date.today().year-70, date.today().year-10)))
+    nationality = LazyTypedChoiceField(choices=countries, required=False)
+    residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=False)
+    ahv_number = forms.CharField(max_length=255, required=False)
+    iban = forms.CharField(max_length=255, required=False)
+    bank_name = forms.CharField(max_length=255, required=False)
+    bank_zip_code = forms.CharField(max_length=255, required=False)
+    bank_city = forms.CharField(max_length=255, required=False)
+    bank_country = LazyTypedChoiceField(choices=countries, required=False)
 
     def clean(self):
         cleaned_data = super(UserEditForm, self).clean()
@@ -41,7 +61,8 @@ class CustomSignupForm(UserEditForm):
     gender.label = 'Geschlecht'
 
     class Meta:
-        fields=['first_name', 'last_name','gender','phone_number','student_status','legi','newsletter','get_involved']
+        fields = ['first_name', 'last_name', 'gender', 'street', 'plz', 'city', 'phone_number', 'student_status',
+                  'legi', 'newsletter', 'get_involved']
 
     def signup(self, request, user):
         log.info("signup new user with email {}".format(user.email))
@@ -49,12 +70,6 @@ class CustomSignupForm(UserEditForm):
 
 
 class UserForm(CustomSignupForm):
-    street = forms.CharField(max_length=255)
-    street.label = 'Strasse'
-    plz = forms.IntegerField()
-    plz.label = 'PLZ'
-    city = forms.CharField(max_length=255)
-    city.label = 'Ort'
     email = forms.EmailField(max_length=75)
     email.label = 'E-Mail'
     email.help_text = 'Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat an!'
@@ -97,4 +112,16 @@ def create_initial_from_user(user, initial={}):
     initial['email'] = user.email
     initial['email_repetition'] = user.email
     initial['body_height'] = user.profile.body_height
+
+    initial['birthdate'] = user.profile.birthdate
+    initial['nationality'] = user.profile.nationality
+    initial['residence_permit'] = user.profile.residence_permit
+    initial['ahv_number'] = user.profile.ahv_number
+    if user.profile.bank_account:
+        initial['iban'] = user.profile.bank_account.iban
+        initial['bank_name'] = user.profile.bank_account.bank_name
+        initial['bank_zip_code'] = user.profile.bank_account.bank_zip_code
+        initial['bank_city'] = user.profile.bank_account.bank_city
+        initial['bank_country'] = user.profile.bank_account.bank_country
+
     return initial

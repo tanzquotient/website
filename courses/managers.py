@@ -71,11 +71,14 @@ class AddressManager(models.Manager):
         address.save()
         return address
 
-    def live(self):
-        return self.filter(state='published')
 
-    def interesting(self):
-        return self.filter(interesting=True)
+class BankAccountManager(models.Manager):
+    def create_from_user_data(self, data):
+        from courses.models import BankAccount
+        bank_account = BankAccount(iban=data['iban'], bank_name=data['bank_name'], bank_zip_code=data['bank_zip_code'],
+                                   bank_city=data['bank_city'], bank_country=data['bank_country'])
+        bank_account.save()
+        return bank_account
 
 
 # construction to allow chaining of queryset methods (chaining manager methods is not possible)

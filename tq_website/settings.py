@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_countries',
     'tq_website',
     'courses',
     'faq',

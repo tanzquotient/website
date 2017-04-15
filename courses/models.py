@@ -19,6 +19,8 @@ import payment.vouchergenerator
 from courses.emailcenter import send_online_payment_successful
 from parler.models import TranslatableModel, TranslatedFields
 from post_office.models import Email
+from django_countries.fields import CountryField
+from collections import OrderedDict
 
 
 class Weekday:
@@ -57,6 +59,7 @@ class Address(models.Model):
     street = models.CharField(max_length=255)
     plz = models.IntegerField()
     city = models.CharField(max_length=255)
+    country = CountryField(default='CH')
 
     objects = managers.AddressManager()
 
@@ -65,6 +68,23 @@ class Address(models.Model):
 
     def __str__(self):
         return "{}, {} {}".format(self.street, self.plz, self.city)
+
+
+class BankAccount(models.Model):
+    iban = models.CharField(max_length=255)
+    iban.help_text = "IBAN in the standardized format."
+    bank_name = models.CharField(max_length=255, blank=True, null=True)
+    bank_name.help_text = "Name of the bank."
+    bank_zip_code = models.CharField(max_length=255, blank=True, null=True)
+    bank_zip_code.help_text = "Zipcode of the bank."
+    bank_city = models.CharField(max_length=255, blank=True, null=True)
+    bank_city.help_text = "City of the bank."
+    bank_country = CountryField(default='CH', blank=True, null=True)
+
+    objects = managers.BankAccountManager()
+
+    def __str__(self):
+        return "{} ({}, {} {}, {})".format(self.iban, self.bank_name, self.bank_zip_code, self.bank_city, self.bank_country)
 
 
 class UserProfile(models.Model):
@@ -82,6 +102,21 @@ class UserProfile(models.Model):
         NO = 'no'
 
         CHOICES = ((ETH, 'ETH'), (UNI, 'Uni'), (PH, 'PH'), (OTHER, 'Other'), (NO, 'Not a student'))
+
+    class Residence:
+        PERMITS = OrderedDict()
+        PERMITS['SWISS'] = 'Swiss citizen'
+        PERMITS['B'] = 'B EU/EFTA permit (Resident foreign nationals)'
+        PERMITS['C'] = 'C EU/EFTA permit (Settled foreign nationals)'
+        PERMITS['Ci'] = 'Ci EU/EFTA permit (Resident foreign nationals with gainful employment)'
+        PERMITS['L'] = 'L EU/EFTA permit (Short-term residents)'
+        PERMITS['G'] = 'G EU/EFTA permit (Cross-border commuters)'
+        PERMITS['F'] = 'Permit F (provisionally admitted foreigners)'
+        PERMITS['N'] = 'Permit N (permit for asylum-seekers)'
+        PERMITS['S'] = 'Permit S (people in need of protection)'
+        PERMITS['<NO>'] = 'Short-term stay without VISA'
+
+        CHOICES = list(PERMITS.items())
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
     user.help_text = "The user which is matched to this user profile."
@@ -101,6 +136,12 @@ class UserProfile(models.Model):
     get_involved.help_text = "If this user is interested to get involved with our organisation."
 
     about_me = HTMLField(blank=True, null=True)
+
+    birthdate = models.DateField(blank=True, null=True)
+    nationality = CountryField(blank=True, null=True)
+    residence_permit = models.CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
+    ahv_number = models.CharField(max_length=255, blank=True, null=True)
+    bank_account = models.ForeignKey(BankAccount, blank=True, null=True)
 
     # convenience method for model user are added here
     def is_teacher(self):
@@ -683,8 +724,10 @@ class Subscribe(models.Model):
 
         preceding_courses_done = []
         for predecessor in self.course.preceding_courses.all():
-            preceding_courses_done += [s.course for s in predecessor.subscriptions.accepted().filter(user=self.user).all()]
-        relevant_courses_done = [c for c in calculate_relevant_experience(self.user, self.course) if c not in preceding_courses_done]
+            preceding_courses_done += [s.course for s in
+                                       predecessor.subscriptions.accepted().filter(user=self.user).all()]
+        relevant_courses_done = [c for c in calculate_relevant_experience(self.user, self.course) if
+                                 c not in preceding_courses_done]
 
         preceding_courses_str = ', '.join(map(str, preceding_courses_done))
         relevant_courses_str = ', '.join(map(str, relevant_courses_done))
