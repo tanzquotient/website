@@ -8,7 +8,7 @@
         {{ form }}
     </p>
 
-    <p>Email addresses of selected subscribers (note that selected filters are applied!):</p>
+    <p>{{ message|default:"Email list" }}</p>
 
     <ul>{{ emails|unordered_list }}</ul>
 

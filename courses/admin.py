@@ -25,7 +25,7 @@ class OfferingAdmin(admin.ModelAdmin):
     list_display = ('name', 'period', 'display', 'active')
     inlines = (CourseInline,)
 
-    actions = [display, undisplay, activate, deactivate]
+    actions = [display, undisplay, activate, deactivate, offering_emaillist]
 
 
 class TeachInlineForCourse(admin.TabularInline):

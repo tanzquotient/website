@@ -345,7 +345,31 @@ def emaillist(modeladmin, request, queryset):
     return render(request, 'courses/auth/action_emaillist.html', {
         'form': form,
         'emails': [s.user.email for s in queryset.all()],
+        'message': "Email addresses of selected subscribers (note that selected filters are applied!)"
     })
 
 
 emaillist.short_description = "List emails of selected subscribers"
+
+
+def offering_emaillist(modeladmin, request, queryset):
+    form = None
+
+    if 'ok' in request.POST:
+        form = EmailListForm(request.POST)
+
+        if form.is_valid():
+            return HttpResponseRedirect(reverse('admin:courses_offering_changelist'))
+
+    if not form:
+        form = EmailListForm()
+
+    subscriptions = Subscribe.objects.accepted().filter(course__offering__in=queryset.all())
+    return render(request, 'courses/auth/action_emaillist.html', {
+        'form': form,
+        'emails': [s.user.email for s in subscriptions],
+        'message': "Email addresses of accepted subscribers of offerings {}".format(", ".join(map(str, queryset.all())))
+    })
+
+
+offering_emaillist.short_description = "List emails of accepted participants"
