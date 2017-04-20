@@ -30,7 +30,8 @@ class UserEditForm(forms.Form):
     city.label = 'Ort'
 
     birthdate = forms.DateField(required=False, widget=forms.widgets.SelectDateWidget(
-        empty_label=("Choose Year", "Choose Month", "Choose Day"), years=range(date.today().year-70, date.today().year-10)))
+        empty_label=("Choose Year", "Choose Month", "Choose Day"),
+        years=range(date.today().year - 70, date.today().year - 10)))
     nationality = LazyTypedChoiceField(choices=countries, required=False)
     residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=False)
     ahv_number = forms.CharField(max_length=255, required=False)
@@ -59,10 +60,6 @@ class CustomSignupForm(UserEditForm):
     last_name.label = 'Nachname'
     gender = forms.ChoiceField(choices=UserProfile.Gender.CHOICES)
     gender.label = 'Geschlecht'
-
-    class Meta:
-        fields = ['first_name', 'last_name', 'gender', 'street', 'plz', 'city', 'phone_number', 'student_status',
-                  'legi', 'newsletter', 'get_involved']
 
     def signup(self, request, user):
         log.info("signup new user with email {}".format(user.email))
