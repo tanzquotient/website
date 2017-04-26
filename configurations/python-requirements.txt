@@ -47,3 +47,4 @@ raven==5.32.0
 redis==2.10.5
 cryptography==1.7.1
 django-countries==4.4
+django-ical==1.4

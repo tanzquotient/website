@@ -9,6 +9,8 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from . import views
+import events.urls
+from events.ical import EventFeed
 import django.views.i18n
 from tq_website import views
 import courses.views as courses_views
@@ -24,7 +26,7 @@ urlpatterns = [
     url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
     url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
     url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
-    url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework'))
+    url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
 ]
 
 if settings.DEBUG:
@@ -43,6 +45,10 @@ if settings.DEBUG:
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# ical support
+# the dots are required for selecting the language
+urlpatterns += [url(r'^../events/', include(events.urls))]
 
 urlpatterns += i18n_patterns(
     # Examples:
