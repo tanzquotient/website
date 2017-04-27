@@ -29,8 +29,12 @@ class EventFeed(ICalFeed):
                 description += 'Price without Legi: {}'.format(item.price_without_legi)
         else:
             description += item.price_special
+        description = strip_tags(description)
 
-        return strip_tags(description)
+        description += os.linesep
+        description += 'https://tanzquotient.org/en/events/'
+
+        return description
 
     def item_start_datetime(self, item):
         date = item.date
@@ -51,4 +55,4 @@ class EventFeed(ICalFeed):
 
     def item_link(self, item):
         # remember to change this value when the calendar url changes
-        return 'https://tanzquotient.org/en/events/calendar.ics'
+        return 'https://tanzquotient.org/en/events/'
