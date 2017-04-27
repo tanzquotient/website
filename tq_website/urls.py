@@ -31,6 +31,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
@@ -46,16 +47,13 @@ if settings.DEBUG:
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# ical support
-# the dots are required for selecting the language
-urlpatterns += [url(r'^../events/', include(events.urls))]
-
 urlpatterns += i18n_patterns(
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^profile/$', courses_views.ProfileView.as_view(), name='auth_profile'),
     url(r'^survey/', include(survey.urls, namespace='survey')),
+    url(r'^events/', include(events.urls, namespace='events')),
     url(r'^', include(payment.urls, namespace='payment')),
     url(r'^', include(cms.urls))
 )

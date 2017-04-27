@@ -3,9 +3,10 @@ import datetime
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
 from .models import Event
+from django.core.urlresolvers import reverse
+
 
 class EventFeed(ICalFeed):
-
     # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
     product_id = '-//TQ Website calendar v1.0'
 
@@ -51,4 +52,4 @@ class EventFeed(ICalFeed):
 
     def item_link(self, item):
         # remember to change this value when the calendar url changes
-        return 'https://tanzquotient.org/en/events/calendar.ics'
+        return reverse('events:ical')
