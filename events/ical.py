@@ -65,9 +65,6 @@ class EventFeed(ICalFeed):
         # format current datetime: YYYYMMDD'T'HHmmSS
         current_datetime = current_datetime.strftime('%Y%m%dT%H%M%S')
         pid = os.getpid()
-        sha = hashlib.sha1()
-        sha.update(item.description.encode('utf-8'))
-        unique_hash = sha.hexdigest()[:5]
         domain = 'tanzquotient.org'
-        guid = '{0}-{1}-{2}@{3}'.format(current_datetime, pid, unique_hash, domain)
+        guid = '{0}-{1}-{2}@{3}'.format(current_datetime, pid, item.id, domain)
         return guid
