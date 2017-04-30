@@ -1,5 +1,6 @@
 import os
 import datetime
+import hashlib
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
 from .models import Event
@@ -30,8 +31,12 @@ class EventFeed(ICalFeed):
                 description += 'Price without Legi: {}'.format(item.price_without_legi)
         else:
             description += item.price_special
+        description = strip_tags(description)
 
-        return strip_tags(description)
+        description += os.linesep
+        description += 'https://tanzquotient.org/en/events/'
+
+        return description
 
     def item_start_datetime(self, item):
         date = item.date
@@ -52,4 +57,15 @@ class EventFeed(ICalFeed):
 
     def item_link(self, item):
         # remember to change this value when the calendar url changes
-        return reverse('events:ical')
+        return 'https://tanzquotient.org/en/events/'
+
+    # must be unique in order to display all events correctly in most calendar programs
+    def item_guid(self, item):
+        # for details about the construction, see http://www.kanzaki.com/docs/ical/uid.html
+        current_datetime = datetime.datetime.utcnow()
+        # format current datetime: YYYYMMDD'T'HHmmSS
+        current_datetime = current_datetime.strftime('%Y%m%dT%H%M%S')
+        pid = os.getpid()
+        domain = 'tanzquotient.org'
+        guid = '{0}-{1}-{2}@{3}'.format(current_datetime, pid, item.id, domain)
+        return guid
