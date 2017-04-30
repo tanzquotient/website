@@ -1,5 +1,6 @@
 import os
 import datetime
+import hashlib
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
 from .models import Event
@@ -56,3 +57,17 @@ class EventFeed(ICalFeed):
     def item_link(self, item):
         # remember to change this value when the calendar url changes
         return 'https://tanzquotient.org/en/events/'
+
+    # must be unique in order to display all events correctly in most calendar programs
+    def item_guid(self, item):
+        # for details about the construction, see http://www.kanzaki.com/docs/ical/uid.html
+        current_datetime = datetime.datetime.utcnow()
+        # format current datetime: YYYYMMDD'T'HHmmSS
+        current_datetime = current_datetime.strftime('%Y%m%dT%H%M%S')
+        pid = os.getpid()
+        sha = hashlib.sha1()
+        sha.update(item.description.encode('utf-8'))
+        unique_hash = sha.hexdigest()[:5]
+        domain = 'tanzquotient.org'
+        guid = '{0}-{1}-{2}@{3}'.format(current_datetime, pid, unique_hash, domain)
+        return guid
