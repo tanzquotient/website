@@ -30,6 +30,13 @@ class Payment(models.Model):
                    (COURSE_PAYMENT_TRANSFER, 'course payment transfer'), (IRRELEVANT, 'irrelevant'),
                    (UNKNOWN, 'unknown'))
 
+    class CreditDebit:
+        UNKNOWN = 'unknown'
+        CREDIT = 'credit'
+        DEBIT = 'debit'
+
+        CHOICES = ((UNKNOWN, UNKNOWN), (CREDIT, 'credit (incoming money)'), (DEBIT, 'debit (outgoing money)'))
+
     name = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateTimeField()
     address = models.TextField(null=True, blank=True)
@@ -43,11 +50,14 @@ class Payment(models.Model):
     state = models.CharField(choices=State.CHOICES, max_length=50, default=State.NEW)
     type = models.CharField(verbose_name='type (detected)', choices=Type.CHOICES, max_length=50, default=Type.UNKNOWN,
                             help_text="The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.")
+    credit_debit = models.CharField(verbose_name='credit/debit', choices=CreditDebit.CHOICES, max_length=50, default=CreditDebit.UNKNOWN,
+                                    help_text="If this transaction is a credit or a debit.")
     subscriptions = models.ManyToManyField(Subscribe, blank=True, through='SubscriptionPayment')
     filename = models.CharField(max_length=300)
+    comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "Payment of {0} by {1}".format(self.amount, self.name)
+        return "Payment ({}) of {} by {}".format(self.credit_debit, self.amount, self.name)
 
     def courses(self):
         return [subscription.course for subscription in self.subscriptions.all()]
@@ -78,7 +88,8 @@ class SubscriptionPayment(models.Model):
     def clean(self):
         # Don't allow larger amount then available amount of payment
         if self.amount and (self.amount > self.payment.amount):
-            raise ValidationError('The available payment amount is not sufficient to allow the association of {}.'.format(self.amount))
+            raise ValidationError(
+                'The available payment amount is not sufficient to allow the association of {}.'.format(self.amount))
 
 
 class CoursePayment(models.Model):

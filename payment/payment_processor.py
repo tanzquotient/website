@@ -11,11 +11,19 @@ RE_USI_STRICT = re.compile(r"[USIusi]{3,3}-(?P<usi>[a-zA-Z0-9]{6,6})")
 
 class PaymentProcessor:
     def process_payments(self, queryset=Payment.objects):
+        self.detect_irrelevant_payments()
         self.match_payments(queryset)
         self.finalize_payments(queryset)
 
+    def detect_irrelevant_payments(self, queryset=Payment.objects):
+        new_payments = queryset.filter(state=Payment.State.NEW, credit_debit=Payment.CreditDebit.DEBIT).all()
+
+        for payment in new_payments:
+            payment.type = Payment.Type.IRRELEVANT
+            payment.save()
+
     def match_payments(self, queryset=Payment.objects):
-        new_payments = queryset.filter(state=Payment.State.NEW).all()
+        new_payments = queryset.filter(state=Payment.State.NEW, credit_debit=Payment.CreditDebit.CREDIT).all()
 
         for payment in new_payments:
             if payment.remittance_user_string:
@@ -91,7 +99,7 @@ class PaymentProcessor:
         Returns true if the payment's amount is equals to the sum of the matched subscriptions.
         """
         if payment.state in [Payment.State.NEW,
-                              Payment.State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
+                             Payment.State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
             remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
 
             if remaining_amount == 0:

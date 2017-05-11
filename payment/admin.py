@@ -16,10 +16,10 @@ class SubscriptionPaymentInline(admin.TabularInline):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'state', 'type', 'name', 'date', 'address', 'transaction_id', 'amount',
+    list_display = ['id', 'state', 'type', 'credit_debit', 'name', 'date', 'address', 'transaction_id', 'amount',
                     'amount_to_reimburse',
                     'currency_code', 'remittance_user_string', 'subscription_payments_amount_sum', 'list_subscriptions']
-    list_filter = ['state', 'type', ('date', DateRangeFilter)]
+    list_filter = ['state', 'type', 'credit_debit', ('date', DateRangeFilter)]
     search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                      'currency_code', 'remittance_user_string', 'filename']
 
