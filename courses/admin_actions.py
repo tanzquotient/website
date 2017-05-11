@@ -308,11 +308,13 @@ def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
     # ignore the queryset parameter
     teachers = Group.objects.filter(name__in=['Tanzlehrer', 'Dance Teachers', 'Teachers', 'Lehrer'])
     if teachers.count() == 0:
-        messages.add_message(request, messages.WARNING,
+        if request:
+            messages.add_message(request, messages.WARNING,
                              u'No suitable "Dance Teachers"-group found -> Group is automatically created')
         group = Group.objects.create(name='Dance Teachers')
     elif teachers.count() > 1:
-        messages.add_message(request, messages.ERROR,
+        if request:
+            messages.add_message(request, messages.ERROR,
                              u'More than one "Dance Teachers"-group found -> Nothing done')
         return
     else:
@@ -322,7 +324,8 @@ def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
     for teach in Teach.objects.all():
         if not group.user_set.filter(pk=teach.teacher.id).exists():
             group.user_set.add(teach.teacher)
-    messages.add_message(request, messages.SUCCESS,
+    if request:
+        messages.add_message(request, messages.SUCCESS,
                          u'{} teachers added to group {}'.format(group.user_set.count(), group.name))
 
 
