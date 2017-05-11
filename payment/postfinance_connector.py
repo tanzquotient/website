@@ -37,17 +37,21 @@ from payment.models import Payment
 from datetime import datetime
 
 
+def find_fds_files(processed=False):
+    fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
+    log.debug("parse")
+    for file in os.listdir(fds_data_path):
+        if ('.xml' in file) and (('processed' in file) == processed):
+            yield os.path.join(fds_data_path, file)
+
+
 class ISO2022Parser:
     def __init__(self):
         pass
 
     def parse(self):
-        fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-        log.debug("parse")
-        for file in os.listdir(fds_data_path):
-            if ('.xml' in file) and ('processed' not in file):
-                filepath = os.path.join(fds_data_path, file)
-                self.parse_file(filepath)
+        for filepath in find_fds_files():
+            self.parse_file(filepath)
 
     def parse_user_string(self, string):
         data = {'account_nr': "",
@@ -90,7 +94,7 @@ class ISO2022Parser:
         return data
 
     def parse_file(self, filename):
-        log.debug("parse file")
+        log.debug("parse file {}".format(filename))
 
         tree = ET.parse(filename)
         root = tree.getroot()
