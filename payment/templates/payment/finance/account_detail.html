@@ -25,7 +25,7 @@
             {% for k,v in summary.items %}
                 <tr>
                     <th>{{ k }}</th>
-                    <td>{{ v }}</td>
+                    <td>{{ v|default:"-" }}</td>
                 </tr>
             {% endfor %}
             </tbody>

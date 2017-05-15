@@ -318,15 +318,21 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
     form_class = forms.Form
 
     def _filter(self):
-        year = self.request.GET.get('year')
-        month = self.request.GET.get('month')
+        def to_int(s):
+            try:
+                return int(s)
+            except ValueError as e:
+                return None
+
+        year = to_int(self.request.GET.get('year'))
+        month = to_int(self.request.GET.get('month'))
         filter = self.request.GET.get('filter')
         payments = Payment.objects
         if year:
             payments = payments.filter(date__year=year)
         if month:
             payments = payments.filter(date__month=month)
-        if self.request.GET.get('filter') and filter == "true":
+        if filter and filter == "true":
             payments = payments.exclude(
                 type__in=[Payment.Type.SUBSCRIPTION_PAYMENT, Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE])
         return year, month, filter, payments
@@ -346,10 +352,10 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
             'TOTAL subscription_payment': "{} CHF".format(payments.filter(
                 type__in=[Payment.Type.SUBSCRIPTION_PAYMENT,
                           Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE]).all().aggregate(Sum(
-                'amount'))['amount__sum']),
+                'amount'))['amount__sum'] or "0"),
             'TOTAL course_payment_transfer': "{} CHF".format(payments.filter(
                 type__in=[Payment.Type.COURSE_PAYMENT_TRANSFER]).all().aggregate(Sum(
-                'amount'))['amount__sum'])
+                'amount'))['amount__sum'] or "0")
         }
         context['summary'] = summary
 
