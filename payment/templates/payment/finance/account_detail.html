@@ -1,0 +1,115 @@
+{% extends "basis.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content_title %}
+    {% trans "Finance" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="">Periods</a></li>
+            <li class="active">{{ month_name|default:'' }} {{ year|default:'' }}</li>
+        </ol>
+
+        <h2>Account transactions
+            <small>in {{ month_name|default:'' }} {{ year|default:'' }}</small>
+        </h2>
+
+        <h3>Summary
+            <small>with filters respected</small>
+        </h3>
+        <table class="table">
+            <tbody>
+            {% for k,v in summary.items %}
+                <tr>
+                    <th>{{ k }}</th>
+                    <td>{{ v }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Transaction list
+        </h3>
+        (show <a href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}">with</a>/<a
+            href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}&filter=true">without </a>subscription
+        payments)
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <th></th>
+                        <th>{% trans "ID" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th class="text-right">{% trans "Credit" %}</th>
+                        <th></th>
+                        <th class="text-right">{% trans "Debit" %}</th>
+                        <th>{% trans "Comment" %}</th>
+                        </thead>
+                        <tbody>
+                        {% for p in payments %}
+                            <tr>
+                                <td>
+                                    <button class="dropdown-toggle" type="button" data-toggle="collapse"
+                                            data-target="#{{ p.id }}" aria-expanded="false"
+                                            aria-controls="{{ p.id }}">
+                                        <span class="fa fa-caret-right"></span>
+                                    </button>
+                                </td>
+                                <td>{{ p.id }}</td>
+                                <td>{{ p.date|date:'d. M Y'  }}</td>
+                                <td>{{ p.type }}</td>
+                                <td class="text-right">
+                                    {% if p.credit_debit == "credit" %}
+                                        +{{ p.amount }} {{ p.currency_code }}
+                                    {% elif p.credit_debit == "unknown" %}
+                                        {{ p.amount }} {{ p.currency_code }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if p.credit_debit == "unknown" %}
+                                        <span class="fa fa-long-arrow-left"></span>
+                                        <span class="fa fa-question-circle-o"></span>
+                                        <span class="fa fa-long-arrow-right"></span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                    {% if p.credit_debit == "debit" %}
+                                        -{{ p.amount }} {{ p.currency_code }}
+                                    {% elif p.credit_debit == "unknown" %}
+                                        {{ p.amount }} {{ p.currency_code }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <textarea name="comment-{{ p.id }}" id="comment-{{ p.id }}" rows="2"
+                                              cols="20">{{ p.comment|default:""|safe }}</textarea>
+                                </td>
+                            </tr>
+                            <tr class="collapse" id="{{ p.id }}">
+                                <td></td>
+                                <td colspan="7">
+                                    {{ p.name }}, {{ p.address }}, {{ p.iban }}, {{ p.bic }}
+                                    <br/>
+                                    {{ p.remittance_user_string }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% buttons %}
+                <button type="submit"
+                        class="btn btn-primary btn-sm">
+                    {% trans "Save Comments" %}
+                </button>
+            {% endbuttons %}
+        </form>
+    </div>
+{% endblock main_content %}

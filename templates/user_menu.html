@@ -1,0 +1,40 @@
+{% load cms_tags sekizai_tags menu_tags %}
+{% load i18n %}
+
+{% if user.is_staff %}
+    <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
+        area</a></li>
+{% endif %}
+{% if user.is_staff %}
+    <li><a href="{% url 'courses:subscription_overview' %}"><span
+            class="fa fa-bar-chart fa-lg"></span> Statistics</a></li>
+{% endif %}
+{% if user.is_staff or user.profile.is_teacher %}
+    <li><a href="{% url 'payment:coursepayment_index' %}"><span
+            class="fa fa-book fa-lg"></span> My Courses</a>
+    </li>
+{% endif %}
+{% if user.is_superuser or perms.courses.access_counterpayment %}
+    <li><a href="{% url 'payment:counterpayment_index' %}"><span
+            class="fa fa-money fa-lg"></span> Counter Payment</a>
+    </li>
+{% endif %}
+{% if user.is_superuser or perms.payment.change_payment %}
+    <li><a href="{% url 'payment:offering_finance_index_view' %}"><span
+            class="fa fa-credit-card fa-lg"></span> Offering Finance</a>
+    </li>
+    <li>
+        <a href="{% url 'payment:account_finance_detail_view' %}?year=2017&month=1"><span
+                class="fa fa-credit-card fa-lg"></span> Account Finance</a>
+    </li>
+{% endif %}
+{% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
+    <li role="separator" class="divider"></li>
+{% endif %}
+<li><a href="{% url 'auth_profile' %}"><span
+        class="glyphicon glyphicon-user"></span>
+    {% trans "View profile" %}</a>
+</li>
+<li><a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>
+    Logout</a>
+</li>

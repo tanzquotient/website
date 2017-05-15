@@ -72,6 +72,9 @@ class Payment(models.Model):
             sum += sp.amount
         return sum
 
+    class Meta:
+        ordering = ['date']
+
 
 class SubscriptionPayment(models.Model):
     """

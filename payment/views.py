@@ -18,6 +18,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .services import *
 import json
 from datetime import date
+from payment.models import Payment
+from django.db.models import F, FloatField, Sum
+
+log = logging.getLogger('tq')
 
 
 class VoucherPaymentIndexView(FormView):
@@ -229,7 +233,6 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         return HttpResponseRedirect(reverse('payment:coursepayment_detail', kwargs={'course': self.kwargs['course']}))
 
 
-
 class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
     template_name = 'payment/course/confirm.html'
     form_class = forms.Form
@@ -307,3 +310,62 @@ class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
         offerings = Offering.objects.order_by('-active', '-period__date_from').all()
         context['offerings'] = offerings
         return context
+
+
+class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):
+    template_name = 'payment/finance/account_detail.html'
+    permission_required = 'payment.payment.change'
+    form_class = forms.Form
+
+    def _filter(self):
+        year = self.request.GET.get('year')
+        month = self.request.GET.get('month')
+        filter = self.request.GET.get('filter')
+        payments = Payment.objects
+        if year:
+            payments = payments.filter(date__year=year)
+        if month:
+            payments = payments.filter(date__month=month)
+        if self.request.GET.get('filter') and filter == "true":
+            payments = payments.exclude(
+                type__in=[Payment.Type.SUBSCRIPTION_PAYMENT, Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE])
+        return year, month, filter, payments
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountFinanceDetailView, self).get_context_data(**kwargs)
+
+        year, month, filter, payments = self._filter()
+
+        context['year'] = year
+        context['month'] = month
+        context['month_name'] = datetime.date(year=2000, month=int(month), day=1).strftime('%B') if month else None
+        context['payments'] = payments.all()
+
+        # Summary
+        summary = {
+            'TOTAL subscription_payment': "{} CHF".format(payments.filter(
+                type__in=[Payment.Type.SUBSCRIPTION_PAYMENT,
+                          Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE]).all().aggregate(Sum(
+                'amount'))['amount__sum']),
+            'TOTAL course_payment_transfer': "{} CHF".format(payments.filter(
+                type__in=[Payment.Type.COURSE_PAYMENT_TRANSFER]).all().aggregate(Sum(
+                'amount'))['amount__sum'])
+        }
+        context['summary'] = summary
+
+        return context
+
+    def post(self, request, **kwargs):
+
+        log.debug(self.success_url)
+        year, month, filter, payments = self._filter()
+
+        self.success_url = "{}?year={}&month={}&filter={}".format(
+            reverse('payment:account_finance_detail_view', kwargs=kwargs),
+            year, month, filter)
+
+        for p in payments:
+            p.comment = self.request.POST['comment-{}'.format(p.id)]
+            p.save()
+
+        return super(AccountFinanceDetailView, self).post(request)
