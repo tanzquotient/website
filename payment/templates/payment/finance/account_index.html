@@ -1,0 +1,27 @@
+{% extends "basis.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content_title %}
+    {% trans "Account Finance" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <h2>{% trans "Select period" %}</h2>
+        <p>{% trans "Please period you want to show the transactions for." %}</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Show transactions" %}
+                        </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

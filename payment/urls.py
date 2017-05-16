@@ -33,6 +33,8 @@ urlpatterns = [
         name='offering_finance_overview'),
     url(r'^auth/finance/$', views.OfferingFinanceIndexView.as_view(),
         name='offering_finance_index_view'),
-    url(r'^auth/finance/account/$', views.AccountFinanceDetailView.as_view(),
+    url(r'^auth/finance/account/index/$', views.AccountFinanceIndexView.as_view(),
+        name='account_finance_index_view'),
+    url(r'^auth/finance/account/detail/$', views.AccountFinanceDetailView.as_view(),
         name='account_finance_detail_view'),
 ]

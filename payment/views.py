@@ -4,7 +4,7 @@ from django.views.generic.edit import ProcessFormView, FormMixin
 from django.http import HttpResponseRedirect
 
 from payment import payment_processor
-from payment.forms import USIForm, VoucherForm, PROG_USI
+from payment.forms import USIForm, VoucherForm, PROG_USI, AccountFinanceIndexForm
 from courses.models import PaymentMethod, Offering, Voucher, Course, Teach
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -319,6 +319,8 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
 
     def _filter(self):
         def to_int(s):
+            if s is None:
+                return None
             try:
                 return int(s)
             except ValueError as e:
@@ -333,8 +335,11 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
         if month:
             payments = payments.filter(date__month=month)
         if filter and filter == "true":
+            filter = True
             payments = payments.exclude(
                 type__in=[Payment.Type.SUBSCRIPTION_PAYMENT, Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE])
+        else:
+            filter = False
         return year, month, filter, payments
 
     def get_context_data(self, **kwargs):
@@ -342,20 +347,31 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
 
         year, month, filter, payments = self._filter()
 
+        context['filter'] = filter
         context['year'] = year
         context['month'] = month
         context['month_name'] = datetime.date(year=2000, month=int(month), day=1).strftime('%B') if month else None
-        context['payments'] = payments.all()
+        payments = payments.all()
+        context['payments'] = payments
+        context['total_credit'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])
+        context['total_debit'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])
+        context['total_unknown'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])
 
         # Summary
+        total_subscription_payment = payments.filter(
+            type__in=[Payment.Type.SUBSCRIPTION_PAYMENT,
+                      Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE],
+            credit_debit=Payment.CreditDebit.CREDIT).all().aggregate(Sum(
+            'amount'))['amount__sum'] or 0
+        total_course_payment_transfer = payments.filter(
+            type__in=[Payment.Type.COURSE_PAYMENT_TRANSFER], credit_debit=Payment.CreditDebit.CREDIT).all().aggregate(
+            Sum(
+                'amount'))['amount__sum'] or 0
         summary = {
-            'TOTAL subscription_payment': "{} CHF".format(payments.filter(
-                type__in=[Payment.Type.SUBSCRIPTION_PAYMENT,
-                          Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE]).all().aggregate(Sum(
-                'amount'))['amount__sum'] or "0"),
-            'TOTAL course_payment_transfer': "{} CHF".format(payments.filter(
-                type__in=[Payment.Type.COURSE_PAYMENT_TRANSFER]).all().aggregate(Sum(
-                'amount'))['amount__sum'] or "0")
+            'TOTAL subscription_payment': "{} CHF".format(total_subscription_payment),
+            'TOTAL course_payment_transfer': "{} CHF".format(total_course_payment_transfer),
+            'TOTAL subscription_payment + course_payment_transfer': "{} CHF".format(
+                total_subscription_payment + total_course_payment_transfer)
         }
         context['summary'] = summary
 
@@ -375,3 +391,22 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
             p.save()
 
         return super(AccountFinanceDetailView, self).post(request)
+
+
+class AccountFinanceIndexView(PermissionRequiredMixin, FormView):
+    template_name = 'payment/finance/account_index.html'
+    permission_required = 'payment.payment.change'
+    form_class = AccountFinanceIndexForm
+
+    def get_form_kwargs(self):
+        kwargs = super(AccountFinanceIndexView, self).get_form_kwargs()
+        payments = Payment.objects.all()
+        years = sorted(set(p.date.year for p in payments))
+        kwargs.update({'years': years})
+        return kwargs
+
+    def form_valid(self, form):
+        self.success_url = "{}?year={}&month={}".format(
+            reverse('payment:account_finance_detail_view'),
+            form.data['year'] or "None", form.data['month'] or "None")
+        return super(AccountFinanceIndexView, self).form_valid(form)

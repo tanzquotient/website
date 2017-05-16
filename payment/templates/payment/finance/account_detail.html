@@ -3,13 +3,13 @@
 {% load bootstrap3 %}
 
 {% block content_title %}
-    {% trans "Finance" %}
+    {% trans "Account Finance" %}
 {% endblock %}
 
 {% block main_content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="">Periods</a></li>
+            <li><a href="{% url 'payment:account_finance_index_view' %}">Periods</a></li>
             <li class="active">{{ month_name|default:'' }} {{ year|default:'' }}</li>
         </ol>
 
@@ -33,8 +33,10 @@
 
         <h3>Transaction list
         </h3>
-        (show <a href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}">with</a>/<a
-            href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}&filter=true">without </a>subscription
+        (show {% if filter is True %}
+        <a href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}">with</a>{% else %}<a
+                href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}&filter=true">without </a>{% endif %}
+        subscription
         payments)
 
         <form method="post">
@@ -43,14 +45,16 @@
                 <div class="panel-body">
                     <table class="table">
                         <thead>
-                        <th></th>
-                        <th>{% trans "ID" %}</th>
-                        <th>{% trans "Date" %}</th>
-                        <th>{% trans "Type" %}</th>
-                        <th class="text-right">{% trans "Credit" %}</th>
-                        <th></th>
-                        <th class="text-right">{% trans "Debit" %}</th>
-                        <th>{% trans "Comment" %}</th>
+                        <tr>
+                            <th></th>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th class="text-right">{% trans "Credit" %}</th>
+                            <th></th>
+                            <th class="text-right">{% trans "Debit" %}</th>
+                            <th>{% trans "Comment" %}</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {% for p in payments %}
@@ -101,6 +105,29 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th><strong>TOTAL</strong></th>
+                            <th class="text-right">{{ total_credit }}</th>
+                            <th class="text-right">{{ total_unknown|default:"" }}</th>
+                            <th class="text-right">{{ total_debit }}</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right">{% if total_unknown %}(TOTAL UNKNOWN){% endif %}</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+
                     </table>
                 </div>
             </div>
