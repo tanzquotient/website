@@ -74,9 +74,10 @@
 
             <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
 
-            <p>{% trans "If you do not have internet access in the course room, you can download this list before:" %}
-                <a
-                        href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a></p>
+            <p>
+                {% trans "If you do not have internet access in the course room, you can download this list before:" %}
+                <a href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a>
+            </p>
 
             <div class="visible-xs">
                 <div class="panel panel-default">

@@ -207,7 +207,7 @@ def subscribe(course_id, user1_data, user2_data=None):
 
 # creates a copy of course and sets its offering to the next offering in the future
 def copy_course(course, to=None, set_preceeding_course=False):
-    old_course_pk=course.pk
+    old_course_pk = course.pk
     if to is None:
         to = get_subsequent_offering()
     if to is not None:
@@ -701,6 +701,41 @@ def export_subscriptions(course_ids, export_format):
             return response
         else:
             return None
+    else:
+        return None
+
+
+# exports a summary of all offerings with room usage, course/subscription numbers
+def export_summary(export_format='csv', offerings=models.Offering.objects.all()):
+    offering_ids = [o.pk for o in offerings]
+    subscriptions = models.Subscribe.objects.accepted().filter(course__offering__in=offering_ids)
+
+    filename = 'Summary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
+    if export_format == 'csv':
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+
+        writer = unicodecsv.writer(response)
+
+        rooms = models.Room.objects.all()
+
+        header = ['', 'TOTAL']
+        header += [room.name for room in rooms]
+
+        writer.writerow(header)
+        row = ['TOTAL', subscriptions.count()]
+        row += [subscriptions.filter(course__room=room).count() for room in rooms]
+
+        writer.writerow(row)
+
+        for offering in offerings:
+            subs = models.Subscribe.objects.accepted().filter(course__offering=offering)
+            row = [offering.name, subs.count()]
+            row += [subs.filter(course__room=room).count() for room in rooms]
+            writer.writerow(row)
+
+        return response
     else:
         return None
 

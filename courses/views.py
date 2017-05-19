@@ -313,8 +313,8 @@ def progress_chart_dict():
                                                     o.name))
         accepted = subscriptions.accepted()
         total_count = accepted.count()
-        couple_count =accepted.filter(matching_state=Subscribe.MatchingState.COUPLE).count()
-        single_count = total_count-couple_count
+        couple_count = accepted.filter(matching_state=Subscribe.MatchingState.COUPLE).count()
+        single_count = total_count - couple_count
 
         series_couple.append(str(couple_count))
         series_single.append(str(single_count))
@@ -468,3 +468,14 @@ class ProfileView(FormView):
     def form_valid(self, form):
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
+
+
+@staff_member_required
+def export_summary(request):
+    from courses import services
+    return services.export_summary('csv')
+
+@staff_member_required
+def export_offering_summary(request, offering_id):
+    from courses import services
+    return services.export_summary('csv', [Offering.objects.filter(pk=offering_id).first()])
