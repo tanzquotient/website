@@ -1,42 +1,56 @@
 import os
 import datetime
-import hashlib
 from django.utils.html import strip_tags
-from django_ical.views import ICalFeed
-from .models import Event
 from django.core.urlresolvers import reverse
-
+from django_ical.views import ICalFeed
+from courses.models import IrregularLesson
+from .models import Event
 
 class EventFeed(ICalFeed):
     # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
     product_id = '-//TQ Website calendar v1.0'
 
     def items(self):
-        return Event.objects.all()
+        events = Event.objects.all()
+        special_courses = IrregularLesson.objects.all()
+        all_events = [obj for obj in events]
+        for course in special_courses:
+            all_events.append(course)
+
+        return all_events
 
     def item_title(self, item):
-        return item.name
+        if isinstance(item, Event):
+            return item.name
+        elif isinstance(item, IrregularLesson):
+            return item.course.name
 
     def item_description(self, item):
-        description = item.name
-        description += os.linesep
-        description += item.description
+        if isinstance(item, Event):
+            description = item.name
+            description += os.linesep
+            description += item.description
 
-        if not item.price_special:
-            if not (item.price_with_legi is None):
-                description += os.linesep
-                description += 'Price with Legi: {}'.format(item.price_with_legi)
-            if not (item.price_without_legi is None):
-                description += os.linesep
-                description += 'Price without Legi: {}'.format(item.price_without_legi)
-        else:
-            description += item.price_special
-        description = strip_tags(description)
+            if not item.price_special:
+                if not (item.price_with_legi is None):
+                    description += os.linesep
+                    description += 'Price with Legi: {}'.format(item.price_with_legi)
+                if not (item.price_without_legi is None):
+                    description += os.linesep
+                    description += 'Price without Legi: {}'.format(item.price_without_legi)
+            else:
+                description += item.price_special
+            description = strip_tags(description)
 
-        description += os.linesep
-        description += 'https://tanzquotient.org/en/events/'
+            description += os.linesep
+            description += 'https://tanzquotient.org/en/events/'
 
-        return description
+            return description
+        elif isinstance(item, IrregularLesson):
+            description = item.course.description
+            description += os.linesep
+            description += 'WARNING: Please note that you have to subscribe in order to attend!'
+            return description
 
     def item_start_datetime(self, item):
         date = item.date
