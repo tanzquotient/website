@@ -1,23 +1,20 @@
 import os
 import datetime
 from django.utils.html import strip_tags
-from django.core.urlresolvers import reverse
 from django_ical.views import ICalFeed
-from courses.models import IrregularLesson
+from courses.models import IrregularLesson, Offering
 from .models import Event
+
 
 class EventFeed(ICalFeed):
     # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
-    product_id = '-//TQ Website calendar v1.0'
+    product_id = '-//TQ Website calendar v1.1'
 
     def items(self):
-        events = Event.objects.all()
-        special_courses = IrregularLesson.objects.all()
-        all_events = [obj for obj in events]
-        for course in special_courses:
-            all_events.append(course)
+        events = list(Event.objects.all())
+        special_courses = list(IrregularLesson.objects.filter(course__offering__type=Offering.Type.IRREGULAR).all())
 
-        return all_events
+        return events + special_courses
 
     def item_title(self, item):
         if isinstance(item, Event):
@@ -29,28 +26,23 @@ class EventFeed(ICalFeed):
         if isinstance(item, Event):
             description = item.name
             description += os.linesep
-            description += item.description
+            description += item.safe_translation_getter("description", any_language=True) or ""
 
-            if not item.price_special:
-                if not (item.price_with_legi is None):
-                    description += os.linesep
-                    description += 'Price with Legi: {}'.format(item.price_with_legi)
-                if not (item.price_without_legi is None):
-                    description += os.linesep
-                    description += 'Price without Legi: {}'.format(item.price_without_legi)
-            else:
-                description += item.price_special
-            description = strip_tags(description)
-
-            description += os.linesep
-            description += 'https://tanzquotient.org/en/events/'
-
-            return description
+            price_string = item.format_prices()
+            if price_string:
+                description += os.linesep
+                description += price_string
         elif isinstance(item, IrregularLesson):
-            description = item.course.description
+            description = 'NOTE: You have to subscribe in order to attend!'
             description += os.linesep
-            description += 'WARNING: Please note that you have to subscribe in order to attend!'
-            return description
+            description += os.linesep
+            description += item.course.safe_translation_getter("description", any_language=True) or ""
+
+        # add link (depending on item type) also to description since some calendar programs do not display link field
+        description += os.linesep
+        description += self.item_link(item)
+
+        return strip_tags(description)
 
     def item_start_datetime(self, item):
         date = item.date
@@ -71,7 +63,12 @@ class EventFeed(ICalFeed):
 
     def item_link(self, item):
         # remember to change this value when the calendar url changes
-        return 'https://tanzquotient.org/en/events/'
+        if isinstance(item, Event):
+            return 'https://tanzquotient.org/en/events/'
+        elif isinstance(item, IrregularLesson):
+            return 'https://tanzquotient.org/en/courses/'
+        else:
+            return 'https://tanzquotient.org/en/'
 
     # must be unique in order to display all events correctly in most calendar programs
     def item_guid(self, item):
