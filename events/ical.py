@@ -36,7 +36,7 @@ class EventFeed(ICalFeed):
             description = 'NOTE: You have to subscribe in order to attend!'
             description += os.linesep
             description += os.linesep
-            description += item.course.safe_translation_getter("description", any_language=True) or ""
+            description += item.course.format_description()
 
         # add link (depending on item type) also to description since some calendar programs do not display link field
         description += os.linesep
