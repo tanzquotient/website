@@ -708,6 +708,11 @@ class Subscribe(models.Model):
 
     get_user_email.short_description = "Email"
 
+    def get_user_mobile(self):
+        return self.user.profile.phone_number
+
+    get_user_mobile.short_description = "Mobile"
+
     def get_user_body_height(self):
         return self.user.profile.body_height
 
