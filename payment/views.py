@@ -353,9 +353,9 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
         context['month_name'] = datetime.date(year=2000, month=int(month), day=1).strftime('%B') if month else None
         payments = payments.all()
         context['payments'] = payments
-        context['total_credit'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])
-        context['total_debit'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])
-        context['total_unknown'] = sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])
+        context['total_credit'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])).replace('.', ',')  # replace function after float formatting to have decimal separator for German numbering format
+        context['total_debit'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])).replace('.', ',')
+        context['total_unknown'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])).replace('.', ',')
 
         # Summary
         total_subscription_payment = payments.filter(
