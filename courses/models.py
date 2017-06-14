@@ -282,7 +282,7 @@ class CourseType(TranslatableModel):
 
 
 class PeriodCancellation(models.Model):
-    course = models.ForeignKey('Period', related_name='cancellations', on_delete=models.CASCADE)
+    period = models.ForeignKey('Period', related_name='cancellations', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=True)
 
     def __str__(self):
