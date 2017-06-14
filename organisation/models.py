@@ -10,7 +10,7 @@ class Function(models.Model):
     name = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
     email = models.EmailField(blank=True, null=True)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='functions')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='functions', on_delete=models.PROTECT)
 
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField("Position", default=0)

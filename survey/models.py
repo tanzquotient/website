@@ -48,7 +48,7 @@ class Survey(TranslatableModel):
 
 class QuestionGroup(TranslatableModel):
     name = models.CharField(max_length=255)
-    survey = models.ForeignKey('Survey', blank=False, null=True, on_delete=models.SET_NULL)
+    survey = models.ForeignKey('Survey', blank=False, null=True, on_delete=models.PROTECT)
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     translations = TranslatedFields(
@@ -93,11 +93,11 @@ class Question(TranslatableModel):
                    (FREE_FORM, 'free form'))
 
     name = models.CharField(max_length=255)
-    question_group = models.ForeignKey('QuestionGroup', blank=False, null=True, on_delete=models.SET_NULL)
+    question_group = models.ForeignKey('QuestionGroup', blank=False, null=True, on_delete=models.PROTECT)
     type = models.CharField(max_length=3,
                             choices=Type.CHOICES,
                             default=Type.FREE_FORM)
-    scale_template = models.ForeignKey('ScaleTemplate', blank=True, null=True, on_delete=models.SET_NULL)
+    scale_template = models.ForeignKey('ScaleTemplate', blank=True, null=True, on_delete=models.PROTECT)
     display = models.BooleanField(default=True)
     display.help_text = "Defines if this question is displayed in survey; set this to false instead of deleting"
     position = models.PositiveSmallIntegerField("Position", default=0)
@@ -200,10 +200,11 @@ class Choice(TranslatableModel):
 
 class SurveyInstance(models.Model):
     survey = models.ForeignKey('Survey', related_name='survey_instances', blank=False,
-                               null=False)
+                               null=False, on_delete=models.PROTECT)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='survey_instances', blank=False,
-                             null=False)
-    course = models.ForeignKey('courses.Course', related_name='survey_instances', blank=True, null=True)
+                             null=False, on_delete=models.PROTECT)
+    course = models.ForeignKey('courses.Course', related_name='survey_instances', blank=True, null=True,
+                               on_delete=models.PROTECT)
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True, auto_now_add=False)
     url_expire_date = models.DateTimeField(blank=True, null=True, auto_now_add=False)
@@ -223,8 +224,8 @@ class SurveyInstance(models.Model):
 class Answer(models.Model):
     survey_instance = models.ForeignKey('SurveyInstance', related_name='answers', blank=False, null=True,
                                         on_delete=models.CASCADE)
-    question = models.ForeignKey('Question', related_name='answers', blank=False, null=True, on_delete=models.SET_NULL)
-    choice = models.ForeignKey('Choice', blank=True, null=True, on_delete=models.SET_NULL)
+    question = models.ForeignKey('Question', related_name='answers', blank=False, null=True, on_delete=models.PROTECT)
+    choice = models.ForeignKey('Choice', blank=True, null=True, on_delete=models.PROTECT)
     text = models.TextField(blank=True, null=True)
 
     @classmethod

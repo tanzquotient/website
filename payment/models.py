@@ -81,8 +81,8 @@ class SubscriptionPayment(models.Model):
     A Subscription Payment is a matched intermediate object.
     It also registers how much of the original amount of the associated payment is actually utilized
     """
-    payment = models.ForeignKey(Payment, related_name='subscription_payments')
-    subscription = models.ForeignKey(Subscribe, related_name='subscription_payments')
+    payment = models.ForeignKey(Payment, related_name='subscription_payments', on_delete=models.PROTECT)
+    subscription = models.ForeignKey(Subscribe, related_name='subscription_payments', on_delete=models.PROTECT)
     amount = models.FloatField()
 
     def balance(self):
@@ -99,13 +99,13 @@ class CoursePayment(models.Model):
     """
     A Course Payment is a matched intermediate object.
     """
-    payment = models.ForeignKey(Payment, related_name='course_payments')
-    course = models.ForeignKey(Course, related_name='course_payments')
+    payment = models.ForeignKey(Payment, related_name='course_payments', on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, related_name='course_payments', on_delete=models.PROTECT)
     amount = models.FloatField()
 
 
 class PaymentReminder(models.Model):
-    subscription = models.ForeignKey(Subscribe, related_name='payment_reminders')
+    subscription = models.ForeignKey(Subscribe, related_name='payment_reminders', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the reminder mail was sent to the subscriber."
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)

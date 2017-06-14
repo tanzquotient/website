@@ -18,8 +18,8 @@ from parler.managers import TranslatableManager
 
 
 class Organise(models.Model):
-    organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising')
-    event = models.ForeignKey('Event', related_name='organising')
+    organiser = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='organising', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='organising', on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} organises {}".format(self.organiser, self.event)
@@ -32,7 +32,7 @@ class Event(TranslatableModel):
     date = models.DateField()
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
-    room = models.ForeignKey(Room, related_name='events', blank=True, null=True, on_delete=models.SET_NULL)
+    room = models.ForeignKey(Room, related_name='events', blank=True, null=True, on_delete=models.PROTECT)
     price_with_legi = models.FloatField(blank=True, null=True)
     price_with_legi.help_text = "Leave this empty for free entrance"
     price_without_legi = models.FloatField(blank=True, null=True)

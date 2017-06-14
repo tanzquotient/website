@@ -20,7 +20,7 @@ class Question(TranslatableModel):
     )
 
     display = models.BooleanField(default=True)
-    question_group = models.ForeignKey('QuestionGroup', related_name='questions')
+    question_group = models.ForeignKey('QuestionGroup', related_name='questions', on_delete=models.PROTECT)
 
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField("Position", default=0)

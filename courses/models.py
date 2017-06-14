@@ -124,7 +124,7 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=1,
                               choices=Gender.CHOICES, blank=False, null=True,
                               default=None)
-    address = models.ForeignKey(Address, blank=True, null=True)
+    address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     student_status = models.CharField(max_length=10,
                                       choices=StudentStatus.CHOICES, blank=False, null=False,
@@ -141,7 +141,7 @@ class UserProfile(models.Model):
     nationality = CountryField(blank=True, null=True)
     residence_permit = models.CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
     ahv_number = models.CharField(max_length=255, blank=True, null=True)
-    bank_account = models.ForeignKey(BankAccount, blank=True, null=True)
+    bank_account = models.ForeignKey(BankAccount, blank=True, null=True, on_delete=models.PROTECT)
 
     # convenience method for model user are added here
     def is_teacher(self):
@@ -175,7 +175,7 @@ class Style(TranslatableModel):
 
 class Room(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    address = models.OneToOneField(Address, blank=True, null=True)
+    address = models.OneToOneField(Address, blank=True, null=True, on_delete=models.PROTECT)
     url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
     contact_info = models.TextField(blank=True, null=True)
@@ -213,7 +213,7 @@ class Period(models.Model):
 
 
 class RegularLesson(models.Model):
-    course = models.ForeignKey('Course', related_name='regular_lessons')
+    course = models.ForeignKey('Course', related_name='regular_lessons', on_delete=models.CASCADE)
     weekday = models.CharField(max_length=3,
                                choices=Weekday.CHOICES,
                                default=None)
@@ -229,7 +229,7 @@ class RegularLesson(models.Model):
 
 
 class RegularLessonCancellation(models.Model):
-    course = models.ForeignKey('Course', related_name='cancellations')
+    course = models.ForeignKey('Course', related_name='cancellations', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=True)
 
     class Meta:
@@ -240,11 +240,11 @@ class RegularLessonCancellation(models.Model):
 
 
 class IrregularLesson(models.Model):
-    course = models.ForeignKey('Course', related_name='irregular_lessons')
+    course = models.ForeignKey('Course', related_name='irregular_lessons', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False)
     time_from = models.TimeField()
     time_to = models.TimeField()
-    room = models.ForeignKey(Room, related_name='irregular_lessons', blank=True, null=True, on_delete=models.SET_NULL)
+    room = models.ForeignKey(Room, related_name='irregular_lessons', blank=True, null=True, on_delete=models.PROTECT)
     room.help_text = "The room for this lesson. If left empty, the course room is assumed."
 
     class Meta:
@@ -260,7 +260,7 @@ class IrregularLesson(models.Model):
 
 class CourseType(TranslatableModel):
     name = models.CharField(max_length=255, unique=True, blank=False)
-    styles = models.ManyToManyField(Style, related_name='course_types', blank=True)
+    styles = models.ManyToManyField(Style, related_name='course_types', blank=True, on_delete=models.CASCADE)
     level = models.IntegerField(default=None, blank=True, null=True)
     couple_course = models.BooleanField(default=True)
 
@@ -282,7 +282,7 @@ class CourseType(TranslatableModel):
 
 
 class PeriodCancellation(models.Model):
-    course = models.ForeignKey('Period', related_name='cancellations')
+    course = models.ForeignKey('Period', related_name='cancellations', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=True)
 
     def __str__(self):
@@ -290,8 +290,8 @@ class PeriodCancellation(models.Model):
 
 
 class CourseSuccession(models.Model):
-    predecessor = models.ForeignKey('Course', related_name="successing_courses_through")
-    successor = models.ForeignKey('Course', related_name="preceding_courses_through")
+    predecessor = models.ForeignKey('Course', related_name="successing_courses_through", on_delete=models.CASCADE)
+    successor = models.ForeignKey('Course', related_name="preceding_courses_through", on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} precedes {}".format(self.predecessor, self.successor)
@@ -300,9 +300,9 @@ class CourseSuccession(models.Model):
 class Course(TranslatableModel):
     name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
-    type = models.ForeignKey(CourseType, related_name='courses', blank=False, null=False)
+    type = models.ForeignKey(CourseType, related_name='courses', blank=False, null=False, on_delete=models.PROTECT)
     type.help_text = "The name of the course type is displayed on the website as the course title ."
-    room = models.ForeignKey(Room, related_name='courses', blank=True, null=True, on_delete=models.SET_NULL)
+    room = models.ForeignKey(Room, related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
     min_subscribers = models.IntegerField(blank=False, null=False, default=6)
     max_subscribers = models.IntegerField(blank=True, null=True)
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
@@ -311,12 +311,12 @@ class Course(TranslatableModel):
     price_special.help_text = "Set this only if you want a different price schema."
     open_class = models.BooleanField(blank=True, null=False, default=False)
     open_class.help_text = "Open classes do not require a subscription or subscription is done via a different channel."
-    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
+    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.PROTECT)
     period.help_text = "You can set a custom period for this course here. If this is left empty, the period from the offering is taken."
     teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses',
                                          through_fields=('course', 'user'))
-    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.SET_NULL)
+    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.PROTECT)
     display = models.BooleanField(default=True)
     display.help_text = "Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed)."
     active = models.BooleanField(default=True)
@@ -664,12 +664,12 @@ class Subscribe(models.Model):
             (MATCHED, 'Matched'),
             (NOT_REQUIRED, 'Not required'))
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions')
-    course = models.ForeignKey(Course, related_name='subscriptions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions', on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, related_name='subscriptions', on_delete=models.PROTECT)
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date/time when the subscription was made."
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
-                                null=True)
+                                null=True, on_delete=models.PROTECT)
     matching_state = models.CharField(max_length=30,
                                       choices=MatchingState.CHOICES, blank=False, null=False,
                                       default=MatchingState.UNKNOWN, db_index=True)
@@ -824,7 +824,7 @@ class Subscribe(models.Model):
 
 
 class Confirmation(models.Model):
-    subscription = models.ForeignKey(Subscribe, related_name='confirmations')
+    subscription = models.ForeignKey(Subscribe, related_name='confirmations', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
@@ -848,7 +848,7 @@ class Rejection(models.Model):
                    (ILLEGITIMATE, 'Users subscription is illegitimate'), (BANNED, 'User is banned'),
                    (COURSE_CANCELLED, 'Course was cancelled'))
 
-    subscription = models.ForeignKey(Subscribe, related_name='rejections')
+    subscription = models.ForeignKey(Subscribe, related_name='rejections', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the rejection mail was sent to the subscriber."
     reason = models.CharField(max_length=30,
@@ -863,7 +863,7 @@ class Rejection(models.Model):
 
 
 class TeacherWelcome(models.Model):
-    teach = models.ForeignKey('Teach', related_name='teacher_welcomes')
+    teach = models.ForeignKey('Teach', related_name='teacher_welcomes', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the welcome mail was sent to the teacher."
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
@@ -882,13 +882,13 @@ def generate_key():
 
 @reversion.register()
 class Voucher(models.Model):
-    purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers')
+    purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers', on_delete=models.PROTECT)
     key = models.CharField(max_length=8, unique=True, default=generate_key)
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
     pdf_file = models.FileField(upload_to='/voucher/', null=True, blank=True)
-    subscription = models.ForeignKey('Subscribe', blank=True, null=True)
+    subscription = models.ForeignKey('Subscribe', blank=True, null=True, on_delete=models.PROTECT)
     subscription.help_text = "subscription that was paid with this voucher"
 
     def mark_as_used(self, user=None, comment="", subscription=None):
@@ -920,8 +920,8 @@ class VoucherPurpose(models.Model):
 
 
 class Teach(models.Model):
-    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching')
-    course = models.ForeignKey('Course', related_name='teaching')
+    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', related_name='teaching', on_delete=models.CASCADE)
     welcomed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -937,7 +937,7 @@ class Offering(models.Model):
         CHOICES = ((REGULAR, 'Regular (weekly)'), (IRREGULAR, 'Irregular (Workshops)'))
 
     name = models.CharField(max_length=30, unique=True, blank=False)
-    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.SET_NULL)
+    period = models.ForeignKey(Period, blank=True, null=True, on_delete=models.PROTECT)
     type = models.CharField(max_length=3,
                             choices=Type.CHOICES,
                             default=Type.REGULAR)
