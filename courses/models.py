@@ -261,7 +261,7 @@ class IrregularLesson(models.Model):
 
 class CourseType(TranslatableModel):
     name = models.CharField(max_length=255, unique=True, blank=False)
-    styles = models.ManyToManyField(Style, related_name='course_types', blank=True, on_delete=models.CASCADE)
+    styles = models.ManyToManyField(Style, related_name='course_types', blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     couple_course = models.BooleanField(default=True)
 
