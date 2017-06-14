@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import models
 
 import datetime
@@ -818,6 +819,12 @@ class Subscribe(models.Model):
         if not self.price_to_pay:
             self.generate_price_to_pay()
         super(Subscribe, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.state != Subscribe.State.NEW:
+            messages.add_message(None, messages.ERROR, 'Cannot delete non-NEW subscription.')
+        else:
+            super(Subscribe, self).delete(*args, **kwargs)
 
     def __str__(self):
         return "{} subscribes to {}".format(self.user.get_full_name(), self.course)
