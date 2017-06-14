@@ -48,7 +48,7 @@ class Event(TranslatableModel):
     image.help_text = "Advertising image for this event."
 
     translations = TranslatedFields(
-        description=HTMLField(blank=True, null=True)
+        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True)
     )
 
     objects = TranslatableManager()

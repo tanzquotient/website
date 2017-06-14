@@ -167,7 +167,7 @@ class Style(TranslatableModel):
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
 
     translations = TranslatedFields(
-        description=HTMLField(blank=True, null=True)
+        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True)
     )
 
     def __str__(self):
@@ -182,8 +182,8 @@ class Room(TranslatableModel):
     contact_info = models.TextField(blank=True, null=True)
 
     translations = TranslatedFields(
-        description=HTMLField(blank=True, null=True),
-        instructions=models.TextField(blank=True, null=True,
+        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True),
+        instructions=models.TextField(verbose_name='[TR] Instructions', blank=True, null=True,
                                       help_text="Instructions to prepare the room (for teachers/staff only)")
     )
 
@@ -266,7 +266,7 @@ class CourseType(TranslatableModel):
     couple_course = models.BooleanField(default=True)
 
     translations = TranslatedFields(
-        description=HTMLField(blank=True, null=True,
+        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True,
                               help_text="This text is added to the description of each course instance.")
     )
 
@@ -329,7 +329,7 @@ class Course(TranslatableModel):
     preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
 
     translations = TranslatedFields(
-        description=HTMLField(blank=True, null=True,
+        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True,
                               help_text="Description specific for this course. (Gets displayed combined with the description of the course style)")
     )
 

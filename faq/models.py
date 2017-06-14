@@ -15,8 +15,8 @@ class QuestionGroup(models.Model):
 
 class Question(TranslatableModel):
     translations = TranslatedFields(
-        question_text=models.TextField(blank=True, null=True),
-        answer_text=models.TextField(blank=True, null=True)
+        question_text=models.TextField(verbose_name='[TR] Question text', blank=True, null=True),
+        answer_text=models.TextField(verbose_name='[TR] Answer text', blank=True, null=True)
     )
 
     display = models.BooleanField(default=True)

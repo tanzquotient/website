@@ -16,7 +16,7 @@ class Survey(TranslatableModel):
     name = models.CharField(max_length=255, blank=False)
 
     translations = TranslatedFields(
-        intro_text=models.TextField(blank=True, null=True),
+        intro_text=models.TextField(verbose_name='[TR] Intro text', blank=True, null=True),
     )
 
     def get_test_url(self):
@@ -52,7 +52,7 @@ class QuestionGroup(TranslatableModel):
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     translations = TranslatedFields(
-        intro_text=models.TextField(blank=True, null=True),
+        intro_text=models.TextField(verbose_name='[TR] Intro text', blank=True, null=True),
     )
 
     class Meta:
@@ -103,8 +103,8 @@ class Question(TranslatableModel):
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     translations = TranslatedFields(
-        text=models.TextField(blank=True, null=True),
-        note=models.TextField(blank=True, null=True),
+        text=models.TextField(verbose_name='[TR] Text', blank=True, null=True),
+        note=models.TextField(verbose_name='[TR] Note', blank=True, null=True),
     )
 
     def scale_label(self, which):
@@ -164,9 +164,9 @@ class Question(TranslatableModel):
 
 class ScaleTemplate(TranslatableModel):
     translations = TranslatedFields(
-        low=models.CharField(max_length=30),
-        mid=models.CharField(max_length=30, blank=True, null=True),
-        up=models.CharField(max_length=30)
+        low=models.CharField(verbose_name='[TR] Text for lower', max_length=30),
+        mid=models.CharField(verbose_name='[TR] Text for mid-level', max_length=30, blank=True, null=True),
+        up=models.CharField(verbose_name='[TR] Text for upper', max_length=30)
     )
 
     def __str__(self):
@@ -178,7 +178,7 @@ class Choice(TranslatableModel):
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     translations = TranslatedFields(
-        label=models.CharField(max_length=255)
+        label=models.CharField(verbose_name='[TR] Label', max_length=255)
     )
 
     def get_question_name(self):
