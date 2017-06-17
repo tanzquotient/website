@@ -215,13 +215,19 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 CKEDITOR_SETTINGS = {
+    'disableNativeSpellChecker': False,
     'language': 'en',
+    'extraPlugins': 'language',
+    'language_list': ['en:English', 'de:Deutsch', 'fr:Français'],
     'toolbar_HTMLField': [
         ['Undo', 'Redo'],
         ['ShowBlocks'],
         ['Format', 'Styles'],
         ['Link', 'Unlink'],
         ['Source', ],
+    ],
+    'toolbar_CMS': [
+        ['language']
     ],
     'skin': 'moono',
 }
