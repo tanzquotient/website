@@ -28,6 +28,8 @@ RUN apk add --no-cache python3-dev
 
 ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
 
-RUN pip3 install --upgrade -r /webapps/tq_website/configurations/python-requirements.txt
+RUN apk add --no-cache --virtual .build-deps build-base && \
+    pip3 install --upgrade -r /webapps/tq_website/configurations/python-requirements.txt && \
+    apk del .build-deps
 
 WORKDIR /webapps/tq_website/
