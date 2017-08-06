@@ -33,7 +33,7 @@ class EventFeed(ICalFeed):
                 description += os.linesep
                 description += price_string
         elif isinstance(item, IrregularLesson):
-            description = 'NOTE: You have to subscribe in order to attend!'
+            description = 'NOTE: You have to register in order to attend!'
             description += os.linesep
             description += os.linesep
             description += item.course.format_description()
