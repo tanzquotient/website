@@ -223,6 +223,12 @@ def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
 export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected courses as XLSX"
 
 
+def export_teacher_payment_information_csv(modeladmin, request, queryset):
+    return services.export_teacher_payment_information(offerings=queryset.all())
+
+export_teacher_payment_information_csv.short_description = "Export teacher payment information as CSV"
+
+
 def mark_voucher_as_used(modeladmin, request, queryset):
     # mark vouchers as used
     for voucher in queryset:

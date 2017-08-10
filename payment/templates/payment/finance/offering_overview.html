@@ -16,7 +16,14 @@
         <h2>{{ offering.name }}
             <small>{{ offering.period|default:'' }}</small>
         </h2>
-        <a href="{% url "payment:offering_finance_detail_view" offering.id %}">(show unpaid subscriptions)</a>
+        <p>
+            {% trans "Download an Excel with summary of teacher payment information here:" %}
+            <a href="{% url "courses:export_offering_salary" offering_id=offering.id %}">DOWNLOAD</a>
+        </p>
+        <p>
+            <a href="{% url "payment:offering_finance_detail_view" offering.id %}">(show unpaid subscriptions)
+        </p>
+        </a>
         <div class="panel panel-default">
             <div class="panel-body">
                 <table class="table">

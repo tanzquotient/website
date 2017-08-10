@@ -1,16 +1,13 @@
+import logging
 import unicodedata
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext as _
+from datetime import date
 
 from django.contrib import messages
-
-from django.contrib.auth.models import User
-import courses.models as models
-
-import logging
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse
-from datetime import date
+from django.utils.translation import ugettext as _
+
+import courses.models as models
 
 log = logging.getLogger('tq')
 
@@ -535,8 +532,6 @@ from io import BytesIO
 
 import openpyxl
 from openpyxl.cell import get_column_letter
-from openpyxl.styles import Alignment
-from openpyxl.styles.fonts import Font
 
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 
@@ -668,7 +663,7 @@ def export_subscriptions(course_ids, export_format):
                     writer = unicodecsv.writer(fileobj, encoding='utf-8')
 
                     writer.writerow(
-                        [u'Given Name', 'Family Name', 'Gender', 'E-mail 1 - Type', 'E-mail 1 - Value',
+                        ['Given Name', 'Family Name', 'Gender', 'E-mail 1 - Type', 'E-mail 1 - Value',
                          'Phone 1 - Type',
                          'Phone 1 - Value'])
                     for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
@@ -710,7 +705,7 @@ def export_summary(export_format='csv', offerings=models.Offering.objects.all())
     offering_ids = [o.pk for o in offerings]
     subscriptions = models.Subscribe.objects.accepted().filter(course__offering__in=offering_ids)
 
-    filename = 'Summary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
+    filename = 'TQ-Room Usage-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
     if export_format == 'csv':
         # Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
@@ -740,7 +735,53 @@ def export_summary(export_format='csv', offerings=models.Offering.objects.all())
         return None
 
 
-from django.db import transaction
+def export_teacher_payment_information(export_format='csv', offerings=models.Offering.objects.all()):
+    """Exports a summary of the given ``offerings`` concerning payment of teachers.
+    
+    Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
+    
+    :param export_format: export format
+    :param offerings: offerings to include in summary
+    :return: response or ``None`` if format not supported
+    """
+    offering_ids = [o.pk for o in offerings]
+    teachs = models.Teach.objects.filter(course__offering__in=offering_ids).all()
+    teachers = {teach.teacher for teach in teachs}
+    teachers = sorted(teachers, key=lambda t: t.last_name)
+
+    filename = 'TQ-Salary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
+    if export_format == 'csv':
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+
+        writer = unicodecsv.writer(response)
+
+        header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
+        header += ['Street', 'PLZ', 'City', 'Country']
+        header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'Bank Account']
+
+        # header += [room.name for room in rooms]
+        writer.writerow(header)
+
+        for user in teachers:
+            row = [user.id, user.first_name, user.last_name, user.profile.gender, user.email,
+                   user.profile.phone_number]
+            if user.profile.address:
+                row += [user.profile.address.street, user.profile.address.plz, user.profile.address.city,
+                        user.profile.address.country]
+            else:
+                row += ["-"] * 4
+            row += [user.profile.birthdate, user.profile.nationality, user.profile.residence_permit,
+                    user.profile.ahv_number, user.profile.bank_account]
+
+            writer.writerow(row)
+
+        return response
+    else:
+        return None
+
+
 from django.apps import apps
 from django.db.models import Model
 from django.contrib.contenttypes.fields import GenericForeignKey

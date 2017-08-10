@@ -1,27 +1,25 @@
-from django.contrib import messages
-from django.db import models
-
 import datetime
-from reversion import revisions as reversion
-
-from django.conf import settings
-
-import django.contrib.auth as auth
-
-from courses import managers
-from django.core.exceptions import ValidationError
-from djangocms_text_ckeditor.fields import HTMLField
-import base36
 import hashlib
-import random, string
-from django.db.models import Q
+import random
+import string
+from collections import OrderedDict
+
+import base36
+import django.contrib.auth as auth
+from django.conf import settings
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.db import models
 from django.db import transaction
-import payment.vouchergenerator
-from courses.emailcenter import send_online_payment_successful
+from django.db.models import Q
+from django_countries.fields import CountryField
+from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from post_office.models import Email
-from django_countries.fields import CountryField
-from collections import OrderedDict
+from reversion import revisions as reversion
+
+from courses import managers
+from courses.emailcenter import send_online_payment_successful
 
 
 class Weekday:
@@ -68,7 +66,7 @@ class Address(models.Model):
         return self.street == a.street and self.plz == a.plz and self.city == a.city
 
     def __str__(self):
-        return "{}, {} {}".format(self.street, self.plz, self.city)
+        return "{}, {} {}, {}".format(self.street, self.plz, self.city, self.country)
 
 
 class BankAccount(models.Model):
@@ -85,7 +83,8 @@ class BankAccount(models.Model):
     objects = managers.BankAccountManager()
 
     def __str__(self):
-        return "{} ({}, {} {}, {})".format(self.iban, self.bank_name, self.bank_zip_code, self.bank_city, self.bank_country)
+        return "{} ({}, {} {}, {})".format(self.iban, self.bank_name, self.bank_zip_code, self.bank_city,
+                                           self.bank_country)
 
 
 class UserProfile(models.Model):
