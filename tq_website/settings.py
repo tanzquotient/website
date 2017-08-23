@@ -226,9 +226,6 @@ CKEDITOR_SETTINGS = {
         ['Link', 'Unlink'],
         ['Source', ],
     ],
-    'toolbar_CMS': [
-        ['language']
-    ],
     'skin': 'moono',
 }
 
