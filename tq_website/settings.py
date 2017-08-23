@@ -214,19 +214,34 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
+toolbar = [
+    ['Undo', 'Redo'],
+    ['cmsplugins', '-', 'ShowBlocks'],
+    ['Format', 'Styles'],
+    ['TextColor', 'BGColor', '-', 'PasteText', 'PasteFromWord'],
+    ['Maximize'],
+    '/',
+    ['Source'],
+    '/',
+    ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+    ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+    ['HorizontalRule'],
+    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Table',],
+    #['Scayt'], # needs further investigation
+]
+
+# useful documentation about CKEditor:
+# https://docs.ckeditor.com/#!/guide/dev_toolbarconcepts
+# complete list of all available toolbar elements:
+# https://ckeditor.com/forums/CKEditor/Complete-list-of-toolbar-items
+# documentation for Django CMS plugin:
+# https://pypi.python.org/pypi/djangocms-text-ckeditor/
 CKEDITOR_SETTINGS = {
     'disableNativeSpellChecker': False,
     'language': 'en',
-    'extraPlugins': 'language',
-    'language_list': ['en:English', 'de:Deutsch', 'fr:Français'],
-    'toolbar_HTMLField': [
-        ['Undo', 'Redo'],
-        ['ShowBlocks'],
-        ['Format', 'Styles'],
-        ['Link', 'Unlink'],
-        ['Source', ],
-    ],
-    'skin': 'moono',
+    'toolbar_CMS': toolbar,
+    'toolbar_HTMLField': toolbar,
+    'skin': 'moono'
 }
 
 ###############################
