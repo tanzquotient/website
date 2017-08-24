@@ -48,3 +48,4 @@ redis==2.10.5
 cryptography==1.7.1
 django-countries==4.4
 django-ical==1.4
+pylint==1.7.2
