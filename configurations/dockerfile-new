@@ -15,6 +15,10 @@ RUN apk add --no-cache zlib jpeg && \
     LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==3.2.0 && \
     apk del .build-deps
 
+# pyreverse: generate UML diagrams in comfortable formats
+RUN apk add --no-cache graphviz && \
+    apk add --no-cache ttf-dejavu
+
 # Cryptography
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual .build-deps \
