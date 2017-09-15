@@ -8,13 +8,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-from django.utils.translation import ugettext_lazy as _
-
+import logging
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-import logging
 import raven
+from django.utils.translation import ugettext_lazy as _
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -226,8 +225,8 @@ toolbar = [
     ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
     ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
     ['HorizontalRule'],
-    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Table',],
-    #['Scayt'], # needs further investigation
+    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Table', ],
+    # ['Scayt'], # needs further investigation
 ]
 
 # useful documentation about CKEditor:
@@ -495,7 +494,7 @@ INTERNAL_IPS = ['127.0.0.1', '192.168.99.100', '192.168.99.1']
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("TQ_DEBUG", False))
+DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
 
 # Configure the email host to send mails from
 EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')
@@ -548,4 +547,3 @@ RAVEN_CONFIG = {
     'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
     'environment': RAVEN_ENVIRONMENT
 }
-
