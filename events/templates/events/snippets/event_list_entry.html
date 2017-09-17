@@ -1,4 +1,8 @@
 {% load thumbnail %}
+{% load i18n %}
+{% trans "Not yet set" as not_yet_known %}
+{% trans "No entry fee" as no_entry_fee %}
+{% trans "Venue not yet set" as venue_not_yet_set %}
 
 {% with event_id=event.id|stringformat:"s" %}
     {% with modal_id="modal_event_xs-"|add:event_id %}
@@ -17,12 +21,12 @@
                 <br/>
                 <small> {{ event.date }}</small>
             </h4>
-            <p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>,
-                {{ event.room|default:"Ort noch unbekannt" }}</p>
+            <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
+                {{ event.room|default:venue_not_yet_set }}</p>
 
-            <p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
+            <p class="list-group-item-text">{{ event.format_prices|default:no_entry_fee }}</p>
             {% if event.format_organisators %}
-                <p class="list-group-item-text">Organisiert von {{ event.format_organisators }}</p>
+                <p class="list-group-item-text">{% trans "Organized by" %} {{ event.format_organisators }}</p>
             {% endif %}
         </a>
         {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}

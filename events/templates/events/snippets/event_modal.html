@@ -1,4 +1,7 @@
 {% load thumbnail %}
+{% load i18n %}
+{% trans "Not yet set" as not_yet_known %}
+{% trans "No entry fee" as no_entry_fee %}
 
 <!-- Modal -->
 <div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="Event" aria-hidden="true">
@@ -11,16 +14,16 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <p class="list-group-item-text"><b>{{ event.format_time|default:"unbekannt" }}</b>,
+                <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
                     {% if event.room %}
                             <a href="{{ event.room.url }}" target="_blank">{{ event.room.name }}</a>
                         {% else %}
-                            Ort noch unbekannt
+                            {% trans "Venue not yet set" %}
                         {% endif %}</p>
 
-                <p class="list-group-item-text">{{ event.format_prices|default:"freier Eintritt" }}</p>
+                <p class="list-group-item-text">{{ event.format_prices|default:no_entry_fee }}</p>
                 {% if event.format_organisators %}
-                    <p class="list-group-item-text">Organisiert von {{ event.format_organisators }}</p>
+                    <p class="list-group-item-text">{% trans "Organized by" %} {{ event.format_organisators }}</p>
                 {% endif %}
                 {% if event.description %}
                     <br/>
@@ -32,7 +35,7 @@
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
     </div>

@@ -1,15 +1,16 @@
 {% load thumbnail %}
-
+{% load i18n %}
+{% trans "No entry fee" as no_entry_fee %}
 <div class="hidden-xs">
     <table class="table">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Datum</th>
-            <th>Zeit</th>
-            <th>Ort</th>
-            <th>Eintritt</th>
-            <th>Organisatoren</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Venue" %}</th>
+            <th>{% trans "Entry Fee" %}</th>
+            <th>{% trans "Organizer" %}</th>
             <th></th>
         </tr>
         </thead>
@@ -43,10 +44,10 @@
                         {% if event.room %}
                             {% include "courses/snippets/room.html" with room=event.room only %}
                         {% else %}
-                            noch unbekannt
+                            {% trans "Venue not yet set" %}
                         {% endif %}
                     </td>
-                    <td>{{ event.format_prices|default:"frei" }}</td>
+                    <td>{{ event.format_prices|default:no_entry_fee }}</td>
                     <td>{{ event.format_organisators }}</td>
                     <td>
                         <!-- Button trigger modal -->

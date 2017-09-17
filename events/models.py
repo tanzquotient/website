@@ -69,9 +69,9 @@ class Event(TranslatableModel):
         if self.time_from and self.time_to:
             return "{}-{}".format(self.time_from.strftime("%H:%M"), self.time_to.strftime("%H:%M"))
         elif self.time_from:
-            return "ab {}".format(self.time_from.strftime("%H:%M"))
+            return _("from") + " {}".format(self.time_from.strftime("%H:%M"))
         else:
-            return "unbekannt"
+            return _("Time not set yet")
 
     format_time.short_description = "Time"
 
