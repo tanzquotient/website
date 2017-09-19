@@ -89,7 +89,7 @@ def update_user(user, user_data):
             userprofile.address.street = user_data['street']
             userprofile.address.plz = user_data['plz']
             userprofile.address.city = user_data['city']
-            userprofile.save()
+            userprofile.address.save()
         else:
             userprofile.address = models.Address.objects.create_from_user_data(user_data)
 
