@@ -1,0 +1,11 @@
+notifications:
+  email:
+    - renato-jun.bellotti@student.ethz.ch
+
+sudo: required
+
+services:
+  - docker
+
+install:
+  - docker-compose build
