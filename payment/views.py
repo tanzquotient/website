@@ -182,9 +182,9 @@ class CoursePaymentIndexView(TemplateView, TeacherOnly):
                     1, day=1), reverse=True)
             nodes = [{'text': c.name, 'href': reverse('payment:coursepayment_detail', kwargs={'course': c.id})} for c in
                      courses]
-            if o.period and o.period.date_from > date.today():
+            if o.period and o.period.date_from and o.period.date_from > date.today():
                 color = "#5bc0de"
-            elif o.period and o.period.date_to < date.today():
+            elif o.period and o.period.date_to and o.period.date_to < date.today():
                 color = "#DDDDDD"
             else:
                 color = "#FFFFFF"
