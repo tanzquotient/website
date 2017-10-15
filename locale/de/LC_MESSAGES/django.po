@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ-Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 20:51+0200\n"
+"POT-Creation-Date: 2017-10-15 09:27+0200\n"
 "PO-Revision-Date: 2016-04-06 12:11+0100\n"
 "Last-Translator: Martin Zellner\n"
 "Language-Team: German (Switzerland)\n"
@@ -149,7 +149,7 @@ msgstr "Ablehnungen"
 
 #: courses/cms_toolbars.py:58
 msgid "Teacher welcomes"
-msgstr ""
+msgstr "Lehrer Willkommensmails"
 
 #: courses/cms_toolbars.py:60
 msgid "Tools"
@@ -162,6 +162,70 @@ msgstr "Doppelte Benutzer zusammenführen"
 #: courses/cms_toolbars.py:64
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
+
+#: courses/forms.py:20
+msgid "Mobile phone number"
+msgstr ""
+
+#: courses/forms.py:21
+msgid ""
+"Your number will be kept private and only given to the teachers for "
+"distributing course related information!"
+msgstr ""
+
+#: courses/forms.py:23
+msgid "Student"
+msgstr "Student"
+
+#: courses/forms.py:25
+msgid "Legi-Number"
+msgstr "Legi-Nummer"
+
+#: courses/forms.py:27
+msgid "Subscribe to our Newsletter (Send about once a month)"
+msgstr "Newsletter abonnieren (Wird etwa einmal pro Monat versendet)"
+
+#: courses/forms.py:29
+msgid ""
+"I would like to join the TQ family or assist from time to time (e.g. events)"
+msgstr ""
+"Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei "
+"Veranstaltungen)"
+
+#: courses/forms.py:31
+msgid "Street"
+msgstr "Strasse"
+
+#: courses/forms.py:33
+msgid "Postcode"
+msgstr "PLZ"
+
+#: courses/forms.py:35
+msgid "City"
+msgstr "Ort"
+
+#: courses/forms.py:67
+msgid "Forename"
+msgstr "Vorname"
+
+#: courses/forms.py:69
+msgid "Surname"
+msgstr "Nachname"
+
+#: courses/forms.py:71
+#: courses/templates/courses/snippets/signup_user_form.html:33
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: courses/forms.py:84 tq_website/cms_toolbars.py:21
+msgid "Email"
+msgstr "E-Mail"
+
+#: courses/forms.py:85
+msgid "Please use a separate email address for yourself and your partner!"
+msgstr ""
+"Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat "
+"an!"
 
 #: courses/services.py:252
 msgid "{} couples matched successfully"
@@ -254,6 +318,41 @@ msgstr ""
 msgid "Merge selected proposals"
 msgstr "Markierte Vorschläge zusammenführen"
 
+#: courses/templates/courses/snippets/address_input.html:5
+#, fuzzy
+#| msgid "Addresses"
+msgid "Address"
+msgstr "Adresse"
+
+#: courses/templates/courses/snippets/signup_user_form.html:5
+#: events/templates/events/snippets/event_modal.html:38
+msgid "Close"
+msgstr "Schliessen"
+
+#: courses/templates/courses/snippets/signup_user_form.html:6
+msgid "Some inputs are not valid."
+msgstr "Einige Eingaben sind ungültig."
+
+#: courses/templates/courses/snippets/signup_user_form.html:11
+#: events/templates/events/snippets/event_list.html:8
+#: payment/templates/payment/counter/details.html:21
+#: payment/templates/payment/course/confirm.html:21
+#: payment/templates/payment/course/course.html:132
+#: payment/templates/payment/finance/offering_detail.html:26
+#: payment/templates/payment/voucher/form.html:18
+#: payment/templates/payment/voucher/payment_failed.html:17
+#: payment/templates/payment/voucher/payment_success.html:17
+msgid "Name"
+msgstr "Name"
+
+#: courses/templates/courses/snippets/signup_user_form.html:38
+msgid "Male"
+msgstr "Männlich"
+
+#: courses/templates/courses/snippets/signup_user_form.html:42
+msgid "Female"
+msgstr "Weiblich"
+
 #: courses/templates/courses/subscription.html:16
 #, python-format
 msgid ""
@@ -266,7 +365,7 @@ msgstr ""
 #: courses/templates/courses/subscription2.html:8
 #: courses/templates/courses/subscription_message.html:7
 msgid "Go back"
-msgstr ""
+msgstr "Zurück"
 
 #: courses/views.py:48
 msgid "Irregular weekday"
@@ -274,7 +373,7 @@ msgstr ""
 
 #: courses/views.py:56
 msgid "Unknown month"
-msgstr ""
+msgstr "Unbekannter Monat"
 
 #: courses/views.py:142
 msgid ""
@@ -306,17 +405,6 @@ msgstr "Keine Events geplant."
 #: events/templates/events/snippets/event_modal.html:4
 msgid "No entry fee"
 msgstr "Freier Eintritt"
-
-#: events/templates/events/snippets/event_list.html:8
-#: payment/templates/payment/counter/details.html:21
-#: payment/templates/payment/course/confirm.html:21
-#: payment/templates/payment/course/course.html:132
-#: payment/templates/payment/finance/offering_detail.html:26
-#: payment/templates/payment/voucher/form.html:18
-#: payment/templates/payment/voucher/payment_failed.html:17
-#: payment/templates/payment/voucher/payment_success.html:17
-msgid "Name"
-msgstr "Name"
 
 #: events/templates/events/snippets/event_list.html:9
 #: payment/templates/payment/finance/account_detail.html:51
@@ -356,10 +444,6 @@ msgstr "Noch nicht festgelegt"
 #: events/templates/events/snippets/event_modal.html:26
 msgid "Organized by"
 msgstr "Organisiert von"
-
-#: events/templates/events/snippets/event_modal.html:38
-msgid "Close"
-msgstr "Schliessen"
 
 #: faq/cms_plugins.py:15
 msgid "FAQ"
@@ -649,31 +733,31 @@ msgstr "Anmeldungen anzeigen"
 #: payment/templates/payment/finance/offering_detail.html:6
 #: payment/templates/payment/finance/offering_overview.html:6
 msgid "Finance"
-msgstr ""
+msgstr "Finanzen"
 
 #: payment/templates/payment/finance/offering_detail.html:31
 msgid "Last reminded"
-msgstr ""
+msgstr "Zuletzt erinnert"
 
 #: payment/templates/payment/finance/offering_detail.html:55
 msgid "Send Reminder"
-msgstr ""
+msgstr "Verschicke Erinnerung"
 
 #: payment/templates/payment/finance/offering_overview.html:20
 msgid "Download an Excel with summary of teacher payment information here:"
-msgstr ""
+msgstr "Exceldatei mit Zusammenfassung der Lehrerdaten hier herunterladen:"
 
 #: payment/templates/payment/finance/offering_overview.html:33
 msgid "Unpaid"
-msgstr ""
+msgstr "Nicht bezahlt"
 
 #: payment/templates/payment/finance/offering_overview.html:35
 msgid "Cash"
-msgstr ""
+msgstr "Barzahlung"
 
 #: payment/templates/payment/finance/offering_overview.html:35
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 #: payment/templates/payment/finance/offering_overview.html:36
 #, fuzzy
@@ -754,11 +838,11 @@ msgstr "wurde erfolgreich als bezahlt markiert."
 
 #: survey/cms_toolbars.py:10
 msgid "Survey"
-msgstr ""
+msgstr "Umfrage"
 
 #: survey/cms_toolbars.py:13
 msgid "Surveys"
-msgstr ""
+msgstr "Umfragen"
 
 #: survey/cms_toolbars.py:16
 #, fuzzy
@@ -774,19 +858,19 @@ msgstr "Anmeldungen"
 
 #: survey/cms_toolbars.py:22
 msgid "Templates for scale questions"
-msgstr ""
+msgstr "Vorlage für Skalafragen"
 
 #: survey/cms_toolbars.py:25
 msgid "Choices"
-msgstr ""
+msgstr "Wahlmöglichkeiten"
 
 #: survey/cms_toolbars.py:31
 msgid "Answers"
-msgstr ""
+msgstr "Antworten"
 
 #: survey/cms_toolbars.py:34
 msgid "Survey Instances"
-msgstr ""
+msgstr "Einzelne Umfragen"
 
 #: survey/templates/survey/survey.html:25
 msgid "Senden"
@@ -794,7 +878,7 @@ msgstr ""
 
 #: survey/templates/survey/survey_done.html:15
 msgid "Successfully sent. Thank you for your time!"
-msgstr ""
+msgstr "Senden erfolgreich. Vielen Dank für deine Zeit!"
 
 #: survey/views.py:86
 msgid ""
@@ -805,15 +889,15 @@ msgstr ""
 
 #: survey/views.py:95
 msgid "This survey was already filled out"
-msgstr ""
+msgstr "Diese Umfrage wurde schon ausgefüllt"
 
 #: survey/views.py:98
 msgid "This survey link has expired"
-msgstr ""
+msgstr "Dieser Umfragenlink ist abgelaufen"
 
 #: survey/views.py:126
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 #: templates/account/base.html:11 templates/account/email.html:5
 #, fuzzy
@@ -836,15 +920,15 @@ msgstr "Adressen"
 
 #: templates/account/email.html:13
 msgid "The following e-mail addresses are associated with your account:"
-msgstr ""
+msgstr "Folgende E-Mail Adressen sind mit deinem Account verknüpft"
 
 #: templates/account/email.html:29
 msgid "Verified"
-msgstr ""
+msgstr "Bestätigt"
 
 #: templates/account/email.html:31
 msgid "Unverified"
-msgstr ""
+msgstr "Unbestätigt"
 
 #: templates/account/email.html:33
 msgid "Primary"
@@ -856,15 +940,15 @@ msgstr ""
 
 #: templates/account/email.html:43
 msgid "Re-send Verification"
-msgstr ""
+msgstr "Bestätigung erneut senden"
 
 #: templates/account/email.html:44
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: templates/account/email.html:51
 msgid "Warning:"
-msgstr ""
+msgstr "Warnung:"
 
 #: templates/account/email.html:51
 msgid ""
@@ -880,12 +964,10 @@ msgstr "E-Mail"
 
 #: templates/account/email.html:86
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr ""
+msgstr "Willst du die ausgewählten E-Mail Adressen wirklich entfernen?"
 
 #: templates/account/login1.html:6 templates/account/login1.html:10
 #: templates/account/login1.html:43
-#, fuzzy
-#| msgid "Signin"
 msgid "Sign In"
 msgstr "Einloggen"
 
@@ -900,7 +982,7 @@ msgstr ""
 
 #: templates/account/login1.html:25
 msgid "or"
-msgstr ""
+msgstr "oder"
 
 #: templates/account/login1.html:32
 #, python-format
@@ -915,23 +997,25 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr "Passwort vergessen?"
 
-#: templates/account/signup.html:5
-#, fuzzy
-#| msgid "Signin"
-msgid "Signup"
-msgstr "Einloggen"
+#: templates/account/signup.html:4 templates/account/signup.html:6
+#: templates/account/signup.html:9 templates/account/signup.html:24
+msgid "Sign up"
+msgstr "Registrieren"
 
-#: templates/account/signup.html:8 templates/account/signup.html:23
-#, fuzzy
-#| msgid "Signin"
-msgid "Sign Up"
-msgstr "Einloggen"
-
-#: templates/account/signup.html:10
+#: templates/account/signup.html:11
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
+"Du hast schon ein Account? Bitte <a href=\"%(login_url)s\">einloggen</a>."
+
+#: templates/basis.html:150
+msgid "https://tanzquotient.org/en/event-calendar/"
+msgstr "https://tanzquotient.org/de/event-calendar/"
+
+#: templates/basis.html:160
+msgid "Please send Website Feedback to"
+msgstr "Feedback zum Webauftritt bitte an"
 
 #: templates/user_menu.html:36
 msgid "View profile"
@@ -948,10 +1032,6 @@ msgstr "Vorstandsposten"
 #: tq_website/cms_toolbars.py:19
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
-
-#: tq_website/cms_toolbars.py:21
-msgid "Email"
-msgstr "E-Mail"
 
 #: tq_website/cms_toolbars.py:24
 msgid "Emails"
