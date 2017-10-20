@@ -67,7 +67,7 @@ msgstr ""
 
 #: courses/admin_actions.py:247
 msgid "URL expire date"
-msgstr ""
+msgstr "URL Ablaufdatum"
 
 #: courses/admin_views.py:19
 msgid "Choose amount"
