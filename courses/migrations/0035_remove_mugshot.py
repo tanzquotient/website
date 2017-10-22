@@ -12,8 +12,8 @@ class Migration(migrations.Migration):
         ('courses', '0034_auto_20160828_2324'),
     ]
 
-    operations = [
-        migrations.RunSQL(
-            r'''ALTER TABLE courses_userprofile DROP COLUMN mugshot;'''
-        ),
-    ]
+    #operations = [
+    #    migrations.RunSQL(
+    #        r'''ALTER TABLE courses_userprofile DROP COLUMN mugshot;'''
+    #    ),
+    #]
