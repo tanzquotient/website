@@ -46,7 +46,7 @@ class Payment(models.Model):
     amount = models.FloatField()
     amount_to_reimburse = models.FloatField(blank=True, default=0)
     currency_code = models.CharField(max_length=3)
-    remittance_user_string = models.CharField(max_length=300)
+    remittance_user_string = models.CharField(max_length=600)
     state = models.CharField(choices=State.CHOICES, max_length=50, default=State.NEW)
     type = models.CharField(verbose_name='type (detected)', choices=Type.CHOICES, max_length=50, default=Type.UNKNOWN,
                             help_text="The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.")
