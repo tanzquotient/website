@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import transaction
 from paramiko.client import SSHClient
 import os
 import re
@@ -149,6 +150,8 @@ class ISO2022Parser:
             log.info('Detected payment: {}'.format(payment))
 
         for payment in payments:
-            payment.save()
+            # make sure only fully correct payments get saved
+            with transaction.atomic():
+                payment.save()
 
         os.rename(filename, filename + '.processed')
