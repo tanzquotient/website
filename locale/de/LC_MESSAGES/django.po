@@ -229,7 +229,7 @@ msgstr ""
 
 #: courses/services.py:252
 msgid "{} couples matched successfully"
-msgstr ""
+msgstr "{} Paare erfolgreich zugeordnet"
 
 #: courses/services.py:271
 msgid "{} subscriptions ({} couples) corrected successfully"
@@ -237,7 +237,7 @@ msgstr ""
 
 #: courses/services.py:296
 msgid "{} couples unmatched successfully"
-msgstr ""
+msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
 #: courses/services.py:299
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
@@ -249,7 +249,7 @@ msgstr ""
 
 #: courses/services.py:328
 msgid "{} couples broken up successfully"
-msgstr ""
+msgstr "{} Paare erfolgreich getrennt"
 
 #: courses/services.py:331
 msgid "{} couples can not be broken up because already CONFIRMED"
@@ -1059,7 +1059,7 @@ msgstr "Nicht-Anmeldungen anzeigen"
 
 #: tq_website/cms_toolbars.py:43 tq_website/cms_toolbars.py:45
 msgid "Files"
-msgstr "Daten"
+msgstr "Dateien"
 
 #: tq_website/settings.py:255 tq_website/settings.py:270
 msgid "Deutsch"
