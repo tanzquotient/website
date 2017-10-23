@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ-Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-15 09:27+0200\n"
+"POT-Creation-Date: 2017-10-23 15:51+0000\n"
 "PO-Revision-Date: 2016-04-06 12:11+0100\n"
 "Last-Translator: Martin Zellner\n"
 "Language-Team: German (Switzerland)\n"
@@ -163,70 +163,6 @@ msgstr "Doppelte Benutzer zusammenführen"
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
-#: courses/forms.py:20
-msgid "Mobile phone number"
-msgstr ""
-
-#: courses/forms.py:21
-msgid ""
-"Your number will be kept private and only given to the teachers for "
-"distributing course related information!"
-msgstr ""
-
-#: courses/forms.py:23
-msgid "Student"
-msgstr "Student"
-
-#: courses/forms.py:25
-msgid "Legi-Number"
-msgstr "Legi-Nummer"
-
-#: courses/forms.py:27
-msgid "Subscribe to our Newsletter (Send about once a month)"
-msgstr "Newsletter abonnieren (Wird etwa einmal pro Monat versendet)"
-
-#: courses/forms.py:29
-msgid ""
-"I would like to join the TQ family or assist from time to time (e.g. events)"
-msgstr ""
-"Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei "
-"Veranstaltungen)"
-
-#: courses/forms.py:31
-msgid "Street"
-msgstr "Strasse"
-
-#: courses/forms.py:33
-msgid "Postcode"
-msgstr "PLZ"
-
-#: courses/forms.py:35
-msgid "City"
-msgstr "Ort"
-
-#: courses/forms.py:67
-msgid "Forename"
-msgstr "Vorname"
-
-#: courses/forms.py:69
-msgid "Surname"
-msgstr "Nachname"
-
-#: courses/forms.py:71
-#: courses/templates/courses/snippets/signup_user_form.html:33
-msgid "Gender"
-msgstr "Geschlecht"
-
-#: courses/forms.py:84 tq_website/cms_toolbars.py:21
-msgid "Email"
-msgstr "E-Mail"
-
-#: courses/forms.py:85
-msgid "Please use a separate email address for yourself and your partner!"
-msgstr ""
-"Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat "
-"an!"
-
 #: courses/services.py:252
 msgid "{} couples matched successfully"
 msgstr "{} Paare erfolgreich zugeordnet"
@@ -318,41 +254,6 @@ msgstr ""
 msgid "Merge selected proposals"
 msgstr "Markierte Vorschläge zusammenführen"
 
-#: courses/templates/courses/snippets/address_input.html:5
-#, fuzzy
-#| msgid "Addresses"
-msgid "Address"
-msgstr "Adresse"
-
-#: courses/templates/courses/snippets/signup_user_form.html:5
-#: events/templates/events/snippets/event_modal.html:38
-msgid "Close"
-msgstr "Schliessen"
-
-#: courses/templates/courses/snippets/signup_user_form.html:6
-msgid "Some inputs are not valid."
-msgstr "Einige Eingaben sind ungültig."
-
-#: courses/templates/courses/snippets/signup_user_form.html:11
-#: events/templates/events/snippets/event_list.html:8
-#: payment/templates/payment/counter/details.html:21
-#: payment/templates/payment/course/confirm.html:21
-#: payment/templates/payment/course/course.html:132
-#: payment/templates/payment/finance/offering_detail.html:26
-#: payment/templates/payment/voucher/form.html:18
-#: payment/templates/payment/voucher/payment_failed.html:17
-#: payment/templates/payment/voucher/payment_success.html:17
-msgid "Name"
-msgstr "Name"
-
-#: courses/templates/courses/snippets/signup_user_form.html:38
-msgid "Male"
-msgstr "Männlich"
-
-#: courses/templates/courses/snippets/signup_user_form.html:42
-msgid "Female"
-msgstr "Weiblich"
-
 #: courses/templates/courses/subscription.html:16
 #, python-format
 msgid ""
@@ -406,6 +307,17 @@ msgstr "Keine Events geplant."
 msgid "No entry fee"
 msgstr "Freier Eintritt"
 
+#: events/templates/events/snippets/event_list.html:8
+#: payment/templates/payment/counter/details.html:21
+#: payment/templates/payment/course/confirm.html:21
+#: payment/templates/payment/course/course.html:132
+#: payment/templates/payment/finance/offering_detail.html:26
+#: payment/templates/payment/voucher/form.html:18
+#: payment/templates/payment/voucher/payment_failed.html:17
+#: payment/templates/payment/voucher/payment_success.html:17
+msgid "Name"
+msgstr "Name"
+
 #: events/templates/events/snippets/event_list.html:9
 #: payment/templates/payment/finance/account_detail.html:51
 msgid "Date"
@@ -444,6 +356,10 @@ msgstr "Noch nicht festgelegt"
 #: events/templates/events/snippets/event_modal.html:26
 msgid "Organized by"
 msgstr "Organisiert von"
+
+#: events/templates/events/snippets/event_modal.html:38
+msgid "Close"
+msgstr "Schliessen"
 
 #: faq/cms_plugins.py:15
 msgid "FAQ"
@@ -997,21 +913,24 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr "Passwort vergessen?"
 
-#: templates/account/signup.html:4 templates/account/signup.html:6
-#: templates/account/signup.html:9 templates/account/signup.html:24
-msgid "Sign up"
+#: templates/account/signup.html:5
+#, fuzzy
+#| msgid "Sign up"
+msgid "Signup"
 msgstr "Registrieren"
 
-#: templates/account/signup.html:11
+#: templates/account/signup.html:8 templates/account/signup.html:23
+#, fuzzy
+#| msgid "Sign up"
+msgid "Sign Up"
+msgstr "Registrieren"
+
+#: templates/account/signup.html:10
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 "Du hast schon ein Account? Bitte <a href=\"%(login_url)s\">einloggen</a>."
-
-#: templates/basis.html:150
-msgid "https://tanzquotient.org/en/event-calendar/"
-msgstr "https://tanzquotient.org/de/event-calendar/"
 
 #: templates/basis.html:160
 msgid "Please send Website Feedback to"
@@ -1032,6 +951,10 @@ msgstr "Vorstandsposten"
 #: tq_website/cms_toolbars.py:19
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
+
+#: tq_website/cms_toolbars.py:21
+msgid "Email"
+msgstr "E-Mail"
 
 #: tq_website/cms_toolbars.py:24
 msgid "Emails"
@@ -1080,6 +1003,59 @@ msgstr "Seiteninhalt"
 #: tq_website/settings.py:303
 msgid "Title"
 msgstr "Titel"
+
+#~ msgid "Student"
+#~ msgstr "Student"
+
+#~ msgid "Legi-Number"
+#~ msgstr "Legi-Nummer"
+
+#~ msgid "Subscribe to our Newsletter (Send about once a month)"
+#~ msgstr "Newsletter abonnieren (Wird etwa einmal pro Monat versendet)"
+
+#~ msgid ""
+#~ "I would like to join the TQ family or assist from time to time (e.g. "
+#~ "events)"
+#~ msgstr ""
+#~ "Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. "
+#~ "bei Veranstaltungen)"
+
+#~ msgid "Street"
+#~ msgstr "Strasse"
+
+#~ msgid "Postcode"
+#~ msgstr "PLZ"
+
+#~ msgid "City"
+#~ msgstr "Ort"
+
+#~ msgid "Forename"
+#~ msgstr "Vorname"
+
+#~ msgid "Surname"
+#~ msgstr "Nachname"
+
+#~ msgid "Gender"
+#~ msgstr "Geschlecht"
+
+#~ msgid "Please use a separate email address for yourself and your partner!"
+#~ msgstr ""
+#~ "Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner "
+#~ "separat an!"
+
+#, fuzzy
+#~| msgid "Addresses"
+#~ msgid "Address"
+#~ msgstr "Adresse"
+
+#~ msgid "Some inputs are not valid."
+#~ msgstr "Einige Eingaben sind ungültig."
+
+#~ msgid "Male"
+#~ msgstr "Männlich"
+
+#~ msgid "Female"
+#~ msgstr "Weiblich"
 
 #~ msgid "Unknown weekday"
 #~ msgstr "Unbekannter Wochentag"
