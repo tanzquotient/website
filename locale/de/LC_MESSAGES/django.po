@@ -39,7 +39,7 @@ msgstr ""
 
 #: courses/admin_actions.py:50
 msgid "Offering to copy into"
-msgstr ""
+msgstr "Angebot zu kopieren in"
 
 #: courses/admin_actions.py:116
 #, fuzzy
@@ -49,7 +49,7 @@ msgstr "Kurs auswählen"
 
 #: courses/admin_actions.py:117
 msgid "Inform subscriber about cancellation"
-msgstr ""
+msgstr "Informiere Abonnent über Stornierung"
 
 #: courses/admin_actions.py:243
 #, fuzzy
@@ -59,11 +59,11 @@ msgstr "Kurs auswählen"
 
 #: courses/admin_actions.py:244
 msgid "Send invitations (without reviewing)?"
-msgstr ""
+msgstr "Einladungen verschicken (ohne Überprüfung)?"
 
 #: courses/admin_actions.py:246
 msgid "Should invitation url expire?"
-msgstr ""
+msgstr "Soll Einladungs-URL ablaufen?"
 
 #: courses/admin_actions.py:247
 msgid "URL expire date"
@@ -71,11 +71,11 @@ msgstr "URL Ablaufdatum"
 
 #: courses/admin_views.py:19
 msgid "Choose amount"
-msgstr ""
+msgstr "Wähle Betrag"
 
 #: courses/admin_views.py:21
 msgid "Set expire date?"
-msgstr ""
+msgstr "Ablaufdatum setzen?"
 
 #: courses/cms_apps.py:7
 msgid "Course Administration"
@@ -169,7 +169,7 @@ msgstr "{} Paare erfolgreich zugeordnet"
 
 #: courses/services.py:271
 msgid "{} subscriptions ({} couples) corrected successfully"
-msgstr ""
+msgstr "{} Einschreibungen ({} Paare) erfolgreich korrigiert"
 
 #: courses/services.py:296
 msgid "{} couples unmatched successfully"
@@ -177,11 +177,11 @@ msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
 #: courses/services.py:299
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
-msgstr ""
+msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT sind"
 
 #: courses/services.py:303
 msgid "{} subscriptions can not be unmatched because invalid matching state"
-msgstr ""
+msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem ungültigen Zustand sind"
 
 #: courses/services.py:328
 msgid "{} couples broken up successfully"
@@ -189,39 +189,39 @@ msgstr "{} Paare erfolgreich getrennt"
 
 #: courses/services.py:331
 msgid "{} couples can not be broken up because already CONFIRMED"
-msgstr ""
+msgstr "{} Paare können nicht getrennt werden, da sie BESTÄTIGT sind"
 
 #: courses/services.py:335
 msgid "{} couples can not be broken up because invalid matching state"
-msgstr ""
+msgstr "{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand sind"
 
 #: courses/services.py:355
 msgid "This subscription has no partner set"
-msgstr ""
+msgstr "Diese Einschreibung hat keinen Partner gesetzt"
 
 #: courses/services.py:381
 msgid "{} subscriptions were not confirmed because no partner set"
-msgstr ""
+msgstr "{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
 
 #: courses/services.py:400
 msgid "{} of {} confirmed successfully"
-msgstr ""
+msgstr "{} von {} erfolgreich bestätigt"
 
 #: courses/services.py:443
 msgid "{} unrejected successfully"
-msgstr ""
+msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
 #: courses/services.py:472
 msgid "{} of {} welcomed successfully"
-msgstr ""
+msgstr "{} von {} erfolgreich begrüsst"
 
 #: courses/services.py:486
 msgid "{} of {} teachers reset successfully"
-msgstr ""
+msgstr "{} von {} Lehrern erfolgreich zurückgesetzt"
 
 #: courses/templates/courses/auth/offering_overview.html:13
 msgid "Download an Excel with summary of this offering here:"
-msgstr ""
+msgstr "Lade eine Zusammenfassung von diesem Angebot in Excel hier herunter:"
 
 #: courses/templates/courses/auth/profile.html:5
 #, fuzzy
@@ -231,7 +231,7 @@ msgstr "Profil ansehen"
 
 #: courses/templates/courses/auth/profile.html:8
 msgid "Profile of"
-msgstr ""
+msgstr "Profil von"
 
 #: courses/templates/courses/auth/profile.html:12
 #, python-format
@@ -239,6 +239,8 @@ msgid ""
 "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 msgstr ""
+"<a href=\"%(account_email)s\">Verwalte deine Mailaddressen <i\n"
+"            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: courses/templates/courses/auth/profile.html:27
 #, fuzzy
@@ -248,7 +250,7 @@ msgstr "Profil ansehen"
 
 #: courses/templates/courses/auth/subscription_overview.html:14
 msgid "Download an Excel with summary of all offerings here:"
-msgstr ""
+msgstr "Lade eine Zusammenfassung aller Angebote in Excel hier herunter:"
 
 #: courses/templates/courses/duplicate_users.html:26
 msgid "Merge selected proposals"
@@ -262,6 +264,10 @@ msgid ""
 "\">logging in</a> first with your email address from your last\n"
 "            subscription."
 msgstr ""
+"Beschleunige deine \n"
+"            Anmeldung mit <a href=\"%(login_url)s?next=%(request_path)s"
+"\">logging in</a> zuerst mit deiner Mailaddresse von deiner letzten\n"
+"            Anmeldung."
 
 #: courses/templates/courses/subscription2.html:8
 #: courses/templates/courses/subscription_message.html:7
@@ -270,7 +276,7 @@ msgstr "Zurück"
 
 #: courses/views.py:48
 msgid "Irregular weekday"
-msgstr ""
+msgstr "Ungültiger Wochentag"
 
 #: courses/views.py:56
 msgid "Unknown month"
@@ -280,6 +286,7 @@ msgstr "Unbekannter Monat"
 msgid ""
 "The session is no longer valid. Please start over with the subscription."
 msgstr ""
+"Session ist nicht länger gültig. Bitte Anmeldung neu starten."
 
 #: events/cms_plugins.py:10 events/cms_toolbars.py:10 events/cms_toolbars.py:13
 msgid "Events"
