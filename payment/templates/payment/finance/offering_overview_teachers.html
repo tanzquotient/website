@@ -18,7 +18,9 @@
         </h2>
 
         <ul class="nav nav-tabs">
-            <li role="presentation"><a href="{% url 'payment:offering_finance_overview_subscribers' offering.id %}">{% trans "Subscriptions" %}</a></li>
+            <li role="presentation"><a
+                    href="{% url 'payment:offering_finance_overview_subscribers' offering.id %}">{% trans "Subscriptions" %}</a>
+            </li>
             <li role="presentation" class="active"><a href="#">{% trans "Teachers" %}</a></li>
         </ul>
 
@@ -32,24 +34,31 @@
                 <table class="table">
                     <thead>
                     <th>{% trans "Course" %}</th>
-                    <th>{% trans "Total" %}</th>
-                    <th>{% trans "Unpaid" %}</th>
-                    <th>Paid</th>
-                    <th>{% trans "Cash" %} / {% trans "Voucher" %} / {% trans "Online" %}
-                        / {% trans "Counter" %}</th>
+                    <th>{% trans "Hourly wage(s)" %}</th>
+                    <th>{% trans "Total hours" %}</th>
+                    <th>{% trans "Total wage(s) (CHF)" %}</th>
                     </thead>
                     <tbody>
                     {% for course in offering.course_set.all %}
-                        {% with course.payment_totals as payment_totals %}
+                        {% with course.get_total_time as total_time %}
                             <tr>
 
                                 <td>{{ course.name }}</td>
-                                <td>{{ payment_totals.to_pay }}</td>
-                                <td>{{ payment_totals.unpaid }}</td>
-                                <td>{{ payment_totals.paid }}</td>
-                                <td>{{ payment_totals.paid_course }} / {{ payment_totals.paid_voucher }}
-                                    / {{ payment_totals.paid_online }} / {{ payment_totals.paid_counter }}</td>
-
+                                <td>
+                                    {% for teach in course.teaching.all %}
+                                        <p>
+                                            {{ teach.teacher.get_full_name }}: {{ teach.hourly_wage }}
+                                        </p>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ total_time }}</td>
+                                <td>
+                                    {% for teach in course.teaching.all %}
+                                        <p>
+                                            {{ teach.teacher.get_full_name }}: {{ teach.get_wage }}
+                                        </p>
+                                    {% endfor %}
+                                </td>
                             </tr>
                         {% endwith %}
                     {% endfor %}

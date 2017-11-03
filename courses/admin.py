@@ -263,7 +263,7 @@ class TeachAdmin(admin.ModelAdmin):
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter,)
     list_display_link = ('id',)
     search_fields = ['teacher__email', 'teacher__first_name', 'teacher__last_name', 'course__name',
-                     'course__type__name']
+                     'course__type__name', 'hourly_wage']
 
 
 @admin.register(Style)

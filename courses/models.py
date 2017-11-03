@@ -142,6 +142,8 @@ class UserProfile(models.Model):
     residence_permit = models.CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
     ahv_number = models.CharField(max_length=255, blank=True, null=True)
     bank_account = models.ForeignKey(BankAccount, blank=True, null=True, on_delete=models.PROTECT)
+    default_hourly_wage = models.FloatField(default=30.0)
+    default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
 
     # convenience method for model user are added here
     def is_teacher(self):
@@ -223,6 +225,17 @@ class RegularLesson(models.Model):
     def get_weekday_number(self):
         return Weekday.NUMBERS[self.weekday]
 
+    def get_total_time(self):
+        period = self.course.get_period()
+        if not period or not period.date_from or not period.date_to:
+            return None  # time cannot be calculated because period is unknown
+
+        daygenerator = (period.date_from + datetime.timedelta(x) for x in
+                        range((period.date_from - period.date_to).days + 1))
+        count = sum(1 for day in daygenerator if day.weekday() == self.weekday)
+        return count * (
+            datetime.datetime.combine(datetime.datetime.today(), self.time_to) - datetime.datetime.combine(datetime.datetime.today(), self.time_from))
+
     def __str__(self):
         return "{}, {}-{}".format(WEEKDAYS_TRANS[self.weekday], self.time_from.strftime("%H:%M"),
                                   self.time_to.strftime("%H:%M"))
@@ -249,6 +262,9 @@ class IrregularLesson(models.Model):
 
     class Meta:
         ordering = ['date', 'time_from']
+
+    def get_total_time(self):
+        return datetime.datetime.combine(self.date, self.time_to) - datetime.datetime.combine(self.date, self.time_from)
 
     def __str__(self):
         s = "{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
@@ -577,6 +593,12 @@ class Course(TranslatableModel):
 
     get_teachers_welcomed.short_description = "Teachers welcomed"
     get_teachers_welcomed.boolean = True
+
+    def get_total_time(self):
+        times = [l.get_total_time() for l in list(self.regular_lessons.all()) + list(self.irregular_lessons.all())]
+        if any(t is None for t in times):
+            return None
+        return sum(t.seconds/3600 for t in times)
 
     # create and stores identical copy of this course
     def copy(self):
@@ -929,6 +951,15 @@ class Teach(models.Model):
     teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', related_name='teaching', on_delete=models.CASCADE)
     welcomed = models.BooleanField(default=False)
+    hourly_wage = models.FloatField(default=30.0)
+    hourly_wage.help_text = "Hourly wage, by default the wage set in the teachers profile is taken."
+
+    def get_wage(self):
+        time = self.course.get_total_time()
+        if not time:
+            return None
+
+        return time * self.hourly_wage
 
     def __str__(self):
         return "{} teaches {}".format(self.teacher, self.course)
