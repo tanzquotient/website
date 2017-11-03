@@ -1,25 +1,24 @@
-from django.http import Http404
-from django.views.generic import TemplateView, FormView, RedirectView, View
-from django.views.generic.edit import ProcessFormView, FormMixin
-from django.http import HttpResponseRedirect
-
-from payment import payment_processor
-from payment.forms import USIForm, VoucherForm, PROG_USI, AccountFinanceIndexForm
-from courses.models import PaymentMethod, Offering, Voucher, Course, Teach
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.utils.translation import ugettext as _
-from django.core.urlresolvers import reverse, reverse_lazy
-from django import forms
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import permission_required, login_required
-from django.core.exceptions import PermissionDenied
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from .services import *
 import json
 from datetime import date
+
+from django import forms
+from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse_lazy
+from django.db.models import Sum
+from django.http import Http404
+from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
+from django.views.generic import TemplateView, FormView, View
+from django.views.generic.edit import ProcessFormView, FormMixin
+
+from courses.models import PaymentMethod, Offering, Voucher, Course, Teach
+from payment import payment_processor
+from payment.forms import USIForm, VoucherForm, PROG_USI, AccountFinanceIndexForm
 from payment.models import Payment
-from django.db.models import F, FloatField, Sum
+from .services import *
 
 log = logging.getLogger('tq')
 
@@ -288,15 +287,28 @@ class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFo
         return super(OfferingFinanceDetailView, self).post(request)
 
 
-class OfferingFinanceOverview(PermissionRequiredMixin, TemplateView):
-    template_name = 'payment/finance/offering_overview.html'
+class OfferingFinanceOverviewSubscribers(PermissionRequiredMixin, TemplateView):
+    template_name = 'payment/finance/offering_overview_subscribers.html'
     permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):
         offering = Offering.objects.get(
             id=kwargs['offering'])
 
-        context = super(OfferingFinanceOverview, self).get_context_data(**kwargs)
+        context = super(OfferingFinanceOverviewSubscribers, self).get_context_data(**kwargs)
+        context['offering'] = offering
+        return context
+
+
+class OfferingFinanceOverviewTeachers(PermissionRequiredMixin, TemplateView):
+    template_name = 'payment/finance/offering_overview_teachers.html'
+    permission_required = 'payment.payment.change'
+
+    def get_context_data(self, **kwargs):
+        offering = Offering.objects.get(
+            id=kwargs['offering'])
+
+        context = super(OfferingFinanceOverviewTeachers, self).get_context_data(**kwargs)
         context['offering'] = offering
         return context
 
@@ -353,9 +365,13 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
         context['month_name'] = datetime.date(year=2000, month=int(month), day=1).strftime('%B') if month else None
         payments = payments.all()
         context['payments'] = payments
-        context['total_credit'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])).replace('.', ',')  # replace function after float formatting to have decimal separator for German numbering format
-        context['total_debit'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])).replace('.', ',')
-        context['total_unknown'] = ('%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])).replace('.', ',')
+        context['total_credit'] = (
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])).replace('.',
+                                                                                                            ',')  # replace function after float formatting to have decimal separator for German numbering format
+        context['total_debit'] = (
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])).replace('.', ',')
+        context['total_unknown'] = (
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])).replace('.', ',')
 
         # Summary
         total_subscription_payment = payments.filter(

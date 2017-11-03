@@ -10,7 +10,7 @@
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{% url 'payment:offering_finance_index_view' %}">Offerings</a></li>
-            <li><a href="{% url 'payment:offering_finance_overview' offering.pk %}">{{ offering.name }}</a></li>
+            <li><a href="{% url 'payment:offering_finance_overview_subscribers' offering.pk %}">{{ offering.name }}</a></li>
             <li class="active">Unpaid Subscriptions</li>
         </ol>
 
