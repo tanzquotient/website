@@ -35,12 +35,14 @@
                     <thead>
                     <th>{% trans "Course" %}</th>
                     <th>{% trans "Hourly wage(s)" %}</th>
+                    <th>{% trans "Regular course hours" %}</th>
+                    <th>{% trans "Irregular course hours" %}</th>
                     <th>{% trans "Total hours" %}</th>
                     <th>{% trans "Total wage(s) (CHF)" %}</th>
                     </thead>
                     <tbody>
                     {% for course in offering.course_set.all %}
-                        {% with course.get_total_time as total_time %}
+                        {% with course.get_total_time as totals %}
                             <tr>
 
                                 <td>{{ course.name }}</td>
@@ -51,12 +53,21 @@
                                         </p>
                                     {% endfor %}
                                 </td>
-                                <td>{{ total_time }}</td>
+                                <td>{{ totals.regular|default_if_none:"unbounded period" }}</td>
+                                <td>{{ totals.irregular|default_if_none:"unbounded period" }}</td>
+                                <td>{{ totals.total|default_if_none:"unbounded period" }}</td>
                                 <td>
                                     {% for teach in course.teaching.all %}
-                                        <p>
-                                            {{ teach.teacher.get_full_name }}: {{ teach.get_wage }}
-                                        </p>
+                                        {% with teach.get_wage as wage %}
+                                            <p>
+                                                {{ teach.teacher.get_full_name }}:
+                                                {% if wage %}
+                                                    {{ wage }}
+                                                {% else %}
+                                                    <i class="fa fa-bolt" aria-hidden="true"></i>
+                                                {% endif %}
+                                            </p>
+                                        {% endwith %}
                                     {% endfor %}
                                 </td>
                             </tr>
