@@ -745,8 +745,8 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
     :return: response or ``None`` if format not supported
     """
     offering_ids = [o.pk for o in offerings]
-    teachs = models.Teach.objects.filter(course__offering__in=offering_ids).all()
-    teachers = {teach.teacher for teach in teachs}
+    teachs = models.Teach.objects.filter(course__offering__in=offering_ids)
+    teachers = {teach.teacher for teach in teachs.all()}
     teachers = sorted(teachers, key=lambda t: t.last_name)
 
     filename = 'TQ-Salary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
@@ -760,6 +760,8 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
         header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
         header += ['Street', 'PLZ', 'City', 'Country']
         header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'Bank Account']
+        for o in offerings:
+            header += ['Wage for ' + o.name]
 
         # header += [room.name for room in rooms]
         writer.writerow(header)
@@ -774,6 +776,15 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
                 row += ["-"] * 4
             row += [user.profile.birthdate, user.profile.nationality, user.profile.residence_permit,
                     user.profile.ahv_number, user.profile.bank_account]
+
+            # wages for each offering separately
+            for o in offerings:
+                offering_teacher_teachs = teachs.filter(course__offering=o, teacher=user).all()
+                log.debug(list(offering_teacher_teachs))
+                wage = 0
+                for teach in offering_teacher_teachs:
+                    wage += teach.get_wage()
+                row.append(wage)
 
             writer.writerow(row)
 
