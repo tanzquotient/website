@@ -353,7 +353,7 @@ def emaillist(modeladmin, request, queryset):
 
     return render(request, 'courses/auth/action_emaillist.html', {
         'form': form,
-        'emails': [s.user.email for s in queryset.all()],
+        'emails': [s.user.email + ';' for s in queryset.all()],
         'message': "Email addresses of selected subscribers (note that selected filters are applied!)"
     })
 
