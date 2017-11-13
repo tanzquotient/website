@@ -94,6 +94,8 @@ class ISO2022Parser:
 
         return data
 
+    # make sure only fully correct payments get saved
+    @django.db.transaction.atomic
     def parse_file(self, filename):
         log.debug("parse file {}".format(filename))
 
@@ -149,9 +151,7 @@ class ISO2022Parser:
             payments.append(payment)
             log.info('Detected payment: {}'.format(payment))
 
-        # make sure only fully correct payments get saved
-        with django.db.transaction.atomic():
-            for payment in payments:
-                payment.save()
+        for payment in payments:
+            payment.save()
 
         os.rename(filename, filename + '.processed')
