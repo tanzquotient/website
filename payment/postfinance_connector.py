@@ -1,5 +1,4 @@
 from django.conf import settings
-import django.db
 from paramiko.client import SSHClient
 import os
 import re
