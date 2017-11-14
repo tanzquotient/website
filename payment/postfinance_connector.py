@@ -95,7 +95,8 @@ class ISO2022Parser:
         return data
 
     # make sure only fully correct payments get saved
-    @django.db.transaction.atomic
+    # TODO: make this work!
+    #@django.db.transaction.atomic
     def parse_file(self, filename):
         log.debug("parse file {}".format(filename))
 
