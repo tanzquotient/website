@@ -1,11 +1,10 @@
 from daterange_filter.filter import DateRangeFilter
 
-from django.contrib import admin
-
-from payment.models import *
-from payment.admin_actions import *
 from courses.filters import *
+from payment.admin_actions import *
 from payment.filters import *
+from payment.models import *
+
 
 class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
@@ -16,7 +15,7 @@ class SubscriptionPaymentInline(admin.TabularInline):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'state', 'type', 'credit_debit', 'name', 'date', 'address', 'transaction_id', 'amount',
+    list_display = ['id', 'state', 'type', 'credit_debit', 'name', 'date', 'amount',
                     'amount_to_reimburse',
                     'currency_code', 'remittance_user_string', 'subscription_payments_amount_sum', 'list_subscriptions']
     list_filter = ['state', 'type', 'credit_debit', ('date', DateRangeFilter)]
@@ -25,6 +24,8 @@ class PaymentAdmin(admin.ModelAdmin):
 
     inlines = [SubscriptionPaymentInline]
     actions = [process_payments, check_balance, mark_payment_as_irrelevant, mark_payment_as_course_payment]
+    readonly_fields = ('credit_debit', 'name', 'date', 'address', 'transaction_id', 'amount', 'amount_to_reimburse',
+                       'currency_code', 'remittance_user_string', 'filename', 'iban', 'bic')
 
 
 @admin.register(SubscriptionPayment)
