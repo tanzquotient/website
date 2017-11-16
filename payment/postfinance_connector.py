@@ -50,10 +50,13 @@ def find_fds_files(processed=False):
 class ISO2022Parser:
     @staticmethod
     def parse(reparse=False, dry_run=False):
+        count = 0
         for filename in find_fds_files(processed=reparse):
             payments = ISO2022Parser.parse_file(filename)
+            count += len(payments)
             if not dry_run:
                 ISO2022Parser.save_payments(filename, payments)
+        return count
 
     @staticmethod
     def parse_user_string(string):
