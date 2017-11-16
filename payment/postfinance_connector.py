@@ -1,8 +1,10 @@
-from django.conf import settings
-from paramiko.client import SSHClient
+import logging
 import os
 import re
-import logging
+
+from django.conf import settings
+from django.db import DatabaseError
+from paramiko.client import SSHClient
 
 log = logging.getLogger('payment')
 
@@ -39,21 +41,22 @@ from datetime import datetime
 
 def find_fds_files(processed=False):
     fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-    log.debug("parse")
+    log.debug("find fds files under '{}'".format(fds_data_path))
     for file in os.listdir(fds_data_path):
         if ('.xml' in file) and (('processed' in file) == processed):
             yield os.path.join(fds_data_path, file)
 
 
 class ISO2022Parser:
-    def __init__(self):
-        pass
+    @staticmethod
+    def parse(reparse=False, dry_run=False):
+        for filename in find_fds_files(processed=reparse):
+            payments = ISO2022Parser.parse_file(filename)
+            if not dry_run:
+                ISO2022Parser.save_payments(filename, payments)
 
-    def parse(self):
-        for filepath in find_fds_files():
-            self.parse_file(filepath)
-
-    def parse_user_string(self, string):
+    @staticmethod
+    def parse_user_string(string):
         data = {'account_nr': "",
                 'name': "",
                 'street': "",
@@ -93,9 +96,9 @@ class ISO2022Parser:
 
         return data
 
-
-    def parse_file(self, filename):
-        log.debug("parse file {}".format(filename))
+    @staticmethod
+    def parse_file(filename):
+        log.info("parse file {}".format(filename))
 
         tree = ET.parse(filename)
         root = tree.getroot()
@@ -108,7 +111,18 @@ class ISO2022Parser:
             return e.text if e is not None else ""
 
         for transaction in root.findall(".//pf:Ntry", ns):
-            log.debug("Processing Payment...")
+            # check if transaction id is valid transaction exists already -> skip
+            transaction_id = find_or_empty(transaction, 'AcctSvcrRef')
+            only_zero_regex = re.compile(r"0*")
+            if only_zero_regex.match(transaction_id):
+                log.error("A transaction of file {} has an invalid transaction ID".format(filename))
+                continue
+            log.info("processing transaction {}".format(transaction_id))
+            payments_count = Payment.objects.filter(transaction_id=transaction_id).count()
+            if payments_count > 0:
+                log.warning(
+                    "transaction {} in file {} already exists in database".format(transaction_id, filename))
+                continue
 
             payment = Payment()
 
@@ -117,7 +131,7 @@ class ISO2022Parser:
             payment.iban = find_or_empty(transaction, 'DbtrAcct')
 
             # unique reference number by postfinance
-            payment.transaction_id = find_or_empty(transaction, 'AcctSvcrRef')
+            payment.transaction_id = transaction_id
             payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
             payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
 
@@ -133,7 +147,7 @@ class ISO2022Parser:
             # remittance user string
             payment.remittance_user_string = find_or_empty(transaction, 'AddtlNtryInf')
 
-            user_data = self.parse_user_string(payment.remittance_user_string)
+            user_data = ISO2022Parser.parse_user_string(payment.remittance_user_string)
             if user_data is not None:
                 payment.name = user_data['name']
                 payment.address = "{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
@@ -149,7 +163,16 @@ class ISO2022Parser:
             payments.append(payment)
             log.info('Detected payment: {}'.format(payment))
 
-        for payment in payments:
-            payment.save()
+        return payments
 
+    @staticmethod
+    def save_payments(filename, payments):
+        for payment in payments:
+            try:
+                payment.save()
+            except DatabaseError as e:
+                log.error(str(e))
+
+        # even if there was an error, we rename the file to ensure it is not again and again reprocessed,
+        # throwing errors
         os.rename(filename, filename + '.processed')
