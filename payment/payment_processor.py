@@ -1,12 +1,14 @@
-from payment.models import Payment, SubscriptionPayment, CoursePayment
-from courses.models import Subscribe, PaymentMethod, Course
-import re
 import logging
+import re
+
+from courses.models import Subscribe, PaymentMethod
+from payment.models import Payment, SubscriptionPayment
 
 log = logging.getLogger('payment')
 
 USI_PREFIX = "USI-"
-RE_USI_STRICT = re.compile(r"[USIusi]{3,3}-(?P<usi>[a-zA-Z0-9]{6,6})")
+# also accept USL since I is often typed as L
+RE_USI_STRICT = re.compile(r"[USILusil]{3,3}[\- _](?P<usi>[a-zA-Z0-9]{6,6})")
 
 
 class PaymentProcessor:
@@ -28,12 +30,17 @@ class PaymentProcessor:
         for payment in new_payments:
             if payment.remittance_user_string:
                 matches = RE_USI_STRICT.findall(payment.remittance_user_string)
+
+                # if no matches, try removing all spaces first
+                if not matches:
+                    matches = RE_USI_STRICT.findall(payment.remittance_user_string.replace(" ", ""))
+
                 if matches:
                     payment.type = Payment.Type.SUBSCRIPTION_PAYMENT
                     payment.save()
 
                     for usi in matches:
-                        subscription_query = Subscribe.objects.filter(usi=usi)
+                        subscription_query = Subscribe.objects.filter(usi=usi, state=Subscribe.State.CONFIRMED)
                         if subscription_query.count() == 1:
                             matched_subscription = subscription_query.first()
 
@@ -104,6 +111,7 @@ class PaymentProcessor:
 
             if remaining_amount == 0:
                 payment.state = Payment.State.MATCHED
+                payment.amount_to_reimburse = 0
                 payment.save()
                 return True
             elif remaining_amount > 0:
