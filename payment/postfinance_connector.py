@@ -115,7 +115,7 @@ class ISO2022Parser:
             transaction_id = find_or_empty(transaction, 'AcctSvcrRef')
             only_zero_regex = re.compile(r"0*")
             if only_zero_regex.match(transaction_id):
-                log.error("A transaction of file {} has an invalid transaction ID".format(filename))
+                log.warning("A transaction of file {} has an invalid transaction ID: {}".format(filename, transaction_id))
                 continue
             log.info("processing transaction {}".format(transaction_id))
             payments_count = Payment.objects.filter(transaction_id=transaction_id).count()
