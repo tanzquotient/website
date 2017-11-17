@@ -14,6 +14,11 @@
             {% trans "Download an Excel with summary of all offerings here:" %}
             <a href="{% url "courses:export_summary" %}">DOWNLOAD</a>
         </p>
+        
+        <h2>Subscriptions by universities</h2>
+        
+        <p>{% include "courses/auth/student_university_chart.html" with chart=university_chart only %}</p>
+        
 
         <h2>Overall Progress</h2>
 
