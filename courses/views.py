@@ -383,36 +383,18 @@ def subscription_overview(request):
     for o in services.get_offerings_to_display(request):
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
     
-    #university_charts = []
-    ETH_count = 0
-    UZH_count = 0
-    PH_count = 0
-    other_count = 0
-    no_count = 0
-    total_count = 0
-    for course in Subscribe.objects.all():
-        status = course.get_user_student_status()
-        if status == UserProfile.StudentStatus.ETH:
-            ETH_count += 1
-        elif status == UserProfile.StudentStatus.UNI:
-            UZH_count += 1
-        elif status == UserProfile.StudentStatus.PH:
-            PH_count += 1
-        elif status == UserProfile.StudentStatus.OTHER:
-            other_count += 1
-        elif status == UserProfile.StudentStatus.NO:
-            no_count += 1
-        else:
-            other_count += 1
-        
-        total_count += 1
+    ETH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.ETH))
+    UZH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.UNI))
+    PH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.PH))
+    other_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.OTHER))
+    no_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.NO))
     
     university_chart = {
         'ETH_count': ETH_count,
         'UZH_count': UZH_count,
         'PH_count': PH_count,
+        'no_count': no_count,
         'other_count': other_count,
-        'total_count': total_count
     }
 
     context.update({
