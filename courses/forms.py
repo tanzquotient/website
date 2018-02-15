@@ -79,6 +79,8 @@ class UserForm(CustomSignupForm):
     experience.label = 'Erfahrung'
     comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
     comment.label = 'Kommentar'
+    general_terms = forms.BooleanField(required=True)
+    general_terms.label = 'Ich habe die AGB gelesen und verstanden.'
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
