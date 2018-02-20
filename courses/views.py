@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import dateformat
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
+from django.utils.html import escape
 from django.views.generic.edit import FormView
 
 from . import services
@@ -269,7 +270,7 @@ def offering_place_chart_dict(offering):
         # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
-                                                    course.name))
+                                                    escape(course.name)))
         accepted_count = subscriptions.accepted().count()
         series_confirmed.append(str(accepted_count))
         mc = subscriptions.new().men().count()
@@ -301,7 +302,7 @@ def progress_chart_dict():
     for o in Offering.objects.filter(type=Offering.Type.REGULAR).all():
         subscriptions = Subscribe.objects.filter(course__offering=o)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
-                                                    o.name))
+                                                    escape(o.name)))
         accepted = subscriptions.accepted()
         total_count = accepted.count()
         couple_count = accepted.filter(matching_state=Subscribe.MatchingState.COUPLE).count()
