@@ -981,7 +981,7 @@ class Teach(models.Model):
     def save(self, *args, **kwargs):
         if self.hourly_wage is None:
             self.hourly_wage = self.teacher.profile.default_hourly_wage
-        super(Teach, self).save(self, *args, **kwargs)
+        super(Teach, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{} teaches {}".format(self.teacher, self.course)
