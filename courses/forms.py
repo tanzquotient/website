@@ -80,7 +80,7 @@ class UserForm(CustomSignupForm):
     comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
     comment.label = 'Kommentar'
     general_terms = forms.BooleanField(required=True)
-    general_terms.label = 'Ich habe die AGB gelesen und verstanden.'
+    general_terms.label = 'I accept that the enrollment is binding.'
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()
