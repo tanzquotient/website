@@ -21,7 +21,7 @@ def newsletter_list(request, newsletter=True):
     context = {}
 
     context.update({
-        'users': auth.models.User.objects.filter(profile__newsletter=newsletter).all()
+        'users': auth.models.User.objects.filter(is_active=1, profile__newsletter=newsletter).all()
     })
     return render(request, template_name, context)
 
