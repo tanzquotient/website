@@ -2,42 +2,14 @@
 {% load i18n %}
 
 {% block user_form %}
-    {% if course.type.couple_course %}
-        <h3>Anmeldung der {{ person }}. Person</h3>
-    {% else %}
-        <h3>Anmeldung
-            <small>(erfolgt einzeln für diesen Kurs)</small>
-        </h3>
-    {% endif %}
-
-    {% if not user.is_authenticated %}
-        {% url 'account_login' as login_url %}
-        {% with request.path as request_path %}
-        <div class="alert alert-info"><i class="fa fa-lightbulb-o fa-lg"></i> {% blocktrans %}You can speed up
-            subscription by <a href="{{ login_url }}?next={{ request_path }}">logging in</a> first with your email address from your last
-            subscription.{% endblocktrans %}</div>
-        {% endwith %}
-    {% endif %}
-
     <form class="form-horizontal" role="form" action="{% url 'courses:subscription' course.id %}" method="post">
         {% csrf_token %}
 
-        {% include "courses/snippets/user_form.html" with form=form only %}
+        {{ form }}
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                {% if course.type.couple_course %}
-                    <button type="submit" class="btn btn-default" name="subscribe_partner" value="Subscribe a partner">
-                        Mit
-                        Partner anmelden
-                    </button>
-                    <button type="submit" class="btn btn-default" name="subscribe_alone" value="Subscribe alone">Ohne
-                        Partner anmelden
-                    </button>
-                {% else %}
-                    <button type="submit" class="btn btn-default" name="subscribe_alone" value="Subscribe alone">
-                        Anmelden
-                    </button>
-                {% endif %}
+                <button type="submit" class="btn btn-default" name="subscribe" value="subscribe">
+                    Anmelden
+                </button>
             </div>
         </div>
     </form>

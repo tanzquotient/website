@@ -156,31 +156,34 @@ def clean_username(name):
     return re.sub('[^0-9a-zA-Z+-.@_]+', '', name)
 
 
-def subscribe(course_id, user1_data, user2_data=None):
+def subscribe(course_id, data):
     res = dict()
 
     course = models.Course.objects.get(id=course_id)
-    user1 = get_or_create_user(user1_data)
-    if user2_data:
-        user2 = get_or_create_user(user2_data)
-    else:
-        user2 = None
+    user1 = models.UserProfile.objects.filter(user__id=data['user_id1'])
+    assert user1.count() == 1
+    user1 = user1[0]
+    user2 = None
+    if 'user_id2' in data:
+        user2 = models.UserProfile.objects.filter(user__id=data['user_id2'])
+        assert user2.count() == 1
+        user2 = user2[0]
 
     if user1 == user2:
         res['tag'] = 'danger'
         res['text'] = 'Du kannst dich nicht mit dir selbst anmelden!'
-    elif models.Subscribe.objects.filter(user=user1, course__id=course_id).count() > 0:
+    elif models.Subscribe.objects.filter(user=user1.user, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
-        res['text'] = 'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.first_name)
-        res['long_text'] = 'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
-    elif user2 is not None and models.Subscribe.objects.filter(user=user2, course__id=course_id).count() > 0:
+        res['text'] = 'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.user.first_name)
+        res['long_text'] = 'Wenn du einen Fehler bei der Anmeldung gemacht hast, wende dich an anmeldungen@tq.vseth.ch'
+    elif user2 is not None and models.Subscribe.objects.filter(user=user2.user, course__id=course_id).count() > 0:
         res['tag'] = 'danger'
-        res['text'] = 'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.first_name)
-        res['long_text'] = 'Wenn du ein Fehler bei der Anmeldung gemacht hast, wende dich an tanzen@tq.vseth.ch'
+        res['text'] = 'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.user.first_name)
+        res['long_text'] = 'Wenn du einen Fehler bei der Anmeldung gemacht hast, wende dich an anmeldungen@tq.vseth.ch'
     else:
-        subscription = models.Subscribe(user=user1, course=course, partner=user2,
-                                        experience=user1_data['experience'],
-                                        comment=user1_data['comment'])
+        subscription = models.Subscribe(user=user1.user, course=course, partner=user2.user,
+                                        experience=data['experience'],
+                                        comment=data['comment'])
         subscription.derive_matching_state()
         subscription.save()
         send_subscription_confirmation(subscription)
@@ -189,8 +192,8 @@ def subscribe(course_id, user1_data, user2_data=None):
             subscription.matching_state = models.Subscribe.MatchingState.COUPLE
             subscription.save()
 
-            subscription2 = models.Subscribe(user=user2, course=course, partner=user1,
-                                             experience=user2_data['experience'], comment=user2_data['comment'])
+            subscription2 = models.Subscribe(user=user2.user, course=course, partner=user1.user,
+                                             experience=data['experience'], comment=data['comment'])
             subscription2.matching_state = models.Subscribe.MatchingState.COUPLE
             subscription2.save()
             send_subscription_confirmation(subscription2)

@@ -66,61 +66,25 @@ class CustomSignupForm(UserEditForm):
         update_user(user, self.cleaned_data)
 
 
-class UserForm(CustomSignupForm):
-    email = forms.EmailField(max_length=75)
-    email.label = 'E-Mail'
-    email.help_text = 'Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat an!'
-    email_repetition = forms.EmailField(max_length=75)
-    email_repetition.label = 'E-Mail Wiederholung'
-    body_height = forms.IntegerField(max_value=400, required=False)
-    body_height.label = 'Körpergrösse (cm)'
-    body_height.help_text = 'Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum finden eines ähnlich grossen Partners.'
+class SingleSubscriptionForm(forms.Form):
     experience = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
     experience.label = 'Erfahrung'
     comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
     comment.label = 'Kommentar'
+    
     general_terms = forms.BooleanField(required=True)
-    general_terms.label = 'I accept that the enrollment is binding.'
+    general_terms.label = 'I/We accept that the enrollment is binding.'
+        
 
-    def clean(self):
-        cleaned_data = super(UserForm, self).clean()
-        email = cleaned_data.get("email")
-        email_repetition = cleaned_data.get("email_repetition")
-
-        if email != email_repetition:
-            msg = "Email-Adressen sind nicht gleich."
-            self.add_error('email_repetition', msg)
-            raise forms.ValidationError(msg)
-
-        return cleaned_data
-
-
-def create_initial_from_user(user, initial={}):
-    initial['first_name'] = user.first_name
-    initial['last_name'] = user.last_name
-    initial['gender'] = user.profile.gender
-    initial['phone_number'] = user.profile.phone_number
-    initial['student_status'] = user.profile.student_status
-    initial['legi'] = user.profile.legi
-    initial['newsletter'] = user.profile.newsletter
-    initial['get_involved'] = user.profile.get_involved
-    if user.profile.address:
-        initial['street'] = user.profile.address.street
-        initial['plz'] = user.profile.address.plz
-        initial['city'] = user.profile.address.city
-    initial['email'] = user.email
-    initial['email_repetition'] = user.email
-    initial['body_height'] = user.profile.body_height
-
-    initial['birthdate'] = user.profile.birthdate
-    initial['nationality'] = user.profile.nationality
-    initial['residence_permit'] = user.profile.residence_permit
-    initial['ahv_number'] = user.profile.ahv_number
-    if user.profile.bank_account:
-        initial['iban'] = user.profile.bank_account.iban
-        initial['bank_name'] = user.profile.bank_account.bank_name
-        initial['bank_zip_code'] = user.profile.bank_account.bank_zip_code
-        initial['bank_city'] = user.profile.bank_account.bank_city
-        initial['bank_country'] = user.profile.bank_account.bank_country
-
-    return initial
+class CoupleSubscriptionForm(SingleSubscriptionForm):
+    # helper function that checks if the email address belongs to a user
+    def validate_user_email(email):
+        # an empty address is ok
+        if not email:
+            return
+        users = UserProfile.objects.filter(user__email=email)
+        # the email does not belong to a valid user account
+        if len(users) != 1:
+            raise forms.ValidationError('There is no user for the email address you entered for your partner!')
+    
+    partner_email = forms.EmailField(required=False, validators=[validate_user_email])        
