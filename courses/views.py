@@ -90,7 +90,7 @@ def course_list(request, force_preview=False):
 def course_list_preview(request):
     return course_list(request, force_preview=True)
 
-
+@login_required
 def subscription(request, course_id):
     from .forms import UserForm, create_initial_from_user
     template_name = "courses/subscription.html"
