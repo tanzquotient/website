@@ -67,9 +67,10 @@ class CustomSignupForm(UserEditForm):
 
 
 class SingleSubscriptionForm(forms.Form):
-    experience = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
+    textarea_attribs = {'rows': '4', 'cols': '80'}
+    experience = forms.CharField(widget=forms.Textarea(textarea_attribs), max_length=1000, required=False)
     experience.label = 'Erfahrung'
-    comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
+    comment = forms.CharField(widget=forms.Textarea(textarea_attribs), max_length=1000, required=False)
     comment.label = 'Kommentar'
     
     general_terms = forms.BooleanField(required=True)

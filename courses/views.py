@@ -1,6 +1,5 @@
 import logging
 
-from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -117,10 +116,8 @@ def subscription(request, course_id):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         
-        messages.debug(request, 'before is_valid')
         # check whether it's valid:
         if form.is_valid():
-            messages.debug(request, 'after is_valid')
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
