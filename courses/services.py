@@ -181,7 +181,12 @@ def subscribe(course_id, data):
         res['text'] = 'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.user.first_name)
         res['long_text'] = 'Wenn du einen Fehler bei der Anmeldung gemacht hast, wende dich an anmeldungen@tq.vseth.ch'
     else:
-        subscription = models.Subscribe(user=user1.user, course=course, partner=user2.user,
+        if user2:
+            subscription = models.Subscribe(user=user1.user, course=course, partner=user2.user,
+                                        experience=data['experience'],
+                                        comment=data['comment'])
+        else:
+            subscription = models.Subscribe(user=user1.user, course=course,
                                         experience=data['experience'],
                                         comment=data['comment'])
         subscription.derive_matching_state()
