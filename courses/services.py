@@ -234,7 +234,7 @@ def match_partners(subscriptions, request=None):
     courses = subscriptions.values_list('course', flat=True)
     match_count = 0
     for course_id in courses:
-        single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(state=models.Subscribe.state.REJECTED)
+        single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(state=models.Subscribe.State.REJECTED)
         sm = single.filter(user__profile__gender=models.UserProfile.Gender.MEN).order_by('date').all()
         sw = single.filter(user__profile__gender=models.UserProfile.Gender.WOMAN).order_by('date').all()
         c = min(sm.count(), sw.count())
