@@ -590,6 +590,20 @@ def export_subscriptions(course_ids, export_format):
         course_id = course_ids[0]
         course_name = models.Course.objects.get(id=course_id).name
         filename = 'Kursteilnehmer-{}'.format(course_name)
+        
+        # convert unwanted characters
+        mappings = {
+            'ü': 'ue',
+            'Ü': 'Ue',
+            'ä': 'ae',
+            'Ä': 'Ae',
+            'ö': 'oe',
+            'Ö': 'Oe',
+            ' ': '_',
+        }
+        for old, new in mappings.items():
+            filename = filename.replace(old, new)
+
         if export_format == 'csv':
             # Create the HttpResponse object with the appropriate CSV header.
             response = HttpResponse(content_type='text/csv')
