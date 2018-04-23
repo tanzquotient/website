@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ-Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-23 15:51+0000\n"
+"POT-Creation-Date: 2018-04-23 21:12+0200\n"
 "PO-Revision-Date: 2016-04-06 12:11+0100\n"
 "Last-Translator: Martin Zellner\n"
 "Language-Team: German (Switzerland)\n"
@@ -112,6 +112,8 @@ msgid "All Courses"
 msgstr "Kurse"
 
 #: courses/cms_toolbars.py:23
+#: payment/templates/payment/finance/offering_overview_subscribers.html:21
+#: payment/templates/payment/finance/offering_overview_teachers.html:22
 msgid "Subscriptions"
 msgstr "Anmeldungen"
 
@@ -163,6 +165,10 @@ msgstr "Doppelte Benutzer zusammenführen"
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
+#: courses/forms.py:16
+msgid "Telephone number (Mobile)"
+msgstr "Telefonnummer (Mobil)"
+
 #: courses/services.py:252
 msgid "{} couples matched successfully"
 msgstr "{} Paare erfolgreich zugeordnet"
@@ -177,11 +183,15 @@ msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
 #: courses/services.py:299
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
-msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT sind"
+msgstr ""
+"{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT "
+"sind"
 
 #: courses/services.py:303
 msgid "{} subscriptions can not be unmatched because invalid matching state"
-msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem ungültigen Zustand sind"
+msgstr ""
+"{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem "
+"ungültigen Zustand sind"
 
 #: courses/services.py:328
 msgid "{} couples broken up successfully"
@@ -193,7 +203,9 @@ msgstr "{} Paare können nicht getrennt werden, da sie BESTÄTIGT sind"
 
 #: courses/services.py:335
 msgid "{} couples can not be broken up because invalid matching state"
-msgstr "{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand sind"
+msgstr ""
+"{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand "
+"sind"
 
 #: courses/services.py:355
 msgid "This subscription has no partner set"
@@ -201,7 +213,8 @@ msgstr "Diese Einschreibung hat keinen Partner gesetzt"
 
 #: courses/services.py:381
 msgid "{} subscriptions were not confirmed because no partner set"
-msgstr "{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
+msgstr ""
+"{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
 
 #: courses/services.py:400
 msgid "{} of {} confirmed successfully"
@@ -274,19 +287,18 @@ msgstr ""
 msgid "Go back"
 msgstr "Zurück"
 
-#: courses/views.py:48
+#: courses/views.py:49
 msgid "Irregular weekday"
 msgstr "Ungültiger Wochentag"
 
-#: courses/views.py:56
+#: courses/views.py:57
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/views.py:142
+#: courses/views.py:143
 msgid ""
 "The session is no longer valid. Please start over with the subscription."
-msgstr ""
-"Session ist nicht länger gültig. Bitte Anmeldung neu starten."
+msgstr "Session ist nicht länger gültig. Bitte Anmeldung neu starten."
 
 #: events/cms_plugins.py:10 events/cms_toolbars.py:10 events/cms_toolbars.py:13
 msgid "Events"
@@ -383,7 +395,7 @@ msgid "Payment"
 msgstr "Kursbezahlung"
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 #, fuzzy
 #| msgid "Voucher Code"
 msgid "Voucher"
@@ -482,7 +494,8 @@ msgstr "Zahlungsdetails"
 #: payment/templates/payment/counter/details.html:27
 #: payment/templates/payment/course/confirm.html:25
 #: payment/templates/payment/finance/offering_detail.html:30
-#: payment/templates/payment/finance/offering_overview.html:31
+#: payment/templates/payment/finance/offering_overview_subscribers.html:33
+#: payment/templates/payment/finance/offering_overview_teachers.html:36
 #: payment/templates/payment/voucher/form.html:24
 #: payment/templates/payment/voucher/payment_failed.html:23
 #: payment/templates/payment/voucher/payment_success.html:23
@@ -543,7 +556,7 @@ msgstr "Fälliger Betrag"
 
 #: payment/templates/payment/course/course.html:117
 #: payment/templates/payment/course/course.html:166
-#: payment/templates/payment/finance/offering_overview.html:32
+#: payment/templates/payment/finance/offering_overview_subscribers.html:34
 msgid "Total"
 msgstr "Total"
 
@@ -654,7 +667,8 @@ msgstr "Anmeldungen anzeigen"
 
 #: payment/templates/payment/finance/index.html:6
 #: payment/templates/payment/finance/offering_detail.html:6
-#: payment/templates/payment/finance/offering_overview.html:6
+#: payment/templates/payment/finance/offering_overview_subscribers.html:6
+#: payment/templates/payment/finance/offering_overview_teachers.html:6
 msgid "Finance"
 msgstr "Finanzen"
 
@@ -666,27 +680,56 @@ msgstr "Zuletzt erinnert"
 msgid "Send Reminder"
 msgstr "Verschicke Erinnerung"
 
-#: payment/templates/payment/finance/offering_overview.html:20
-msgid "Download an Excel with summary of teacher payment information here:"
-msgstr "Exceldatei mit Zusammenfassung der Lehrerdaten hier herunterladen:"
+#: payment/templates/payment/finance/offering_overview_subscribers.html:22
+#: payment/templates/payment/finance/offering_overview_teachers.html:24
+#, fuzzy
+#| msgid "Teacher welcomes"
+msgid "Teachers"
+msgstr "Lehrer Willkommensmails"
 
-#: payment/templates/payment/finance/offering_overview.html:33
+#: payment/templates/payment/finance/offering_overview_subscribers.html:35
 msgid "Unpaid"
 msgstr "Nicht bezahlt"
 
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Cash"
 msgstr "Barzahlung"
 
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Online"
 msgstr "Online"
 
-#: payment/templates/payment/finance/offering_overview.html:36
+#: payment/templates/payment/finance/offering_overview_subscribers.html:38
 #, fuzzy
 #| msgid "Counter Payment"
 msgid "Counter"
 msgstr "Schalterzahlung"
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:28
+msgid "Download an Excel with summary of teacher payment information here:"
+msgstr "Exceldatei mit Zusammenfassung der Lehrerdaten hier herunterladen:"
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:37
+msgid "Hourly wage(s)"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:38
+msgid "Regular course hours"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:39
+msgid "Irregular course hours"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:40
+#, fuzzy
+#| msgid "Total"
+msgid "Total hours"
+msgstr "Total"
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:41
+msgid "Total wage(s) (CHF)"
+msgstr ""
 
 #: payment/templates/payment/voucher/form.html:6
 #: payment/templates/payment/voucher/payment_success.html:5
@@ -743,17 +786,17 @@ msgstr ""
 "Der folgende Kurs wurde erfolgreich gezahlt. Du wirst eine E-Mail erhalten, "
 "welche deine Zahlung bestätigt."
 
-#: payment/views.py:66
+#: payment/views.py:65
 #, fuzzy
 #| msgid "Subscription #"
 msgid "Subscription "
 msgstr "Anmeldung #"
 
-#: payment/views.py:66 payment/views.py:254
+#: payment/views.py:65 payment/views.py:253
 msgid " successfully marked as paid."
 msgstr "wurde erfolgreich als bezahlt markiert."
 
-#: payment/views.py:125
+#: payment/views.py:124
 #, fuzzy
 #| msgid " successfully marked as paid."
 msgid "successfully marked as paid."
@@ -939,7 +982,7 @@ msgid ""
 msgstr ""
 "Du hast schon ein Account? Bitte <a href=\"%(login_url)s\">einloggen</a>."
 
-#: templates/basis.html:160
+#: templates/basis.html:163
 msgid "Please send Website Feedback to"
 msgstr "Feedback zum Webauftritt bitte an"
 

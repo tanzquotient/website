@@ -6,13 +6,14 @@ from django_countries.fields import LazyTypedChoiceField
 from django_countries import countries
 import logging
 from datetime import date
+from django.utils.translation import ugettext
 
 log = logging.getLogger('tq')
 
 
 class UserEditForm(forms.Form):
     phone_number = forms.CharField(max_length=255, required=False)
-    phone_number.label = 'Telefonnummer (Mobile)'
+    phone_number.label = ugettext('Telephone number (Mobile)')
     phone_number.help_text = 'Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das Teilen von Kursinhalten weitergegeben!'
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
     student_status.label = 'Student'

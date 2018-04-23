@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-23 15:51+0000\n"
+"POT-Creation-Date: 2018-04-23 21:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,6 +102,8 @@ msgid "All Courses"
 msgstr ""
 
 #: courses/cms_toolbars.py:23
+#: payment/templates/payment/finance/offering_overview_subscribers.html:21
+#: payment/templates/payment/finance/offering_overview_teachers.html:22
 msgid "Subscriptions"
 msgstr ""
 
@@ -151,6 +153,10 @@ msgstr ""
 
 #: courses/cms_toolbars.py:64
 msgid "Check confirmations"
+msgstr ""
+
+#: courses/forms.py:16
+msgid "Telephone number (Mobile)"
 msgstr ""
 
 #: courses/services.py:252
@@ -254,15 +260,15 @@ msgstr ""
 msgid "Go back"
 msgstr ""
 
-#: courses/views.py:48
+#: courses/views.py:49
 msgid "Irregular weekday"
 msgstr ""
 
-#: courses/views.py:56
+#: courses/views.py:57
 msgid "Unknown month"
 msgstr ""
 
-#: courses/views.py:142
+#: courses/views.py:143
 msgid ""
 "The session is no longer valid. Please start over with the subscription."
 msgstr ""
@@ -358,7 +364,7 @@ msgid "Payment"
 msgstr ""
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Voucher"
 msgstr ""
 
@@ -441,7 +447,8 @@ msgstr ""
 #: payment/templates/payment/counter/details.html:27
 #: payment/templates/payment/course/confirm.html:25
 #: payment/templates/payment/finance/offering_detail.html:30
-#: payment/templates/payment/finance/offering_overview.html:31
+#: payment/templates/payment/finance/offering_overview_subscribers.html:33
+#: payment/templates/payment/finance/offering_overview_teachers.html:36
 #: payment/templates/payment/voucher/form.html:24
 #: payment/templates/payment/voucher/payment_failed.html:23
 #: payment/templates/payment/voucher/payment_success.html:23
@@ -500,7 +507,7 @@ msgstr ""
 
 #: payment/templates/payment/course/course.html:117
 #: payment/templates/payment/course/course.html:166
-#: payment/templates/payment/finance/offering_overview.html:32
+#: payment/templates/payment/finance/offering_overview_subscribers.html:34
 msgid "Total"
 msgstr ""
 
@@ -597,7 +604,8 @@ msgstr ""
 
 #: payment/templates/payment/finance/index.html:6
 #: payment/templates/payment/finance/offering_detail.html:6
-#: payment/templates/payment/finance/offering_overview.html:6
+#: payment/templates/payment/finance/offering_overview_subscribers.html:6
+#: payment/templates/payment/finance/offering_overview_teachers.html:6
 msgid "Finance"
 msgstr ""
 
@@ -609,24 +617,49 @@ msgstr ""
 msgid "Send Reminder"
 msgstr ""
 
-#: payment/templates/payment/finance/offering_overview.html:20
-msgid "Download an Excel with summary of teacher payment information here:"
+#: payment/templates/payment/finance/offering_overview_subscribers.html:22
+#: payment/templates/payment/finance/offering_overview_teachers.html:24
+msgid "Teachers"
 msgstr ""
 
-#: payment/templates/payment/finance/offering_overview.html:33
+#: payment/templates/payment/finance/offering_overview_subscribers.html:35
 msgid "Unpaid"
 msgstr ""
 
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Cash"
 msgstr ""
 
-#: payment/templates/payment/finance/offering_overview.html:35
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Online"
 msgstr ""
 
-#: payment/templates/payment/finance/offering_overview.html:36
+#: payment/templates/payment/finance/offering_overview_subscribers.html:38
 msgid "Counter"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:28
+msgid "Download an Excel with summary of teacher payment information here:"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:37
+msgid "Hourly wage(s)"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:38
+msgid "Regular course hours"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:39
+msgid "Irregular course hours"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:40
+msgid "Total hours"
+msgstr ""
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:41
+msgid "Total wage(s) (CHF)"
 msgstr ""
 
 #: payment/templates/payment/voucher/form.html:6
@@ -672,15 +705,15 @@ msgstr ""
 msgid "The follwing course has been successfully paid."
 msgstr ""
 
-#: payment/views.py:66
+#: payment/views.py:65
 msgid "Subscription "
 msgstr ""
 
-#: payment/views.py:66 payment/views.py:254
+#: payment/views.py:65 payment/views.py:253
 msgid " successfully marked as paid."
 msgstr ""
 
-#: payment/views.py:125
+#: payment/views.py:124
 msgid "successfully marked as paid."
 msgstr ""
 
@@ -847,7 +880,7 @@ msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 
-#: templates/basis.html:160
+#: templates/basis.html:163
 msgid "Please send Website Feedback to"
 msgstr ""
 
