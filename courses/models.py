@@ -144,6 +144,8 @@ class UserProfile(models.Model):
     bank_account = models.ForeignKey(BankAccount, blank=True, null=True, on_delete=models.PROTECT)
     default_hourly_wage = models.FloatField(default=30.0)
     default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
+    
+    objects = managers.UserProfileManager()
 
     # convenience method for model user are added here
     def is_teacher(self):

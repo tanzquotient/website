@@ -90,104 +90,74 @@ def course_list(request, force_preview=False):
 def course_list_preview(request):
     return course_list(request, force_preview=True)
 
-
+@login_required
 def subscription(request, course_id):
-    from .forms import UserForm, create_initial_from_user
+    from .forms import SingleSubscriptionForm, CoupleSubscriptionForm
     template_name = "courses/subscription.html"
-    context = {}
 
     # do not clear session keys
-
+    course = Course.objects.filter(id=course_id)
+    
+    # if there is no course with this id --> redirect user to course list
+    if len(course) == 0:
+        return redirect('courses:course_list')
+    # the course id must be unique; this is a consistency check
+    assert len(course) == 1
+    course = course[0]
+    
+    is_couple_course = course.type.couple_course
+    
+    # create the correct form instance
+    if is_couple_course:
+        form = CoupleSubscriptionForm(request.POST)
+    else:
+        form = SingleSubscriptionForm(request.POST)
+    
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = UserForm(request.POST)
+        
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            request.session['user1_data'] = form.cleaned_data
-            if not Course.objects.get(id=course_id).type.couple_course or ("subscribe_alone" in request.POST):
+            assert request.user != None
+            data = {
+                'user_id1': request.user.id,
+                'experience': form.cleaned_data['experience'],
+                'comment': form.cleaned_data['comment'],
+            }
+            if form.cleaned_data['partner_email']:
+                partner = UserProfile.objects.filter(user__email=form.cleaned_data['partner_email'])
+                assert len(partner) == 1    # there should only be one partner with this email address
+                partner = partner[0]
+                data['user_id2'] = partner.user.id
+            
+            request.session['data'] = data
+            if 'subscribe' in request.POST:
                 return redirect('courses:subscription_do', course_id)
-            elif "subscribe_partner" in request.POST:
-                return redirect('courses:subscription2', course_id)
             else:
+                # no valid submit button value
                 return redirect('courses:subscription', course_id)
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        if request.user.is_authenticated():
-            # overwrite initial values with those of the user and his profile
-            initial = create_initial_from_user(request.user)
-            form = UserForm(initial=initial)
-        else:
-            form = UserForm()
-
+    context = {}
     context.update({
         'menu': "courses",
         'course': get_object_or_404(Course, id=course_id),
-        'person': 1,
         'form': form
     })
     return render(request, template_name, context)
 
-
-def subscription2(request, course_id):
-    from .forms import UserForm
-    if 'user1_data' not in request.session:
-        # This can happen if a client does reload the page after the session was reset
-        # -> Redirect to a page with an error message
-        res = dict()
-        res['tag'] = 'danger'
-        res['text'] = _('The session is no longer valid. Please start over with the subscription.')
-        res['long_text'] = None
-        request.session['subscription_result'] = res
-        return redirect('courses:subscription_message', course_id)
-
-    template_name = "courses/subscription2.html"
-    context = {}
-
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = UserForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            request.session['user2_data'] = form.cleaned_data
-            return redirect('courses:subscription_do', course_id)
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        initial = {'newsletter': True}
-        form = UserForm(initial=initial)
-
-    context.update({
-        'menu': "courses",
-        'course': Course.objects.get(id=course_id),
-        'person': 2,
-        'form': form
-    })
-    return render(request, template_name, context)
-
-
+@login_required
 def subscription_do(request, course_id):
-    if 'user1_data' not in request.session:
+    if 'data' not in request.session:
         raise SuspiciousSession()
 
-    if 'user2_data' in request.session:
-        res = services.subscribe(course_id, request.session['user1_data'], request.session['user2_data'])
-    else:
-        res = services.subscribe(course_id, request.session['user1_data'], None)
+    res = services.subscribe(course_id, request.session['data'])
 
     # clear session keys
-    if 'user1_data' in request.session:
-        del request.session['user1_data']
-    if 'user2_data' in request.session:
-        del request.session['user2_data']
+    if 'data' in request.session:
+        del request.session['data']
 
     request.session['subscription_result'] = res
     return redirect('courses:subscription_message', course_id)

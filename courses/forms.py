@@ -66,36 +66,6 @@ class CustomSignupForm(UserEditForm):
         log.info("signup new user with email {}".format(user.email))
         update_user(user, self.cleaned_data)
 
-
-class UserForm(CustomSignupForm):
-    email = forms.EmailField(max_length=75)
-    email.label = 'E-Mail'
-    email.help_text = 'Bitte gib die persönliche E-Mail Adresse für dich und deinen Partner separat an!'
-    email_repetition = forms.EmailField(max_length=75)
-    email_repetition.label = 'E-Mail Wiederholung'
-    body_height = forms.IntegerField(max_value=400, required=False)
-    body_height.label = 'Körpergrösse (cm)'
-    body_height.help_text = 'Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum finden eines ähnlich grossen Partners.'
-    experience = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
-    experience.label = 'Erfahrung'
-    comment = forms.CharField(widget=forms.Textarea, max_length=1000, required=False)
-    comment.label = 'Kommentar'
-    general_terms = forms.BooleanField(required=True)
-    general_terms.label = 'I accept that the enrollment is binding.'
-
-    def clean(self):
-        cleaned_data = super(UserForm, self).clean()
-        email = cleaned_data.get("email")
-        email_repetition = cleaned_data.get("email_repetition")
-
-        if email != email_repetition:
-            msg = "Email-Adressen sind nicht gleich."
-            self.add_error('email_repetition', msg)
-            raise forms.ValidationError(msg)
-
-        return cleaned_data
-
-
 def create_initial_from_user(user, initial={}):
     initial['first_name'] = user.first_name
     initial['last_name'] = user.last_name
@@ -125,3 +95,27 @@ def create_initial_from_user(user, initial={}):
         initial['bank_country'] = user.profile.bank_account.bank_country
 
     return initial
+
+class SingleSubscriptionForm(forms.Form):
+    textarea_attribs = {'rows': '4', 'cols': '80'}
+    experience = forms.CharField(widget=forms.Textarea(textarea_attribs), max_length=1000, required=False)
+    experience.label = 'Erfahrung'
+    comment = forms.CharField(widget=forms.Textarea(textarea_attribs), max_length=1000, required=False)
+    comment.label = 'Kommentar'
+    
+    general_terms = forms.BooleanField(required=True)
+    general_terms.label = 'I/We accept that the enrollment is binding.'
+        
+
+class CoupleSubscriptionForm(SingleSubscriptionForm):
+    # helper function that checks if the email address belongs to a user
+    def validate_user_email(email):
+        # an empty address is ok
+        if not email:
+            return
+        users = UserProfile.objects.filter(user__email=email)
+        # the email does not belong to a valid user account
+        if len(users) != 1:
+            raise forms.ValidationError('There is no user for the email address you entered for your partner!')
+    
+    partner_email = forms.EmailField(required=False, validators=[validate_user_email])        

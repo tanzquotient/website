@@ -1,44 +1,83 @@
 {% extends "courses/subscription_template.html" %}
 {% load i18n %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 {% block user_form %}
-    {% if course.type.couple_course %}
-        <h3>Anmeldung der {{ person }}. Person</h3>
-    {% else %}
-        <h3>Anmeldung
-            <small>(erfolgt einzeln für diesen Kurs)</small>
-        </h3>
-    {% endif %}
+    <div class="col-sm-10">
+        <p class="text-info row">
+            Hint:<br >
+            The epxerience and comment fields below are not required.<br />
+            If you wish to enroll with a partner, he/she needs to have an account. In this case, please enter the corresponding email address.
+        </p>
+        <form class="form-horizontal" role="form" action="{% url 'courses:subscription' course.id %}" method="post">
+            {% csrf_token %}
+            
+            {{ form.non_field_errors }}
 
-    {% if not user.is_authenticated %}
-        {% url 'account_login' as login_url %}
-        {% with request.path as request_path %}
-        <div class="alert alert-info"><i class="fa fa-lightbulb-o fa-lg"></i> {% blocktrans %}You can speed up
-            subscription by <a href="{{ login_url }}?next={{ request_path }}">logging in</a> first with your email address from your last
-            subscription.{% endblocktrans %}</div>
-        {% endwith %}
-    {% endif %}
+            <div id="form-group-{{ form.experience.id_for_label }}" class="form-group has-feedback {% if form.experience.errors %}has-error{% endif %}">
+                <label for="{{ form.experience.id_for_label }}" class="col-sm-2 control-label">{{ form.experience.label }}</label>
 
-    <form class="form-horizontal" role="form" action="{% url 'courses:subscription' course.id %}" method="post">
-        {% csrf_token %}
-
-        {% include "courses/snippets/user_form.html" with form=form only %}
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                {% if course.type.couple_course %}
-                    <button type="submit" class="btn btn-default" name="subscribe_partner" value="Subscribe a partner">
-                        Mit
-                        Partner anmelden
-                    </button>
-                    <button type="submit" class="btn btn-default" name="subscribe_alone" value="Subscribe alone">Ohne
-                        Partner anmelden
-                    </button>
-                {% else %}
-                    <button type="submit" class="btn btn-default" name="subscribe_alone" value="Subscribe alone">
+                <div class="col-sm-10">
+                    {{ form.experience }}
+                    {% if form.experience.errors %}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {% endif %}
+                    {% if form.experience.help_text %}
+                        <p class="help-block">{{ form.experience.help_text }}</p>
+                    {% endif %}
+                    {% include "courses/snippets/field_errors.html" with field=form.experience %}
+                </div>
+            </div>
+            
+            <div id="form-group-{{ form.comment.id_for_label }}" class="form-group has-feedback {% if form.comment.errors %}has-error{% endif %}">
+                <label for="{{ form.comment.id_for_label }}" class="col-sm-2 control-label">{{ form.comment.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.comment }}
+                    {% if form.comment.errors %}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {% endif %}
+                    {% if form.comment.help_text %}
+                        <p class="help-block">{{ form.comment.help_text }}</p>
+                    {% endif %}
+                    {% include "courses/snippets/field_errors.html" with field=form.comment %}
+                </div>
+            </div>
+            
+            {% if course.type.couple_course %}
+                <div id="form-group-{{ form.partner_email.id_for_label }}" class="form-group has-feedback {% if form.partner_email.errors %}has-error{% endif %}">
+                    <label for="{{ form.partner_email.id_for_label }}" class="col-sm-2 control-label">{{ form.partner_email.label }}</label>
+                    <div class="col-sm-10">
+                        {{ form.partner_email }}
+                        {% if form.partner_email.errors %}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        {% endif %}
+                        {% if form.partner_email.help_text %}
+                            <p class="help-block">{{ form.partner_email.help_text }}</p>
+                        {% endif %}
+                        {% include "courses/snippets/field_errors.html" with field=form.partner_email %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div id="form-group-{{ form.general_terms.id_for_label }}" class="form-group has-feedback {% if form.general_terms.errors %}has-error{% endif %}">
+                <label for="{{ form.general_terms.id_for_label }}" class="col-sm-2 control-label">{{ form.general_terms.label }}*</label>
+                <div class="col-sm-10">
+                    {{ form.general_terms }}
+                    {% if form.general_terms.errors %}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {% endif %}
+                    {% if form.general_terms.help_text %}
+                        <p class="help-block">{{ form.general_terms.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                    <button type="submit" class="btn btn-default" name="subscribe" value="subscribe">
                         Anmelden
                     </button>
-                {% endif %}
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 {% endblock user_form %}
