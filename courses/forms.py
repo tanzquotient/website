@@ -6,29 +6,29 @@ from django_countries.fields import LazyTypedChoiceField
 from django_countries import countries
 import logging
 from datetime import date
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, ugettext_lazy
 
 log = logging.getLogger('tq')
 
 
 class UserEditForm(forms.Form):
     phone_number = forms.CharField(max_length=255, required=False)
-    phone_number.label = ugettext('Telephone number (Mobile)')
+    phone_number.label = ugettext_lazy('Telephone number (Mobile)')
     phone_number.help_text = 'Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das Teilen von Kursinhalten weitergegeben!'
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
-    student_status.label = 'Student'
+    student_status.label = ugettext_lazy('Student')
     legi = forms.CharField(max_length=16, required=False)
-    legi.label = 'Legi-Nummer'
+    legi.label = ugettext('Student card mumber')
     newsletter = forms.BooleanField(required=False, initial=True)
-    newsletter.label = 'Newsletter abonnieren'
+    newsletter.label = ugettext_lazy('Subscribe to newsletter')
     get_involved = forms.BooleanField(required=False)
-    get_involved.label = 'Ich würde gerne ab und zu beim TQ mithelfen (Events etc.)'
+    get_involved.label = ugettext_lazy('I\'d like to help TQ from time to time (Events etc.)')
     street = forms.CharField(max_length=255)
-    street.label = 'Strasse'
+    street.label = ugettext_lazy('Street')
     plz = forms.IntegerField()
-    plz.label = 'PLZ'
+    plz.label = ugettext_lazy('Postal code')
     city = forms.CharField(max_length=255)
-    city.label = 'Ort'
+    city.label = ugettext_lazy('City')
 
     birthdate = forms.DateField(required=False, widget=forms.widgets.SelectDateWidget(
         empty_label=("Choose Year", "Choose Month", "Choose Day"),
@@ -47,7 +47,7 @@ class UserEditForm(forms.Form):
 
         # if a student, the legi must be set
         if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
-            msg = "Legi muss fuer Studenten angegeben werden."
+            msg = ugettex("Students have to enter their student card number.")
             self.add_error('legi', msg)
             raise forms.ValidationError(msg)
 

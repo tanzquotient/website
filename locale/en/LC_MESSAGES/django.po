@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-23 21:12+0200\n"
+"POT-Creation-Date: 2018-04-27 15:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,59 +159,87 @@ msgstr ""
 msgid "Telephone number (Mobile)"
 msgstr ""
 
-#: courses/services.py:252
+#: courses/forms.py:19
+msgid "Student"
+msgstr ""
+
+#: courses/forms.py:21
+msgid "Student card mumber"
+msgstr ""
+
+#: courses/forms.py:23
+msgid "Subscribe to newsletter"
+msgstr ""
+
+#: courses/forms.py:25
+msgid "I'd like to help TQ from time to time (Events etc.)"
+msgstr ""
+
+#: courses/forms.py:27
+msgid "Street"
+msgstr ""
+
+#: courses/forms.py:29
+msgid "Postal code"
+msgstr ""
+
+#: courses/forms.py:31
+msgid "City"
+msgstr ""
+
+#: courses/services.py:260
 msgid "{} couples matched successfully"
 msgstr ""
 
-#: courses/services.py:271
+#: courses/services.py:279
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr ""
 
-#: courses/services.py:296
+#: courses/services.py:304
 msgid "{} couples unmatched successfully"
 msgstr ""
 
-#: courses/services.py:299
+#: courses/services.py:307
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr ""
 
-#: courses/services.py:303
+#: courses/services.py:311
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr ""
 
-#: courses/services.py:328
+#: courses/services.py:336
 msgid "{} couples broken up successfully"
 msgstr ""
 
-#: courses/services.py:331
+#: courses/services.py:339
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr ""
 
-#: courses/services.py:335
+#: courses/services.py:343
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr ""
 
-#: courses/services.py:355
+#: courses/services.py:363
 msgid "This subscription has no partner set"
 msgstr ""
 
-#: courses/services.py:381
+#: courses/services.py:389
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 
-#: courses/services.py:400
+#: courses/services.py:408
 msgid "{} of {} confirmed successfully"
 msgstr ""
 
-#: courses/services.py:443
+#: courses/services.py:451
 msgid "{} unrejected successfully"
 msgstr ""
 
-#: courses/services.py:472
+#: courses/services.py:480
 msgid "{} of {} welcomed successfully"
 msgstr ""
 
-#: courses/services.py:486
+#: courses/services.py:494
 msgid "{} of {} teachers reset successfully"
 msgstr ""
 
@@ -246,15 +274,6 @@ msgstr ""
 msgid "Merge selected proposals"
 msgstr ""
 
-#: courses/templates/courses/subscription.html:16
-#, python-format
-msgid ""
-"You can speed up\n"
-"            subscription by <a href=\"%(login_url)s?next=%(request_path)s"
-"\">logging in</a> first with your email address from your last\n"
-"            subscription."
-msgstr ""
-
 #: courses/templates/courses/subscription2.html:8
 #: courses/templates/courses/subscription_message.html:7
 msgid "Go back"
@@ -266,11 +285,6 @@ msgstr ""
 
 #: courses/views.py:57
 msgid "Unknown month"
-msgstr ""
-
-#: courses/views.py:143
-msgid ""
-"The session is no longer valid. Please start over with the subscription."
 msgstr ""
 
 #: events/cms_plugins.py:10 events/cms_toolbars.py:10 events/cms_toolbars.py:13
@@ -838,11 +852,12 @@ msgid "Do you really want to remove the selected e-mail address?"
 msgstr ""
 
 #: templates/account/login1.html:6 templates/account/login1.html:10
-#: templates/account/login1.html:43
+#: templates/account/login1.html:43 templates/allauth/login.html:6
+#: templates/allauth/login.html:10 templates/allauth/login.html:43
 msgid "Sign In"
 msgstr ""
 
-#: templates/account/login1.html:15
+#: templates/account/login1.html:15 templates/allauth/login.html:15
 #, python-format
 msgid ""
 "Please sign in with one\n"
@@ -851,7 +866,7 @@ msgid ""
 "for a %(site_name)s account and sign in below:"
 msgstr ""
 
-#: templates/account/login1.html:25
+#: templates/account/login1.html:25 templates/allauth/login.html:25
 msgid "or"
 msgstr ""
 
@@ -862,7 +877,7 @@ msgid ""
 "<a href=\"%(signup_url)s\">sign up</a> first."
 msgstr ""
 
-#: templates/account/login1.html:42
+#: templates/account/login1.html:42 templates/allauth/login.html:42
 msgid "Forgot Password?"
 msgstr ""
 
@@ -878,6 +893,13 @@ msgstr ""
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+
+#: templates/allauth/login.html:32
+#, python-format
+msgid ""
+"If you have not created an account yet, then please\n"
+"<a href=\"%(signup_url)s\">sign up</a> first, fuck!."
 msgstr ""
 
 #: templates/basis.html:163
