@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ-Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 15:38+0000\n"
+"POT-Creation-Date: 2018-04-27 15:51+0000\n"
 "PO-Revision-Date: 2016-04-06 12:11+0100\n"
 "Last-Translator: Martin Zellner\n"
 "Language-Team: German (Switzerland)\n"
@@ -174,12 +174,10 @@ msgid "Student"
 msgstr "Student"
 
 #: courses/forms.py:21
-msgid "Student card mumber"
+msgid "Student card number"
 msgstr "Legi-Nummer"
 
 #: courses/forms.py:23
-#, fuzzy
-#| msgid "Subscriptions"
 msgid "Subscribe to newsletter"
 msgstr "Newsletter abonnieren"
 

@@ -18,7 +18,7 @@ class UserEditForm(forms.Form):
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
     student_status.label = ugettext_lazy('Student')
     legi = forms.CharField(max_length=16, required=False)
-    legi.label = ugettext('Student card mumber')
+    legi.label = ugettext('Student card number')
     newsletter = forms.BooleanField(required=False, initial=True)
     newsletter.label = ugettext_lazy('Subscribe to newsletter')
     get_involved = forms.BooleanField(required=False)
