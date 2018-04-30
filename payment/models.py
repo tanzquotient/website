@@ -24,11 +24,13 @@ class Payment(models.Model):
         COURSE_PAYMENT_TRANSFER = 'course_payment_transfer'
         IRRELEVANT = 'irrelevant'
         UNKNOWN = 'unknown'
+        ARCHIVE = 'archive'
 
         CHOICES = ((SUBSCRIPTION_PAYMENT, 'subscription payment'),
                    (SUBSCRIPTION_PAYMENT_TO_REIMBURSE, 'subscription payment (to reimburse)'),
                    (COURSE_PAYMENT_TRANSFER, 'course payment transfer'), (IRRELEVANT, 'irrelevant'),
-                   (UNKNOWN, 'unknown'))
+                   (UNKNOWN, 'unknown'),
+                   (ARCHIVE, 'archive'))
 
     class CreditDebit:
         UNKNOWN = 'unknown'
