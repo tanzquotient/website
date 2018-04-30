@@ -17,6 +17,11 @@ class UserEditForm(forms.Form):
     phone_number.help_text = 'Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das Teilen von Kursinhalten weitergegeben!'
     student_status = forms.ChoiceField(choices=UserProfile.StudentStatus.CHOICES)
     student_status.label = ugettext_lazy('Student')
+    gender = forms.ChoiceField(choices=UserProfile.Gender.CHOICES)
+    gender.label = ugettext_lazy('Gender')
+    body_height = forms.IntegerField(max_value=400, required=False)
+    body_height.label = ugettext_lazy('Height (cm)')
+    body_height.help_text = 'Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum finden eines ähnlich grossen Partners.'
     legi = forms.CharField(max_length=16, required=False)
     legi.label = ugettext('Student card number')
     newsletter = forms.BooleanField(required=False, initial=True)

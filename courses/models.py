@@ -92,7 +92,7 @@ class UserProfile(models.Model):
         MEN = 'm'
         WOMAN = 'w'
 
-        CHOICES = ((MEN, 'Men'), (WOMAN, 'Woman'))
+        CHOICES = ((MEN, 'Man'), (WOMAN, 'Woman'))
 
     class StudentStatus:
         ETH = 'eth'

@@ -25,9 +25,18 @@
 
 {% include "courses/snippets/generic_input.html" with field=form.student_status only %}
 {% include "courses/snippets/text_input.html" with field=form.legi only %}
+{% include "courses/snippets/text_input.html" with field=form.body_height only %}
+{% include "courses/snippets/generic_input.html" with field=form.birthdate only %}
+{% include "courses/snippets/generic_input.html" with field=form.gender only %}
+
 
 {% include "courses/snippets/boolean_input.html" with field=form.newsletter only %}
 {% include "courses/snippets/boolean_input.html" with field=form.get_involved only %}
+
+
+
+
+
 
 <div class="col-sm-12">
     <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false"
@@ -35,7 +44,6 @@
         Salary Payment Info (only required for teachers)
     </a>
     <div class="collapse" id="collapseExample">
-        {% include "courses/snippets/generic_input.html" with field=form.birthdate only %}
         {% include "courses/snippets/generic_input.html" with field=form.nationality only %}
         {% include "courses/snippets/generic_input.html" with field=form.residence_permit only %}
         {% include "courses/snippets/text_input.html" with field=form.ahv_number only %}
