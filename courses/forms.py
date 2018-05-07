@@ -23,7 +23,7 @@ class UserEditForm(forms.Form):
     body_height.label = ugettext_lazy('Height (cm)')
     body_height.help_text = 'Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum finden eines ähnlich grossen Partners.'
     legi = forms.CharField(max_length=16, required=False)
-    legi.label = ugettext('Student card number')
+    legi.label = ugettext_lazy('Student card number')
     newsletter = forms.BooleanField(required=False, initial=True)
     newsletter.label = ugettext_lazy('Subscribe to newsletter')
     get_involved = forms.BooleanField(required=False)
@@ -52,7 +52,7 @@ class UserEditForm(forms.Form):
 
         # if a student, the legi must be set
         if cleaned_data.get('student_status') != 'no' and not cleaned_data.get('legi'):
-            msg = ugettex("Students have to enter their student card number.")
+            msg = ugettext_lazy("Students have to enter their student card number.")
             self.add_error('legi', msg)
             raise forms.ValidationError(msg)
 
