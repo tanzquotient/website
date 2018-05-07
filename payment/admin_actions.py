@@ -44,3 +44,11 @@ def mark_payment_as_course_payment(modeladmin, request, queryset):
         payment.state = Payment.State.PROCESSED
         payment.type = Payment.Type.COURSE_PAYMENT_TRANSFER
         payment.save()
+        
+def mark_archive(modeladmin, request, queryset):
+    for payment in queryset:
+        payment.state = Payment.State.ARCHIVE
+        payment.save()    
+
+
+mark_archive.short_description = "Archive selected payments"
