@@ -12,7 +12,7 @@ class EventFeed(ICalFeed):
 
     def items(self):
         events = list(Event.objects.all())
-        special_courses = list(IrregularLesson.objects.filter(course__offering__type=Offering.Type.IRREGULAR).all())
+        special_courses = list(IrregularLesson.objects.filter(course__offering__type=Offering.Type.IRREGULAR).filter(course__active=True))
 
         return events + special_courses
 
