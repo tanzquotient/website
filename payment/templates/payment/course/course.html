@@ -184,7 +184,7 @@
             </div>
 
             <h4>{% trans "Payment Summary" %}</h4>
-            <p>{{ course.number_paid }} {% trans "people already paid the course." %}</p>
+            <p>{{ payment_totals.paid_count }} {% trans "people already paid the course." %}</p>
             <p>{% trans "You should have" %} {{ payment_totals.paid_course }} CHF {% trans 'of collected money.' %}</p>
 
         </div>
