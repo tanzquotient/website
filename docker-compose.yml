@@ -3,7 +3,7 @@ services:
 
   # Database (MySQL)
   db:
-    image: mysql
+    image: mysql:5
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}

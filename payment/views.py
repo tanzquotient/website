@@ -60,9 +60,9 @@ class VoucherPaymentIndexView(FormView):
             raise Http404("Voucher was already used")
 
         # show a message that the subscription has been payed (use django message passing framework)
-        if subscription.mark_as_payed(PaymentMethod.VOUCHER):
+        if subscription.apply_voucher(voucher):
             messages.add_message(self.request, messages.SUCCESS,
-                                 _("Subscription ") + self.kwargs['usi'] + _(' successfully marked as paid.'))
+                                 _("Voucher was successfully applied to Subscription") + self.kwargs['usi'])
 
         return super(VoucherPaymentIndexView, self).form_valid(form)
 
@@ -75,7 +75,7 @@ class VoucherPaymentSuccessView(TemplateView):
         if subscription.payed():
             self.template_name = 'payment/voucher/payment_success.html'
         else:
-            self.template_name = 'payment/voucher/payment_failed.html'
+            self.template_name = 'payment/voucher/remaining_amount.html'
 
         context = super(VoucherPaymentSuccessView, self).get_context_data(**kwargs)
         context['subscription'] = subscription

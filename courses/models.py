@@ -802,6 +802,7 @@ class Subscribe(models.Model):
 
     def mark_as_payed(self, payment_method, user=None):
         if self.state == Subscribe.State.CONFIRMED:
+
             with reversion.create_revision():
                 self.state = Subscribe.State.PAYED
                 self.paymentmethod = payment_method
@@ -814,6 +815,23 @@ class Subscribe(models.Model):
             return True
         else:
             return False
+
+    def apply_voucher(self, voucher, user=None):
+        price = self.get_price_to_pay()
+        with reversion.create_revision():
+            voucher_value = price * (float(voucher.percentage) / 100.0)
+            self.price_to_pay = price - voucher_value
+            if price == voucher_value and self.state == Subscribe.State.CONFIRMED:
+                self.state = Subscribe.State.PAYED
+                self.paymentmethod = PaymentMethod.VOUCHER
+                if user is not None:
+                    reversion.set_user(user)
+                reversion.set_comment("Payed using payment method " + PaymentMethod.VOUCHER)
+                send_online_payment_successful(self)
+            self.save()
+
+        return price == voucher_value
+
 
     def generate_price_to_pay(self):
         if self.user.profile.student_status == 'no':
@@ -929,7 +947,9 @@ def generate_key():
 
 @reversion.register()
 class Voucher(models.Model):
+
     purpose = models.ForeignKey('VoucherPurpose', related_name='vouchers', on_delete=models.PROTECT)
+    percentage = models.IntegerField(default=100)
     key = models.CharField(max_length=8, unique=True, default=generate_key)
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
