@@ -127,7 +127,7 @@ def subscription(request, course_id):
                 'experience': form.cleaned_data['experience'],
                 'comment': form.cleaned_data['comment'],
             }
-            if form.cleaned_data['partner_email']:
+            if 'partner_email' in form.cleaned_data and form.cleaned_data['partner_email']:
                 partner = UserProfile.objects.filter(user__email=form.cleaned_data['partner_email'])
                 assert len(partner) == 1    # there should only be one partner with this email address
                 partner = partner[0]
