@@ -33,6 +33,9 @@ RUN apk add --no-cache gettext-dev
 # Python3
 RUN apk add --no-cache python3-dev
 
+# make (needed for building sphinx documentation)
+RUN apk add --no-cache make
+
 ADD configurations/python-requirements.txt /webapps/tq_website/configurations/python-requirements.txt
 
 RUN apk add --no-cache --virtual .build-deps build-base && \
