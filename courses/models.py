@@ -838,6 +838,9 @@ class Subscribe(models.Model):
             self.price_to_pay = self.course.price_without_legi
         else:
             self.price_to_pay = self.course.price_with_legi
+        # happens when course has no price(s) set
+        if self.price_to_pay is None:
+            self.price_to_pay = 0
 
     def get_price_to_pay(self):
         if not self.price_to_pay:
