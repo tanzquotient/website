@@ -8,4 +8,4 @@ services:
   - docker
 
 install:
-  - docker-compose -f tanzquotient/tq_website/docker-compose.yml -f tanzquotient/tq_website/docker-compose.test.yml build
+  - docker-compose -f ~/tanzquotient/tq_website/docker-compose.yml -f ~/tanzquotient/tq_website/docker-compose.test.yml build
