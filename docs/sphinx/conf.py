@@ -18,13 +18,15 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tq_website.settings")
-django.setup()
 
 # load the environment variables
 from dotenv import load_dotenv
 load_dotenv('configurations/.env_test')
+
+# setup django
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tq_website.settings")
+django.setup()
 
 
 # -- Project information -----------------------------------------------------
