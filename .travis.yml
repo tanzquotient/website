@@ -8,4 +8,5 @@ services:
   - docker
 
 install:
+  - source configurations/.env_test
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml build
