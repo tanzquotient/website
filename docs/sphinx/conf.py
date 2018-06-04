@@ -22,6 +22,10 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tq_website.settings")
 django.setup()
 
+# load the environment variables
+from dotenv import load_dotenv
+load_dotenv('configurations/.env_test')
+
 
 # -- Project information -----------------------------------------------------
 
