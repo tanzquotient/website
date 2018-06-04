@@ -1,5 +1,6 @@
 version '2'
 
-django:
-    env_file:
-     - configurations/.env_test
+services:
+    django:
+        env_file:
+         - configurations/.env_test
