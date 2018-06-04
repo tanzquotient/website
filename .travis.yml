@@ -8,4 +8,4 @@ services:
   - docker
 
 install:
-  - docker-compose build -f docker-compose.yml -f docker-compose.test.yml
+  - docker-compose -f docker-compose.yml -f docker-compose.test.yml build
