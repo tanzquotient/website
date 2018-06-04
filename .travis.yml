@@ -9,8 +9,10 @@ services:
 
 before_install:
   # make sure that the environment (config) variables are read from the .env file
-  - source configurations/.env_test
-  - export $(cut -d= -f1 configurations/.env_test)
+  # see https://unix.stackexchange.com/questions/79064/how-to-export-variables-from-a-file/79077#79077
+  - set -a
+  - . configurations/.env_test
+  - set +a
 
 install:
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml build
