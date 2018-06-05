@@ -22,7 +22,7 @@ def get_all_offerings():
 
 
 def get_offerings_to_display(request=None, force_preview=False):
-    # return offerings that have display flag on and order them with increasing start
+    '''return offerings that have display flag on and order them by start date in ascending order'''
     if force_preview or (request and request.user.is_staff):
         return models.Offering.objects.filter(Q(display=True) | Q(period__date_to__gte=date.today())).order_by(
             'period__date_from')
@@ -110,7 +110,7 @@ def update_user(user, user_data):
 
 
 def find_user(user_data):
-    # check if user already exists
+    '''check if user already exists'''
     fn = user_data['first_name']
     ln = user_data['last_name']
 
@@ -151,7 +151,7 @@ def find_unused_username_variant(name, ignore=None):
 
 
 def clean_username(name):
-    """first try to find ascii similar character, then strip away disallowed characters still left"""
+    '''first try to find ascii similar character, then strip away disallowed characters still left'''
     name = unicodedata.normalize('NFKD', name)
     return re.sub('[^0-9a-zA-Z+-.@_]+', '', name)
 
@@ -407,8 +407,8 @@ def unconfirm_subscriptions(subscriptions, request=None):
             s.save()
 
 
-# sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before
 def reject_subscription(subscription, reason=None, send_email=True):
+    '''sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before'''
     subscription.state = models.Subscribe.State.REJECTED
     subscription.save()
     if not reason:
@@ -425,8 +425,8 @@ def reject_subscription(subscription, reason=None, send_email=True):
         c.save()
 
 
-# same as reject_subscription, but for multiple subscriptions at once
 def reject_subscriptions(subscriptions, reason=None, send_email=True):
+    '''same as reject_subscription, but for multiple subscriptions at once'''
     for subscription in subscriptions:
         reject_subscription(subscription, reason, send_email)
 
@@ -494,8 +494,8 @@ def get_or_create_userprofile(user):
         return userprofile
 
 
-# finds a list of courses the 'user' did already and that are somehow relevant for 'course'
 def calculate_relevant_experience(user, course):
+    '''finds a list of courses the "user" did already and that are somehow relevant for "course"'''
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
             models.Subscribe.objects.filter(user=user, state__in=models.Subscribe.State.ACCEPTED_STATES,
@@ -536,8 +536,8 @@ from openpyxl.cell import get_column_letter
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 
 
-# exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_subscriptions(course_ids, export_format):
+    '''exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)'''
     def create_xlsx_sheet(wb, course_id, course_name):
         # strip away unallowed characters and restrict to 30 characters
         ws = wb.create_sheet(title=INVALID_TITLE_CHARS.sub("", course_name)[:30])
@@ -714,8 +714,8 @@ def export_subscriptions(course_ids, export_format):
         return None
 
 
-# exports a summary of all offerings with room usage, course/subscription numbers
 def export_summary(export_format='csv', offerings=models.Offering.objects.all()):
+    '''exports a summary of all offerings with room usage, course/subscription numbers'''
     offering_ids = [o.pk for o in offerings]
     subscriptions = models.Subscribe.objects.accepted().filter(course__offering__in=offering_ids)
 
@@ -852,17 +852,17 @@ def merge_duplicate_users_by_ids(to_merge):
 
 # Based on https://gist.github.com/NicholasMerrill/7c395aa3634b2f2a0cb4
 def merge_model_objects(primary_object, alias_objects=None, keep_old=False):
-    """
+    '''
     Use this function to merge model objects (i.e. Users, Organizations, Polls,
     etc.) and migrate all of the related fields from the alias objects to the
     primary object.
 
-    Usage:
-    from django.contrib.auth.models import User
-    primary_user = User.objects.get(email='good_email@example.com')
-    duplicate_user = User.objects.get(email='good_email+duplicate@example.com')
-    merge_model_objects(primary_user, duplicate_user)
-    """
+    Usage::
+        from django.contrib.auth.models import User
+        primary_user = User.objects.get(email='good_email@example.com')
+        duplicate_user = User.objects.get(email='good_email+duplicate@example.com')
+        merge_model_objects(primary_user, duplicate_user)
+    '''
     if not alias_objects: alias_objects = []
     if not isinstance(alias_objects, list):
         alias_objects = [alias_objects]
