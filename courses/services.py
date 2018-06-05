@@ -43,14 +43,6 @@ def get_subsequent_offering():
         return None
 
 
-def get_or_create_user(user_data):
-    user = find_user(user_data)
-    if user:
-        return update_user(user, user_data)
-    else:
-        return create_user(user_data)
-
-
 def update_user(user, user_data):
     if 'email' in user_data:
         user.email = user_data['email']
@@ -107,38 +99,6 @@ def update_user(user, user_data):
     userprofile.save()
 
     return user
-
-
-def find_user(user_data):
-    '''check if user already exists'''
-    fn = user_data['first_name']
-    ln = user_data['last_name']
-
-    q_email = Q(email=user_data['email'])
-    q_address = Q(profile__address__plz=user_data['plz']) & Q(profile__address__street=user_data['street']) & Q(
-        profile__address__city=user_data['city'])
-    q = q_email | q_address
-    qs = User.objects.filter(first_name=fn, last_name=ln).filter(q).all()
-    if qs.count() > 0:
-        return qs[0]
-    else:
-        return None
-
-
-def create_user(user_data):
-    fn = user_data['first_name']
-    ln = user_data['last_name']
-
-    user = User.objects.create_user(generate_username(fn, ln), email=user_data['email'],
-                                    password=User.objects.make_random_password())
-
-    update_user(user, user_data)
-    return user
-
-
-def generate_username(first_name, last_name):
-    username = "{}_{}".format(first_name, last_name)
-    return find_unused_username_variant(clean_username(username)).lower()
 
 
 def find_unused_username_variant(name, ignore=None):
