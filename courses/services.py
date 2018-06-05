@@ -800,11 +800,6 @@ def find_user_duplicates_ids(user):
     return list(ret)
 
 
-def merge_duplicate_users(to_merge):
-    for primary, aliases in to_merge.items():
-        merge_model_objects(primary, aliases, False)
-
-
 def merge_duplicate_users_by_ids(to_merge):
     for primary, aliases in to_merge.items():
         merge_model_objects(User.objects.get(id=primary), list(User.objects.filter(id__in=aliases)), False)
