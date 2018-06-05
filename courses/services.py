@@ -350,17 +350,9 @@ def _unmatch_person(subscription):
     subscription.save()
 
 
-class CourseException(Exception):
-    def __init__(self, value):
-        self.value = value
-
+class NoPartnerException(Exception):
     def __str__(self):
-        return self.value
-
-
-class NoPartnerException(CourseException):
-    def __init__(self):
-        super(NoPartnerException, self).__init__(_('This subscription has no partner set'))
+        return 'This subscription has no partner set'
 
 
 # sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
