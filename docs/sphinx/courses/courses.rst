@@ -18,7 +18,15 @@ Details
 .. automodule:: courses.models
   :members:
 
+========
 Services
 ========
+
+Summary
+-------
+.. automodsumm:: courses.services
+
+Details
+-------
 .. automodule:: courses.services
   :members:
