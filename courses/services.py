@@ -315,8 +315,8 @@ class NoPartnerException(Exception):
         return 'This subscription has no partner set'
 
 
-# sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before
 def confirm_subscription(subscription, request=None, allow_single_in_couple_course=False):
+    '''sends a confirmation mail if subscription is confirmed (by some other method) and no confirmation mail was sent before'''
     # check: only people with partner are confirmed (in couple courses)
     if not allow_single_in_couple_course and subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
@@ -775,8 +775,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 
-# find duplicates for all users in the system
 def find_duplicate_users():
+    '''find duplicates for all users in the system'''
     ret = dict()
     done = set()
     for user in User.objects.all():
@@ -789,9 +789,9 @@ def find_duplicate_users():
 
 # finds duplicates of the given user
 def find_user_duplicates_ids(user):
-    """
+    '''
     Finds duplicates of user. Returns a list of ids including user's id, ordered by the date the user joined the system.
-    """
+    '''
     candidates = list(User.objects.filter(first_name=user.first_name, last_name=user.last_name).order_by('date_joined'))
     # candidates intentionally also includes the passed user
     ret = set()
