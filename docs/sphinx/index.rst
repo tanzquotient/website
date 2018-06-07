@@ -11,6 +11,8 @@ Welcome to TQ Website's documentation!
    :numbered:
    :caption: Contents:
    
+   introduction/setup
+   introduction/apply_code_changes
    courses/courses
 
 
