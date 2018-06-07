@@ -359,8 +359,8 @@ class Course(TranslatableModel):
     def participatory(self):
         return self.subscriptions.accepted()
 
-    # calculate different statistics in one method (performance optimization)
     def payment_totals(self):
+        '''calculate different statistics in one method (performance optimization)'''
         totals = {
             'to_pay': 0,
             'paid': 0,
@@ -419,8 +419,8 @@ class Course(TranslatableModel):
         else:
             return self.period
 
-    # only show free_places_count if it can be calculated and is below 10
     def show_free_places_count(self):
+        '''only show free_places_count if it can be calculated and is below 10'''
         BOUND = 6
         counts = self.get_free_places_count()
         if counts is not None:
@@ -433,9 +433,9 @@ class Course(TranslatableModel):
             return None
 
     def get_free_places_count(self):
-        """
+        '''
         Creates a dict with the free places totally and for men/women separately
-        """
+        '''
         if self.max_subscribers != None:
             subscriptions = self.subscriptions.active()
             m = subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
@@ -584,7 +584,7 @@ class Course(TranslatableModel):
                     return d2
 
     def get_common_irregular_weekday(self):
-        """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
+        '''Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None'''
         if self.irregular_lessons.exists():
             weekdays = [lesson.date.weekday() for lesson in self.irregular_lessons.all()]
             weekdays_unique = list(set(weekdays))
@@ -598,7 +598,7 @@ class Course(TranslatableModel):
     def get_teachers_welcomed(self):
         return self.teaching.filter(welcomed=True).count() > 0
 
-    get_teachers_welcomed.short_description = "Teachers welcomed"
+    get_teachers_welcomed.short_description = 'Teachers welcomed'
     get_teachers_welcomed.boolean = True
 
     def get_total_time(self):
@@ -653,7 +653,7 @@ class Course(TranslatableModel):
         return self
 
     # position field for ordering columns (grappelli feature)
-    position = models.PositiveSmallIntegerField("Position", default=0)
+    position = models.PositiveSmallIntegerField('Position', default=0)
 
     class Meta:
         ordering = ['position', 'type__name', 'name']
@@ -708,7 +708,7 @@ class Subscribe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions', on_delete=models.PROTECT)
     course = models.ForeignKey(Course, related_name='subscriptions', on_delete=models.PROTECT)
     date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
-    date.help_text = "The date/time when the subscription was made."
+    date.help_text = 'The date/time when the subscription was made.'
     partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
                                 null=True, on_delete=models.PROTECT)
     matching_state = models.CharField(max_length=30,
@@ -716,13 +716,13 @@ class Subscribe(models.Model):
                                       default=MatchingState.UNKNOWN, db_index=True)
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
-    comment.help_text = "A optional comment made by the user during subscription."
+    comment.help_text = 'A optional comment made by the user during subscription.'
 
     state = models.CharField(max_length=30,
                              choices=State.CHOICES, blank=False, null=False,
                              default=State.NEW, db_index=True)
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
-    usi.help_text = "Unique subscription identifier: 4 characters identifier, 2 characters checksum"
+    usi.help_text = 'Unique subscription identifier: 4 characters identifier, 2 characters checksum'
     price_to_pay = models.FloatField(blank=True, null=True, default=None)
 
     paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
@@ -737,35 +737,35 @@ class Subscribe(models.Model):
     def get_offering(self):
         return self.course.offering
 
-    get_offering.short_description = "Offering"
+    get_offering.short_description = 'Offering'
 
     def get_user_gender(self):
         return self.user.profile.gender
 
-    get_user_gender.short_description = "Gender"
+    get_user_gender.short_description = 'Gender'
 
     def get_user_email(self):
         return self.user.email
 
-    get_user_email.short_description = "Email"
+    get_user_email.short_description = 'Email'
 
     def get_user_mobile(self):
         return self.user.profile.phone_number
 
-    get_user_mobile.short_description = "Mobile"
+    get_user_mobile.short_description = 'Mobile'
 
     def get_user_body_height(self):
         return self.user.profile.body_height
 
-    get_user_body_height.short_description = "Body height"
+    get_user_body_height.short_description = 'Body height'
 
     def get_user_student_status(self):
         return self.user.profile.student_status
 
-    get_user_student_status.short_description = "Student"
+    get_user_student_status.short_description = 'Student'
 
-    # returns similar courses that the user did before in the system
     def get_calculated_experience(self):
+        '''returns similar courses that the user did before in the system'''
         from courses.services import calculate_relevant_experience
 
         preceding_courses_done = []
@@ -784,8 +784,8 @@ class Subscribe(models.Model):
     def payed(self):
         return self.state in self.State.PAID_STATES
 
-    # searches for courses that the user did before in the system
     def get_payment_state(self):
+        '''searches for courses that the user did before in the system'''
         c = self.user.subscriptions.filter(state=Subscribe.State.CONFIRMED, course__offering__active=False).filter(
             ~Q(course=self.course)).count()
         if self.payed():
@@ -798,7 +798,7 @@ class Subscribe(models.Model):
             r += ', owes {} more'.format(c)
         return r
 
-    get_payment_state.short_description = "Payed?"
+    get_payment_state.short_description = 'Payed?'
 
     def mark_as_payed(self, payment_method, user=None):
         if self.state == Subscribe.State.CONFIRMED:
@@ -809,7 +809,7 @@ class Subscribe(models.Model):
                 self.save()
                 if user is not None:
                     reversion.set_user(user)
-                reversion.set_comment("Payed using payment method " + payment_method)
+                reversion.set_comment('Payed using payment method ' + payment_method)
             if self.paymentmethod == PaymentMethod.ONLINE:
                 send_online_payment_successful(self)
             return True
@@ -826,7 +826,7 @@ class Subscribe(models.Model):
                 self.paymentmethod = PaymentMethod.VOUCHER
                 if user is not None:
                     reversion.set_user(user)
-                reversion.set_comment("Payed using payment method " + PaymentMethod.VOUCHER)
+                reversion.set_comment('Payed using payment method ' + PaymentMethod.VOUCHER)
                 send_online_payment_successful(self)
             self.save()
 
@@ -848,8 +848,8 @@ class Subscribe(models.Model):
             self.save()
         return self.price_to_pay
 
-    # derives the matching state from the current information (if couple course and if partner set or not)
     def derive_matching_state(self):
+        '''derives the matching state from the current information (if couple course and if partner set or not)'''
         if self.course.type.couple_course:
             if self.partner is None:
                 if self.matching_state not in [Subscribe.MatchingState.TO_MATCH, Subscribe.MatchingState.TO_REMATCH]:
@@ -888,17 +888,17 @@ class Subscribe(models.Model):
             super(Subscribe, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return "{} subscribes to {}".format(self.user.get_full_name(), self.course)
+        return '{} subscribes to {}'.format(self.user.get_full_name(), self.course)
 
 
 class Confirmation(models.Model):
     subscription = models.ForeignKey(Subscribe, related_name='confirmations', on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=False, auto_now_add=True)
-    date.help_text = "The date when the participation confirmation mail was sent to the subscriber."
+    date.help_text = 'The date when the participation confirmation mail was sent to the subscriber.'
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "({}) confirmed at {}".format(self.subscription, self.date)
+        return '({}) confirmed at {}'.format(self.subscription, self.date)
 
 
 class Rejection(models.Model):
@@ -959,9 +959,9 @@ class Voucher(models.Model):
     used = models.BooleanField(blank=False, null=False, default=False)
     pdf_file = models.FileField(upload_to='/voucher/', null=True, blank=True)
     subscription = models.ForeignKey('Subscribe', blank=True, null=True, on_delete=models.PROTECT)
-    subscription.help_text = "subscription that was paid with this voucher"
+    subscription.help_text = 'subscription that was paid with this voucher'
 
-    def mark_as_used(self, user=None, comment="", subscription=None):
+    def mark_as_used(self, user=None, comment='', subscription=None):
         if not self.used:
             with transaction.atomic(), reversion.create_revision():
                 self.used = True
@@ -969,7 +969,7 @@ class Voucher(models.Model):
                 self.save()
                 if user is not None and not user.is_anonymous():
                     reversion.set_user(user)
-                reversion.set_comment("Marked as used. " + comment)
+                reversion.set_comment('Marked as used. ' + comment)
             return True
         else:
             return False
@@ -978,7 +978,7 @@ class Voucher(models.Model):
         ordering = ['issued', 'expires']
 
     def __str__(self):
-        return "#{} valid {} - {}".format(self.key, self.issued, self.expires)
+        return '#{} valid {} - {}'.format(self.key, self.issued, self.expires)
 
 
 class VoucherPurpose(models.Model):
@@ -994,7 +994,7 @@ class Teach(models.Model):
     course = models.ForeignKey('Course', related_name='teaching', on_delete=models.CASCADE)
     welcomed = models.BooleanField(default=False)
     hourly_wage = models.FloatField(blank=True, null=True)
-    hourly_wage.help_text = "Hourly wage, leave empty to copy default wage from teacher profile."
+    hourly_wage.help_text = 'Hourly wage, leave empty to copy default wage from teacher profile.'
 
     def get_wage(self):
         time = self.course.get_total_time()['total']
@@ -1009,7 +1009,7 @@ class Teach(models.Model):
         super(Teach, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{} teaches {}".format(self.teacher, self.course)
+        return '{} teaches {}'.format(self.teacher, self.course)
 
 
 # An offering is a list of courses to be offered in the given period
@@ -1025,17 +1025,17 @@ class Offering(models.Model):
     type = models.CharField(max_length=3,
                             choices=Type.CHOICES,
                             default=Type.REGULAR)
-    type.help_text = "The type of the offering influences how the offering is displayed."
+    type.help_text = 'The type of the offering influences how the offering is displayed.'
     display = models.BooleanField(default=False)
-    display.help_text = "Defines if the courses in this offering should be displayed on the Website."
+    display.help_text = 'Defines if the courses in this offering should be displayed on the Website.'
     active = models.BooleanField(default=False)
-    active.help_text = "Defines if clients can subscribe to courses in this offering."
+    active.help_text = 'Defines if clients can subscribe to courses in this offering.'
 
     def is_preview(self):
         return not self.display
 
     def __str__(self):
-        return "{}".format(self.name)
+        return '{}'.format(self.name)
 
 
 class Song(models.Model):
@@ -1043,13 +1043,13 @@ class Song(models.Model):
     artist = models.CharField(max_length=255, blank=True, null=True)
     length = models.TimeField(blank=True, null=True)
     speed = models.IntegerField(blank=True, null=True)
-    speed.help_text = "The speed of the song in TPM"
+    speed.help_text = 'The speed of the song in TPM'
     style = models.ForeignKey(Style, related_name='songs', blank=False, null=True, on_delete=models.SET_NULL)
     url_video = models.URLField(max_length=500, blank=True, null=True)
-    url_video.help_text = "A url to a demo video (e.g Youtube)."
+    url_video.help_text = 'A url to a demo video (e.g Youtube).'
 
     def __str__(self):
-        return "{} - {}".format(self.title, self.artist)
+        return '{} - {}'.format(self.title, self.artist)
 
     class Meta:
         ordering = ['speed', 'length', ]

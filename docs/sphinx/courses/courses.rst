@@ -18,7 +18,6 @@ Details
 .. automodule:: courses.models
   :members:
 
-========
 Services
 ========
 

@@ -91,3 +91,6 @@ maintenance.conf
 
 # Database dumps
 database_*
+
+# built documentation
+docs/sphinx/_build
