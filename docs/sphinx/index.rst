@@ -8,6 +8,7 @@ Welcome to TQ Website's documentation!
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
    :caption: Contents:
    
    courses/courses

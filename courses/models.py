@@ -40,6 +40,7 @@ class Weekday:
     NUMBER_2_SLUG = {y: x for x, y in NUMBERS.items()}
 
 
+#: Maps the English day of week abbreviations to the full German names of the days.
 WEEKDAYS_TRANS = {'mon': 'Montag', 'tue': 'Dienstag', 'wed': 'Mittwoch', 'thu': 'Donnerstag', 'fri': 'Freitag',
                   'sat': 'Samstag', 'sun': 'Sonntag'}
 
