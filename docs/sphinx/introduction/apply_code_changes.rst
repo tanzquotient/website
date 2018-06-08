@@ -1,6 +1,6 @@
-==================
-Apply code changes
-==================
+=================================
+Contributing & Apply code changes
+=================================
 
 *Note*: This method of applying code changes does not destroy your test data, but gradually migrates the database.
 
