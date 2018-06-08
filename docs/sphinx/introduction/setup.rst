@@ -2,6 +2,8 @@
 Server setup, configuration and maintenance
 ===========================================
 
+Introduction and general architecture
+-------------------------------------
 This file contains setup with docker. Many of the steps you may expect to setup a webstack are automatized. You can still look them up in the `Dockerfile <https://github.com/tanzquotient/tq_website/blob/master/configurations/dockerfile-new>`_.
 
 The setup instructions are divided into:
@@ -227,3 +229,48 @@ While this command is running you should be able to view the local, full-stack w
 
 - :code:`localhost:8000` or :code:`127.0.0.1:8000`
 - :code:`localhost:8001` or :code:`127.0.0.1:8001` (if you started with :code:`-f docker-compose-production-no_ssl.yml`)
+
+
+Setup on a Mac
+--------------
+
+If you have a Mac and prefer to use GUIs, the following tutorial gives an alternative way over the command line setup:
+
+Download the necessary Software:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `Docker for Mac <https://store.docker.com/editions/community/docker-ce-desktop-mac>`_
+
+- `Download PyCharm <https://www.jetbrains.com/pycharm/download/#section=mac>`_ - As a student, you can get a professional license for free
+
+- `Sequel Pro <https://sequelpro.com/download#auto-start>`_
+
+Debugger
+~~~~~~~~
+
+#. Open the pycharm settings
+#. In the *Settings / Preferences* dialog go to *Build, Execution, Deployment* and then *Docker*
+#. Click on *+* and then *Apply*
+#. Go to *Project: tq_website*, then *Project Interpreter* and in the *Drop Down Menu* choose *Show All*
+#. Click on the *+* and then *Add Remote*
+#. In the Pop-Up, choose *Docker-Compose*
+
+    a) Under *Server*, *Docker* should show up (only if you did steps 2. and 3. right)
+    b) *Configuration Files* should show your docker-compose.yml file (if not, are you in the tq_website project?)
+    c) *Service* should have *Django*
+
+#. Apply and close, go back to the main editor. In the right upper corner click on the combo box reading *tq_website*, and then *Edit Configurations*
+#. In the pop-up, with the tq_website configuration selected, choose *Host* to be *0.0.0.0*
+
+Sequel Pro
+~~~~~~~~~~
+.. image:: ../../img/SequelProLogin.jpg
+  :alt: Login
+
+Password: root
+
+PyCharm
+~~~~~~~
+#. On the main menu, choose File | Open.
+#. Select the directory that contains the desired source code (pulled from git repository).
+#. Click ok.
