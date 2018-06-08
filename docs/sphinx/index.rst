@@ -13,7 +13,7 @@ Welcome to TQ Website's documentation!
    
    introduction/setup
    introduction/apply_code_changes
-   infrastructure/used_python_packages
+   infrastructure
    common_problems/common_problems
    courses/courses
 
