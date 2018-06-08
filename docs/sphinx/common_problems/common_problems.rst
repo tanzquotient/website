@@ -8,3 +8,4 @@ Common Problems
 
     one_of_the_migrations_fails
     solving_migration_errors
+    issues_with_django_cms
