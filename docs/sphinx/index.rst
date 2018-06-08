@@ -11,6 +11,7 @@ Welcome to TQ Website's documentation!
    :numbered:
    :caption: Contents:
    
+   introduction/non_programmer_howto
    introduction/setup
    introduction/apply_code_changes
    introduction/working_on_production_server
