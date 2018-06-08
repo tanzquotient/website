@@ -11,3 +11,4 @@ Common Problems
     issues_with_django_cms
     error_during_docker-compose_build
     undetected_internal_server_error
+    certificate_renewal
