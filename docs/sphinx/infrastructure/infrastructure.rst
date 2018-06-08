@@ -7,6 +7,7 @@ Infrastructure & Architecture
     :caption: Contents:
 
     used_python_packages
+    used_libraries
     translations
     payment_system
     unit_tests
