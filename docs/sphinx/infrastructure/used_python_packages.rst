@@ -1,3 +1,5 @@
+.. _python_packages:
+
 Python packages
 ===============
 This page contains information about all the Python packages that are used somewhere in the TQ website. Please keep the information up to date and extend it as new features are added. This makes it easier for newcomers to understand what is going on in the project.
