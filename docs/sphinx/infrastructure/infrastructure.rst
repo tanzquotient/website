@@ -12,3 +12,4 @@ Infrastructure & Architecture
     payment_system
     unit_tests
     generate_sphinx_documentation
+    migrations
