@@ -6,7 +6,8 @@ Infrastructure & Architecture
     :maxdepth: 2
     :caption: Contents:
 
-    infrastructure/used_python_packages
-    infrastructure/translations
-    infrastructure/payment_system
-    infrastructure/unit_tests
+    used_python_packages
+    translations
+    payment_system
+    unit_tests
+    generate_sphinx_documentation
