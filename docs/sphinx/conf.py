@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # load the environment variables
 from dotenv import load_dotenv
-load_dotenv('{}/{}'.format(sys.path[0], 'configurations/.env_test'))
+load_dotenv('{}/{}'.format(sys.path[0], 'configurations/.env-template'))
 
 # setup django
 import django

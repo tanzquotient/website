@@ -9,6 +9,7 @@ services:
 
 before_install:
   - cp configurations/.env-template .env
+  - chmod --recursive ug+x scripts/
 
 install:
   - docker-compose build
