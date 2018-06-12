@@ -15,7 +15,7 @@ install:
   # make sure that the environment (config) variables are read from the .env file
   # see https://unix.stackexchange.com/questions/79064/how-to-export-variables-from-a-file/79077#79077
   - set -a
-  - . configurations/.env_test
+  - . .env
   - set +a
   - docker-compose build
 
