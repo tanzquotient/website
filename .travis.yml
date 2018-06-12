@@ -1,6 +1,6 @@
 notifications:
   email:
-    - renato-jun.bellotti@student.ethz.ch
+    - informatik@tq.vseth.ethz.ch
 
 sudo: required
 
@@ -8,11 +8,7 @@ services:
   - docker
 
 before_install:
-  # make sure that the environment (config) variables are read from the .env file
-  # see https://unix.stackexchange.com/questions/79064/how-to-export-variables-from-a-file/79077#79077
-  - set -a
-  - . configurations/.env_test
-  - set +a
+  - cp configurations/.env-template .env
 
 install:
-  - docker-compose -f docker-compose.yml -f docker-compose.test.yml up
+  - docker-compose build
