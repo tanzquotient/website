@@ -28,7 +28,7 @@ services:
     user: root
     volumes:
       - .:/webapps/tq_website:Z
-    command: sh -c 'scripts/wait-for db:3306 -- python3 manage.py runserver 0.0.0.0:8000'
+    command: python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "${TQ_DJANGO_PORT}:8000"
     links:
