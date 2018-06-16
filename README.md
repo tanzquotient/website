@@ -1,6 +1,9 @@
 tq-website
 ==========
 
+[![Build Status](https://travis-ci.org/tanzquotient/tq_website.svg?branch=master)](https://travis-ci.org/tanzquotient/tq_website)
+[![Documentation Status](https://readthedocs.org/projects/tq-website/badge/?version=latest)](https://tq-website.readthedocs.io/en/latest/?badge=latest)
+
 The WebSite developed for the TanzQuotient at ETH Zurich.
 
 For users:
