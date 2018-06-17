@@ -1,6 +1,12 @@
 FROM python:3.5-alpine
 MAINTAINER martin.zellner@gmail.com
 
+# make sure to have the latest package index
+RUN rm -rf /var/cache/apk/* && \
+    rm -rf /tmp/*
+
+RUN apk update
+
 # MySQL
 RUN apk add --no-cache mariadb-client-libs && \
     apk add --no-cache --virtual .build-deps \
