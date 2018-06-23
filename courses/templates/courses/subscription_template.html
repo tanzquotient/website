@@ -1,4 +1,7 @@
+
 {% extends "basis.html" %}
+
+{% load i18n %}
 
 {% block lead %}
     <header id="header_courses">
@@ -19,18 +22,18 @@
         <p>{% include "courses/snippets/detail.html" with course=course only %}</p>
         <p>{% include "courses/snippets/subscription_info.html" with course=course long=True only %}</p>
     </div>
-
     {% if course.is_subscription_allowed %}
-        {% if user.user.is_authenticated %}
+
         <div class="jumbotron">
             <div class="container">
-                {% block user_form %}
-                {% endblock user_form %}
+            {% if user.is_authenticated %}
+                    {% block user_form %}
+                    {% endblock user_form %}
+            {% else %}
+                  {%  trans "In order to enroll to a course you need to login first." %}<br /><br /><a href="{% url 'account_login' %}?next={{request.path}}" class="btn btn-success">{% trans "Login to Enroll" %}</a>
+            {% endif %}
             </div>
         </div>
-        {% else %}
-              <a href="{% url 'login' %}?next={{request.path}}" class="btn btn-success">{% trans "Login to Enroll" %}</a>
-        {% endif %}
     {% endif %}
 
 {% endblock main_content %}
