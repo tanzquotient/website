@@ -21,12 +21,16 @@
     </div>
 
     {% if course.is_subscription_allowed %}
+        {% if user.user.is_authenticated %}
         <div class="jumbotron">
             <div class="container">
                 {% block user_form %}
                 {% endblock user_form %}
             </div>
         </div>
+        {% else %}
+              <a href="{% url 'login' %}?next={{request.path}}" class="btn btn-success">{% trans "Login to Enroll" %}</a>
+        {% endif %}
     {% endif %}
 
 {% endblock main_content %}
