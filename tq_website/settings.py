@@ -133,7 +133,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-INTERNAL_IPS = ['127.0.0.1', '172.21.0.1', '::1']
+# loopback and docker gateway
+INTERNAL_IPS = ['127.0.0.1', '::1', '172.18.0.1']
 
 ###############################################
 # Configuration of allauth account management #
@@ -486,9 +487,6 @@ CACHES = {
 #################
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-toolbar autopatch my settings!
-
-# Internal IPs for Debug Toolbar
-INTERNAL_IPS = ['127.0.0.1', '192.168.99.100', '192.168.99.1']
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
