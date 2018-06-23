@@ -313,10 +313,10 @@ from django.contrib.auth.admin import UserAdmin
 
 # Define a new User admin
 class MyUserAdmin(UserAdmin):
-    list_display = ('id',) + UserAdmin.list_display
+    list_display = ('id',) + UserAdmin.list_display + ('is_active',)
     inlines = list(UserAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
     list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
-
+    actions = [make_inactive] + UserAdmin.actions
 
 # Define a new Group admin
 class MyGroupAdmin(GroupAdmin):

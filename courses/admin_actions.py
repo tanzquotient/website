@@ -382,3 +382,10 @@ def offering_emaillist(modeladmin, request, queryset):
 
 
 offering_emaillist.short_description = "List emails of accepted participants"
+
+def make_inactive(modeladmin, request, queryset):
+    for user in queryset:
+
+        user.is_active = False
+        user.save()
+    messages.add_message(request, messages.SUCCESS, 'Deactivated {} profiles'.format(queryset.count()))
