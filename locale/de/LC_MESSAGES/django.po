@@ -288,14 +288,14 @@ msgid ""
 "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 msgstr ""
-"<a href=\"%(account_email)s\">Verwalte deine Mailaddressen <i\n"
+"<a href=\"%(account_email)s\">Verwalte deine Mailadressen <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: courses/templates/courses/auth/profile.html:27
 #, fuzzy
 #| msgid "View profile"
 msgid "Update Profile"
-msgstr "Profil ansehen"
+msgstr "Profil verwalten"
 
 #: courses/templates/courses/auth/subscription_overview.html:14
 msgid "Download an Excel with summary of all offerings here:"
