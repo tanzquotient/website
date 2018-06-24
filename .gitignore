@@ -94,3 +94,4 @@ database_*
 
 # built documentation
 docs/sphinx/_build
+docs/sphinx/_static
