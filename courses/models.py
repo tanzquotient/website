@@ -958,7 +958,7 @@ class Voucher(models.Model):
     issued = models.DateField(blank=False, null=False, auto_now_add=True)
     expires = models.DateField(blank=True, null=True)
     used = models.BooleanField(blank=False, null=False, default=False)
-    pdf_file = models.FileField(upload_to='/voucher/', null=True, blank=True)
+    pdf_file = models.FileField(upload_to='voucher/', null=True, blank=True)
     subscription = models.ForeignKey('Subscribe', blank=True, null=True, on_delete=models.PROTECT)
     subscription.help_text = 'subscription that was paid with this voucher'
 
