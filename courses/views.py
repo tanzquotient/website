@@ -91,6 +91,14 @@ def course_list_preview(request):
     return course_list(request, force_preview=True)
 
 def subscription(request, course_id):
+    '''
+    This view provides a form to enrol in a course
+
+    Redirects:
+    courses:course_list         if no course with the given ID exists
+    courses:subscription        if no valid submit button value is found
+    courses:subscription_do     everything is ok, redirection to actually perform the enrolment
+    '''
     from .forms import SingleSubscriptionForm, CoupleSubscriptionForm
     template_name = "courses/subscription.html"
 
@@ -149,6 +157,13 @@ def subscription(request, course_id):
 
 @login_required
 def subscription_do(request, course_id):
+    '''
+    This view actually performs the enrolment in a given course.
+
+    The view is just a wrapper to call services.subscribe(...)
+    Redirects:
+    courses:subscription_message    always in order to inform the user about success of enrolment
+    '''
     if 'data' not in request.session:
         raise SuspiciousSession()
 
@@ -163,6 +178,12 @@ def subscription_do(request, course_id):
 
 
 def subscription_message(request, course_id):
+    '''
+    This view displays whether the enrolment was successful or not
+
+    Redirects:
+    courses:subscription    if there is no result in the given request
+    '''
     if 'subscription_result' not in request.session:
         return redirect('courses:subscription', course_id)
 

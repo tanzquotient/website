@@ -117,6 +117,7 @@ def clean_username(name):
 
 
 def subscribe(course_id, data):
+    '''Actually enrols a user or a pair of users in a course'''
     res = dict()
 
     course = models.Course.objects.get(id=course_id)
