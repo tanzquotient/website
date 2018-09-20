@@ -75,7 +75,7 @@ class Payment(models.Model):
         return sum
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
 
 
 class SubscriptionPayment(models.Model):
