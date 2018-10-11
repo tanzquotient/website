@@ -10,7 +10,7 @@
            class="list-group-item {% if event.special %}emphasize{% endif %}">
             {% if event.image %}
                 <p class="text-center"><img
-                        src="{% thumbnail event.image 350x150 crop upscale subject_location=event.image.subject_location %}"
+                        src="{% thumbnail event.image 320x180 crop upscale subject_location=event.image.subject_location %}"
                         alt=""/></p>
             {% endif %}
             <h4 class="list-group-item-heading">
