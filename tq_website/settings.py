@@ -133,6 +133,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+FORMAT_MODULE_PATH = [
+    'tq_website.formats',
+]
+
 # loopback and docker gateway
 INTERNAL_IPS = ['127.0.0.1', '::1', '172.18.0.1']
 
