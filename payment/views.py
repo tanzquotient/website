@@ -187,15 +187,17 @@ class CoursePaymentIndexView(TemplateView, TeacherOnly):
                 color = "#DDDDDD"
             else:
                 color = "#FFFFFF"
-            tree.append({
-                'text': o.name,
-                'nodes': nodes,
-                'state': {
-                    'expanded': False,
-                },
-                'selectable': False,
-                'backColor': color,
-            })
+                
+            if courses:    
+                tree.append({
+                    'text': o.name,
+                    'nodes': nodes,
+                    'state': {
+                        'expanded': False,
+                    },
+                    'selectable': False,
+                    'backColor': color,
+                })
 
         context['tree'] = json.dumps(tree)
         return context
