@@ -79,4 +79,4 @@ class Event(TranslatableModel):
         return "{}".format(self.name)
 
     class Meta:
-        ordering = ['date', 'time_from', 'room']
+        ordering = ['-date', '-time_from']
