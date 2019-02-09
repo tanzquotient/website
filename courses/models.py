@@ -969,7 +969,7 @@ class Voucher(models.Model):
             return False
 
     class Meta:
-        ordering = ['issued', 'expires']
+        ordering = ['-issued', '-expires']
 
     def __str__(self):
         return '#{} valid {} - {}'.format(self.key, self.issued, self.expires)
