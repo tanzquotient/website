@@ -8,12 +8,14 @@ from django.http.response import HttpResponse
 from django.utils.translation import ugettext as _
 
 import courses.models as models
-
-log = logging.getLogger('tq')
+from courses.utils import export_csv, export
+from courses.utils import export_excel
 
 from .emailcenter import *
 
 import re
+
+log = logging.getLogger('tq')
 
 
 # Create your services here.
@@ -144,12 +146,12 @@ def subscribe(course_id, data):
     else:
         if user2:
             subscription = models.Subscribe(user=user1.user, course=course, partner=user2.user,
-                                        experience=data['experience'],
-                                        comment=data['comment'])
+                                            experience=data['experience'],
+                                            comment=data['comment'])
         else:
             subscription = models.Subscribe(user=user1.user, course=course,
-                                        experience=data['experience'],
-                                        comment=data['comment'])
+                                            experience=data['experience'],
+                                            comment=data['comment'])
         subscription.derive_matching_state()
         subscription.save()
         send_subscription_confirmation(subscription)
@@ -195,7 +197,8 @@ def match_partners(subscriptions, request=None):
     courses = subscriptions.values_list('course', flat=True)
     match_count = 0
     for course_id in courses:
-        single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(state=models.Subscribe.State.REJECTED)
+        single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(
+            state=models.Subscribe.State.REJECTED)
         sm = single.filter(user__profile__gender=models.UserProfile.Gender.MEN).order_by('date').all()
         sw = single.filter(user__profile__gender=models.UserProfile.Gender.WOMAN).order_by('date').all()
         c = min(sm.count(), sw.count())
@@ -487,227 +490,73 @@ def model_attribute_language_fallback(model, attribute):
     return None
 
 
-import zipfile
 import unicodecsv
-from io import BytesIO
-
-import openpyxl
-from openpyxl.cell import get_column_letter
 
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 
 
 def export_subscriptions(course_ids, export_format):
-    '''exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)'''
-    def create_xlsx_sheet(wb, course_id, course_name):
-        # strip away unallowed characters and restrict to 30 characters
-        ws = wb.create_sheet(title=INVALID_TITLE_CHARS.sub("", course_name)[:30])
 
-        row_num = 0
-
-        columns = [
-            (u"Vorname", 20),
-            (u"Nachname", 20),
-            (u"Geschlecht", 10),
-            (u"E-Mail", 50),
-            (u"Mobile", 30),
-            (u"Legi-Nr.", 30),
-            (u"Preis", 10),
-            (u"Noch zu bezahlen", 10),
-            (u"Erfahrung", 60),
-        ]
-
-        for col_num in range(len(columns)):
-            c = ws.cell(row=row_num + 1, column=col_num + 1)
-            c.value = columns[col_num][0]
-            font = c.font.copy()
-            font.bold = True
-            c.font = font
-            # set column width
-            ws.column_dimensions[get_column_letter(col_num + 1)].width = columns[col_num][1]
-
-        for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by('user__first_name'):
-            row_num += 1
-            row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
-                   s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(),
-                   0 if s.payed() else s.get_price_to_pay(), s.experience]
-            for col_num in range(len(row)):
-                c = ws.cell(row=row_num + 1, column=col_num + 1)
-                c.value = row[col_num]
-
-                alignment = c.alignment.copy()
-                alignment.wrap_text = True
-                c.alignment = alignment
-
-    if len(course_ids) == 1:
-        course_id = course_ids[0]
+    export_data = dict()
+    for course_id in course_ids:
         course_name = models.Course.objects.get(id=course_id).name
-        filename = 'Kursteilnehmer-{}'.format(course_name)
-        
-        # convert unwanted characters
-        mappings = {
-            'ü': 'ue',
-            'Ü': 'Ue',
-            'ä': 'ae',
-            'Ä': 'Ae',
-            'ö': 'oe',
-            'Ö': 'Oe',
-            ' ': '_',
-        }
-        for old, new in mappings.items():
-            filename = filename.replace(old, new)
+        subscriptions = models.Subscribe.objects.accepted().filter(course_id=course_id).order_by('user__first_name')
 
-        if export_format == 'csv':
-            # Create the HttpResponse object with the appropriate CSV header.
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
-
-            writer = unicodecsv.writer(response)
-
-            writer.writerow([u'Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen',
-                             'Erfahrung'])
-            for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
-                    'user__first_name'):
-                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
-                       s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
-                writer.writerow(row)
-
-            return response
+        data = []
         if export_format == 'csv_google':
-            # Create the HttpResponse object with the appropriate CSV header.
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
-
-            writer = unicodecsv.writer(response)
-
-            writer.writerow(
-                [u'Given Name', 'Family Name', 'Gender', 'E-mail 1 - Type', 'E-mail 1 - Value', 'Phone 1 - Type',
-                 'Phone 1 - Value'])
-            for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
-                    'user__first_name'):
-                row = [s.user.first_name, s.user.last_name, s.user.profile.gender, '* Private', s.user.email,
-                       '* Private',
-                       s.user.profile.phone_number]
-                writer.writerow(row)
-
-            return response
-        elif export_format == 'xlsx':
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename={}.xlsx'.format(filename)
-            wb = openpyxl.Workbook()
-            # remove preinitialized sheet
-            wb.remove_sheet(wb.get_active_sheet())
-
-            create_xlsx_sheet(wb, course_id, course_name)
-
-            wb.save(response)
-            return response
+            data.append(['Given Name', 'Family Name', 'Gender',
+                         'E-mail 1 - Type', 'E-mail 1 - Value', 'Phone 1 - Type', 'Phone 1 - Value'])
+            for s in subscriptions:
+                data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, '* Private', s.user.email,
+                             '* Private', s.user.profile.phone_number])
         else:
-            return None
-    elif len(course_ids) > 1:
-        if export_format == 'csv':
-            zipped_file = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
-            with zipfile.ZipFile(zipped_file, 'w') as f:
-                for course_id in course_ids:
-                    fileobj = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
-                    writer = unicodecsv.writer(fileobj, encoding='utf-8')
+            data.append(
+                ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen', 'Erfahrung'])
 
-                    writer.writerow(
-                        ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen',
-                         'Erfahrung'])
-                    for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
-                            'user__first_name'):
-                        l = [s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
-                             s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience]
-                        writer.writerow(l)
-                    f.writestr(u'Kursteilnehmer/{}.csv'.format(models.Course.objects.get(id=course_id).name),
-                               fileobj.getvalue())
-                    fileobj.seek(0)
+            for s in subscriptions:
+                data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
+                             s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience])
 
-            zipped_file.seek(0)
-            response = HttpResponse(zipped_file, content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
-            response['Content-Length'] = zipped_file.tell()
+        export_data[course_name] = data
 
-            return response
-        if export_format == 'csv_google':
-            zipped_file = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
-            with zipfile.ZipFile(zipped_file, 'w') as f:
-                for course_id in course_ids:
-                    fileobj = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
-                    writer = unicodecsv.writer(fileobj, encoding='utf-8')
-
-                    writer.writerow(
-                        ['Given Name', 'Family Name', 'Gender', 'E-mail 1 - Type', 'E-mail 1 - Value',
-                         'Phone 1 - Type',
-                         'Phone 1 - Value'])
-                    for s in models.Subscribe.objects.accepted().filter(course__id=course_id).order_by(
-                            'user__first_name'):
-                        row = [s.user.first_name, s.user.last_name, s.user.profile.gender, '* Private', s.user.email,
-                               '* Private',
-                               s.user.profile.phone_number]
-                        writer.writerow(row)
-                    f.writestr(u'Kursteilnehmer/{}.csv'.format(models.Course.objects.get(id=course_id).name),
-                               fileobj.getvalue())
-                    fileobj.seek(0)
-
-            zipped_file.seek(0)
-            response = HttpResponse(zipped_file, content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.zip'
-            response['Content-Length'] = zipped_file.tell()
-
-            return response
-        elif export_format == 'xlsx':
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=Kursteilnehmer.xlsx'
-            wb = openpyxl.Workbook()
-            # remove preinitialized sheet
-            wb.remove_sheet(wb.get_active_sheet())
-
-            for course_id in course_ids:
-                create_xlsx_sheet(wb, course_id, models.Course.objects.get(id=course_id).name)
-
-            wb.save(response)
-            return response
-        else:
-            return None
-    else:
+    if len(export_data) == 0:
         return None
+
+    if len(export_data) == 1:
+        course_name = list(export_data.keys())[0]
+        return export(export_format, title='Kursteilnehmer-{}'.format(course_name), data=export_data[course_name])
+
+    return export(export_format, title="Kursteilnehmer", data=export_data, multiple_sheets=True)
 
 
 def export_summary(export_format='csv', offerings=models.Offering.objects.all()):
-    '''exports a summary of all offerings with room usage, course/subscription numbers'''
+    """exports a summary of all offerings with room usage, course/subscription numbers"""
+
     offering_ids = [o.pk for o in offerings]
     subscriptions = models.Subscribe.objects.accepted().filter(course__offering__in=offering_ids)
 
     filename = 'TQ-Room Usage-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
-    if export_format == 'csv':
-        # Create the HttpResponse object with the appropriate CSV header.
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+    export_data = []
 
-        writer = unicodecsv.writer(response)
+    rooms = models.Room.objects.all()
 
-        rooms = models.Room.objects.all()
+    header = ['', 'TOTAL']
+    header += [room.name for room in rooms]
 
-        header = ['', 'TOTAL']
-        header += [room.name for room in rooms]
+    export_data.append(header)
 
-        writer.writerow(header)
-        row = ['TOTAL', subscriptions.count()]
-        row += [subscriptions.filter(course__room=room).count() for room in rooms]
+    row = ['TOTAL', subscriptions.count()]
+    row += [subscriptions.filter(course__room=room).count() for room in rooms]
 
-        writer.writerow(row)
+    export_data.append(row)
 
-        for offering in offerings:
-            subs = models.Subscribe.objects.accepted().filter(course__offering=offering)
-            row = [offering.name, subs.count()]
-            row += [subs.filter(course__room=room).count() for room in rooms]
-            writer.writerow(row)
+    for offering in offerings:
+        subs = models.Subscribe.objects.accepted().filter(course__offering=offering)
+        row = [offering.name, subs.count()]
+        row += [subs.filter(course__room=room).count() for room in rooms]
+        export_data.append(row)
 
-        return response
-    else:
-        return None
+    return export(export_format, title=filename, data=export_data)
 
 
 def export_teacher_payment_information(export_format='csv', offerings=models.Offering.objects.all()):
@@ -725,47 +574,40 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
     teachers = sorted(teachers, key=lambda t: t.last_name)
 
     filename = 'TQ-Salary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
-    if export_format == 'csv':
-        # Create the HttpResponse object with the appropriate CSV header.
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
 
-        writer = unicodecsv.writer(response)
+    export_data = []
 
-        header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
-        header += ['Street', 'PLZ', 'City', 'Country']
-        header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'Bank Account']
+    header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
+    header += ['Street', 'PLZ', 'City', 'Country']
+    header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'Bank Account']
+    for o in offerings:
+        header += ['Wage for ' + o.name]
+
+    export_data.append(header)
+
+    for user in teachers:
+        row = [user.id, user.first_name, user.last_name, user.profile.gender, user.email,
+               user.profile.phone_number]
+        if user.profile.address:
+            row += [user.profile.address.street, user.profile.address.plz, user.profile.address.city,
+                    user.profile.address.country]
+        else:
+            row += ["-"] * 4
+        row += [user.profile.birthdate, user.profile.nationality, user.profile.residence_permit,
+                user.profile.ahv_number, user.profile.bank_account]
+
+        # wages for each offering separately
         for o in offerings:
-            header += ['Wage for ' + o.name]
+            offering_teacher_teachs = teachs.filter(course__offering=o, teacher=user).all()
+            log.debug(list(offering_teacher_teachs))
+            wage = 0
+            for teach in offering_teacher_teachs:
+                wage += teach.get_wage()
+            row.append(wage)
 
-        # header += [room.name for room in rooms]
-        writer.writerow(header)
+        export_data.append(row)
 
-        for user in teachers:
-            row = [user.id, user.first_name, user.last_name, user.profile.gender, user.email,
-                   user.profile.phone_number]
-            if user.profile.address:
-                row += [user.profile.address.street, user.profile.address.plz, user.profile.address.city,
-                        user.profile.address.country]
-            else:
-                row += ["-"] * 4
-            row += [user.profile.birthdate, user.profile.nationality, user.profile.residence_permit,
-                    user.profile.ahv_number, user.profile.bank_account]
-
-            # wages for each offering separately
-            for o in offerings:
-                offering_teacher_teachs = teachs.filter(course__offering=o, teacher=user).all()
-                log.debug(list(offering_teacher_teachs))
-                wage = 0
-                for teach in offering_teacher_teachs:
-                    wage += teach.get_wage()
-                row.append(wage)
-
-            writer.writerow(row)
-
-        return response
-    else:
-        return None
+    return export(export_format, title=filename, data=export_data)
 
 
 from django.apps import apps
