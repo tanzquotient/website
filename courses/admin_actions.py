@@ -213,6 +213,16 @@ def export_confirmed_subscriptions_csv_google(modeladmin, request, queryset):
 export_confirmed_subscriptions_csv_google.short_description = "Export confirmed subscriptions of selected courses as Google Contacts readable CSV"
 
 
+def export_confirmed_subscriptions_vcard(modeladmin, request, queryset):
+    ids = []
+    for c in queryset:
+        ids.append(c.id)
+    return services.export_subscriptions(ids, 'vcard')
+
+
+export_confirmed_subscriptions_vcard.short_description = "Export confirmed subscriptions of selected courses as vCard"
+
+
 def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
     ids = []
     for c in queryset:
@@ -227,6 +237,12 @@ def export_teacher_payment_information_csv(modeladmin, request, queryset):
     return services.export_teacher_payment_information(offerings=queryset.all())
 
 export_teacher_payment_information_csv.short_description = "Export teacher payment information as CSV"
+
+
+def export_teacher_payment_information_excel(modeladmin, request, queryset):
+    return services.export_teacher_payment_information(offerings=queryset.all(), export_format='excel')
+
+export_teacher_payment_information_excel.short_description = "Export teacher payment information as Excel"
 
 
 def mark_voucher_as_used(modeladmin, request, queryset):

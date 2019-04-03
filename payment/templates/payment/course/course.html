@@ -76,7 +76,13 @@
 
             <p>
                 {% trans "If you do not have internet access in the course room, you can download this list before:" %}
-                <a href="{% url "payment:coursepayment_export" course.id %}">DOWNLOAD</a>
+                <a href="{% url "payment:coursepayment_export" course.id %}">Download Excel</a>,
+                <a href="{% url "payment:coursepayment_export_csv" course.id %}">Download CSV</a>
+            </p>
+
+            <p>
+                {% trans "Additionally you can download the contact data of the participants here:" %}
+                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">Download</a>
             </p>
 
             <div class="visible-xs">
@@ -128,13 +134,15 @@
                     <div class="panel-body">
                         <table class="table">
                             <thead>
-                            <th>{% trans "USI" %}</th>
-                            <th>{% trans "Name" %}</th>
-                            <th>{% trans "E-Mail" %}</th>
-                            <th>{% trans "Mobile" %}</th>
-                            <th>{% trans "Amount" %}</th>
-                            <th>{% trans "Amount Due" %}</th>
-                            <th>{% trans "Actions" %}</th>
+                            <tr>
+                                <th>{% trans "USI" %}</th>
+                                <th>{% trans "Name" %}</th>
+                                <th>{% trans "E-Mail" %}</th>
+                                <th>{% trans "Mobile" %}</th>
+                                <th>{% trans "Amount" %}</th>
+                                <th>{% trans "Amount Due" %}</th>
+                                <th>{% trans "Actions" %}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {% for subscription in participatory|dictsort:"payed" %}

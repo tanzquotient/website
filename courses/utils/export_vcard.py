@@ -5,7 +5,7 @@ from vobject.vcard import *
 from vobject import *
 
 from courses.models import UserProfile
-from courses.utils import export_zip
+from courses.utils import export_zip, clean_filename
 
 
 def write_vcard(data, file):
@@ -32,12 +32,12 @@ def export_vcard(title, data, multiple=False):
         for name, value in data.items():
             file = BytesIO()
             write_vcard(value, file)
-            files[name] = file.getvalue()
+            files["{}.vcd".format(name)] = file.getvalue()
 
-        return export_zip(title, files, "vcard")
+        return export_zip(title, files)
 
     else:
         response = HttpResponse(content_type='text/vcard')
-        response['Content-Disposition'] = 'attachment; filename="{}.vcard"'.format(title)
+        response['Content-Disposition'] = 'attachment; filename="{}.vcf"'.format(clean_filename(title))
         write_vcard(data, response)
         return response

@@ -3,7 +3,7 @@ from io import BytesIO
 import unicodecsv
 from django.http import HttpResponse
 
-from courses.utils import export_zip
+from courses.utils import export_zip, clean_filename
 
 
 def write_csv(data, file):
@@ -19,13 +19,13 @@ def export_csv(title, data, multiple=False):
         for name, value in data.items():
             file = BytesIO()
             write_csv(value, file)
-            files[name] = file.getvalue()
+            files["{}.csv".format(name)] = file.getvalue()
 
         return export_zip(title, files)
 
     else:
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(title)
+        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(clean_filename(title))
         write_csv(data, response)
         return response
 

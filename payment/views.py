@@ -257,10 +257,22 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
         return super(CoursePaymentConfirm, self).form_valid(form)
 
 
-class CoursePaymentExport(TeacherOfCourseOnly):
+class CoursePaymentExportExcel(TeacherOfCourseOnly):
     def get(self, request, *args, **kwargs):
         from courses import services
         return services.export_subscriptions([kwargs.get('course', None)], 'xlsx')
+
+
+class CoursePaymentExportCsv(TeacherOfCourseOnly):
+    def get(self, request, *args, **kwargs):
+        from courses import services
+        return services.export_subscriptions([kwargs.get('course', None)], 'csv')
+
+
+class CoursePaymentExportVCard(TeacherOfCourseOnly):
+    def get(self, request, *args, **kwargs):
+        from courses import services
+        return services.export_subscriptions([kwargs.get('course', None)], 'vcard')
 
 
 class OfferingFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):

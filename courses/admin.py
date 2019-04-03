@@ -1,17 +1,12 @@
-from django.contrib import admin
-
 # Register your models here.
-from courses.models import *
 
-from django.contrib.auth.admin import UserAdmin, GroupAdmin
-from django.contrib.auth.models import User, Group
-from courses.admin_actions import *
-from django.contrib.admin.filters import SimpleListFilter
-from courses.filters import *
-from reversion.admin import VersionAdmin
-from payment.vouchergenerator import generate_pdf, join_pdfs
-from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
 from django.contrib.admin.views.main import ChangeList
+from django.contrib.auth.admin import GroupAdmin
+from parler.admin import TranslatableAdmin
+from reversion.admin import VersionAdmin
+
+from courses.filters import *
+from payment.vouchergenerator import generate_pdf, join_pdfs
 
 
 class CourseInline(admin.TabularInline):
@@ -25,7 +20,9 @@ class OfferingAdmin(admin.ModelAdmin):
     list_display = ('name', 'period', 'display', 'active')
     inlines = (CourseInline,)
 
-    actions = [display, undisplay, activate, deactivate, offering_emaillist, export_teacher_payment_information_csv]
+    actions = [display, undisplay, activate, deactivate, offering_emaillist,
+               export_teacher_payment_information_csv,
+               export_teacher_payment_information_excel]
 
 
 class TeachInlineForCourse(admin.TabularInline):
@@ -123,6 +120,7 @@ class CourseAdmin(TranslatableAdmin):
     actions = [display, undisplay, activate, deactivate, welcome_teachers, welcome_teachers_reset_flag, copy_courses,
                export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
+               export_confirmed_subscriptions_vcard,
                export_confirmed_subscriptions_xlsx, evaluate_course]
 
 

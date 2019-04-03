@@ -474,12 +474,30 @@ def export_summary(request):
 
 
 @staff_member_required
+def export_summary_excel(request):
+    from courses import services
+    return services.export_summary('xlsx')
+
+
+@staff_member_required
 def export_offering_summary(request, offering_id):
     from courses import services
     return services.export_summary('csv', [Offering.objects.filter(pk=offering_id).first()])
 
 
 @staff_member_required
+def export_offering_summary_excel(request, offering_id):
+    from courses import services
+    return services.export_summary('xlsx', [Offering.objects.filter(pk=offering_id).first()])
+
+
+@staff_member_required
 def export_offering_teacher_payment_information(request, offering_id):
     from courses import services
     return services.export_teacher_payment_information('csv', [Offering.objects.filter(pk=offering_id).first()])
+
+
+@staff_member_required
+def export_offering_teacher_payment_information_excel(request, offering_id):
+    from courses import services
+    return services.export_teacher_payment_information('xlsx', [Offering.objects.filter(pk=offering_id).first()])

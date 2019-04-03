@@ -10,8 +10,9 @@
 
     <div class="container">
         <p>
-            {% trans "Download an Excel with summary of this offering here:" %}
-            <a href="{% url "courses:export_offering_summary" offering.pk %}">DOWNLOAD</a>
+            {% trans "Download summary of this offering here:" %}
+            <a href="{% url "courses:export_offering_summary_excel" offering.pk %}">Download Excel</a>,
+            <a href="{% url "courses:export_offering_summary" offering.pk %}">Download CSV</a>
         </p>
 
         <h2>{{ offering.name }}
