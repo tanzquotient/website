@@ -1,19 +1,14 @@
-import logging
+import re
 import unicodedata
 from datetime import date
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http.response import HttpResponse
 from django.utils.translation import ugettext as _
 
 import courses.models as models
-from courses.utils import export_csv, export
-from courses.utils import export_excel
-
+from courses.utils import export
 from .emailcenter import *
-
-import re
 
 log = logging.getLogger('tq')
 
@@ -490,8 +485,6 @@ def model_attribute_language_fallback(model, attribute):
     return None
 
 
-import unicodecsv
-
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 
 
@@ -509,6 +502,9 @@ def export_subscriptions(course_ids, export_format):
             for s in subscriptions:
                 data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, '* Private', s.user.email,
                              '* Private', s.user.profile.phone_number])
+
+        if export_format == 'vcard':
+            data = [subscription.user for subscription in subscriptions]
         else:
             data.append(
                 ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen', 'Erfahrung'])
@@ -526,7 +522,7 @@ def export_subscriptions(course_ids, export_format):
         course_name = list(export_data.keys())[0]
         return export(export_format, title='Kursteilnehmer-{}'.format(course_name), data=export_data[course_name])
 
-    return export(export_format, title="Kursteilnehmer", data=export_data, multiple_sheets=True)
+    return export(export_format, title="Kursteilnehmer", data=export_data, multiple=True)
 
 
 def export_summary(export_format='csv', offerings=models.Offering.objects.all()):

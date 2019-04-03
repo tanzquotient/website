@@ -1,38 +1,31 @@
-import unicodecsv
 from io import BytesIO
-from zipfile import ZipFile
 
+import unicodecsv
 from django.http import HttpResponse
 
-from courses.utils import clean_filename
+from courses.utils import export_zip
 
 
-def export_csv(title, data, multiple_sheets=False):
+def write_csv(data, file):
+    writer = unicodecsv.writer(file)
+    for row in data:
+        writer.writerow(row)
 
-    if multiple_sheets:
-        zipped_file = BytesIO()
-        with ZipFile(zipped_file, 'w') as folder:
-            for sheet, value in data:
-                csv_file = BytesIO()
-                writer = unicodecsv.writer(csv_file, encoding='utf-8')
-                for row in value:
-                    writer.writerow(row)
 
-                folder.writestr(u'{}/{}.csv'.format(clean_filename(title), clean_filename(sheet)), csv_file.getvalue())
-                csv_file.seek(0)
-        zipped_file.seek(0)
+def export_csv(title, data, multiple=False):
 
-        response = HttpResponse(zipped_file, content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename={}.zip'.format(clean_filename(title))
-        response['Content-Length'] = zipped_file.tell()
-        return response
+    if multiple:
+        files = dict()
+        for name, value in data.items():
+            file = BytesIO()
+            write_csv(value, file)
+            files[name] = file.getvalue()
+
+        return export_zip(title, files)
 
     else:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(title)
-        writer = unicodecsv.writer(response)
-        for row in data:
-            writer.writerow(row)
-
+        write_csv(data, response)
         return response
 

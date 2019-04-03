@@ -1,0 +1,21 @@
+from io import BytesIO
+from zipfile import ZipFile
+
+from django.http import HttpResponse
+
+from courses.utils import clean_filename
+
+
+def export_zip(title, files, file_ending):
+
+    zipped_file = BytesIO()
+    with ZipFile(zipped_file, 'w') as folder:
+        for name, file_bytes in files.items():
+            folder.writestr(u'{}/{}.{}'.format(clean_filename(title), clean_filename(name), file_ending), file_bytes)
+    zipped_file.seek(0)
+
+    response = HttpResponse(zipped_file, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename={}.zip'.format(clean_filename(title))
+    response['Content-Length'] = zipped_file.tell()
+    return response
+
