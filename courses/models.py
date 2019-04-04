@@ -484,10 +484,6 @@ class Course(TranslatableModel):
         else:
             return preview or (self.offering.display and self.display)  # both must be true to be displayed
 
-    def is_preview(self):
-        return False
-        # return not self.display or ((self.offering is not None) and self.offering.is_preview)
-
     def is_subscription_allowed(self):
         if self.open_class:
             return False

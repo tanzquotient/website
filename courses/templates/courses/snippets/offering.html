@@ -30,7 +30,6 @@
                         <tr>
                             <td>
                                 <a href="{% url 'courses:subscription' c.id %}">
-                                    {% if c.is_preview %}<span class="label label-info">Preview</span>{% endif %}
                                     {{ c.type.name }}
                                 </a>
                             </td>
@@ -73,7 +72,6 @@
                     {% for c in d.courses %}
                         <a href="{% url 'courses:subscription' c.id %}" class="list-group-item">
                             <h4 class="list-group-item-heading">
-                                {% if c.is_preview %}<span class="label label-info">Preview</span>{% endif %}
                                 {{ c.type.name }}
                                 <small class="pull-right">
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
