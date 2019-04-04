@@ -18,30 +18,20 @@
                         {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='mars' gender_singular='Mann' gender_plural='Männer' %}
                     {% else %}
                         <span class="subscription_info_item">
-                    {% if show.man or course.men_needed %}
+                    {% if show.man %}
                         <i class="fa fa-mars"></i>
+                        <span class="badge">{{ count.man }} frei</span>
                     {% endif %}
-                            {% if course.men_needed %}
-                                gesucht
-                            {% endif %}
-                            {% if show.man %}
-                                <span class="badge">{{ count.man }} frei</span>
-                            {% endif %}
                     </span>
                     {% endif %}
                     {% if count.woman <= 0 %}
                         {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='venus' gender_singular='Frau' gender_plural='Frauen' %}
                     {% else %}
                         <span class="subscription_info_item">
-                    {% if show.woman or course.women_needed %}
+                    {% if show.woman %}
                         <i class="fa fa-venus"></i>
+                        <span class="badge">{{ count.woman }} frei</span>
                     {% endif %}
-                            {% if course.women_needed %}
-                                gesucht
-                            {% endif %}
-                            {% if show.woman %}
-                                <span class="badge">{{ count.woman }} frei</span>
-                            {% endif %}
                     </span>
                     {% endif %}
                 {% else %}

@@ -421,23 +421,20 @@ class Course(TranslatableModel):
             return self.period
 
     def show_free_places_count(self):
-        '''only show free_places_count if it can be calculated and is below 10'''
-        BOUND = 6
+        """ only show free_places_count if it can be calculated """
         counts = self.get_free_places_count()
         if counts is not None:
             return {
-                'total': 0 < counts['total'] < BOUND,
-                'man': 0 < counts['man'] < BOUND,
-                'woman': 0 < counts['woman'] < BOUND
+                'total': counts['total'] > 0,
+                'man': counts['man'] > 0,
+                'woman': counts['woman'] > 0
             }
         else:
             return None
 
     def get_free_places_count(self):
-        '''
-        Creates a dict with the free places totally and for men/women separately
-        '''
-        if self.max_subscribers != None:
+        """ Creates a dict with the free places totally and for men/women separately """
+        if self.max_subscribers is not None:
             subscriptions = self.subscriptions.active()
             m = subscriptions.filter(user__profile__gender=UserProfile.Gender.MEN).count()
             w = subscriptions.filter(user__profile__gender=UserProfile.Gender.WOMAN).count()
