@@ -3,9 +3,8 @@
 /*******************************/
 .navbar-inverse {
 	border-radius: 0;
-	min-height: 100px;
-	padding-top: 25px;
 	margin-bottom: 0;
+	border-bottom: none;
 }
 
 .navbar-inverse *:focus {
@@ -13,14 +12,19 @@
 }
 
 .navbar-inverse .navbar-nav > li > a {
+	font-weight: bold;
 	color: white;
 	padding: 10px;
-	margin: 0 2px;
+	margin: 20px 2px;
 	border-radius: 5px;
 }
 
-.navbar-inverse .navbar-nav > li > a:focus, .navbar-inverse .navbar-nav > li > a:hover {
+.navbar-inverse .navbar-nav > li > a:hover {
 	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-inverse .navbar-nav > li > a:focus {
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 .navbar-inverse .navbar-toggle {
@@ -28,46 +32,26 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover,
-	.navbar-inverse .navbar-nav>.active>a:focus {
-	background-color: #931516;
-}
-
-.navbar-inverse .navbar-nav>.open>a {
-	color: white;
-}
-
 .navbar-inverse .navbar-nav>.active>a {
 	background-color: #C51718;
 }
 
+.navbar-inverse .navbar-nav>.active>a:hover {
+	background-color: #931516;
+}
+
+.navbar-inverse .navbar-nav>.active>a:focus {
+	background-color: #6e000b;
+}
+
+
 .navbar-inverse .navbar-brand {
-	font-family: "Open sans", helvetica, arial;
-	font-size: 24px;
-	color: white;
-	padding: 0 0 0 15px;
-	margin: 12px 0 0 0;
+	height: 80px;
+	padding: 15px;
 }
 
 .navbar-inverse .navbar-brand img {
-	margin-top: -18px;
-}
-
-.navbar-nav .dropdown-menu {
-	left: -5px;
-	font-size: 13px;
-	background-color: rgba(0, 0, 0, .7);
-	border: 0px none;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-}
-
-.navbar-nav .dropdown-menu>li>a {
-	color: rgba(255, 255, 255, .7);
-	padding: 7px 20px;
+	height: 100%;
 }
 
 .navbar-nav .dropdown-menu>li>a:hover, .navbar-nav .dropdown-menu>li>a:focus,
@@ -96,7 +80,6 @@
 
 .navbar-collapse {
 	border: 0 none;
-	border-top: 0 none;
 	box-shadow: none;
 }
 
@@ -104,11 +87,19 @@
 	.navbar-collapse ul {
 		text-align: center;
 		width: 100%;
-		padding-bottom: 10px;
 	}
 	.navbar-collapse ul .btn {
 		max-width: 50%;
 		margin: 0 auto;
+	}
+	.navbar-inverse .navbar-nav > li > a {
+		margin: 2px;
+	}
+}
+
+@media ( max-width : 990px) {
+	.navbar-inverse .navbar-nav > li > a {
+		margin: 10px 2px;
 	}
 }
 
