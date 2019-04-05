@@ -3,8 +3,6 @@
 /*******************************/
 .navbar-inverse {
 	border-radius: 0;
-	background: rgba(0, 0, 0, .8);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 	min-height: 100px;
 	padding-top: 25px;
 	margin-bottom: 0;
@@ -14,41 +12,33 @@
 	outline: 0;
 }
 
-@media ( max-width : 767px) {
-	.navbar-inverse {
-		background: rgba(0, 0, 0, .9);
-	}
+.navbar-inverse .navbar-nav > li > a {
+	color: white;
+	padding: 10px;
+	margin: 0 2px;
+	border-radius: 5px;
 }
 
-.navbar-inverse .navbar-nav>li>a,.navbar-inverse i, .navbar-inverse .navbar-nav>.open ul>a {
-	color: rgba(255, 255, 255, .4);
+.navbar-inverse .navbar-nav > li > a:focus, .navbar-inverse .navbar-nav > li > a:hover {
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-inverse .navbar-toggle {
-    border-color: rgba(255, 255, 255, .4);
+	color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover,
 	.navbar-inverse .navbar-nav>.active>a:focus {
-	color: #fff;
-	background: none;
+	background-color: #931516;
 }
 
 .navbar-inverse .navbar-nav>.open>a {
-	background: none;
-	color: white;
-}
-
-.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus,
-	.navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus
-	{
-	background: none;
 	color: white;
 }
 
 .navbar-inverse .navbar-nav>.active>a {
-	background: none;
-	color: white;
+	background-color: #C51718;
 }
 
 .navbar-inverse .navbar-brand {
@@ -136,7 +126,7 @@
 }
 
 .btn {
-	padding: 10px 40px;
+	padding: 10px 30px;
 	font-weight: bold;
 	border: 0 none;
 	-webkit-border-radius: 3px;
@@ -145,7 +135,7 @@
 }
 
 .btn-lg {
-	padding: 15px 65px;
+	padding: 15px 30px;
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -176,25 +166,21 @@
 }
 
 .btn-action, .btn-primary {
-	color: #FFEFD7;
-	background-image: -webkit-linear-gradient(top, rgba(197, 23, 24, 0.75)
-		0%, rgb(197, 23, 24) 100%);
-	background-image: linear-gradient(to bottom, rgba(197, 23, 24, 0.75) 0%,
-		rgb(197, 23, 24) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22',
-		endColorstr='#ffFF8C00', GradientType=0);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled= false);
-	background-repeat: repeat-x;
-	border: 0 none;
+	color: white;
+	font-size: 14pt;
+	background: #C51718;
+	border-radius: 5px;
+	margin: 0 5px;
 }
 
 .btn-action:hover, .btn-action:focus {
-	color: #333;
-	background: rgb(250, 238, 118);
+	color: white;
+	background: #931516;
 }
 
 .btn-action:active {
-	color: #000;
+	color: white;
+	background: #6e000b;
 }
 
 /*******************************/
