@@ -16,10 +16,10 @@ def export_csv(title, data, multiple=False):
 
     if multiple:
         files = dict()
-        for name, value in data.items():
+        for count, item in enumerate(data):
             file = BytesIO()
-            write_csv(value, file)
-            files["{}.csv".format(name)] = file.getvalue()
+            write_csv(item['data'], file)
+            files["{}_{}.csv".format(count + 1, item['name'])] = file.getvalue()
 
         return export_zip(title, files)
 

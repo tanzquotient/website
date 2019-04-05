@@ -490,7 +490,7 @@ INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
 
 def export_subscriptions(course_ids, export_format):
 
-    export_data = dict()
+    export_data = []
     for course_id in course_ids:
         course_name = models.Course.objects.get(id=course_id).name
         subscriptions = models.Subscribe.objects.accepted().filter(course_id=course_id).order_by('user__first_name')
@@ -513,7 +513,7 @@ def export_subscriptions(course_ids, export_format):
                 data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
                              s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience])
 
-        export_data[course_name] = data
+        export_data.append({'name': course_name, 'data': data})
 
     if len(export_data) == 0:
         return None

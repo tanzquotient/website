@@ -14,7 +14,7 @@ def clean_filename(name):
     for original, substitute in replacements.items():
         name = name.replace(original, substitute)
 
-    invalid_chars = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
+    invalid_chars = re.compile(r'[^\w\-_ .]', re.IGNORECASE | re.UNICODE)
     name = invalid_chars.sub('', name)
 
     return name

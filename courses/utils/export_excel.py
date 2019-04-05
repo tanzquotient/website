@@ -11,14 +11,14 @@ def export_excel(title, data, has_column_headings=True, multiple=False):
     if multiple:
         sheets = dict()
         workbook.remove_sheet(workbook.get_active_sheet())
-        for key, value in data.items():
-            sheet_title = clean_filename(key)[:30]
-            sheets[workbook.create_sheet(title=sheet_title)] = value
+        for item in data:
+            sheet_title = clean_filename(item['name'])[:30]
+            sheets[workbook.create_sheet(title=sheet_title)] = item['data']
     else:
         sheets = {workbook.get_active_sheet(): data}
 
     for sheet, values in sheets.items():
-        for row_number, row in enumerate(data):
+        for row_number, row in enumerate(values):
             for col_number, value in enumerate(row):
                 cell = sheet.cell(row=row_number + 1, column=col_number + 1, value=value)
                 if has_column_headings and row_number == 0:

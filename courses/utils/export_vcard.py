@@ -1,4 +1,4 @@
-from io import BytesIO
+from io import BytesIO, StringIO
 
 from django.http import HttpResponse
 from vobject.vcard import *
@@ -17,8 +17,9 @@ def write_vcard(data, file):
         card.fn.value = "{} {}".format(user.first_name, user.last_name)
         card.add("email")
         card.email.value = user.email
-        card.add("tel")
-        card.tel.value = user.profile.phone_number
+        if user.profile.phone_number:
+            card.add("tel")
+            card.tel.value = user.profile.phone_number
         card.add("gender")
         card.gender.value = 'M' if user.profile.gender == UserProfile.Gender.MEN else 'F'
 
@@ -29,10 +30,10 @@ def export_vcard(title, data, multiple=False):
 
     if multiple:
         files = dict()
-        for name, value in data.items():
-            file = BytesIO()
-            write_vcard(value, file)
-            files["{}.vcd".format(name)] = file.getvalue()
+        for count, item in enumerate(data):
+            file = StringIO()
+            write_vcard(item['data'], file)
+            files["{}_{}.vcf".format(count + 1, item['name'])] = file.getvalue()
 
         return export_zip(title, files)
 
