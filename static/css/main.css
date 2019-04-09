@@ -1,32 +1,31 @@
 /* Header */
 header {
-    background: #333 url(../elements/home.jpg) no-repeat;
-    background-position: 100% 55%;
+    background: #333 url(../elements/home.jpg) no-repeat 100% 55%;
     background-size: cover;
     min-height: 480px;
     text-align: center;
     padding-top: 200px;
     color: white;
-    font-family: "Open sans", Helvetica, Arial;
+    font-family: "Open sans", Helvetica, Arial, sans-serif;
     font-weight: 400;
     margin-bottom: 25px;
 }
 
 header.light{
     background:none;
-    min-height: 0px;
+    min-height: 0;
     padding-top: 70px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 header.secondary {
     height: 100px;
     min-height: 100px;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 header .lead {
-    font-family: "Open sans", Helvetica, Arial;
+    font-family: "Open sans", Helvetica, Arial, sans-serif;
     font-size: 44px;
     font-weight: bold;
     background-color: #C51718;
@@ -55,26 +54,8 @@ header .btn-default, header .btn-default:hover, header .btn-default:active,
     background: rgba(102, 102, 102, 0.43);
 }
 
-header .btn-default {
-    text-shadow: none;
-    color: rgba(255, 255, 255, .5);
-    -webkit-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
-    -moz-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
-    box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
-}
-
-header .btn-default:hover, header .btn-default:focus {
-    color: rgba(255, 255, 255, .8);
-    -webkit-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
-    -moz-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
-    box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
-}
-
-header .btn-default:active, header .btn-default.active {
-    color: #fff;
-    -webkit-box-shadow: inset 0px 0px 0px 3px #fff;
-    -moz-box-shadow: inset 0px 0px 0px 3px #fff;
-    box-shadow: inset 0px 0px 0px 3px #fff;
+header .container {
+    padding: 20px 0;
 }
 
 @media ( max-width : 1200px) {
@@ -98,15 +79,13 @@ header .btn-default:active, header .btn-default.active {
 }
 
 #header_about {
-    background: #333 url( ../elements/about.jpg) no-repeat;
     background-size: cover;
-    background-position: 100% 50%;
+    background: #333 url(../elements/about.jpg) no-repeat 100% 50%;
 }
 
 #header_courses {
-    background: #333 url( ../elements/courses.jpg) no-repeat;
     background-size: cover;
-    background-position: 50% 50%;
+    background: #333 url(../elements/courses.jpg) no-repeat 50% 50%;
 }
 
 #header_events {
@@ -115,27 +94,33 @@ header .btn-default:active, header .btn-default.active {
 }
 
 #header_music {
-    background: #333 url( ../elements/music.jpg) no-repeat;
     background-size: cover;
-    background-position: 50% 50%;
+    background: #333 url(../elements/music.jpg) no-repeat 50% 50%;
 }
 
 #header_gallery {
-    background: #333 url( ../elements/gallery.jpg) no-repeat;
     background-size: cover;
-    background-position: 30% 50%;
+    background: #333 url(../elements/gallery.jpg) no-repeat 30% 50%;
 }
 
 #header_faq {
-    background: #333 url( ../elements/faq.jpg) no-repeat;
     background-size: cover;
-    background-position: 30% 50%;
+    background: #333 url(../elements/faq.jpg) no-repeat 30% 50%;
 }
 
 #header_login {
-    background: #333 url( ../elements/login.jpg) no-repeat;
     background-size: cover;
-    background-position: 50% 50%;
+    background: #333 url(../elements/login.jpg) no-repeat 50% 50%;
+}
+
+
+.dropdown-menu {
+    background-color: #333;
+    border: none;
+}
+
+.dropdown-menu > li > a {
+    color: white;
 }
 
 /* navbar */
@@ -192,7 +177,7 @@ header .btn-default:active, header .btn-default.active {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Open sans", Helvetica, Arial;
+    font-family: "Open sans", Helvetica, Arial, sans-serif;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
@@ -201,7 +186,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 blockquote {
     font-style: italic;
-    font-family: Georgia;
+    font-family: "Open sans", Helvetica, Arial, sans-serif;
     color: #999;
     margin: 30px 0 30px;
 }
@@ -226,7 +211,7 @@ label {
 .breadcrumb {
     background: none;
     padding: 0;
-    margin: 30px 0 0px 0;
+    margin: 30px 0 0 0;
 }
 
 ul.list-spaces li {
@@ -342,7 +327,6 @@ img.pull-left {
     margin: 0 0 35px 0;
     padding: 2px 0;
     color: #888888;
-    font-size: 12px;
     font-size: 0.75rem;
 }
 
