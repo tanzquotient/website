@@ -87,8 +87,10 @@ def course_list(request, force_preview=False):
     return render(request, template_name, context)
 
 
+@staff_member_required
 def course_list_preview(request):
     return course_list(request, force_preview=True)
+
 
 def subscription(request, course_id):
     '''
