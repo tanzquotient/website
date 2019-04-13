@@ -49,14 +49,14 @@ def update_user(user, user_data):
         user.last_name = user_data['last_name']
     user.save()
 
-    userprofile = get_or_create_userprofile(user)
+    profile = get_or_create_userprofile(user)
 
     # convenience method. if key is not given, assume same as attr
     def set_if_given(attr, key=None):
         if not key:
             key = attr
         if key in user_data:
-            setattr(userprofile, attr, user_data[key])
+            setattr(profile, attr, user_data[key])
 
     set_if_given('legi')
     set_if_given('gender')
@@ -74,26 +74,26 @@ def update_user(user, user_data):
     set_if_given('ahv_number')
 
     if all((key in user_data) for key in ['street', 'plz', 'city']):
-        if userprofile.address:
-            userprofile.address.street = user_data['street']
-            userprofile.address.plz = user_data['plz']
-            userprofile.address.city = user_data['city']
-            userprofile.address.save()
+        if profile.address:
+            profile.address.street = user_data['street']
+            profile.address.plz = user_data['plz']
+            profile.address.city = user_data['city']
+            profile.address.save()
         else:
-            userprofile.address = models.Address.objects.create_from_user_data(user_data)
+            profile.address = models.Address.objects.create_from_user_data(user_data)
 
     if all((key in user_data) for key in ['iban']):
-        if userprofile.bank_account:
-            userprofile.bank_account.iban = user_data['iban']
-            userprofile.bank_account.bank_name = user_data['bank_name']
-            userprofile.bank_account.bank_zip_code = user_data['bank_zip_code']
-            userprofile.bank_account.bank_city = user_data['bank_city']
-            userprofile.bank_account.bank_country = user_data['bank_country']
-            userprofile.bank_account.save()
+        if profile.bank_account:
+            profile.bank_account.iban = user_data['iban']
+            profile.bank_account.bank_name = user_data['bank_name']
+            profile.bank_account.bank_zip_code = user_data['bank_zip_code']
+            profile.bank_account.bank_city = user_data['bank_city']
+            profile.bank_account.bank_country = user_data['bank_country']
+            profile.bank_account.save()
         else:
-            userprofile.bank_account = models.BankAccount.objects.create_from_user_data(user_data)
+            profile.bank_account = models.BankAccount.objects.create_from_user_data(user_data)
 
-    userprofile.save()
+    profile.save()
 
     return user
 

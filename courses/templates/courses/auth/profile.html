@@ -13,6 +13,11 @@
             class="fa fa-arrow-circle-right fa-lg"></i></a>{% endblocktrans %}
     </p>
 
+    {% url 'change_password' as change_password %}
+    <p>{% blocktrans %}<a href="{{ change_password }}">Change your password <i
+            class="fa fa-arrow-circle-right fa-lg"></i></a>{% endblocktrans %}
+    </p>
+
     {% if not is_profile_complete and not form.errors %}
         <div class="alert alert-danger" role="alert">
             <strong>Please complete your profile!</strong>

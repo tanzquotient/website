@@ -1,7 +1,9 @@
 import logging
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sessions.exceptions import SuspiciousSession
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -473,6 +475,28 @@ class ProfileView(FormView):
     def form_valid(self, form):
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
+
+
+@login_required
+def change_password(request):
+    success = True
+    initial = True
+    if request.method == 'POST':
+        initial = False
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+        else:
+            success = False
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'account/change_password.html', {
+        'form': form,
+        'success': success,
+        'initial': initial,
+    })
 
 
 @staff_member_required
