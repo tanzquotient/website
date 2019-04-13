@@ -1,6 +1,6 @@
 /* Header */
 header {
-    background: #333 url(../elements/home-selfmade.jpg) no-repeat;
+    background: #333 url(../elements/home.jpg) no-repeat;
     background-position: 100% 55%;
     background-size: cover;
     min-height: 480px;
@@ -8,7 +8,7 @@ header {
     padding-top: 200px;
     color: white;
     font-family: "Open sans", Helvetica, Arial;
-    font-weight: 450;
+    font-weight: 400;
     margin-bottom: 25px;
 }
 
@@ -28,18 +28,12 @@ header.secondary {
 header .lead {
     font-family: "Open sans", Helvetica, Arial;
     font-size: 44px;
-    margin-bottom: 6px;
-    color: white;
-    background: rgba(10, 10, 10, .5);
-    background: -webkit-linear-gradient(rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
-    background: -o-linear-gradient(left, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
-    background: -moz-linear-gradient(left, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
-    background: linear-gradient(to right, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
-    line-height: 1.15em;
+    font-weight: bold;
+    background-color: #C51718;
+    display: inline-block;
+    padding: 0 20px 5px;
+    border-radius: 10px;
+    margin: 0 20px;
 }
 
 header .tagline {
@@ -146,8 +140,7 @@ header .btn-default:active, header .btn-default.active {
 
 /* navbar */
 .navbar-inverse {
-    background: linear-gradient(to bottom, #C51718 0%, rgba(197, 23, 24, 0.75)
-        100%);
+    background: #232323;
 }
 
 /* Autohide navbar */
@@ -194,7 +187,7 @@ header .btn-default:active, header .btn-default.active {
 }
 
 .emphasize td {
-    background: transparent:
+    background: transparent;
 }
 
 /* Typography */
