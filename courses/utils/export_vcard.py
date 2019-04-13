@@ -10,20 +10,21 @@ from courses.utils import export_zip, clean_filename
 
 def write_vcard(data, file):
     for user in data:
-        card = vCard()
-        card.add('n')
-        card.n.value = Name(family=user.last_name, given=user.first_name)
-        card.add('fn')
-        card.fn.value = "{} {}".format(user.first_name, user.last_name)
-        card.add("email")
-        card.email.value = user.email
-        if user.profile.phone_number:
-            card.add("tel")
-            card.tel.value = user.profile.phone_number
-        card.add("gender")
-        card.gender.value = 'M' if user.profile.gender == UserProfile.Gender.MEN else 'F'
 
-        file.write(card.serialize())
+        card = "BEGIN:VCARD\n"
+        card += "VERSION:3.0\n"
+        card += "EMAIL:{}\n".format(user.email)
+        card += "FN:{} {}\n".format(user.first_name, user.last_name)
+        card += "GENDER:{}\n".format('M' if user.profile.gender == UserProfile.Gender.MEN else 'F')
+        card += "N:{};{};;;\n".format(user.last_name, user.first_name)
+        if user.profile.phone_number:
+            tel = user.profile.phone_number
+            if len(tel) >= 2 and tel[0:2] == "07": # Add country code for swiss numbers
+                tel = "+41 " + tel[1:]
+            card += "TEL:{}\n".format(tel)
+        card += "END:VCARD\n"
+
+        file.write(card)
 
 
 def export_vcard(title, data, multiple=False):

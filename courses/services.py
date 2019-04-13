@@ -519,8 +519,8 @@ def export_subscriptions(course_ids, export_format):
         return None
 
     if len(export_data) == 1:
-        course_name = list(export_data.keys())[0]
-        return export(export_format, title='Kursteilnehmer-{}'.format(course_name), data=export_data[course_name])
+        course_name = export_data[0]['name']
+        return export(export_format, title='Kursteilnehmer-{}'.format(course_name), data=export_data[0]['data'])
 
     return export(export_format, title="Kursteilnehmer", data=export_data, multiple=True)
 

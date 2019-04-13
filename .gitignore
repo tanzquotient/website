@@ -64,6 +64,7 @@ celerybeat.*
 
 # PyCharm Project Files
 .idea/
+*.iml
 
 node_modules/
 
