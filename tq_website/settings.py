@@ -148,7 +148,7 @@ ANONYMOUS_USER_ID = -1
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 # default redirect URL after login (if no GET parameter next is given)
-LOGIN_REDIRECT_URL = "/accounts/email"
+LOGIN_REDIRECT_URL = "/profile"
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -473,18 +473,6 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-# Caching
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached:{}'.format(os.environ.get("TQ_MEMCACHED_PORT", '11211')),
-    },
-    'db': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'tq_cache_table',
-    }
-}
 
 #################
 # Debug Toolbar #
@@ -497,6 +485,21 @@ SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'tq_website',
+    } if DEBUG else {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'memcached:{}'.format(os.environ.get("TQ_MEMCACHED_PORT", '11211')),
+    },
+    'db': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'tq_cache_table',
+    }
+}
 
 # Configure the email host to send mails from
 EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')

@@ -13,10 +13,23 @@
             class="fa fa-arrow-circle-right fa-lg"></i></a>{% endblocktrans %}
     </p>
 
+    {% if not is_profile_complete and not form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Please complete your profile!</strong>
+            <p>Currently missing:</p>
+            <ul>
+                {% for missing in profile_missing_values %}
+                    <li>{{ missing }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
     <form class="form-horizontal" role="form" id="signup_form" method="post" action="{% url 'auth_profile' %}">
         {% csrf_token %}
 
-        {% include "courses/snippets/user_profile_form.html" with form=form only %}
+        {% include "courses/snippets/user_profile_form.html" with form=form is_teacher=is_teacher only %}
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
