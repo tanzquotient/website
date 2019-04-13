@@ -575,7 +575,7 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
 
     header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
     header += ['Street', 'PLZ', 'City', 'Country']
-    header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'Bank Account']
+    header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'IBAN', 'Bank']
     for o in offerings:
         header += ['Wage for ' + o.name]
 
@@ -586,11 +586,16 @@ def export_teacher_payment_information(export_format='csv', offerings=models.Off
                user.profile.phone_number]
         if user.profile.address:
             row += [user.profile.address.street, user.profile.address.plz, user.profile.address.city,
-                    user.profile.address.country]
+                    str(user.profile.address.country)]
         else:
             row += ["-"] * 4
-        row += [user.profile.birthdate, user.profile.nationality, user.profile.residence_permit,
-                user.profile.ahv_number, user.profile.bank_account]
+
+        row += [user.profile.birthdate, str(user.profile.nationality), user.profile.residence_permit, user.profile.ahv_number]
+
+        if user.profile.bank_account:
+            row += [user.profile.bank_account.iban, user.profile.bank_account.bank_info_str()]
+        else:
+            row += ["-"] * 2
 
         # wages for each offering separately
         for o in offerings:

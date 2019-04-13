@@ -84,8 +84,10 @@ class BankAccount(models.Model):
     objects = managers.BankAccountManager()
 
     def __str__(self):
-        return "{} ({}, {} {}, {})".format(self.iban, self.bank_name, self.bank_zip_code, self.bank_city,
-                                           self.bank_country)
+        return "{} ({})".format(self.iban, self.bank_info_str())
+
+    def bank_info_str(self):
+        return "{}, {} {}, {}".format(self.bank_name, self.bank_zip_code, self.bank_city, self.bank_country)
 
 
 class UserProfile(models.Model):
