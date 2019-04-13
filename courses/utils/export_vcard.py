@@ -1,8 +1,6 @@
-from io import BytesIO, StringIO
+from io import StringIO
 
 from django.http import HttpResponse
-from vobject.vcard import *
-from vobject import *
 
 from courses.models import UserProfile
 from courses.utils import export_zip, clean_filename
