@@ -31,7 +31,7 @@
     {% endif %}
 
 
-    <form class="form-horizontal" role="form" id="signup_form" method="post" action="{% url 'auth_profile' %}">
+    <form role="form" id="signup_form" method="post" action="{% url 'auth_profile' %}">
         {% csrf_token %}
 
         {% include "courses/snippets/user_profile_form.html" with form=form is_teacher=is_teacher only %}
@@ -41,7 +41,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">
+                <button type="submit" class="btn btn-success">
                     {% trans "Update Profile" %}
                 </button>
             </div>

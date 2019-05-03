@@ -8,21 +8,21 @@
 
 {% include "courses/snippets/address_input.html" with form=form only %}
 {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
-{% include "courses/snippets/generic_input.html" with field=form.student_status only %}
+{% include "courses/snippets/select.html" with field=form.student_status only %}
 {% include "courses/snippets/text_input.html" with field=form.legi only %}
 {% include "courses/snippets/text_input.html" with field=form.body_height only %}
 {% include "courses/snippets/generic_input.html" with field=form.birthdate only %}
-{% include "courses/snippets/generic_input.html" with field=form.gender only %}
+{% include "courses/snippets/select.html" with field=form.gender only %}
 
 {% if is_teacher %}
-    {% include "courses/snippets/generic_input.html" with field=form.nationality only %}
-    {% include "courses/snippets/generic_input.html" with field=form.residence_permit only %}
+    {% include "courses/snippets/select.html" with field=form.nationality only %}
+    {% include "courses/snippets/select.html" with field=form.residence_permit only %}
     {% include "courses/snippets/text_input.html" with field=form.ahv_number only %}
     {% include "courses/snippets/text_input.html" with field=form.iban only %}
     {% include "courses/snippets/text_input.html" with field=form.bank_name only %}
     {% include "courses/snippets/text_input.html" with field=form.bank_zip_code only %}
     {% include "courses/snippets/text_input.html" with field=form.bank_city only %}
-    {% include "courses/snippets/generic_input.html" with field=form.bank_country only %}
+    {% include "courses/snippets/select.html" with field=form.bank_country only %}
 {% endif %}
 
 {% include "courses/snippets/boolean_input.html" with field=form.newsletter only %}
