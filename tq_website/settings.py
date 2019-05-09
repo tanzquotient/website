@@ -356,7 +356,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 # using post office as the default email backend 
-EMAIL_BACKEND = 'post_office.EmailBackend'
+# EMAIL_BACKEND = 'post_office.EmailBackend'
 
 POST_OFFICE = {
     'BACKENDS': {
