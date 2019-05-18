@@ -1,38 +1,45 @@
 /* Header */
 header {
-    background: #333 url(../elements/home.jpg) no-repeat 100% 55%;
+    background: #333 url(../elements/home-selfmade.jpg) no-repeat;
+    background-position: 100% 55%;
     background-size: cover;
     min-height: 480px;
     text-align: center;
     padding-top: 200px;
     color: white;
-    font-family: "Open sans", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Open sans", Helvetica, Arial;
+    font-weight: 450;
     margin-bottom: 25px;
 }
 
 header.light{
     background:none;
-    min-height: 0;
+    min-height: 0px;
     padding-top: 70px;
-    margin-bottom: 0;
+    margin-bottom: 0px;
 }
 
 header.secondary {
     height: 100px;
     min-height: 100px;
-    padding-top: 0;
+    padding-top: 0px;
 }
 
 header .lead {
-    font-family: "Open sans", Helvetica, Arial, sans-serif;
+    font-family: "Open sans", Helvetica, Arial;
     font-size: 44px;
-    font-weight: bold;
-    background-color: #C51718;
-    display: inline-block;
-    padding: 0 20px 5px;
-    border-radius: 10px;
-    margin: 0 20px;
+    margin-bottom: 6px;
+    color: white;
+    background: rgba(10, 10, 10, .5);
+    background: -webkit-linear-gradient(rgba(10, 10, 10, 0),
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    background: -o-linear-gradient(left, rgba(10, 10, 10, 0),
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    background: -moz-linear-gradient(left, rgba(10, 10, 10, 0),
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    background: linear-gradient(to right, rgba(10, 10, 10, 0),
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    line-height: 1.15em;
 }
 
 header .tagline {
@@ -50,12 +57,30 @@ header .btn {
 }
 
 header .btn-default, header .btn-default:hover, header .btn-default:active,
-    header .btn-default:focus {
+header .btn-default:focus {
     background: rgba(102, 102, 102, 0.43);
 }
 
-header .container {
-    padding: 20px 0;
+header .btn-default {
+    text-shadow: none;
+    color: rgba(255, 255, 255, .5);
+    -webkit-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
+    -moz-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
+    box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .5);
+}
+
+header .btn-default:hover, header .btn-default:focus {
+    color: rgba(255, 255, 255, .8);
+    -webkit-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
+    -moz-box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
+    box-shadow: inset 0px 0px 0px 3px rgba(255, 255, 255, .8);
+}
+
+header .btn-default:active, header .btn-default.active {
+    color: #fff;
+    -webkit-box-shadow: inset 0px 0px 0px 3px #fff;
+    -moz-box-shadow: inset 0px 0px 0px 3px #fff;
+    box-shadow: inset 0px 0px 0px 3px #fff;
 }
 
 @media ( max-width : 1200px) {
@@ -79,13 +104,15 @@ header .container {
 }
 
 #header_about {
+    background: #333 url( ../elements/about.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/about.jpg) no-repeat 100% 50%;
+    background-position: 100% 50%;
 }
 
 #header_courses {
+    background: #333 url( ../elements/courses.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/courses.jpg) no-repeat 50% 50%;
+    background-position: 50% 50%;
 }
 
 #header_events {
@@ -94,38 +121,33 @@ header .container {
 }
 
 #header_music {
+    background: #333 url( ../elements/music.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/music.jpg) no-repeat 50% 50%;
+    background-position: 50% 50%;
 }
 
 #header_gallery {
+    background: #333 url( ../elements/gallery.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/gallery.jpg) no-repeat 30% 50%;
+    background-position: 30% 50%;
 }
 
 #header_faq {
+    background: #333 url( ../elements/faq.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/faq.jpg) no-repeat 30% 50%;
+    background-position: 30% 50%;
 }
 
 #header_login {
+    background: #333 url( ../elements/login.jpg) no-repeat;
     background-size: cover;
-    background: #333 url(../elements/login.jpg) no-repeat 50% 50%;
-}
-
-
-.dropdown-menu {
-    background-color: #333;
-    border: none;
-}
-
-.dropdown-menu > li > a {
-    color: white;
+    background-position: 50% 50%;
 }
 
 /* navbar */
 .navbar-inverse {
-    background: #232323;
+    background: linear-gradient(to bottom, #C51718 0%, rgba(197, 23, 24, 0.75)
+    100%);
 }
 
 /* Autohide navbar */
@@ -172,12 +194,12 @@ header .container {
 }
 
 .emphasize td {
-    background: transparent;
+    background: transparent:
 }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Open sans", Helvetica, Arial, sans-serif;
+    font-family: "Open sans", Helvetica, Arial;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
@@ -186,7 +208,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 blockquote {
     font-style: italic;
-    font-family: "Open sans", Helvetica, Arial, sans-serif;
+    font-family: Georgia;
     color: #999;
     margin: 30px 0 30px;
 }
@@ -211,7 +233,7 @@ label {
 .breadcrumb {
     background: none;
     padding: 0;
-    margin: 30px 0 0 0;
+    margin: 30px 0 0px 0;
 }
 
 ul.list-spaces li {
@@ -290,7 +312,7 @@ img.pull-left {
 }
 
 .sidebar h1, .sidebar .h1, .sidebar h2, .sidebar .h2, .sidebar h3,
-    .sidebar .h3 {
+.sidebar .h3 {
     margin-top: 20px;
 }
 
@@ -327,6 +349,7 @@ img.pull-left {
     margin: 0 0 35px 0;
     padding: 2px 0;
     color: #888888;
+    font-size: 12px;
     font-size: 0.75rem;
 }
 
