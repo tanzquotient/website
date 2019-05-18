@@ -51,6 +51,7 @@ urlpatterns += i18n_patterns(
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^password/$', courses_views.change_password, name='change_password'),
     url(r'^profile/$', courses_views.ProfileView.as_view(), name='auth_profile'),
     url(r'^survey/', include(survey.urls, namespace='survey')),
     url(r'^events/', include(events.urls, namespace='events')),

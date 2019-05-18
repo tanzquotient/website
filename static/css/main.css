@@ -32,13 +32,13 @@ header .lead {
     color: white;
     background: rgba(10, 10, 10, .5);
     background: -webkit-linear-gradient(rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
     background: -o-linear-gradient(left, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
     background: -moz-linear-gradient(left, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
     background: linear-gradient(to right, rgba(10, 10, 10, 0),
-        rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
+    rgba(10, 10, 10, .5), rgba(10, 10, 10, .5), rgba(10, 10, 10, 0));
     line-height: 1.15em;
 }
 
@@ -57,7 +57,7 @@ header .btn {
 }
 
 header .btn-default, header .btn-default:hover, header .btn-default:active,
-    header .btn-default:focus {
+header .btn-default:focus {
     background: rgba(102, 102, 102, 0.43);
 }
 
@@ -147,7 +147,7 @@ header .btn-default:active, header .btn-default.active {
 /* navbar */
 .navbar-inverse {
     background: linear-gradient(to bottom, #C51718 0%, rgba(197, 23, 24, 0.75)
-        100%);
+    100%);
 }
 
 /* Autohide navbar */
@@ -312,7 +312,7 @@ img.pull-left {
 }
 
 .sidebar h1, .sidebar .h1, .sidebar h2, .sidebar .h2, .sidebar h3,
-    .sidebar .h3 {
+.sidebar .h3 {
     margin-top: 20px;
 }
 

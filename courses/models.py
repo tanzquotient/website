@@ -154,6 +154,24 @@ class UserProfile(models.Model):
     def is_teacher(self):
         return self.user.teaching.count() > 0
 
+    def is_complete(self):
+        return not self.missing_values()
+
+    def missing_values(self):
+        if self.is_teacher():
+            missing = []
+            if not self.birthdate:
+                missing.append('birth date')
+            if not self.residence_permit:
+                missing.append('residence permit')
+            if not self.ahv_number:
+                missing.append('AHV number')
+            if not self.bank_account:
+                missing.append('bank account')
+
+            return missing
+        return []
+
     class Meta:
         permissions = (
             ("access_counterpayment", "Can access counter payment"),

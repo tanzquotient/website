@@ -27,8 +27,6 @@ class Organise(models.Model):
 
 # Create your models here.
 class Event(TranslatableModel):
-    name = models.CharField(max_length=255, blank=False)
-    name.help_text = "The name of this event (e.g. 'Freies Tanzen')"
     date = models.DateField()
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
@@ -37,8 +35,6 @@ class Event(TranslatableModel):
     price_with_legi.help_text = "Leave this empty for free entrance"
     price_without_legi = models.FloatField(blank=True, null=True)
     price_without_legi.help_text = "Leave this empty for free entrance"
-    price_special = models.CharField(max_length=255, blank=True, null=True)
-    price_special.help_text = "Set this only if you want a different price schema."
     organisators = models.ManyToManyField(settings.AUTH_USER_MODEL, through=Organise, related_name='organising_events')
     special = BooleanField(blank=True, null=False, default=False)
     special.help_text = "If this is a special event that should be emphasized on the website"
@@ -48,7 +44,18 @@ class Event(TranslatableModel):
     image.help_text = "Advertising image for this event."
 
     translations = TranslatedFields(
-        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True)
+        description=HTMLField(
+            blank=True, null=True,
+            verbose_name='[TR] Description'
+        ),
+        name=models.CharField(
+            max_length=255, blank=False,
+            verbose_name="[TR] The name of this event (e.g. 'Freies Tanzen')"
+        ),
+        price_special=models.CharField(
+            max_length=255, blank=True, null=True,
+            verbose_name="Set this only if you want a different price schema."
+        ),
     )
 
     objects = TranslatableManager()

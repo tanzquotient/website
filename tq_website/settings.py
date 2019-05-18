@@ -8,16 +8,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-import logging
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
 import raven
-from django.utils.translation import ugettext_lazy as _
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
+
+IS_DEBUG = bool(os.environ.get("TQ_DEBUG", False))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -39,9 +40,14 @@ ALLOWED_HOSTS = [
 USE_X_FORWARDED_HOST = True
 
 # Application definition
+INSTALLED_APPS = []
 
-INSTALLED_APPS = [
-    'raven.contrib.django.raven_compat',
+if not IS_DEBUG:
+    INSTALLED_APPS += [
+        'raven.contrib.django.raven_compat',
+    ]
+
+INSTALLED_APPS += [
     'treebeard',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
@@ -148,7 +154,7 @@ ANONYMOUS_USER_ID = -1
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 # default redirect URL after login (if no GET parameter next is given)
-LOGIN_REDIRECT_URL = "/accounts/email"
+LOGIN_REDIRECT_URL = "/profile"
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -474,18 +480,6 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-# Caching
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'memcached:{}'.format(os.environ.get("TQ_MEMCACHED_PORT", '11211')),
-    },
-    'db': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'tq_cache_table',
-    }
-}
 
 #################
 # Debug Toolbar #
@@ -498,6 +492,21 @@ SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'tq_website',
+    } if DEBUG else {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'memcached:{}'.format(os.environ.get("TQ_MEMCACHED_PORT", '11211')),
+    },
+    'db': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'tq_cache_table',
+    }
+}
 
 # Configure the email host to send mails from
 EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')
@@ -541,7 +550,7 @@ PAYMENT_ACCOUNT = {
     }
 }
 
-RAVEN_ENVIRONMENT = 'development' if bool(os.environ.get("TQ_DEBUG", False)) else 'production'
+RAVEN_ENVIRONMENT = 'development' if IS_DEBUG else 'production'
 
 RAVEN_CONFIG = {
     'dsn': 'https://883ad6a3790e48aea0291f4a0d1d89c4:339fab1993244b4e9d414ebcef70cee0@sentry.io/124755',

@@ -25,11 +25,11 @@
 }
 
 .navbar-inverse .navbar-toggle {
-    border-color: rgba(255, 255, 255, .4);
+	border-color: rgba(255, 255, 255, .4);
 }
 
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover,
-	.navbar-inverse .navbar-nav>.active>a:focus {
+.navbar-inverse .navbar-nav>.active>a:focus {
 	color: #fff;
 	background: none;
 }
@@ -40,8 +40,8 @@
 }
 
 .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus,
-	.navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus
-	{
+.navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus
+{
 	background: none;
 	color: white;
 }
@@ -81,13 +81,13 @@
 }
 
 .navbar-nav .dropdown-menu>li>a:hover, .navbar-nav .dropdown-menu>li>a:focus,
-	.navbar-nav .dropdown-menu>.active>a:hover {
+.navbar-nav .dropdown-menu>.active>a:hover {
 	background: rgba(255, 255, 255, .1);
 	color: white;
 }
 
 .navbar-nav .dropdown-menu>.active>a, .navbar-nav .dropdown-menu>.active>a:focus
-	{
+{
 	background: none;
 	color: #fff;
 }
@@ -178,11 +178,11 @@
 .btn-action, .btn-primary {
 	color: #FFEFD7;
 	background-image: -webkit-linear-gradient(top, rgba(197, 23, 24, 0.75)
-		0%, rgb(197, 23, 24) 100%);
+	0%, rgb(197, 23, 24) 100%);
 	background-image: linear-gradient(to bottom, rgba(197, 23, 24, 0.75) 0%,
-		rgb(197, 23, 24) 100%);
+	rgb(197, 23, 24) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22',
-		endColorstr='#ffFF8C00', GradientType=0);
+	endColorstr='#ffFF8C00', GradientType=0);
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled= false);
 	background-repeat: repeat-x;
 	border: 0 none;
@@ -221,7 +221,7 @@
 }
 
 .jumbotron h2, .jumbotron h3, .jumbotron h4, .jumbotron h5, .jumbotron h6
-	{
+{
 	line-height: 1.3em;
 }
 

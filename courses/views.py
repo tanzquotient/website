@@ -1,7 +1,9 @@
 import logging
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sessions.exceptions import SuspiciousSession
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -13,6 +15,7 @@ from django.utils.translation import ugettext as _
 from django.utils.html import escape
 from django.views.generic.edit import FormView
 
+from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from . import services
 from .models import *
 
@@ -444,15 +447,17 @@ def offering_overview(request, offering_id):
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
-    from .forms import UserEditForm
     template_name = 'courses/auth/profile.html'
     form_class = UserEditForm
     success_url = reverse_lazy('auth_profile')
 
-    def get_initial(self):
-        from .forms import create_initial_from_user
-        initial = create_initial_from_user(self.request.user)
+    def get_form_class(self):
+        if self.request.user.profile.is_teacher():
+            return TeacherEditForm
+        return super().get_form_class()
 
+    def get_initial(self):
+        initial = create_initial_from_user(self.request.user)
         return initial
 
     def get_context_data(self, **kwargs):
@@ -462,11 +467,36 @@ class ProfileView(FormView):
         user = self.request.user
         if user.profile.gender:
             context['gender_icon'] = 'mars' if user.profile.gender == 'm' else 'venus'
+        context['is_teacher'] = user.profile.is_teacher()
+        context['is_profile_complete'] = user.profile.is_complete()
+        context['profile_missing_values'] = user.profile.missing_values()
         return context
 
     def form_valid(self, form):
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
+
+
+@login_required
+def change_password(request):
+    success = True
+    initial = True
+    if request.method == 'POST':
+        initial = False
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+        else:
+            success = False
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'account/change_password.html', {
+        'form': form,
+        'success': success,
+        'initial': initial,
+    })
 
 
 @staff_member_required
