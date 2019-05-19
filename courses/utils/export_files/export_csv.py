@@ -3,7 +3,7 @@ from io import BytesIO
 import unicodecsv
 from django.http import HttpResponse
 
-from courses.utils import export_zip, clean_filename
+from . import export_zip, clean_filename
 
 
 def write_csv(data, file):

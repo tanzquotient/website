@@ -3,7 +3,7 @@ from zipfile import ZipFile
 
 from django.http import HttpResponse
 
-from courses.utils import clean_filename
+from . import clean_filename
 
 
 def export_zip(title, files):

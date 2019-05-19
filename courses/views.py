@@ -16,6 +16,7 @@ from django.utils.html import escape
 from django.views.generic.edit import FormView
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
+from courses.utils import merge_duplicate_users, find_duplicate_users
 from . import services
 from .models import *
 
@@ -235,9 +236,9 @@ def duplicate_users(request):
             if to_merge_aliases:
                 to_merge[primary_id] = to_merge_aliases
         log.info(to_merge)
-        services.merge_duplicate_users_by_ids(to_merge)
+        merge_duplicate_users(to_merge)
     else:
-        duplicates = services.find_duplicate_users()
+        duplicates = find_duplicate_users()
         for primary, aliases in duplicates.items():
             users.append(User.objects.get(id=primary))
             user_aliases[primary] = list(User.objects.filter(id__in=aliases))

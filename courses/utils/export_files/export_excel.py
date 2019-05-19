@@ -1,11 +1,10 @@
 from django.http import HttpResponse
 from openpyxl import Workbook
 
-from courses.utils import clean_filename
+from . import clean_filename
 
 
 def export_excel(title, data, has_column_headings=True, multiple=False):
-
     workbook = Workbook()
 
     if multiple:

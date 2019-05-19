@@ -2,8 +2,8 @@ from io import StringIO
 
 from django.http import HttpResponse
 
-from courses.models import UserProfile
-from courses.utils import export_zip, clean_filename
+from ...models import UserProfile
+from . import export_zip, clean_filename
 
 
 def write_vcard(data, file):

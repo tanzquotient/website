@@ -1,4 +1,4 @@
-from courses.utils import export_excel, export_csv, export_vcard
+from . import export_excel, export_csv, export_vcard
 
 
 def export(export_format, title, data, multiple=False):
