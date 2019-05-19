@@ -367,7 +367,8 @@ EMAIL_BACKEND = 'post_office.EmailBackend'
 POST_OFFICE = {
     'BACKENDS': {
         # using djcelery's email backend as a backend for post office
-        'default': 'djcelery_email.backends.CeleryEmailBackend',
+        # Currently not working: 'default': 'djcelery_email.backends.CeleryEmailBackend',
+        'default': 'django.core.mail.backends.smtp.EmailBackend',
     },
     'DEFAULT_PRIORITY': 'now'
 }
