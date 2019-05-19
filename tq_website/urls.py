@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^jsi18n/(?P<packages>\S+?)/$', django.views.i18n.javascript_catalog),
     url(r'^export/newsletter/$', views.newsletter_list, name="newsletter_list"),
     url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
+    url(r'^export/get-involved-list/$', views.get_involved_list, name="get_involved_list"),
+    url(r'^export/not-get-involved-list/$', views.not_get_involved_list, name="not_get_involved_list"),
     url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
     url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
     url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
