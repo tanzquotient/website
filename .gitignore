@@ -96,3 +96,12 @@ database_*
 # built documentation
 docs/sphinx/_build
 docs/sphinx/_static
+
+
+# Server files
+*.backup
+*.log
+*fixture.json
+*fixture.yml
+*fixture.xml
+*fixture.yaml
