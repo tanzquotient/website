@@ -4,6 +4,7 @@ from datetime import date
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 
 import courses.models as models

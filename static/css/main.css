@@ -28,7 +28,7 @@ header .lead {
     font-family: "Open sans", Helvetica, Arial, sans-serif;
     font-size: 44px;
     font-weight: bold;
-    background-color: #C51718;
+    background-color: rgba(0,0,0,0.67);
     display: inline-block;
     padding: 0 20px 5px;
     border-radius: 10px;
@@ -125,7 +125,7 @@ header .container {
 
 /* navbar */
 .navbar-inverse {
-    background: #232323;
+    background: #C51718;
 }
 
 /* Autohide navbar */

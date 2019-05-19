@@ -33,15 +33,18 @@
 }
 
 .navbar-inverse .navbar-nav>.active>a {
-	background-color: #C51718;
+	color: #C51718;
+	background-color: #fff;
 }
 
 .navbar-inverse .navbar-nav>.active>a:hover {
-	background-color: #931516;
+	color: #C51718;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 .navbar-inverse .navbar-nav>.active>a:focus {
-	background-color: #6e000b;
+	color: #C51718;
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 
