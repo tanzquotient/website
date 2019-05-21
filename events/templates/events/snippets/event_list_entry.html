@@ -17,7 +17,7 @@
                 {% if event.special %}
                     <i class="fa fa-hand-o-right fa-lg"></i>
                 {% endif %}
-                {{ event.name }}
+                {{ event.get_name }}
                 <br/>
                 <small> {{ event.date }}</small>
             </h4>

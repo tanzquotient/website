@@ -8,6 +8,7 @@ from django.conf import settings
 
 import django.contrib.auth as auth
 
+from utils import TranslationUtils
 from . import managers
 from django.core.exceptions import ValidationError
 from courses.services import calculate_relevant_experience, format_prices
@@ -79,6 +80,12 @@ class Event(TranslatableModel):
             return _("from") + " {}".format(self.time_from.strftime("%H:%M"))
         else:
             return _("Time not set yet")
+
+    def get_name(self):
+        return TranslationUtils.get_text_with_language_fallback(self, 'name')
+
+    def get_description(self):
+        return TranslationUtils.get_text_with_language_fallback(self, 'description')
 
     format_time.short_description = "Time"
 

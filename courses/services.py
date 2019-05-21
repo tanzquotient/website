@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 
 import courses.models as models
 from courses.utils import export
+from utils.translation_utils import TranslationUtils
 from .emailcenter import *
 
 log = logging.getLogger('tq')
@@ -479,11 +480,7 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
 
 
 def model_attribute_language_fallback(model, attribute):
-    for lang in [model.get_current_language()] + settings.PARLER_LANGUAGES['default']['fallbacks']:
-        val = model.safe_translation_getter(attribute, language_code=lang)
-        if val:
-            return val
-    return None
+    return TranslationUtils.get_text_with_language_fallback(model, attribute)
 
 
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
