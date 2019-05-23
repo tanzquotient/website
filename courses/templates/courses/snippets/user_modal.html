@@ -13,6 +13,11 @@
             <div class="modal-body">
                 <div class="row">
                     {% if user.profile %}
+                        {% if user.profile.picture %}
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
+                            </div>
+                        {% endif %}
                         {% if user.profile.is_teacher or user.functions.count > 0 %}
                             <div class="col-xs-12 col-sm-6 col-md-8">
                                 {% if user.profile.is_teacher %}
@@ -31,11 +36,6 @@
                                         {% endfor %}
                                     </p>
                                 {% endif %}
-                            </div>
-                        {% endif %}
-                        {% if user.profile.picture %}
-                            <div class="col-xs-12 col-sm-6 col-md-4">
-                                <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
                             </div>
                         {% endif %}
                         <div class="col-xs-12">
