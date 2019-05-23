@@ -138,7 +138,7 @@ class UserProfile(models.Model):
     get_involved = models.BooleanField(default=False)
     get_involved.help_text = "If this user is interested to get involved with our organisation."
 
-    picture = models.ImageField(null=True)
+    picture = models.ImageField(null=True, blank=True)
     about_me = HTMLField(blank=True, null=True)
 
     birthdate = models.DateField(blank=True, null=True)
