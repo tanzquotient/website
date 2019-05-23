@@ -34,6 +34,10 @@ class UserEditForm(forms.Form):
         empty_label=("Choose Year", "Choose Month", "Choose Day"),
         years=range(date.today().year - 70, date.today().year - 10)))
 
+    picture = forms.ImageField(required=False)
+    about_me = forms.CharField(widget=forms.Textarea(), required=False)
+    about_me.help_text = 'Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!'
+
     def clean(self):
         cleaned_data = super(UserEditForm, self).clean()
 

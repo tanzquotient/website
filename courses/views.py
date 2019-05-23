@@ -469,6 +469,7 @@ class ProfileView(FormView):
         if user.profile.gender:
             context['gender_icon'] = 'mars' if user.profile.gender == 'm' else 'venus'
         context['is_teacher'] = user.profile.is_teacher()
+        context['is_board_member'] = user.profile.is_board_member()
         context['is_profile_complete'] = user.profile.is_complete()
         context['profile_missing_values'] = user.profile.missing_values()
         return context

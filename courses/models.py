@@ -155,6 +155,19 @@ class UserProfile(models.Model):
     def is_teacher(self):
         return self.user.teaching.count() > 0
 
+    def is_board_member(self):
+        return self.user.functions.count() > 0
+
+    def get_styles_of_teacher(self):
+        if not self.is_teacher():
+            return []
+
+        styles = set()
+        for teaching in self.user.teaching.all():
+            styles.update(set(teaching.course.type.styles.all()))
+
+        return styles
+
     def is_complete(self):
         return not self.missing_values()
 

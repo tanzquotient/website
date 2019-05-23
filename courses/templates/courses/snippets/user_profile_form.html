@@ -6,7 +6,7 @@
     </div>
 {% endif %}
 
-{% if is_teacher %}
+{% if is_teacher or is_board_member%}
     {% include "courses/snippets/image_input.html" with field=form.picture only %}
     {% include "courses/snippets/text_area.html" with field=form.about_me only %}
 {% endif %}

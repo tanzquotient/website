@@ -26,7 +26,7 @@
                     <p>
                         Mit
                         {% for teacher in course.teachers.all %}
-                            <a href="#" data-toggle="modal" data-target="#teacher_modal-{{ teacher.id }}">
+                            <a href="#" data-toggle="modal" data-target="#user_modal-{{ teacher.id }}">
                                 {{ teacher.get_full_name }}
                             </a>
                             {% if not forloop.last %}
@@ -35,7 +35,7 @@
                         {% endfor %}
                     </p>
                     {% for teacher in course.teachers.all %}
-                        {% include "courses/snippets/teacher_modal.html" with teacher=teacher modal_name="teacher_modal" only %}
+                        {% include "courses/snippets/user_modal.html" with user=teacher only %}
                     {% endfor %}
                 {% endif %}
                 <p>Kosten: {{ course.format_prices|default:"-" }}</p>
