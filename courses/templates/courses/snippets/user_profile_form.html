@@ -6,6 +6,11 @@
     </div>
 {% endif %}
 
+{% if is_teacher %}
+    {% include "courses/snippets/image_input.html" with field=form.picture only %}
+    {% include "courses/snippets/text_area.html" with field=form.about_me only %}
+{% endif %}
+
 {% include "courses/snippets/address_input.html" with form=form only %}
 {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
 {% include "courses/snippets/select.html" with field=form.student_status only %}

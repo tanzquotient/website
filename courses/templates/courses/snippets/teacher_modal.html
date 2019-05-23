@@ -1,0 +1,35 @@
+<!-- Modal -->
+{% load i18n %}
+<div class="modal fade" id="{{ modal_name }}-{{ teacher.id }}" tabindex="-1" role="dialog" aria-labelledby="Profile"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{ teacher.get_full_name }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    {% if teacher.profile %}
+                        {% if teacher.profile.picture %}
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <img src="{{ teacher.profile.picture.url }}" alt="{{ teacher.get_full_name }}">
+                            </div>
+                        {% endif %}
+                        <div class="col-xs-12 col-sm-6 col-md-8">
+                            <h4>{% trans "About" %}</h4>
+                            {% if teacher.profile.about_me %}
+                                <p>{{ teacher.profile.about_me|default:''|safe }}</p>
+                            {% else %}
+                                <p>{% trans "No info available" %} </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+            </div>
+        </div>
+    </div>
+</div>

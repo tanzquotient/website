@@ -7,6 +7,8 @@ def create_initial_from_user(user, initial={}):
     initial['legi'] = user.profile.legi
     initial['newsletter'] = user.profile.newsletter
     initial['get_involved'] = user.profile.get_involved
+    initial['picture'] = user.profile.picture
+    initial['about_me'] = user.profile.about_me
     if user.profile.address:
         initial['street'] = user.profile.address.street
         initial['plz'] = user.profile.address.plz

@@ -1,0 +1,27 @@
+<div id="form-group-{{ field.id_for_label }}" class="form-group has-feedback {% if field.errors %}has-error{% endif %}">
+    <div class="row">
+        <label for="{{ field.id_for_label }}" class="col-md-2 control-label">{{ field.label }}
+            {% if field.required %}
+                *
+            {% endif %}
+        </label>
+
+        <div class="col-md-10">
+            {% if field.initial != 'False' %}
+                <div>
+                    <img src="{{ field.initial.url }}" alt="Current picture" class="avatar"/>
+                </div>
+                <input type="checkbox" name="{{ field.name }}-clear" id="{{ field.name }}-clear_id"/>
+                <label for="{{ field.name }}-clear_id">Clear</label><br/>
+            {% endif %}
+            <input type="file" name="{{ field.name }}" id="{{ field.auto_id }}"/>
+            {% if field.errors %}
+                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {% endif %}
+            {% if field.help_text %}
+                <p class="help-block">{{ field.help_text }}</p>
+            {% endif %}
+            {% include "courses/snippets/field_errors.html" %}
+        </div>
+    </div>
+</div>
