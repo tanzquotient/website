@@ -19,6 +19,7 @@ class TeacherEditForm(UserEditForm):
     birthdate = forms.DateField(required=True, validators=[validate], widget=forms.widgets.SelectDateWidget(
         years=range(1920, date.today().year - 10))
                                 )
+    about_me = forms.CharField(widget=forms.Textarea())
     nationality = LazyTypedChoiceField(choices=countries, required=True)
     residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=True)
     ahv_number = forms.CharField(max_length=255, required=True)
