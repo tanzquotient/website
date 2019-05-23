@@ -68,7 +68,10 @@ def update_user(user, user_data):
     set_if_given('newsletter')
     set_if_given('get_involved')
 
-    set_if_given('picture')
+    if not user_data["picture"]:
+        profile.picture = None
+    else:
+        set_if_given('picture')
     set_if_given('about_me')
 
     set_if_given('birthdate')

@@ -20,7 +20,7 @@ class TeacherEditForm(UserEditForm):
         years=range(1920, date.today().year - 10))
                                 )
     picture = forms.ImageField(required=False)
-    about_me = forms.CharField(widget=forms.Textarea())
+    about_me = forms.CharField(widget=forms.Textarea(), required=False)
     nationality = LazyTypedChoiceField(choices=countries, required=True)
     residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=True)
     ahv_number = forms.CharField(max_length=255, required=True)
