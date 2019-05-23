@@ -2,8 +2,10 @@ from datetime import date
 
 from django import forms
 from django.utils.translation import ugettext_lazy
+from django_countries.fields import LazyTypedChoiceField
 
 from courses.models import UserProfile
+from django_countries import countries
 
 
 class UserEditForm(forms.Form):
@@ -37,8 +39,17 @@ class UserEditForm(forms.Form):
     picture = forms.ImageField(required=False)
     about_me = forms.CharField(widget=forms.Textarea(), required=False)
     about_me.help_text = 'Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!'
+    nationality = LazyTypedChoiceField(choices=countries, required=False)
+    residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=False)
+    ahv_number = forms.CharField(max_length=255, required=False)
+    iban = forms.CharField(max_length=255, required=False)
+    bank_name = forms.CharField(max_length=255, required=False)
+    bank_zip_code = forms.CharField(max_length=255, required=False)
+    bank_city = forms.CharField(max_length=255, required=False)
+    bank_country = LazyTypedChoiceField(choices=countries, required=False)
 
-    def clean(self):
+
+def clean(self):
         cleaned_data = super(UserEditForm, self).clean()
 
         # if a student, the legi must be set

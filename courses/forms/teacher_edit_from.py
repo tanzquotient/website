@@ -22,7 +22,7 @@ class TeacherEditForm(UserEditForm):
     nationality = LazyTypedChoiceField(choices=countries, required=True)
     residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=True)
     ahv_number = forms.CharField(max_length=255, required=True)
-    iban = forms.CharField(max_length=255, required=False)
+    iban = forms.CharField(max_length=255, required=True)
     bank_name = forms.CharField(max_length=255, required=True)
     bank_zip_code = forms.CharField(max_length=255, required=True)
     bank_city = forms.CharField(max_length=255, required=True)

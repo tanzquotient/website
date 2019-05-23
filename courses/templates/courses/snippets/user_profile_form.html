@@ -6,7 +6,7 @@
     </div>
 {% endif %}
 
-{% if is_teacher or is_board_member%}
+{% if is_teacher or is_board_member %}
     {% include "courses/snippets/image_input.html" with field=form.picture only %}
     {% include "courses/snippets/text_area.html" with field=form.about_me only %}
 {% endif %}
@@ -20,16 +20,23 @@
 {% include "courses/snippets/select.html" with field=form.gender only %}
 
 {% if is_teacher %}
-    {% include "courses/snippets/select.html" with field=form.nationality only %}
-    {% include "courses/snippets/select.html" with field=form.residence_permit only %}
-    {% include "courses/snippets/text_input.html" with field=form.ahv_number only %}
-    {% include "courses/snippets/text_input.html" with field=form.iban only %}
-    {% include "courses/snippets/text_input.html" with field=form.bank_name only %}
-    {% include "courses/snippets/text_input.html" with field=form.bank_zip_code only %}
-    {% include "courses/snippets/text_input.html" with field=form.bank_city only %}
-    {% include "courses/snippets/select.html" with field=form.bank_country only %}
+    {% include "courses/snippets/user_profile_form_payment.html" with form=form only %}
 {% endif %}
 
 {% include "courses/snippets/boolean_input.html" with field=form.newsletter only %}
 {% include "courses/snippets/boolean_input.html" with field=form.get_involved only %}
 
+{% if not is_teacher %}
+    <div>
+        <div>
+            <p>
+                <a role="button" data-toggle="collapse" href="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
+                    Add salary Payment Info (only required for teachers and helpers)
+                </a>
+            </p>
+        </div>
+        <div class="collapse" id="collapsePayment">
+            {% include "courses/snippets/user_profile_form_payment.html" with form=form only %}
+        </div>
+    </div>
+{% endif %}
