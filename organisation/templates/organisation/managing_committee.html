@@ -20,7 +20,6 @@
                                 <!-- Button trigger modal -->
                                 <a href="#" data-toggle="modal"
                                    data-target="#user_modal-{{ user.id }}">{{ user.get_full_name }}</a>
-                                {% include "courses/snippets/user_modal.html" with user=user function=function modal_name="modal_profile" only %}
                                 {% if not forloop.last %}
                                     /
                                 {% endif %}
@@ -50,8 +49,7 @@
                         </h4>
                         <p class="list-group-item-text">{{ function.email }}</p>
                     </a>
-                    {% include "courses/snippets/user_modal.html" with user=user only %}
-                    {% empty %}
+                {% empty %}
                     <a href="#" class="list-group-item">
                         <h4 class="list-group-item-heading">
                             vakant
@@ -64,3 +62,12 @@
         </div>
     {% endif %}
 </div>
+
+
+{% if functions %}
+    {% for function in functions %}
+        {% for user in function.users.all %}
+            {% include "courses/snippets/user_modal.html" with user=user only %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}
