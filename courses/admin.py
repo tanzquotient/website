@@ -94,7 +94,7 @@ class SongAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(TranslatableAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'evaluated', 'offering', 'period', 'format_lessons', 'format_cancellations',
+        'name', 'type', 'subscription_type', 'evaluated', 'offering', 'period', 'format_lessons', 'format_cancellations',
         'room', 'format_prices',
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
@@ -106,7 +106,7 @@ class CourseAdmin(TranslatableAdmin):
     model = Course
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'type', 'open_class', 'min_subscribers', 'max_subscribers', 'description']}),
+            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description']}),
         ('When?', {
             'fields': ['offering', 'period', ]}),
         ('Where?', {
@@ -133,7 +133,7 @@ class CourseSuccession(admin.ModelAdmin):
 @admin.register(PlannedCourse)
 class PlannedCourseAdmin(CourseAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'offering', 'period', 'format_lessons', 'format_cancellations', 'room',
+        'name', 'type', 'subscription_type', 'offering', 'period', 'format_lessons', 'format_cancellations', 'room',
         'format_prices',
         'format_teachers')
     list_filter = ()
@@ -143,7 +143,7 @@ class PlannedCourseAdmin(CourseAdmin):
 @admin.register(CurrentCourse)
 class CurrentCourseAdmin(CourseAdmin):
     list_display = (
-        'name', 'type', 'open_class', 'evaluated', 'offering',
+        'name', 'type', 'subscription_type', 'evaluated', 'offering',
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed')
     list_filter = ('display', 'active')
@@ -174,9 +174,9 @@ class SubscribeChangeList(ChangeList):
         course_consistent = True
         course = None
         for s in self.result_list:
-            if s.state in Subscribe.State.ACCEPTED_STATES:
+            if s.state in SubscribeState.ACCEPTED_STATES:
                 self.info['accepted'] += 1
-            if s.state == Subscribe.State.REJECTED_STATES:
+            if s.state == SubscribeState.REJECTED_STATES:
                 self.info['rejected'] += 1
             if course_consistent:
                 if course is None:

@@ -1,10 +1,9 @@
-import hashlib, zlib
+import hashlib
+
 try:
     import pickle
 except ImportError:
     import cPickle as pickle
-
-import urllib
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -113,13 +112,10 @@ def _email_helper(email, template, context):
 
 
 import zipfile
-import unicodecsv
 from io import BytesIO
 
 import openpyxl
 from openpyxl.cell import get_column_letter
-from openpyxl.styles import Alignment
-from openpyxl.styles.fonts import Font
 
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)

@@ -1,8 +1,8 @@
-from django.db import models
-from django.conf import settings
-from courses.models import Subscribe, Course
-from post_office.models import Email
 from django.core.exceptions import ValidationError
+from django.db import models
+from post_office.models import Email
+
+from courses.models import Subscribe, Course
 
 
 class Payment(models.Model):

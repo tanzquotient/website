@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from django.core.management.base import BaseCommand
 
-from django.contrib.auth.models import User, Group, Permission
-
-from courses import services
-from payment.models import *
-from courses.models import *
 from courses.emailcenter import send_sorry_for_incorrect_reminder
-
-import logging
+from courses.models import *
+from payment.models import *
 
 log = logging.getLogger('tq')
 
@@ -31,7 +28,7 @@ class Command(BaseCommand):
         count=0
         for pr in PaymentReminder.objects.all():
             s = pr.subscription
-            if s.state in Subscribe.State.PAID_STATES:
+            if s.state in SubscribeState.PAID_STATES:
                 count += 1
                 print("{} - {} - {}".format(s.id, s.usi, s))
                 if options['sorry']:

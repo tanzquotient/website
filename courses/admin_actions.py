@@ -190,7 +190,7 @@ def welcome_teachers_reset_flag(modeladmin, request, queryset):
 
 
 def set_subscriptions_as_payed(modeladmin, request, queryset):
-    queryset.filter(state=Subscribe.State.CONFIRMED).update(state=Subscribe.State.COMPLETED)
+    queryset.filter(state=SubscribeState.CONFIRMED).update(state=SubscribeState.COMPLETED)
 
 
 set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
@@ -305,9 +305,9 @@ evaluate_course.short_description = "Configure evaluation of selected courses"
 
 def undo_voucher_payment(modeladmin, request, queryset):
     for subscription in queryset:
-        if subscription.state in [Subscribe.State.PAYED,
-                                  Subscribe.State.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
-            subscription.state = Subscribe.State.CONFIRMED
+        if subscription.state in [SubscribeState.PAYED,
+                                  SubscribeState.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
+            subscription.state = SubscribeState.CONFIRMED
             for voucher in Voucher.objects.filter(subscription=subscription).all():
                 voucher.subscription = None
                 voucher.used = False

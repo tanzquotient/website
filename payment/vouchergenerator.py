@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
-from io import open
+
 import os
-import datetime
-from django.core.files import File
-from django.conf import settings
+from io import open
+
 from PyPDF2 import PdfFileWriter, PdfFileReader
+from django.conf import settings
 from django.http import FileResponse
 
 

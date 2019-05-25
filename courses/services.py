@@ -3,6 +3,7 @@ import unicodedata
 from datetime import date
 
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.translation import ugettext as _
@@ -199,9 +200,9 @@ def match_partners(subscriptions, request=None):
     match_count = 0
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(
-            state=models.Subscribe.State.REJECTED)
-        sm = single.filter(user__profile__gender=models.UserProfile.Gender.MEN).order_by('date').all()
-        sw = single.filter(user__profile__gender=models.UserProfile.Gender.WOMAN).order_by('date').all()
+            state=models.SubscribeState.REJECTED)
+        sm = single.filter(user__profile__gender=models.Gender.MEN).order_by('date').all()
+        sw = single.filter(user__profile__gender=models.Gender.WOMAN).order_by('date').all()
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])
@@ -250,7 +251,7 @@ def unmatch_partners(subscriptions, request):
     invalid_state_count = 0
     invalid_matching_state_count = 0
     for s in subscriptions.all():
-        if s.state == models.Subscribe.State.NEW:
+        if s.state == models.SubscribeState.NEW:
             allowed_states = [models.Subscribe.MatchingState.MATCHED]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
@@ -282,7 +283,7 @@ def breakup_couple(subscriptions, request):
     invalid_state_count = 0
     invalid_matching_state_count = 0
     for s in subscriptions.all():
-        if s.state == models.Subscribe.State.NEW:
+        if s.state == models.SubscribeState.NEW:
             allowed_states = [models.Subscribe.MatchingState.COUPLE]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
@@ -326,8 +327,8 @@ def confirm_subscription(subscription, request=None, allow_single_in_couple_cour
     if not allow_single_in_couple_course and subscription.course.type.couple_course and subscription.partner is None:
         raise NoPartnerException()
 
-    if subscription.state == models.Subscribe.State.NEW:
-        subscription.state = models.Subscribe.State.CONFIRMED
+    if subscription.state == models.SubscribeState.NEW:
+        subscription.state = models.SubscribeState.CONFIRMED
         subscription.save()
 
         m = send_participation_confirmation(subscription)
@@ -367,14 +368,14 @@ def confirm_subscriptions(subscriptions, request=None, allow_single_in_couple_co
 
 def unconfirm_subscriptions(subscriptions, request=None):
     for s in subscriptions.all():
-        if s.state == models.Subscribe.State.CONFIRMED:
-            s.state = models.Subscribe.State.NEW
+        if s.state == models.SubscribeState.CONFIRMED:
+            s.state = models.SubscribeState.NEW
             s.save()
 
 
 def reject_subscription(subscription, reason=None, send_email=True):
     '''sends a rejection mail if subscription is rejected (by some other method) and no rejection mail was sent before'''
-    subscription.state = models.Subscribe.State.REJECTED
+    subscription.state = models.SubscribeState.REJECTED
     subscription.save()
     if not reason:
         reason = detect_rejection_reason(subscription)
@@ -399,8 +400,8 @@ def reject_subscriptions(subscriptions, reason=None, send_email=True):
 def unreject_subscriptions(subscriptions, request=None):
     unrejected_count = 0
     for subscription in subscriptions:
-        if subscription.state == models.Subscribe.State.REJECTED:
-            subscription.state = models.Subscribe.State.NEW
+        if subscription.state == models.SubscribeState.REJECTED:
+            subscription.state = models.SubscribeState.NEW
             subscription.save()
             unrejected_count += 1
     if unrejected_count:
@@ -463,7 +464,7 @@ def calculate_relevant_experience(user, course):
     '''finds a list of courses the "user" did already and that are somehow relevant for "course"'''
     relevant_exp = [style.id for style in course.type.styles.all()]
     return [s.course for s in
-            models.Subscribe.objects.filter(user=user, state__in=models.Subscribe.State.ACCEPTED_STATES,
+            models.Subscribe.objects.filter(user=user, state__in=models.SubscribeState.ACCEPTED_STATES,
                                             course__type__styles__id__in=relevant_exp).exclude(
                 course=course).order_by('course__type__level').distinct().all()]
 

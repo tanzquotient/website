@@ -38,10 +38,10 @@ def course_list(request, force_preview=False):
         offering_sections = []
         course_set = offering.course_set
 
-        if offering.type == Offering.Type.REGULAR:
+        if offering.type == OfferingType.REGULAR:
             for (w, w_name) in Weekday.CHOICES:
                 section_dict = {}
-                section_dict['section_title'] = WEEKDAYS_TRANS[w]
+                section_dict['section_title'] = Weekday.WEEKDAYS_TRANSLATIONS_DE[w]
                 section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed(preview_mode)]
                 if (w in Weekday.WEEKEND) and section_dict['courses'].__len__() == 0:
                     pass
@@ -54,7 +54,7 @@ def course_list(request, force_preview=False):
             section_dict['courses'] = course_set.weekday(None)
             if section_dict['courses'].__len__() != 0:
                 offering_sections.append(section_dict)
-        elif offering.type == Offering.Type.IRREGULAR:
+        elif offering.type == OfferingType.IRREGULAR:
             courses_by_month = course_set.by_month()
             for (d, l) in courses_by_month:
                 if d is None:
@@ -97,38 +97,38 @@ def course_list_preview(request):
 
 
 def subscription(request, course_id):
-    '''
+    """
     This view provides a form to enrol in a course
 
     Redirects:
     courses:course_list         if no course with the given ID exists
     courses:subscription        if no valid submit button value is found
     courses:subscription_do     everything is ok, redirection to actually perform the enrolment
-    '''
+    """
     from .forms import SingleSubscriptionForm, CoupleSubscriptionForm
     template_name = "courses/subscription.html"
 
     # do not clear session keys
     course = Course.objects.filter(id=course_id)
-    
+
     # if there is no course with this id --> redirect user to course list
     if len(course) == 0:
         return redirect('courses:course_list')
     # the course id must be unique; this is a consistency check
     assert len(course) == 1
     course = course[0]
-    
+
     is_couple_course = course.type.couple_course
-    
+
     # create the correct form instance
     if is_couple_course:
         form = CoupleSubscriptionForm(request.POST)
     else:
         form = SingleSubscriptionForm(request.POST)
-    
+
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        
+
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
@@ -142,10 +142,10 @@ def subscription(request, course_id):
             }
             if 'partner_email' in form.cleaned_data and form.cleaned_data['partner_email']:
                 partner = UserProfile.objects.filter(user__email=form.cleaned_data['partner_email'])
-                assert len(partner) == 1    # there should only be one partner with this email address
+                assert len(partner) == 1  # there should only be one partner with this email address
                 partner = partner[0]
                 data['user_id2'] = partner.user.id
-            
+
             request.session['data'] = data
             if 'subscribe' in request.POST:
                 return redirect('courses:subscription_do', course_id)
@@ -161,15 +161,16 @@ def subscription(request, course_id):
     })
     return render(request, template_name, context)
 
+
 @login_required
 def subscription_do(request, course_id):
-    '''
+    """
     This view actually performs the enrolment in a given course.
 
     The view is just a wrapper to call services.subscribe(...)
     Redirects:
     courses:subscription_message    always in order to inform the user about success of enrolment
-    '''
+    """
     if 'data' not in request.session:
         raise SuspiciousSession()
 
@@ -184,12 +185,12 @@ def subscription_do(request, course_id):
 
 
 def subscription_message(request, course_id):
-    '''
+    """
     This view displays whether the enrolment was successful or not
 
     Redirects:
     courses:subscription    if there is no result in the given request
-    '''
+    """
     if 'subscription_result' not in request.session:
         return redirect('courses:subscription', course_id)
 
@@ -263,7 +264,8 @@ def offering_place_chart_dict(offering):
     courses = offering.course_set.all()
 
     for course in courses:
-        # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
+        # NOTE: do not use the related manager with 'course.subscriptions',
+        # because does not have access to default manager methods
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                     escape(course.name)))
@@ -295,7 +297,7 @@ def progress_chart_dict():
     series_couple = []
     series_single = []
 
-    for o in Offering.objects.filter(type=Offering.Type.REGULAR).all():
+    for o in Offering.objects.filter(type=OfferingType.REGULAR).all():
         subscriptions = Subscribe.objects.filter(course__offering=o)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
                                                     escape(o.name)))
@@ -379,13 +381,13 @@ def subscription_overview(request):
     offering_charts = []
     for o in services.get_offerings_to_display(request):
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
-    
-    ETH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.ETH))
-    UZH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.UNI))
-    PH_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.PH))
-    other_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.OTHER))
-    no_count = len(Subscribe.objects.filter(user__profile__student_status = UserProfile.StudentStatus.NO))
-    
+
+    ETH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.ETH))
+    UZH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.UNI))
+    PH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.PH))
+    other_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.OTHER))
+    no_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.NO))
+
     university_chart = {
         'ETH_count': ETH_count,
         'UZH_count': UZH_count,
@@ -409,7 +411,8 @@ def course_overview(request, course_id):
     context = {}
 
     course = Course.objects.get(id=course_id)
-    # NOTE: do not use the related manager with 'course.subscriptions', because does not have access to default manager methods
+    # NOTE: do not use the related manager with 'course.subscriptions',
+    # because does not have access to default manager methods
     subscriptions = Subscribe.objects.filter(course=course)
 
     cc = subscriptions.accepted().count()

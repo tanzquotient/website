@@ -1,11 +1,9 @@
+{% load i18n %}
 {% with count=course.get_free_places_count show=course.show_free_places_count %}
-    {% if course.open_class %}
-        {% if long %}
-            <i class="fa fa-connectdevelop fa-lg"></i> <em>Open Class: </em>Für diesen
-            Kurs kann man sich nicht hier anmelden.
-        {% else %}
-            <i class="fa fa-connectdevelop fa-lg"></i> Open Class
-        {% endif %}
+    {% if course.is_open_class %}
+        <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
+    {% elif course.is_external %}
+        <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
     {% endif %}
     {% if course.is_subscription_allowed %}
         {% if display_link %}

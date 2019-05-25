@@ -1,12 +1,13 @@
-from django import forms
-from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
-from courses.models import Subscribe, voucher
-
-import datetime
-from django.utils.translation import ugettext as _
-import re
 import calendar
+import datetime
+import re
+
+from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.utils.translation import ugettext as _
+
+from courses.models import Subscribe, Voucher
 
 RE_USI = r"([USIusi]{0,3}-)?(?P<usi>[a-zA-Z0-9]{6,6})"
 PROG_USI = re.compile(RE_USI)
@@ -29,9 +30,9 @@ def voucher_valid(code):
     :param code: the voucher key to be validated
     :return:
     """
-    if not voucher.objects.filter(key=code).count() > 0:
+    if not Voucher.objects.filter(key=code).count() > 0:
         raise ValidationError(_('The specified voucher code does not exist'))
-    voucher = voucher.objects.filter(key=code).first()
+    voucher = Voucher.objects.filter(key=code).first()
     if voucher.used:
         raise ValidationError(_('The specified voucher code has already been used'))
     if voucher.expires:

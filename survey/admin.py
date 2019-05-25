@@ -2,6 +2,7 @@ from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
 import courses
+from courses.filters import SubscribeOfferingListFilter, SubscribeCourseListFilter
 from .admin_actions import *
 from survey.models import *
 
@@ -62,7 +63,7 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
     list_display = ('id', 'invitation_sent', 'survey', 'user', 'course', 'date', 'url_expire_date','last_update','get_url')
     model = SurveyInstance
     raw_id_fields = ('course',)
-    list_filter = (courses.filters.SubscribeOfferingListFilter, courses.filters.SubscribeCourseListFilter, 'url_expire_date', 'last_update','invitation_sent')
+    list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'url_expire_date', 'last_update','invitation_sent')
 
     actions = [send_invitations,let_url_expire_now]
 

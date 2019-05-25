@@ -30,7 +30,7 @@ class Weekday:
     }
     NUMBER_2_SLUG = {number: slug for slug, number in NUMBERS.items()}
 
-    WEEKDAYS_TRANS = {
+    WEEKDAYS_TRANSLATIONS_DE = {
         MONDAY: 'Montag',
         TUESDAY: 'Dienstag',
         WEDNESDAY: 'Mittwoch',

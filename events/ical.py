@@ -1,8 +1,10 @@
-import os
 import datetime
+import os
+
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
-from courses.models import IrregularLesson, Offering
+
+from courses.models import IrregularLesson, OfferingType
 from .models import Event
 
 
@@ -12,7 +14,7 @@ class EventFeed(ICalFeed):
 
     def items(self):
         events = list(Event.objects.all())
-        special_courses = list(IrregularLesson.objects.filter(course__offering__type=Offering.Type.IRREGULAR).filter(course__active=True))
+        special_courses = list(IrregularLesson.objects.filter(course__offering__type=OfferingType.IRREGULAR).filter(course__active=True))
 
         return events + special_courses
 

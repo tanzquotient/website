@@ -1,21 +1,17 @@
-from django.db import models
-from courses.models import Room
-from django.db.models.fields import BooleanField
-import datetime
-from django.utils.translation import ugettext as _
-
-from django.conf import settings
-
 import django.contrib.auth as auth
-
-from utils import TranslationUtils
-from . import managers
-from django.core.exceptions import ValidationError
-from courses.services import calculate_relevant_experience, format_prices
+from django.conf import settings
+from django.db import models
+from django.db.models.fields import BooleanField
+from django.utils.translation import ugettext as _
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
-from parler.models import TranslatableModel, TranslatedFields
 from parler.managers import TranslatableManager
+from parler.models import TranslatableModel, TranslatedFields
+
+from courses.models import Room
+from courses.services import format_prices
+from utils import TranslationUtils
+from . import managers
 
 
 class Organise(models.Model):

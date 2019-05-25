@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import NoArgsCommand
+import logging
 
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User
+from django.core.management.base import NoArgsCommand
 
 from courses import services
 
-import logging
 log = logging.getLogger('tq')
 
 class Command(NoArgsCommand):

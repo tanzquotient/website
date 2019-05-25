@@ -1,19 +1,11 @@
-from operator import pos
+import logging
 
-from django.conf import settings
-
-from tq_website import settings as my_settings
-
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from post_office import mail, models as post_office_models
 
-from django.core.urlresolvers import reverse
-from django.contrib.sites.models import Site
-
 import courses.models
-
 from tq_website import settings as my_settings
-
-import logging
 
 log = logging.getLogger('tq')
 
@@ -158,12 +150,12 @@ def detect_rejection_reason(subscription):
     detect the reason why the subscription is rejected
     :return: the reason as constant from Rejection.Reason
     """
-    reason = courses.models.Rejection.Reason.UNKNOWN
+    reason = courses.models.RejectionReason.UNKNOWN
     counts = subscription.course.get_free_places_count()
     if counts and counts['total'] == 0:
-        reason = courses.models.Rejection.Reason.OVERBOOKED
+        reason = courses.models.RejectionReason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
-        reason = courses.models.Rejection.Reason.NO_PARTNER
+        reason = courses.models.RejectionReason.NO_PARTNER
     return reason
 
 
@@ -196,7 +188,7 @@ def create_course_info(course):
         s += ', {}\n'.format(course.room)
     else:
         s += '\n'
-    if course.get_period() and course.offering and course.offering.type == courses.models.Offering.Type.REGULAR:
+    if course.get_period() and course.offering and course.offering.type == courses.models.OfferingType.REGULAR:
         s += '{}\n'.format(course.get_period())
     if course.format_cancellations():
         s += 'Ausfälle: {}\n'.format(course.format_cancellations())

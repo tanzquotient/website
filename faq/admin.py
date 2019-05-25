@@ -1,5 +1,6 @@
 from django.contrib import admin
-from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
+from parler.admin import TranslatableAdmin, TranslatableTabularInline
+
 from faq.models import *
 
 

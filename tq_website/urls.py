@@ -1,23 +1,19 @@
-from django.conf.urls import include, url
-from django.http import HttpResponse
-from django.contrib import admin
-
-from django.conf.urls.i18n import i18n_patterns
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import cms.urls
+import django.views.i18n
+import rest_framework.urls
 from django.conf import settings
+from django.conf.urls import include, url
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
-from . import views
-import events.urls
-from events.ical import EventFeed
-import django.views.i18n
-from tq_website import views
 import courses.views as courses_views
-import rest_framework.urls
-import survey.urls
+import events.urls
 import payment.urls
-import cms.urls
+import survey.urls
+from tq_website import views
 
 urlpatterns = [
     # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # comment out robots or change it when site is finished

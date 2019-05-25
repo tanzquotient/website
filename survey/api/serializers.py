@@ -1,11 +1,7 @@
+from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
-from django.contrib import auth
-
 from survey.models import *
-
-from parler_rest.serializers import TranslatableModelSerializer
-from parler_rest.fields import TranslatedFieldsField
 
 
 class ChoiceSerializer(TranslatableModelSerializer):

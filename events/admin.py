@@ -1,8 +1,8 @@
 from django.contrib import admin
-from events.models import *
+from parler.admin import TranslatableAdmin
 
 from events.admin_actions import *
-from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableModelForm
+from events.models import Organise, Event
 
 
 class OrganisatorInline(admin.TabularInline):

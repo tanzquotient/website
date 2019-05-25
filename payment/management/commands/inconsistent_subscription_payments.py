@@ -1,9 +1,8 @@
+import logging
+
 from django.core.management.base import BaseCommand
 
 from payment.models import *
-from courses.models import *
-
-import logging
 
 log = logging.getLogger('tq')
 

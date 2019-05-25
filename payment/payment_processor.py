@@ -1,7 +1,7 @@
 import logging
 import re
 
-from courses.models import Subscribe, PaymentMethod
+from courses.models import Subscribe, PaymentMethod, SubscribeState
 from payment.models import Payment, SubscriptionPayment
 
 log = logging.getLogger('payment')
@@ -40,7 +40,7 @@ class PaymentProcessor:
                     payment.save()
 
                     for usi in matches:
-                        subscription_query = Subscribe.objects.filter(usi=usi, state=Subscribe.State.CONFIRMED)
+                        subscription_query = Subscribe.objects.filter(usi=usi, state=SubscribeState.CONFIRMED)
                         if subscription_query.count() == 1:
                             matched_subscription = subscription_query.first()
 

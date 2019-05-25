@@ -7,30 +7,18 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import PaymentMethod, Weekday, Gender
+from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType
 
 
 class Course(TranslatableModel):
+    # Mandatory fields
     name = models.CharField(max_length=255, blank=False)
     name.help_text = "This name is just for reference and is not displayed anywhere on the website."
     type = models.ForeignKey('CourseType', related_name='courses', blank=False, null=False, on_delete=models.PROTECT)
     type.help_text = "The name of the course type is displayed on the website as the course title ."
-    room = models.ForeignKey('Room', related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
-    min_subscribers = models.IntegerField(blank=False, null=False, default=6)
-    max_subscribers = models.IntegerField(blank=True, null=True)
-    price_with_legi = models.FloatField(blank=True, null=True, default=35)
-    price_without_legi = models.FloatField(blank=True, null=True, default=70)
-    price_special = models.CharField(max_length=255, blank=True, null=True)
-    price_special.help_text = "Set this only if you want a different price schema."
-    open_class = models.BooleanField(blank=True, null=False, default=False)
-    open_class.help_text = "Open classes do not require a subscription or subscription is done via a different channel."
-    period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
-    period.help_text = "You can set a custom period for this course here. " \
-                       "If this is left empty, the period from the offering is taken."
-    teachers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Teach', related_name='teaching_courses')
-    subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Subscribe', related_name='courses',
-                                         through_fields=('course', 'user'))
-    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.PROTECT)
+    subscription_type = models.CharField(max_length=20, blank=False, null=False,
+                                         choices=CourseSubscriptionType.CHOICES,
+                                         default=CourseSubscriptionType.REGULAR)
     display = models.BooleanField(default=True)
     display.help_text = "Defines if this course should be displayed on the Website " \
                         "(if checked, course is displayed if offering is displayed)."
@@ -39,15 +27,44 @@ class Course(TranslatableModel):
                        "(if checked, course is active if offering is active)."
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
-    preceding_courses = models.ManyToManyField('Course', related_name='succeeding_courses', through='CourseSuccession',
-                                               through_fields=('successor', 'predecessor'))
-    preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
 
+    # Optional - apply to all course types
+    room = models.ForeignKey('Room', related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
+    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.PROTECT)
+    period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
+    period.help_text = "You can set a custom period for this course here. " \
+                       "If this is left empty, the period from the offering is taken."
+
+    # Translated fields
     translations = TranslatedFields(
         description=HTMLField(verbose_name='[TR] Description', blank=True, null=True,
                               help_text="Description specific for this course. "
                                         "(Gets displayed combined with the description of the course style)")
     )
+
+    # For regular courses only
+    min_subscribers = models.IntegerField(blank=True, null=True)
+    max_subscribers = models.IntegerField(blank=True, null=True)
+
+    # Pricing
+    price_with_legi = models.FloatField(blank=True, null=True, default=35)
+    price_without_legi = models.FloatField(blank=True, null=True, default=70)
+    price_special = models.CharField(max_length=255, blank=True, null=True)
+    price_special.help_text = "Set this only if you want a different price schema."
+
+    # Relations
+    teachers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                      through='Teach',
+                                      related_name='teaching_courses')
+    subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                         through='Subscribe',
+                                         related_name='courses',
+                                         through_fields=('course', 'user'))
+    preceding_courses = models.ManyToManyField('Course',
+                                               related_name='succeeding_courses',
+                                               through='CourseSuccession',
+                                               through_fields=('successor', 'predecessor'))
+    preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
 
     objects = managers.CourseManager()
 
@@ -178,8 +195,17 @@ class Course(TranslatableModel):
         else:
             return preview or (self.offering.display and self.display)  # both must be true to be displayed
 
+    def is_external(self):
+        return self.subscription_type == CourseSubscriptionType.EXTERNAL
+
+    def is_open_class(self):
+        return self.subscription_type == CourseSubscriptionType.OPEN_CLASS
+
+    def is_regular(self):
+        return self.subscription_type == CourseSubscriptionType.REGULAR
+
     def is_subscription_allowed(self):
-        if self.open_class:
+        if not self.is_regular():
             return False
         else:
             if self.offering is None:

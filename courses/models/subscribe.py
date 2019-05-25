@@ -97,7 +97,7 @@ class Subscribe(models.Model):
 
     def get_payment_state(self):
         """searches for courses that the user did before in the system"""
-        c = self.user.subscriptions.filter(state=Subscribe.State.CONFIRMED, course__offering__active=False).filter(
+        c = self.user.subscriptions.filter(state=SubscribeState.CONFIRMED, course__offering__active=False).filter(
             ~Q(course=self.course)).count()
         if self.payed():
             r = 'Yes'
@@ -112,10 +112,10 @@ class Subscribe(models.Model):
     get_payment_state.short_description = 'Payed?'
 
     def mark_as_payed(self, payment_method, user=None):
-        if self.state == Subscribe.State.CONFIRMED:
+        if self.state == SubscribeState.CONFIRMED:
 
             with reversion.create_revision():
-                self.state = Subscribe.State.PAYED
+                self.state = SubscribeState.PAYED
                 self.paymentmethod = payment_method
                 self.save()
                 if user is not None:
@@ -132,8 +132,8 @@ class Subscribe(models.Model):
         with reversion.create_revision():
             voucher_value = price * (float(voucher.percentage) / 100.0)
             self.price_to_pay = price - voucher_value
-            if price == voucher_value and self.state == Subscribe.State.CONFIRMED:
-                self.state = Subscribe.State.PAYED
+            if price == voucher_value and self.state == SubscribeState.CONFIRMED:
+                self.state = SubscribeState.PAYED
                 self.paymentmethod = PaymentMethod.VOUCHER
                 if user is not None:
                     reversion.set_user(user)
@@ -192,7 +192,7 @@ class Subscribe(models.Model):
         super(Subscribe, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.state != Subscribe.State.NEW:
+        if self.state != SubscribeState.NEW:
             messages.add_message(None, messages.ERROR, 'Cannot delete non-NEW subscription.')
         else:
             super(Subscribe, self).delete(*args, **kwargs)

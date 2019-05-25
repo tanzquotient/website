@@ -1,8 +1,10 @@
-from django.db import models
-
 from datetime import date
+
+from django.db import models
 from parler.managers import TranslatableManager
-from django.db.models import Q
+
+from courses.models import Gender, SubscribeState
+
 
 class UserProfileManager(models.Manager):
     def get_queryset(self):
@@ -90,32 +92,25 @@ class BankAccountManager(models.Manager):
 # and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
 class SubscribeQuerySet(models.QuerySet):
     def men(self):
-        from courses.models import UserProfile
-        return self.filter(user__profile__gender=UserProfile.Gender.MEN)
+        return self.filter(user__profile__gender=Gender.MEN)
 
     def women(self):
-        from courses.models import UserProfile
-        return self.filter(user__profile__gender=UserProfile.Gender.WOMAN)
+        return self.filter(user__profile__gender=Gender.WOMAN)
 
     def single_men(self):
-        from courses.models import UserProfile
-        return self.filter(partner__isnull=True, user__profile__gender=UserProfile.Gender.MEN)
+        return self.filter(partner__isnull=True, user__profile__gender=Gender.MEN)
 
     def single_women(self):
-        from courses.models import UserProfile
-        return self.filter(partner__isnull=True, user__profile__gender=UserProfile.Gender.WOMAN)
+        return self.filter(partner__isnull=True, user__profile__gender=Gender.WOMAN)
 
     def accepted(self):
-        from courses.models import Subscribe
-        return self.filter(state__in=Subscribe.State.ACCEPTED_STATES)
+        return self.filter(state__in=SubscribeState.ACCEPTED_STATES)
 
     def active(self):
-        from courses.models import Subscribe
-        return self.exclude(state__in=Subscribe.State.REJECTED_STATES)
+        return self.exclude(state__in=SubscribeState.REJECTED_STATES)
 
     def paid(self):
-        from courses.models import Subscribe
-        return self.filter(state__in=Subscribe.State.PAID_STATES)
+        return self.filter(state__in=SubscribeState.PAID_STATES)
 
     def course_payment(self):
         from courses.models import PaymentMethod
@@ -130,5 +125,4 @@ class SubscribeQuerySet(models.QuerySet):
         return self.filter(paymentmethod=PaymentMethod.ONLINE)
 
     def new(self):
-        from courses.models import Subscribe
-        return self.filter(state=Subscribe.State.NEW)
+        return self.filter(state=SubscribeState.NEW)

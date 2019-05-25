@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import EmailMessage, get_connection
+
 from courses.admin_actions import update_dance_teacher_group
 
 try:
@@ -8,7 +8,6 @@ except ImportError:
     from celery.decorators import task as shared_task
 
 # Make sure our AppConf is loaded properly.
-import djcelery_email.conf  # noqa
 
 from post_office.mail import send_queued
 from payment.postfinance_connector import FDSConnection, ISO2022Parser

@@ -1,9 +1,4 @@
-from django.contrib import admin
-
-from events.models import *
-
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+import datetime
 
 
 def copy_event(modeladmin, request, queryset):

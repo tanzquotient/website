@@ -1,13 +1,11 @@
+from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from cms.models.pluginmodel import CMSPlugin
-from django.utils.translation import ugettext_lazy as _
 from django.db import models
-
-from djangocms_link.models import Link
+from django.utils.translation import ugettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
+from djangocms_link.models import Link
 from filer.fields.image import FilerImageField
-from datetime import datetime
 
 
 class PageTitlePluginModel(CMSPlugin):

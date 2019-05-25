@@ -15,7 +15,7 @@ class CourseType(TranslatableModel):
     )
 
     def get_level(self):
-        return self.level if self.level else "";
+        return self.level if self.level else ""
 
     def format_styles(self):
         return ', '.join(map(str, self.styles.all()))

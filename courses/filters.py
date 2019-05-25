@@ -1,12 +1,8 @@
-from django.contrib import admin
-
 # Register your models here.
-from courses.models import *
 
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from courses.admin_actions import *
 from django.contrib.admin.filters import SimpleListFilter
+
+from courses.admin_actions import *
 
 
 class SubscribeOfferingListFilter(SimpleListFilter):
