@@ -35,9 +35,7 @@ class EventsTeaserPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        events = Event.displayed_events.future(instance.delta_days).all()
-        if instance.max_displayed:
-            events = events[0:instance.max_displayed]
+        events = Event.displayed_events.future(delta_days=instance.delta_days, limit=instance.max_displayed).all()
         context.update({
             'events': events,
         })

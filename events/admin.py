@@ -2,6 +2,7 @@ from django.contrib import admin
 from parler.admin import TranslatableAdmin
 
 from events.admin_actions import *
+from events.filters.event_date_filter import EventDateFilter
 from events.models import Organise, Event
 
 
@@ -16,7 +17,7 @@ class OrganisatorInline(admin.TabularInline):
 @admin.register(Event)
 class EventAdmin(TranslatableAdmin):
     list_display = ('name', 'date', 'format_time', 'room', 'format_prices', 'format_organisators', 'special', 'display')
-    list_filter = ('date', 'room',)
+    list_filter = (EventDateFilter, 'room',)
     inlines = (OrganisatorInline,)
 
     model = Event
