@@ -20,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voucher',
             name='key',
-            field=models.CharField(default=courses.models.generate_key, unique=True, max_length=8),
+            field=models.CharField(default=courses.models.voucher.generate_key, unique=True, max_length=8),
         ),
     ]

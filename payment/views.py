@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, FormView, View
 from django.views.generic.edit import ProcessFormView, FormMixin
 
-from courses.models import PaymentMethod, Offering, Voucher, Course, Teach
+from courses.models import PaymentMethod, Offering, voucher, Course, Teach
 from payment import payment_processor
 from payment.forms import USIForm, VoucherForm, PROG_USI, AccountFinanceIndexForm
 from payment.models import Payment
@@ -51,7 +51,7 @@ class VoucherPaymentIndexView(FormView):
 
         subscription = Subscribe.objects.filter(usi=self.kwargs['usi']).first()
 
-        voucher = Voucher.objects.filter(key=form.data['voucher_code']).first()
+        voucher = voucher.objects.filter(key=form.data['voucher_code']).first()
         if not voucher:
             raise Http404("Voucher with this code does not exist")
         if not voucher.mark_as_used(self.request.user,

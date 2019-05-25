@@ -6,7 +6,7 @@ from django_countries import countries
 from django_countries.fields import LazyTypedChoiceField
 
 from courses.forms import UserEditForm
-from courses.models import UserProfile
+from courses.models import Residence
 
 
 def validate(birth_date):
@@ -20,7 +20,7 @@ class TeacherEditForm(UserEditForm):
         years=range(1920, date.today().year - 10))
                                 )
     nationality = LazyTypedChoiceField(choices=countries, required=True)
-    residence_permit = forms.ChoiceField(choices=UserProfile.Residence.CHOICES, required=True)
+    residence_permit = forms.ChoiceField(choices=Residence.CHOICES, required=True)
     ahv_number = forms.CharField(max_length=255, required=True)
     iban = forms.CharField(max_length=255, required=True)
     bank_name = forms.CharField(max_length=255, required=True)

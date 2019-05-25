@@ -1,11 +1,14 @@
+import datetime
+
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from survey.models import Survey, SurveyInstance
 import survey.services as survey_services
 from courses.models import *
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 
 from . import services
 
@@ -113,7 +116,7 @@ payment_reminder.short_description = "Send payment reminder to the selected subs
 
 class RejectForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
-    reason = forms.ChoiceField(label=_("Select Reason"), choices=Rejection.Reason.CHOICES)
+    reason = forms.ChoiceField(label=_("Select Reason"), choices=RejectionReason.CHOICES)
     send_email = forms.BooleanField(label=_("Inform subscriber about cancellation"), required=False)
 
 

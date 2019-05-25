@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from courses.models import Subscribe, Voucher
+from courses.models import Subscribe, voucher
 
 import datetime
 from django.utils.translation import ugettext as _
@@ -29,9 +29,9 @@ def voucher_valid(code):
     :param code: the voucher key to be validated
     :return:
     """
-    if not Voucher.objects.filter(key=code).count() > 0:
+    if not voucher.objects.filter(key=code).count() > 0:
         raise ValidationError(_('The specified voucher code does not exist'))
-    voucher = Voucher.objects.filter(key=code).first()
+    voucher = voucher.objects.filter(key=code).first()
     if voucher.used:
         raise ValidationError(_('The specified voucher code has already been used'))
     if voucher.expires:
