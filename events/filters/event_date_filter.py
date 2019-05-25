@@ -33,5 +33,5 @@ class EventDateFilter(admin.SimpleListFilter):
         """
         if self.value() == 'upcoming':
             return queryset.filter(date__gte=datetime.today())
-        if self.value() == 'upcoming':
+        if self.value() == 'this_year':
             return queryset.filter(date__gte=date(year=datetime.today().year, day=1, month=1))
