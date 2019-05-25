@@ -1,13 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TQ Website\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 15:00+0200\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
+"Project-Id-Version: TQ Website\n"
+"Language: de\n"
 
 #: .\cms_plugins\cms_plugins.py:19
 msgid "Page title"
@@ -179,9 +177,7 @@ msgstr "Newsletter abonnieren"
 #: .\courses\forms\user_edit_from.py:29
 #, fuzzy
 msgid "I'd like to help TQ from time to time (Events etc.)"
-msgstr ""
-"Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei "
-"Veranstaltungen)"
+msgstr "Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei Veranstaltungen)"
 
 #: .\courses\forms\user_edit_from.py:31
 msgid "Street"
@@ -214,15 +210,11 @@ msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
 #: .\courses\services.py:273
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
-msgstr ""
-"{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT "
-"sind"
+msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT sind"
 
 #: .\courses\services.py:277
 msgid "{} subscriptions can not be unmatched because invalid matching state"
-msgstr ""
-"{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem "
-"ungültigen Zustand sind"
+msgstr "{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem ungültigen Zustand sind"
 
 #: .\courses\services.py:302
 msgid "{} couples broken up successfully"
@@ -234,14 +226,11 @@ msgstr "{} Paare können nicht getrennt werden, da sie BESTÄTIGT sind"
 
 #: .\courses\services.py:309
 msgid "{} couples can not be broken up because invalid matching state"
-msgstr ""
-"{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand "
-"sind"
+msgstr "{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand sind"
 
 #: .\courses\services.py:347
 msgid "{} subscriptions were not confirmed because no partner set"
-msgstr ""
-"{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
+msgstr "{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
 
 #: .\courses\services.py:366
 msgid "{} of {} confirmed successfully"
@@ -275,21 +264,16 @@ msgid "Profile of"
 msgstr "Profil von"
 
 #: .\courses\templates\courses\auth\profile.html:12
-#, python-format
-msgid ""
-"<a href=\"%(account_email)s\">Manage your email addresses <i\n"
+msgid "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr ""
-"<a href=\"%(account_email)s\">Verwalte deine Mailadressen <i\n"
+msgstr "<a href=\"%(account_email)s\">Verwalte deine Mailadressen <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:17
-#, fuzzy, python-format
-msgid ""
-"<a href=\"%(change_password)s\">Change your password <i\n"
+#, fuzzy
+msgid "<a href=\"%(change_password)s\">Change your password <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr ""
-"<a href=\"%(account_email)s\">Verwalte deine Mailadressen <i\n"
+msgstr "<a href=\"%(account_email)s\">Verwalte deine Mailadressen <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:45
@@ -305,14 +289,6 @@ msgstr "Lade eine Zusammenfassung aller Angebote in Excel hier herunter:"
 #: .\courses\templates\courses\duplicate_users.html:26
 msgid "Merge selected proposals"
 msgstr "Markierte Vorschläge zusammenführen"
-
-#: .\courses\templates\courses\snippets\subscription_info.html:4
-msgid "Open class"
-msgstr ""
-
-#: .\courses\templates\courses\snippets\subscription_info.html:6
-msgid "External partner course"
-msgstr ""
 
 #: .\courses\templates\courses\snippets\user_modal.html:25
 #, fuzzy
@@ -347,7 +323,7 @@ msgstr "Zurück"
 
 #: .\courses\templates\courses\subscription_template.html:33
 msgid "In order to enroll to a course you need to login first."
-msgstr ""
+msgstr "Um dich für einen Kurs einzuschreiben, musst du dich zuerst anmelden."
 
 #: .\courses\templates\courses\subscription_template.html:33
 msgid "Login to Enroll"
@@ -596,15 +572,12 @@ msgid "Please mark the students that paid in the course in cash."
 msgstr "Bitte markiere die Schüler welche den Kurs in Bar bezahlt haben."
 
 #: .\payment\templates\payment\course\course.html:78
-msgid ""
-"If you do not have internet access in the course room, you can download this "
-"list before:"
-msgstr ""
+msgid "If you do not have internet access in the course room, you can download this list before:"
+msgstr "Falls du im Kursraum keinen Internetzugang hast, kannst du diese Liste vorher herunterladen:"
 
 #: .\payment\templates\payment\course\course.html:84
-msgid ""
-"Additionally you can download the contact data of the participants here:"
-msgstr ""
+msgid "Additionally you can download the contact data of the participants here:"
+msgstr "Zusätzlich kannst du hier die Kontaktdaten der Teilnehmer herunterladen:"
 
 #: .\payment\templates\payment\course\course.html:93
 #: .\payment\templates\payment\course\course.html:143
@@ -675,7 +648,7 @@ msgstr "Bitte wähle den Kurs für welchen du die Zahlungen verwalten möchtest"
 #: .\payment\templates\payment\finance\account_detail.html:6
 #: .\payment\templates\payment\finance\account_index.html:6
 msgid "Account Finance"
-msgstr ""
+msgstr "Account Finance"
 
 #: .\payment\templates\payment\finance\account_detail.html:50
 msgid "ID"
@@ -687,11 +660,11 @@ msgstr "Typ"
 
 #: .\payment\templates\payment\finance\account_detail.html:53
 msgid "Credit"
-msgstr ""
+msgstr "Credit"
 
 #: .\payment\templates\payment\finance\account_detail.html:55
 msgid "Debit"
-msgstr ""
+msgstr "Debit"
 
 #: .\payment\templates\payment\finance\account_detail.html:56
 msgid "Comment"
@@ -786,11 +759,8 @@ msgid "Payment Status"
 msgstr "Zahlungsstatus"
 
 #: .\payment\templates\payment\voucher\form.html:12
-msgid ""
-"Please check the payment details so you make sure you pay the right course"
-msgstr ""
-"Bitte überprüfe die Zahlungsdetails und gehe sicher, dass du den richtigen "
-"Kurs bezahlst"
+msgid "Please check the payment details so you make sure you pay the right course"
+msgstr "Bitte überprüfe die Zahlungsdetails und gehe sicher, dass du den richtigen Kurs bezahlst"
 
 #: .\payment\templates\payment\voucher\form.html:30
 #, fuzzy
@@ -802,12 +772,8 @@ msgid "Enter Voucher Code"
 msgstr "Gutscheincode eingeben"
 
 #: .\payment\templates\payment\voucher\form.html:38
-msgid ""
-"You can enter your voucher code here. If you use it to pay the course the "
-"voucher will be marked as used."
-msgstr ""
-"Hier kannst du einen Gutscheincode eingeben. Wenn du ihn benutzt um den Kurs "
-"zu zahlen wird der Gutschein als verwendet markiert."
+msgid "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used."
+msgstr "Hier kannst du einen Gutscheincode eingeben. Wenn du ihn benutzt um den Kurs zu zahlen wird der Gutschein als verwendet markiert."
 
 #: .\payment\templates\payment\voucher\form.html:46
 #: .\payment\templates\payment\voucher\payment_failed.html:5
@@ -820,12 +786,8 @@ msgid "Payment Failed"
 msgstr "Zahlung fehlgeschlagen"
 
 #: .\payment\templates\payment\voucher\payment_failed.html:11
-msgid ""
-"The course payment for the following course has failed. Please contact the "
-"TQ. "
-msgstr ""
-"Die Zahlung des folgenden Kurses ist fehlgeschlagen. Bitte kontaktiere den "
-"TQ."
+msgid "The course payment for the following course has failed. Please contact the TQ. "
+msgstr "Die Zahlung des folgenden Kurses ist fehlgeschlagen. Bitte kontaktiere den TQ."
 
 #: .\payment\templates\payment\voucher\payment_success.html:10
 msgid "Successfully Paid"
@@ -834,9 +796,7 @@ msgstr "Zahlung erfolgreich"
 #: .\payment\templates\payment\voucher\payment_success.html:11
 #, fuzzy
 msgid "The follwing course has been successfully paid."
-msgstr ""
-"Der folgende Kurs wurde erfolgreich gezahlt. Du wirst eine E-Mail erhalten, "
-"welche deine Zahlung bestätigt."
+msgstr "Der folgende Kurs wurde erfolgreich gezahlt. Du wirst eine E-Mail erhalten, welche deine Zahlung bestätigt."
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:10
 #, fuzzy
@@ -844,10 +804,8 @@ msgid "Voucher Applied"
 msgstr "Gutscheincode"
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:11
-msgid ""
-"Your voucher was successfully applied to the following course. Please <b>pay "
-"the remaining amount</b> as described in the course confirmation mail."
-msgstr ""
+msgid "Your voucher was successfully applied to the following course. Please <b>pay the remaining amount</b> as described in the course confirmation mail."
+msgstr "Dein Gutschein wurde für den folgenden Kurs erfolgreich eingelöst. <b>Zahle bitte den Restbetrag<\\b> wie in der Kursbestätigungsmail beschrieben."
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:29
 #, fuzzy
@@ -914,11 +872,8 @@ msgid "Successfully sent. Thank you for your time!"
 msgstr "Senden erfolgreich. Vielen Dank für deine Zeit!"
 
 #: .\survey\views.py:86
-msgid ""
-"There is a technical problem with your link. We are very sorry. Please "
-"inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to "
-"take part in the survey"
-msgstr ""
+msgid "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey"
+msgstr "Es gibt ein technisches Problem mit deinem Link. Das tut uns leid. Bitte informiere uns auf informatik@tq.vseth.ch MIT DEINEM VOLLSTÄNDIGEN NAMEN, falls du immer noch an der Umfrage teilnehmen möchtest."
 
 #: .\survey\views.py:95
 msgid "This survey was already filled out"
@@ -938,11 +893,8 @@ msgid "Account"
 msgstr "Betrag"
 
 #: .\templates\account\change_password.html:9 .\templates\account\email.html:9
-#, python-format
-msgid ""
-"<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> "
-"Go back to your profile</a>"
-msgstr ""
+msgid "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Go back to your profile</a>"
+msgstr "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Zurück zu deinem Profil</a>"
 
 #: .\templates\account\change_password.html:12
 msgid "Change password of"
@@ -955,7 +907,7 @@ msgstr "Zahlung erfolgreich"
 
 #: .\templates\account\change_password.html:27
 msgid "Password not changed. Please try again"
-msgstr ""
+msgstr "Das Passwort wurde nicht geändert. Versuche es bitte nochmals"
 
 #: .\templates\account\email.html:11
 #, fuzzy
@@ -995,10 +947,8 @@ msgid "Warning:"
 msgstr "Warnung:"
 
 #: .\templates\account\email.html:51
-msgid ""
-"You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
-msgstr ""
+msgid "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
+msgstr "Du hast zurzeit keine E-Mail Adresse eingerichtet. Du solltest wirklich eine hinzufügen, damit du etwa Mitteilungen emfangen oder dein Passwort zurücksetzen kannst."
 
 #: .\templates\account\email.html:74
 #, fuzzy
@@ -1020,11 +970,8 @@ msgid "Sign Up"
 msgstr "Registrieren"
 
 #: .\templates\account\signup.html:10
-#, python-format
-msgid ""
-"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr ""
-"Du hast schon ein Account? Bitte <a href=\"%(login_url)s\">einloggen</a>."
+msgid "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr "Du hast schon ein Account? Bitte <a href=\"%(login_url)s\">einloggen</a>."
 
 #: .\templates\basis.html:163
 msgid "Please send Website Feedback to"
@@ -1101,3 +1048,12 @@ msgstr "Seiteninhalt"
 #: .\tq_website\settings.py:314
 msgid "Title"
 msgstr "Titel"
+
+#: .\courses\templates\courses\snippets\subscription_info.html:4
+msgid "Open class"
+msgstr "Open class"
+
+#: .\courses\templates\courses\snippets\subscription_info.html:6
+msgid "External partner course"
+msgstr "Externer Partnerkurs"
+
