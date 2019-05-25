@@ -1,65 +1,67 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: TQ Website\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-25 15:00+0200\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: TQ Website\n"
-"Language: en\n"
 
-#: .\cms_plugins\cms_plugins.py:21
+#: .\cms_plugins\cms_plugins.py:19
 msgid "Page title"
 msgstr "Page title"
 
-#: .\cms_plugins\cms_plugins.py:40
+#: .\cms_plugins\cms_plugins.py:38
 msgid "Button"
 msgstr "Button"
 
-#: .\cms_plugins\cms_plugins.py:46
+#: .\cms_plugins\cms_plugins.py:44
 msgid "Row"
 msgstr "Row"
 
-#: .\cms_plugins\cms_plugins.py:69
+#: .\cms_plugins\cms_plugins.py:67
 msgid "Thumbnail"
 msgstr "Thumbnail"
 
-#: .\cms_plugins\cms_plugins.py:93
+#: .\cms_plugins\cms_plugins.py:91
 msgid "Countdown"
 msgstr "Countdown"
 
-#: .\courses\admin_actions.py:50
+#: .\courses\admin_actions.py:53
 msgid "Offering to copy into"
 msgstr "Offering to coy"
 
-#: .\courses\admin_actions.py:116
+#: .\courses\admin_actions.py:119
 msgid "Select Reason"
 msgstr "Select reason"
 
-#: .\courses\admin_actions.py:117
+#: .\courses\admin_actions.py:120
 msgid "Inform subscriber about cancellation"
 msgstr "Inform subscriber about cancellation"
 
-#: .\courses\admin_actions.py:259
+#: .\courses\admin_actions.py:262
 msgid "Select Survey"
 msgstr "Select survey"
 
-#: .\courses\admin_actions.py:260
+#: .\courses\admin_actions.py:263
 msgid "Send invitations (without reviewing)?"
 msgstr "Send invitations (without reviewing)?"
 
-#: .\courses\admin_actions.py:262
+#: .\courses\admin_actions.py:265
 msgid "Should invitation url expire?"
 msgstr "Should invitation url expire?"
 
-#: .\courses\admin_actions.py:263
+#: .\courses\admin_actions.py:266
 msgid "URL expire date"
 msgstr "URL expire date"
 
-#: .\courses\admin_views.py:19
+#: .\courses\admin_views.py:15
 msgid "Choose amount"
 msgstr "Choose amount"
 
-#: .\courses\admin_views.py:21
+#: .\courses\admin_views.py:17
 msgid "Set expire date?"
 msgstr "Set expire date"
 
@@ -145,7 +147,7 @@ msgstr "Merge duplicate users"
 msgid "Check confirmations"
 msgstr "Check confirmations"
 
-#: .\courses\forms\user_edit_from.py:14
+#: .\courses\forms\user_edit_from.py:13
 msgid "Telephone number (Mobile)"
 msgstr "Telephone number (Mobile)"
 
@@ -161,83 +163,83 @@ msgstr "Gender"
 msgid "Height (cm)"
 msgstr "Height (cm)"
 
-#: .\courses\forms\user_edit_from.py:24
+#: .\courses\forms\user_edit_from.py:25
 msgid "Student card number"
 msgstr "Student card number"
 
-#: .\courses\forms\user_edit_from.py:26
+#: .\courses\forms\user_edit_from.py:27
 msgid "Subscribe to newsletter"
 msgstr "Subscribe to newsletter"
 
-#: .\courses\forms\user_edit_from.py:28
+#: .\courses\forms\user_edit_from.py:29
 msgid "I'd like to help TQ from time to time (Events etc.)"
 msgstr "I'd like to help TQ from time to time (Events etc.)"
 
-#: .\courses\forms\user_edit_from.py:30
+#: .\courses\forms\user_edit_from.py:31
 msgid "Street"
 msgstr "Street"
 
-#: .\courses\forms\user_edit_from.py:32
+#: .\courses\forms\user_edit_from.py:33
 msgid "Postal code"
 msgstr "Postal code"
 
-#: .\courses\forms\user_edit_from.py:34
+#: .\courses\forms\user_edit_from.py:35
 msgid "City"
 msgstr "City"
 
-#: .\courses\forms\user_edit_from.py:57
+#: .\courses\forms\user_edit_from.py:58
 msgid "Students have to enter their student card number."
 msgstr "Students have to enter their student card number."
 
-#: .\courses\services.py:225
+#: .\courses\services.py:226
 msgid "{} couples matched successfully"
 msgstr "{} couples matched successfully"
 
-#: .\courses\services.py:244
+#: .\courses\services.py:245
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr "{} subscriptions ({} couples) corrected successfully"
 
-#: .\courses\services.py:269
+#: .\courses\services.py:270
 msgid "{} couples unmatched successfully"
 msgstr "{} couples unmatched successfully"
 
-#: .\courses\services.py:272
+#: .\courses\services.py:273
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr "{} subscriptions can not be unmatched because already CONFIRMED"
 
-#: .\courses\services.py:276
+#: .\courses\services.py:277
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr "{} subscriptions can not be unmatched because invalid matching state"
 
-#: .\courses\services.py:301
+#: .\courses\services.py:302
 msgid "{} couples broken up successfully"
 msgstr "{} couples broken up successfully"
 
-#: .\courses\services.py:304
+#: .\courses\services.py:305
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr "{} couples can not be broken up because already CONFIRMED"
 
-#: .\courses\services.py:308
+#: .\courses\services.py:309
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr "{} couples can not be broken up because invalid matching state"
 
-#: .\courses\services.py:346
+#: .\courses\services.py:347
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr "{} subscriptions were not confirmed because no partner set"
 
-#: .\courses\services.py:365
+#: .\courses\services.py:366
 msgid "{} of {} confirmed successfully"
 msgstr "{} of {} confirmed successfully"
 
-#: .\courses\services.py:408
+#: .\courses\services.py:409
 msgid "{} unrejected successfully"
 msgstr "{} unrejected successfully"
 
-#: .\courses\services.py:437
+#: .\courses\services.py:438
 msgid "{} of {} welcomed successfully"
 msgstr "{} of {} welcomed successfully"
 
-#: .\courses\services.py:451
+#: .\courses\services.py:452
 msgid "{} of {} teachers reset successfully"
 msgstr "{} of {} teachers reset successfully"
 
@@ -255,15 +257,21 @@ msgid "Profile of"
 msgstr "Profile of"
 
 #: .\courses\templates\courses\auth\profile.html:12
-msgid "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
+#, python-format
+msgid ""
+"<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
+msgstr ""
+"<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:17
-msgid "<a href=\"%(change_password)s\">Change your password <i\n"
+#, python-format
+msgid ""
+"<a href=\"%(change_password)s\">Change your password <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr "<a href=\"%(change_password)s\">Change your password <i\n"
+msgstr ""
+"<a href=\"%(change_password)s\">Change your password <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:45
@@ -277,6 +285,14 @@ msgstr "Download summary of all offerings here:"
 #: .\courses\templates\courses\duplicate_users.html:26
 msgid "Merge selected proposals"
 msgstr "Merge selected proposals"
+
+#: .\courses\templates\courses\snippets\subscription_info.html:4
+msgid "Open class"
+msgstr ""
+
+#: .\courses\templates\courses\snippets\subscription_info.html:6
+msgid "External partner course"
+msgstr ""
 
 #: .\courses\templates\courses\snippets\user_modal.html:25
 msgid "Teacher"
@@ -298,8 +314,8 @@ msgstr "No info available"
 msgid "We accept the GTC"
 msgstr "We accept the GTC"
 
-#: .\courses\templates\courses\subscription.html:86
-#: .\courses\templates\courses\subscription.html:88
+#: .\courses\templates\courses\subscription.html:87
+#: .\courses\templates\courses\subscription.html:89
 msgid "View our GTC"
 msgstr "View our GTC"
 
@@ -333,11 +349,11 @@ msgstr "Events"
 msgid "Events Teaser"
 msgstr "Events Teaser"
 
-#: .\events\models.py:80
+#: .\events\models.py:76
 msgid "from"
 msgstr "from"
 
-#: .\events\models.py:82
+#: .\events\models.py:78
 msgid "Time not set yet"
 msgstr "Time not set yet"
 
@@ -408,7 +424,7 @@ msgstr "Close"
 msgid "FAQ"
 msgstr "FAQ"
 
-#: .\organisation\cms_plugins.py:11
+#: .\organisation\cms_plugins.py:10
 msgid "Managing Committee"
 msgstr "Managing Committee"
 
@@ -445,39 +461,39 @@ msgstr "Course Payments"
 msgid "Payment Reminders"
 msgstr "Payment Reminders"
 
-#: .\payment\forms.py:23
+#: .\payment\forms.py:24
 msgid "The specified USI does not exist"
 msgstr "The specified USI does not exist"
 
-#: .\payment\forms.py:33
+#: .\payment\forms.py:34
 msgid "The specified voucher code does not exist"
 msgstr "The specified voucher code does not exist"
 
-#: .\payment\forms.py:36
+#: .\payment\forms.py:37
 msgid "The specified voucher code has already been used"
 msgstr "The specified voucher code has already been used"
 
-#: .\payment\forms.py:39
+#: .\payment\forms.py:40
 msgid "The specified voucher code is expired"
 msgstr "The specified voucher code is expired"
 
-#: .\payment\forms.py:43
+#: .\payment\forms.py:44
 msgid "Please enter a valid USI"
 msgstr "Please enter a valid USI"
 
-#: .\payment\forms.py:44
+#: .\payment\forms.py:45
 msgid "Unique Course Identifier (USI)"
 msgstr "Unique Course Identifier (USI)"
 
-#: .\payment\forms.py:54
+#: .\payment\forms.py:55
 msgid "Voucher Code"
 msgstr "Voucher Code"
 
-#: .\payment\forms.py:60
+#: .\payment\forms.py:61
 msgid "Select year"
 msgstr "Select year"
 
-#: .\payment\forms.py:62
+#: .\payment\forms.py:63
 msgid "Select month"
 msgstr "Select month"
 
@@ -548,12 +564,18 @@ msgid "Please mark the students that paid in the course in cash."
 msgstr "Please mark the students that paid in the course in cash."
 
 #: .\payment\templates\payment\course\course.html:78
-msgid "If you do not have internet access in the course room, you can download this list before:"
-msgstr "If you do not have internet access in the course room, you can download this list before:"
+msgid ""
+"If you do not have internet access in the course room, you can download this "
+"list before:"
+msgstr ""
+"If you do not have internet access in the course room, you can download this "
+"list before:"
 
 #: .\payment\templates\payment\course\course.html:84
-msgid "Additionally you can download the contact data of the participants here:"
-msgstr "Additionally you can download the contact data of the participants here:"
+msgid ""
+"Additionally you can download the contact data of the participants here:"
+msgstr ""
+"Additionally you can download the contact data of the participants here:"
 
 #: .\payment\templates\payment\course\course.html:93
 #: .\payment\templates\payment\course\course.html:143
@@ -724,8 +746,10 @@ msgid "Payment Status"
 msgstr "Payment Status"
 
 #: .\payment\templates\payment\voucher\form.html:12
-msgid "Please check the payment details so you make sure you pay the right course"
-msgstr "Please check the payment details so you make sure you pay the right course"
+msgid ""
+"Please check the payment details so you make sure you pay the right course"
+msgstr ""
+"Please check the payment details so you make sure you pay the right course"
 
 #: .\payment\templates\payment\voucher\form.html:30
 msgid "Amount to Pay"
@@ -736,8 +760,12 @@ msgid "Enter Voucher Code"
 msgstr "Enter Voucher Code"
 
 #: .\payment\templates\payment\voucher\form.html:38
-msgid "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used."
-msgstr "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used."
+msgid ""
+"You can enter your voucher code here. If you use it to pay the course the "
+"voucher will be marked as used."
+msgstr ""
+"You can enter your voucher code here. If you use it to pay the course the "
+"voucher will be marked as used."
 
 #: .\payment\templates\payment\voucher\form.html:46
 #: .\payment\templates\payment\voucher\payment_failed.html:5
@@ -750,8 +778,12 @@ msgid "Payment Failed"
 msgstr "Payment Failed"
 
 #: .\payment\templates\payment\voucher\payment_failed.html:11
-msgid "The course payment for the following course has failed. Please contact the TQ. "
-msgstr "The course payment for the following course has failed. Please contact the TQ. "
+msgid ""
+"The course payment for the following course has failed. Please contact the "
+"TQ. "
+msgstr ""
+"The course payment for the following course has failed. Please contact the "
+"TQ. "
 
 #: .\payment\templates\payment\voucher\payment_success.html:10
 msgid "Successfully Paid"
@@ -766,8 +798,12 @@ msgid "Voucher Applied"
 msgstr "Voucher Applied"
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:11
-msgid "Your voucher was successfully applied to the following course. Please <b>pay the remaining amount</b> as described in the course confirmation mail."
-msgstr "Your voucher was successfully applied to the following course. Please <b>pay the remaining amount</b> as described in the course confirmation mail."
+msgid ""
+"Your voucher was successfully applied to the following course. Please <b>pay "
+"the remaining amount</b> as described in the course confirmation mail."
+msgstr ""
+"Your voucher was successfully applied to the following course. Please <b>pay "
+"the remaining amount</b> as described in the course confirmation mail."
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:29
 msgid "Subscription Identifier (for online payments)"
@@ -830,8 +866,14 @@ msgid "Successfully sent. Thank you for your time!"
 msgstr "Successfully sent. Thank you for your time!"
 
 #: .\survey\views.py:86
-msgid "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey"
-msgstr "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey"
+msgid ""
+"There is a technical problem with your link. We are very sorry. Please "
+"inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to "
+"take part in the survey"
+msgstr ""
+"There is a technical problem with your link. We are very sorry. Please "
+"inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to "
+"take part in the survey"
 
 #: .\survey\views.py:95
 msgid "This survey was already filled out"
@@ -850,8 +892,13 @@ msgid "Account"
 msgstr "Account"
 
 #: .\templates\account\change_password.html:9 .\templates\account\email.html:9
-msgid "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Go back to your profile</a>"
-msgstr "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Go back to your profile</a>"
+#, python-format
+msgid ""
+"<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> "
+"Go back to your profile</a>"
+msgstr ""
+"<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> "
+"Go back to your profile</a>"
 
 #: .\templates\account\change_password.html:12
 msgid "Change password of"
@@ -902,8 +949,12 @@ msgid "Warning:"
 msgstr "Warning:"
 
 #: .\templates\account\email.html:51
-msgid "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
-msgstr "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
 
 #: .\templates\account\email.html:74
 msgid "Add E-mail"
@@ -922,8 +973,11 @@ msgid "Sign Up"
 msgstr "Sign Up"
 
 #: .\templates\account\signup.html:10
-msgid "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 
 #: .\templates\basis.html:163
 msgid "Please send Website Feedback to"
@@ -1000,4 +1054,3 @@ msgstr "Side content"
 #: .\tq_website\settings.py:314
 msgid "Title"
 msgstr "Title"
-
