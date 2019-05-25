@@ -1,367 +1,355 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-25 00:31+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: TQ Website\n"
+"Language: en\n"
 
 #: .\cms_plugins\cms_plugins.py:21
 msgid "Page title"
-msgstr ""
+msgstr "Page title"
 
 #: .\cms_plugins\cms_plugins.py:40
 msgid "Button"
-msgstr ""
+msgstr "Button"
 
 #: .\cms_plugins\cms_plugins.py:46
 msgid "Row"
-msgstr ""
+msgstr "Row"
 
 #: .\cms_plugins\cms_plugins.py:69
 msgid "Thumbnail"
-msgstr ""
+msgstr "Thumbnail"
 
 #: .\cms_plugins\cms_plugins.py:93
 msgid "Countdown"
-msgstr ""
+msgstr "Countdown"
 
 #: .\courses\admin_actions.py:50
 msgid "Offering to copy into"
-msgstr ""
+msgstr "Offering to coy"
 
 #: .\courses\admin_actions.py:116
 msgid "Select Reason"
-msgstr ""
+msgstr "Select reason"
 
 #: .\courses\admin_actions.py:117
 msgid "Inform subscriber about cancellation"
-msgstr ""
+msgstr "Inform subscriber about cancellation"
 
 #: .\courses\admin_actions.py:259
 msgid "Select Survey"
-msgstr ""
+msgstr "Select survey"
 
 #: .\courses\admin_actions.py:260
 msgid "Send invitations (without reviewing)?"
-msgstr ""
+msgstr "Send invitations (without reviewing)?"
 
 #: .\courses\admin_actions.py:262
 msgid "Should invitation url expire?"
-msgstr ""
+msgstr "Should invitation url expire?"
 
 #: .\courses\admin_actions.py:263
 msgid "URL expire date"
-msgstr ""
+msgstr "URL expire date"
 
 #: .\courses\admin_views.py:19
 msgid "Choose amount"
-msgstr ""
+msgstr "Choose amount"
 
 #: .\courses\admin_views.py:21
 msgid "Set expire date?"
-msgstr ""
+msgstr "Set expire date"
 
 #: .\courses\cms_apps.py:7
 msgid "Course Administration"
-msgstr ""
+msgstr "Course administration"
 
 #: .\courses\cms_plugins.py:16
 msgid "Music of dance styles"
-msgstr ""
+msgstr "Music of dance styles"
 
 #: .\courses\cms_toolbars.py:10
 msgid "Courses"
-msgstr ""
+msgstr "Courses"
 
 #: .\courses\cms_toolbars.py:13
 msgid "Offerings"
-msgstr ""
+msgstr "Offerings"
 
 #: .\courses\cms_toolbars.py:16
 msgid "Course Planning"
-msgstr ""
+msgstr "Course Planning"
 
 #: .\courses\cms_toolbars.py:18
 msgid "Current Courses Management"
-msgstr ""
+msgstr "Current Course Management"
 
 #: .\courses\cms_toolbars.py:20
 msgid "All Courses"
-msgstr ""
+msgstr "All Courses"
 
 #: .\courses\cms_toolbars.py:23
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:21
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:22
 msgid "Subscriptions"
-msgstr ""
+msgstr "Subscriptions"
 
 #: .\courses\cms_toolbars.py:29
 msgid "Course types"
-msgstr ""
+msgstr "Course types"
 
 #: .\courses\cms_toolbars.py:32
 msgid "Styles"
-msgstr ""
+msgstr "Styles"
 
 #: .\courses\cms_toolbars.py:35
 msgid "Songs"
-msgstr ""
+msgstr "Songs"
 
 #: .\courses\cms_toolbars.py:38
 msgid "Periods"
-msgstr ""
+msgstr "Periods"
 
 #: .\courses\cms_toolbars.py:41
 msgid "Rooms"
-msgstr ""
+msgstr "Rooms"
 
 #: .\courses\cms_toolbars.py:44
 msgid "Addresses"
-msgstr ""
+msgstr "Addresses"
 
 #: .\courses\cms_toolbars.py:50
 msgid "Confirmations"
-msgstr ""
+msgstr "Confirmations"
 
 #: .\courses\cms_toolbars.py:54
 msgid "Rejections"
-msgstr ""
+msgstr "Rejections"
 
 #: .\courses\cms_toolbars.py:58
 msgid "Teacher welcomes"
-msgstr ""
+msgstr "Teacher welcomes"
 
 #: .\courses\cms_toolbars.py:60
 msgid "Tools"
-msgstr ""
+msgstr "Tools"
 
 #: .\courses\cms_toolbars.py:62
 msgid "Merge duplicate users"
-msgstr ""
+msgstr "Merge duplicate users"
 
 #: .\courses\cms_toolbars.py:64
 msgid "Check confirmations"
-msgstr ""
+msgstr "Check confirmations"
 
 #: .\courses\forms\user_edit_from.py:14
 msgid "Telephone number (Mobile)"
-msgstr ""
+msgstr "Telephone number (Mobile)"
 
 #: .\courses\forms\user_edit_from.py:17
 msgid "Student"
-msgstr ""
+msgstr "Student"
 
 #: .\courses\forms\user_edit_from.py:19
 msgid "Gender"
-msgstr ""
+msgstr "Gender"
 
 #: .\courses\forms\user_edit_from.py:21
 msgid "Height (cm)"
-msgstr ""
+msgstr "Height (cm)"
 
 #: .\courses\forms\user_edit_from.py:24
 msgid "Student card number"
-msgstr ""
+msgstr "Student card number"
 
 #: .\courses\forms\user_edit_from.py:26
 msgid "Subscribe to newsletter"
-msgstr ""
+msgstr "Subscribe to newsletter"
 
 #: .\courses\forms\user_edit_from.py:28
 msgid "I'd like to help TQ from time to time (Events etc.)"
-msgstr ""
+msgstr "I'd like to help TQ from time to time (Events etc.)"
 
 #: .\courses\forms\user_edit_from.py:30
 msgid "Street"
-msgstr ""
+msgstr "Street"
 
 #: .\courses\forms\user_edit_from.py:32
 msgid "Postal code"
-msgstr ""
+msgstr "Postal code"
 
 #: .\courses\forms\user_edit_from.py:34
 msgid "City"
-msgstr ""
+msgstr "City"
 
 #: .\courses\forms\user_edit_from.py:57
 msgid "Students have to enter their student card number."
-msgstr ""
+msgstr "Students have to enter their student card number."
 
 #: .\courses\services.py:225
 msgid "{} couples matched successfully"
-msgstr ""
+msgstr "{} couples matched successfully"
 
 #: .\courses\services.py:244
 msgid "{} subscriptions ({} couples) corrected successfully"
-msgstr ""
+msgstr "{} subscriptions ({} couples) corrected successfully"
 
 #: .\courses\services.py:269
 msgid "{} couples unmatched successfully"
-msgstr ""
+msgstr "{} couples unmatched successfully"
 
 #: .\courses\services.py:272
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
-msgstr ""
+msgstr "{} subscriptions can not be unmatched because already CONFIRMED"
 
 #: .\courses\services.py:276
 msgid "{} subscriptions can not be unmatched because invalid matching state"
-msgstr ""
+msgstr "{} subscriptions can not be unmatched because invalid matching state"
 
 #: .\courses\services.py:301
 msgid "{} couples broken up successfully"
-msgstr ""
+msgstr "{} couples broken up successfully"
 
 #: .\courses\services.py:304
 msgid "{} couples can not be broken up because already CONFIRMED"
-msgstr ""
+msgstr "{} couples can not be broken up because already CONFIRMED"
 
 #: .\courses\services.py:308
 msgid "{} couples can not be broken up because invalid matching state"
-msgstr ""
+msgstr "{} couples can not be broken up because invalid matching state"
 
 #: .\courses\services.py:346
 msgid "{} subscriptions were not confirmed because no partner set"
-msgstr ""
+msgstr "{} subscriptions were not confirmed because no partner set"
 
 #: .\courses\services.py:365
 msgid "{} of {} confirmed successfully"
-msgstr ""
+msgstr "{} of {} confirmed successfully"
 
 #: .\courses\services.py:408
 msgid "{} unrejected successfully"
-msgstr ""
+msgstr "{} unrejected successfully"
 
 #: .\courses\services.py:437
 msgid "{} of {} welcomed successfully"
-msgstr ""
+msgstr "{} of {} welcomed successfully"
 
 #: .\courses\services.py:451
 msgid "{} of {} teachers reset successfully"
-msgstr ""
+msgstr "{} of {} teachers reset successfully"
 
 #: .\courses\templates\courses\auth\offering_overview.html:13
 msgid "Download summary of this offering here:"
-msgstr ""
+msgstr "Download summary of this offering here:"
 
 #: .\courses\templates\courses\auth\profile.html:5
 #: .\templates\account\change_password.html:5
 msgid "Profile"
-msgstr ""
+msgstr "Profile"
 
 #: .\courses\templates\courses\auth\profile.html:8
 msgid "Profile of"
-msgstr ""
+msgstr "Profile of"
 
 #: .\courses\templates\courses\auth\profile.html:12
-#, python-format
-msgid ""
-"<a href=\"%(account_email)s\">Manage your email addresses <i\n"
+msgid "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr ""
+msgstr "<a href=\"%(account_email)s\">Manage your email addresses <i\n"
+"            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:17
-#, python-format
-msgid ""
-"<a href=\"%(change_password)s\">Change your password <i\n"
+msgid "<a href=\"%(change_password)s\">Change your password <i\n"
 "            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
-msgstr ""
+msgstr "<a href=\"%(change_password)s\">Change your password <i\n"
+"            class=\"fa fa-arrow-circle-right fa-lg\"></i></a>"
 
 #: .\courses\templates\courses\auth\profile.html:45
 msgid "Update Profile"
-msgstr ""
+msgstr "Update Profile"
 
 #: .\courses\templates\courses\auth\subscription_overview.html:14
 msgid "Download summary of all offerings here:"
-msgstr ""
+msgstr "Download summary of all offerings here:"
 
 #: .\courses\templates\courses\duplicate_users.html:26
 msgid "Merge selected proposals"
-msgstr ""
+msgstr "Merge selected proposals"
 
 #: .\courses\templates\courses\snippets\user_modal.html:25
 msgid "Teacher"
-msgstr ""
+msgstr "Teacher"
 
 #: .\courses\templates\courses\snippets\user_modal.html:29
 msgid "Board member"
-msgstr ""
+msgstr "Board member"
 
 #: .\courses\templates\courses\snippets\user_modal.html:42
 msgid "About"
-msgstr ""
+msgstr "About"
 
 #: .\courses\templates\courses\snippets\user_modal.html:46
 msgid "No info available"
-msgstr ""
+msgstr "No info available"
 
 #: .\courses\templates\courses\subscription.html:75
 msgid "We accept the GTC"
-msgstr ""
+msgstr "We accept the GTC"
 
 #: .\courses\templates\courses\subscription.html:86
 #: .\courses\templates\courses\subscription.html:88
 msgid "View our GTC"
-msgstr ""
+msgstr "View our GTC"
 
 #: .\courses\templates\courses\subscription2.html:8
 #: .\courses\templates\courses\subscription_message.html:7
 msgid "Go back"
-msgstr ""
+msgstr "Go back"
 
 #: .\courses\templates\courses\subscription_template.html:33
 msgid "In order to enroll to a course you need to login first."
-msgstr ""
+msgstr "In order to enroll to a course you need to login first."
 
 #: .\courses\templates\courses\subscription_template.html:33
 msgid "Login to Enroll"
-msgstr ""
+msgstr "Login to Enroll"
 
 #: .\courses\views.py:53
 msgid "Irregular weekday"
-msgstr ""
+msgstr "Irregular weekday"
 
 #: .\courses\views.py:61
 msgid "Unknown month"
-msgstr ""
+msgstr "Unknown month"
 
 #: .\events\cms_plugins.py:10 .\events\cms_toolbars.py:10
 #: .\events\cms_toolbars.py:13
 msgid "Events"
-msgstr ""
+msgstr "Events"
 
 #: .\events\cms_plugins.py:31
 msgid "Events Teaser"
-msgstr ""
+msgstr "Events Teaser"
 
 #: .\events\models.py:80
 msgid "from"
-msgstr ""
+msgstr "from"
 
 #: .\events\models.py:82
 msgid "Time not set yet"
-msgstr ""
+msgstr "Time not set yet"
 
 #: .\events\templates\events\events.html:5
 msgid "No events planned."
-msgstr ""
+msgstr "No events planned."
 
 #: .\events\templates\events\snippets\event_list.html:3
 #: .\events\templates\events\snippets\event_list_entry.html:4
 #: .\events\templates\events\snippets\event_modal.html:4
 msgid "No entry fee"
-msgstr ""
+msgstr "No entry fee"
 
 #: .\events\templates\events\snippets\event_list.html:8
 #: .\payment\templates\payment\counter\details.html:21
@@ -373,141 +361,141 @@ msgstr ""
 #: .\payment\templates\payment\voucher\payment_success.html:17
 #: .\payment\templates\payment\voucher\remaining_amount.html:17
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: .\events\templates\events\snippets\event_list.html:9
 #: .\payment\templates\payment\finance\account_detail.html:51
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: .\events\templates\events\snippets\event_list.html:10
 msgid "Time"
-msgstr ""
+msgstr "Time"
 
 #: .\events\templates\events\snippets\event_list.html:11
 msgid "Venue"
-msgstr ""
+msgstr "Venue"
 
 #: .\events\templates\events\snippets\event_list.html:12
 msgid "Entry Fee"
-msgstr ""
+msgstr "Entry Fee"
 
 #: .\events\templates\events\snippets\event_list.html:13
 msgid "Organizer"
-msgstr ""
+msgstr "Organizer"
 
 #: .\events\templates\events\snippets\event_list.html:47
 #: .\events\templates\events\snippets\event_list_entry.html:5
 #: .\events\templates\events\snippets\event_modal.html:21
 msgid "Venue not yet set"
-msgstr ""
+msgstr "Venue not yet set"
 
 #: .\events\templates\events\snippets\event_list_entry.html:3
 #: .\events\templates\events\snippets\event_modal.html:3
 msgid "Not yet set"
-msgstr ""
+msgstr "Not yet set"
 
 #: .\events\templates\events\snippets\event_list_entry.html:29
 #: .\events\templates\events\snippets\event_modal.html:26
 msgid "Organized by"
-msgstr ""
+msgstr "Organized by"
 
 #: .\events\templates\events\snippets\event_modal.html:38
 msgid "Close"
-msgstr ""
+msgstr "Close"
 
 #: .\faq\cms_plugins.py:15
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: .\organisation\cms_plugins.py:11
 msgid "Managing Committee"
-msgstr ""
+msgstr "Managing Committee"
 
 #: .\payment\cms_toolbars.py:10
 msgid "Payment"
-msgstr ""
+msgstr "Payment"
 
 #: .\payment\cms_toolbars.py:13
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:37
 msgid "Voucher"
-msgstr ""
+msgstr "Voucher"
 
 #: .\payment\cms_toolbars.py:16
 msgid "Voucher purposes"
-msgstr ""
+msgstr "Voucher purposes"
 
 #: .\payment\cms_toolbars.py:19
 msgid "Generate multiple vouchers"
-msgstr ""
+msgstr "Generate multiple vouchers"
 
 #: .\payment\cms_toolbars.py:23
 msgid "Online Payments"
-msgstr ""
+msgstr "Online Payments"
 
 #: .\payment\cms_toolbars.py:26
 msgid "Subscription Payments"
-msgstr ""
+msgstr "Subscription Payments"
 
 #: .\payment\cms_toolbars.py:29
 msgid "Course Payments"
-msgstr ""
+msgstr "Course Payments"
 
 #: .\payment\cms_toolbars.py:32
 msgid "Payment Reminders"
-msgstr ""
+msgstr "Payment Reminders"
 
 #: .\payment\forms.py:23
 msgid "The specified USI does not exist"
-msgstr ""
+msgstr "The specified USI does not exist"
 
 #: .\payment\forms.py:33
 msgid "The specified voucher code does not exist"
-msgstr ""
+msgstr "The specified voucher code does not exist"
 
 #: .\payment\forms.py:36
 msgid "The specified voucher code has already been used"
-msgstr ""
+msgstr "The specified voucher code has already been used"
 
 #: .\payment\forms.py:39
 msgid "The specified voucher code is expired"
-msgstr ""
+msgstr "The specified voucher code is expired"
 
 #: .\payment\forms.py:43
 msgid "Please enter a valid USI"
-msgstr ""
+msgstr "Please enter a valid USI"
 
 #: .\payment\forms.py:44
 msgid "Unique Course Identifier (USI)"
-msgstr ""
+msgstr "Unique Course Identifier (USI)"
 
 #: .\payment\forms.py:54
 msgid "Voucher Code"
-msgstr ""
+msgstr "Voucher Code"
 
 #: .\payment\forms.py:60
 msgid "Select year"
-msgstr ""
+msgstr "Select year"
 
 #: .\payment\forms.py:62
 msgid "Select month"
-msgstr ""
+msgstr "Select month"
 
 #: .\payment\services.py:27
 msgid "{} of {} reminded successfully"
-msgstr ""
+msgstr "{} of {} reminded successfully"
 
 #: .\payment\templates\payment\counter\details.html:6
 #: .\payment\templates\payment\counter\form.html:6
 #: .\payment\templates\payment\counter\main.html:5
 msgid "Counter Payment"
-msgstr ""
+msgstr "Counter Payment"
 
 #: .\payment\templates\payment\counter\details.html:11
 #: .\payment\templates\payment\course\confirm.html:11
 #: .\payment\templates\payment\voucher\form.html:11
 msgid "Payment Details"
-msgstr ""
+msgstr "Payment Details"
 
 #: .\payment\templates\payment\counter\details.html:27
 #: .\payment\templates\payment\course\confirm.html:25
@@ -519,7 +507,7 @@ msgstr ""
 #: .\payment\templates\payment\voucher\payment_success.html:23
 #: .\payment\templates\payment\voucher\remaining_amount.html:23
 msgid "Course"
-msgstr ""
+msgstr "Course"
 
 #: .\payment\templates\payment\counter\details.html:33
 #: .\payment\templates\payment\course\confirm.html:29
@@ -527,508 +515,489 @@ msgstr ""
 #: .\payment\templates\payment\course\course.html:142
 #: .\payment\templates\payment\finance\offering_detail.html:28
 msgid "Amount"
-msgstr ""
+msgstr "Amount"
 
 #: .\payment\templates\payment\counter\details.html:43
 #: .\payment\templates\payment\course\confirm.html:35
 msgid "Mark as Paid"
-msgstr ""
+msgstr "Mark as Paid"
 
 #: .\payment\templates\payment\counter\details.html:46
 #: .\payment\templates\payment\course\confirm.html:37
 msgid "Already Paid"
-msgstr ""
+msgstr "Already Paid"
 
 #: .\payment\templates\payment\counter\form.html:11
 msgid "Enter USI"
-msgstr ""
+msgstr "Enter USI"
 
 #: .\payment\templates\payment\counter\form.html:17
 msgid "Submit"
-msgstr ""
+msgstr "Submit"
 
 #: .\payment\templates\payment\course\confirm.html:6
 msgid "Course Payment"
-msgstr ""
+msgstr "Course Payment"
 
 #: .\payment\templates\payment\course\course.html:8
 msgid "Course Management"
-msgstr ""
+msgstr "Course Management"
 
 #: .\payment\templates\payment\course\course.html:75
 msgid "Please mark the students that paid in the course in cash."
-msgstr ""
+msgstr "Please mark the students that paid in the course in cash."
 
 #: .\payment\templates\payment\course\course.html:78
-msgid ""
-"If you do not have internet access in the course room, you can download this "
-"list before:"
-msgstr ""
+msgid "If you do not have internet access in the course room, you can download this list before:"
+msgstr "If you do not have internet access in the course room, you can download this list before:"
 
 #: .\payment\templates\payment\course\course.html:84
-msgid ""
-"Additionally you can download the contact data of the participants here:"
-msgstr ""
+msgid "Additionally you can download the contact data of the participants here:"
+msgstr "Additionally you can download the contact data of the participants here:"
 
 #: .\payment\templates\payment\course\course.html:93
 #: .\payment\templates\payment\course\course.html:143
 #: .\payment\templates\payment\finance\offering_detail.html:29
 msgid "Amount Due"
-msgstr ""
+msgstr "Amount Due"
 
 #: .\payment\templates\payment\course\course.html:123
 #: .\payment\templates\payment\course\course.html:174
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:34
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: .\payment\templates\payment\course\course.html:138
 #: .\payment\templates\payment\finance\offering_detail.html:25
 msgid "USI"
-msgstr ""
+msgstr "USI"
 
 #: .\payment\templates\payment\course\course.html:140
 #: .\payment\templates\payment\finance\offering_detail.html:27
 msgid "E-Mail"
-msgstr ""
+msgstr "E-Mail"
 
 #: .\payment\templates\payment\course\course.html:141
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: .\payment\templates\payment\course\course.html:144
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 #: .\payment\templates\payment\course\course.html:182
 msgid "paid in course"
-msgstr ""
+msgstr "paid in course"
 
 #: .\payment\templates\payment\course\course.html:194
 msgid "Payment Summary"
-msgstr ""
+msgstr "Payment Summary"
 
 #: .\payment\templates\payment\course\course.html:195
 msgid "people already paid the course."
-msgstr ""
+msgstr "people already paid the course."
 
 #: .\payment\templates\payment\course\course.html:196
 msgid "You should have"
-msgstr ""
+msgstr "You should have"
 
 #: .\payment\templates\payment\course\course.html:196
 msgid "of collected money."
-msgstr ""
+msgstr "of collected money."
 
 #: .\payment\templates\payment\course\form.html:7
 msgid "My Courses"
-msgstr ""
+msgstr "My Courses"
 
 #: .\payment\templates\payment\course\form.html:12
 msgid "Select Course"
-msgstr ""
+msgstr "Select Course"
 
 #: .\payment\templates\payment\course\form.html:13
 msgid "Please select the course you want to manage."
-msgstr ""
+msgstr "Please select the course you want to manage."
 
 #: .\payment\templates\payment\finance\account_detail.html:6
 #: .\payment\templates\payment\finance\account_index.html:6
 msgid "Account Finance"
-msgstr ""
+msgstr "Account Finance"
 
 #: .\payment\templates\payment\finance\account_detail.html:50
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: .\payment\templates\payment\finance\account_detail.html:52
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: .\payment\templates\payment\finance\account_detail.html:53
 msgid "Credit"
-msgstr ""
+msgstr "Credit"
 
 #: .\payment\templates\payment\finance\account_detail.html:55
 msgid "Debit"
-msgstr ""
+msgstr "Debit"
 
 #: .\payment\templates\payment\finance\account_detail.html:56
 msgid "Comment"
-msgstr ""
+msgstr "Comment"
 
 #: .\payment\templates\payment\finance\account_detail.html:137
 msgid "Save Comments"
-msgstr ""
+msgstr "Save Comments"
 
 #: .\payment\templates\payment\finance\account_index.html:11
 msgid "Select period"
-msgstr ""
+msgstr "Select period"
 
 #: .\payment\templates\payment\finance\account_index.html:12
 msgid "Please period you want to show the transactions for."
-msgstr ""
+msgstr "Please period you want to show the transactions for."
 
 #: .\payment\templates\payment\finance\account_index.html:20
 msgid "Show transactions"
-msgstr ""
+msgstr "Show transactions"
 
 #: .\payment\templates\payment\finance\index.html:6
 #: .\payment\templates\payment\finance\offering_detail.html:6
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:6
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:6
 msgid "Finance"
-msgstr ""
+msgstr "Finance"
 
 #: .\payment\templates\payment\finance\offering_detail.html:31
 msgid "Last reminded"
-msgstr ""
+msgstr "Last reminded"
 
 #: .\payment\templates\payment\finance\offering_detail.html:55
 msgid "Send Reminder"
-msgstr ""
+msgstr "Send Reminder"
 
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:22
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:24
 msgid "Teachers"
-msgstr ""
+msgstr "Teachers"
 
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:35
 msgid "Unpaid"
-msgstr ""
+msgstr "Unpaid"
 
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:37
 msgid "Cash"
-msgstr ""
+msgstr "Cash"
 
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:37
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 #: .\payment\templates\payment\finance\offering_overview_subscribers.html:38
 msgid "Counter"
-msgstr ""
+msgstr "Counter"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:28
 msgid "Download summary of teacher payment information here:"
-msgstr ""
+msgstr "Download summary of teacher payment information here:"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:38
 msgid "Hourly wage(s)"
-msgstr ""
+msgstr "Hourly wage(s)"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:39
 msgid "Regular course hours"
-msgstr ""
+msgstr "Regular course hours"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:40
 msgid "Irregular course hours"
-msgstr ""
+msgstr "Irregular course hours"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:41
 msgid "Total hours"
-msgstr ""
+msgstr "Total hours"
 
 #: .\payment\templates\payment\finance\offering_overview_teachers.html:42
 msgid "Total wage(s) (CHF)"
-msgstr ""
+msgstr "Total wage(s) (CHF)"
 
 #: .\payment\templates\payment\voucher\form.html:6
 #: .\payment\templates\payment\voucher\payment_success.html:5
 msgid "Payment Status"
-msgstr ""
+msgstr "Payment Status"
 
 #: .\payment\templates\payment\voucher\form.html:12
-msgid ""
-"Please check the payment details so you make sure you pay the right course"
-msgstr ""
+msgid "Please check the payment details so you make sure you pay the right course"
+msgstr "Please check the payment details so you make sure you pay the right course"
 
 #: .\payment\templates\payment\voucher\form.html:30
 msgid "Amount to Pay"
-msgstr ""
+msgstr "Amount to Pay"
 
 #: .\payment\templates\payment\voucher\form.html:37
 msgid "Enter Voucher Code"
-msgstr ""
+msgstr "Enter Voucher Code"
 
 #: .\payment\templates\payment\voucher\form.html:38
-msgid ""
-"You can enter your voucher code here. If you use it to pay the course the "
-"voucher will be marked as used."
-msgstr ""
+msgid "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used."
+msgstr "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used."
 
 #: .\payment\templates\payment\voucher\form.html:46
 #: .\payment\templates\payment\voucher\payment_failed.html:5
 #: .\payment\templates\payment\voucher\remaining_amount.html:5
 msgid "Pay With Voucher"
-msgstr ""
+msgstr "Pay With Voucher"
 
 #: .\payment\templates\payment\voucher\payment_failed.html:10
 msgid "Payment Failed"
-msgstr ""
+msgstr "Payment Failed"
 
 #: .\payment\templates\payment\voucher\payment_failed.html:11
-msgid ""
-"The course payment for the following course has failed. Please contact the "
-"TQ. "
-msgstr ""
+msgid "The course payment for the following course has failed. Please contact the TQ. "
+msgstr "The course payment for the following course has failed. Please contact the TQ. "
 
 #: .\payment\templates\payment\voucher\payment_success.html:10
 msgid "Successfully Paid"
-msgstr ""
+msgstr "Successfully Paid"
 
 #: .\payment\templates\payment\voucher\payment_success.html:11
 msgid "The follwing course has been successfully paid."
-msgstr ""
+msgstr "The follwing course has been successfully paid."
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:10
 msgid "Voucher Applied"
-msgstr ""
+msgstr "Voucher Applied"
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:11
-msgid ""
-"Your voucher was successfully applied to the following course. Please <b>pay "
-"the remaining amount</b> as described in the course confirmation mail."
-msgstr ""
+msgid "Your voucher was successfully applied to the following course. Please <b>pay the remaining amount</b> as described in the course confirmation mail."
+msgstr "Your voucher was successfully applied to the following course. Please <b>pay the remaining amount</b> as described in the course confirmation mail."
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:29
 msgid "Subscription Identifier (for online payments)"
-msgstr ""
+msgstr "Subscription Identifier (for online payments)"
 
 #: .\payment\templates\payment\voucher\remaining_amount.html:35
 msgid "Remaining Amount to Pay"
-msgstr ""
+msgstr "Remaining Amount to Pay"
 
 #: .\payment\views.py:65
 msgid "Voucher was successfully applied to Subscription"
-msgstr ""
+msgstr "Voucher was successfully applied to Subscription"
 
 #: .\payment\views.py:124
 msgid "successfully marked as paid."
-msgstr ""
+msgstr "successfully marked as paid."
 
 #: .\payment\views.py:255
 msgid " successfully marked as paid."
-msgstr ""
+msgstr " successfully marked as paid."
 
 #: .\survey\cms_toolbars.py:10
 msgid "Survey"
-msgstr ""
+msgstr "Survey"
 
 #: .\survey\cms_toolbars.py:13
 msgid "Surveys"
-msgstr ""
+msgstr "Surveys"
 
 #: .\survey\cms_toolbars.py:16
 msgid "Question groups"
-msgstr ""
+msgstr "Question groups"
 
 #: .\survey\cms_toolbars.py:19
 msgid "Questions"
-msgstr ""
+msgstr "Questions"
 
 #: .\survey\cms_toolbars.py:22
 msgid "Templates for scale questions"
-msgstr ""
+msgstr "Templates for scale questions"
 
 #: .\survey\cms_toolbars.py:25
 msgid "Choices"
-msgstr ""
+msgstr "Choices"
 
 #: .\survey\cms_toolbars.py:31
 msgid "Answers"
-msgstr ""
+msgstr "Answers"
 
 #: .\survey\cms_toolbars.py:34
 msgid "Survey Instances"
-msgstr ""
+msgstr "Survey Instances"
 
 #: .\survey\templates\survey\survey.html:25
 msgid "Senden"
-msgstr ""
+msgstr "Senden"
 
 #: .\survey\templates\survey\survey_done.html:15
 msgid "Successfully sent. Thank you for your time!"
-msgstr ""
+msgstr "Successfully sent. Thank you for your time!"
 
 #: .\survey\views.py:86
-msgid ""
-"There is a technical problem with your link. We are very sorry. Please "
-"inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to "
-"take part in the survey"
-msgstr ""
+msgid "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey"
+msgstr "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey"
 
 #: .\survey\views.py:95
 msgid "This survey was already filled out"
-msgstr ""
+msgstr "This survey was already filled out"
 
 #: .\survey\views.py:98
 msgid "This survey link has expired"
-msgstr ""
+msgstr "This survey link has expired"
 
 #: .\survey\views.py:126
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: .\templates\account\base.html:11 .\templates\account\email.html:5
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: .\templates\account\change_password.html:9 .\templates\account\email.html:9
-#, python-format
-msgid ""
-"<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> "
-"Go back to your profile</a>"
-msgstr ""
+msgid "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Go back to your profile</a>"
+msgstr "<a href=\"%(auth_profile)s\"><i class=\"fa fa-arrow-circle-left fa-lg\"></i> Go back to your profile</a>"
 
 #: .\templates\account\change_password.html:12
 msgid "Change password of"
-msgstr ""
+msgstr "Change password of"
 
 #: .\templates\account\change_password.html:21
 msgid "Password successfully changed"
-msgstr ""
+msgstr "Password successfully changed"
 
 #: .\templates\account\change_password.html:27
 msgid "Password not changed. Please try again"
-msgstr ""
+msgstr "Password not changed. Please try again"
 
 #: .\templates\account\email.html:11
 msgid "E-mail Addresses"
-msgstr ""
+msgstr "E-mail Addresses"
 
 #: .\templates\account\email.html:13
 msgid "The following e-mail addresses are associated with your account:"
-msgstr ""
+msgstr "The following e-mail addresses are associated with your account:"
 
 #: .\templates\account\email.html:29
 msgid "Verified"
-msgstr ""
+msgstr "Verified"
 
 #: .\templates\account\email.html:31
 msgid "Unverified"
-msgstr ""
+msgstr "Unverified"
 
 #: .\templates\account\email.html:33
 msgid "Primary"
-msgstr ""
+msgstr "Primary"
 
 #: .\templates\account\email.html:41
 msgid "Make Primary"
-msgstr ""
+msgstr "Make Primary"
 
 #: .\templates\account\email.html:43
 msgid "Re-send Verification"
-msgstr ""
+msgstr "Re-send Verification"
 
 #: .\templates\account\email.html:44
 msgid "Remove"
-msgstr ""
+msgstr "Remove"
 
 #: .\templates\account\email.html:51
 msgid "Warning:"
-msgstr ""
+msgstr "Warning:"
 
 #: .\templates\account\email.html:51
-msgid ""
-"You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
-msgstr ""
+msgid "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
+msgstr "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc."
 
 #: .\templates\account\email.html:74
 msgid "Add E-mail"
-msgstr ""
+msgstr "Add E-mail"
 
 #: .\templates\account\email.html:86
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr ""
+msgstr "Do you really want to remove the selected e-mail address?"
 
 #: .\templates\account\signup.html:5
 msgid "Signup"
-msgstr ""
+msgstr "Signup"
 
 #: .\templates\account\signup.html:8 .\templates\account\signup.html:23
 msgid "Sign Up"
-msgstr ""
+msgstr "Sign Up"
 
 #: .\templates\account\signup.html:10
-#, python-format
-msgid ""
-"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr ""
+msgid "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 
 #: .\templates\basis.html:163
 msgid "Please send Website Feedback to"
-msgstr ""
+msgstr "Please send Website Feedback to"
 
 #: .\templates\user_menu.html:36
 msgid "View profile"
-msgstr ""
+msgstr "View profile"
 
 #: .\tq_website\cms_toolbars.py:10
 msgid "Organisation"
-msgstr ""
+msgstr "Organisation"
 
 #: .\tq_website\cms_toolbars.py:13
 msgid "Association functions"
-msgstr ""
+msgstr "Association functions"
 
 #: .\tq_website\cms_toolbars.py:19
 msgid "FAQ - Question groups"
-msgstr ""
+msgstr "FAQ - Question groups"
 
 #: .\tq_website\cms_toolbars.py:21
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: .\tq_website\cms_toolbars.py:24
 msgid "Emails"
-msgstr ""
+msgstr "Emails"
 
 #: .\tq_website\cms_toolbars.py:27
 msgid "Email templates"
-msgstr ""
+msgstr "Email templates"
 
 #: .\tq_website\cms_toolbars.py:30
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: .\tq_website\cms_toolbars.py:35
 msgid "Newsletter"
-msgstr ""
+msgstr "Newsletter"
 
 #: .\tq_website\cms_toolbars.py:37 .\tq_website\cms_toolbars.py:45
 msgid "Show subscriptions"
-msgstr ""
+msgstr "Show subscriptions"
 
 #: .\tq_website\cms_toolbars.py:40 .\tq_website\cms_toolbars.py:48
 msgid "Show non-subscriptions"
-msgstr ""
+msgstr "Show non-subscriptions"
 
 #: .\tq_website\cms_toolbars.py:43
 msgid "Willing to get involved"
-msgstr ""
+msgstr "Willing to get involved"
 
 #: .\tq_website\cms_toolbars.py:51 .\tq_website\cms_toolbars.py:53
 msgid "Files"
-msgstr ""
+msgstr "Files"
 
 #: .\tq_website\settings.py:266 .\tq_website\settings.py:281
 msgid "Deutsch"
-msgstr ""
+msgstr "Deutsch"
 
 #: .\tq_website\settings.py:267 .\tq_website\settings.py:289
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: .\tq_website\settings.py:306
 msgid "Main content"
-msgstr ""
+msgstr "Main content"
 
 #: .\tq_website\settings.py:310
 msgid "Side content"
-msgstr ""
+msgstr "Side content"
 
 #: .\tq_website\settings.py:314
 msgid "Title"
-msgstr ""
+msgstr "Title"
+
