@@ -1,3 +1,4 @@
+{% load i18n %}
 <h2>
     {% if offering.is_preview %}<span class="label label-info">Preview</span>{% endif %}
     {{ offering.name }}
@@ -15,14 +16,14 @@
                 {% if d.courses %}
                     <thead>
                     <tr>
-                        <th>Kurs</th>
-                        <th>Ort</th>
-                        <th>Zeit</th>
+                        <th>{% trans "Course" %}</th>
+                        <th>{% trans "Location" %}</th>
+                        <th>{% trans "Time" %}</th>
                         {% if not d.hide_period_column %}
                             <th>Kursperiode</th>
                         {% endif %}
-                        <th>Kosten</th>
-                        <th>Anmelden / Freie Plätze</th>
+                        <th>{% trans "Costs" %}</th>
+                        <th>{% trans "Subscribe / Free places" %}</th>
                     </tr>
                     </thead>
                     <tbody>

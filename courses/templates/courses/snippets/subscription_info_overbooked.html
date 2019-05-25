@@ -1,6 +1,6 @@
+{% load i18n %}
 {% if long %}
-    <em>Ausgebucht: </em>Dieser
-    Kurs ist ausgebucht. Die Anmeldung ist leider nicht mehr möglich.
+    <em>{% trans "Ausgebucht:" %}</em>{% trans "Dieser Kurs ist ausgebucht. Die Anmeldung ist leider nicht mehr möglich." %}
 {% else %}
-    <em>ausgebucht</em>
+    <em>{% trans "ausgebucht" %}</em>
 {% endif %}

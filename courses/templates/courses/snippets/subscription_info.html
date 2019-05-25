@@ -7,7 +7,7 @@
     {% endif %}
     {% if course.is_subscription_allowed %}
         {% if display_link %}
-            <a href="{% url 'courses:subscription' course.id %}#subscription">Anmelden</a>
+            <a href="{% url 'courses:subscription' course.id %}#subscription">{% trans "Subscribe" %}</a>
         {% endif %}
         <div class="subscription_info">
             {% if course.type.couple_course %}
