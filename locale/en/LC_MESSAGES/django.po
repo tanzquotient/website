@@ -1007,5 +1007,5 @@ msgstr "Open class"
 
 #: .\courses\templates\courses\snippets\subscription_info.html:6
 msgid "External partner course"
-msgstr "Externer Partnerkurs"
+msgstr "External partner course"
 
