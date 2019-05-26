@@ -93,7 +93,7 @@ class Subscribe(models.Model):
     get_calculated_experience.short_description = "Calculated experience"
 
     def payed(self):
-        return self.state in self.State.PAID_STATES
+        return self.state in SubscribeState.PAID_STATES
 
     def get_payment_state(self):
         """searches for courses that the user did before in the system"""
