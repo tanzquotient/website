@@ -162,11 +162,11 @@ class Subscribe(models.Model):
         """derives the matching state from the current information (if couple course and if partner set or not)"""
         if self.course.type.couple_course:
             if self.partner is None:
-                if self.matching_state not in [Subscribe.MatchingState.TO_MATCH, Subscribe.MatchingState.TO_REMATCH]:
-                    self.matching_state = Subscribe.MatchingState.TO_MATCH
+                if self.matching_state not in [MatchingState.TO_MATCH, MatchingState.TO_REMATCH]:
+                    self.matching_state = MatchingState.TO_MATCH
             else:
-                if self.matching_state in [Subscribe.MatchingState.TO_MATCH, Subscribe.MatchingState.TO_REMATCH]:
-                    self.matching_state = Subscribe.MatchingState.MATCHED
+                if self.matching_state in [MatchingState.TO_MATCH, MatchingState.TO_REMATCH]:
+                    self.matching_state = MatchingState.MATCHED
         else:
             self.matching_state = 'not_required'
             # DO NOT save here since this method is also called from save()

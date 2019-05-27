@@ -303,7 +303,7 @@ def progress_chart_dict():
                                                     escape(o.name)))
         accepted = subscriptions.accepted()
         total_count = accepted.count()
-        couple_count = accepted.filter(matching_state=Subscribe.MatchingState.COUPLE).count()
+        couple_count = accepted.filter(matching_state=MatchingState.COUPLE).count()
         single_count = total_count - couple_count
 
         series_couple.append(str(couple_count))

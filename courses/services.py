@@ -159,12 +159,12 @@ def subscribe(course_id, data):
         send_subscription_confirmation(subscription)
 
         if user2:
-            subscription.matching_state = models.Subscribe.MatchingState.COUPLE
+            subscription.matching_state = models.MatchingState.COUPLE
             subscription.save()
 
             subscription2 = models.Subscribe(user=user2.user, course=course, partner=user1.user,
                                              experience=data['experience'], comment=data['comment'])
-            subscription2.matching_state = models.Subscribe.MatchingState.COUPLE
+            subscription2.matching_state = models.MatchingState.COUPLE
             subscription2.save()
             send_subscription_confirmation(subscription2)
 
@@ -215,10 +215,10 @@ def match_partners(subscriptions, request=None):
             m = sm[c]
             w = sw[c]
             m.partner = w.user
-            m.matching_state = models.Subscribe.MatchingState.MATCHED
+            m.matching_state = models.MatchingState.MATCHED
             m.save()
             w.partner = m.user
-            w.matching_state = models.Subscribe.MatchingState.MATCHED
+            w.matching_state = models.MatchingState.MATCHED
             w.save()
             match_count += 1
     if match_count:
@@ -234,9 +234,9 @@ def correct_matching_state_to_couple(subscriptions, request=None):
         if partner_subs.count() == 1:
             partner_sub = partner_subs.first()
             # because we update matching state iteratively, we have to allow also COUPLE State
-            allowed_states = [models.Subscribe.MatchingState.MATCHED, models.Subscribe.MatchingState.COUPLE]
-            if s.matching_state == models.Subscribe.MatchingState.MATCHED and partner_sub.matching_state in allowed_states:
-                s.matching_state = models.Subscribe.MatchingState.COUPLE
+            allowed_states = [models.MatchingState.MATCHED, models.Subscribe.COUPLE]
+            if s.matching_state == models.MatchingState.MATCHED and partner_sub.matching_state in allowed_states:
+                s.matching_state = models.MatchingState.COUPLE
                 s.save()
                 corrected_count += 1
 
@@ -252,7 +252,7 @@ def unmatch_partners(subscriptions, request):
     invalid_matching_state_count = 0
     for s in subscriptions.all():
         if s.state == models.SubscribeState.NEW:
-            allowed_states = [models.Subscribe.MatchingState.MATCHED]
+            allowed_states = [models.MatchingState.MATCHED]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
                 _unmatch_person(s)
@@ -284,7 +284,7 @@ def breakup_couple(subscriptions, request):
     invalid_matching_state_count = 0
     for s in subscriptions.all():
         if s.state == models.SubscribeState.NEW:
-            allowed_states = [models.Subscribe.MatchingState.COUPLE]
+            allowed_states = [models.MatchingState.COUPLE]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if partner_subs.count() == 1 and s.matching_state in allowed_states and partner_subs.first().matching_state in allowed_states:
                 _unmatch_person(s)
@@ -312,7 +312,7 @@ def breakup_couple(subscriptions, request):
 
 def _unmatch_person(subscription):
     subscription.partner = None
-    subscription.matching_state = models.Subscribe.MatchingState.TO_REMATCH
+    subscription.matching_state = models.MatchingState.TO_REMATCH
     subscription.save()
 
 
