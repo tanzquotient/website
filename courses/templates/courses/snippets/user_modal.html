@@ -18,14 +18,14 @@
                                 <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
                             </div>
                         {% endif %}
-                        {% if user.profile.is_teacher or user.functions.count > 0 %}
+                        {% if user.profile.is_teacher or user.profile.is_board_member %}
                             <div class="col-xs-12 col-sm-6 col-md-8">
                                 {% if user.profile.is_teacher %}
                                     <h4>
                                         {% trans "Teacher" %}
                                     </h4>
                                 {% endif %}
-                                {% if user.functions.count > 0 %}
+                                {% if user.profile.is_board_member %}
                                     <h4>{% trans "Board member" %}</h4>
                                     <p>
                                         {% for function in user.functions.all %}

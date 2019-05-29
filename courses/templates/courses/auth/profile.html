@@ -34,7 +34,7 @@
     <form role="form" enctype="multipart/form-data" id="signup_form" method="post" action="{% url 'auth_profile' %}">
         {% csrf_token %}
 
-        {% include "courses/snippets/user_profile_form.html" with form=form is_teacher=is_teacher only %}
+        {% include "courses/snippets/user_profile_form.html" with form=form is_teacher=is_teacher is_board_member=is_board_member only %}
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
