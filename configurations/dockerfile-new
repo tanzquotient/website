@@ -11,7 +11,7 @@ RUN apk update
 RUN apk add --no-cache mariadb-client-libs && \
     apk add --no-cache --virtual .build-deps \
     build-base mariadb-dev && \
-    pip3 install mysqlclient==1.3.13 && \
+    pip3 install mysqlclient==1.4.2.post1 && \
     apk del .build-deps
 
 # Pillow
@@ -29,7 +29,7 @@ RUN apk add --no-cache graphviz && \
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual .build-deps \
     build-base openssl-dev libffi-dev && \
-    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==1.7.1 && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==2.6.1 && \
     LIBRARY_PATH=/lib:/usr/lib pip3 install cffi && \
     apk del .build-deps
 
