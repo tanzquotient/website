@@ -42,6 +42,27 @@ class UserProfile(models.Model):
     def is_teacher(self):
         return self.user.teaching.count() > 0
 
+    def teaching_since(self):
+        if not self.is_teacher():
+            return None
+
+        earliest_course = None
+        for teaching in self.user.teaching.all():
+            course_start = teaching.course.get_first_lesson_date()
+            if not course_start:
+                continue
+            if not earliest_course or course_start < earliest_course.get_first_lesson_date():
+                earliest_course = teaching.course
+
+        if earliest_course:
+            return earliest_course.get_first_lesson_date()
+
+    def teacher_courses_count(self):
+        if not self.is_teacher():
+            return 0
+
+        return self.user.teaching.count()
+
     def is_board_member(self):
         return self.user.functions.count() > 0
 
