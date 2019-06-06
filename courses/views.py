@@ -94,7 +94,7 @@ def course_list(request, force_preview=False):
             },
             'sections': [
                 {
-                    'section_title': _("Next"),
+                    'section_title': _("Next courses"),
                     'courses': courses_without_offering
                 }
             ]
