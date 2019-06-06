@@ -86,7 +86,7 @@ class Event(TranslatableModel):
     format_time.short_description = "Time"
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}".format(self.get_name())
 
     class Meta:
         ordering = ['-date', '-time_from']

@@ -130,9 +130,11 @@ class Course(TranslatableModel):
 
     def get_period(self):
         if self.period is None:
-            return self.offering.period
+            if self.offering:
+                return self.offering.period
         else:
             return self.period
+        return None
 
     def show_free_places_count(self):
         """ only show free_places_count if it can be calculated """
@@ -217,7 +219,10 @@ class Course(TranslatableModel):
                 return self.offering.active and self.active  # both must be true to allow subscription
 
     def is_over(self):
-        return self.get_last_lesson_date() < datetime.date.today()
+        last_date = self.get_last_lesson_date()
+        if last_date:
+            return last_date < datetime.date.today()
+        return False
 
     def get_lessons(self):
         lessons = []
