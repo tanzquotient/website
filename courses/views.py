@@ -40,20 +40,17 @@ def course_list(request, force_preview=False):
 
         if offering.type == OfferingType.REGULAR:
             for (w, w_name) in Weekday.CHOICES:
-                section_dict = {}
-                section_dict['section_title'] = Weekday.WEEKDAYS_TRANSLATIONS_DE[w]
-                section_dict['courses'] = [c for c in course_set.weekday(w) if c.is_displayed(preview_mode)]
-                if (w in Weekday.WEEKEND) and section_dict['courses'].__len__() == 0:
-                    pass
-                else:
-                    offering_sections.append(section_dict)
+                courses_on_weekday = [c for c in course_set.weekday(w) if c.is_displayed(preview_mode)]
+                if courses_on_weekday:
+                    offering_sections.append({
+                        'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
+                        'courses': courses_on_weekday
+                    })
 
-            # add courses that have no weekday entry yet
-            section_dict = {}
-            section_dict['section_title'] = _("Irregular weekday")
-            section_dict['courses'] = course_set.weekday(None)
-            if section_dict['courses'].__len__() != 0:
-                offering_sections.append(section_dict)
+            courses_without_weekday = course_set.weekday(None)
+            if courses_without_weekday:
+                offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
+
         elif offering.type == OfferingType.IRREGULAR:
             courses_by_month = course_set.by_month()
             for (d, l) in courses_by_month:
@@ -83,6 +80,24 @@ def course_list(request, force_preview=False):
         c_offerings.append({
             'offering': offering,
             'sections': offering_sections,
+        })
+
+    # Courses without offering -> create fake offering
+    courses_without_offering = services.get_upcoming_courses_without_offering()
+    if courses_without_offering:
+        c_offerings.insert(0, {
+            'offering': {
+                'name': _("Upcoming courses"),
+                'type': OfferingType.IRREGULAR,
+                'display': True,
+                'active': True,
+            },
+            'sections': [
+                {
+                    'section_title': _("Next"),
+                    'courses': courses_without_offering
+                }
+            ]
         })
 
     context.update({

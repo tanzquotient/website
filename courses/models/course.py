@@ -30,10 +30,13 @@ class Course(TranslatableModel):
 
     # Optional - apply to all course types
     room = models.ForeignKey('Room', related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
-    offering = models.ForeignKey('Offering', blank=False, null=True, on_delete=models.PROTECT)
+    offering = models.ForeignKey('Offering', blank=True, null=True, on_delete=models.PROTECT)
+    offering.help_text = "Not required! Useful for regular courses or summer workshops. " \
+                         "Do not use for irrgeular courses (e.g. ASVZ open classes)"
     period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
     period.help_text = "You can set a custom period for this course here. " \
-                       "If this is left empty, the period from the offering is taken."
+                       "If this is left empty, the period from the offering is taken. " \
+                       "Must be set if no offering associated but has regular lessons."
 
     # Translated fields
     translations = TranslatedFields(
@@ -213,6 +216,9 @@ class Course(TranslatableModel):
             else:
                 return self.offering.active and self.active  # both must be true to allow subscription
 
+    def is_over(self):
+        return self.get_last_lesson_date() < datetime.date.today()
+
     def get_lessons(self):
         lessons = []
         lessons.extend(self.regular_lessons.all())
@@ -256,46 +262,68 @@ class Course(TranslatableModel):
     def get_first_irregular_lesson(self):
         if self.irregular_lessons.exists():
             return self.irregular_lessons.order_by('date', 'time_from').all()[0]
-        else:
-            return None
+        return None
+
+    def get_last_irregular_lesson(self):
+        if self.irregular_lessons.exists():
+            return self.irregular_lessons.order_by('-date', '-time_from').all()[0]
+        return None
+
+    @staticmethod
+    def next_weekday(d, weekday):
+        days_ahead = weekday - d.weekday()
+        if days_ahead < 0:  # Target day already happened
+            days_ahead += 7
+        return d + datetime.timedelta(days_ahead)
 
     def get_first_regular_lesson_date(self):
-        def next_weekday(d, weekday):
-            days_ahead = weekday - d.weekday()
-            if days_ahead < 0:  # Target day already happened this week
-                days_ahead += 7
-            return d + datetime.timedelta(days_ahead)
-
-        frl = self.get_first_regular_lesson()
+        lesson = self.get_first_regular_lesson()
         period = self.get_period()
-        if frl is not None and period is not None:
-            return next_weekday(period.date_from, frl.get_weekday_number())
+        if lesson and period:
+            return Course.next_weekday(period.date_from, lesson.get_weekday_number())
         else:
             return None
+
+    def get_last_regular_lesson_date(self):
+        period = self.get_period()
+        if self.regular_lessons.exists() and period:
+            course_weekdays = [Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()]
+
+            # Find last course day before date_to
+            for day_delta in range(7):
+                day = period.date_to - datetime.timedelta(days=day_delta)
+                if day.weekday() in course_weekdays:
+                    return day
+
+        return None
 
     def get_first_irregular_lesson_date(self):
-        fil = self.get_first_irregular_lesson()
-        if fil is not None:
-            return fil.date
-        else:
-            return None
+        lesson = self.get_first_irregular_lesson()
+        return lesson.date if lesson else None
+
+    def get_last_irregular_lesson_date(self):
+        lesson = self.get_last_irregular_lesson()
+        return lesson.date if lesson else None
 
     def get_first_lesson_date(self):
         d1 = self.get_first_irregular_lesson_date()
         d2 = self.get_first_regular_lesson_date()
         if d1 is None:
-            if d2 is None:
-                return None
-            else:
-                return d2
-        else:
-            if d2 is None:
-                return d1
-            else:
-                if d1 < d2:
-                    return d1
-                else:
-                    return d2
+            return d2
+        if d2 is None:
+            return d1
+
+        return d1 if d1 < d2 else d2
+
+    def get_last_lesson_date(self):
+        d1 = self.get_last_irregular_lesson_date()
+        d2 = self.get_last_regular_lesson_date()
+        if d1 is None:
+            return d2
+        if d2 is None:
+            return d1
+
+        return d1 if d1 > d2 else d2
 
     def get_common_irregular_weekday(self):
         """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""

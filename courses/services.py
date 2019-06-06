@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext as _
 
 import courses.models as models
+from courses.models import Offering, OfferingType, Course
 from courses.utils import export
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
@@ -21,13 +22,28 @@ def get_all_offerings():
     return models.Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display(request=None, force_preview=False):
-    '''return offerings that have display flag on and order them by start date in ascending order'''
+def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False):
+    """return offerings that have display flag on and order them by start date in ascending order"""
+
+    queryset = Offering.objects
+    if only_regular_offerings:
+        queryset = queryset.filter(type=OfferingType.REGULAR)
+
     if force_preview or (request and request.user.is_staff):
-        return models.Offering.objects.filter(Q(display=True) | Q(period__date_to__gte=date.today())).order_by(
-            'period__date_from')
+        queryset = queryset.filter(Q(display=True) | Q(period__date_to__gte=date.today()))
     else:
-        return models.Offering.objects.filter(display=True).order_by('-active', 'period__date_from')
+        queryset = queryset.filter(display=True)
+
+    return queryset.order_by('period__date_from')
+
+
+def get_upcoming_courses_without_offering():
+
+    courses = Course.objects.filter(
+        display=True, offering__isnull=True
+    )
+
+    return [course for course in courses if not course.is_over()]
 
 
 def get_current_active_offering():
