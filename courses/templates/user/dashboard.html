@@ -1,0 +1,14 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}
+    {% trans "Dashboard" %}
+{% endblock %}
+
+{% block content_title %}
+    {% trans "Dashboard" %}
+{% endblock %}
+
+{% block content %}
+    {% include "user/dashboard_profile.html" %}
+{% endblock %}

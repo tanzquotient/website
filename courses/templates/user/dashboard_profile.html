@@ -1,0 +1,138 @@
+{% load i18n %}
+<h1>{{ user.get_full_name }}</h1>
+<div class="row">
+    {% if user.profile.picture %}
+        <div class="col-xs-4 col-sm-3 col-md-2">
+            <p>
+                <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
+
+            </p>
+        </div>
+    {% endif %}
+    {% if user.profile.is_teacher or user.profile.is_board_member %}
+        <div class="col-xs-8 col-sm-9 col-md-10">
+            <p>
+                <strong> {% trans "Functions" %}</strong>
+                {% if user.profile.is_teacher %}
+                    <br/>
+                    {% trans "Teacher" %}
+                {% endif %}
+                {% if user.profile.is_board_member %}
+                    <br/>
+                    {% trans "Board member" %}:
+                    {% for function in user.functions.all %}
+                        {{ function.name }}
+                        {% if not forloop.last %}
+                            &amp;
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+    {% if user.profile.about_me %}
+        <div class="col-xs-8 col-sm-9 col-md-10">
+            <p>
+                <strong> {% trans "About me" %}</strong>
+                <br/>
+                {{ user.profile.about_me }}
+            </p>
+        </div>
+    {% endif %}
+</div>
+<div class="row">
+    {% if user.profile.body_height or user.profile.birthdate or user.profile.nationality or user.profile.residence_permit or user.profile.ahv_number %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <p>
+                <strong> {% trans "Personal details" %}</strong>
+                <br/>
+                {% if  user.profile.birthdate %}
+                    {% trans "Birth date" %}: {{ user.profile.birthdate|date:"SHORT_DATE_FORMAT" }}
+                {% endif %}
+                <br/>
+                {% if  user.profile.body_height %}
+                    {% trans "Body height" %}: {{ user.profile.body_height }}cm
+                {% endif %}
+                <br/>
+                {% if  user.profile.nationality %}
+                    {% trans "Nationality" %}: {{ user.profile.get_nationality }}
+                {% endif %}
+                <br/>
+                {% if  user.profile.residence_permit %}
+                    {% trans "Residence permit" %}: {{ user.profile.residence_permit }}
+                {% endif %}
+                <br/>
+                {% if  user.profile.ahv_number %}
+                    {% trans "AHV number" %}: {{ user.profile.ahv_number }}
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+    {% if user.profile.address %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <p>
+                <strong> {% trans "Address" %}</strong>
+                <br/>
+                {{ user.profile.address.street }}
+                <br/>
+                {{ user.profile.address.plz }} {{ user.profile.address.city }}
+                <br/>
+                {{ user.profile.address.country.name }}
+            </p>
+        </div>
+    {% endif %}
+    <div class="col-xs-12 col-sm-6 col-md-4">
+        <p>
+            <strong> {% trans "Contact" %}</strong>
+            <br/>
+            {% trans "Email" %}: {{ user.email }}
+            <br/>
+            {% if user.profile.phone_number %}
+                {% trans "Phone" %}: {{ user.profile.phone_number }}
+            {% endif %}
+        </p>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4">
+        <p>
+            <strong> {% trans "Student status" %}</strong>
+            <br/>
+            {% trans "Student" %}: {{ user.profile.get_student_status }}
+            <br/>
+            {% if user.profile.legi %}
+                {% trans "Legi" %}: {{ user.profile.legi }}
+            {% endif %}
+        </p>
+    </div>
+    {% if user.profile.bank_account %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <p>
+                <strong> {% trans "Bank account" %}</strong>
+                <br/>
+                {% trans "IBAN" %}: {{ user.profile.bank_account.iban }}
+                <br/>
+                {% trans "Bank" %}: {{ user.profile.bank_account.bank_info_str }}
+            </p>
+        </div>
+    {% endif %}
+    <div class="col-xs-12 col-sm-6 col-md-4">
+        <p>
+            <strong> {% trans "Preferences" %}</strong>
+            <br/>
+            {% trans "Newsletter" %}:
+            {% if  user.profile.newsletter %}
+                {% trans "Yes" %}
+            {% else %}
+                {% trans "No" %}
+            {% endif %}
+            <br/>
+            {% if user.profile.legi %}
+                {% trans "Get involved" %}:
+                {% if  user.profile.get_involved %}
+                    {% trans "Yes" %}
+                {% else %}
+                    {% trans "No" %}
+                {% endif %}
+            {% endif %}
+        </p>
+    </div>
+</div>

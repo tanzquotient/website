@@ -76,6 +76,15 @@ class UserProfile(models.Model):
 
         return styles
 
+    def get_student_status(self):
+        return StudentStatus.TEXT[self.student_status]
+
+    def get_residence_permit(self):
+        return Residence.PERMITS[self.residence_permit]
+
+    def get_nationality(self):
+        return self.nationality.name
+
     def is_complete(self):
         return not self.missing_values()
 

@@ -464,6 +464,15 @@ def offering_overview(request, offering_id):
     return render(request, template_name, context)
 
 
+@login_required
+def user_dashboard(request):
+    template_name = "user/dashboard.html"
+    context = {
+        'user': request.user
+    }
+    return render(request, template_name, context)
+
+
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = 'courses/auth/profile.html'
