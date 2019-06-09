@@ -46,8 +46,7 @@ def _build_subscription_context(subscription):
         'course_info': create_course_info(subscription.course),
         'usi': payment_processor.USI_PREFIX + subscription.usi,
         'account_IBAN': conf['IBAN'],
-        'account_recipient': ','.join(conf['recipient']) if isinstance(conf['recipient'], (list, tuple)) else conf[
-            'recipient'],
+        'account_recipient': conf['recipient'],
         'account_post_number': conf['post_number'] or '-',
         'voucher_url': voucher_url
     }
@@ -123,7 +122,7 @@ def send_teacher_welcome(teach):
     room_url = current_site + reverse('courses:subscription', kwargs={'course_id': course.id})
     coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
     login_url = current_site + reverse('account_login')
-    profile_url = current_site + reverse('auth_profile')
+    profile_url = current_site + reverse('edit_profile')
 
     context = {
         'first_name': teacher.first_name,

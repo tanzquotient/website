@@ -10,5 +10,108 @@
 {% endblock %}
 
 {% block content %}
-    {% include "user/dashboard_profile.html" %}
+    <h1 class="media-heading">{{ user.get_full_name }}</h1>
+    <p>
+        <a href="{% url "profile" %}">
+            {% trans "Show my profile" %}
+            <i class="fa fa-arrow-circle-right fa-lg"></i>
+        </a>
+    </p>
+    <h2>{% trans "My courses" %}</h2>
+    {% for subscription in user.subscriptions.all %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ subscription.course.type }}
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <p>
+                            <strong>{% trans "Time" %}</strong>
+                            <br/>
+                            {% include "courses/snippets/lessons.html" with course=subscription.course only %}
+                        </p>
+                        {% if subscription.course.room %}
+                            <p>
+                                <strong>{% trans "Location" %}</strong>
+                                <br/>
+                                {% include "courses/snippets/room.html" with room=subscription.course.room only %}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <p>
+                            <strong>{% trans "Costs" %}</strong>
+                            {% if subscription.get_price_to_pay %}
+                                <br/>
+                                {{ subscription.get_price_to_pay }} CHF
+                                {% if subscription.state == 'confirmed' and not subscription.payed %}
+                                    <br/>
+                                    <span class="label label-warning">{% trans "Unpaid" %}</span>
+                                    <br/>
+                                    {% trans "Unpaid subscription info" %}
+                                {% endif %}
+                            {% else %}
+                                {% trans "free of charge" %}
+                            {% endif %}
+                        </p>
+                        {% if subscription.get_price_to_pay and subscription.state == 'confirmed' and not subscription.payed %}
+                            <p>
+                                <strong>{% trans "Transfer to" %}</strong>
+                                <br/>
+                                {% trans "IBAN" %}: {{ payment_account.IBAN }}
+                                <br/>
+                                {% trans "Accout number" %}: {{ payment_account.post_number }}
+                                <br/>
+                                {% trans "SWIFT/BIC" %}: {{ payment_account.SWIFT }}
+                                <br/>
+                                {% trans "Recipient" %}: {{ payment_account.recipient }}
+                                <br/>
+                                {% trans "Transfer Message" %}: USI-{{ subscription.usi }}
+                            </p>
+                            <p>
+                                <strong>{% trans "Use voucher" %}</strong>
+                                <br/>
+                                <a href="{% url "payment:voucherpayment_index" usi=subscription.usi %}">
+                                    {% trans "Reedeem voucher here" %}
+                                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                                </a>
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <p>
+                            <strong>{% trans "State" %}</strong>
+                            <br/>
+                            {% if subscription.state == 'new' %}
+                                <span class="label label-info">{% trans "Subscription received" %}</span>
+                                <br/>
+                                {% trans "New subscription info" %}
+                            {% elif subscription.state == 'confirmed' %}
+                                <span class="label label-success">{% trans "Subscription confirmed" %}</span>
+                                <br/>
+                                {% trans "Confirmed subscription info" %}
+                            {% elif subscription.state == 'rejected' %}
+                                <span class="label label-danger">{% trans "Rejected" %}</span>
+                                <br/>
+                                {% trans "Rejected subscription info" %}
+                            {% elif subscription.state == 'completed' %}
+                                <span class="label label-success">{% trans "Completed" %}</span>
+                                <br/>
+                                {% trans "Completed subscription info" %}
+                            {% elif subscription.state == 'to_reimburse' %}
+                                <span class="label label-primary">{% trans "To reimburse" %}</span>
+                                <br/>
+                                {% trans "To reimburse subscription info" %}
+                            {% elif subscription.state == 'payed' %}
+                                <span class="label label-success">{% trans "Payed" %}</span>
+                                <br/>
+                                {% trans "Payed subscription info" %}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

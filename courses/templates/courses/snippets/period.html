@@ -1,7 +1,5 @@
-{% if course.period %}
-    <i class="fa fa-exclamation fa-lg"></i>
-{% endif %}
-{{ course.get_period|default:'' }}
-{% if course.period %}
-    <i class="fa fa-exclamation fa-lg"></i>
+{% if is_custom %}
+    <em>{{ from|date:"d. N Y" }} - {{ to|date:"d. N Y" }} (!)</em>
+{% else %}
+    {{ from|date:"d. N Y" }} - {{ to|date:"d. N Y" }}
 {% endif %}

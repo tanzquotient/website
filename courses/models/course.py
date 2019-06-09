@@ -128,6 +128,9 @@ class Course(TranslatableModel):
 
     format_description.short_description = "Description"
 
+    def is_custom_period(self):
+        return self.period is not None
+
     def get_period(self):
         if self.period is None:
             if self.offering:

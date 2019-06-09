@@ -7,16 +7,8 @@
 {% block content %}
     <h1>{% trans "Profile of" %} {{ request.user.get_full_name }} {% if gender_icon %}
         <i class="fa fa-{{ gender_icon }} fa"></i>{% endif %}</h1>
-
-    {% url 'account_email' as account_email %}
-    <p>{% blocktrans %}<a href="{{ account_email }}">Manage your email addresses <i
-            class="fa fa-arrow-circle-right fa-lg"></i></a>{% endblocktrans %}
-    </p>
-
-    {% url 'change_password' as change_password %}
-    <p>{% blocktrans %}<a href="{{ change_password }}">Change your password <i
-            class="fa fa-arrow-circle-right fa-lg"></i></a>{% endblocktrans %}
-    </p>
+    {% url 'profile' as auth_profile %}
+    <p>{% blocktrans %}<a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to your profile</a>{% endblocktrans %}
 
     {% if not is_profile_complete and not form.errors %}
         <div class="alert alert-danger" role="alert">
@@ -31,7 +23,7 @@
     {% endif %}
 
 
-    <form role="form" enctype="multipart/form-data" id="signup_form" method="post" action="{% url 'auth_profile' %}">
+    <form role="form" enctype="multipart/form-data" id="signup_form" method="post" action="{% url 'edit_profile' %}">
         {% csrf_token %}
 
         {% include "courses/snippets/user_profile_form.html" with form=form is_teacher=is_teacher is_board_member=is_board_member only %}

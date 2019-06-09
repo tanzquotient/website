@@ -17,7 +17,6 @@ ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
-
 IS_DEBUG = bool(os.environ.get("TQ_DEBUG", False))
 
 # Quick-start development settings - unsuitable for production
@@ -480,7 +479,6 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-
 #################
 # Debug Toolbar #
 #################
@@ -544,9 +542,10 @@ FDS_PORT = 22
 PAYMENT_ACCOUNT = {
     'default': {
         'IBAN': os.environ.get("TQ_PAYMENT_ACCOUNT_IBAN", ''),
+        'SWIFT': os.environ.get("TQ_PAYMENT_ACCOUNT_SWIFT", ''),
         'post_number': os.environ.get("TQ_PAYMENT_ACCOUNT_POST_NUMBER", ''),
-        'recipient': [os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT", ''),
-                      os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY", '')]
+        'recipient': ', '.join([os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT", ''),
+                                os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY", '')])
     }
 }
 

@@ -19,9 +19,6 @@
                         <th>{% trans "Course" %}</th>
                         <th>{% trans "Location" %}</th>
                         <th>{% trans "Time" %}</th>
-                        {% if not d.hide_period_column %}
-                            <th>Kursperiode</th>
-                        {% endif %}
                         <th>{% trans "Costs" %}</th>
                         <th>{% trans "Subscribe / Free places" %}</th>
                     </tr>
@@ -42,11 +39,6 @@
                                 {% endif %}
                             </td>
                             <td>{% include "courses/snippets/lessons.html" with course=c only %}</td>
-                            {% if not d.hide_period_column %}
-                                <td>
-                                    {% include "courses/snippets/period.html" with course=c only %}
-                                </td>
-                            {% endif %}
                             <td>{{ c.format_prices|default:"-" }}</td>
                             <td>
                                 {% include "courses/snippets/subscription_info.html" with course=c display_link=True only %}
