@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="text-center thin">
@@ -22,22 +23,7 @@
                 <p>{{ course.get_period|default:'' }}</p>
 
                 <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
-                {% if course.format_teachers %}
-                    <p>
-                        Mit
-                        {% for teacher in course.teachers.all %}
-                            <a href="#" data-toggle="modal" data-target="#user_modal-{{ teacher.id }}">
-                                {{ teacher.get_full_name }}
-                            </a>
-                            {% if not forloop.last %}
-                                &amp;
-                            {% endif %}
-                        {% endfor %}
-                    </p>
-                    {% for teacher in course.teachers.all %}
-                        {% include "courses/snippets/user_modal.html" with user=teacher only %}
-                    {% endfor %}
-                {% endif %}
+                <p>{% trans "With" %}{% include "courses/snippets/course_teachers.html" with course=course only %}</p>
                 <p>Kosten: {{ course.format_prices|default:"-" }}</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">

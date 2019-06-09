@@ -75,11 +75,7 @@
             <p>
                 <strong> {% trans "Contact" %}</strong>
                 <br/>
-                {% trans "Email" %}: {{ user.email }}
-                <br/>
-                {% if user.profile.phone_number %}
-                    {% trans "Phone" %}: <span style="white-space: nowrap">{{ user.profile.phone_number }}</span>
-                {% endif %}
+                {% include "courses/snippets/user_contact.html" with user=user only %}
             </p>
         </div>
         <div class="col-xs-12 col-sm-4">

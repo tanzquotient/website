@@ -1,3 +1,6 @@
+
+import pytz
+from datetime import datetime, date
 from django.conf import settings
 from django.db import models
 from django_countries.fields import CountryField
@@ -75,6 +78,22 @@ class UserProfile(models.Model):
             styles.update(set(teaching.course.type.styles.all()))
 
         return styles
+
+    def get_subscriptions(self):
+        subscriptions = list(self.user.subscriptions.all())
+        subscriptions.sort(key=lambda s: s.course.get_first_lesson_date() or date.min, reverse=True)
+        return subscriptions
+
+    def get_past_subscriptions(self):
+        return filter(lambda s: s.course.is_over(), self.get_subscriptions())
+
+    def get_current_teaching_courses(self):
+        courses = [t.course for t in self.user.teaching.all() if not t.course.is_over()]
+        courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
+        return courses
+
+    def get_current_subscriptions(self):
+        return filter(lambda s: not s.course.is_over(), self.get_subscriptions())
 
     def get_student_status(self):
         return StudentStatus.TEXT[self.student_status]
