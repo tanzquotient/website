@@ -31,9 +31,13 @@
 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
     <li role="separator" class="divider"></li>
 {% endif %}
+<li><a href="{% url 'user_dashboard' %}"><span
+        class="glyphicon glyphicon-th"></span>
+    {% trans "Dashboard" %}</a>
+</li>
 <li><a href="{% url 'profile' %}"><span
         class="glyphicon glyphicon-user"></span>
-    {% trans "View profile" %}</a>
+    {% trans "Profile" %}</a>
 </li>
 <li><a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>
     Logout</a>
