@@ -84,6 +84,9 @@ class UserProfile(models.Model):
         subscriptions.sort(key=lambda s: s.course.get_first_lesson_date() or date.min, reverse=True)
         return subscriptions
 
+    def get_subscribed_courses(self):
+        return [s.course for s in self.get_subscriptions()]
+
     def get_past_subscriptions(self):
         return filter(lambda s: s.course.is_over(), self.get_subscriptions())
 
