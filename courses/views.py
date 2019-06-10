@@ -17,6 +17,7 @@ from django.views.generic.edit import FormView
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
+from tq_website import settings
 from . import services
 from .models import *
 
@@ -464,11 +465,30 @@ def offering_overview(request, offering_id):
     return render(request, template_name, context)
 
 
+@login_required
+def user_dashboard(request):
+    template_name = "user/dashboard.html"
+    context = {
+        'user': request.user,
+        'payment_account': settings.PAYMENT_ACCOUNT['default']
+    }
+    return render(request, template_name, context)
+
+
+@login_required
+def user_profile(request):
+    template_name = "user/profile.html"
+    context = {
+        'user': request.user
+    }
+    return render(request, template_name, context)
+
+
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = 'courses/auth/profile.html'
     form_class = UserEditForm
-    success_url = reverse_lazy('auth_profile')
+    success_url = reverse_lazy('edit_profile')
 
     def get_form_class(self):
         if self.request.user.profile.is_teacher():

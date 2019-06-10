@@ -81,6 +81,7 @@ class Course(TranslatableModel):
             'paid': 0,
             'unpaid': 0,
             'paid_count': 0,
+            'not_paid_count': 0,
             'paid_course': 0,
             'paid_voucher': 0,
             'paid_online': 0,
@@ -93,6 +94,7 @@ class Course(TranslatableModel):
 
         paid = accepted.paid()
         totals['paid_count'] = paid.count()
+        totals['not_paid_count'] = accepted.count() - paid.count()
         for s in paid.all():
             price = s.get_price_to_pay() or 0
             totals['paid'] += price
@@ -127,6 +129,9 @@ class Course(TranslatableModel):
         return desc
 
     format_description.short_description = "Description"
+
+    def is_custom_period(self):
+        return self.period is not None
 
     def get_period(self):
         if self.period is None:
@@ -179,6 +184,18 @@ class Course(TranslatableModel):
     def men_count(self):
         return self.subscriptions.active().men().count()
 
+    def confirmed_men_count(self):
+        return self.subscriptions.accepted().men().count()
+
+    def confirmed_women_count(self):
+        return self.subscriptions.accepted().women().count()
+
+    def unconfirmed_men_count(self):
+        return self.subscriptions.active().men().count() - self.subscriptions.accepted().men().count()
+
+    def unconfirmed_women_count(self):
+        return self.subscriptions.active().women().count() - self.subscriptions.accepted().women().count()
+
     def women_count(self):
         return self.subscriptions.active().women().count()
 
@@ -222,6 +239,8 @@ class Course(TranslatableModel):
         last_date = self.get_last_lesson_date()
         if last_date:
             return last_date < datetime.date.today()
+        if self.get_period():
+            return self.get_period().date_to < datetime.date.today()
         return False
 
     def get_lessons(self):

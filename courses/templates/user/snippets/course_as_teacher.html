@@ -1,0 +1,68 @@
+{% load i18n %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ course.type }}
+    </div>
+    <div class="panel-body">
+        <p>
+            <strong>{% trans "Time" %}</strong>
+            <br/>
+            {% include "courses/snippets/lessons.html" with course=course only %}
+        </p>
+        {% if course.room %}
+            <p>
+                <strong>{% trans "Location" %}</strong>
+                <br/>
+                {% include "courses/snippets/room.html" with room=course.room only %}
+            </p>
+        {% endif %}
+        {% if course.subscription_type == "regular" %}
+            <p>
+                <strong>{% trans "Participants" %}</strong>
+                <br/>
+                {% if course.get_confirmed_count %}
+                    {% trans "Confirmed" %}: {{ course.get_confirmed_count }}
+                    {% if  course.confirmed_men_count !=  course.confirmed_women_count %}
+                        ({{ course.confirmed_men_count }} {% trans "male" %}, {{ course.confirmed_women_count }} {% trans "female" %})
+                    {% endif %}
+                {% endif %}
+                {% if course.unconfirmed_men_count %}
+                    <br/>
+                    {% trans "Unconfirmed men" %}: {{ course.unconfirmed_men_count }}
+                {% endif %}
+                {% if course.unconfirmed_women_count %}
+                    <br/>
+                    {% trans "Unconfirmed women" %}: {{ course.unconfirmed_women_count }}
+                {% endif %}
+            </p>
+            <p>
+                {% if course.payment_totals.paid_count or payment_totals.not_paid_count %}
+                    <strong>{% trans "Payment status" %}</strong>
+                    <br/>
+                    {% if course.payment_totals.paid_count %}
+                        {% trans "Paid" %}: {{ course.payment_totals.paid_count }}
+                    {% endif %}
+                    {% if course.payment_totals.not_paid_count %}
+                        <br/>
+                        {% trans "Not paid" %}: {{ course.payment_totals.not_paid_count }}
+                    {% endif %}
+                {% endif %}
+            </p>
+            <p>
+                <strong>{% trans "Downloads" %}</strong>
+                <br/>
+                <a href="{% url "payment:coursepayment_export" course.id %}">{% trans "Participants (Excel)" %}</a>
+                <br/>
+                <a href="{% url "payment:coursepayment_export_csv" course.id %}">{% trans "Participants (CSV)" %}</a>
+                <br/>
+                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (vCard)" %}</a>
+            </p>
+        {% endif %}
+        <p>
+            <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
+                <strong>{% trans "Details & edit" %}</strong>
+                <i class="fa fa-arrow-circle-right fa-lg"></i>
+            </a>
+        </p>
+    </div>
+</div>
