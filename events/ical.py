@@ -52,7 +52,7 @@ class EventFeed(ICalFeed):
         return item.room
 
     def item_link(self, item):
-        return reverse('courses:course_overview')
+        return reverse('courses:home')
 
     # must be unique in order to display all events correctly in most calendar programs
     def item_guid(self, item):
