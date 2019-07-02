@@ -40,14 +40,17 @@ class EventFeed(ICalFeed):
         if item.time_from is None:
             # no start time is available
             return date
-        return datetime.datetime.combine(date, item.time_from, tzinfo=timezone('Europe/Zurich'))
+        start = datetime.datetime.combine(date, item.time_from)
+        return start - timezone('Europe/Zurich').utcoffset(start)
+
 
     def item_end_datetime(self, item):
         date = item.date
         if item.time_to is None:
             # no end time is available
             return date
-        return datetime.datetime.combine(date, item.time_to, tzinfo=timezone('Europe/Zurich'))
+        end = datetime.datetime.combine(date, item.time_to)
+        return end - timezone('Europe/Zurich').utcoffset(end)
 
     def item_location(self, item):
         return item.room
