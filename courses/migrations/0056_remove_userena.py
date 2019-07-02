@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            "drop table userena_userenasignup"
+            "DROP TABLE IF EXISTS userena_userenasignup"
         )
     ]
