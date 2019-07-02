@@ -1,10 +1,10 @@
 import datetime
 import os
 
+from django.urls import reverse
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
 
-from courses.models import IrregularLesson, OfferingType
 from .models import Event
 
 
@@ -13,32 +13,20 @@ class EventFeed(ICalFeed):
     product_id = '-//TQ Website calendar v1.1'
 
     def items(self):
-        events = list(Event.objects.all())
-        special_courses = list(IrregularLesson.objects.filter(course__offering__type=OfferingType.IRREGULAR).filter(course__active=True))
-
-        return events + special_courses
+        return Event.objects.all()
 
     def item_title(self, item):
-        if isinstance(item, Event):
-            return item.name
-        elif isinstance(item, IrregularLesson):
-            return item.course.name
+        return item.safe_translation_getter("name", any_language=True) or "Untitled"
 
     def item_description(self, item):
-        if isinstance(item, Event):
-            description = item.name
-            description += os.linesep
-            description += item.safe_translation_getter("description", any_language=True) or ""
+        description = item.name
+        description += os.linesep
+        description += item.safe_translation_getter("description", any_language=True) or ""
 
-            price_string = item.format_prices()
-            if price_string:
-                description += os.linesep
-                description += price_string
-        elif isinstance(item, IrregularLesson):
-            description = 'NOTE: You have to register in order to attend!'
+        price_string = item.format_prices()
+        if price_string:
             description += os.linesep
-            description += os.linesep
-            description += item.course.format_description()
+            description += price_string
 
         # add link (depending on item type) also to description since some calendar programs do not display link field
         description += os.linesep
@@ -64,21 +52,11 @@ class EventFeed(ICalFeed):
         return item.room
 
     def item_link(self, item):
-        # remember to change this value when the calendar url changes
-        if isinstance(item, Event):
-            return 'https://tanzquotient.org/en/events/'
-        elif isinstance(item, IrregularLesson):
-            return 'https://tanzquotient.org/en/courses/'
-        else:
-            return 'https://tanzquotient.org/en/'
+        return reverse('courses:course_overview')
 
     # must be unique in order to display all events correctly in most calendar programs
     def item_guid(self, item):
-        # for details about the construction, see http://www.kanzaki.com/docs/ical/uid.html
-        current_datetime = datetime.datetime.utcnow()
-        # format current datetime: YYYYMMDD'T'HHmmSS
-        current_datetime = current_datetime.strftime('%Y%m%dT%H%M%S')
-        pid = os.getpid()
-        domain = 'tanzquotient.org'
-        guid = '{0}-{1}-{2}@{3}'.format(current_datetime, pid, item.id, domain)
+        domain = 'tanzquotient'
+        namespace = 'event'
+        guid = '{0}_{1}_{2}'.format(domain, namespace, item.id)
         return guid
