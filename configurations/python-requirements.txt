@@ -49,3 +49,4 @@ django-ical==1.4
 pylint==1.7.2
 python-dotenv==0.8.2
 sphinx-automodapi==0.7
+pytz>=2019.1
