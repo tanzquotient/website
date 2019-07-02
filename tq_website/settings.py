@@ -17,7 +17,8 @@ ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
-IS_DEBUG = bool(os.environ.get("TQ_DEBUG", False))
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -41,7 +42,7 @@ USE_X_FORWARDED_HOST = True
 # Application definition
 INSTALLED_APPS = []
 
-if not IS_DEBUG:
+if not DEBUG:
     INSTALLED_APPS += [
         'raven.contrib.django.raven_compat',
     ]
@@ -488,9 +489,6 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
-
 # Caching
 CACHES = {
     'default': {
@@ -549,7 +547,7 @@ PAYMENT_ACCOUNT = {
     }
 }
 
-RAVEN_ENVIRONMENT = 'development' if IS_DEBUG else 'production'
+RAVEN_ENVIRONMENT = 'development' if DEBUG else 'production'
 
 RAVEN_CONFIG = {
     'dsn': 'https://883ad6a3790e48aea0291f4a0d1d89c4:339fab1993244b4e9d414ebcef70cee0@sentry.io/124755',
