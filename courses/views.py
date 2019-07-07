@@ -38,6 +38,9 @@ def course_list(request, style_name=None, force_preview=False):
         if not c.is_displayed(preview_mode):
             return False
 
+        if c.is_over():
+            return False
+
         if style_name is None:
             return True
 
