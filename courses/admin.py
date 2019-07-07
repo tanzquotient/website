@@ -98,7 +98,7 @@ class CourseAdmin(TranslatableAdmin):
         'room', 'format_prices',
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
-    list_filter = ('offering', 'type', 'room', 'display', 'active')
+    list_filter = ('subscription_type', 'offering', 'type', 'room', 'display', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
                PredecessorCoursesInline, SubscribeInlineForCourse)
@@ -106,7 +106,7 @@ class CourseAdmin(TranslatableAdmin):
     model = Course
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description']}),
+            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description', 'external_url']}),
         ('When?', {
             'fields': ['offering', 'period', ]}),
         ('Where?', {
