@@ -3,8 +3,8 @@
     {% if course.is_open_class %}
         <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
     {% elif course.is_external %}
-        {% if external_url %}
-            <a href="{{ external_url }}">
+        {% if course.external_url %}
+            <a href="{{ course.external_url }}">
                 <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
             </a>
         {% else %}
