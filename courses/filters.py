@@ -123,3 +123,18 @@ class ConfirmationCourseListFilter(SubscribeCourseListFilter):
     @staticmethod
     def filter_by_course(queryset, course_id):
         return queryset.filter(subscription__course__id=course_id)
+
+
+class StyleParentFilter(SimpleListFilter):
+    title = 'parent style'
+
+    parameter_name = 'parent'
+
+    def lookups(self, request, model_admin):
+        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        else:
+            return queryset.filter(parent_style__name=self.value())
