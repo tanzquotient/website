@@ -138,3 +138,20 @@ class StyleParentFilter(SimpleListFilter):
             return queryset
         else:
             return queryset.filter(parent_style__name=self.value())
+
+
+class StyleChildrenOfFilter(SimpleListFilter):
+    title = 'children of'
+
+    parameter_name = 'children_of'
+
+    def lookups(self, request, model_admin):
+        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        else:
+            style = Style.objects.get(name=self.value())
+            children = [s.name for s in queryset if s.is_child_of(style)]
+            return queryset.filter(name__in=children)

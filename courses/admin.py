@@ -267,7 +267,7 @@ class TeachAdmin(admin.ModelAdmin):
 @admin.register(Style)
 class StyleAdmin(TranslatableAdmin):
     list_display = ('name', 'parent_style', 'filter_enabled')
-    list_filter = ('filter_enabled', StyleParentFilter)
+    list_filter = ('filter_enabled', StyleParentFilter, StyleChildrenOfFilter)
     inlines = (SongInline,)
 
 

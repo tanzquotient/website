@@ -21,3 +21,15 @@ class Style(TranslatableModel):
 
     def __str__(self):
         return "{}".format(self.name)
+
+    class Meta:
+        ordering = ['name']
+
+    def is_child_of(self, style):
+        current_style = self
+        while current_style is not None:
+            current_style = current_style.parent_style
+            if current_style == style:
+                return True
+
+        return False
