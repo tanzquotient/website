@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.exceptions import SuspiciousSession
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import dateformat
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
@@ -26,12 +26,31 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request, force_preview=False):
+def course_list(request, style_name=None, force_preview=False):
     template_name = "courses/list.html"
-    context = {}
 
     # unpublished courses should be shown with a preview marker
     preview_mode = request and request.user.is_staff or force_preview
+
+    filter_styles = Style.objects.filter(filter_enabled=True)
+
+    def course_filter(c):
+        if not c.is_displayed(preview_mode):
+            return False
+
+        if style_name is None:
+            return True
+
+        if style_name.lower() == "all":
+            return True
+
+        if style_name.lower() == "other":
+            for s in filter_styles:
+                if c.has_style(s.name):
+                    return False
+            return True
+
+        return c.has_style(style_name)
 
     offerings = services.get_offerings_to_display(request, preview_mode)
     c_offerings = []
@@ -41,20 +60,20 @@ def course_list(request, force_preview=False):
 
         if offering.type == OfferingType.REGULAR:
             for (w, w_name) in Weekday.CHOICES:
-                courses_on_weekday = [c for c in course_set.weekday(w) if c.is_displayed(preview_mode)]
+                courses_on_weekday = [c for c in course_set.weekday(w) if course_filter(c)]
                 if courses_on_weekday:
                     offering_sections.append({
                         'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
                         'courses': courses_on_weekday
                     })
 
-            courses_without_weekday = course_set.weekday(None)
+            courses_without_weekday = [c for c in course_set.weekday(None) if course_filter(c)]
             if courses_without_weekday:
                 offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
 
         elif offering.type == OfferingType.IRREGULAR:
             courses_by_month = course_set.by_month()
-            for (d, l) in courses_by_month:
+            for (d, courses) in courses_by_month:
                 if d is None:
                     section_title = _("Unknown month")
                 elif 1 < d.month < 12:
@@ -63,28 +82,30 @@ def course_list(request, force_preview=False):
                 else:
                     section_title = ""
                 # filter out undisplayed courses if not staff user
-                l = [c for c in l if c.is_displayed(preview_mode)]
+                courses = [c for c in courses if course_filter(c)]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
-                for c in l:
+                for c in courses:
                     if c.period:
                         deviating_period = True
                         break
 
-                offering_sections.append(
-                    {'section_title': section_title, 'courses': l, 'hide_period_column': not deviating_period})
+                if courses:
+                    offering_sections.append(
+                        {'section_title': section_title, 'courses': courses, 'hide_period_column': not deviating_period})
         else:
             message = "unsupported offering type"
             log.error(message)
             raise Http404(message)
 
-        c_offerings.append({
-            'offering': offering,
-            'sections': offering_sections,
-        })
+        if offering_sections:
+            c_offerings.append({
+                'offering': offering,
+                'sections': offering_sections,
+            })
 
     # Courses without offering -> create fake offering
-    courses_without_offering = services.get_upcoming_courses_without_offering()
+    courses_without_offering = list(filter(course_filter, services.get_upcoming_courses_without_offering()))
     if courses_without_offering:
         c_offerings.insert(0, {
             'offering': {
@@ -101,9 +122,15 @@ def course_list(request, force_preview=False):
             ]
         })
 
-    context.update({
+    context = {
         'offerings': c_offerings,
-    })
+        'filter': {
+            'styles': {
+                'available': filter_styles,
+                'selected': style_name,
+            }
+        }
+    }
     return render(request, template_name, context)
 
 

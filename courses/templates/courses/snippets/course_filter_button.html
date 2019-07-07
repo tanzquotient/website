@@ -1,0 +1,7 @@
+<a href="{% url 'courses:list_style' value %}" class="btn btn-default {% if selected == value %} active {% endif %} ">
+    {% if name %}
+        {{ name }}
+    {% else %}
+        {{ value }}
+    {% endif %}
+</a>

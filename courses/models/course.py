@@ -211,6 +211,22 @@ class Course(TranslatableModel):
     def women_needed(self):
         return self.single_women_count() < self.single_men_count()
 
+    def has_style(self, style_name):
+        if style_name is None:
+            return True
+
+        for style in self.type.styles.all():
+            if style.name == style_name:
+                return True
+
+            parent = style.parent_style
+            while parent:
+                if parent.name == style_name:
+                    return True
+                parent = parent.parent_style
+
+        return False
+
     def is_displayed(self, preview=False):
         if self.offering is None:
             return False

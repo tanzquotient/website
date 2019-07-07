@@ -12,6 +12,7 @@
 
 {% block main_content %}
     <div class="container">
+        {%  include "courses/snippets/course_filter.html" with filter=filter only %}
         {% for o in offerings %}
             <p>{% include "courses/snippets/offering.html" with offering=o.offering sections=o.sections user=user only %}</p>
             {% empty %}
