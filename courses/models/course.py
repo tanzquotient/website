@@ -49,6 +49,9 @@ class Course(TranslatableModel):
     min_subscribers = models.IntegerField(blank=True, null=True)
     max_subscribers = models.IntegerField(blank=True, null=True)
 
+    # For external courses only
+    external_url = models.URLField(max_length=500, blank=True, null=True)
+
     # Pricing
     price_with_legi = models.FloatField(blank=True, null=True, default=35)
     price_without_legi = models.FloatField(blank=True, null=True, default=70)
