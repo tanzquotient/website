@@ -20,13 +20,14 @@ from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
 from . import services
 from .models import *
+from .utils import course_filter
 
 log = logging.getLogger('tq')
 
 
 # Create your views here.
 
-def course_list(request, style_name=None, force_preview=False):
+def course_list(request, subscription_type="all", style_name="all", force_preview=False):
     template_name = "courses/list.html"
 
     # unpublished courses should be shown with a preview marker
@@ -34,26 +35,8 @@ def course_list(request, style_name=None, force_preview=False):
 
     filter_styles = Style.objects.filter(filter_enabled=True)
 
-    def course_filter(c):
-        if not c.is_displayed(preview_mode):
-            return False
-
-        if c.is_over():
-            return False
-
-        if style_name is None:
-            return True
-
-        if style_name.lower() == "all":
-            return True
-
-        if style_name.lower() == "other":
-            for s in filter_styles:
-                if c.has_style(s.name):
-                    return False
-            return True
-
-        return c.has_style(style_name)
+    def matches_filter(c):
+        return course_filter(c, preview_mode, subscription_type, style_name, filter_styles)
 
     offerings = services.get_offerings_to_display(request, preview_mode)
     c_offerings = []
@@ -63,14 +46,14 @@ def course_list(request, style_name=None, force_preview=False):
 
         if offering.type == OfferingType.REGULAR:
             for (w, w_name) in Weekday.CHOICES:
-                courses_on_weekday = [c for c in course_set.weekday(w) if course_filter(c)]
+                courses_on_weekday = [c for c in course_set.weekday(w) if matches_filter(c)]
                 if courses_on_weekday:
                     offering_sections.append({
                         'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
                         'courses': courses_on_weekday
                     })
 
-            courses_without_weekday = [c for c in course_set.weekday(None) if course_filter(c)]
+            courses_without_weekday = [c for c in course_set.weekday(None) if matches_filter(c)]
             if courses_without_weekday:
                 offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
 
@@ -85,7 +68,7 @@ def course_list(request, style_name=None, force_preview=False):
                 else:
                     section_title = ""
                 # filter out undisplayed courses if not staff user
-                courses = [c for c in courses if course_filter(c)]
+                courses = [c for c in courses if matches_filter(c)]
                 # tracks if at least one period of a course is set (it should be displayed on page)
                 deviating_period = False
                 for c in courses:
@@ -108,7 +91,7 @@ def course_list(request, style_name=None, force_preview=False):
             })
 
     # Courses without offering -> create fake offering
-    courses_without_offering = list(filter(course_filter, services.get_upcoming_courses_without_offering()))
+    courses_without_offering = list(filter(matches_filter, services.get_upcoming_courses_without_offering()))
     if courses_without_offering:
         c_offerings.insert(0, {
             'offering': {
@@ -131,7 +114,8 @@ def course_list(request, style_name=None, force_preview=False):
             'styles': {
                 'available': filter_styles,
                 'selected': style_name,
-            }
+            },
+            'subscription_type': subscription_type,
         }
     }
     return render(request, template_name, context)

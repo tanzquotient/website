@@ -7,7 +7,7 @@ import courses.api.urls
 urlpatterns = [
     url(r'^$', views.course_list, name='home'),
     url(r'^list/$', views.course_list, name='list'),
-    url(r'^style/(?P<style_name>\w+)/$', views.course_list, name='list_style'),
+    url(r'^(?P<subscription_type>\w+)/(?P<style_name>\w+)/$', views.course_list, name='list_style'),
     url(r'^preview/$', views.course_list_preview, name='list_preview'),
     url(r'^detail/(?P<course_id>\d+)/$', views.subscription, name='subscription'),
     url(r'^detail/(?P<course_id>\d+)/subscription/$', views.subscription_do, name='subscription_do'),

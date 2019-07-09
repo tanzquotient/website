@@ -16,6 +16,7 @@
         {% for o in offerings %}
             <p>{% include "courses/snippets/offering.html" with offering=o.offering sections=o.sections user=user only %}</p>
             {% empty %}
+            &nbsp;
             <div class="alert alert-info">Keine Kurse verfügbar.</div>
         {% endfor %}
     </div>
