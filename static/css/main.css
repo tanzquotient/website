@@ -260,23 +260,17 @@ img.pull-left {
 }
 
 /* Other elements */
-.subscription_info {
-    display:inline-block;
-    white-space:nowrap;
+.cms-toolbar-expanded .navbar-fixed-top {
+    top: 45px;
 }
 
-.subscription_info_item {
-    display:inline-block;
-    padding-left: 12px;
+
+.badge.green {
+    background-color: #33ac1b;
 }
 
 .sign_in {
     color: #C51718;
-}
-
-/* Main content block */
-.maincontent {
-
 }
 
 /* Sidebars */

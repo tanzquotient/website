@@ -1,15 +1,26 @@
 {% load i18n %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="text-center thin">
-            {% if not course.display %}<span class="label label-info">Preview</span>{% endif %}
-            {{ course.type.name }}
-        </h3>
+        {% if not course.display %}<span class="label label-info">Preview</span>{% endif %}
+        {{ course.type.name }}
     </div>
     <div class="panel-body">
         <div class="row">
+
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h4>Infos</h4>
+                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True only %}</p>
+
+                {% if user and course in user.profile.get_subscribed_courses %}
+                    <div class="container">
+                        <p>
+                            <a href="{% url "user_dashboard" %}">
+                                {% trans "Go to dashboard to see status and further information" %}
+                                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
 
                 <p><strong>{% include "courses/snippets/lessons.html" with course=course only %}</strong></p>
                 <p>

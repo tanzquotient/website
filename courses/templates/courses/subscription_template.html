@@ -13,41 +13,29 @@
 {% endblock lead %}
 
 {% block main_content %}
-    <h2></h2>
-
     <div class="container">
         <a id="subscription"></a>
-
         <p>{% include "courses/snippets/detail.html" with course=course only %}</p>
-        <p>{% include "courses/snippets/subscription_info.html" with course=course long=True only %}</p>
+        {% if course.is_subscription_allowed %}
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    {% trans "Sign up" %}
+                </div>
+                <div class="panel-body">
+                    {% if user.is_authenticated %}
+                        {% block user_form %}
+                        {% endblock user_form %}
+                    {% else %}
+                        {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
+                        <a href="{% url 'account_login' %}?next={{ request.path }}"
+                           class="btn btn-success">{% trans "Login to Enroll" %}</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
-    {% if user and course in user.profile.get_subscribed_courses %}
-        <div class="container">
-            <p>
-                <span class="label label-success">{% trans "Subscribed" %}</span>
-            </p>
-            <p>
-                <a href="{% url "user_dashboard" %}">
-                    {% trans "Go to dashboard to see status and further information" %}
-                    <i class="fa fa-arrow-circle-right fa-lg"></i>
-                </a>
-            </p>
-        </div>
-    {% elif course.is_subscription_allowed %}
 
-        <div class="jumbotron">
-            <div class="container">
-                {% if user.is_authenticated %}
-                    {% block user_form %}
-                    {% endblock user_form %}
-                {% else %}
-                    {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
-                    <a href="{% url 'account_login' %}?next={{ request.path }}"
-                       class="btn btn-success">{% trans "Login to Enroll" %}</a>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
 
 {% endblock main_content %}

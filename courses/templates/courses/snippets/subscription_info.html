@@ -3,7 +3,7 @@
     {% if course.is_open_class %}
         <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
     {% elif course.is_external %}
-        {% if course.external_url %}
+        {% if course.external_url and display_link %}
             <a href="{{ course.external_url }}" target="_blank">
                 <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
             </a>
@@ -30,8 +30,7 @@
                     {% else %}
                         <span class="subscription_info_item">
                     {% if show.man %}
-                        <i class="fa fa-mars"></i>
-                        <span class="badge">{{ count.man }} frei</span>
+                        <span class="badge green"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
                     {% endif %}
                     </span>
                     {% endif %}
@@ -40,8 +39,7 @@
                     {% else %}
                         <span class="subscription_info_item">
                     {% if show.woman %}
-                        <i class="fa fa-venus"></i>
-                        <span class="badge">{{ count.woman }} frei</span>
+                        <span class="badge green"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
                     {% endif %}
                     </span>
                     {% endif %}
