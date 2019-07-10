@@ -1030,7 +1030,7 @@ msgstr "Subscribe / Free places"
 #: .\courses\templates\courses\snippets\subscription_info.html:22
 #: .\courses\templates\courses\subscription.html:92
 msgid "Subscribe"
-msgstr "Subscripe"
+msgstr "Subscribe"
 
 #: .\courses\templates\courses\snippets\subscription_info_overbooked.html:3
 msgid "Ausgebucht:"
