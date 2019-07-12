@@ -1,17 +1,19 @@
 import datetime
 
 from django.db import models
-
-from . import Room
+from django.db.models import CASCADE
 
 
 class IrregularLesson(models.Model):
-    course = models.ForeignKey('Course', related_name='irregular_lessons', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', related_name='irregular_lessons', on_delete=CASCADE)
     date = models.DateField(blank=False, null=False)
     time_from = models.TimeField()
     time_to = models.TimeField()
-    room = models.ForeignKey(Room, related_name='irregular_lessons', blank=True, null=True, on_delete=models.PROTECT)
-    room.help_text = "The room for this lesson. If left empty, the course room is assumed."
+
+    lesson_details = models.OneToOneField('LessonDetails', related_name='irregular_lesson',
+                                          null=True, blank=True, on_delete=CASCADE)
+    lesson_details.help_text = "Only needed, if details are different from course. " \
+                               "E.g. different room, different teachers,..."
 
     class Meta:
         ordering = ['date', 'time_from']
@@ -20,8 +22,6 @@ class IrregularLesson(models.Model):
         return datetime.datetime.combine(self.date, self.time_to) - datetime.datetime.combine(self.date, self.time_from)
 
     def __str__(self):
-        s = "{}, {}-{}".format(self.date, self.time_from.strftime("%H:%M"),
-                               self.time_to.strftime("%H:%M"))
-        if self.room:
-            s = s + ", {}".format(self.room)
+        s = "{}, {}, {}-{}".format(self.course, self.date, self.time_from.strftime("%H:%M"),
+                                  self.time_to.strftime("%H:%M"))
         return s

@@ -1,15 +1,19 @@
-{% with teachers=course.teachers.all %}
-    {% if teachers %}
-        {% for teacher in teachers %}
-            <a href="#" data-toggle="modal" data-target="#user_modal-{{ teacher.id }}">
-                {{ teacher.get_full_name }}
+{% if teachings %}
+    {% for teaching in teachings %}
+        {% if display_link %}
+            <a href="#" data-toggle="modal" data-target="#user_modal-{{ teaching.teacher.id }}">
+                {{ teaching.teacher.get_full_name }}
             </a>
-            {% if not forloop.last %}
-                &amp;
-            {% endif %}
-        {% endfor %}
-        {% for teacher in teachers %}
-            {% include "courses/snippets/user_modal.html" with user=teacher only %}
+        {% else %}
+            {{ teaching.teacher.get_full_name }}
+        {% endif %}
+        {% if not forloop.last %}
+            &amp;
+        {% endif %}
+    {% endfor %}
+    {% if display_link %}
+        {% for teaching in teachings %}
+            {% include "courses/snippets/user_modal.html" with user=teaching.teacher only %}
         {% endfor %}
     {% endif %}
-{% endwith %}
+{% endif %}

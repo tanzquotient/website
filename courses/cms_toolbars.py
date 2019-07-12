@@ -39,9 +39,6 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm('courses.change_room'):
             url = reverse('admin:courses_room_changelist')
             menu.add_sideframe_item(_('Rooms'), url=url)
-        if self.request.user.has_perm('courses.change_address'):
-            url = reverse('admin:courses_address_changelist')
-            menu.add_sideframe_item(_('Addresses'), url=url)
 
         menu.add_break('courses-break2')
 

@@ -55,7 +55,11 @@ def merge_duplicate_users(to_merge):
                 organising.organiser = user
                 organising.save()
 
-            for teaching in alias.teaching.all():
+            for teaching in alias.teaching_courses.all():
+                teaching.teacher = user
+                teaching.save()
+
+            for teaching in alias.teaching_lessons.all():
                 teaching.teacher = user
                 teaching.save()
 

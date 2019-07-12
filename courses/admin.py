@@ -33,6 +33,12 @@ class TeachInlineForCourse(admin.TabularInline):
     raw_id_fields = ('teacher',)
 
 
+class TeachingLessonInline(admin.TabularInline):
+    model = TeachLesson
+    extra = 0
+    fk_name = 'lesson'
+
+
 class SubscribeInlineForCourse(admin.TabularInline):
     model = Subscribe
     extra = 1
@@ -51,18 +57,19 @@ class SubscribeInlineForUser(admin.TabularInline):
     readonly_fields = ('state', 'matching_state', 'usi',)
 
 
-class RegularLessonCancellationInline(admin.TabularInline):
-    model = RegularLessonCancellation
-    extra = 1
+class IrregularLessonInline(admin.TabularInline):
+    model = IrregularLesson
+    extra = 0
 
 
 class RegularLessonInline(admin.TabularInline):
     model = RegularLesson
     extra = 0
+    show_change_link = True
 
 
-class IrregularLessonInline(admin.TabularInline):
-    model = IrregularLesson
+class RegularLessonExceptionInline(admin.TabularInline):
+    model = RegularLessonException
     extra = 0
 
 
@@ -91,6 +98,18 @@ class SongAdmin(admin.ModelAdmin):
     model = Song
 
 
+@admin.register(LessonDetails)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ['get_course', 'get_lesson', 'room',]
+    inlines = (TeachingLessonInline,)
+
+
+@admin.register(RegularLesson)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ['course', 'weekday', 'time_from', 'time_to']
+    inlines = (RegularLessonExceptionInline,)
+
+
 @admin.register(Course)
 class CourseAdmin(TranslatableAdmin):
     list_display = (
@@ -100,15 +119,16 @@ class CourseAdmin(TranslatableAdmin):
         'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
     list_filter = ('subscription_type', 'offering', 'type', 'room', 'display', 'active')
     search_fields = ['name', 'type__name', ]
-    inlines = (RegularLessonCancellationInline, RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
+    inlines = (RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
                PredecessorCoursesInline, SubscribeInlineForCourse)
 
     model = Course
+
     fieldsets = [
         ('What?', {
             'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description', 'external_url']}),
         ('When?', {
-            'fields': ['offering', 'period', ]}),
+            'fields': ['offering', 'period']}),
         ('Where?', {
             'fields': ['room']}),
         ('Billing', {
@@ -251,6 +271,7 @@ class TeacherWelcomeAdmin(admin.ModelAdmin):
 
 @admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date_from', "date_to")
     inlines = (PeriodCancellationInline,)
 
 
@@ -273,16 +294,6 @@ class StyleAdmin(TranslatableAdmin):
 
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
-    pass
-
-
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(BankAccount)
-class BankAccountAdmin(admin.ModelAdmin):
     pass
 
 

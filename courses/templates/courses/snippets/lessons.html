@@ -17,7 +17,23 @@
         {% endfor %}
         <br/>
         {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date is_custom=course.is_custom_period only %}
+
+        {% if course.get_not_cancelled_regular_lesson_exceptions %}
+            <br/>
+            <u>{% trans "Exceptions" %}:</u>
+            <br/>
+            {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
+        {% endif %}
+
+        {% if course.get_regular_lesson_cancellation_dates %}
+            <br/>
+            <u>{% trans "Cancellations" %}:</u>
+            <br/>
+            {% include "courses/snippets/course_cancellation.html" with cancellation_dates=course.get_regular_lesson_cancellation_dates only %}
+        {% endif %}
+
     {% endif %}
+
 
     {% if regular and irregular %}
         <br/>

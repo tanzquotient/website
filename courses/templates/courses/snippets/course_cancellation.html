@@ -1,0 +1,6 @@
+{% for date in cancellation_dates %}
+    {{ date|date:'D, d. N Y' }}
+    {% if not forloop.last %}
+        <br/>
+    {% endif %}
+{% endfor %}

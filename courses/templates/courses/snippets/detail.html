@@ -22,20 +22,31 @@
                     </div>
                 {% endif %}
 
-                <p><strong>{% include "courses/snippets/lessons.html" with course=course only %}</strong></p>
+                <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
+
+
+                <strong>{% trans "Teachers" %}</strong>
+                <br/>
                 <p>
-                    {% if course.room %}
-                        Raum {% include "courses/snippets/room.html" with room=course.room only %}
-                    {% else %}
-                        Raum noch unbekannt
-                    {% endif %}
+                    {% include "courses/snippets/course_teachers.html" with display_link=True teachings=course.teaching.all only %}
                 </p>
 
-                <p>{{ course.get_period|default:'' }}</p>
 
-                <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
-                <p>{% trans "With" %}{% include "courses/snippets/course_teachers.html" with course=course only %}</p>
-                <p>Kosten: {{ course.format_prices|default:"-" }}</p>
+                {% if course.room %}
+                    <strong>{% trans "Raum" %}</strong>
+                    <br/>
+                    <p>
+                        {% include "courses/snippets/room.html" with display_link=True room=course.room only %}
+                    </p>
+                {% endif %}
+
+                <strong>{% trans "Costs" %}</strong>
+                <br/>
+                <p>{{ course.format_prices|default:"-" }}</p>
+
+                <strong>{% trans "Time" %}</strong>
+                <br/>
+                {% include "courses/snippets/lessons.html" with course=course display_link=True only %}
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
                 {% if course.type.styles.all %}
@@ -50,10 +61,6 @@
                         <p>{{ desc }}</p>
                     {% endif %}
                 {% endwith %}
-                {% if course.get_cancellation_dates %}
-                    <h4>Ausfälle</h4>
-                    <p>{{ course.format_cancellations }}</p>
-                {% endif %}
             </div>
         </div>
     </div>

@@ -43,14 +43,14 @@ class UserProfile(models.Model):
 
     # convenience method for model user are added here
     def is_teacher(self):
-        return self.user.teaching.count() > 0
+        return self.user.teaching_courses.count() > 0 or self.user.teaching_lessons.count() > 0
 
     def teaching_since(self):
         if not self.is_teacher():
             return None
 
         earliest_course = None
-        for teaching in self.user.teaching.all():
+        for teaching in self.user.teaching_courses.all():
             course_start = teaching.course.get_first_lesson_date()
             if not course_start:
                 continue
@@ -64,7 +64,7 @@ class UserProfile(models.Model):
         if not self.is_teacher():
             return 0
 
-        return self.user.teaching.count()
+        return self.user.teaching_courses.count()
 
     def is_board_member(self):
         return self.user.functions.count() > 0
@@ -74,7 +74,7 @@ class UserProfile(models.Model):
             return []
 
         styles = set()
-        for teaching in self.user.teaching.all():
+        for teaching in self.user.teaching_courses.all():
             styles.update(set(teaching.course.type.styles.all()))
 
         return styles
@@ -91,7 +91,8 @@ class UserProfile(models.Model):
         return filter(lambda s: s.course.is_over(), self.get_subscriptions())
 
     def get_current_teaching_courses(self):
-        courses = [t.course for t in self.user.teaching.all() if not t.course.is_over()]
+        courses = [t.course for t in self.user.teaching_courses.all() if not t.course.is_over()]
+        courses += [t.course for t in self.user.teaching_lessons.all() if not t.course.is_over()]
         courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
         return courses
 

@@ -42,7 +42,7 @@
                     <td>{{ event.format_time }}</td>
                     <td>
                         {% if event.room %}
-                            {% include "courses/snippets/room.html" with room=event.room only %}
+                            {% include "courses/snippets/room.html" with display_link=True room=event.room only %}
                         {% else %}
                             {% trans "Venue not yet set" %}
                         {% endif %}

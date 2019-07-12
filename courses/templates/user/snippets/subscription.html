@@ -16,14 +16,14 @@
                     <p>
                         <strong>{% trans "Location" %}</strong>
                         <br/>
-                        {% include "courses/snippets/room.html" with room=subscription.course.room only %}
+                        {% include "courses/snippets/room.html" with display_link=True room=subscription.course.room only %}
                     </p>
                 {% endif %}
-                {% if subscription.course.teachers.all %}
+                {% if subscription.course.teaching.all %}
                     <p>
                         <strong>{% trans "Teachers" %}</strong>
                         <br/>
-                        {% include "courses/snippets/course_teachers.html" with course=subscription.course only %}
+                        {% include "courses/snippets/course_teachers.html" with display_link=True teachings=subscription.course.teaching.all only %}
                     </p>
                 {% endif %}
             </div>

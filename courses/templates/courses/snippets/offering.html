@@ -33,12 +33,12 @@
                             </td>
                             <td>
                                 {% if c.room %}
-                                    {% include "courses/snippets/room.html" with room=c.room only %}
+                                    {% include "courses/snippets/room.html" with display_link=True room=c.room only %}
                                 {% else %}
                                     noch unbekannt
                                 {% endif %}
                             </td>
-                            <td>{% include "courses/snippets/lessons.html" with course=c only %}</td>
+                            <td>{% include "courses/snippets/lessons.html" with course=c display_link=False only %}</td>
                             <td>{{ c.format_prices|default:"-" }}</td>
                             <td>
                                 {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
@@ -71,7 +71,7 @@
                                 {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
                             </p>
                             <p class="list-group-item-text">
-                                <strong>{% include "courses/snippets/lessons.html" with course=c only %}</strong></p>
+                                <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.format_prices %}
                                 <p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>

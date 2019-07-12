@@ -6,7 +6,10 @@ from .style import Style
 from .room import Room
 from .period import Period
 from .regular_lesson import RegularLesson
-from .regular_lesson_cancellation import RegularLessonCancellation
+from .lesson_details import LessonDetails
+from .teach_lesson import TeachLesson
+from .teach import Teach
+from .regular_lesson_exception import RegularLessonException
 from .irregular_lesson import IrregularLesson
 from .course_type import CourseType
 from .course import Course
@@ -20,6 +23,5 @@ from .rejection import Rejection
 from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
-from .teach import Teach
 from .offering import Offering
 from .song import Song

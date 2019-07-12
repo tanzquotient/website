@@ -1,0 +1,25 @@
+{% load i18n %}
+{% for exception in exceptions %}
+    {{ exception.date|date:'D, d. N Y' }}:
+    {% if exception.is_cancellation %}
+        {% trans "no lesson" %}
+    {% else %}
+        {% if exception.time_from or exception.time_to %}
+            {{ exception.get_time_from|date:'H:i' }} - {{ exception.get_time_to|date:'H:i' }}
+            {% if exception.lesson_details %}
+                <br/>
+            {% endif %}
+        {% endif %}
+        {% if exception.lesson_details %}
+            {% if exception.lesson_details.room %}
+                {% include "courses/snippets/room.html" with display_link=display_link room=exception.lesson_details.room only %}
+            {% endif %}
+            {% if exception.lesson_details.teaching.all %}
+                {% trans "with" %}{% include "courses/snippets/course_teachers.html" with display_link=display_link teachings=exception.lesson_details.teaching.all only %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% if not forloop.last %}
+        <br/>
+    {% endif %}
+{% endfor %}

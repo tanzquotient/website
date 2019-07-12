@@ -59,9 +59,6 @@ class Course(TranslatableModel):
     price_special.help_text = "Set this only if you want a different price schema."
 
     # Relations
-    teachers = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                      through='Teach',
-                                      related_name='teaching_courses')
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                          through='Subscribe',
                                          related_name='courses',
@@ -114,7 +111,10 @@ class Course(TranslatableModel):
         return totals
 
     def format_teachers(self):
-        return ', '.join(map(auth.get_user_model().get_full_name, self.teachers.all()))
+        return ', '.join(map(auth.get_user_model().get_full_name, self.get_teachers()))
+
+    def get_teachers(self):
+        return [t.teacher for t in self.teaching.all()]
 
     format_teachers.short_description = "Teachers"
 
@@ -268,6 +268,15 @@ class Course(TranslatableModel):
         lessons.extend(self.irregular_lessons.all())
         return lessons
 
+    def get_all_regular_lesson_exceptions(self):
+        exceptions = []
+        for regular_lesson in self.regular_lessons.all():
+            exceptions += [e for e in regular_lesson.exceptions.all() if e.is_applicable()]
+        return exceptions
+
+    def get_not_cancelled_regular_lesson_exceptions(self):
+        return [e for e in self.get_all_regular_lesson_exceptions() if not e.is_cancellation]
+
     def get_lessons_as_strings(self):
         return map(str, self.get_lessons())
 
@@ -276,14 +285,26 @@ class Course(TranslatableModel):
 
     format_lessons.short_description = "Lessons"
 
+    def get_regular_lesson_cancellation_dates(self):
+        def is_applicable(date):
+            period = self.get_period()
+            weekdays = [Weekday.NUMBERS[r.weekday] for r in self.regular_lessons.all()]
+
+            return date.weekday() in weekdays and period.date_from <= date <= period.date_to
+
+        return [d for d in self.get_cancellation_dates() if is_applicable(d)]
+
     def get_cancellation_dates(self):
-        # take the union of the cancellations of this course and the period it belongs to
-        dates = [c.date for c in self.cancellations.all()]
-        dates_offering = []
+        dates = []
+        for regular_lesson in self.regular_lessons.all():
+            for exception in regular_lesson.exceptions.all():
+                if exception.is_cancellation:
+                    dates.append(exception.date)
+
         period = self.get_period()
         if period:
-            dates_offering = [c.date for c in period.cancellations.all()]
-        return sorted(dates + dates_offering)
+            dates += [c.date for c in period.cancellations.all()]
+        return sorted(dates)
 
     def format_cancellations(self):
         dates = [d.strftime('%d.%m.%Y') for d in self.get_cancellation_dates()]

@@ -150,9 +150,19 @@ class TeacherOfCourseOnly(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         # check permissions not expressed by auth.perm
-        if not self.request.user.is_staff and not self.request.user.teaching.filter(
-                course__id=kwargs['course']).count() \
-                and not self.request.user.has_perm('courses.change_subscribe'):
+        allowed = False
+
+        user = self.request.user
+        course_id = kwargs['course']
+
+        if user.is_superuser or user.has_perm('courses.change_subscribe'):
+            allowed = True
+        if user.teaching_courses.filter(course__id=course_id).exists():
+            allowed = True
+        if user.teaching_lessons.filter(course__id=course_id).exists():
+            allowed = True
+
+        if not allowed:
             raise PermissionDenied
 
         return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)

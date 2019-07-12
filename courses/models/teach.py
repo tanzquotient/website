@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Teach(models.Model):
-    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching', on_delete=models.CASCADE)
+    teacher = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='teaching_courses', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', related_name='teaching', on_delete=models.CASCADE)
     welcomed = models.BooleanField(default=False)
     hourly_wage = models.FloatField(blank=True, null=True)
