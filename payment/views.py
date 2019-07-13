@@ -159,8 +159,6 @@ class TeacherOfCourseOnly(View):
             allowed = True
         if user.teaching_courses.filter(course__id=course_id).exists():
             allowed = True
-        if user.teaching_lessons.filter(course__id=course_id).exists():
-            allowed = True
 
         if not allowed:
             raise PermissionDenied
