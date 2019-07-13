@@ -9,17 +9,15 @@
 
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h4>Infos</h4>
-                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True only %}</p>
+                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True user=user only %}</p>
 
                 {% if user and course in user.profile.get_subscribed_courses %}
-                    <div class="container">
-                        <p>
-                            <a href="{% url "user_dashboard" %}">
-                                {% trans "Go to dashboard to see status and further information" %}
-                                <i class="fa fa-arrow-circle-right fa-lg"></i>
-                            </a>
-                        </p>
-                    </div>
+                    <p>
+                        <a href="{% url "user_dashboard" %}">
+                            {% trans "Go to dashboard to see status and further information" %}
+                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                        </a>
+                    </p>
                 {% endif %}
 
                 <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
