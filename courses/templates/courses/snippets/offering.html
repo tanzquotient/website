@@ -68,7 +68,7 @@
                                 {{ c.type.name }}
                             </h4>
                             <p class="list-group-item-text">
-                                {% include "courses/snippets/subscription_info.html" with course=c display_link=False only %}
+                                {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
                             </p>
                             <p class="list-group-item-text">
                                 <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong></p>
