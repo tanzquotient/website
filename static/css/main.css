@@ -1,6 +1,6 @@
 /* Header */
 header {
-    background: #333 url(../elements/home.jpg) no-repeat 100% 55%;
+    background: #333 url(../elements/home.jpg) no-repeat 50% 50%;
     background-size: cover;
     min-height: 480px;
     text-align: center;
@@ -79,13 +79,13 @@ header .container {
 }
 
 #header_about {
+    background: #333 url(../elements/about.jpg) no-repeat 50% 0;
     background-size: cover;
-    background: #333 url(../elements/about.jpg) no-repeat 100% 50%;
 }
 
 #header_courses {
-    background-size: cover;
     background: #333 url(../elements/courses.jpg) no-repeat 50% 50%;
+    background-size: cover;
 }
 
 #header_events {
@@ -93,26 +93,20 @@ header .container {
     background-size: cover;
 }
 
-#header_music {
-    background-size: cover;
-    background: #333 url(../elements/music.jpg) no-repeat 50% 50%;
-}
-
-#header_gallery {
-    background-size: cover;
-    background: #333 url(../elements/gallery.jpg) no-repeat 30% 50%;
-}
-
 #header_faq {
+    background: #333 url(../elements/faq.jpg) no-repeat 50% 0;
     background-size: cover;
-    background: #333 url(../elements/faq.jpg) no-repeat 30% 50%;
 }
 
-#header_login {
+#header_partner {
+    background: #333 url(../elements/partner.jpg) no-repeat 50% 0;
     background-size: cover;
-    background: #333 url(../elements/login.jpg) no-repeat 50% 50%;
 }
 
+#header_services {
+    background: #333 url(../elements/services.jpg) no-repeat 50% 20%;
+    background-size: cover;
+}
 
 .dropdown-menu {
     background-color: #333;
