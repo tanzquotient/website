@@ -11,17 +11,8 @@
             <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
         {% endif %}
     {% endif %}
-    {% if user and course in user.profile.get_subscribed_courses %}
-        <p>
-            <span class="label label-success">{% trans "Subscribed" %}</span>
-        </p>
-    {% endif %}
     {% if course.is_subscription_allowed %}
-        {% if display_link and not user or course not in user.profile.get_subscribed_courses %}
-            <p>
-                <a href="{% url 'courses:subscription' course.id %}#subscription">{% trans "Subscribe" %}</a>
-            </p>
-        {% endif %}
+
         <div class="subscription_info">
             {% if course.type.couple_course %}
                 {% if count != None %}
@@ -63,6 +54,15 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% if user and course in user.profile.get_subscribed_courses %}
+            <p>
+                <span class="label label-success">{% trans "Subscribed" %}</span>
+            </p>
+        {% elif display_link %}
+            <p>
+                <a href="{% url 'courses:subscription' course.id %}#subscription">{% trans "Subscribe" %}</a>
+            </p>
+        {% endif %}
     {% else %}
         {% if count != None and count.total <= 0 %}
             {% include "courses/snippets/subscription_info_overbooked.html" %}
