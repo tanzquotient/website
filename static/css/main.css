@@ -1,14 +1,18 @@
 /* Header */
 header {
-    background: #333 url(../elements/home.jpg) no-repeat 50% 50%;
+    background-color: #333;
+    background-image: url(../elements/home.jpg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
     background-size: cover;
-    min-height: 480px;
     text-align: center;
-    padding-top: 200px;
     color: white;
     font-family: "Open sans", Helvetica, Arial, sans-serif;
     font-weight: 400;
     margin-bottom: 25px;
+    margin-top: 80px;
+    padding-bottom: 125px;
+    padding-top: 125px;
 }
 
 header.light{
@@ -58,54 +62,60 @@ header .container {
     padding: 20px 0;
 }
 
-@media ( max-width : 1200px) {
+@media ( max-width : 120px) {
     header {
-        min-height: 300px;
-        padding-top: 140px;
-    }
-    header .lead {
-        font-size: 34px;
+        padding-bottom: 100px;
+        padding-top: 100px;
     }
 }
 
-@media ( max-width : 767px) {
-    header {
-        min-height: 250px;
-        padding-top: 120px;
-    }
+@media ( max-width : 992px) {
     header .lead {
         font-size: 34px;
     }
+    header {
+        padding-bottom: 50px;
+        padding-top: 50px;
+    }
+}
+
+@media ( max-width : 600px) {
+    header {
+        padding-bottom: 25px;
+        padding-top: 25px;
+    }
+}
+
+#header_home {
+    padding-bottom: 25px;
 }
 
 #header_about {
-    background: #333 url(../elements/about.jpg) no-repeat 50% 0;
-    background-size: cover;
+    background-image: url(../elements/about.jpg);
 }
 
 #header_courses {
-    background: #333 url(../elements/courses.jpg) no-repeat 50% 50%;
-    background-size: cover;
+    background-image: url(../elements/courses.jpg);
+
 }
 
 #header_events {
-    background: #333 url( ../elements/events.jpg) no-repeat;
-    background-size: cover;
+    background-image: url(../elements/events.jpg);
+
 }
 
 #header_faq {
-    background: #333 url(../elements/faq.jpg) no-repeat 50% 0;
-    background-size: cover;
+    background-image: url(../elements/faq.jpg);
+
 }
 
 #header_partner {
-    background: #333 url(../elements/partner.jpg) no-repeat 50% 0;
-    background-size: cover;
+    background-image: url(../elements/partner.jpg);
+
 }
 
 #header_services {
-    background: #333 url(../elements/services.jpg) no-repeat 50% 20%;
-    background-size: cover;
+    background-image: url(../elements/services.jpg);
 }
 
 .dropdown-menu {
