@@ -21,6 +21,12 @@
         {% endif %}
         <div class="col-xs-8 col-sm-9 col-md-10">
             <h3 class="media-heading">{{ user.get_full_name }}</h3>
+            <p>
+                <a href="{% url "user_dashboard" %}">
+                    {% trans "Go to dashboard" %}
+                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                </a>
+            </p>
             {% url 'edit_profile' as edit_profile %}
             <p>
                 <a href="{{ edit_profile }}">

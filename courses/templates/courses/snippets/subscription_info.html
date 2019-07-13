@@ -60,7 +60,10 @@
             </p>
         {% elif display_link %}
             <p>
-                <a href="{% url 'courses:subscription' course.id %}#subscription">{% trans "Subscribe" %}</a>
+                <a href="{% url 'courses:subscription' course.id %}#subscription">
+                    <i class="fa  fa-sign-in fa-lg"></i>
+                    {% trans "Subscribe" %}
+                </a>
             </p>
         {% endif %}
     {% else %}
