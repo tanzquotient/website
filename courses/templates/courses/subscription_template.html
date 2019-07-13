@@ -16,23 +16,24 @@
     <div class="container">
         <a id="subscription"></a>
         <p>{% include "courses/snippets/detail.html" with course=course user=user only %}</p>
-        {% if course.is_subscription_allowed and not user or course not in user.profile.get_subscribed_courses %}
-
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    {% trans "Sign up" %}
+        {% if course.is_subscription_allowed %}
+            {% if not user or course not in user.profile.get_subscribed_courses %}
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        {% trans "Sign up" %}
+                    </div>
+                    <div class="panel-body">
+                        {% if user.is_authenticated %}
+                            {% block user_form %}
+                            {% endblock user_form %}
+                        {% else %}
+                            {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
+                            <a href="{% url 'account_login' %}?next={{ request.path }}"
+                               class="btn btn-success">{% trans "Login to Enroll" %}</a>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {% if user.is_authenticated %}
-                        {% block user_form %}
-                        {% endblock user_form %}
-                    {% else %}
-                        {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
-                        <a href="{% url 'account_login' %}?next={{ request.path }}"
-                           class="btn btn-success">{% trans "Login to Enroll" %}</a>
-                    {% endif %}
-                </div>
-            </div>
+            {% endif %}
         {% endif %}
     </div>
 
