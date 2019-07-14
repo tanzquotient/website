@@ -8,7 +8,7 @@
     <h1>{% trans "Profile of" %} {{ request.user.get_full_name }} {% if gender_icon %}
         <i class="fa fa-{{ gender_icon }} fa"></i>{% endif %}</h1>
     {% url 'profile' as auth_profile %}
-    <p>{% blocktrans %}<a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to your profile</a>{% endblocktrans %}
+    <p><a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> {% trans "Back to profile" %}</a>
 
     {% if not is_profile_complete and not form.errors %}
         <div class="alert alert-danger" role="alert">

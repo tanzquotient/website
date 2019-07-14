@@ -9,9 +9,9 @@
 {% block main_content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{% url 'payment:offering_finance_index_view' %}">Offerings</a></li>
+            <li><a href="{% url 'payment:offering_finance_index_view' %}">{% trans "Offerings" %}</a></li>
             <li><a href="{% url 'payment:offering_finance_overview_subscribers' offering.pk %}">{{ offering.name }}</a></li>
-            <li class="active">Unpaid Subscriptions</li>
+            <li class="active">{% trans "Unpaid Subscriptions" %}</li>
         </ol>
 
         <h2>Unpaid Subscriptions in {{ offering }}

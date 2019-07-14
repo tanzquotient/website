@@ -1,8 +1,10 @@
+{% load i18n %}
+
 {% if form.errors %}
     <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
-                class="sr-only">Schliessen</span></button>
-        <strong>Einige Eingaben sind ungültig</strong>
+                class="sr-only">{% trans "Close" %}</span></button>
+        <strong>{% trans "Some inputs are invalid" %}</strong>
     </div>
 {% endif %}
 
@@ -31,7 +33,7 @@
         <div>
             <p>
                 <a role="button" data-toggle="collapse" href="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
-                    Add salary Payment Info (only required for teachers and helpers)
+                    {% trans "Add salary Payment Info (only required for teachers and helpers)" %}
                 </a>
             </p>
         </div>

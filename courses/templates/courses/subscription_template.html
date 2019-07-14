@@ -2,11 +2,15 @@
 
 {% load i18n %}
 
+{% block title %}
+    {{ course.type.name }}
+{% endblock %}
+
 {% block lead %}
     <header id="header_courses">
         <div class="container">
             <div class="row">
-                <h1 class="lead">Anmeldung</h1>
+                <h1 class="lead">{% trans "Course details" %}</h1>
             </div>
         </div>
     </header>

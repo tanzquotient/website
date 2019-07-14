@@ -52,7 +52,7 @@
                     {% if user.functions.count > 0 %}
                         <br/>
                         <div class="col-xs-12">
-                            <h4>Kontakt</h4>
+                            <h4>{% trans "Contact" %}</h4>
                             {% for function in user.functions.all %}
                                 <p><a href="mailto:{{ function.email }}">{{ function.email|default:"-" }}</a></p>
                             {% endfor %}
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
     </div>

@@ -1,10 +1,11 @@
 {% extends "template_basic.html" %}
+{% load i18n %}
 
 {% block lead %}
     <header id="header_courses">
         <div class="container">
             <div class="row">
-                <h1 class="lead">Kurse</h1>
+                <h1 class="lead">{% trans "Courses" %}</h1>
             </div>
         </div>
     </header>
@@ -17,7 +18,7 @@
             <p>{% include "courses/snippets/offering.html" with offering=o.offering sections=o.sections user=user only %}</p>
             {% empty %}
             &nbsp;
-            <div class="alert alert-info">Keine Kurse verfügbar.</div>
+            <div class="alert alert-info">{% trans "No courses available" %}</div>
         {% endfor %}
     </div>
 {% endblock main_content %}

@@ -15,31 +15,16 @@
 
         <div class="subscription_info">
             {% if course.type.couple_course %}
-                {% if count != None %}
-                    {% if count.man <= 0 %}
-                        {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='mars' gender_singular='Mann' gender_plural='Männer' %}
-                    {% else %}
+                {% if count %}
+                    {% if show.man and count.man > 0 %}
                         <span class="subscription_info_item">
-                    {% if show.man %}
-                        <span class="badge green"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
+                            <span class="badge green"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
+                        </span>
                     {% endif %}
-                    </span>
-                    {% endif %}
-                    {% if count.woman <= 0 %}
-                        {% include "courses/snippets/subscription_info_waiting_list.html" with gender_icon='venus' gender_singular='Frau' gender_plural='Frauen' %}
-                    {% else %}
+                    {% if show.woman and count.woman > 0 %}
                         <span class="subscription_info_item">
-                    {% if show.woman %}
-                        <span class="badge green"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
-                    {% endif %}
-                    </span>
-                    {% endif %}
-                {% else %}
-                    {% if course.men_needed %}
-                        {% include "courses/snippets/subscription_info_missing_gender.html" with gender_icon='mars' gender_singular='Mann' gender_plural='Männer' gender_op_singular='Frau' gender_op_plural='Frauen' %}
-                    {% endif %}
-                    {% if course.women_needed %}
-                        {% include "courses/snippets/subscription_info_missing_gender.html" with gender_icon='venus' gender_singular='Frau' gender_plural='Frauen' gender_op_singular='Mann' gender_op_plural='Männer' %}
+                            <span class="badge green"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
+                        </span>
                     {% endif %}
                 {% endif %}
             {% else %}

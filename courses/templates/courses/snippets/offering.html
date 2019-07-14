@@ -1,6 +1,6 @@
 {% load i18n %}
 <h2>
-    {% if offering.is_preview %}<span class="label label-info">Preview</span>{% endif %}
+    {% if offering.is_preview %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
     {{ offering.name }}
     <small>{{ offering.period|default:'' }}</small>
 </h2>
@@ -35,7 +35,7 @@
                                 {% if c.room %}
                                     {% include "courses/snippets/room.html" with display_link=True room=c.room only %}
                                 {% else %}
-                                    noch unbekannt
+                                    {% trans "Currently unknown" %}
                                 {% endif %}
                             </td>
                             <td>{% include "courses/snippets/lessons.html" with course=c display_link=False only %}</td>
@@ -46,7 +46,7 @@
                         </tr>
                     {% endfor %}
                 {% else %}
-                    <div class="alert alert-info">Keine Kurse verfügbar.</div>
+                    <div class="alert alert-info">{% trans "No courses available" %}</div>
                 {% endif %}
                 </tbody>
             </table>
@@ -74,13 +74,13 @@
                                 <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.format_prices %}
-                                <p class="list-group-item-text">Kosten: {{ c.format_prices|default:"-" }}</p>
+                                <p class="list-group-item-text">{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</p>
                             {% endif %}
                         </a>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="alert alert-info">Keine Kurse verfügbar.</div>
+                <div class="alert alert-info">{% trans "No courses available" %}</div>
             {% endif %}
         </div>
     {% endfor %}

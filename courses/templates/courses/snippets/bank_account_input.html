@@ -1,5 +1,7 @@
+{% load i18n  %}
+
 <div class="form-group has-feedback  {% if form.iban.errors or form.bank_name.errors or form.bank_zip_code.errors or form.bank_bank_city.errors or form.bank_country.errors %}has-error{% endif %}">
-    <label for="{{ form.iban.id_for_label }}" class="col-sm-2 control-label">Bank Account</label>
+    <label for="{{ form.iban.id_for_label }}" class="col-sm-2 control-label">{%  trans "Bank Account" %}</label>
 
     <div class="col-sm-10">
         <input type="text" class="form-control" id="{{ form.iban.id_for_label }}" name="{{ form.iban.html_name }}"

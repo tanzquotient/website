@@ -2,43 +2,60 @@
 {% load i18n %}
 
 {% if user.is_staff %}
-    <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin
-        area</a></li>
+    <li>
+        <a href="{% url 'admin:index' %}">
+            <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
+        </a>
+    </li>
 {% endif %}
 {% if user.is_staff %}
-    <li><a href="{% url 'courses:subscription_overview' %}"><span
-            class="fa fa-bar-chart fa-lg"></span> Statistics</a></li>
+    <li>
+        <a href="{% url 'courses:subscription_overview' %}">
+            <span class="fa fa-bar-chart fa-lg"></span> {% trans "Statistics" %}
+        </a>
+    </li>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
-    <li><a href="{% url 'payment:coursepayment_index' %}"><span
-            class="fa fa-book fa-lg"></span> My Courses</a>
+    <li>
+        <a href="{% url 'payment:coursepayment_index' %}">
+            <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}
+        </a>
     </li>
 {% endif %}
 {% if user.is_superuser or perms.courses.access_counterpayment %}
-    <li><a href="{% url 'payment:counterpayment_index' %}"><span
-            class="fa fa-money fa-lg"></span> Counter Payment</a>
+    <li>
+        <a href="{% url 'payment:counterpayment_index' %}">
+            <span class="fa fa-money fa-lg"></span> {% trans "Counter payment" %}
+        </a>
     </li>
 {% endif %}
 {% if user.is_superuser or perms.payment.change_payment %}
-    <li><a href="{% url 'payment:offering_finance_index_view' %}"><span
-            class="fa fa-credit-card fa-lg"></span> Offering Finance</a>
+    <li>
+        <a href="{% url 'payment:offering_finance_index_view' %}">
+            <span class="fa fa-credit-card fa-lg"></span> {% trans "Offering finance" %}
+        </a>
     </li>
     <li>
-        <a href="{% url 'payment:account_finance_index_view' %}"><span
-                class="fa fa-credit-card fa-lg"></span> Account Finance</a>
+        <a href="{% url 'payment:account_finance_index_view' %}">
+            <span class="fa fa-credit-card fa-lg"></span> {% trans "Account finance" %}
+        </a>
     </li>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
     <li role="separator" class="divider"></li>
 {% endif %}
-<li><a href="{% url 'user_dashboard' %}"><span
-        class="glyphicon glyphicon-th"></span>
-    {% trans "Dashboard" %}</a>
+<li>
+    <a href="{% url 'user_dashboard' %}">
+        <span class="glyphicon glyphicon-th"></span>{% trans "Dashboard" %}
+    </a>
 </li>
-<li><a href="{% url 'profile' %}"><span
-        class="glyphicon glyphicon-user"></span>
-    {% trans "Profile" %}</a>
+<li>
+    <a href="{% url 'profile' %}">
+        <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
+    </a>
 </li>
-<li><a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>
-    Logout</a>
+<li>
+    <a href="{% url 'account_logout' %}">
+        <span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}
+    </a>
 </li>

@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content_title %}
-    <h1 class="lead">Subscription Overview</h1>
+    <h1 class="lead">{% trans "Subscription Overview" %}</h1>
 {% endblock %}
 
 {% block main_content %}
@@ -12,16 +12,16 @@
     <div class="container">
         <p>
             {% trans "Download summary of all offerings here:" %}
-            <a href="{% url "courses:export_summary_excel" %}">Download Excel</a>,
-            <a href="{% url "courses:export_summary" %}">Download CSV</a>
+            <a href="{% url "courses:export_summary_excel" %}">{% trans "Download Excel" %}</a>,
+            <a href="{% url "courses:export_summary" %}">{% trans "Download CSV" %}</a>
         </p>
         
-        <h2>Subscriptions by universities</h2>
+        <h2>{% trans "Subscriptions by universities" %}</h2>
         
         <p>{% include "courses/auth/student_university_chart.html" with chart=university_chart only %}</p>
         
 
-        <h2>Overall Progress</h2>
+        <h2>{% trans "Overall Progress" %}</h2>
 
         <p>{% include "courses/auth/progress_chart.html" with chart=progress_chart only %}</p>
 
@@ -37,7 +37,7 @@
         {% endfor %}
 
 
-        <h3>All Offerings</h3>
+        <h3>{% trans "All Offerings" %}</h3>
         <ul>
             {% for o in all_offerings %}
                 <li><a href="{% url "courses:offering_overview" o.id %}">{{ o.name }}</a></li>

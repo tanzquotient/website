@@ -13,7 +13,7 @@
         <div class="container">
             <h2>{{ course }}</h2>
 
-            <h3>Description</h3>
+            <h3>{% trans "Description" %}</h3>
             <form class="form-horizontal" role="form" action="{% url 'payment:coursepayment_detail' course.id %}"
                   method="post">
                 {% csrf_token %}
@@ -22,9 +22,9 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#editor-de" aria-controls="editor-de" role="tab"
-                                                                  data-toggle="tab">Deutsch</a></li>
+                                                                  data-toggle="tab">{% trans "German" %}</a></li>
                         <li role="presentation"><a href="#editor-en" aria-controls="editor-en" role="tab"
-                                                   data-toggle="tab">English</a></li>
+                                                   data-toggle="tab">{% trans "English" %}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -70,19 +70,19 @@
                 <span class="help-block">(You can save both language versions at once)</span>
             </form>
 
-            <h3>Participants</h3>
+            <h3>{% trans "Participants" %}</h3>
 
             <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
 
             <p>
                 {% trans "If you do not have internet access in the course room, you can download this list before:" %}
-                <a href="{% url "payment:coursepayment_export" course.id %}">Download Excel</a>,
-                <a href="{% url "payment:coursepayment_export_csv" course.id %}">Download CSV</a>
+                <a href="{% url "payment:coursepayment_export" course.id %}">{% trans "Download Excel" %}</a>,
+                <a href="{% url "payment:coursepayment_export_csv" course.id %}">{% trans "Download CSV" %}</a>
             </p>
 
             <p>
                 {% trans "Additionally you can download the contact data of the participants here:" %}
-                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">Download</a>
+                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Download" %}</a>
             </p>
 
             <div class="visible-xs">
@@ -159,7 +159,7 @@
                                     <td>
                                         {% if not subscription.payed %}
                                             <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
-                                               class="btn btn-default btn-xs">Pay</a>
+                                               class="btn btn-default btn-xs">{% trans "Pay" %}</a>
                                         {% else %}
                                             <span class="label label-default">{{ subscription.paymentmethod }}</span>
                                         {% endif %}

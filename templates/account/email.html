@@ -6,7 +6,7 @@
 
 {% block content %}
     {% url 'profile' as auth_profile %}
-    <p>{% blocktrans %}<a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> Go back to your profile</a>{% endblocktrans %}
+    <p><a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> {% trans "Back to profile" %}</a>
     </p>
     <h2>{% trans "E-mail Addresses" %}</h2>
     {% if user.emailaddress_set.all %}

@@ -81,7 +81,7 @@
                     {% if user.is_authenticated %}
                         {% include "user_menu.html" %}
                     {% else %}
-                        <li><a href="{% url 'account_login' %}">Login</a></li>
+                        <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -131,7 +131,7 @@
             <div class="row">
 
                 <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">Kontakt</h3>
+                    <h3 class="widget-title">{% trans "Contact" %}</h3>
 
                     <div class="widget-body">
                         {% include "snippets/contact_address.html" %}
@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">Folge uns</h3>
+                    <h3 class="widget-title">{% trans "Follow us" %}</h3>
 
                     <div class="widget-body">
                         <p class="follow-me-icons">
@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">Gebaut mit</h3>
+                    <h3 class="widget-title">{% trans "Built with" %}</h3>
 
                     <div class="widget-body">
                         <a href="//www.djangoproject.com/">Django</a>
@@ -177,16 +177,15 @@
                         <br/>
                         <a href="//www.python.org/">Python</a>
                         <br/>
-                        Design basiert auf Progressus von <a href="//gettemplate.com/"
-                                                             rel="designer">gettemplate</a>
+                        {% trans "Design based on" %}: Progressus <a href="//gettemplate.com/" rel="designer">gettemplate</a>
                     </div>
                 </div>
 
                 <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">Unterstützt vom</h3>
+                    <h3 class="widget-title">{% trans "Supported by" %}</h3>
 
                     <div class="widget-body">
-                        Der TQ ist eine Kommission des
+                        {% trans "TQ is a commision of VSETH and VSUZH" %}
                         <a href="https://vseth.ch"><img src="{% static "elements/vseth_logo.png" %}"
                                                   style="height: 100px"
                                                   class="img-responsive"
@@ -218,11 +217,11 @@
                         <p class="simplenav">
                             {% if user.is_authenticated %}
                                 {% if user.is_staff %}
-                                    <a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span> Admin area</a>|
+                                    <a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
                                 {% endif %}
-                                <a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>Logout</a>
+                                <a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
                             {% else %}
-                                <a href="{% url 'account_login' %}">Login</a>
+                                <a href="{% url 'account_login' %}">{% trans "Login" %}</a>
                             {% endif %}
                         </p>
                     </div>

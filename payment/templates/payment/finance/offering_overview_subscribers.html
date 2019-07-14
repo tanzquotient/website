@@ -9,7 +9,7 @@
 {% block main_content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{% url 'payment:offering_finance_index_view' %}">Offerings</a></li>
+            <li><a href="{% url 'payment:offering_finance_index_view' %}">{% trans "Offerings" %}</a></li>
             <li class="active">{{ offering.name }}</li>
         </ol>
 
@@ -33,7 +33,7 @@
                     <th>{% trans "Course" %}</th>
                     <th>{% trans "Total" %}</th>
                     <th>{% trans "Unpaid" %}</th>
-                    <th>Paid</th>
+                    <th>{% trans "Paid" %}</th>
                     <th>{% trans "Cash" %} / {% trans "Voucher" %} / {% trans "Online" %}
                         / {% trans "Counter" %}</th>
                     </thead>

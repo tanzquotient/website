@@ -1,15 +1,15 @@
 {% load i18n %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        {% if not course.display %}<span class="label label-info">Preview</span>{% endif %}
+        {% if not course.display %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
         {{ course.type.name }}
     </div>
     <div class="panel-body">
         <div class="row">
 
             <div class="col-xs-12 col-sm-6 col-md-3">
-                <h4>Infos</h4>
-                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True user=user only %}</p>
+                <h4>{% trans "Info" %}</h4>
+                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True user=user only %}</p>
 
                 {% if user and course in user.profile.get_subscribed_courses %}
                     <p>
@@ -38,9 +38,11 @@
                     </p>
                 {% endif %}
 
-                <strong>{% trans "Costs" %}</strong>
-                <br/>
-                <p>{{ course.format_prices|default:"-" }}</p>
+                {% if course.format_prices %}
+                    <strong>{% trans "Costs" %}</strong>
+                    <br/>
+                    <p>{{ course.format_prices|default:"-" }}</p>
+                {% endif %}
 
                 <strong>{% trans "Time" %}</strong>
                 <br/>
@@ -48,14 +50,14 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
                 {% if course.type.styles.all %}
-                    <h4>Tanzstile</h4>
+                    <h4>{% trans "Styles" %}</h4>
                     <p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
                 {% endif %}
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
                 {% with desc=course.format_description|safe %}
                     {% if desc %}
-                        <h4>Beschreibung</h4>
+                        <h4>{% trans "Description" %}</h4>
                         <p>{{ desc }}</p>
                     {% endif %}
                 {% endwith %}

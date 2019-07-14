@@ -9,7 +9,7 @@
 {% block main_content %}
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="{% url 'payment:offering_finance_index_view' %}">Offerings</a></li>
+            <li><a href="{% url 'payment:offering_finance_index_view' %}">{% trans "Offerings" %}</a></li>
             <li class="active">{{ offering.name }}</li>
         </ol>
 
@@ -26,8 +26,8 @@
 
         <p>
             {% trans "Download summary of teacher payment information here:" %}
-            <a href="{% url "courses:export_offering_salary" offering_id=offering.id %}">Download CSV</a>,
-            <a href="{% url "courses:export_offering_salary_excel" offering_id=offering.id %}">Download Excel</a>
+            <a href="{% url "courses:export_offering_salary" offering_id=offering.id %}">{% trans "Download CSV" %}</a>,
+            <a href="{% url "courses:export_offering_salary_excel" offering_id=offering.id %}">{% trans "Download Excel" %}</a>
         </p>
         </a>
         <div class="panel panel-default">
