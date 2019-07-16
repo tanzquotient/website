@@ -43,7 +43,7 @@
             <p>
                 <span class="label label-success">{% trans "Subscribed" %}</span>
             </p>
-        {% elif display_link %}
+        {% elif display_link and not is_detail_page %}
             <p>
                 <a href="{% url 'courses:subscription' course.id %}#subscription">
                     <i class="fa  fa-sign-in fa-lg"></i>
