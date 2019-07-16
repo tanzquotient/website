@@ -9,7 +9,7 @@
 
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h4>{% trans "Info" %}</h4>
-                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True user=user only %}</p>
+                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}</p>
 
                 {% if user and course in user.profile.get_subscribed_courses %}
                     <p>
