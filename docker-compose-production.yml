@@ -12,11 +12,6 @@ services:
       - "${TQ_DB_PORT}:3306"
     restart: always
 
-  # Cache
-  memcached:
-    image: memcached:1.4
-    restart: always
-
   # Django (serving with gunicorn)
   django:
     build:
@@ -31,7 +26,7 @@ services:
     command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
     links:
       - db
-      - memcached
+      - redis
     restart: always
 
   # Webserver
@@ -54,7 +49,7 @@ services:
       - django
     restart: always
 
-  # Message Broker for Celery (handles background tasks)
+  # Cache and message broker for celery (handles background tasks)
   redis:
     image: redis:3.2-alpine
     restart: always
@@ -72,7 +67,6 @@ services:
     command: celery -A tq_website beat -l info -S django
     links:
       - db
-      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
       - redis
     restart: always
 
@@ -90,6 +84,5 @@ services:
     command: celery -A tq_website worker -l info
     links:
       - db
-      - memcached # necessary because Django configuration is loaded and refers this refers to host 'memcached'
       - redis
     restart: always

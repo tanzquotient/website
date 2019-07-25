@@ -13,8 +13,8 @@ services:
     restart: always
 
   # Cache
-  memcached:
-    image: memcached:1.4
+  redis:
+    image: redis:3.2-alpine
     restart: always
 
   # Django (serving with gunicorn)
@@ -33,7 +33,7 @@ services:
       - "${TQ_DJANGO_PORT}:8000"
     links:
       - db
-      - memcached
+      - redis
     restart: always
 
 networks:
