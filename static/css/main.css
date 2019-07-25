@@ -92,6 +92,7 @@ header .container {
 
 #header_about {
     background-image: url(../elements/about.jpg);
+    background-position: 50% 37%;
 }
 
 #header_courses {

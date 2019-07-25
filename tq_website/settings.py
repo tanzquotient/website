@@ -492,6 +492,9 @@ SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
 # Caching
 CACHES = {
     'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'tq_website',
+    } if DEBUG else {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://redis/',
         'OPTIONS': {
