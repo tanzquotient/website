@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% if display_link %}
+{% if display_link and not disable_modals %}
 
     <!-- Button trigger modal -->
     <a href="#" data-toggle="modal" data-target="#modal_room-{{ room.id }}">{{ room.name }}</a>

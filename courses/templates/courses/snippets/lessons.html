@@ -22,7 +22,7 @@
             <br/>
             <u>{% trans "Exceptions" %}:</u>
             <br/>
-            {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
+            {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link disable_modals=disable_modals exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
         {% endif %}
 
         {% if course.get_regular_lesson_cancellation_dates %}

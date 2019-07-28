@@ -1,6 +1,6 @@
 {% if teachings %}
     {% for teaching in teachings %}
-        {% if display_link %}
+        {% if display_link and not disable_modals %}
             <a href="#" data-toggle="modal" data-target="#user_modal-{{ teaching.teacher.id }}">
                 {{ teaching.teacher.get_full_name }}
             </a>

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
@@ -6,6 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
 from djangocms_link.models import Link
 from filer.fields.image import FilerImageField
+
+from courses.models import IrregularLesson
+from events.models import Event
 
 
 class PageTitlePluginModel(CMSPlugin):
@@ -78,6 +83,69 @@ class ThumbnailPlugin(CMSPluginBase):
         return context
 
 
+class UpcomingEventsAndCoursesPluginModel(CMSPlugin):
+    delta_days = models.IntegerField(blank=True, null=True)
+    delta_days.help_text = "Events and courses within the time delta (in days) from now on are shown." \
+                           "Leave empty to make no restrictions."
+    max_displayed = models.IntegerField(blank=True, null=True)
+    max_displayed.help_text = "Maximum number of items to be displayed. Leave empty to make no restrictions."
+
+
+class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
+    name = _("Upcoming events and courses")
+    model = UpcomingEventsAndCoursesPluginModel
+    render_template = "cms_plugins/upcoming_events_and_courses.html"
+    text_enabled = False
+    allow_children = False
+
+    def render(self, context, instance, placeholder):
+        items = []
+
+        events = Event.displayed_events \
+            .future(delta_days=instance.delta_days, limit=instance.max_displayed) \
+            .prefetch_related('room') \
+            .all()
+
+        irregular_lessons = IrregularLesson.objects \
+            .filter(date__gte=datetime.today()) \
+            .order_by('date') \
+            .prefetch_related('course', 'course__type', 'course__room') \
+            .all()
+
+        for event in events:
+            items.append({
+                'date': event.date,
+                'time_from': event.time_from,
+                'time_to': event.time_to,
+                'name': event.get_name(),
+                'special': event.special,
+                'price': event.format_prices(),
+                'room': event.room,
+                'event': event,
+            })
+
+        for irregular_lesson in irregular_lessons:
+            if len(irregular_lesson.course.get_lessons()) == 1:
+                items.append({
+                    'date': irregular_lesson.date,
+                    'time_from': irregular_lesson.time_from,
+                    'time_to': irregular_lesson.time_to,
+                    'name': irregular_lesson.course.type.name,
+                    'room': irregular_lesson.course.room,
+                    'special': False,
+                    'price': irregular_lesson.course.format_prices(),
+                    'course': irregular_lesson.course
+                })
+
+        items.sort(key=lambda item: datetime.combine(item["date"], item["time_from"]))
+        items = items[0:instance.max_displayed]
+
+        context.update({
+            'items': items,
+        })
+        return context
+
+
 class CountdownPluginModel(CMSPlugin):
     text = models.TextField(max_length=255, blank=True, null=True)
     finish_text = models.CharField(max_length=255, blank=True, null=True)
@@ -106,3 +174,4 @@ plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
 plugin_pool.register_plugin(ThumbnailPlugin)
 plugin_pool.register_plugin(CountdownPlugin)
+plugin_pool.register_plugin(UpcomingEventsAndCoursesPlugin)

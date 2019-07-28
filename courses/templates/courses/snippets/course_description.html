@@ -1,0 +1,8 @@
+{% load i18n %}
+
+{% with desc=course.format_description|safe %}
+    {% if desc %}
+        <h4>{% trans "Description" %}</h4>
+        <p>{{ desc }}</p>
+    {% endif %}
+{% endwith %}

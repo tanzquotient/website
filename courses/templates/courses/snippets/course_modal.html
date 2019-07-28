@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="Course" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{ course.type.name }}</h4>
+            </div>
+            <div class="modal-body">
+                {% include "courses/snippets/course_info.html" with disable_modals=True %}
+                <br/>
+                <a href="{% url 'courses:subscription' course.id %}">
+                    <p>
+                        <i class="fa fa-arrow-circle-right fa-lg"></i> {% trans "Go to course" %}
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

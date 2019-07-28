@@ -6,8 +6,7 @@
     </div>
     <div class="panel-body">
         <div class="row">
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <h4>{% trans "Info" %}</h4>
                 <p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}</p>
 
@@ -19,48 +18,10 @@
                         </a>
                     </p>
                 {% endif %}
-
-                <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
-
-
-                <strong>{% trans "Teachers" %}</strong>
-                <br/>
-                <p>
-                    {% include "courses/snippets/course_teachers.html" with display_link=True teachings=course.teaching.all only %}
-                </p>
-
-
-                {% if course.room %}
-                    <strong>{% trans "Raum" %}</strong>
-                    <br/>
-                    <p>
-                        {% include "courses/snippets/room.html" with display_link=True room=course.room only %}
-                    </p>
-                {% endif %}
-
-                {% if course.format_prices %}
-                    <strong>{% trans "Costs" %}</strong>
-                    <br/>
-                    <p>{{ course.format_prices|default:"-" }}</p>
-                {% endif %}
-
-                <strong>{% trans "Time" %}</strong>
-                <br/>
-                {% include "courses/snippets/lessons.html" with course=course display_link=True only %}
+                {% include "courses/snippets/course_info.html" %}
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
-                {% if course.type.styles.all %}
-                    <h4>{% trans "Styles" %}</h4>
-                    <p>{% include "courses/snippets/styles.html" with type=course.type only %}</p>
-                {% endif %}
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                {% with desc=course.format_description|safe %}
-                    {% if desc %}
-                        <h4>{% trans "Description" %}</h4>
-                        <p>{{ desc }}</p>
-                    {% endif %}
-                {% endwith %}
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                {% include "courses/snippets/course_description.html" %}
             </div>
         </div>
     </div>

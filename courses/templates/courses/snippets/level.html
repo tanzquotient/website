@@ -1,13 +1,14 @@
-<em>
+{% load i18n %}
+<span>
     {% if level %}
         {% if level <= 1 %}
-            Anfängerkurs
+            {% trans "Beginner" %}
         {% elif level <= 3 %}
-            Mittleres Niveau
+            {% trans "Intermediate" %}
         {% else %}
-            Fortgeschrittenes Niveau
+           {% trans "Advanced" %}
         {% endif %}
     {% else %}
-        alle Niveaus
+        {% trans "All levels" %}
     {% endif %}
-</em>
+</span>

@@ -378,3 +378,21 @@ img.pull-left {
 .alert-empty {
     background-color: transparent;
 }
+
+.list-group-item {
+    overflow: hidden;
+}
+
+.banner {
+    position: absolute;
+    top: 15px;
+    right: -75px;
+    width: 200px;
+    background-color: #c51718;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 8pt;
+    padding: 2px;
+    transform: rotate(45deg);
+}

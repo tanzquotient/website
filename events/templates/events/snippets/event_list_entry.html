@@ -6,28 +6,24 @@
 
 {% with event_id=event.id|stringformat:"s" %}
     {% with modal_id="modal_event_xs-"|add:event_id %}
-        <a href="#" data-toggle="modal" data-target="#{{ modal_id }}"
-           class="list-group-item {% if event.special %}emphasize{% endif %}">
-            {% if event.image %}
-                <p class="text-center"><img
-                        src="{% thumbnail event.image 320x180 crop upscale subject_location=event.image.subject_location %}"
-                        alt=""/></p>
+        <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item">
+            {% if event.special %}
+                <span class="banner">
+                        <i class="fa fa-star fa-lg"></i> {% trans "Special" %}
+                    </span>
             {% endif %}
-            <h4 class="list-group-item-heading">
-                {% if event.special %}
-                    <i class="fa fa-hand-o-right fa-lg"></i>
+            <strong class="list-group-item-heading">
+                {{ event.name }}
+            </strong>
+            <div>{{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}- {{ event.time_to|date:'H:i' }}</div>
+            <div>{{ event.room }}</div>
+            <div>
+                {% if event.price %}
+                    {% trans "Costs" %}: {{ event.price }}
+                {% else %}
+                    {% trans "Free of charge" %}
                 {% endif %}
-                {{ event.get_name }}
-                <br/>
-                <small> {{ event.date }}</small>
-            </h4>
-            <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
-                {{ event.room|default:venue_not_yet_set }}</p>
-
-            <p class="list-group-item-text">{{ event.format_prices|default:no_entry_fee }}</p>
-            {% if event.format_organisators %}
-                <p class="list-group-item-text">{% trans "Organized by" %} {{ event.format_organisators }}</p>
-            {% endif %}
+            </div>
         </a>
         {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
     {% endwith %}

@@ -1,0 +1,37 @@
+{% load i18n %}
+<div>
+
+
+    <strong>{% trans "Level" %}</strong>
+    <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
+
+    {% if course.type.styles.all %}
+        <strong>{% trans "Styles" %}</strong>
+        {% include "courses/snippets/styles.html" with type=course.type disable_modals=disable_modals only %}
+    {% endif %}
+
+    <strong>{% trans "Teachers" %}</strong>
+    <br/>
+    <p>
+        {% include "courses/snippets/course_teachers.html" with display_link=True disable_modals=disable_modals teachings=course.teaching.all only %}
+    </p>
+
+
+    {% if course.room %}
+        <strong>{% trans "Raum" %}</strong>
+        <br/>
+        <p>
+            {% include "courses/snippets/room.html" with display_link=True disable_modals=disable_modals room=course.room only %}
+        </p>
+    {% endif %}
+
+    {% if course.format_prices %}
+        <strong>{% trans "Costs" %}</strong>
+        <br/>
+        <p>{{ course.format_prices|default:"-" }}</p>
+    {% endif %}
+
+    <strong>{% trans "Time" %}</strong>
+    <br/>
+    {% include "courses/snippets/lessons.html" with course=course display_link=True disable_modals=disable_modals only %}
+</div>
