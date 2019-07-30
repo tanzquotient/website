@@ -232,7 +232,7 @@ class Course(TranslatableModel):
 
     def is_displayed(self, preview=False):
         if self.offering is None:
-            return False
+            return self.display
         else:
             return preview or (self.offering.display and self.display)  # both must be true to be displayed
 
