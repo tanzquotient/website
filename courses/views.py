@@ -145,7 +145,7 @@ def subscription(request, course_id):
 
     # if there is no course with this id --> redirect user to course list
     if len(course) == 0:
-        return redirect('courses:course_list')
+        return redirect('courses:list')
     # the course id must be unique; this is a consistency check
     assert len(course) == 1
     course = course[0]
