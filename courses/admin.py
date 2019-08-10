@@ -292,9 +292,14 @@ class StyleAdmin(TranslatableAdmin):
     inlines = (SongInline,)
 
 
+class AddressInline(admin.TabularInline):
+    model = Address
+
+
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
-    pass
+    list_display = ('name', 'address')
+    inlines = (AddressInline,)
 
 
 @admin.register(Voucher)
