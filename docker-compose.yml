@@ -12,6 +12,17 @@ services:
       - "${TQ_DB_PORT}:3306"
     restart: always
 
+  # Database
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${TQ_DB_USER}
+      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
+      POSTGRES_DB: tq_website
+    ports:
+      - 5432:5432
+    restart: always
+
   # Cache
   redis:
     image: redis:3.2-alpine
