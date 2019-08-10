@@ -18,8 +18,8 @@
             <div>{{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}- {{ event.time_to|date:'H:i' }}</div>
             <div>{{ event.room }}</div>
             <div>
-                {% if event.price %}
-                    {% trans "Costs" %}: {{ event.price }}
+                {% if event.format_prices %}
+                    {% trans "Costs" %}: {{ event.format_prices }}
                 {% else %}
                     {% trans "Free of charge" %}
                 {% endif %}

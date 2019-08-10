@@ -65,7 +65,7 @@ class Event(TranslatableModel):
     format_organisators.short_description = "Organisators"
 
     def format_prices(self):
-        return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
+        return format_prices(self.price_with_legi, self.price_without_legi, self.get_price_special())
 
     format_prices.short_description = "Prices"
 
@@ -82,6 +82,9 @@ class Event(TranslatableModel):
 
     def get_description(self):
         return TranslationUtils.get_text_with_language_fallback(self, 'description')
+
+    def get_price_special(self):
+        return TranslationUtils.get_text_with_language_fallback(self, 'price_special')
 
     format_time.short_description = "Time"
 
