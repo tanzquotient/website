@@ -1,0 +1,55 @@
+version: '2'
+services:
+
+  # Database (MySQL)
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: tq_website
+    ports:
+      - "${TQ_DB_PORT}:3306"
+    restart: always
+
+  # Database
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${TQ_DB_USER}
+      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
+      POSTGRES_DB: tq_website
+    ports:
+      - 5432:5432
+    restart: always
+
+  # Cache
+  redis:
+    image: redis:3.2-alpine
+    restart: always
+
+  # Django (serving with gunicorn)
+  django:
+    build:
+      context: .
+      dockerfile: configurations/dockerfile-new
+    image: tq_website_django # give this built image a name to use it below
+    env_file:
+      - .env
+    user: root
+    volumes:
+      - .:/webapps/tq_website:Z
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "${TQ_DJANGO_PORT}:8000"
+    links:
+      - db
+      - redis
+    restart: always
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+          gateway: 172.18.0.1
