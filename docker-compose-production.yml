@@ -8,6 +8,8 @@ services:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
       MYSQL_DATABASE: tq_website
+    volumes:
+      - "../data-mysql:/var/lib/mysql"
     ports:
       - "${TQ_DB_PORT}:3306"
     restart: always
@@ -75,7 +77,7 @@ services:
     working_dir: /webapps/tq_website
     volumes:
       - .:/webapps/tq_website
-    command: celery -A tq_website beat -l info -S django
+    command: celery -A tq_website beat -l info --pidfile="/tmp/celerybeat.pid" -S django
     links:
       - db
       - redis
