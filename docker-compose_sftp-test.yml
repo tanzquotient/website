@@ -1,9 +1,0 @@
-version: '2'
-services:
-  sftp:
-    image: atmoz/sftp
-    volumes:
-        - ./payment/sftp-test:/home/foo
-    ports:
-        - "2222:22"
-    command: foo:test:1001
