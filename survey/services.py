@@ -115,7 +115,6 @@ import zipfile
 from io import BytesIO
 
 import openpyxl
-from openpyxl.cell import get_column_letter
 
 
 # exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
@@ -140,8 +139,6 @@ def export_surveys(surveys):
             font = c.font.copy()
             font.bold = True
             c.font = font
-            # set column width
-            ws.column_dimensions[get_column_letter(col_num + 1)].width = 50
 
         for inst in instances:
             # only take the newest answer for all questions

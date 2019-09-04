@@ -1,13 +1,13 @@
 from io import BytesIO
 
-import unicodecsv
+import csv
 from django.http import HttpResponse
 
 from . import export_zip, clean_filename
 
 
 def write_csv(data, file):
-    writer = unicodecsv.writer(file)
+    writer = csv.writer(file)
     for row in data:
         writer.writerow(row)
 

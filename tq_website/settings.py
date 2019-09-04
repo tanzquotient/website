@@ -58,7 +58,6 @@ INSTALLED_APPS += [
     'cmsplugin_filer_link',
     'cmsplugin_filer_image',
     'cms',  # django CMS itself
-    'mptt',  # utilities for implementing a tree
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
     'djangocms_admin_style',
@@ -76,7 +75,6 @@ INSTALLED_APPS += [
     'django_celery_results',
     'djcelery_email',
     'post_office',
-    'absolute',
     'daterange_filter',
     'guardian',
     'allauth',

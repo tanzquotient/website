@@ -9,6 +9,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
+import courses.urls
 import courses.views as courses_views
 import events.urls
 import payment.urls
@@ -46,7 +47,6 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^password/$', courses_views.change_password, name='change_password'),
@@ -55,6 +55,7 @@ urlpatterns += i18n_patterns(
     url(r'^profile/$', courses_views.user_profile, name='profile'),
     url(r'^survey/', include(survey.urls, namespace='survey')),
     url(r'^events/', include(events.urls, namespace='events')),
+    url(r'^courses/', include(courses.urls, namespace='courses')),
     url(r'^', include(payment.urls, namespace='payment')),
     url(r'^', include(cms.urls))
 )
