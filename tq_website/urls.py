@@ -55,7 +55,6 @@ urlpatterns += i18n_patterns(
     url(r'^profile/$', courses_views.user_profile, name='profile'),
     url(r'^survey/', include(survey.urls, namespace='survey')),
     url(r'^events/', include(events.urls, namespace='events')),
-    url(r'^courses/', include(courses.urls, namespace='courses')),
     url(r'^', include(payment.urls, namespace='payment')),
     url(r'^', include(cms.urls))
 )
