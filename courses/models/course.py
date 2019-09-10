@@ -343,14 +343,14 @@ class Course(TranslatableModel):
     def get_first_regular_lesson_date(self):
         lesson = self.get_first_regular_lesson()
         period = self.get_period()
-        if lesson and period:
+        if lesson and period and period.date_from:
             return Course.next_weekday(period.date_from, lesson.get_weekday_number())
         else:
             return None
 
     def get_last_regular_lesson_date(self):
         period = self.get_period()
-        if self.regular_lessons.exists() and period:
+        if self.regular_lessons.exists() and period and period.date_to:
             course_weekdays = [Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()]
 
             # Find last course day before date_to

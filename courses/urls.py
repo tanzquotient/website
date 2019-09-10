@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^detail/(?P<course_id>\d+)/subscription/$', views.subscription_do, name='subscription_do'),
     url(r'^detail/(?P<course_id>\d+)/subscription_message/$', views.subscription_message,
         name='subscription_message'),
+    url(r'^offering/(?P<offering_id>\d+)/$', views.offering_by_id, name='offering_by_id'),
     url(r'^auth/$', views.subscription_overview,
         name='subscription_overview'),
     url(r'^auth/export/excel$', views.export_summary_excel, name='export_summary_excel'),

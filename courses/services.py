@@ -6,10 +6,12 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.http import Http404
+from django.utils import dateformat
 from django.utils.translation import ugettext as _
 
 import courses.models as models
-from courses.models import Offering, OfferingType, Course
+from courses.models import Offering, OfferingType, Course, Weekday
 from courses.utils import export
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
@@ -37,8 +39,76 @@ def get_offerings_to_display(request=None, force_preview=False, only_regular_off
     return queryset.order_by('period__date_from')
 
 
-def get_upcoming_courses_without_offering():
+def get_historic_offerings(offering_type=None):
 
+    queryset = Offering.objects.all()
+    if offering_type:
+        queryset = Offering.objects.filter(type=offering_type)
+
+    offerings = [o for o in queryset if o.is_historic() and o.has_date_from()]
+    offerings_dict = {}
+
+    for offering in offerings:
+        year = offering.get_start_year()
+        if year not in offerings_dict:
+            offerings_dict[year] = []
+        offerings_dict[year].append(offering)
+
+    return sorted([(k, v) for k, v in offerings_dict.items()], key=lambda t: t[0], reverse=True)
+
+
+
+def get_sections(offering, course_filter=None):
+    offering_sections = []
+    course_set = offering.course_set
+
+    if not course_filter:
+        course_filter = lambda c: True
+
+    if offering.type == OfferingType.REGULAR:
+        for (w, w_name) in Weekday.CHOICES:
+            courses_on_weekday = [c for c in course_set.weekday(w) if course_filter(c)]
+            if courses_on_weekday:
+                offering_sections.append({
+                    'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
+                    'courses': courses_on_weekday
+                })
+
+        courses_without_weekday = [c for c in course_set.weekday(None) if course_filter(c)]
+        if courses_without_weekday:
+            offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
+
+    elif offering.type == OfferingType.IRREGULAR:
+        courses_by_month = course_set.by_month()
+        for (d, courses) in courses_by_month:
+            if d is None:
+                section_title = _("Unknown month")
+            elif 1 < d.month < 12:
+                # use the django formatter for date objects
+                section_title = dateformat.format(d, 'F Y')
+            else:
+                section_title = ""
+            # filter out undisplayed courses if not staff user
+            courses = [c for c in courses if course_filter(c)]
+            # tracks if at least one period of a course is set (it should be displayed on page)
+            deviating_period = False
+            for c in courses:
+                if c.period:
+                    deviating_period = True
+                    break
+
+            if courses:
+                offering_sections.append(
+                    {'section_title': section_title, 'courses': courses, 'hide_period_column': not deviating_period})
+    else:
+        message = "unsupported offering type"
+        log.error(message)
+        raise Http404(message)
+
+    return offering_sections
+
+
+def get_upcoming_courses_without_offering():
     courses = Course.objects.filter(
         display=True, offering__isnull=True
     )

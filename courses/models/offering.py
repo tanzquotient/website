@@ -15,9 +15,23 @@ class Offering(models.Model):
     display.help_text = 'Defines if the courses in this offering should be displayed on the Website.'
     active = models.BooleanField(default=False)
     active.help_text = 'Defines if clients can subscribe to courses in this offering.'
+    preview = models.BooleanField(default=False)
+    preview.help_text = 'Defines if the offering should be displayed as preview'
 
     def is_preview(self):
-        return not self.display
+        return self.preview
+
+    def is_historic(self):
+        return not self.active and not self.is_preview() and not self.display
+
+    def has_date_from(self):
+        return self.get_start_year() is not None
+
+    def get_start_year(self):
+        try:
+            return self.period.date_from.year
+        except:
+            return None
 
     def __str__(self):
         return '{}'.format(self.name)

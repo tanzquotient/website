@@ -1,0 +1,22 @@
+{% extends "template_basic.html" %}
+{% load i18n %}
+
+{% block title %}
+    {{ offering.name }}
+{% endblock title%}
+
+{% block lead %}
+    <header id="header_courses">
+        <div class="container">
+            <div class="row">
+                <h1 class="lead">{{ offering.name }}</h1>
+            </div>
+        </div>
+    </header>
+{% endblock lead %}
+
+{% block main_content %}
+    <div class="container">
+        {% include "courses/snippets/offering.html" with offering=offering sections=sections hide_subscribtion=True only %}
+    </div>
+{% endblock main_content %}

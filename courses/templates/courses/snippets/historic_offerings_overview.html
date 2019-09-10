@@ -1,0 +1,39 @@
+{% load i18n %}
+
+{% if offerings.regular or offerings.irregular %}
+    <h2>{% trans "Past courses" %}</h2>
+    {% if offerings.regular %}
+        <h3>{% trans "Regular offerings" %}</h3>
+        {% spaceless %}
+            {% for year, offerings in offerings.regular %}
+                <p>
+                    <strong>{{ year }}</strong>
+                    <br/>
+                    {% for offering in offerings %}
+                        <a href="{% url 'courses:offering_by_id' offering.id %}">{{ offering.name }}</a>
+                        {% if not forloop.last %}
+                            <span>,&nbsp;</span>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endfor %}
+        {% endspaceless %}
+    {% endif %}
+    {% if offerings.regular %}
+        <h3>{% trans "Workshops and other irregular offerings" %}</h3>
+        {% spaceless %}
+            {% for year, offerings in offerings.irregular %}
+                <p>
+                    <strong>{{ year }}</strong>
+                    <br/>
+                    {% for offering in offerings %}
+                        <a href="{% url 'courses:offering_by_id' offering.id %}">{{ offering.name }}</a>
+                        {% if not forloop.last %}
+                            <span>,&nbsp;</span>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endfor %}
+        {% endspaceless %}
+    {% endif %}
+{% endif %}

@@ -20,7 +20,9 @@
                         <th>{% trans "Location" %}</th>
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Costs" %}</th>
-                        <th>{% trans "Subscribe / Free places" %}</th>
+                        {% if not hide_subscribtion %}
+                            <th>{% trans "Subscribe / Free places" %}</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -40,9 +42,11 @@
                             </td>
                             <td>{% include "courses/snippets/lessons.html" with course=c display_link=False only %}</td>
                             <td>{{ c.format_prices|default:"-" }}</td>
-                            <td>
-                                {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
-                            </td>
+                            {% if not hide_subscribtion %}
+                                <td>
+                                    {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
+                                </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -67,11 +71,14 @@
                             <h4 class="list-group-item-heading">
                                 {{ c.type.name }}
                             </h4>
+                            {% if not hide_subscribtion %}
+                                <p class="list-group-item-text">
+                                    {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
+                                </p>
+                            {% endif %}
                             <p class="list-group-item-text">
-                                {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
+                                <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong>
                             </p>
-                            <p class="list-group-item-text">
-                                <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong></p>
                             <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
                             {% if c.format_prices %}
                                 <p class="list-group-item-text">{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</p>
