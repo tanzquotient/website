@@ -53,7 +53,7 @@
                 </a>
             </p>
         {% endif %}
-    {% else %}
+    {% elif course.is_regular %}
         <em>{% trans "Registration closed" %}</em>
     {% endif %}
 {% endwith %}
