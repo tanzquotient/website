@@ -20,7 +20,7 @@
     <div class="container">
         <a id="subscription"></a>
         <p>{% include "courses/snippets/detail.html" with course=course user=user only %}</p>
-        {% if course.is_subscription_allowed %}
+        {% if course.is_subscription_allowed and course.has_free_places %}
             {% if not user.is_authenticated or course not in user.profile.get_subscribed_courses %}
                 <div class="panel panel-success">
                     <div class="panel-heading">

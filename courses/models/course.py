@@ -156,6 +156,13 @@ class Course(TranslatableModel):
         else:
             return None
 
+    def has_free_places(self):
+        counts = self.get_free_places_count()
+        if counts is not None:
+            return counts['total'] > 0 or counts['man'] > 0 or counts['woman'] > 0
+        else:
+            return True
+
     def get_free_places_count(self):
         """ Creates a dict with the free places totally and for men/women separately """
         if self.max_subscribers is not None:
