@@ -265,7 +265,7 @@ class Course(TranslatableModel):
         last_date = self.get_last_lesson_date()
         if last_date:
             return last_date < datetime.date.today()
-        if self.get_period():
+        if self.get_period() and self.get_period().date_to is not None:
             return self.get_period().date_to < datetime.date.today()
         return False
 
