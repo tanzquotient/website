@@ -320,7 +320,7 @@ def correct_matching_state_to_couple(subscriptions, request=None):
         if partner_subs.count() == 1:
             partner_sub = partner_subs.first()
             # because we update matching state iteratively, we have to allow also COUPLE State
-            allowed_states = [models.MatchingState.MATCHED, models.Subscribe.COUPLE]
+            allowed_states = [models.MatchingState.MATCHED, models.MatchingState.COUPLE]
             if s.matching_state == models.MatchingState.MATCHED and partner_sub.matching_state in allowed_states:
                 s.matching_state = models.MatchingState.COUPLE
                 s.save()
