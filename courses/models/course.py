@@ -441,6 +441,7 @@ class Course(TranslatableModel):
         # copy regular lessons
         for lesson in old.regular_lessons.all():
             lesson.pk = None
+            lesson.exceptions = None
             lesson.course = self
             lesson.save()
 
@@ -449,12 +450,6 @@ class Course(TranslatableModel):
             lesson.pk = None
             lesson.course = self
             lesson.save()
-
-        # copy cancellations
-        for c in old.cancellations.all():
-            c.pk = None
-            c.course = self
-            c.save()
 
         # copy teachers
         for teach in old.teaching.all():
