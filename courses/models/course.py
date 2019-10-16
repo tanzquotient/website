@@ -441,7 +441,6 @@ class Course(TranslatableModel):
         # copy regular lessons
         for lesson in old.regular_lessons.all():
             lesson.pk = None
-            lesson.exceptions = None
             lesson.course = self
             lesson.save()
 
