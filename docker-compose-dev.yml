@@ -9,6 +9,7 @@ services:
   # Database (MySQL)
   db:
     image: mysql:8
+    container_name: db-mysql
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
