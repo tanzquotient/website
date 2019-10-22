@@ -28,7 +28,7 @@ services:
 #      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
 #      POSTGRES_DB: tq_website
 #    ports:
-#     - 5433:5432
+#     - 5432:5432
 #   restart: always
 
   # Cache
