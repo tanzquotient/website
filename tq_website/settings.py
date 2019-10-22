@@ -519,7 +519,7 @@ SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", 'test@example.com'),
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ.get("TQ_DB_HOST", 'db-mysql'),
+        'HOST': os.environ.get("TQ_DB_HOST", 'tq-db-mysql'),
         'PORT': os.environ.get("TQ_DB_PORT", '3306'),
         'NAME': 'tq_website',
         'USER': os.environ.get("TQ_DB_USER", ''),

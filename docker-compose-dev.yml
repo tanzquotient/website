@@ -9,7 +9,7 @@ services:
   # Database (MySQL)
   db:
     image: mysql:8
-    container_name: db-mysql
+    container_name: tq-db-mysql
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
@@ -34,11 +34,13 @@ services:
 
   # Cache
   redis:
+    container_name: tq-db-redis
     image: redis:3.2-alpine
     restart: always
 
   # Django (serving with debug webserver)
   django:
+    container_name: tq-db-django
     build:
       context: .
       dockerfile: configurations/dockerfile-new
