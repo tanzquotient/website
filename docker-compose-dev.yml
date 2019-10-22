@@ -1,6 +1,11 @@
 version: '2'
-services:
 
+# This Compose file can be used in a development environment.
+#
+# Run this: docker-compose -f docker-compose-dev.yml down && docker-compose -f docker-compose-dev.yml up -d --build
+# Restore DB dump: docker exec -i tq_website_db_1 mysql -u root -p"ROOTPASSWORD" tq_website < dump.sql
+
+services:
   # Database (MySQL)
   db:
     image: mysql:8
@@ -8,27 +13,30 @@ services:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
       MYSQL_DATABASE: tq_website
+    command: [--default-authentication-plugin=mysql_native_password]
+    volumes:
+      - "db-volume:/var/lib/mysql"
     ports:
       - "${TQ_DB_PORT}:3306"
     restart: always
 
-  # Database
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_USER: ${TQ_DB_USER}
-      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
-      POSTGRES_DB: tq_website
-    ports:
-      - 5432:5432
-    restart: always
+  # Database (Postgres, in the future maybe)
+#  postgres:
+#    image: postgres
+#    environment:
+#      POSTGRES_USER: ${TQ_DB_USER}
+#      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
+#      POSTGRES_DB: tq_website
+#    ports:
+#     - 5433:5432
+#   restart: always
 
   # Cache
   redis:
     image: redis:3.2-alpine
     restart: always
 
-  # Django (serving with gunicorn)
+  # Django (serving with debug webserver)
   django:
     build:
       context: .
@@ -46,10 +54,8 @@ services:
       - db
       - redis
     restart: always
+    depends_on:
+      - db
 
-networks:
-  default:
-    ipam:
-      config:
-        - subnet: 172.18.0.0/24
-          gateway: 172.18.0.1
+volumes:
+  db-volume: # Let Docker generate a place for this, doesn't matter for development

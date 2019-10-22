@@ -520,6 +520,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': os.environ.get("TQ_DB_HOST", 'db'),
+        'PORT': os.environ.get("TQ_DB_PORT", '3306'),
         'NAME': 'tq_website',
         'USER': os.environ.get("TQ_DB_USER", ''),
         'PASSWORD': os.environ.get("TQ_DB_PASSWORD", ''),
