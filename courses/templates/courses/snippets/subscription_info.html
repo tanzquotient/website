@@ -12,7 +12,6 @@
         {% endif %}
     {% endif %}
     {% if course.is_subscription_allowed %}
-
         <div class="subscription_info">
             {% if course.type.couple_course %}
                 {% if count %}
@@ -53,7 +52,9 @@
                 </a>
             </p>
         {% endif %}
-    {% elif course.is_regular %}
+    {% elif course.subscription_opens_soon %}
+        <em>{% trans "Registration opens soon" %}</em>
+    {% elif course.subscription_closed %}
         <em>{% trans "Registration closed" %}</em>
     {% endif %}
 {% endwith %}

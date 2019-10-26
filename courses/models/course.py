@@ -252,14 +252,23 @@ class Course(TranslatableModel):
     def is_regular(self):
         return self.subscription_type == CourseSubscriptionType.REGULAR
 
+    def subscription_opens_soon(self):
+        if self.get_period() is None:
+            return False
+
+        return self.subscription_closed() and self.get_period().date_from > datetime.date.today()
+
+    def subscription_closed(self):
+        return self.is_regular() and not self.is_subscription_allowed()
+
     def is_subscription_allowed(self):
         if not self.is_regular():
             return False
-        else:
-            if self.offering is None:
-                return self.active
-            else:
-                return self.offering.active and self.active  # both must be true to allow subscription
+
+        if self.offering is None:
+            return self.active
+
+        return self.offering.active and self.active  # both must be true to allow subscription
 
     def is_over(self):
         last_date = self.get_last_lesson_date()

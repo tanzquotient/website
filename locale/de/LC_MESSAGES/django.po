@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-10 17:58+0000\n"
+"POT-Creation-Date: 2019-10-26 15:08+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -586,10 +586,18 @@ msgstr "Externes Partnerangebot"
 msgid "Subscribed"
 msgstr "Angemeldet"
 
-#: courses/templates/courses/snippets/subscription_info.html:50
+#: courses/templates/courses/snippets/subscription_info.html:52
 #: courses/templates/courses/subscription.html:92
 msgid "Subscribe"
 msgstr "Anmelden"
+
+#: courses/templates/courses/snippets/subscription_info.html:57
+msgid "Registration opens soon"
+msgstr ""
+
+#: courses/templates/courses/snippets/subscription_info.html:59
+msgid "Registration closed"
+msgstr ""
 
 #: courses/templates/courses/snippets/subscription_info_overbooked.html:3
 msgid "Ausgebucht:"
