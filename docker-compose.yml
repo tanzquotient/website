@@ -3,7 +3,7 @@ services:
 
   # Database (MySQL)
   db:
-    container_name: tq-db-mysql
+    container_name: tq-mysql
     image: mysql:8
     environment:
       MYSQL_ROOT_USER: root
@@ -18,7 +18,7 @@ services:
   # Database
 #  postgres:
 #    image: postgres
-#    container_name: tq-db-postgres
+#    container_name: tq-postgres
 #    environment:
 #      POSTGRES_USER: ${TQ_DB_USER}
 #      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
@@ -29,7 +29,7 @@ services:
 
   # Django (serving with gunicorn)
   django:
-    container_name: tq-db-django
+    container_name: tq-django
     build:
       context: .
       dockerfile: configurations/dockerfile-new
@@ -47,7 +47,7 @@ services:
 
   # Webserver
   nginx:
-    container_name: tq-db-nginx
+    container_name: tq-nginx
     image: nginx:mainline-alpine
     volumes:
       - ./configurations/nginx-ssl.conf:/etc/nginx/conf.d/tq_website.template
@@ -68,13 +68,13 @@ services:
 
   # Cache and message broker for celery (handles background tasks)
   redis:
-    container_name: tq-db-redis
+    container_name: tq-redis
     image: redis:3.2-alpine
     restart: always
 
   # Celery Beat
   beat:
-    container_name: tq-db-beat
+    container_name: tq-beat
     image: tq_website_django
     env_file:
       - .env
@@ -90,7 +90,7 @@ services:
     restart: always
 
   worker:
-    container_name: tq-db-worker
+    container_name: tq-worker
     depends_on:
       - django # ensure the image is built before running this container
     image: tq_website_django
