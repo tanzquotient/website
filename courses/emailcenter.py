@@ -15,7 +15,6 @@ def send_subscription_confirmation(subscription):
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
-        'offering': subscription.course.offering.name,
         'course_info': create_course_info(subscription.course),
     }
 
@@ -42,7 +41,6 @@ def _build_subscription_context(subscription):
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
-        'offering': subscription.course.offering.name,
         'course_info': create_course_info(subscription.course),
         'usi': payment_processor.USI_PREFIX + subscription.usi,
         'account_IBAN': conf['IBAN'],
@@ -75,7 +73,6 @@ def send_online_payment_successful(subscription):
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
-        'offering': subscription.course.offering.name,
     }
 
     template = 'online_payment_successful'
@@ -104,7 +101,6 @@ def send_rejection(subscription, reason):
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
         'course': subscription.course.type.name,
-        'offering': subscription.course.offering.name,
     }
 
     template = 'rejection_{}'.format(reason)
@@ -129,7 +125,6 @@ def send_teacher_welcome(teach):
         'last_name': teacher.last_name,
         'course': course.type.name,
         'course_internal_name': course.name,
-        'offering': course.offering.name,
         'course_info': create_course_info(course),
         'room_url': room_url,
         'room_info': course.room.description,
