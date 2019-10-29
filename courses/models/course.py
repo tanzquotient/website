@@ -389,13 +389,13 @@ class Course(TranslatableModel):
         d1 = self.get_first_irregular_lesson_date()
         d2 = self.get_first_regular_lesson_date()
         if d1 is None and d2 is None:
-            return None
+            return datetime.date.min
         if d1 is None:
-            return d2.day
+            return d2
         if d2 is None:
             return d1
 
-        return d1 if d1 < d2.day else d2.day
+        return d1 if d1 < d2 else d2
 
     def get_last_lesson_date(self):
         d1 = self.get_last_irregular_lesson_date()
