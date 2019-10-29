@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, date
+from datetime import datetime
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -8,12 +8,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sessions.exceptions import SuspiciousSession
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import dateformat
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext as _
 from django.utils.html import escape
+from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
@@ -53,7 +51,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
     # Courses without offering -> create fake offering
     courses_without_offering = list(filter(matches_filter, services.get_upcoming_courses_without_offering()))
     if courses_without_offering:
-        courses_without_offering.sort(key=lambda c: c.get_first_lesson_date() or date.min)
+        courses_without_offering.sort(key=lambda c: c.get_first_lesson_date() or datetime.min)
 
         c_offerings.insert(0, {
             'offering': {
