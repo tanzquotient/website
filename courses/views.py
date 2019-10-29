@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -53,7 +53,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
     # Courses without offering -> create fake offering
     courses_without_offering = list(filter(matches_filter, services.get_upcoming_courses_without_offering()))
     if courses_without_offering:
-        courses_without_offering.sort(key=lambda c: c.get_first_lesson_date() or datetime.min)
+        courses_without_offering.sort(key=lambda c: c.get_first_lesson_date() or date.min)
 
         c_offerings.insert(0, {
             'offering': {
