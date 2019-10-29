@@ -387,7 +387,7 @@ class Course(TranslatableModel):
 
     def get_first_lesson_date(self):
         d1 = self.get_first_irregular_lesson_date()
-        d2 = self.get_first_regular_lesson_date()
+        d2 = self.get_first_regular_lesson_date().day
         if d1 is None:
             return d2
         if d2 is None:
