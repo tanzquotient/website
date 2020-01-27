@@ -27,7 +27,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: configurations/dockerfile-new
+      dockerfile: configurations/dockerfile
     image: tq_website_django # give this built image a name to use it below
     env_file:
       - .env
