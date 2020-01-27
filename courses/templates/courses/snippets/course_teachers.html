@@ -11,7 +11,7 @@
             &amp;
         {% endif %}
     {% endfor %}
-    {% if display_link %}
+    {% if display_link and not disable_modals %}
         {% for teaching in teachings %}
             {% include "courses/snippets/user_modal.html" with user=teaching.teacher only %}
         {% endfor %}
