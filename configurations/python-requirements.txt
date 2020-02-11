@@ -1,5 +1,5 @@
 celery==4.4.0
-Django==1.11.27
+Django==1.11.28
 django-absolute==0.3
 django-analytical==2.5.0
 django-celery-email==2.0.2
