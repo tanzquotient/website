@@ -24,7 +24,9 @@
                                     <h4>
                                         {% trans "Teacher" %}
                                     </h4>
-                                    <p>{% trans "Teaching for TQ since" %}: {{ user.profile.teaching_since.year }}</p>
+                                    {% if  user.profile.teaching_since %}
+                                        <p>{% trans "Teaching for TQ since" %}: {{ user.profile.teaching_since.year }}</p>
+                                    {% endif %}
                                     <p>{% trans "Courses thaught for TQ" %}: {{ user.profile.teacher_courses_count }}</p>
                                 {% endif %}
                                 {% if user.profile.is_board_member %}
