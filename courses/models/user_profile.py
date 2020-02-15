@@ -3,6 +3,7 @@ import pytz
 from datetime import datetime, date
 from django.conf import settings
 from django.db import models
+from django.db.models import CASCADE
 from django_countries.fields import CountryField
 from djangocms_text_ckeditor.fields import HTMLField
 
@@ -11,7 +12,7 @@ from . import Address, BankAccount, Gender, StudentStatus, Residence
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile', on_delete=CASCADE)
     user.help_text = "The user which is matched to this user profile."
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
