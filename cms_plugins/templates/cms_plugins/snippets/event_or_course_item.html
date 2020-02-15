@@ -10,7 +10,13 @@
         {{ item.name }}
     </strong>
     <div>{{ item.date|date:'D, d. N Y' }}, {{ item.time_from|date:'H:i' }}- {{ item.time_to|date:'H:i' }}</div>
-    <div>{{ item.room }}</div>
+    <div>
+        {% if item.room %}
+            {{ item.room }}
+        {% else %}
+            {% trans "Venue not yet set" %}
+        {% endif %}
+    </div>
     <div>
         {% if item.price %}
             {% trans "Costs" %}: {{ item.price }}
