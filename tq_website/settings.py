@@ -230,8 +230,7 @@ toolbar = [
     ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
     ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
     ['HorizontalRule'],
-    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Table', ],
-    # ['Scayt'], # needs further investigation
+    ['NumberedList', 'BulletedList', 'Blockquote', '-', 'Outdent', 'Indent', '-', 'Table', 'Link', 'Unlink'],
 ]
 
 # useful documentation about CKEditor:
@@ -245,7 +244,7 @@ CKEDITOR_SETTINGS = {
     'language': 'en',
     'toolbar_CMS': toolbar,
     'toolbar_HTMLField': toolbar,
-    'skin': 'moono'
+    'skin': 'moono-lisa'
 }
 
 ###############################
