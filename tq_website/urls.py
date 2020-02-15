@@ -47,7 +47,7 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^password/$', courses_views.change_password, name='change_password'),
     url(r'^profile/dashboard$', courses_views.user_dashboard, name='user_dashboard'),
