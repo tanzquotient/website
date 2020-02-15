@@ -53,10 +53,7 @@ INSTALLED_APPS += [
     'filer',
     'easy_thumbnails',
     'djangocms_googlemap',
-    'djangocms_inherit',
     'djangocms_link',
-    'cmsplugin_filer_link',
-    'cmsplugin_filer_image',
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
@@ -95,13 +92,12 @@ INSTALLED_APPS += [
     'debug_toolbar',
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',

@@ -4,7 +4,6 @@ from django.db import models
 from django.db.models.fields import BooleanField
 from django.utils.translation import ugettext as _
 from djangocms_text_ckeditor.fields import HTMLField
-from filer.fields.image import FilerImageField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -37,7 +36,7 @@ class Event(TranslatableModel):
     special.help_text = "If this is a special event that should be emphasized on the website"
     display = models.BooleanField(default=True)
     display.help_text = "Defines if this event should be displayed on the website."
-    image = FilerImageField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
     image.help_text = "Advertising image for this event."
 
     translations = TranslatedFields(

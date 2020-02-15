@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from post_office import mail, models as post_office_models
 
 import courses.models

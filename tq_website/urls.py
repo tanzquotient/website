@@ -18,7 +18,7 @@ from tq_website import views
 
 urlpatterns = [
     # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # comment out robots or change it when site is finished
-    url(r'^jsi18n/(?P<packages>\S+?)/$', django.views.i18n.javascript_catalog),
+    url(r'^jsi18n/(?P<packages>\S+?)/$', django.views.i18n.JavaScriptCatalog.as_view()),
     url(r'^export/newsletter/$', views.newsletter_list, name="newsletter_list"),
     url(r'^export/no-newsletter/$', views.no_newsletter_list, name="no_newsletter_list"),
     url(r'^export/get-involved-list/$', views.get_involved_list, name="get_involved_list"),
