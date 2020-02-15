@@ -24,4 +24,4 @@ def copy_event(modeladmin, request, queryset):
         event.save()
 
 
-copy_event.short_description = "Create copy of selected events"
+copy_event.short_description = "Create copy of selected events (adding one week)"
