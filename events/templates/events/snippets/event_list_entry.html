@@ -16,8 +16,8 @@
                 {{ event.name }}
             </strong>
             <div>{{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}- {{ event.time_to|date:'H:i' }}</div>
-            {% if item.room %}
-                {{ item.room }}
+            {% if event.room %}
+                {{ event.room }}
             {% else %}
                 {% trans "Venue not yet set" %}
             {% endif %}
