@@ -22,7 +22,7 @@
                         <p>{{ room.address }}</p>
                     {% endif %}
                     {% if room.url %}
-                        <p>{% include "snippets/google_map.html" with url=room.url only %}</p>
+                        <p>{% include "snippets/map_link.html" with url=room.url only %}</p>
                     {% endif %}
                 </div>
                 <div class="modal-footer">

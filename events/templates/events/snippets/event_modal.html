@@ -16,10 +16,14 @@
             <div class="modal-body">
                 <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
                     {% if event.room %}
+                        {% if room.url %}
                             <a href="{{ event.room.url }}" target="_blank">{{ event.room.name }}</a>
                         {% else %}
-                            {% trans "Venue not yet set" %}
-                        {% endif %}</p>
+                            {{ event.room.name }}
+                        {% endif %}
+                    {% else %}
+                        {% trans "Venue not yet set" %}
+                    {% endif %}</p>
 
                 <p class="list-group-item-text">{{ event.format_prices|default:no_entry_fee }}</p>
                 {% if event.format_organisators %}
