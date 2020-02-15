@@ -50,7 +50,7 @@ services:
     user: root
     volumes:
       - .:/webapps/tq_website:Z
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 -Wd manage.py runserver 0.0.0.0:8000
     ports:
       - "${TQ_DJANGO_PORT}:8000"
     links:
