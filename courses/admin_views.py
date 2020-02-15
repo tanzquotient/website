@@ -2,8 +2,8 @@ import datetime
 
 from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.urlresolvers import reverse
-from django.forms.extras.widgets import SelectDateWidget
+from django.urls import reverse
+from django.forms.widgets import SelectDateWidget
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _

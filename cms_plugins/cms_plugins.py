@@ -7,7 +7,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
 from djangocms_link.models import Link
-from filer.fields.image import FilerImageField
 
 from courses.models import IrregularLesson
 from events.models import Event
@@ -60,7 +59,7 @@ class RowPlugin(CMSPluginBase):
 
 
 class ThumbnailPluginModel(CMSPlugin):
-    image = FilerImageField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
     image.help_text = "Image to show thumbnail for."
     crop = models.BooleanField(blank=True, null=False, default=False)
     crop.help_text = "If this thumbnail should be cropped to fit given size."

@@ -4,6 +4,7 @@ from courses import views
 from courses import admin_views
 import courses.api.urls
 
+app_name = 'courses'
 urlpatterns = [
     url(r'^$', views.course_list, name='home'),
     url(r'^list/$', views.course_list, name='list'),
@@ -28,5 +29,5 @@ urlpatterns = [
         name='offering_overview'),
     url(r'^admin/voucher_generate/$', admin_views.voucher_generation_view,
         name='voucher_generation'),
-    url(r'^api/', include(courses.api.urls, namespace='api')),  # nested namespace 'api'
+    url(r'^api/', include(courses.api.urls, namespace='courses_api')),  # nested namespace 'api'
 ]

@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import Http404
 from django.http import HttpResponseRedirect

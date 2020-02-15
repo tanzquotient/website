@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.7-alpine
 MAINTAINER martin.zellner@gmail.com
 
 # make sure to have the latest package index
