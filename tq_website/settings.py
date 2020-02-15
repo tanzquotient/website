@@ -53,10 +53,7 @@ INSTALLED_APPS += [
     'filer',
     'easy_thumbnails',
     'djangocms_googlemap',
-    'djangocms_inherit',
     'djangocms_link',
-    'cmsplugin_filer_link',
-    'cmsplugin_filer_image',
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
@@ -95,13 +92,12 @@ INSTALLED_APPS += [
     'debug_toolbar',
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -110,7 +106,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
-)
+]
 
 AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
@@ -234,8 +230,7 @@ toolbar = [
     ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
     ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
     ['HorizontalRule'],
-    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Table', ],
-    # ['Scayt'], # needs further investigation
+    ['NumberedList', 'BulletedList', 'Blockquote', '-', 'Outdent', 'Indent', '-', 'Table', 'Link', 'Unlink'],
 ]
 
 # useful documentation about CKEditor:
@@ -249,7 +244,7 @@ CKEDITOR_SETTINGS = {
     'language': 'en',
     'toolbar_CMS': toolbar,
     'toolbar_HTMLField': toolbar,
-    'skin': 'moono'
+    'skin': 'moono-lisa'
 }
 
 ###############################
@@ -342,11 +337,6 @@ THUMBNAIL_PROCESSORS = (
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
 )
-
-####################################
-# Configuration of cmsplugin-filer #
-####################################
-TEXT_SAVE_IMAGE_FUNCTION = 'cmsplugin_filer_image.integrations.ckeditor.create_image_plugin'
 
 ##################################################
 # Configuration of post_office plugin und celery #
@@ -482,6 +472,10 @@ LOCALE_PATHS = [
 #################
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-toolbar autopatch my settings!
+# Show toolbar whenever DEBUG is True. Workaround for dynamic IPs in a Docker environment (which would not be in INTERNAL_IPS)
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
+}
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')

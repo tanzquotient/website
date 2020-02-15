@@ -8,6 +8,7 @@ from .api import *
 # router.register(r'user', UserDetail)
 # router.register(r'course', CourseDetail)
 
+app_name = 'courses_api'
 user_urls = [
     url(r'^(?P<pk>\d+)/$', UserDetail.as_view(), name='user-detail'),
 ]
