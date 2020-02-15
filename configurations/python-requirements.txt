@@ -23,9 +23,7 @@ djangocms-link==2.5.0
 djangocms-text-ckeditor==3.8.0
 djangorestframework==3.11.0
 easy-thumbnails==2.7
-gunicorn==20.0.4
 openpyxl==3.0.3
-mysqlclient==1.4.6
 django-bootstrap3==12.0.3
 base36==0.1.1
 PyPDF2==1.26.0
@@ -44,3 +42,10 @@ pylint==2.4.4
 python-dotenv==0.11.0
 sphinx-automodapi==0.12
 pytz==2019.3
+
+# DATABASE
+psycopg2==2.8.4
+mysqlclient==1.4.6
+
+# Connection Django <--> Webserver
+gunicorn==20.0.4

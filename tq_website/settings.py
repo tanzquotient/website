@@ -522,6 +522,14 @@ DATABASES = {
         'NAME': 'tq_website',
         'USER': os.environ.get("TQ_DB_USER", ''),
         'PASSWORD': os.environ.get("TQ_DB_PASSWORD", ''),
+    },
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': os.environ.get("TQ_DB_HOST_POSTGRES", 'tq-postgres'),
+        'PORT': os.environ.get("TQ_DB_PORT_POSTGRES", '5432'),
+        'NAME': 'tq_website',
+        'USER': os.environ.get("TQ_DB_USER_POSTGRES", ''),
+        'PASSWORD': os.environ.get("TQ_DB_PASSWORD_POSTGRES", ''),
     }
 }
 
