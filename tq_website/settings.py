@@ -218,7 +218,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
-toolbar = [
+ckeditor_toolbar_cms = [
     ['Undo', 'Redo'],
     ['cmsplugins', '-', 'ShowBlocks'],
     ['Format', 'Styles'],
@@ -233,6 +233,10 @@ toolbar = [
     ['NumberedList', 'BulletedList', 'Blockquote', '-', 'Outdent', 'Indent', '-', 'Table', 'Link', 'Unlink'],
 ]
 
+# show cms plugins drop down only if used in cms
+ckeditor_toolbar_htmlfield = ckeditor_toolbar_cms[:]
+ckeditor_toolbar_htmlfield[1] = ['ShowBlocks']
+
 # useful documentation about CKEditor:
 # https://docs.ckeditor.com/#!/guide/dev_toolbarconcepts
 # complete list of all available toolbar elements:
@@ -242,8 +246,8 @@ toolbar = [
 CKEDITOR_SETTINGS = {
     'disableNativeSpellChecker': False,
     'language': 'en',
-    'toolbar_CMS': toolbar,
-    'toolbar_HTMLField': toolbar,
+    'toolbar_CMS': ckeditor_toolbar_cms,
+    'toolbar_HTMLField': ckeditor_toolbar_htmlfield,
     'skin': 'moono-lisa'
 }
 
