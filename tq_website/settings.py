@@ -92,7 +92,7 @@ INSTALLED_APPS += [
     'debug_toolbar',
 ]
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -106,7 +106,7 @@ MIDDLEWARE = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
-)
+]
 
 AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
@@ -339,11 +339,6 @@ THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.filters',
 )
 
-####################################
-# Configuration of cmsplugin-filer #
-####################################
-TEXT_SAVE_IMAGE_FUNCTION = 'cmsplugin_filer_image.integrations.ckeditor.create_image_plugin'
-
 ##################################################
 # Configuration of post_office plugin und celery #
 ##################################################
@@ -478,6 +473,10 @@ LOCALE_PATHS = [
 #################
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False  # configure manually and do not let debug-toolbar autopatch my settings!
+# Show toolbar whenever DEBUG is True. Workaround for dynamic IPs in a Docker environment (which would not be in INTERNAL_IPS)
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
+}
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
