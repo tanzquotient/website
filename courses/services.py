@@ -5,13 +5,14 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.http import Http404
 from django.utils import dateformat
 from django.utils.translation import ugettext as _
 
 import courses.models as models
-from courses.models import Offering, OfferingType, Course, Weekday
+from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
+    RegularLessonException
 from courses.utils import export
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
@@ -28,7 +29,7 @@ def get_all_offerings():
 def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False):
     """return offerings that have display flag on and order them by start date in ascending order"""
 
-    queryset = Offering.objects.select_related('period')
+    queryset = Offering.objects.select_related('period').prefetch_related('period__cancellations')
     if only_regular_offerings:
         queryset = queryset.filter(type=OfferingType.REGULAR)
 
@@ -61,7 +62,12 @@ def get_historic_offerings(offering_type=None):
 
 def get_sections(offering, course_filter=None):
     offering_sections = []
-    course_set = offering.course_set.select_related('period', 'type').prefetch_related('regular_lessons', 'irregular_lessons')
+    course_set = offering.course_set.select_related('period', 'type', 'room').prefetch_related(
+        'regular_lessons',
+        Prefetch('irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
+        Prefetch('regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
+        'period__cancellations',
+    )
 
     if not course_filter:
         course_filter = lambda c: True

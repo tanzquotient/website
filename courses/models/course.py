@@ -341,12 +341,12 @@ class Course(TranslatableModel):
 
     def get_first_irregular_lesson(self):
         if self.irregular_lessons.exists():
-            return self.irregular_lessons.order_by('date', 'time_from').all()[0]
+            return self.irregular_lessons.all()[0]
         return None
 
     def get_last_irregular_lesson(self):
         if self.irregular_lessons.exists():
-            return self.irregular_lessons.order_by('-date', '-time_from').all()[0]
+            return self.irregular_lessons.all()[0]
         return None
 
     @staticmethod
@@ -474,7 +474,7 @@ class Course(TranslatableModel):
     position = models.PositiveSmallIntegerField('Position', default=0)
 
     class Meta:
-        ordering = ['position', 'type__name', 'name']
+        ordering = ['position', 'name']
 
     def __str__(self):
         return "{} ({})".format(self.name, self.offering)
