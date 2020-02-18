@@ -16,7 +16,7 @@
             <div class="modal-body">
                 <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
                     {% if event.room %}
-                        {% if room.url %}
+                        {% if event.room.url %}
                             <a href="{{ event.room.url }}" target="_blank">{{ event.room.name }}</a>
                         {% else %}
                             {{ event.room.name }}
