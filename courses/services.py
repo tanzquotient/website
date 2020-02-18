@@ -15,6 +15,7 @@ from courses.models import Offering, OfferingType, Course, Weekday
 from courses.utils import export
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
+from .managers import CourseManager
 
 log = logging.getLogger('tq')
 
@@ -27,7 +28,7 @@ def get_all_offerings():
 def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False):
     """return offerings that have display flag on and order them by start date in ascending order"""
 
-    queryset = Offering.objects
+    queryset = Offering.objects.select_related('period')
     if only_regular_offerings:
         queryset = queryset.filter(type=OfferingType.REGULAR)
 
@@ -60,26 +61,26 @@ def get_historic_offerings(offering_type=None):
 
 def get_sections(offering, course_filter=None):
     offering_sections = []
-    course_set = offering.course_set
+    course_set = offering.course_set.select_related('period', 'type').prefetch_related('regular_lessons', 'irregular_lessons')
 
     if not course_filter:
         course_filter = lambda c: True
 
     if offering.type == OfferingType.REGULAR:
         for (w, w_name) in Weekday.CHOICES:
-            courses_on_weekday = [c for c in course_set.weekday(w) if course_filter(c)]
+            courses_on_weekday = [c for c in CourseManager.weekday(course_set, w) if course_filter(c)]
             if courses_on_weekday:
                 offering_sections.append({
                     'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
                     'courses': courses_on_weekday
                 })
 
-        courses_without_weekday = [c for c in course_set.weekday(None) if course_filter(c)]
+        courses_without_weekday = [c for c in CourseManager.weekday(course_set, None) if course_filter(c)]
         if courses_without_weekday:
             offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
 
     elif offering.type == OfferingType.IRREGULAR:
-        courses_by_month = course_set.by_month()
+        courses_by_month = CourseManager.by_month(course_set)
         for (d, courses) in courses_by_month:
             if d is None:
                 section_title = _("Unknown month")
