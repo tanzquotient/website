@@ -150,26 +150,6 @@ class CourseSuccession(admin.ModelAdmin):
     model = CourseSuccession
 
 
-@admin.register(PlannedCourse)
-class PlannedCourseAdmin(CourseAdmin):
-    list_display = (
-        'name', 'type', 'subscription_type', 'offering', 'period', 'format_lessons', 'format_cancellations', 'room',
-        'format_prices',
-        'format_teachers')
-    list_filter = ()
-    pass
-
-
-@admin.register(CurrentCourse)
-class CurrentCourseAdmin(CourseAdmin):
-    list_display = (
-        'name', 'type', 'subscription_type', 'evaluated', 'offering',
-        'format_teachers',
-        'display', 'active', 'get_teachers_welcomed')
-    list_filter = ('display', 'active')
-    pass
-
-
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
     list_display = ('name', 'format_styles', 'level', 'couple_course',)

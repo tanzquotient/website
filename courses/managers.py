@@ -61,18 +61,6 @@ class CourseManager(TranslatableManager):
         return result
 
 
-class PlannedCourseManager(CourseManager):
-    def get_queryset(self):
-        from courses.services import get_subsequent_offering
-        return super(PlannedCourseManager, self).get_queryset().filter(offering=get_subsequent_offering())
-
-
-class CurrentCourseManager(CourseManager):
-    def get_queryset(self):
-        from courses.services import get_current_active_offering
-        return super(CurrentCourseManager, self).get_queryset().filter(offering=get_current_active_offering())
-
-
 class AddressManager(models.Manager):
     def create_from_user_data(self, data):
         from courses.models import Address

@@ -14,10 +14,8 @@ from .irregular_lesson import IrregularLesson
 from .course_type import CourseType
 from .course import Course
 from .subscribe import Subscribe
-from .current_course import CurrentCourse
 from .period_cancellation import PeriodCancellation
 from .course_succession import CourseSuccession
-from .planned_course import PlannedCourse
 from .confirmation import Confirmation
 from .rejection import Rejection
 from .teacher_welcome import TeacherWelcome
