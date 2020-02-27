@@ -9,12 +9,12 @@ def export_excel(title, data, has_column_headings=True, multiple=False):
 
     if multiple:
         sheets = dict()
-        workbook.remove_sheet(workbook.get_active_sheet())
+        workbook.remove_sheet(workbook.active)
         for item in data:
             sheet_title = clean_filename(item['name'])[:30]
             sheets[workbook.create_sheet(title=sheet_title)] = item['data']
     else:
-        sheets = {workbook.get_active_sheet(): data}
+        sheets = {workbook.active: data}
 
     for sheet, values in sheets.items():
         for row_number, row in enumerate(values):
