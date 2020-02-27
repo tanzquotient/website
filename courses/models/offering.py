@@ -35,3 +35,6 @@ class Offering(models.Model):
 
     def __str__(self):
         return '{}'.format(self.name)
+
+    class Meta:
+        ordering = ['-period__date_from', 'name']
