@@ -14,3 +14,6 @@ class MatchingState:
         (MATCHED, 'Matched'),
         (NOT_REQUIRED, 'Not required')
     )
+
+    MATCHED_STATES = [COUPLE, MATCHED]
+    TO_MATCH_STATES = [TO_MATCH, TO_REMATCH]

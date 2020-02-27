@@ -7,7 +7,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType
+from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState
 
 
 class Course(TranslatableModel):
@@ -167,13 +167,15 @@ class Course(TranslatableModel):
         """ Creates a dict with the free places totally and for men/women separately """
         if self.max_subscribers is not None:
             subscriptions = self.subscriptions.active()
-            m = subscriptions.filter(user__profile__gender=Gender.MEN).count()
-            w = subscriptions.filter(user__profile__gender=Gender.WOMAN).count()
 
             c = self.max_subscribers - subscriptions.count()
             if self.type.couple_course:
-                cm = self.max_subscribers / 2 - m
-                cw = self.max_subscribers / 2 - w
+                matched_count = subscriptions.filter(matching_state__in=MatchingState.MATCHED_STATES).count()
+                unmatched_male_count = subscriptions.filter(user__profile__gender=Gender.MEN, matching_state__in=MatchingState.TO_MATCH_STATES).count()
+                unmatched_female_count = subscriptions.filter(user__profile__gender=Gender.MEN, matching_state__in=MatchingState.TO_MATCH_STATES).count()
+                effective_max = (self.max_subscribers - matched_count) / 2
+                cm = effective_max - unmatched_male_count
+                cw = effective_max - unmatched_female_count
             else:
                 cm = c
                 cw = c
