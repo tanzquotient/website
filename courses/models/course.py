@@ -253,10 +253,11 @@ class Course(TranslatableModel):
         return self.subscription_type == CourseSubscriptionType.REGULAR
 
     def subscription_opens_soon(self):
-        if self.get_period() is None:
+        period = self.get_period()
+        if period is None or period.date_from is None:
             return False
 
-        return self.subscription_closed() and self.get_period().date_from > datetime.date.today()
+        return self.subscription_closed() and period.date_from > datetime.date.today()
 
     def subscription_closed(self):
         return self.is_regular() and not self.is_subscription_allowed()
