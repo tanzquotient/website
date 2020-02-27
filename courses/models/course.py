@@ -172,8 +172,8 @@ class Course(TranslatableModel):
             if self.type.couple_course:
                 matched_count = subscriptions.filter(matching_state__in=MatchingState.MATCHED_STATES).count()
                 unmatched_male_count = subscriptions.filter(user__profile__gender=Gender.MEN, matching_state__in=MatchingState.TO_MATCH_STATES).count()
-                unmatched_female_count = subscriptions.filter(user__profile__gender=Gender.MEN, matching_state__in=MatchingState.TO_MATCH_STATES).count()
-                effective_max = (self.max_subscribers - matched_count) / 2
+                unmatched_female_count = subscriptions.filter(user__profile__gender=Gender.WOMAN, matching_state__in=MatchingState.TO_MATCH_STATES).count()
+                effective_max = (self.max_subscribers - matched_count) // 2
                 cm = effective_max - unmatched_male_count
                 cw = effective_max - unmatched_female_count
             else:
