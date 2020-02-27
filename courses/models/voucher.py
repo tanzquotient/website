@@ -31,7 +31,7 @@ class Voucher(models.Model):
                 self.used = True
                 self.subscription = subscription  # which subscription was paid
                 self.save()
-                if user is not None and not user.is_anonymous():
+                if user is not None and not user.is_anonymous:
                     reversion.set_user(user)
                 reversion.set_comment('Marked as used. ' + comment)
             return True
