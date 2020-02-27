@@ -113,11 +113,11 @@ class MemberAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(TranslatableAdmin):
     list_display = (
-        'name', 'type', 'subscription_type', 'evaluated', 'offering', 'period', 'format_lessons', 'format_cancellations',
+        'name', 'type', 'subscription_type', 'offering', 'period', 'format_lessons', 'format_cancellations',
         'room', 'format_prices',
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
-    list_filter = ('subscription_type', 'offering', 'type', 'room', 'display', 'active')
+    list_filter = ('offering', 'subscription_type', 'display', 'active')
     search_fields = ['name', 'type__name', ]
     inlines = (RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
                PredecessorCoursesInline, SubscribeInlineForCourse)
