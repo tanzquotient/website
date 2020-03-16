@@ -75,9 +75,6 @@ fds_data/
 # Settings Local (Private Information)
 settings_local.py
 
-# SQL Dumps
-*.sql
-
 # Testdata
 payment/testdata
 
