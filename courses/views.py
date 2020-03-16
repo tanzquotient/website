@@ -69,7 +69,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
         })
 
     context = {
-        'offerings': c_offerings,
+        'offerings': c_offerings[::-1],
         'historic_offerings': {
             "regular": services.get_historic_offerings(offering_type=OfferingType.REGULAR),
             "irregular": services.get_historic_offerings(offering_type=OfferingType.IRREGULAR),
