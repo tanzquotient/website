@@ -120,6 +120,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                 'special': event.special,
                 'price': event.format_prices(),
                 'room': event.room,
+                'cancelled': event.cancelled,
                 'event': event,
             })
 
