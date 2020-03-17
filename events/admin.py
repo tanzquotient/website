@@ -29,7 +29,7 @@ class EventAdmin(TranslatableAdmin):
         ('What?', {
             'fields': ['name', 'description', 'image']}),
         ('When?', {
-            'fields': ['date', 'time_from', 'time_to', ]}),
+            'fields': ['date', 'time_from', 'time_to', 'cancelled']}),
         ('Where?', {
             'fields': ['room', ]}),
         ('Billing', {

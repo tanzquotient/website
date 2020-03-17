@@ -26,6 +26,7 @@ class Event(TranslatableModel):
     date = models.DateField()
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
+    cancelled = models.BooleanField(blank=False, null=False, default=False)
     room = models.ForeignKey(Room, related_name='events', blank=True, null=True, on_delete=models.PROTECT)
     price_with_legi = models.FloatField(blank=True, null=True)
     price_with_legi.help_text = "Leave this empty for free entrance"

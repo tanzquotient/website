@@ -14,7 +14,7 @@ class EventFeed(ICalFeed):
     product_id = '-//TQ Website calendar v1.1'
 
     def items(self):
-        return Event.objects.all()
+        return Event.objects.filter(cancelled=False).all()
 
     def item_title(self, item):
         return item.safe_translation_getter("name", any_language=True) or "Untitled"

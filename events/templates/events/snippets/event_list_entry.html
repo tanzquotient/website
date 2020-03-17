@@ -7,7 +7,11 @@
 {% with event_id=event.id|stringformat:"s" %}
     {% with modal_id="modal_event_xs-"|add:event_id %}
         <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item">
-            {% if event.special %}
+            {% if event.cancelled %}
+                <span class="banner">
+                        <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}
+                    </span>
+            {% elif event.special %}
                 <span class="banner">
                         <i class="fa fa-star fa-lg"></i> {% trans "Special" %}
                     </span>
