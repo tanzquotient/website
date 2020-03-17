@@ -11,7 +11,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="modal_label_event-{{ event.id }}">
                     {% if event.cancelled %}
-                        {% trans "Cancelled" %}
+                        {% trans "Cancelled" %}:
                     {% endif %}
                     {{ event.get_name }}
                     <small> {{ event.date }}</small>
