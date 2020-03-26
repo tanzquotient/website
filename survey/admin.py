@@ -24,7 +24,6 @@ class ChoiceInline(TranslatableTabularInline):
 class SurveyAdmin(TranslatableAdmin):
     list_display = ('name', 'get_test_url')
     model = Survey
-    inlines = (QuestionGroupInline,)
 
     actions = [export_surveys_xlsx, copy_survey]
 
