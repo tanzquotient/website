@@ -127,13 +127,13 @@ def export_surveys(surveys):
         for group in survey.questiongroup_set.all():
             questions += list(group.question_set.all())
 
-        columns = [question.name for question in questions]
+        columns = ["User"] + [question.name for question in questions]
         data.append(columns)
 
         for instance in survey.survey_instances.exclude(last_update=None):
             # only take the newest answer if multiple submissions
             answers = instance.answers.order_by('-id')
-            row = []
+            row = [instance.user.username]
             for question in questions:
                 answers_for_question = answers.filter(question=question)
                 answer = None
