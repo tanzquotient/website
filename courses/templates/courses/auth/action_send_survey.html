@@ -9,11 +9,11 @@
     <p>
         {{ evaluate_form }}
     </p>
-    <p>The following courses will be evaluated or prepared to do so:</p>
+    <p>The survey will be sent to the following courses</p>
 
     <ul>{{ courses|unordered_list }}</ul>
 
-    <input type="hidden" name="action" value="evaluate_course" />
+    <input type="hidden" name="action" value="send_survey" />
     <input type="submit" name="go" value="Go" />
 </form>
 

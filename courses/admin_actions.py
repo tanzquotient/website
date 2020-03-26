@@ -16,6 +16,7 @@ from django import forms
 
 from django.utils.translation import ugettext as _
 from payment.services import remind_of_payments
+from post_office.models import EmailTemplate
 
 from django.contrib import messages
 
@@ -260,6 +261,7 @@ mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 class EvaluateForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     survey = forms.ModelChoiceField(label=_("Select Survey"), queryset=Survey.objects.all())
+    email_template = forms.ModelChoiceField(label=_("Select email template"), queryset=EmailTemplate.objects.all())
     send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True,
                                           required=False)
     url_expires = forms.BooleanField(label=_("Should invitation url expire?"), initial=False, required=False)
@@ -267,7 +269,7 @@ class EvaluateForm(forms.Form):
                                           initial=datetime.date.today() + datetime.timedelta(days=30))
 
 
-def evaluate_course(self, request, queryset):
+def send_survey(self, request, queryset):
     form = None
 
     if 'go' in request.POST:
@@ -275,6 +277,7 @@ def evaluate_course(self, request, queryset):
 
         if form.is_valid():
             survey = form.cleaned_data['survey']
+            email_template = form.cleaned_data['email_template']
             send_invitations = form.cleaned_data['send_invitations']
             url_expires = form.cleaned_data['url_expires']
             url_expire_date = form.cleaned_data['url_expire_date']
@@ -285,7 +288,7 @@ def evaluate_course(self, request, queryset):
                 c.evaluated = True
                 c.save()
                 for s in c.participatory().all():
-                    inst = SurveyInstance(survey=survey, course=c, user=s.user,
+                    inst = SurveyInstance(survey=survey, email_template=email_template, course=c, user=s.user,
                                           url_expire_date=url_expire_date if url_expires else None)
                     inst.save()
                     if send_invitations:
@@ -295,12 +298,12 @@ def evaluate_course(self, request, queryset):
     if not form:
         form = EvaluateForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
-    return render(request, 'courses/auth/action_evaluate.html', {'courses': queryset,
+    return render(request, 'courses/auth/action_send_survey.html', {'courses': queryset,
                                                                  'evaluate_form': form,
                                                                  })
 
 
-evaluate_course.short_description = "Configure evaluation of selected courses"
+send_survey.short_description = "Send a survey invitation to all participants of the selected course(s)"
 
 
 def undo_voucher_payment(modeladmin, request, queryset):

@@ -3,6 +3,7 @@ from django.db import models
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from post_office.models import EmailTemplate
 
 
 def _copy_translations(old, new):
@@ -201,6 +202,7 @@ class Choice(TranslatableModel):
 class SurveyInstance(models.Model):
     survey = models.ForeignKey('Survey', related_name='survey_instances', blank=False,
                                null=False, on_delete=models.PROTECT)
+    email_template = models.ForeignKey(EmailTemplate, related_name='survey_instances', blank=True, null=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='survey_instances', blank=False,
                              null=False, on_delete=models.PROTECT)
     course = models.ForeignKey('courses.Course', related_name='survey_instances', blank=True, null=True,

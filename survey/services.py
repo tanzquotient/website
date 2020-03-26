@@ -87,6 +87,8 @@ def send_invitation(survey_inst):
     }
 
     template = 'survey_invitation'
+    if survey_inst.email_template:
+        template = survey_inst.email_template
 
     if _email_helper(survey_inst.user.email, template, context):
         survey_inst.invitation_sent = True

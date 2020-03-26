@@ -141,7 +141,7 @@ class CourseAdmin(TranslatableAdmin):
                export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_vcard,
-               export_confirmed_subscriptions_xlsx, evaluate_course]
+               export_confirmed_subscriptions_xlsx, send_survey]
 
 
 @admin.register(CourseSuccession)
