@@ -15,7 +15,7 @@ def export_surveys_xlsx(modeladmin, request, queryset):
     return services.export_surveys(queryset.all())
 
 
-export_surveys_xlsx.short_description = "Export selected surveys as several XLSX-files"
+export_surveys_xlsx.short_description = "Export Excel"
 
 
 def let_url_expire_now(modeladmin, request, queryset):
