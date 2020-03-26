@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -128,6 +129,7 @@ def survey_error(request):
     return render(request, template_name, {'message': message})
 
 
+@staff_member_required
 def survey_test(request, survey_id):
     template_name = "survey/survey.html"
 
