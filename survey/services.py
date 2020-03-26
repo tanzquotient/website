@@ -136,7 +136,9 @@ def export_surveys(surveys):
             row = []
             for question in questions:
                 answers_for_question = answers.filter(question=question)
-                answer = answers_for_question.first().text if answers_for_question.count() > 0 else None
+                answer = None
+                if answers_for_question.count() > 0:
+                    answer = answers_for_question.first().value()
                 row.append(answer)
 
             data.append(row)

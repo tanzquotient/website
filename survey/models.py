@@ -257,5 +257,13 @@ class Answer(models.Model):
                 choice = get_object_or_404(Choice, pk=choice)
                 return klass(survey_instance=survey_inst, question=question, choice=choice, text=choice_input)
 
+    def value(self):
+        if self.text:
+            return self.text
+        elif self.choice:
+            return self.choice.get_question_name()
+        else:
+            return None
+
     def __str__(self):
-        return "q({})-c({}): {}".format(self.question, self.choice, self.text)
+        return self.value()
