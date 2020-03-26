@@ -49,7 +49,7 @@ class Survey(TranslatableModel):
 
 class QuestionGroup(TranslatableModel):
     name = models.CharField(max_length=255)
-    survey = models.ForeignKey('Survey', blank=False, null=True, on_delete=models.PROTECT)
+    survey = models.ForeignKey('Survey', blank=True, null=True, on_delete=models.SET_NULL)
     position = models.PositiveSmallIntegerField("Position", default=0)
 
     translations = TranslatedFields(
