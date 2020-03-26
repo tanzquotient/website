@@ -1,5 +1,7 @@
 import hashlib
 
+from courses.utils import export
+
 try:
     import pickle
 except ImportError:
@@ -113,84 +115,34 @@ def _email_helper(email, template, context):
         return False
 
 
-import zipfile
-from io import BytesIO
-
-import openpyxl
-
-
-# exports the subscriptions of course with course_id to fileobj (e.g. a HttpResponse)
 def export_surveys(surveys):
-    def create_xlsx_sheet(wb, survey, instances, title):
-        ws = wb.create_sheet(title=title[:28])
 
-        row_num = 0
+    export_format = "excel"
+    export_data = []
 
-        # first fill questions in list to ensure consistent order
+    for survey in surveys:
+        data = []
+
         questions = []
-        for g in survey.questiongroup_set.all():
-            questions += list(g.question_set.all())
+        for group in survey.questiongroup_set.all():
+            questions += list(group.question_set.all())
 
-        columns = []
-        for q in questions:
-            columns.append(q.name)
+        columns = [question.name for question in questions]
+        data.append(columns)
 
-        for col_num in range(len(columns)):
-            c = ws.cell(row=row_num + 1, column=col_num + 1)
-            c.value = columns[col_num]
-            font = c.font.copy()
-            font.bold = True
-            c.font = font
+        for instance in survey.survey_instances.exclude(last_update=None):
+            # only take the newest answer if multiple submissions
+            answers = instance.answers.order_by('-id')
+            row = []
+            for question in questions:
+                answers_for_question = answers.filter(question=question)
+                answer = answers_for_question.first() if answers_for_question.count() > 0 else None
+                row.append(answer)
 
-        for inst in instances:
-            # only take the newest answer for all questions
-            answers = Answer.objects.filter(survey_instance__survey=survey,
-                                                   survey_instance__user=inst.user).order_by('-id')
+            data.append(row)
 
-            row_num += 1
-            for col_num in range(len(columns)):
-                c = ws.cell(row=row_num + 1, column=col_num + 1)
-                res = answers.filter(question=questions[col_num])
-                c.value = res[0].text if res else ""
 
-                alignment = c.alignment.copy()
-                alignment.wrap_text = True
-                c.alignment = alignment
+        export_data.append({'name': survey.name, 'data': data})
 
-    zipped_file = BytesIO()  # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
-    with zipfile.ZipFile(zipped_file, 'w') as f:
-        for survey in surveys:
-            fileobj = BytesIO()    # since Python3, this must by BytesIO (not StringIO) since zipfile operates still on Bytes
 
-            #####################################
-            survey_inst = survey.survey_instances.values('course').distinct()
-            wb = openpyxl.Workbook()
-            if survey_inst.count():
-                # remove preinitialized sheet (only if we later add same, no sheets in the end lead to error!)
-                wb.remove_sheet(wb.get_active_sheet())
-
-            for d in survey_inst:
-                course_id = d['course']  # get the courses out of dict returned by values
-                if course_id:
-                    course = Course.objects.get(pk=course_id)
-                    create_xlsx_sheet(wb, survey,
-                                      survey.survey_instances.exclude(last_update=None).filter(course=course_id).all(),
-                                      course.name)
-                else:  # course_id is None
-                    create_xlsx_sheet(wb, survey, survey.survey_instances.exclude(last_update=None).all(),
-                                      "COURSE UNSPECIFIC")
-
-            wb.save(fileobj)
-            #####################################
-
-            f.writestr(u'Surveys/{}.xlsx'.format(survey.name),
-                       fileobj.getvalue())
-            fileobj.seek(0)
-
-    content_length = zipped_file.tell()
-    zipped_file.seek(0)
-    response = HttpResponse(zipped_file, content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=Surveys.zip'
-    response['Content-Length'] = content_length
-
-    return response
+    return export(export_format, title="Survey results", data=export_data, multiple=True)
