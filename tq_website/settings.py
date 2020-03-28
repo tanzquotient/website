@@ -183,6 +183,16 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
+# Store uploads on S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('TQ_S3_ACCESS_KEY', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('TQ_S3_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = 'tq-data'
+# s3 endpoint, in dev container set to 'http://tq-data:9000'
+AWS_S3_ENDPOINT_URL = os.environ.get('TQ_S3_ENDPOINT_URL', '')
+# the region has to be set, otherwise authentication fails
+AWS_S3_REGION_NAME = os.environ.get('TQ_S3_REGION_NAME', '')
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 TEMPLATES = [
