@@ -120,13 +120,13 @@ class Migration(migrations.Migration):
             name='Course',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text=b'This name is just for reference and is not displayed anywhere on the website.', max_length=255)),
+                ('name', models.CharField(help_text='This name is just for reference and is not displayed anywhere on the website.', max_length=255)),
                 ('min_subscribers', models.IntegerField(default=6)),
                 ('max_subscribers', models.IntegerField(blank=True, null=True)),
                 ('price_with_legi', models.FloatField(blank=True, default=35, null=True)),
                 ('price_without_legi', models.FloatField(blank=True, default=70, null=True)),
                 ('comment', models.TextField(blank=True, null=True)),
-                ('position', models.PositiveSmallIntegerField(default=0, verbose_name=b'Position')),
+                ('position', models.PositiveSmallIntegerField(default=0, verbose_name='Position')),
             ],
             options={
                 'ordering': ['position'],
@@ -169,8 +169,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True)),
-                ('display', models.BooleanField(default=False, help_text=b'Defines if the courses in this offering should be displayed on the Website.')),
-                ('active', models.BooleanField(default=False, help_text=b'Defines if clients can subscribe to courses in this offering.')),
+                ('display', models.BooleanField(default=False, help_text='Defines if the courses in this offering should be displayed on the Website.')),
+                ('active', models.BooleanField(default=False, help_text='Defines if clients can subscribe to courses in this offering.')),
             ],
         ),
         migrations.CreateModel(
@@ -195,7 +195,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True)),
                 ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('url', models.URLField(blank=True, help_text=b'The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)', max_length=500, null=True)),
+                ('url', models.URLField(blank=True, help_text='The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)', max_length=500, null=True)),
                 ('contact_info', models.TextField(blank=True, null=True)),
                 ('address', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='courses.Address')),
             ],
@@ -207,8 +207,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255)),
                 ('artist', models.CharField(blank=True, max_length=255, null=True)),
                 ('length', models.TimeField(blank=True, null=True)),
-                ('speed', models.IntegerField(blank=True, help_text=b'The speed of the song in TPM', null=True)),
-                ('url_video', models.URLField(blank=True, help_text=b'A url to a demo video (e.g Youtube).', max_length=500, null=True)),
+                ('speed', models.IntegerField(blank=True, help_text='The speed of the song in TPM', null=True)),
+                ('url_video', models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True)),
             ],
             options={
                 'ordering': ['speed', 'length'],
@@ -220,18 +220,18 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('url_info', models.URLField(blank=True, help_text=b'A url to an information page (e.g. Wikipedia).', max_length=500, null=True)),
-                ('url_video', models.URLField(blank=True, help_text=b'A url to a demo video (e.g Youtube).', max_length=500, null=True)),
+                ('url_info', models.URLField(blank=True, help_text='A url to an information page (e.g. Wikipedia).', max_length=500, null=True)),
+                ('url_video', models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Subscribe',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text=b'The date when the subscription was made.')),
+                ('date', models.DateField(auto_now_add=True, help_text='The date when the subscription was made.')),
                 ('experience', models.TextField(blank=True, null=True)),
-                ('comment', models.TextField(blank=True, help_text=b'A optional comment made by the user during subscription.', null=True)),
-                ('confirmed', models.BooleanField(default=False, help_text=b'When this is checked, a confirmation email is send (once) to the user while saving this form.')),
+                ('comment', models.TextField(blank=True, help_text='A optional comment made by the user during subscription.', null=True)),
+                ('confirmed', models.BooleanField(default=False, help_text='When this is checked, a confirmation email is send (once) to the user while saving this form.')),
                 ('payed', models.BooleanField(default=False)),
                 ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='courses.Course')),
             ],
@@ -246,18 +246,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('user', models.OneToOneField(help_text=b'The user which is matched to this user profile.', on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(help_text='The user which is matched to this user profile.', on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to=settings.AUTH_USER_MODEL)),
                 ('legi', models.CharField(blank=True, max_length=16, null=True)),
                 ('gender', models.CharField(choices=[(b'm', 'Men'), (b'w', 'Woman')], default=None, max_length=1, null=True)),
                 ('phone_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('student_status', models.CharField(choices=[(b'eth', 'ETH'), (b'uni', 'Uni'), (b'ph', 'PH'), (b'other', 'Other'), (b'no', 'Not a student')], default=b'no', max_length=10)),
+                ('student_status', models.CharField(choices=[(b'eth', 'ETH'), (b'uni', 'Uni'), (b'ph', 'PH'), (b'other', 'Other'), (b'no', 'Not a student')], default='no', max_length=10)),
                 ('newsletter', models.BooleanField(default=True)),
                 ('about_me', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
                 ('address', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='courses.Address')),
                 ('body_height', models.IntegerField(blank=True, help_text=b"The user's body height in cm.", null=True)),
-                ('language', models.CharField(choices=[(b'de', b'Deutsch'), (b'en', b'English')], default=b'de', help_text='Default language.', max_length=5, verbose_name='language')),
-                ('privacy', models.CharField(choices=[(b'open', 'Open'), (b'registered', 'Registered'), (b'closed', 'Closed')], default=b'registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
-                ('get_involved', models.BooleanField(default=False, help_text=b'If this user is interested to get involved with our organisation.')),
+                ('language', models.CharField(choices=[(b'de', b'Deutsch'), (b'en', b'English')], default='de', help_text='Default language.', max_length=5, verbose_name='language')),
+                ('privacy', models.CharField(choices=[(b'open', 'Open'), (b'registered', 'Registered'), (b'closed', 'Closed')], default='registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
+                ('get_involved', models.BooleanField(default=False, help_text='If this user is interested to get involved with our organisation.')),
             ],
             options={
                 'permissions': (('view_profile', 'Can view profile'),),
@@ -301,7 +301,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='period',
-            field=models.ForeignKey(blank=True, help_text=b'You can set a custom period for this course here. If this is left empty, the period from the offering is taken.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Period'),
+            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Period'),
         ),
         migrations.AddField(
             model_name='course',
@@ -321,7 +321,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='type',
-            field=models.ForeignKey(help_text=b'The name of the course type is displayed on the website as the course title .', on_delete=django.db.models.deletion.CASCADE, related_name='courses', to='courses.CourseType'),
+            field=models.ForeignKey(help_text='The name of the course type is displayed on the website as the course title .', on_delete=django.db.models.deletion.CASCADE, related_name='courses', to='courses.CourseType'),
         ),
         migrations.RemoveField(
             model_name='coursetype',
@@ -330,30 +330,30 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='active',
-            field=models.BooleanField(default=True, help_text=b'Defines if clients can subscribe to this course (if unchecked, course is active if offering is active).'),
+            field=models.BooleanField(default=True, help_text='Defines if clients can subscribe to this course (if unchecked, course is active if offering is active).'),
         ),
         migrations.AddField(
             model_name='course',
             name='special',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text=b'Any special properties of this course.', null=True),
+            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Any special properties of this course.', null=True),
         ),
         migrations.CreateModel(
             name='Confirmation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text=b'The date when the participation confirmation mail was sent to the subscriber.')),
+                ('date', models.DateField(auto_now_add=True, help_text='The date when the participation confirmation mail was sent to the subscriber.')),
                 ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='confirmations', to='courses.Subscribe')),
             ],
         ),
         migrations.AlterField(
             model_name='subscribe',
             name='confirmed',
-            field=models.BooleanField(default=False, help_text=b'When this is checked, a participation confirmation email is send (once) to the user while saving this form.'),
+            field=models.BooleanField(default=False, help_text='When this is checked, a participation confirmation email is send (once) to the user while saving this form.'),
         ),
         migrations.AlterField(
             model_name='subscribe',
             name='date',
-            field=models.DateTimeField(auto_now_add=True, help_text=b'The date/time when the subscription was made.'),
+            field=models.DateTimeField(auto_now_add=True, help_text='The date/time when the subscription was made.'),
         ),
         migrations.CreateModel(
             name='MusicPluginModel',
@@ -373,7 +373,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='open_class',
-            field=models.BooleanField(default=False, help_text=b'Open classes do not require a subscription or subscription is done via a different channel.'),
+            field=models.BooleanField(default=False, help_text='Open classes do not require a subscription or subscription is done via a different channel.'),
         ),
         migrations.AddField(
             model_name='course',
@@ -408,7 +408,7 @@ class Migration(migrations.Migration):
                 ('time_from', models.TimeField()),
                 ('time_to', models.TimeField()),
                 ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='irregular_lessons', to='courses.Course')),
-                ('room', models.ForeignKey(blank=True, help_text=b'The room for this lesson. If left empty, the course room is assumed.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='irregular_lessons', to='courses.Room')),
+                ('room', models.ForeignKey(blank=True, help_text='The room for this lesson. If left empty, the course room is assumed.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='irregular_lessons', to='courses.Room')),
             ],
             options={
                 'ordering': ['date', 'time_from'],
@@ -417,22 +417,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='offering',
             name='type',
-            field=models.CharField(choices=[(b'reg', 'Regular (weekly)'), (b'irr', 'Irregular (Workshops)')], default=b'reg', help_text=b'The type of the offering influences how the offering is displayed.', max_length=3),
+            field=models.CharField(choices=[(b'reg', 'Regular (weekly)'), (b'irr', 'Irregular (Workshops)')], default='reg', help_text='The type of the offering influences how the offering is displayed.', max_length=3),
         ),
         migrations.AddField(
             model_name='course',
             name='display',
-            field=models.BooleanField(default=True, help_text=b'Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).'),
+            field=models.BooleanField(default=True, help_text='Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).'),
         ),
         migrations.AlterField(
             model_name='course',
             name='active',
-            field=models.BooleanField(default=True, help_text=b'Defines if clients can subscribe to this course (if checked, course is active if offering is active).'),
+            field=models.BooleanField(default=True, help_text='Defines if clients can subscribe to this course (if checked, course is active if offering is active).'),
         ),
         migrations.AddField(
             model_name='subscribe',
             name='matching_state',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default=b'unknown', max_length=30),
+            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default='unknown', max_length=30),
         ),
         migrations.RunSQL(
             sql="UPDATE courses_subscribe SET matching_state='couple' WHERE date >= DATE('2015-08-07') AND matching_state='unknown';",
@@ -441,15 +441,15 @@ class Migration(migrations.Migration):
             name='Rejection',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text=b'The date when the rejection mail was sent to the subscriber.')),
-                ('reason', models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found')], default=b'unknown', max_length=30)),
+                ('date', models.DateField(auto_now_add=True, help_text='The date when the rejection mail was sent to the subscriber.')),
+                ('reason', models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found')], default='unknown', max_length=30)),
                 ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rejections', to='courses.Subscribe')),
             ],
         ),
         migrations.AddField(
             model_name='subscribe',
             name='rejected',
-            field=models.BooleanField(default=False, help_text=b'When this is checked, a rejection email is send (once) to the user while saving this form.'),
+            field=models.BooleanField(default=False, help_text='When this is checked, a rejection email is send (once) to the user while saving this form.'),
         ),
         migrations.AlterField(
             model_name='coursetype',
@@ -464,7 +464,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='style',
             name='url_playlist',
-            field=models.URLField(blank=True, help_text=b'A url to a playlist (e.g on online-Spotify, Youtube).', max_length=500, null=True),
+            field=models.URLField(blank=True, help_text='A url to a playlist (e.g on online-Spotify, Youtube).', max_length=500, null=True),
         ),
         migrations.AlterModelOptions(
             name='course',
@@ -494,7 +494,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='subscribe',
             name='status',
-            field=models.CharField(choices=[(b'new', 'new'), (b'confirmed', 'confirmed (to pay)'), (b'payed', 'payed'), (b'completed', 'completed'), (b'rejected', 'rejected'), (b'to_reimburse', 'to reimburse')], default=b'new', max_length=30),
+            field=models.CharField(choices=[(b'new', 'new'), (b'confirmed', 'confirmed (to pay)'), (b'payed', 'payed'), (b'completed', 'completed'), (b'rejected', 'rejected'), (b'to_reimburse', 'to reimburse')], default='new', max_length=30),
         ),
         migrations.AddField(
             model_name='subscribe',
@@ -527,7 +527,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='subscribe',
             name='usi',
-            field=models.CharField(blank=True, default=b'------', help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6, unique=True),
+            field=models.CharField(blank=True, default='------', help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6, unique=True),
         ),
         migrations.AlterField(
             model_name='voucher',
@@ -546,7 +546,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='subscribe',
             name='matching_state',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'to_rematch', 'To rematch'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default=b'unknown', max_length=30),
+            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'to_rematch', 'To rematch'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default='unknown', max_length=30),
         ),
         migrations.AddField(
             model_name='voucher',
@@ -566,12 +566,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='rejection',
             name='reason',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned')], default=b'unknown', max_length=30),
+            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned')], default='unknown', max_length=30),
         ),
         migrations.AlterField(
             model_name='rejection',
             name='reason',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned'), (b'course_cancelled', 'Course was cancelled')], default=b'unknown', max_length=30),
+            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned'), (b'course_cancelled', 'Course was cancelled')], default='unknown', max_length=30),
         ),
         migrations.AddField(
             model_name='course',
