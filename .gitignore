@@ -19,14 +19,17 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
 # PyInstaller
 # Usually these files are written by a python script from a template
 # before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -34,31 +37,30 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+
 # Translations
 *.mo
 *.pot
-# Django stuff:
 
 # Sphinx documentation
 docs/_build/
+
 # PyBuilder
 target/
 
 ################
 # My own ignores
 ################
-# fabfile.py # better include this in production (because passwords are visible in plain text)
 *.pyc
 *.*~
-
-bin/
-collected_static/
-media/
-
 .bash_history
 .project
 .pydevproject
 .settings
+
+bin/
+collected_static/
+media/
 
 celerybeat.*
 
@@ -68,9 +70,7 @@ celerybeat.*
 
 node_modules/
 
-
 fds_data/
-
 
 # Settings Local (Private Information)
 settings_local.py
@@ -87,13 +87,13 @@ credentials/
 # nginx maintenance file
 maintenance.conf
 
-# Database dumps
+# Database stuff
 database_*
+*.sql
 
 # built documentation
 docs/sphinx/_build
 docs/sphinx/_static
-
 
 # Server files
 *.backup
