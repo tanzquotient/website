@@ -1,0 +1,1 @@
+alter schema tq_website rename to public;
