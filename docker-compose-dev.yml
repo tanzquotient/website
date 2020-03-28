@@ -21,13 +21,13 @@ services:
     volumes:
       - "postgres-volume:/var/lib/postgresql/data"
     ports:
-      - "${TQ_DB_PORT_POSTGRES}:5432"
+      - "${TQ_DB_PORT_POSTGRES_DEBUG_HOST}:5432"
     restart: always
 
   # Cache and message broker for celery (handles background tasks)
   redis:
     container_name: tq-redis
-    image: redis:3.2-alpine
+    image: redis:5.0-alpine
     restart: always
 
   # Django (serving with debug webserver)
