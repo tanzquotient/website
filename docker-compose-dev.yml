@@ -48,9 +48,11 @@ services:
     links:
       - postgres
       - redis
+      - minio
     restart: always
     depends_on:
       - postgres
+      - minio
 
   # S3 storage
   minio:
