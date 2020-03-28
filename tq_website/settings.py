@@ -515,7 +515,7 @@ SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", 'test@example.com'),
 
 # Database
 DATABASES = {
-    'default': {
+    'legacy': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': os.environ.get("TQ_DB_HOST", 'tq-mysql'),
         'PORT': os.environ.get("TQ_DB_PORT", '3306'),
@@ -523,7 +523,7 @@ DATABASES = {
         'USER': os.environ.get("TQ_DB_USER", ''),
         'PASSWORD': os.environ.get("TQ_DB_PASSWORD", ''),
     },
-    'postgres': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'HOST': os.environ.get("TQ_DB_HOST_POSTGRES", 'tq-postgres'),
         'PORT': os.environ.get("TQ_DB_PORT_POSTGRES", '5432'),

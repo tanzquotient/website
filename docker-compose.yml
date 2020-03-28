@@ -3,8 +3,8 @@ services:
 
   # Database (MySQL)
   db:
-    container_name: tq-mysql
     image: mysql:8
+    container_name: tq-mysql
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${TQ_DB_ROOT_PASSWORD}
@@ -15,17 +15,25 @@ services:
       - "${TQ_DB_PORT}:3306"
     restart: always
 
-  # Database
-#  postgres:
-#    image: postgres
-#    container_name: tq-postgres
-#    environment:
-#      POSTGRES_USER: ${TQ_DB_USER}
-#      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
-#      POSTGRES_DB: tq_website
-#    ports:
-#      - 5432:5432
-#    restart: always
+  # Database (Postgres)
+  postgres:
+    image: postgres:12
+    container_name: tq-postgres
+    environment:
+      POSTGRES_USER: ${TQ_DB_USER_POSTGRES}
+      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD_POSTGRES}
+      POSTGRES_DB: tq_website
+    volumes:
+      - "../data-postgres:/var/lib/postgresql/data"
+    ports:
+      - "${TQ_DB_PORT_POSTGRES}:5432"
+    restart: always
+
+  # Cache and message broker for celery (handles background tasks)
+  redis:
+    container_name: tq-redis
+    image: redis:3.2-alpine
+    restart: always
 
   # Django (serving with gunicorn)
   django:
@@ -42,6 +50,7 @@ services:
     command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
     links:
       - db
+      - postgres
       - redis
     restart: always
 
@@ -66,12 +75,6 @@ services:
       - django
     restart: always
 
-  # Cache and message broker for celery (handles background tasks)
-  redis:
-    container_name: tq-redis
-    image: redis:3.2-alpine
-    restart: always
-
   # Celery Beat
   beat:
     container_name: tq-beat
@@ -84,6 +87,7 @@ services:
     command: celery -A tq_website beat -l info --pidfile="/tmp/celerybeat.pid" -S django
     links:
       - db
+      - postgres
       - redis
     depends_on:
       - django # ensure the image is built before running this container
@@ -104,5 +108,6 @@ services:
     command: celery -A tq_website worker -l info
     links:
       - db
+      - postgres
       - redis
     restart: always
