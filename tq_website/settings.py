@@ -510,9 +510,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = os.environ.get("TQ_EMAIL_HOST_PASSWORD", '')
 DEFAULT_FROM_EMAIL = os.environ.get("TQ_DEFAULT_FROM_EMAIL", '')
 
-ADMINS = [(email, email) for email in os.environ.get("TQ_ADMINS", "").split(',')]
-SERVER_EMAIL = os.environ.get("TQ_SERVER_EMAIL", 'test@example.com'),
-
 # Database
 DATABASES = {
     'default': {
