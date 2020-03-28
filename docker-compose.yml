@@ -1,6 +1,11 @@
 version: '2'
 services:
 
+# Docker-Compose file to run the TQ website in production
+#
+# Security consideration: using port: mappings will expose the ports to the world, using expose: makes
+# them only accessible in the local Docker network
+
   # Database (Postgres)
   postgres:
     image: postgres:12
@@ -11,8 +16,8 @@ services:
       POSTGRES_DB: tq_website
     volumes:
       - "../data-postgres:/var/lib/postgresql/data"
-    ports:
-      - "${TQ_DB_PORT_POSTGRES}:5432"
+    expose:
+      - "5432"
     restart: always
 
   # Cache and message broker for celery (handles background tasks)
@@ -30,7 +35,7 @@ services:
     image: tq_website_django # give this built image a name to use it below
     env_file:
       - .env
-    user: root
+    user: root # TODO not good :/
     volumes:
       - .:/webapps/tq_website
     command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload

@@ -21,7 +21,7 @@ services:
     volumes:
       - "postgres-volume:/var/lib/postgresql/data"
     ports:
-      - "${TQ_DB_PORT_POSTGRES}:5432"
+      - "${TQ_DB_PORT_POSTGRES_DEBUG_HOST}:5432"
     restart: always
 
   # Cache and message broker for celery (handles background tasks)
