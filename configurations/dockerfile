@@ -14,6 +14,12 @@ RUN apk add --no-cache mariadb-connector-c-dev mariadb-connector-c && \
     pip3 install mysqlclient==1.4.6 && \
     apk del .build-deps
 
+# Postgres
+RUN apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc postgresql-dev musl-dev && \
+    pip3 install psycopg2==2.8.4 && \
+    apk del .build-deps
+
 # Pillow
 RUN apk add --no-cache zlib jpeg && \
     apk add --no-cache --virtual .build-deps \
