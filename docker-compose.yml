@@ -35,7 +35,6 @@ services:
       - .:/webapps/tq_website
     command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
     links:
-      - db
       - postgres
       - redis
     restart: always
@@ -72,7 +71,6 @@ services:
       - .:/webapps/tq_website
     command: celery -A tq_website beat -l info --pidfile="/tmp/celerybeat.pid" -S django
     links:
-      - db
       - postgres
       - redis
     depends_on:
@@ -93,7 +91,6 @@ services:
       - .:/webapps/tq_website
     command: celery -A tq_website worker -l info
     links:
-      - db
       - postgres
       - redis
     restart: always

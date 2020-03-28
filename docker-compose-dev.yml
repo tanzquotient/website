@@ -46,12 +46,11 @@ services:
     ports:
       - "${TQ_DJANGO_PORT}:8000"
     links:
-      - db
       - postgres
       - redis
     restart: always
     depends_on:
-      - db
+      - postgres
 
 volumes:
   db-volume: # Let Docker generate a place for this, doesn't matter for development
