@@ -27,7 +27,7 @@ services:
   # Cache and message broker for celery (handles background tasks)
   redis:
     container_name: tq-redis
-    image: redis:3.2-alpine
+    image: redis:5.0-alpine
     restart: always
 
   # Django (serving with debug webserver)
