@@ -1,11 +1,11 @@
 from django.db import models
 
-from tq_website.settings import POSTFINANCE_FILE_STORAGE
+from tq_website.settings import postfinance_file_storage
 
 
 class PostfinanceFile(models.Model):
     name = models.CharField(max_length=200, unique=True, blank=False, null=False)
-    file = models.FileField(blank=False, null=False, storage=POSTFINANCE_FILE_STORAGE)
+    file = models.FileField(blank=False, null=False, storage=postfinance_file_storage())
     processed = models.BooleanField(default=False, null=False, blank=False)
     downloaded_at = models.DateTimeField(null=False, blank=False)
 

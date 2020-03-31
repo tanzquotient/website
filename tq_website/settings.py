@@ -14,7 +14,6 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from django.core.files.storage import Storage, FileSystemStorage
-from storages.backends.s3boto3 import S3Boto3Storage
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -189,9 +188,12 @@ if USE_S3:
     AWS_S3_REGION_NAME = os.environ.get('TQ_S3_REGION_NAME', '')
 
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    POSTFINANCE_FILE_STORAGE = S3Boto3Storage(bucket_name='postfinance')
+    def postfinance_file_storage():
+        from storages.backends.s3boto3 import S3Boto3Storage
+        return S3Boto3Storage(bucket_name='postfinance')
 else:
-    POSTFINANCE_FILE_STORAGE = FileSystemStorage(location=os.path.join(BASE_DIR, 'postfinance'))
+    def postfinance_file_storage():
+        return FileSystemStorage(location=os.path.join(BASE_DIR, 'postfinance'))
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
