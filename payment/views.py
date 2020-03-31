@@ -18,6 +18,7 @@ from courses.models import PaymentMethod, Offering, Voucher, Course, Teach, Subs
 from payment import payment_processor
 from payment.forms import USIForm, VoucherForm, PROG_USI, AccountFinanceIndexForm
 from payment.models import Payment
+from .models.choices import Type, CreditDebit
 from .services import *
 
 log = logging.getLogger('tq')
@@ -371,7 +372,7 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
         if filter and filter == "true":
             filter = True
             payments = payments.exclude(
-                type__in=[Payment.Type.SUBSCRIPTION_PAYMENT, Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE])
+                type__in=[Type.SUBSCRIPTION_PAYMENT, Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE])
         else:
             filter = False
         return year, month, filter, payments
@@ -388,21 +389,21 @@ class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFor
         payments = payments.all()
         context['payments'] = payments
         context['total_credit'] = (
-        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.CREDIT])).replace('.',
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == CreditDebit.CREDIT])).replace('.',
                                                                                                             ',')  # replace function after float formatting to have decimal separator for German numbering format
         context['total_debit'] = (
-        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.DEBIT])).replace('.', ',')
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == CreditDebit.DEBIT])).replace('.', ',')
         context['total_unknown'] = (
-        '%.2f' % sum([p.amount for p in payments if p.credit_debit == Payment.CreditDebit.UNKNOWN])).replace('.', ',')
+        '%.2f' % sum([p.amount for p in payments if p.credit_debit == CreditDebit.UNKNOWN])).replace('.', ',')
 
         # Summary
         total_subscription_payment = payments.filter(
-            type__in=[Payment.Type.SUBSCRIPTION_PAYMENT,
-                      Payment.Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE],
-            credit_debit=Payment.CreditDebit.CREDIT).all().aggregate(Sum(
+            type__in=[Type.SUBSCRIPTION_PAYMENT,
+                      Type.SUBSCRIPTION_PAYMENT_TO_REIMBURSE],
+            credit_debit=CreditDebit.CREDIT).all().aggregate(Sum(
             'amount'))['amount__sum'] or 0
         total_course_payment_transfer = payments.filter(
-            type__in=[Payment.Type.COURSE_PAYMENT_TRANSFER], credit_debit=Payment.CreditDebit.CREDIT).all().aggregate(
+            type__in=[Type.COURSE_PAYMENT_TRANSFER], credit_debit=CreditDebit.CREDIT).all().aggregate(
             Sum(
                 'amount'))['amount__sum'] or 0
         summary = {

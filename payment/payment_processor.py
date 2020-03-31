@@ -3,6 +3,7 @@ import re
 
 from courses.models import Subscribe, PaymentMethod, SubscribeState
 from payment.models import Payment, SubscriptionPayment
+from payment.models.choices import State, CreditDebit, Type
 
 log = logging.getLogger('payment')
 
@@ -18,14 +19,14 @@ class PaymentProcessor:
         self.finalize_payments(queryset)
 
     def detect_irrelevant_payments(self, queryset=Payment.objects):
-        new_payments = queryset.filter(state=Payment.State.NEW, credit_debit=Payment.CreditDebit.DEBIT).all()
+        new_payments = queryset.filter(state=State.NEW, credit_debit=CreditDebit.DEBIT).all()
 
         for payment in new_payments:
-            payment.type = Payment.Type.IRRELEVANT
+            payment.type = Type.IRRELEVANT
             payment.save()
 
     def match_payments(self, queryset=Payment.objects):
-        new_payments = queryset.filter(state=Payment.State.NEW, credit_debit=Payment.CreditDebit.CREDIT).all()
+        new_payments = queryset.filter(state=State.NEW, credit_debit=CreditDebit.CREDIT).all()
 
         for payment in new_payments:
             if payment.remittance_user_string:
@@ -36,7 +37,7 @@ class PaymentProcessor:
                     matches = RE_USI_STRICT.findall(payment.remittance_user_string.replace(" ", ""))
 
                 if matches:
-                    payment.type = Payment.Type.SUBSCRIPTION_PAYMENT
+                    payment.type = Type.SUBSCRIPTION_PAYMENT
                     payment.save()
 
                     for usi in matches:
@@ -50,7 +51,7 @@ class PaymentProcessor:
                                 log.warning(
                                     "Received payment {} which is related to a course with undefined prices.".format(
                                         payment))
-                                payment.state = Payment.State.MANUAL
+                                payment.state = State.MANUAL
                                 payment.save()
                                 break
 
@@ -83,20 +84,20 @@ class PaymentProcessor:
                     payment.save()
             else:
                 log.warning("No user remittance was found for payment {0}.".format(payment))
-                payment.state = Payment.State.MANUAL
+                payment.state = State.MANUAL
                 payment.save()
 
     def finalize_payments(self, queryset=Payment.objects):
-        matched_payments = queryset.filter(state=Payment.State.MATCHED).all()
+        matched_payments = queryset.filter(state=State.MATCHED).all()
 
         for payment in matched_payments:
             for s in payment.subscriptions.all():
                 s.mark_as_payed(PaymentMethod.ONLINE)
-            payment.state = Payment.State.PROCESSED
+            payment.state = State.PROCESSED
             payment.save()
 
     def check_balance(self, payments):
-        for payment in payments.filter(state__in=[Payment.State.NEW, Payment.State.MANUAL]).all():
+        for payment in payments.filter(state__in=[State.NEW, State.MANUAL]).all():
             self._check_balance(payment)
 
     def _check_balance(self, payment):
@@ -105,21 +106,21 @@ class PaymentProcessor:
 
         Returns true if the payment's amount is equals to the sum of the matched subscriptions.
         """
-        if payment.state in [Payment.State.NEW,
-                             Payment.State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
+        if payment.state in [State.NEW,
+                             State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
             remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
 
             if remaining_amount == 0:
-                payment.state = Payment.State.MATCHED
+                payment.state = State.MATCHED
                 payment.amount_to_reimburse = 0
                 payment.save()
                 return True
             elif remaining_amount > 0:
                 payment.amount_to_reimburse = remaining_amount
-                payment.state = Payment.State.MANUAL
+                payment.state = State.MANUAL
                 payment.save()
                 return False
             else:
-                payment.state = Payment.State.MANUAL
+                payment.state = State.MANUAL
                 payment.save()
                 return False

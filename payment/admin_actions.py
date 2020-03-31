@@ -1,3 +1,4 @@
+from payment.models.choices import State, Type
 from payment.payment_processor import PaymentProcessor
 from payment.models import Payment
 
@@ -33,21 +34,21 @@ check_balance.short_description = "Check balance and if ok mark selected payment
 def mark_payment_as_irrelevant(modeladmin, request, queryset):
     short_description = "Mark selected payments as irrelevant"
     for payment in queryset:
-        payment.state = Payment.State.PROCESSED
-        payment.type = Payment.Type.IRRELEVANT
+        payment.state = State.PROCESSED
+        payment.type = Type.IRRELEVANT
         payment.save()
 
 
 def mark_payment_as_course_payment(modeladmin, request, queryset):
     short_description = "Mark selected payments as Course Payment Transfer"
     for payment in queryset:
-        payment.state = Payment.State.PROCESSED
-        payment.type = Payment.Type.COURSE_PAYMENT_TRANSFER
+        payment.state = State.PROCESSED
+        payment.type = Type.COURSE_PAYMENT_TRANSFER
         payment.save()
         
 def mark_archive(modeladmin, request, queryset):
     for payment in queryset:
-        payment.state = Payment.State.ARCHIVE
+        payment.state = State.ARCHIVE
         payment.save()    
 
 

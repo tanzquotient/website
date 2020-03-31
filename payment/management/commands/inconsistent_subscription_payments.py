@@ -3,6 +3,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from payment.models import *
+from payment.models.choices import State, Type
 
 log = logging.getLogger('tq')
 
@@ -14,7 +15,7 @@ class Command(BaseCommand):
         msg_method = []
         msg_amount = []
         for p in Payment.objects.all():
-            if p.state == Payment.State.PROCESSED and p.type == Payment.Type.SUBSCRIPTION_PAYMENT:
+            if p.state == State.PROCESSED and p.type == Type.SUBSCRIPTION_PAYMENT:
                 for sp in p.subscription_payments.all():
                     s = sp.subscription
                     if not s.paymentmethod:
