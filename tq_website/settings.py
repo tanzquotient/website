@@ -13,6 +13,8 @@ import os
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 from django.core.files.storage import Storage, FileSystemStorage
 
 ugettext = lambda s: s
@@ -561,7 +563,11 @@ PAYMENT_ACCOUNT = {
 # Logging
 sentry_sdk.init(
     dsn="https://883ad6a3790e48aea0291f4a0d1d89c4@sentry.io/124755",
-    integrations=[DjangoIntegration()],
+    integrations=[
+        DjangoIntegration(),
+        CeleryIntegration(),
+        RedisIntegration(),
+    ],
     environment='debug' if DEBUG else 'production',
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
