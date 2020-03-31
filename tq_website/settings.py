@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-import raven
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from django.core.files.storage import Storage, FileSystemStorage
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -43,11 +44,6 @@ USE_X_FORWARDED_HOST = True
 
 # Application definition
 INSTALLED_APPS = []
-
-if not DEBUG:
-    INSTALLED_APPS += [
-        'raven.contrib.django.raven_compat',
-    ]
 
 INSTALLED_APPS += [
     'treebeard',
@@ -560,12 +556,12 @@ PAYMENT_ACCOUNT = {
     }
 }
 
-RAVEN_ENVIRONMENT = 'development' if DEBUG else 'production'
-
-RAVEN_CONFIG = {
-    'dsn': 'https://883ad6a3790e48aea0291f4a0d1d89c4:339fab1993244b4e9d414ebcef70cee0@sentry.io/124755',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.join(os.path.dirname(__file__), '..')),
-    'environment': RAVEN_ENVIRONMENT
-}
+# Logging
+sentry_sdk.init(
+    dsn="https://883ad6a3790e48aea0291f4a0d1d89c4@sentry.io/124755",
+    integrations=[DjangoIntegration()],
+    environment='debug' if DEBUG else 'production',
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
