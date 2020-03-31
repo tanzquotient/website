@@ -20,6 +20,18 @@ services:
       - "5432"
     restart: always
 
+  # S3 storage
+  minio:
+    container_name: tq-data
+    image: minio/minio
+    volumes:
+      - ../data-minio:/data
+    environment:
+      MINIO_ACCESS_KEY: ${TQ_S3_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${TQ_S3_SECRET_KEY}
+      MINIO_REGION_NAME: ${TQ_S3_REGION_NAME}
+    command: server /data
+
   # Cache and message broker for celery (handles background tasks)
   redis:
     container_name: tq-redis
@@ -42,6 +54,7 @@ services:
     links:
       - postgres
       - redis
+      - minio
     restart: always
 
   # Webserver
@@ -78,6 +91,7 @@ services:
     links:
       - postgres
       - redis
+      - minio
     depends_on:
       - django # ensure the image is built before running this container
     restart: always
@@ -98,4 +112,5 @@ services:
     links:
       - postgres
       - redis
+      - minio
     restart: always
