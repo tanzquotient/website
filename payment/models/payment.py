@@ -1,7 +1,9 @@
 from django.db import models
 
-from courses.models import Subscribe
 from .choices import *
+from . import PostfinanceFile
+
+from courses.models import Subscribe
 
 
 class Payment(models.Model):
@@ -25,6 +27,7 @@ class Payment(models.Model):
                                     help_text="If this transaction is a credit or a debit.")
     subscriptions = models.ManyToManyField(Subscribe, blank=True, through='SubscriptionPayment')
     filename = models.CharField(max_length=300)
+    file = models.ForeignKey(to=PostfinanceFile, related_name='payments', null=True, blank=True, on_delete=models.SET_NULL)
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):

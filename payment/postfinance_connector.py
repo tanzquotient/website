@@ -1,61 +1,61 @@
 import logging
-import os
 import re
+import xml.etree.ElementTree as ET
+from datetime import datetime
 
-from django.conf import settings
 from django.db import DatabaseError
 from paramiko.client import SSHClient
+
+from payment.models import Payment, PostfinanceFile
+from payment.models.choices import CreditDebit, State
+from tq_website.settings import FDS_HOST_KEY, FDS_PORT, FDS_HOST, FDS_PRIVATE_KEY, FDS_USER
 
 log = logging.getLogger('payment')
 
 
-class FDSConnection():
+class FDSConnection:
     def __init__(self):
         self.client = SSHClient()
-        self.client.load_host_keys(settings.FDS_HOST_KEY)
-        self.client.connect(settings.FDS_HOST, username=settings.FDS_USER, key_filename=settings.FDS_PRIVATE_KEY,
-                            port=settings.FDS_PORT)
+        self.client.load_host_keys(FDS_HOST_KEY)
+        self.client.connect(FDS_HOST, username=FDS_USER, key_filename=FDS_PRIVATE_KEY, port=FDS_PORT)
         self.sftp = self.client.open_sftp()
         log.info("Connected to FDS")
 
     def get_files(self):
         log.info("Receiving files from FDS...")
-        fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
 
-        local_files = os.listdir(fds_data_path)
-
+        # Iterate over all remote files
         self.sftp.chdir('yellow-net-reports')
-        for file in self.sftp.listdir():
-            if file not in local_files and file + '.processed' not in local_files:
-                log.info("Receiving {}".format(file))
-                self.sftp.get(file, os.path.join(fds_data_path, file))
-                # self.sftp.remove(file)
+        for filename in self.sftp.listdir():
+            if not PostfinanceFile.objects.filter(name=filename).exists():
+                log.info("Receiving {}".format(filename))
+                file = self.sftp.open(filename)
+                PostfinanceFile.objects.create(name=filename, file=file, downloaded_at=datetime.now())
+                log.info("Saved {}".format(filename))
             else:
-                log.debug("Skipping already present file: {}".format(file))
+                log.debug("Skipping already existing file: {}".format(filename))
 
 
-import xml.etree.ElementTree as ET
-from payment.models import Payment
-from datetime import datetime
 
 
-def find_fds_files(processed=False):
-    fds_data_path = os.path.join(settings.BASE_DIR, settings.FDS_DATA_PATH)
-    log.debug("find fds files under '{}'".format(fds_data_path))
-    for file in os.listdir(fds_data_path):
-        if ('.xml' in file) and (('processed' in file) == processed):
-            yield os.path.join(fds_data_path, file)
+def find_fds_files(include_processed=False):
+    if include_processed:
+        return PostfinanceFile.objects
+    return PostfinanceFile.objects.filter(processed=False)
+
 
 
 class ISO2022Parser:
     @staticmethod
     def parse(reparse=False, dry_run=False):
         count = 0
-        for filename in find_fds_files(processed=reparse):
-            payments = ISO2022Parser.parse_file(filename)
+        for file in find_fds_files(include_processed=reparse):
+            payments = ISO2022Parser.parse_file(file)
             count += len(payments)
             if not dry_run:
-                ISO2022Parser.save_payments(filename, payments)
+                ISO2022Parser.save_payments(payments)
+                file.processed = True
+                file.save()
         return count
 
     @staticmethod
@@ -100,10 +100,13 @@ class ISO2022Parser:
         return data
 
     @staticmethod
-    def parse_file(filename):
+    def parse_file(db_file):
+        filename = db_file.name
         log.info("parse file {}".format(filename))
+        if db_file.processed:
+            log.info("file has already been processed previously")
 
-        tree = ET.parse(filename)
+        tree = ET.parse(db_file.file)
         root = tree.getroot()
         payments = []
 
@@ -141,11 +144,11 @@ class ISO2022Parser:
             # Credit or Debit
             credit_debit = find_or_empty(transaction, 'CdtDbtInd')
             if credit_debit == 'CRDT':
-                payment.credit_debit = Payment.CreditDebit.CREDIT
+                payment.credit_debit = CreditDebit.CREDIT
             elif credit_debit == 'DBIT':
-                payment.credit_debit = Payment.CreditDebit.DEBIT
+                payment.credit_debit = CreditDebit.DEBIT
             else:
-                payment.credit_debit = Payment.CreditDebit.UNKNOWN
+                payment.credit_debit = CreditDebit.UNKNOWN
 
             # remittance user string
             payment.remittance_user_string = find_or_empty(transaction, 'AddtlNtryInf')
@@ -156,26 +159,23 @@ class ISO2022Parser:
                 payment.address = "{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
                 payment.remittance_user_string = user_data['note']
 
-            payment.state = Payment.State.NEW
+            payment.state = State.NEW
             # postal_address = debitor.find(".//pf:PstlAdr",ns)
             # if postal_address:
             #    addresses = debitor.findall(".//pf:AdrLine", ns)
             #    payment.address = ", ".join([adr.text for adr in addresses])
             payment.date = datetime.today()  # TODO not exactly elegant
-            payment.filename = os.path.split(filename)[-1]
+            payment.filename = filename
+            payment.file = db_file
             payments.append(payment)
             log.info('Detected payment: {}'.format(payment))
 
         return payments
 
     @staticmethod
-    def save_payments(filename, payments):
+    def save_payments(payments):
         for payment in payments:
             try:
                 payment.save()
             except DatabaseError as e:
                 log.error(str(e))
-
-        # even if there was an error, we rename the file to ensure it is not again and again reprocessed,
-        # throwing errors
-        os.rename(filename, filename + '.processed')
