@@ -1,5 +1,6 @@
 import re
 import unicodedata
+import uuid
 from datetime import date
 
 from django.contrib import messages
@@ -165,6 +166,8 @@ def update_user(user, user_data):
     if not user_data["picture"]:
         profile.picture = None
     else:
+        name = user_data['picture'].name
+        user_data['picture'].name = "{}.{}".format(uuid.uuid4(), name.split(".")[-1])
         set_if_given('picture')
     set_if_given('about_me')
 

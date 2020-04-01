@@ -16,7 +16,6 @@ def generate_svg(modeladmin, request, queryset):
 
     for voucher in queryset:
         filename = "Voucher-" + voucher.key + ".svg"
-        path = os.path.join(settings.MEDIA_ROOT, filename)
 
         if voucher.expires:
             date_string = "valid through " + voucher.expires.strftime("%m/%Y")
