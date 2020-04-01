@@ -31,8 +31,9 @@ def merge_duplicate_users(to_merge):
         profile.save()
 
         bank_account = _get_value_from_most_recent_alias_profile(aliases, profile, "bank_account")
-        bank_account.user_profile = profile
-        bank_account.save()
+        if bank_account:
+            bank_account.user_profile = profile
+            bank_account.save()
 
         for alias in user_aliases:
             try:
