@@ -266,4 +266,4 @@ class Answer(models.Model):
             return None
 
     def __str__(self):
-        return self.value()
+        return self.value() or "<not answered>"
