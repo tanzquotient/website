@@ -5,6 +5,7 @@ import tempfile
 from io import open
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 
 
 def generate_svg(modeladmin, request, queryset):
@@ -22,8 +23,7 @@ def generate_svg(modeladmin, request, queryset):
         else:
             date_string = ""
 
-        with tempfile.TemporaryFile(mode='w') as file:
-            file.write(content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string))
-            voucher.pdf_file.save(filename, file)
+        file = ContentFile(content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string))
+        voucher.pdf_file.save(filename, file)
 
 generate_svg.short_description = "Generate Voucher SVG"
