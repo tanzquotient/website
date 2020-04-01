@@ -22,7 +22,7 @@ def generate_svg(modeladmin, request, queryset):
         else:
             date_string = ""
 
-        with tempfile.TemporaryFile() as file:
+        with tempfile.TemporaryFile(mode='w') as file:
             file.write(content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string))
             voucher.pdf_file.save(filename, file)
 
