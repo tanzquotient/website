@@ -69,8 +69,8 @@ class PaymentProcessor:
                         #    course = course_query.first()
                         #    log.info("Matched payment to course payment {}".format(course))
                         #    CoursePayment(course=course, payment=payment, amount=payment.amount).save()
-                        #    payment.type = payment.Type.COURSE_PAYMENT_TRANSFER
-                        #    payment.state = payment.State.PROCESSED
+                        #    payment.type = Type.COURSE_PAYMENT_TRANSFER
+                        #    payment.state = State.PROCESSED
                         #    payment.save()
                         #    break
                         else:
@@ -80,7 +80,7 @@ class PaymentProcessor:
                     log.info("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
                     # TODO improve this with a code for teachers when they transfer course payments
-                    payment.state = payment.State.MANUAL
+                    payment.state = State.MANUAL
                     payment.save()
             else:
                 log.warning("No user remittance was found for payment {0}.".format(payment))
@@ -107,7 +107,7 @@ class PaymentProcessor:
         Returns true if the payment's amount is equals to the sum of the matched subscriptions.
         """
         if payment.state in [State.NEW,
-                             State.MANUAL] and payment.type == payment.Type.SUBSCRIPTION_PAYMENT:
+                             State.MANUAL] and payment.type == Type.SUBSCRIPTION_PAYMENT:
             remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
 
             if remaining_amount == 0:
