@@ -36,7 +36,7 @@ class UserProfile(models.Model):
     nationality = CountryField(blank=True, null=True)
     residence_permit = models.CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
     ahv_number = models.CharField(max_length=255, blank=True, null=True)
-    bank_account = models.OneToOneField(BankAccount, blank=True, null=True, on_delete=models.CASCADE)
+    bank_account = models.OneToOneField(BankAccount, related_name='user_profile', blank=True, null=True, on_delete=models.CASCADE)
     default_hourly_wage = models.FloatField(default=30.0)
     default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
 

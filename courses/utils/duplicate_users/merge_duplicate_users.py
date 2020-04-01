@@ -26,8 +26,11 @@ def merge_duplicate_users(to_merge):
         profile.nationality = _get_value_from_most_recent_alias_profile(aliases, profile, "nationality")
         profile.residence_permit = _get_value_from_most_recent_alias_profile(aliases, profile, "residence_permit")
         profile.ahv_number = _get_value_from_most_recent_alias_profile(aliases, profile, "ahv_number")
-        profile.bank_account = _get_value_from_most_recent_alias_profile(aliases, profile, "bank_account")
         profile.default_hourly_wage = _get_value_from_most_recent_alias_profile(aliases, profile, "default_hourly_wage")
+
+        bank_account = _get_value_from_most_recent_alias_profile(aliases, profile, "bank_account")
+        bank_account.user_profile = profile
+        bank_account.save()
 
         profile.save()
         user.save()
