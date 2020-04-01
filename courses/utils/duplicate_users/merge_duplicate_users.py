@@ -12,6 +12,7 @@ def merge_duplicate_users(to_merge):
         user = User.objects.get(id=primary)
         user_aliases = list(User.objects.filter(id__in=aliases))
         user.date_joined = User.objects.filter(id__in=aliases).order_by("date_joined").first().date_joined
+        user.save()
 
         log.info("Merging {}".format(user))
 
@@ -27,13 +28,11 @@ def merge_duplicate_users(to_merge):
         profile.residence_permit = _get_value_from_most_recent_alias_profile(aliases, profile, "residence_permit")
         profile.ahv_number = _get_value_from_most_recent_alias_profile(aliases, profile, "ahv_number")
         profile.default_hourly_wage = _get_value_from_most_recent_alias_profile(aliases, profile, "default_hourly_wage")
+        profile.save()
 
         bank_account = _get_value_from_most_recent_alias_profile(aliases, profile, "bank_account")
         bank_account.user_profile = profile
         bank_account.save()
-
-        profile.save()
-        user.save()
 
         for alias in user_aliases:
             try:
