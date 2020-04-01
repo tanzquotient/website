@@ -6,7 +6,7 @@ from parler.admin import TranslatableAdmin
 from reversion.admin import VersionAdmin
 
 from courses.filters import *
-from payment.vouchergenerator import generate_pdf, join_pdfs
+from payment.vouchergenerator import generate_svg
 
 
 class CourseInline(admin.TabularInline):
@@ -282,7 +282,7 @@ class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
     exclude = ('key',)
 
-    actions = [mark_voucher_as_used, generate_pdf, join_pdfs]
+    actions = [mark_voucher_as_used, generate_svg]
 
     raw_id_fields = ('subscription',)
 
