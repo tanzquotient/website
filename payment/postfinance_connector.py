@@ -26,14 +26,16 @@ class FDSConnection:
 
         # Iterate over all remote files
         self.sftp.chdir('yellow-net-reports')
-        for filename in self.sftp.listdir():
+        filenames = self.sftp.listdir()
+        log.info("Found {} files on server".format(filenames))
+        for filename in filenames:
             if not PostfinanceFile.objects.filter(name=filename).exists():
                 log.info("Receiving {}".format(filename))
                 file = self.sftp.open(filename)
                 PostfinanceFile.objects.create(name=filename, file=file, downloaded_at=datetime.now())
                 log.info("Saved {}".format(filename))
             else:
-                log.debug("Skipping already existing file: {}".format(filename))
+                log.info("Skipping already existing file: {}".format(filename))
 
 
 
