@@ -3,14 +3,12 @@
 {% load i18n %}
 
 {% block message %}
-    <p><a href="{% url 'courses:subscription' course.id %}"><i
-            class="fa fa-arrow-circle-left fa-lg"></i> {% trans 'Go back' %}</a>
-    </p>
-
-    <div class="alert alert-{{ message.tag }}">{{ message.text }}</div>
-    {% if message.long_text %}
-        <p>
-            {{ message.long_text }}
-        </p>
-    {% endif %}
+    <div class="alert alert-{{ message.tag }}">
+        <p><strong>{{ message.text }}</strong></p>
+        {% if message.long_text %}
+            <p>
+                {{ message.long_text }}
+            </p>
+        {% endif %}
+    </div>
 {% endblock message %}
