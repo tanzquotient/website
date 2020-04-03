@@ -85,10 +85,6 @@ header .container {
     }
 }
 
-#header_home {
-    padding-bottom: 25px;
-}
-
 #header_about {
     background-image: url(../elements/about.jpg);
     background-position: 50% 37%;
