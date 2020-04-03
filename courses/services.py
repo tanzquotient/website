@@ -6,14 +6,15 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q, Prefetch
-from django.http import Http404
+from django.http import Http404, HttpResponseServerError
 from django.utils import dateformat
 from django.utils.translation import ugettext as _
 
 import courses.models as models
 from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
-    RegularLessonException
+    RegularLessonException, Subscribe, UserProfile, MatchingState
 from courses.utils import export
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
@@ -216,59 +217,91 @@ def clean_username(name):
     return re.sub('[^0-9a-zA-Z+-.@_]+', '', name)
 
 
+@transaction.atomic
 def subscribe(course_id, data):
-    '''Actually enrols a user or a pair of users in a course'''
-    res = dict()
+    """Actually enrols a user or a pair of users in a course"""
 
-    course = models.Course.objects.get(id=course_id)
-    user1 = models.UserProfile.objects.filter(user__id=data['user_id1'])
-    assert user1.count() == 1
-    user1 = user1[0]
-    user2 = None
+    # Get course and user
+    course = Course.objects.get(id=course_id)
+    user = User.objects.get(id=data['user_id1'])
+
+    # Get partner, if specified
+    partner = None
     if 'user_id2' in data:
-        user2 = models.UserProfile.objects.filter(user__id=data['user_id2'])
-        assert user2.count() == 1
-        user2 = user2[0]
+        partner = User.objects.get(id=data['user_id2'])
 
-    if user1 == user2:
-        res['tag'] = 'danger'
-        res['text'] = 'Du kannst dich nicht mit dir selbst anmelden!'
-    elif models.Subscribe.objects.filter(user=user1.user, course__id=course_id).count() > 0:
-        res['tag'] = 'danger'
-        res['text'] = 'Du ({}) bist schon für diesen Kurs angemeldet!'.format(user1.user.first_name)
-        res['long_text'] = 'Wenn du einen Fehler bei der Anmeldung gemacht hast, wende dich an anmeldungen@tq.vseth.ch'
-    elif user2 is not None and models.Subscribe.objects.filter(user=user2.user, course__id=course_id).count() > 0:
-        res['tag'] = 'danger'
-        res['text'] = 'Dein Partner {} ist schon für diesen Kurs angemeldet!'.format(user2.user.first_name)
-        res['long_text'] = 'Wenn du einen Fehler bei der Anmeldung gemacht hast, wende dich an anmeldungen@tq.vseth.ch'
+    # Find existing subscriptions
+    user_subscription = course.subscriptions.filter(user=user)
+    partner_subscription = course.subscriptions.filter(user=partner)
+
+    # Errors
+    if user == partner:
+        return dict(
+            tag='danger',
+            text=_('You entered yourself as partner! Please enter a valid partner.')
+        )
+    if partner_subscription.exists() and partner_subscription.get().partner not in [None, user]:
+        return dict(
+            tag='danger',
+            text=_('The partner you entered is already subscribed with someone else!')
+        )
+    if user_subscription.exists() and partner is None:
+        return dict(
+            tag='warning',
+            text=_('You are already subscribed!')
+        )
+    if user_subscription.exists() and partner_subscription.exists():
+        # Link partners if not already done
+        if user_subscription.get().partner is None and partner_subscription.get().partner is None:
+            user_subscription.get().partner = partner
+            partner_subscription.get().partner = user
+            user_subscription.get().matching_state = MatchingState.COUPLE
+            partner_subscription.get().matching_state = MatchingState.COUPLE
+        return dict(
+            tag='warning',
+            text=_('Both, you and your partner are already subscribed!')
+        )
+
+
+    # Get relevant info
+    experience = data['experience']
+    comment = data['comment']
+
+    # Get or create user subscription
+    if not user_subscription.exists():
+        user_subscription = Subscribe(user=user, course=course, experience=experience, comment=comment)
     else:
-        if user2:
-            subscription = models.Subscribe(user=user1.user, course=course, partner=user2.user,
-                                            experience=data['experience'],
-                                            comment=data['comment'])
+        user_subscription = user_subscription.get()
+
+    # Handle couple subscription
+    if partner:
+        # Get or create partner subscription
+        if not partner_subscription.exists():
+            partner_subscription = Subscribe(user=partner, course=course, experience=experience, comment=comment)
         else:
-            subscription = models.Subscribe(user=user1.user, course=course,
-                                            experience=data['experience'],
-                                            comment=data['comment'])
-        subscription.derive_matching_state()
-        subscription.save()
-        send_subscription_confirmation(subscription)
+            partner_subscription = partner_subscription.get()
 
-        if user2:
-            subscription.matching_state = models.MatchingState.COUPLE
-            subscription.save()
+        # Link subscriptions
+        user_subscription.partner = partner
+        partner_subscription.partner = user
+        user_subscription.matching_state = MatchingState.COUPLE
+        partner_subscription.matching_state = MatchingState.COUPLE
 
-            subscription2 = models.Subscribe(user=user2.user, course=course, partner=user1.user,
-                                             experience=data['experience'], comment=data['comment'])
-            subscription2.matching_state = models.MatchingState.COUPLE
-            subscription2.save()
-            send_subscription_confirmation(subscription2)
+        # Finish partner subscription
+        partner_subscription.save()
+        send_subscription_confirmation(partner_subscription)
 
-        res['tag'] = 'info'
-        res['text'] = 'Anmeldung erfolgreich.'
-        res['long_text'] = 'Du erhältst in Kürze eine Emailbestätigung.'
 
-    return res
+    # Finish user subscription
+    user_subscription.derive_matching_state()
+    user_subscription.save()
+    send_subscription_confirmation(user_subscription)
+
+    return dict(
+        tag='success',
+        text=_('Successfully subscribed'),
+        long_text=_('You will receive an email shortly')
+    )
 
 
 # creates a copy of course and sets its offering to the next offering in the future
