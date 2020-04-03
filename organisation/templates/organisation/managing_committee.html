@@ -59,10 +59,6 @@
 </div>
 
 
-{% if functions %}
-    {% for function in functions %}
-        {% for user in function.users.all %}
-            {% include "courses/snippets/user_modal.html" with user=user only %}
-        {% endfor %}
-    {% endfor %}
-{% endif %}
+{% for user in users %}
+    {% include "courses/snippets/user_modal.html" with user=user only %}
+{% endfor %}

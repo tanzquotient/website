@@ -22,7 +22,7 @@ class ManagingCommitteePlugin(CMSPluginBase):
             for user in function.users.all():
                 users.add(user)
 
-        users = list(users)
+        users = sorted(users, key=lambda u: u.get_full_name())
 
         context.update({
             'users': users,
