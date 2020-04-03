@@ -19,7 +19,7 @@ class ManagingCommitteePlugin(CMSPluginBase):
         functions = Function.objects.active()
         users = set()
         for function in functions:
-            for user in function.users:
+            for user in function.users.all():
                 users.add(user)
 
         users = list(users)
