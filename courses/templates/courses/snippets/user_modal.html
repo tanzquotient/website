@@ -51,15 +51,6 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    {% if user.functions.count > 0 %}
-                        <br/>
-                        <div class="col-xs-12">
-                            <h4>{% trans "Contact" %}</h4>
-                            {% for function in user.functions.all %}
-                                <p><a href="mailto:{{ function.email }}">{{ function.email|default:"-" }}</a></p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
             <div class="modal-footer">

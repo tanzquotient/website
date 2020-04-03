@@ -6,31 +6,28 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>{% trans "Resort" %}</th>
             <th>{% trans "Name" %}</th>
-            <th>{% trans "Mail" %}</th>
+            <th>{% trans "Resort" %}</th>
         </tr>
         </thead>
-        {% if functions %}
+        {% if users %}
             <tbody>
-            {% for function in functions %}
+            {% for user in users %}
                 <tr>
-                    <td>{{ function.name }}</td>
                     <td>
-                        {% if function.users %}
-                            {% for user in function.users.all %}
-                                <!-- Button trigger modal -->
-                                <a href="#" data-toggle="modal"
-                                   data-target="#user_modal-{{ user.id }}">{{ user.get_full_name }}</a>
-                                {% if not forloop.last %}
-                                    /
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            {% trans "vacant" %}
-                        {% endif %}
+                        <a href="#" data-toggle="modal" data-target="#user_modal-{{ user.id }}">
+                            {{ user.get_full_name }}
+                        </a>
                     </td>
-                    <td><a href="mailto:{{ function.email }}">{{ function.email|default:"-" }}</a></td>
+                    <td>
+                        {% for function in user.functions.all %}
+                            <!-- Button trigger modal -->
+                            {{ function.name }}
+                            {% if not forloop.last %}
+                                &amp;
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -39,27 +36,23 @@
 </div>
 
 <div class="visible-xs">
-    {% if functions %}
+    {% if users %}
         <div class="list-group">
-            {% for function in functions %}
-                {% for user in function.users.all %}
-                    <a href="#" data-toggle="modal" data-target="#user_modal-{{ user.id }}"
-                       class="list-group-item">
-                        <h4 class="list-group-item-heading">
-                            {{ user.get_full_name }}
-                            <small> {{ function.name }}</small>
-                        </h4>
-                        <p class="list-group-item-text">{{ function.email }}</p>
-                    </a>
-                {% empty %}
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">
-                            vakant
-                            <small> {{ function.name }}</small>
-                        </h4>
-                        <p class="list-group-item-text">{{ function.email }}</p>
-                    </a>
-                {% endfor %}
+            {% for user in users %}
+                <a href="#" data-toggle="modal" data-target="#user_modal-{{ user.id }}"
+                   class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        {{ user.get_full_name }}
+                        <small> {% for function in user.functions.all %}
+                            <!-- Button trigger modal -->
+                            {{ function.name }}
+                            {% if not forloop.last %}
+                                &amp;
+                            {% endif %}
+                        {% endfor %}</small>
+                    </h4>
+                    <p class="list-group-item-text">{{ function.email }}</p>
+                </a>
             {% endfor %}
         </div>
     {% endif %}
