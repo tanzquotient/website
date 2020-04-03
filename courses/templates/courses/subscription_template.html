@@ -17,6 +17,8 @@
 {% endblock lead %}
 
 {% block main_content %}
+    {%  block message %}
+    {% endblock message %}
     <div class="container">
         <a id="subscription"></a>
         <p>{% include "courses/snippets/detail.html" with course=course user=user only %}</p>

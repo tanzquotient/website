@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block user_form %}
+{% block message %}
     <p><a href="{% url 'courses:subscription' course.id %}"><i
             class="fa fa-arrow-circle-left fa-lg"></i> {% trans 'Go back' %}</a>
     </p>
@@ -13,4 +13,4 @@
             {{ message.long_text }}
         </p>
     {% endif %}
-{% endblock user_form %}
+{% endblock message %}
