@@ -227,14 +227,15 @@ def subscribe(course_id, data):
 
     # Get partner, if specified
     partner = None
-    if 'partner_email' in data:
+    partner_email = data['partner_email']
+    if partner_email:
         # Try to find by email address
-        partner = User.objects.filter(email=data['partner_email'])
-        if not partner.exist():
+        partner = User.objects.filter(email=partner_email)
+        if not partner.exists():
             return dict(
                 tag='danger',
                 text=_('Partner does not exist!'),
-                text_long=_('The email you specified does not belong to any user. Make sure your partner has an active account.')
+                long_text=_('The email you specified does not belong to any user. Make sure your partner has an active account.')
             )
 
         # Get user object for partner

@@ -140,7 +140,7 @@ def subscribe(request, course_id):
     """
 
     # get course and form
-    course = Course.objects.filter(id=course_id)
+    course = Course.objects.get(id=course_id)
     form = course.get_subscribe_form(data=request.POST)
 
     # check whether it's valid:
