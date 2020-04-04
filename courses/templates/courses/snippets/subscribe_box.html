@@ -8,7 +8,7 @@
             </div>
             <div class="panel-body">
                 {% if user.is_authenticated %}
-                    {% include "courses/snippets/subscribe_form.html" with course=course form=form only%}
+                    {% include "courses/snippets/subscribe_form.html" with course=course form=form request=request only%}
                 {% else %}
                     {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
                     <a href="{% url 'account_login' %}?next={{ request.path }}"
