@@ -7,7 +7,6 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.forms import CoupleSubscriptionForm, SingleSubscriptionForm
 from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState
 
 
@@ -478,6 +477,7 @@ class Course(TranslatableModel):
     position = models.PositiveSmallIntegerField('Position', default=0)
 
     def get_subscribe_form(self, data=None):
+        from courses.forms import CoupleSubscriptionForm, SingleSubscriptionForm
         if self.type.couple_course:
             return CoupleSubscriptionForm(data=data)
         else:
