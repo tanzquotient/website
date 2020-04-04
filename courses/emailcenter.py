@@ -115,7 +115,7 @@ def send_teacher_welcome(teach):
     course = teach.course
 
     current_site = Site.objects.get_current().domain
-    room_url = current_site + reverse('courses:subscription', kwargs={'course_id': course.id})
+    course_url = current_site + reverse('courses:course_detail', kwargs={'course_id': course.id})
     coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
     login_url = current_site + reverse('account_login')
     profile_url = current_site + reverse('edit_profile')
@@ -126,7 +126,7 @@ def send_teacher_welcome(teach):
         'course': course.type.name,
         'course_internal_name': course.name,
         'course_info': create_course_info(course),
-        'room_url': room_url,
+        'room_url': course_url,
         'room_info': course.room.description,
         'room_instructions': course.room.instructions,
         'coursepayment_url': coursepayment_url,

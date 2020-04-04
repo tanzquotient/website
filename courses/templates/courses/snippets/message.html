@@ -1,8 +1,4 @@
-{% extends "courses/subscription_template.html" %}
-
-{% load i18n %}
-
-{% block message %}
+{% if message %}
     <div class="alert alert-{{ message.tag }}">
         <p><strong>{{ message.text }}</strong></p>
         {% if message.long_text %}
@@ -11,4 +7,4 @@
             </p>
         {% endif %}
     </div>
-{% endblock message %}
+{% endif message %}

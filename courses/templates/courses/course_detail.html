@@ -1,0 +1,25 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ course.type.name }}
+{% endblock %}
+
+{% block lead %}
+    <header id="header_courses">
+        <div class="container">
+            <div class="row">
+                <h1 class="lead">{% trans "Course details" %}</h1>
+            </div>
+        </div>
+    </header>
+{% endblock lead %}
+
+{% block main_content %}
+    <div class="container">
+        {% include "courses/snippets/message.html" with message=message only %}
+        {% include "courses/snippets/detail.html" with course=course user=user only %}
+        {% include "courses/snippets/subscribe_box.html" with course=course form=form user=user only %}
+    </div>
+{% endblock main_content %}

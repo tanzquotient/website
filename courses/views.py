@@ -6,7 +6,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.contrib.sessions.exceptions import SuspiciousSession
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -100,113 +99,70 @@ def offering_by_id(request, offering_id):
     return render(request, template_name, context)
 
 
-def subscription(request, course_id):
+def course_detail(request, course_id):
     """
     This view provides a form to enrol in a course
 
     Redirects:
     courses:course_list         if no course with the given ID exists
-    courses:subscription        if no valid submit button value is found
-    courses:subscription_do     everything is ok, redirection to actually perform the enrolment
     """
-    from .forms import SingleSubscriptionForm, CoupleSubscriptionForm
-    template_name = "courses/subscription.html"
+    template_name = "courses/course_detail.html"
 
-    # do not clear session keys
+    # Query course object
     course = Course.objects.filter(id=course_id)
 
     # if there is no course with this id --> redirect user to course list
-    if len(course) == 0:
+    if not course.exists():
         return redirect('courses:list')
-    # the course id must be unique; this is a consistency check
-    assert len(course) == 1
-    course = course[0]
 
-    is_couple_course = course.type.couple_course
+    # Get course object
+    course = course.get()
 
-    # create the correct form instance
-    if is_couple_course:
-        form = CoupleSubscriptionForm(request.POST)
-    else:
-        form = SingleSubscriptionForm(request.POST)
-
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            assert request.user != None
-            data = {
-                'user_id1': request.user.id,
-                'experience': form.cleaned_data['experience'],
-                'comment': form.cleaned_data['comment'],
-            }
-            if 'partner_email' in form.cleaned_data and form.cleaned_data['partner_email']:
-                partner = UserProfile.objects.filter(user__email=form.cleaned_data['partner_email'])
-                assert len(partner) == 1  # there should only be one partner with this email address
-                partner = partner[0]
-                data['user_id2'] = partner.user.id
-
-            request.session['data'] = data
-            if 'subscribe' in request.POST:
-                return redirect('courses:subscription_do', course_id)
-            else:
-                # no valid submit button value
-                return redirect('courses:subscription', course_id)
-
-    context = {}
-    context.update({
+    context = {
         'menu': "courses",
-        'course': get_object_or_404(Course, id=course_id),
-        'form': form
-    })
+        'course': course,
+        'user': request.user,
+        'form': course.get_subscribe_form()
+    }
+
+    # Add message if available
+    if 'message' in request.session:
+        context['message'] =  request.session.get('message', None)
+        del request.session['message']
+
     return render(request, template_name, context)
 
 
 @login_required
-def subscription_do(request, course_id):
+def subscribe(request, course_id):
     """
     This view actually performs the enrolment in a given course.
-
-    The view is just a wrapper to call services.subscribe(...)
-    Redirects:
-    courses:subscription_message    always in order to inform the user about success of enrolment
     """
-    if 'data' not in request.session:
-        raise SuspiciousSession()
 
-    res = services.subscribe(course_id, request.session['data'])
+    # get course and form
+    course = Course.objects.filter(id=course_id)
+    form = course.get_subscribe_form(data=request.POST)
 
-    # clear session keys
-    if 'data' in request.session:
-        del request.session['data']
+    # check whether it's valid:
+    if not form.is_valid():
+        request.session['message'] = {
+            'tag': 'danger',
+            'text': _('Form not valid. Pleas check your input again!')
+        }
+        return redirect('courses:course_detail', course_id)
 
-    request.session['subscription_result'] = res
-    return redirect('courses:subscription_message', course_id)
+    # Get subscription data
+    subscription_data = {
+        'user': request.user,
+        'experience': form.cleaned_data.get('experience', None),
+        'comment': form.cleaned_data.get('comment', None),
+        'partner_email': form.cleaned_data.get('partner_email', None)
+    }
 
-
-def subscription_message(request, course_id):
-    """
-    This view displays whether the enrolment was successful or not
-
-    Redirects:
-    courses:subscription    if there is no result in the given request
-    """
-    if 'subscription_result' not in request.session:
-        return redirect('courses:subscription', course_id)
-
-    template_name = "courses/subscription_message.html"
-    context = {}
-
-    context.update({
-        'menu': "courses",
-        'message': request.session['subscription_result'],
-        'course': Course.objects.get(id=course_id),
-    })
-    return render(request, template_name, context)
+    # Subscribe
+    subscription_result = services.subscribe(course_id, subscription_data)
+    request.session['message'] = subscription_result
+    return redirect('courses:course_detail', course_id)
 
 
 @staff_member_required

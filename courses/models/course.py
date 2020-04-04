@@ -7,6 +7,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
+from courses.forms import CoupleSubscriptionForm, SingleSubscriptionForm
 from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState
 
 
@@ -475,6 +476,12 @@ class Course(TranslatableModel):
 
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField('Position', default=0)
+
+    def get_subscribe_form(self, data=None):
+        if self.type.couple_course:
+            return CoupleSubscriptionForm(data=data)
+        else:
+            return SingleSubscriptionForm(data=data)
 
     class Meta:
         ordering = ['position', 'name']

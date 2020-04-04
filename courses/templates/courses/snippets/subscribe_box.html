@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% if course.is_subscription_allowed and course.has_free_places %}
+    {% if not user.is_authenticated or course not in user.profile.get_subscribed_courses %}
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                {% trans "Sign up" %}
+            </div>
+            <div class="panel-body">
+                {% if user.is_authenticated %}
+                    {% include "courses/snippets/subscribe_form.html" with course=course form=form only%}
+                {% else %}
+                    {% trans "In order to enroll to a course you need to login first." %}<br/><br/>
+                    <a href="{% url 'account_login' %}?next={{ request.path }}"
+                       class="btn btn-success">{% trans "Login to Enroll" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
