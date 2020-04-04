@@ -2,8 +2,10 @@
 <h2>
     {% if offering.is_preview %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
     {{ offering.name }}
-    <small>{{ offering.period|default:'' }}</small>
 </h2>
+{% if offering.period  %}
+    <p>{{ offering.period.date_as_string }}</p>
+{% endif %}
 
 <div class="hidden-xs">
     {% for d in sections %}
