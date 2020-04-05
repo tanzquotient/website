@@ -8,7 +8,7 @@
     </p>
     {% if course.type.couple_course %}
         <p class="text-info row">
-            {% trans  "If you wish to enroll with a partner, he/she needs to have an account. In this case, please enter the corresponding email address." %}
+            {% trans "If you wish to enroll with a partner, he/she needs to have an account. In this case, please enter the corresponding email address." %}
         </p>
     {% endif %}
     <form class="form-horizontal" role="form" action="{% url 'courses:subscribe' course.id %}" method="post">
