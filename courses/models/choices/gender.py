@@ -1,8 +1,10 @@
+from django.utils.translation import ugettext_lazy as _
+
 class Gender:
-    MEN = 'm'
-    WOMAN = 'w'
+    MALE = 'm'
+    FEMALE = 'w'
 
     CHOICES = (
-        (MEN, 'Man'),
-        (WOMAN, 'Woman')
+        (MALE, _('male')),
+        (FEMALE, _('female'))
     )

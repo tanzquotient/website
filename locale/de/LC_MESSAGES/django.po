@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 15:03+0000\n"
+"POT-Creation-Date: 2020-04-05 15:30+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -182,21 +182,50 @@ msgstr "Doppelte Benutzer zusammenführen"
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
+#: courses/forms/custom_signup_form.py:15
+msgid "Vorname"
+msgstr "Vorname"
+
+#: courses/forms/custom_signup_form.py:17
+msgid "Nachname"
+msgstr "Nachname"
+
+#: courses/forms/custom_signup_form.py:19
+msgid "Geschlecht"
+msgstr "Geschlecht"
+
 #: courses/forms/user_edit_from.py:13
 msgid "Telephone number (Mobile)"
 msgstr "Telefonnummer (Mobil)"
+
+#: courses/forms/user_edit_from.py:14
+msgid ""
+"Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
+"Teilen von Kursinhalten weitergegeben!"
+msgstr ""
+"Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
+"Teilen von Kursinhalten weitergegeben!"
 
 #: courses/forms/user_edit_from.py:17 courses/templates/user/profile.html:113
 msgid "Student"
 msgstr "Student"
 
 #: courses/forms/user_edit_from.py:19
+#: courses/templates/courses/snippets/signup_user_form.html:34
 msgid "Gender"
 msgstr "Geschlecht"
 
 #: courses/forms/user_edit_from.py:21
 msgid "Height (cm)"
 msgstr "Größe"
+
+#: courses/forms/user_edit_from.py:22
+msgid ""
+"Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
+"finden eines ähnlich grossen Partners."
+msgstr ""
+"Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
+"finden eines ähnlich grossen Partners."
 
 #: courses/forms/user_edit_from.py:25
 msgid "Student card number"
@@ -224,9 +253,37 @@ msgstr "PLZ"
 msgid "City"
 msgstr "Ort"
 
+#: courses/forms/user_edit_from.py:37
+msgid "Choose Year"
+msgstr "Wähle Jahr"
+
+#: courses/forms/user_edit_from.py:37
+msgid "Choose Month"
+msgstr "Wähle Monat"
+
+#: courses/forms/user_edit_from.py:37
+msgid "Choose Day"
+msgstr "Wähle Tag"
+
+#: courses/forms/user_edit_from.py:42
+msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
+msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
+
 #: courses/forms/user_edit_from.py:58
 msgid "Students have to enter their student card number."
 msgstr "Studenten müssen Ihre Legi Nummer eingeben"
+
+#: courses/models/choices/gender.py:8
+#: courses/templates/courses/snippets/signup_user_form.html:39
+#: courses/templates/user/snippets/course_as_teacher.html:26
+msgid "male"
+msgstr "männlich"
+
+#: courses/models/choices/gender.py:9
+#: courses/templates/courses/snippets/signup_user_form.html:43
+#: courses/templates/user/snippets/course_as_teacher.html:26
+msgid "female"
+msgstr "weiblich"
 
 #: courses/services.py:88
 msgid "Irregular weekday"
@@ -245,8 +302,8 @@ msgid ""
 "The email you specified does not belong to any user. Make sure your partner "
 "has an active account."
 msgstr ""
-"Die angegebene Emailadresse gehört zu keinem Benutzer. Stelle sicher, dass dein "
-"partner ein aktives Konto hat."
+"Die angegebene Emailadresse gehört zu keinem Benutzer. Stelle sicher, dass "
+"dein partner ein aktives Konto hat."
 
 #: courses/services.py:252
 msgid "You entered yourself as partner! Please enter a valid partner."
@@ -254,7 +311,8 @@ msgstr "Du hast dich selbst als partner eingetragen! Das ist nicht möglich."
 
 #: courses/services.py:257
 msgid "The partner you entered is already subscribed with someone else!"
-msgstr "Der angegebene Partner hat sich schon mit einer anderen Person angemeldet!"
+msgstr ""
+"Der angegebene Partner hat sich schon mit einer anderen Person angemeldet!"
 
 #: courses/services.py:262
 msgid "You are already subscribed!"
@@ -409,6 +467,11 @@ msgstr "Markierte Vorschläge zusammenführen"
 #: courses/templates/courses/snippets/offering.html:92
 msgid "No courses available"
 msgstr "Keine Kurse verfügbar"
+
+#: courses/templates/courses/snippets/address_input.html:4
+#: courses/templates/user/profile.html:90
+msgid "Address"
+msgstr "Adresse"
 
 #: courses/templates/courses/snippets/bank_account_input.html:4
 msgid "Bank Account"
@@ -590,8 +653,22 @@ msgstr "Schliessen"
 msgid "Some inputs are invalid"
 msgstr "Einige Eingaben sind ungültig"
 
+#: courses/templates/courses/snippets/signup_user_form.html:12
+#: events/templates/events/snippets/event_list.html:8
+#: organisation/templates/organisation/managing_committee.html:7
+#: payment/templates/payment/counter/details.html:21
+#: payment/templates/payment/course/confirm.html:21
+#: payment/templates/payment/course/course.html:139
+#: payment/templates/payment/finance/offering_detail.html:26
+#: payment/templates/payment/voucher/form.html:18
+#: payment/templates/payment/voucher/payment_failed.html:17
+#: payment/templates/payment/voucher/payment_success.html:17
+#: payment/templates/payment/voucher/remaining_amount.html:17
+msgid "Name"
+msgstr "Name"
+
 #: courses/templates/courses/snippets/song_list.html:5
-#: tq_website/settings.py:337
+#: tq_website/settings.py:336
 msgid "Title"
 msgstr "Titel"
 
@@ -636,16 +713,15 @@ msgstr "Einloggen zum Anmelden"
 
 #: courses/templates/courses/snippets/subscribe_form.html:7
 msgid "The experience and comment fields below are not required."
-msgstr ""
+msgstr "Erfahrung und Kommentar sind optional."
 
 #: courses/templates/courses/snippets/subscribe_form.html:11
 msgid ""
 "If you wish to enroll with a partner, he/she needs to have an account. In "
 "this case, please enter the corresponding email address."
 msgstr ""
-"Falls du dich mit einem/r Partner/in anmelden möchtest, benötigt "
-"er/sie ein Profil. In diesem Fall, gib bitte die entsprechende E-Mail "
-"Adresse an."
+"Falls du dich mit einem/r Partner/in anmelden möchtest, benötigt er/sie ein "
+"Profil. In diesem Fall, gib bitte die entsprechende E-Mail Adresse an."
 
 #: courses/templates/courses/snippets/subscribe_form.html:74
 msgid "I/We accept the GTC"
@@ -816,10 +892,6 @@ msgstr "AHV Nummer"
 msgid "Contact"
 msgstr "Kontakt"
 
-#: courses/templates/user/profile.html:90
-msgid "Address"
-msgstr "Adresse"
-
 #: courses/templates/user/profile.html:101
 msgid "Bank account"
 msgstr "Kontonummer"
@@ -879,14 +951,6 @@ msgstr "Teilnehmer"
 #: courses/templates/user/snippets/course_as_teacher.html:24
 msgid "Confirmed"
 msgstr "Bestätigt"
-
-#: courses/templates/user/snippets/course_as_teacher.html:26
-msgid "male"
-msgstr "männlich"
-
-#: courses/templates/user/snippets/course_as_teacher.html:26
-msgid "female"
-msgstr "weiblich"
 
 #: courses/templates/user/snippets/course_as_teacher.html:31
 msgid "Unconfirmed men"
@@ -1080,19 +1144,6 @@ msgstr "Keine Events geplant."
 msgid "No entry fee"
 msgstr "Freier Eintritt"
 
-#: events/templates/events/snippets/event_list.html:8
-#: organisation/templates/organisation/managing_committee.html:7
-#: payment/templates/payment/counter/details.html:21
-#: payment/templates/payment/course/confirm.html:21
-#: payment/templates/payment/course/course.html:139
-#: payment/templates/payment/finance/offering_detail.html:26
-#: payment/templates/payment/voucher/form.html:18
-#: payment/templates/payment/voucher/payment_failed.html:17
-#: payment/templates/payment/voucher/payment_success.html:17
-#: payment/templates/payment/voucher/remaining_amount.html:17
-msgid "Name"
-msgstr "Name"
-
 #: events/templates/events/snippets/event_list.html:11
 msgid "Venue"
 msgstr "Ort"
@@ -1249,8 +1300,8 @@ msgstr "Kursmanagement"
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/course/course.html:27 tq_website/settings.py:290
-#: tq_website/settings.py:312
+#: payment/templates/payment/course/course.html:27 tq_website/settings.py:289
+#: tq_website/settings.py:311
 msgid "English"
 msgstr "Englisch"
 
@@ -1810,14 +1861,14 @@ msgstr "Möchte gerne mithelfen"
 msgid "Files"
 msgstr "Dateien"
 
-#: tq_website/settings.py:289 tq_website/settings.py:304
+#: tq_website/settings.py:288 tq_website/settings.py:303
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:329
+#: tq_website/settings.py:328
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:333
+#: tq_website/settings.py:332
 msgid "Side content"
 msgstr "Seiteninhalt"

@@ -13,7 +13,7 @@ def write_vcard(data, file):
         card += "VERSION:3.0\n"
         card += "EMAIL:{}\n".format(user.email)
         card += "FN:{} {}\n".format(user.first_name, user.last_name)
-        card += "GENDER:{}\n".format('M' if user.profile.gender == Gender.MEN else 'F')
+        card += "GENDER:{}\n".format('M' if user.profile.gender == Gender.MALE else 'F')
         card += "N:{};{};;;\n".format(user.last_name, user.first_name)
         if user.profile.phone_number:
             tel = user.profile.phone_number

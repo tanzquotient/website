@@ -1,6 +1,7 @@
+{% load i18n %}
 <div class="form-group has-feedback  {% if form.street.errors or form.plz.errors or form.city.errors %}has-error{% endif %}">
    <div class="row">
-       <label for="{{ form.address.id_for_label }}" class="col-xs-12 col-sm-2 control-label">Adresse*</label>
+       <label for="{{ form.address.id_for_label }}" class="col-xs-12 col-sm-2 control-label">{% trans "Address" %}*</label>
 
        <div class="col-xs-12 col-sm-10">
            <div class="row">

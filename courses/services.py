@@ -341,8 +341,8 @@ def match_partners(subscriptions, request=None):
     for course_id in courses:
         single = subscriptions.filter(course__id=course_id, partner__isnull=True).all().exclude(
             state=models.SubscribeState.REJECTED)
-        sm = single.filter(user__profile__gender=models.Gender.MEN).order_by('date').all()
-        sw = single.filter(user__profile__gender=models.Gender.WOMAN).order_by('date').all()
+        sm = single.filter(user__profile__gender=models.Gender.MALE).order_by('date').all()
+        sw = single.filter(user__profile__gender=models.Gender.FEMALE).order_by('date').all()
         c = min(sm.count(), sw.count())
         sm = list(sm[0:c])  # list() enforces evaluation of queryset
         sw = list(sw[0:c])

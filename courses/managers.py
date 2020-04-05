@@ -83,16 +83,16 @@ class BankAccountManager(models.Manager):
 # and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
 class SubscribeQuerySet(models.QuerySet):
     def men(self):
-        return self.filter(user__profile__gender=Gender.MEN)
+        return self.filter(user__profile__gender=Gender.MALE)
 
     def women(self):
-        return self.filter(user__profile__gender=Gender.WOMAN)
+        return self.filter(user__profile__gender=Gender.FEMALE)
 
     def single_men(self):
-        return self.filter(partner__isnull=True, user__profile__gender=Gender.MEN)
+        return self.filter(partner__isnull=True, user__profile__gender=Gender.MALE)
 
     def single_women(self):
-        return self.filter(partner__isnull=True, user__profile__gender=Gender.WOMAN)
+        return self.filter(partner__isnull=True, user__profile__gender=Gender.FEMALE)
 
     def accepted(self):
         return self.filter(state__in=SubscribeState.ACCEPTED_STATES)
