@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 15:30+0000\n"
+"POT-Creation-Date: 2020-04-05 15:48+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -965,6 +965,7 @@ msgid "Payment status"
 msgstr "Zahlungsstatus"
 
 #: courses/templates/user/snippets/course_as_teacher.html:43
+#: courses/templates/user/snippets/subscription.html:95
 #: payment/templates/payment/finance/offering_overview_subscribers.html:36
 msgid "Paid"
 msgstr "Bezahlt"
@@ -1079,10 +1080,6 @@ msgstr "Zu erstatten"
 #: courses/templates/user/snippets/subscription.html:93
 msgid "To reimburse subscription info"
 msgstr "Rückerstattung wird noch durchgeführt."
-
-#: courses/templates/user/snippets/subscription.html:95
-msgid "Paid"
-msgstr "Bezahlt"
 
 #: courses/templates/user/snippets/subscription.html:97
 msgid "Paid subscription info"
