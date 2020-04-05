@@ -46,7 +46,7 @@ class CoursePaymentDetail(generics.RetrieveAPIView):
 
 class SubscriptionPayment(APIView):
     """
-    Change if a subscription is payed/not payed
+    Change if a subscription is paid/not paid
     """
     permission_classes = [
         TeacherCanReadUpdateSubscriptionPermission

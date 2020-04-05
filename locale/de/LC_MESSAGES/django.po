@@ -1081,11 +1081,11 @@ msgid "To reimburse subscription info"
 msgstr "Rückerstattung wird noch durchgeführt."
 
 #: courses/templates/user/snippets/subscription.html:95
-msgid "Payed"
+msgid "Paid"
 msgstr "Bezahlt"
 
 #: courses/templates/user/snippets/subscription.html:97
-msgid "Payed subscription info"
+msgid "Paid subscription info"
 msgstr "Wir haben die Bezahlung erhalten. Vielen Dank!"
 
 #: courses/templates/user/snippets/subscription.html:106

@@ -46,10 +46,10 @@ class CoursePaymentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SubscribePaymentUpdateSerializer(serializers.Serializer):
-    payed = serializers.BooleanField()
+    paid = serializers.BooleanField()
 
     def update(self, instance, validated_data):
-        instance.payed = validated_data.get('payed', instance.payed)
+        instance.paid = validated_data.get('paid', instance.paid)
         instance.save()
         return instance
 

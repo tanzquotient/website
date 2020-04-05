@@ -17,7 +17,7 @@ class SurveyDetail(generics.RetrieveAPIView):
 
 class SurveyAnswer(APIView):
     """
-    Change if a subscription is payed/not payed
+    Change if a subscription is paid/not paid
     """
     permission_classes = [
         permissions.AllowAny

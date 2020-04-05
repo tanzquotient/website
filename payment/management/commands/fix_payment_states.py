@@ -19,6 +19,6 @@ class Command(BaseCommand):
             if s.state == SubscribeState.CONFIRMED and s.get_price_to_pay() == sp.amount:
                 count += 1
                 print("{} - {} - {}".format(s.id, s.usi, s))
-                s.state = SubscribeState.PAYED
+                s.state = SubscribeState.PAID
                 s.save()
         print('TOTAL fixed: {}'.format(count))

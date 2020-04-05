@@ -190,11 +190,11 @@ def welcome_teachers_reset_flag(modeladmin, request, queryset):
     services.welcome_teachers_reset_flag(queryset, request)
 
 
-def set_subscriptions_as_payed(modeladmin, request, queryset):
+def set_subscriptions_as_paid(modeladmin, request, queryset):
     queryset.filter(state=SubscribeState.CONFIRMED).update(state=SubscribeState.COMPLETED)
 
 
-set_subscriptions_as_payed.short_description = "Set selected subscriptions as payed"
+set_subscriptions_as_paid.short_description = "Set selected subscriptions as paid"
 
 
 def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
@@ -308,7 +308,7 @@ send_survey.short_description = "Send a survey invitation to all participants of
 
 def undo_voucher_payment(modeladmin, request, queryset):
     for subscription in queryset:
-        if subscription.state in [SubscribeState.PAYED,
+        if subscription.state in [SubscribeState.PAID,
                                   SubscribeState.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
             subscription.state = SubscribeState.CONFIRMED
             for voucher in Voucher.objects.filter(subscription=subscription).all():

@@ -92,7 +92,7 @@ class PaymentProcessor:
 
         for payment in matched_payments:
             for s in payment.subscriptions.all():
-                s.mark_as_payed(PaymentMethod.ONLINE)
+                s.mark_as_paid(PaymentMethod.ONLINE)
             payment.state = State.PROCESSED
             payment.save()
 

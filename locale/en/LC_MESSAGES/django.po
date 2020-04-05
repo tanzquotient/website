@@ -1065,11 +1065,11 @@ msgid "To reimburse subscription info"
 msgstr "Reimbursement pending."
 
 #: courses/templates/user/snippets/subscription.html:95
-msgid "Payed"
-msgstr "Payed"
+msgid "Paid"
+msgstr "Paid"
 
 #: courses/templates/user/snippets/subscription.html:97
-msgid "Payed subscription info"
+msgid "Paid subscription info"
 msgstr "We received your payment. Thank you!"
 
 #: courses/templates/user/snippets/subscription.html:106

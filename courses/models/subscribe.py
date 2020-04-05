@@ -105,22 +105,22 @@ class Subscribe(models.Model):
             r = 'No'
 
         if c > 0:
-            # this user didn't payed for other courses
+            # this user didn't pay for other courses
             r += ', owes {} more'.format(c)
         return r
 
-    get_payment_state.short_description = 'Payed?'
+    get_payment_state.short_description = 'Paid?'
 
-    def mark_as_payed(self, payment_method, user=None):
+    def mark_as_paid(self, payment_method, user=None):
         if self.state == SubscribeState.CONFIRMED:
 
             with reversion.create_revision():
-                self.state = SubscribeState.PAYED
+                self.state = SubscribeState.PAID
                 self.paymentmethod = payment_method
                 self.save()
                 if user is not None:
                     reversion.set_user(user)
-                reversion.set_comment('Payed using payment method ' + payment_method)
+                reversion.set_comment('Paid using payment method ' + payment_method)
             if self.paymentmethod == PaymentMethod.ONLINE:
                 send_online_payment_successful(self)
             return True
@@ -133,11 +133,11 @@ class Subscribe(models.Model):
             voucher_value = price * (float(voucher.percentage) / 100.0)
             self.price_to_pay = price - voucher_value
             if price == voucher_value and self.state == SubscribeState.CONFIRMED:
-                self.state = SubscribeState.PAYED
+                self.state = SubscribeState.PAID
                 self.paymentmethod = PaymentMethod.VOUCHER
                 if user is not None:
                     reversion.set_user(user)
-                reversion.set_comment('Payed using payment method ' + PaymentMethod.VOUCHER)
+                reversion.set_comment('Paid using payment method ' + PaymentMethod.VOUCHER)
                 send_online_payment_successful(self)
             self.save()
 
