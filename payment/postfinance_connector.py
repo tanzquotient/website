@@ -3,6 +3,7 @@ import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
+from django.core.files.base import ContentFile
 from django.db import DatabaseError
 from paramiko.client import SSHClient
 
@@ -31,8 +32,12 @@ class FDSConnection:
         for filename in filenames:
             if not PostfinanceFile.objects.filter(name=filename).exists():
                 log.info("Receiving {}".format(filename))
-                file = self.sftp.open(filename)
-                PostfinanceFile.objects.create(name=filename, file=file, downloaded_at=datetime.now())
+                with self.sftp.open(filename) as file:
+                    content = file.read()
+                if isinstance(content, str):
+                    content = content.encode('utf-8')
+                content_file = ContentFile(content)
+                PostfinanceFile.objects.create(name=filename, file=content_file, downloaded_at=datetime.now())
                 log.info("Saved {}".format(filename))
             else:
                 log.info("Skipping already existing file: {}".format(filename))
@@ -43,7 +48,7 @@ class FDSConnection:
 def find_fds_files(include_processed=False):
     if include_processed:
         return PostfinanceFile.objects
-    return PostfinanceFile.objects.filter(processed=False)
+    return PostfinanceFile.objects.filter(processed=False).all()
 
 
 
