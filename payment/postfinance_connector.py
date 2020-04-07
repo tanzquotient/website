@@ -37,7 +37,8 @@ class FDSConnection:
                 if isinstance(content, str):
                     content = content.encode('utf-8')
                 content_file = ContentFile(content)
-                PostfinanceFile.objects.create(name=filename, file=content_file, downloaded_at=datetime.now())
+                db_file = PostfinanceFile.objects.create(name=filename, downloaded_at=datetime.now())
+                db_file.file.save(filename, content_file)
                 log.info("Saved {}".format(filename))
             else:
                 log.info("Skipping already existing file: {}".format(filename))
