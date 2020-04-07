@@ -25,7 +25,14 @@ class PaymentAdmin(admin.ModelAdmin):
     inlines = [SubscriptionPaymentInline]
     actions = [process_payments, check_balance, mark_payment_as_irrelevant, mark_payment_as_course_payment, mark_archive]
     readonly_fields = ('credit_debit', 'name', 'date', 'address', 'transaction_id', 'amount', 'amount_to_reimburse',
-                       'currency_code', 'remittance_user_string', 'filename', 'iban', 'bic')
+                       'currency_code', 'remittance_user_string', 'filename', 'file', 'iban', 'bic')
+
+@admin.register(PostfinanceFile)
+class PostfinanceFileAdmin(admin.ModelAdmin):
+    list_display = ['name', 'processed', 'downloaded_at']
+    list_filter = ['processed']
+    search_fields = ['name']
+    readonly_fields = ['name', 'file', 'downloaded_at']
 
 
 @admin.register(SubscriptionPayment)
