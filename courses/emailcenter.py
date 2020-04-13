@@ -157,7 +157,7 @@ def _email_helper(email, template, context):
     """Sending facility. Catches errors due to not existent template."""
     try:
         return mail.send(
-            [email, my_settings.DEFAULT_FROM_EMAIL],
+            [email],
             my_settings.DEFAULT_FROM_EMAIL,
             template=template,
             context=context,

@@ -48,6 +48,7 @@ INSTALLED_APPS = []
 
 INSTALLED_APPS += [
     'treebeard',
+    'ckeditor',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
     'easy_thumbnails',
@@ -239,6 +240,7 @@ TEMPLATES = [
 ############################################
 # Configuration of djangocms-text-ckeditor #
 ############################################
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "uploads/"
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
 CKEDITOR_IMAGE_BACKEND = 'pillow'

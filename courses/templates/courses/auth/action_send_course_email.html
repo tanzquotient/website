@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <h1>{% trans "Email" %}</h1>
+
+    {{ evaluate_form.media }}
+
+    {{ evaluate_form.as_p }}
+
+
+    </br>
+
+    <h1>{% trans "Recipients" %}</h1>
+    <p>{% trans "The email will be sent to all participants of the following courses" %}</p>
+
+    <ul>{{ courses|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="send_course_email" />
+    <input type="submit" name="go" value="Go" />
+</form>
+
+{% endblock %}

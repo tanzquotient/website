@@ -1,24 +1,17 @@
-import datetime
-
+from django import forms
 from django.contrib import admin
+from django.contrib import messages
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from survey.models import Survey, SurveyInstance
 import survey.services as survey_services
 from courses.models import *
-from django.contrib.auth.models import Group
-
-from . import services
-
-from django import forms
-
-from django.utils.translation import ugettext as _
 from payment.services import remind_of_payments
-from post_office.models import EmailTemplate
-
-from django.contrib import messages
+from survey.models import SurveyInstance
+from . import services
+from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
 
 
 def display(modeladmin, request, queryset):
@@ -47,13 +40,6 @@ def deactivate(modeladmin, request, queryset):
 
 
 deactivate.short_description = "Deactivate"
-
-
-class CopyCourseForm(forms.Form):
-    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
-    offering = forms.ModelChoiceField(queryset=Offering.objects.all(), label=_("Offering to copy into"))
-    set_preceeding_course = forms.BooleanField(required=False)
-    set_preceeding_course.help_text = "Should the copy of the course link to the original course as a predecessor?"
 
 
 def copy_courses(modeladmin, request, queryset):
@@ -111,14 +97,8 @@ unconfirm_subscriptions.short_description = "Unconfirm subscriptions (be sure to
 def payment_reminder(modeladmin, request, queryset):
     remind_of_payments(queryset, request)
 
-
 payment_reminder.short_description = "Send payment reminder to the selected subscriptions (which are in TO_PAY state)"
 
-
-class RejectForm(forms.Form):
-    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
-    reason = forms.ChoiceField(label=_("Select Reason"), choices=RejectionReason.CHOICES)
-    send_email = forms.BooleanField(label=_("Inform subscriber about cancellation"), required=False)
 
 
 def reject_subscriptions(self, request, queryset):
@@ -258,52 +238,26 @@ def mark_voucher_as_used(modeladmin, request, queryset):
 mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 
 
-class EvaluateForm(forms.Form):
-    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
-    survey = forms.ModelChoiceField(label=_("Select Survey"), queryset=Survey.objects.all())
-    email_template = forms.ModelChoiceField(label=_("Select email template"), queryset=EmailTemplate.objects.all())
-    send_invitations = forms.BooleanField(label=_("Send invitations (without reviewing)?"), initial=True,
-                                          required=False)
-    url_expires = forms.BooleanField(label=_("Should invitation url expire?"), initial=False, required=False)
-    url_expire_date = forms.DateTimeField(label=_("URL expire date"),
-                                          initial=datetime.date.today() + datetime.timedelta(days=30))
 
-
-def send_survey(self, request, queryset):
+def send_course_email(modeladmin, request, queryset):
     form = None
 
     if 'go' in request.POST:
-        form = EvaluateForm(request.POST)
+        form = SendCourseEmailForm(data=request.POST)
 
         if form.is_valid():
-            survey = form.cleaned_data['survey']
-            email_template = form.cleaned_data['email_template']
-            send_invitations = form.cleaned_data['send_invitations']
-            url_expires = form.cleaned_data['url_expires']
-            url_expire_date = form.cleaned_data['url_expire_date']
-
-            for c in queryset:
-                if c.evaluated:
-                    continue
-                c.evaluated = True
-                c.save()
-                for s in c.participatory().all():
-                    inst = SurveyInstance(survey=survey, email_template=email_template, course=c, user=s.user,
-                                          url_expire_date=url_expire_date if url_expires else None)
-                    inst.save()
-                    if send_invitations:
-                        survey_services.send_invitation(inst)
+            services.send_course_email(data=form.cleaned_data, courses=queryset)
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = EvaluateForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        form = SendCourseEmailForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
-    return render(request, 'courses/auth/action_send_survey.html', {'courses': queryset,
+    return render(request, 'courses/auth/action_send_course_email.html', {'courses': queryset,
                                                                  'evaluate_form': form,
-                                                                 })
+                                                                          })
 
 
-send_survey.short_description = "Send a survey invitation to all participants of the selected course(s)"
+send_course_email.short_description = "Send an email to all participants of the selected course(s)"
 
 
 def undo_voucher_payment(modeladmin, request, queryset):
@@ -357,8 +311,7 @@ def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
                          u'{} teachers added to group {}'.format(group.user_set.count(), group.name))
 
 
-class EmailListForm(forms.Form):
-    pass
+
 
 
 def emaillist(modeladmin, request, queryset):

@@ -1,9 +1,13 @@
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.db import models
+from django.utils.encoding import escape_uri_path
 from parler.models import TranslatableModel, TranslatedFields
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from post_office.models import EmailTemplate
+
+from survey.services import encode_id
 
 
 def _copy_translations(old, new):
@@ -213,8 +217,15 @@ class SurveyInstance(models.Model):
     invitation_sent = models.BooleanField(blank=False, null=False, default=False)
 
     def get_url(self):
-        from . import services
-        return services.create_url(self)
+        return self.create_url()
+
+    def create_url(self):
+        id_str, c = encode_id(self.id)
+        return "{}?id={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(id_str), escape_uri_path(c))
+
+
+    def create_full_url(self):
+        return "https://{}{}".format(Site.objects.get(id=settings.SITE_ID).domain, self.create_url())
 
     def __str__(self):
         if self.course:

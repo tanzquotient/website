@@ -7,21 +7,10 @@ try:
 except ImportError:
     import cPickle as pickle
 
-from django.conf import settings
-from django.contrib.sites.models import Site
-from django.urls import reverse
-from django.http import HttpResponse
-from django.utils.encoding import escape_uri_path
-
 from tq_website import settings as my_settings
 
 from post_office import mail, models as post_office_models
 import logging
-
-from survey.models import Answer
-from courses.models import Course
-
-from django.utils import translation
 
 log = logging.getLogger('tq')
 
@@ -54,50 +43,6 @@ def decode_id(id_str, checksum):
                 id_str, checksum, real_checksum))
         return False
     return int(id_str)
-
-
-def create_url(survey_inst):
-    id_str, c = encode_id(survey_inst.id)
-    return"{}?id={}&c={}".format(reverse('survey:survey_invitation'), escape_uri_path(id_str),
-                                   escape_uri_path(c))
-
-
-def create_full_url(survey_inst):
-    return"https://{}{}".format(Site.objects.get(id=settings.SITE_ID).domain, create_url(survey_inst))
-
-
-def send_invitation(survey_inst):
-    if survey_inst.invitation_sent:
-        return False
-
-    lang = translation.get_language()
-    translation.activate('de')
-    url_de = create_full_url(survey_inst)
-    translation.activate('en')
-    url_en = create_full_url(survey_inst)
-    translation.activate(lang)
-
-    context = {
-        'first_name': survey_inst.user.first_name,
-        'last_name': survey_inst.user.last_name,
-        'course': survey_inst.course.type.name,
-        'offering': survey_inst.course.offering.name,
-        'expires': survey_inst.url_expire_date,
-        'url': url_de,
-        'url_en': url_en,
-        'url_de': url_de,
-    }
-
-    template = 'survey_invitation'
-    if survey_inst.email_template:
-        template = survey_inst.email_template
-
-    if _email_helper(survey_inst.user.email, template, context):
-        survey_inst.invitation_sent = True
-        survey_inst.save()
-        return True
-    else:
-        return False
 
 
 def _email_helper(email, template, context):

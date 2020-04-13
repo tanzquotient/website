@@ -16,6 +16,8 @@ import courses.models as models
 from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
     RegularLessonException, Subscribe, UserProfile, MatchingState
 from courses.utils import export
+from survey.models import SurveyInstance
+from tq_website import settings
 from utils.translation_utils import TranslationUtils
 from .emailcenter import *
 from .managers import CourseManager
@@ -629,6 +631,58 @@ def model_attribute_language_fallback(model, attribute):
 
 
 INVALID_TITLE_CHARS = re.compile(r'[^\w\-_ ]', re.IGNORECASE | re.UNICODE)
+
+
+
+def send_course_email(data, courses):
+    email_template = data['email_template']
+    email_subject = data['email_subject']
+    email_content = data['email_content']
+    send_to_participants = data['send_to_participants']
+    send_to_teachers = data['send_to_teachers']
+    survey = data['survey']
+    survey_url_expire_date = data['survey_url_expire_date']
+
+    for course in courses:
+        recipients = []
+        if send_to_participants:
+            recipients += [p.user for p in course.participatory().all()]
+        if send_to_teachers:
+            recipients += course.get_teachers()
+
+        for recipient in recipients:
+
+            # Get context for email
+            context = {
+                'first_name': recipient.first_name,
+                'last_name': recipient.last_name,
+                'course': course.type.name,
+                'offering': course.offering.name,
+            }
+
+            if survey:
+                survey_instance = SurveyInstance.objects.create(
+                    survey=survey,
+                    email_template=email_template,
+                    course=course,
+                    user=recipient,
+                    url_expire_date=survey_url_expire_date
+                )
+                context['survey_url'] = survey_instance.create_full_url()
+                context['survey_expiration'] = survey_instance.url_expire_date
+
+            subject = email_subject or email_template.subject
+            html_message = email_content or email_template.html_content
+
+            mail.send(
+                recipients=[recipient.email],
+                sender=settings.DEFAULT_FROM_EMAIL,
+                subject=subject,
+                html_message=html_message,
+                context=context,
+            )
+
+
 
 
 def export_subscriptions(course_ids, export_format):
