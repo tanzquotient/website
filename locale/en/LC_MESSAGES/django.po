@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 15:48+0000\n"
+"POT-Creation-Date: 2020-04-13 20:40+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,37 +67,85 @@ msgstr "Costs"
 msgid "Free of charge"
 msgstr "Free of charge"
 
-#: courses/admin_actions.py:54
+#: courses/admin_forms/copy_course_form.py:9
 msgid "Offering to copy into"
 msgstr "Offering to coy"
 
-#: courses/admin_actions.py:120
+#: courses/admin_forms/reject_form.py:9
 msgid "Select Reason"
 msgstr "Select reason"
 
-#: courses/admin_actions.py:121
+#: courses/admin_forms/reject_form.py:10
 msgid "Inform subscriber about cancellation"
 msgstr "Inform subscriber about cancellation"
 
-#: courses/admin_actions.py:263
-msgid "Select Survey"
-msgstr "Select survey"
+#: courses/admin_forms/send_course_email_form.py:14
+msgid "Email template"
+msgstr "Email template"
 
-#: courses/admin_actions.py:264
-msgid "Select email template"
-msgstr "Select email template"
+#: courses/admin_forms/send_course_email_form.py:15
+msgid "Can be left empty if Subject and Content are specified."
+msgstr "Can be left empty if Subject and Content are specified."
 
-#: courses/admin_actions.py:265
-msgid "Send invitations (without reviewing)?"
-msgstr "Send invitations (without reviewing)?"
+#: courses/admin_forms/send_course_email_form.py:20
+msgid "Subject"
+msgstr "Subject"
 
-#: courses/admin_actions.py:267
-msgid "Should invitation url expire?"
-msgstr "Should invitation url expire?"
+#: courses/admin_forms/send_course_email_form.py:21
+msgid "If left empty, uses subject of template."
+msgstr "If left empty, uses subject of template."
 
-#: courses/admin_actions.py:268
-msgid "URL expire date"
-msgstr "URL expire date"
+#: courses/admin_forms/send_course_email_form.py:25
+msgid "Content"
+msgstr "Content"
+
+#: courses/admin_forms/send_course_email_form.py:26
+msgid "Compose your own text. Email template will not be used."
+msgstr "Compose your own text. Email template will not be used."
+
+#: courses/admin_forms/send_course_email_form.py:27
+msgid "You can use the following placeholders:"
+msgstr "You can use the following placeholders:"
+
+#: courses/admin_forms/send_course_email_form.py:34
+msgid "Send to Participants"
+msgstr "Send to Participants"
+
+#: courses/admin_forms/send_course_email_form.py:40
+msgid "Send to Teachers"
+msgstr "Send to Teachers"
+
+#: courses/admin_forms/send_course_email_form.py:46
+msgid "Optional: Select Survey"
+msgstr "Optional: Select Survey"
+
+#: courses/admin_forms/send_course_email_form.py:47
+msgid "If specified, you can use the 'survey_url' placeholder."
+msgstr "If specified, you can use the 'survey_url' placeholder."
+
+#: courses/admin_forms/send_course_email_form.py:53
+msgid "Optional: Expiration date for survey"
+msgstr "Optional: Expiration date for survey"
+
+#: courses/admin_forms/send_course_email_form.py:54
+msgid "Surveys will not expire if left empty."
+msgstr "Surveys will not expire if left empty."
+
+#: courses/admin_forms/send_course_email_form.py:67
+msgid ""
+"Subject not specified. Please specify either a template or enter the subject "
+"directly!"
+msgstr ""
+"Subject not specified. Please specify either a template or enter the subject "
+"directly!"
+
+#: courses/admin_forms/send_course_email_form.py:72
+msgid ""
+"Content not specified. Please specify either a template or enter the content "
+"directly!"
+msgstr ""
+"Content not specified. Please specify either a template or enter the content "
+"directly!"
 
 #: courses/admin_views.py:15
 msgid "Choose amount"
@@ -281,19 +329,19 @@ msgstr "male"
 msgid "female"
 msgstr "female"
 
-#: courses/services.py:88
+#: courses/services.py:90
 msgid "Irregular weekday"
 msgstr "Irregular weekday"
 
-#: courses/services.py:94
+#: courses/services.py:96
 msgid "Unknown month"
 msgstr "Unknown month"
 
-#: courses/services.py:237
+#: courses/services.py:239
 msgid "Partner does not exist!"
 msgstr "Partner does not exist!"
 
-#: courses/services.py:238
+#: courses/services.py:240
 msgid ""
 "The email you specified does not belong to any user. Make sure your partner "
 "has an active account."
@@ -301,81 +349,95 @@ msgstr ""
 "The email you specified does not belong to any user. Make sure your partner "
 "has an active account."
 
-#: courses/services.py:252
+#: courses/services.py:254
 msgid "You entered yourself as partner! Please enter a valid partner."
 msgstr "You entered yourself as partner! Please enter a valid partner."
 
-#: courses/services.py:257
+#: courses/services.py:259
 msgid "The partner you entered is already subscribed with someone else!"
 msgstr "The partner you entered is already subscribed with someone else!"
 
-#: courses/services.py:262
+#: courses/services.py:264
 msgid "You are already subscribed!"
 msgstr "You are already subscribed!"
 
-#: courses/services.py:273
+#: courses/services.py:275
 msgid "Both, you and your partner are already subscribed!"
 msgstr "Both, you and your partner are already subscribed!"
 
-#: courses/services.py:313
+#: courses/services.py:315
 msgid "Successfully subscribed"
 msgstr "Successfully subscribed"
 
-#: courses/services.py:314
+#: courses/services.py:316
 msgid "You will receive an email shortly"
 msgstr "You will receive an email shortly"
 
-#: courses/services.py:366
+#: courses/services.py:368
 msgid "{} couples matched successfully"
 msgstr "{} couples matched successfully"
 
-#: courses/services.py:385
+#: courses/services.py:387
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr "{} subscriptions ({} couples) corrected successfully"
 
-#: courses/services.py:410
+#: courses/services.py:412
 msgid "{} couples unmatched successfully"
 msgstr "{} couples unmatched successfully"
 
-#: courses/services.py:413
+#: courses/services.py:415
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr "{} subscriptions can not be unmatched because already CONFIRMED"
 
-#: courses/services.py:417
+#: courses/services.py:419
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr "{} subscriptions can not be unmatched because invalid matching state"
 
-#: courses/services.py:442
+#: courses/services.py:444
 msgid "{} couples broken up successfully"
 msgstr "{} couples broken up successfully"
 
-#: courses/services.py:445
+#: courses/services.py:447
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr "{} couples can not be broken up because already CONFIRMED"
 
-#: courses/services.py:449
+#: courses/services.py:451
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr "{} couples can not be broken up because invalid matching state"
 
-#: courses/services.py:487
+#: courses/services.py:489
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr "{} subscriptions were not confirmed because no partner set"
 
-#: courses/services.py:506
+#: courses/services.py:508
 msgid "{} of {} confirmed successfully"
 msgstr "{} of {} confirmed successfully"
 
-#: courses/services.py:549
+#: courses/services.py:551
 msgid "{} unrejected successfully"
 msgstr "{} unrejected successfully"
 
-#: courses/services.py:578
+#: courses/services.py:580
 msgid "{} of {} welcomed successfully"
 msgstr "{} of {} welcomed successfully"
 
-#: courses/services.py:592
+#: courses/services.py:594
 msgid "{} of {} teachers reset successfully"
 msgstr "{} of {} teachers reset successfully"
+
+#: courses/templates/courses/auth/action_send_course_email.html:11
+#: courses/templates/courses/snippets/user_contact.html:2
+#: tq_website/cms_toolbars.py:21
+msgid "Email"
+msgstr "Email"
+
+#: courses/templates/courses/auth/action_send_course_email.html:20
+msgid "Recipients"
+msgstr "Recipients"
+
+#: courses/templates/courses/auth/action_send_course_email.html:21
+msgid "The email will be sent to all participants of the following courses"
+msgstr "The email will be sent to all participants of the following courses"
 
 #: courses/templates/courses/auth/course_overview.html:5
 msgid "Course Overview"
@@ -656,7 +718,7 @@ msgid "Name"
 msgstr "Name"
 
 #: courses/templates/courses/snippets/song_list.html:5
-#: tq_website/settings.py:336
+#: tq_website/settings.py:338
 msgid "Title"
 msgstr "Title"
 
@@ -758,11 +820,6 @@ msgstr "This course is fully booked. Registration is no longer possible."
 #: courses/templates/courses/snippets/subscription_info_overbooked.html:5
 msgid "ausgebucht"
 msgstr "fully booked"
-
-#: courses/templates/courses/snippets/user_contact.html:2
-#: tq_website/cms_toolbars.py:21
-msgid "Email"
-msgstr "Email"
 
 #: courses/templates/courses/snippets/user_contact.html:5
 msgid "Phone"
@@ -1283,8 +1340,8 @@ msgstr "Course Management"
 msgid "German"
 msgstr "German"
 
-#: payment/templates/payment/course/course.html:27 tq_website/settings.py:289
-#: tq_website/settings.py:311
+#: payment/templates/payment/course/course.html:27 tq_website/settings.py:291
+#: tq_website/settings.py:313
 msgid "English"
 msgstr "English"
 
@@ -1839,14 +1896,26 @@ msgstr "Willing to get involved"
 msgid "Files"
 msgstr "Files"
 
-#: tq_website/settings.py:288 tq_website/settings.py:303
+#: tq_website/settings.py:290 tq_website/settings.py:305
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:328
+#: tq_website/settings.py:330
 msgid "Main content"
 msgstr "Main content"
 
-#: tq_website/settings.py:332
+#: tq_website/settings.py:334
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid "Select email template"
+#~ msgstr "Select email template"
+
+#~ msgid "Send invitations (without reviewing)?"
+#~ msgstr "Send invitations (without reviewing)?"
+
+#~ msgid "Should invitation url expire?"
+#~ msgstr "Should invitation url expire?"
+
+#~ msgid "URL expire date"
+#~ msgstr "URL expire date"
