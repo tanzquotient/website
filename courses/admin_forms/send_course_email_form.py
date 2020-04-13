@@ -32,11 +32,13 @@ class SendCourseEmailForm(forms.Form):
 
     send_to_participants = forms.BooleanField(
         label=_("Send to Participants"),
+        required=False,
         initial=True,
     )
 
     send_to_teachers = forms.BooleanField(
         label=_("Send to Teachers"),
+        required=False,
         initial=True,
     )
 
