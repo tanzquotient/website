@@ -12,7 +12,7 @@
 
 {% if is_teacher or is_board_member %}
     {% include "courses/snippets/image_input.html" with field=form.picture only %}
-    {{ form.about_me }}
+    {% include "courses/snippets/generic_input.html" with field=form.about_me only %}
 {% endif %}
 
 {% include "courses/snippets/address_input.html" with form=form only %}
