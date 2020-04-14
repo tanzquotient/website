@@ -4,6 +4,8 @@ from django import forms
 from django_countries import countries
 from django_countries.fields import LazyTypedChoiceField
 from django.utils.translation import gettext_lazy as _
+from ckeditor.widgets import CKEditorWidget
+
 
 from courses.models import StudentStatus, Gender, Residence
 
@@ -38,7 +40,7 @@ class UserEditForm(forms.Form):
         years=range(date.today().year - 70, date.today().year - 10)))
 
     picture = forms.ImageField(required=False)
-    about_me = forms.CharField(widget=forms.Textarea(), required=False)
+    about_me = forms.CharField(widget=CKEditorWidget, required=False)
     about_me.help_text = _('Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!')
     nationality = LazyTypedChoiceField(choices=countries, required=False)
     residence_permit = forms.ChoiceField(choices=Residence.CHOICES, required=False)
