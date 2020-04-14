@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{{ form.media }}
+
 {% if form.errors %}
     <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
@@ -10,7 +12,7 @@
 
 {% if is_teacher or is_board_member %}
     {% include "courses/snippets/image_input.html" with field=form.picture only %}
-    {% include "courses/snippets/text_area.html" with field=form.about_me only %}
+    {{ form.about_me }}
 {% endif %}
 
 {% include "courses/snippets/address_input.html" with form=form only %}
