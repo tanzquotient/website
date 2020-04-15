@@ -11,7 +11,7 @@ class GroupEmailAdmin(TranslatableAdmin):
 
     list_display = ['subject', 'target_group', 'sent_at']
     list_filter = ['target_group']
-    search_fields = ['subject', 'target_group__name']
+    search_fields = ['target_group__name']
     actions = [send_emails_admin_action, copy_emails_admin_action]
     fields = ['target_group', 'subject', 'message']
 
