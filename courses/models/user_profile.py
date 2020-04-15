@@ -66,7 +66,7 @@ class UserProfile(models.Model):
         courses += [teaching.lesson.get_course() for teaching in self.user.teaching_lessons.all()]
         for teaching in courses:
             last_date = teaching.course.get_last_lesson_date()
-            if last_date is not None and last_date >= datetime.today():
+            if last_date is not None and last_date >= date.today():
                 return True
 
         return False
