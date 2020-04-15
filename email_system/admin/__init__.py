@@ -1,2 +1,2 @@
-from .tq_email_admin import TQEmailAdmin
-from .generated_tq_email_admin import GeneratedTQEmailAdmin
+from .group_email_admin import GroupEmailAdmin
+from .generated_individual_email_admin import GeneratedIndividualEmailAdmin

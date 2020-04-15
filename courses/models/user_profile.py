@@ -1,9 +1,10 @@
-
-import pytz
 from datetime import datetime, date
+
 from django.conf import settings
+from django.contrib.auth import user_logged_in
 from django.db import models
 from django.db.models import CASCADE
+from django.dispatch import receiver
 from django_countries.fields import CountryField
 from djangocms_text_ckeditor.fields import HTMLField
 
@@ -14,6 +15,9 @@ from . import Address, BankAccount, Gender, StudentStatus, Residence
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='profile', on_delete=CASCADE)
     user.help_text = "The user which is matched to this user profile."
+
+    language = models.CharField(max_length=10, blank=False, default='en')
+
     legi = models.CharField(max_length=16, blank=True, null=True)
     gender = models.CharField(max_length=1,
                               choices=Gender.CHOICES, blank=False, null=True,
@@ -41,6 +45,16 @@ class UserProfile(models.Model):
     default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
 
     objects = managers.UserProfileManager()
+
+    @receiver(user_logged_in)
+    def set_language(sender, **kwargs):
+        user = kwargs['user']
+        lang_code = kwargs['request'].LANGUAGE_CODE
+        try:
+            user.profile.language = lang_code
+            user.profile.save()
+        except UserProfile.DoesNotExist:
+            pass
 
     # convenience method for model user are added here
     def is_teacher(self):
