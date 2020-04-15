@@ -18,20 +18,6 @@ class GroupForm(ModelForm):
 
     class Meta:
         model = Group
-        exclude = ('permissions', )  # since Django 1.8 this is needed
-        widgets = dict()
-
-
-class GroupFormWithPermissions(ModelForm):
-    users = ModelMultipleChoiceField(
-        label='Users',
-        queryset=User.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple(
-            "users", is_stacked=False))
-
-    class Meta:
-        model = Group
         exclude = ()  # since Django 1.8 this is needed
         widgets = {
             'permissions': FilteredSelectMultiple(
@@ -54,8 +40,6 @@ class TQGroupAdmin(GroupAdmin):
             self.form.base_fields['users'].initial = [o.pk for o in obj.user_set.all()]
         else:
             self.form.base_fields['users'].initial = []
-        if request.user.is_superuser:
-            return GroupFormWithPermissions
         return GroupForm
 
     def has_delete_permission(self, request, obj=None):
