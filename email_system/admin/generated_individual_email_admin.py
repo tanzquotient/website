@@ -10,7 +10,7 @@ class GeneratedIndividualEmailAdmin(ModelAdmin):
 
     list_display = ['subject', 'to', 'source']
     list_filter = []
-    search_fields = ['source__subject', 'email__to', 'email__subject']
+    search_fields = ['email__to', 'email__subject']
     actions = []
 
     def subject(self, obj):
