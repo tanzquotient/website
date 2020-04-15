@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from courses.admin_actions import update_dance_teacher_group
+from groups.services import update_groups
 
 try:
     from celery import shared_task
@@ -47,8 +47,8 @@ def match_payments():
     PaymentProcessor().process_payments()
 
 
-TASK_CONFIG_TEACHER_GROUP = {'name': 'update_teacher_group', 'ignore_result': True}
+TASK_CONFIG_TEACHER_GROUP = {'name': 'update_groups', 'ignore_result': True}
 
 @shared_task(**TASK_CONFIG_TEACHER_GROUP)
-def update_teacher_group():
-    update_dance_teacher_group()
+def task_update_groups():
+    update_groups()

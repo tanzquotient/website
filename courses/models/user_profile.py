@@ -46,6 +46,17 @@ class UserProfile(models.Model):
     def is_teacher(self):
         return self.user.teaching_courses.count() > 0 or self.user.teaching_lessons.count() > 0
 
+    # At least one course ends in the future
+    def is_current_teacher(self):
+        courses = self.user.teaching_courses.all()
+        courses += [teaching.lesson.get_course() for teaching in self.user.teaching_lessons.count()]
+        for teaching in courses:
+            last_date = teaching.course.get_last_lesson_date()
+            if last_date is not None and last_date >= datetime.today():
+                return True
+
+        return False
+
     def teaching_since(self):
         if not self.is_teacher():
             return None

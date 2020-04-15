@@ -286,34 +286,6 @@ def raise_price_to_pay(modeladmin, request, queryset):
 raise_price_to_pay.short_description = "raise price to pay to fit amount"
 
 
-def update_dance_teacher_group(modeladmin=None, request=None, queryset=None):
-    # ignore the queryset parameter
-    teachers = Group.objects.filter(name__in=['Tanzlehrer', 'Dance Teachers', 'Teachers', 'Lehrer'])
-    if teachers.count() == 0:
-        if request:
-            messages.add_message(request, messages.WARNING,
-                             u'No suitable "Dance Teachers"-group found -> Group is automatically created')
-        group = Group.objects.create(name='Dance Teachers')
-    elif teachers.count() > 1:
-        if request:
-            messages.add_message(request, messages.ERROR,
-                             u'More than one "Dance Teachers"-group found -> Nothing done')
-        return
-    else:
-        group = teachers.first()
-
-    group.user_set.clear()
-    for teach in Teach.objects.all():
-        if not group.user_set.filter(pk=teach.teacher.id).exists():
-            group.user_set.add(teach.teacher)
-    if request:
-        messages.add_message(request, messages.SUCCESS,
-                         u'{} teachers added to group {}'.format(group.user_set.count(), group.name))
-
-
-
-
-
 def emaillist(modeladmin, request, queryset):
     form = None
 
