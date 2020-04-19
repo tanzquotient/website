@@ -12,6 +12,7 @@ from payment.services import remind_of_payments
 from survey.models import SurveyInstance
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
+from .forms import VoucherGenerationForm
 
 
 def display(modeladmin, request, queryset):
@@ -238,6 +239,24 @@ def mark_voucher_as_used(modeladmin, request, queryset):
 mark_voucher_as_used.short_description = "Mark selected vouchers as used"
 
 
+def send_vouchers_for_subscriptions(modeladmin, request, queryset):
+    form = None
+
+    if 'go' in request.POST:
+        form = VoucherGenerationForm(data=request.POST)
+
+        if form.is_valid():
+            recipients = [subscription.user for subscription in queryset]
+            services.send_vouchers(data=form.cleaned_data, recipients=recipients)
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = VoucherGenerationForm()
+
+    context = {'form': form}
+    render(request, 'courses/auth/action_send_voucher.html', context)
+
+send_vouchers_for_subscriptions.short_description = "Send a voucher to users of selected subscriptions"
 
 def send_course_email(modeladmin, request, queryset):
     form = None

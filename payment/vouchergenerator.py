@@ -7,14 +7,13 @@ from io import open
 from django.conf import settings
 from django.core.files.base import ContentFile
 
-
-def generate_svg(modeladmin, request, queryset):
+def generate_voucher_svg(vouchers):
 
     basic_file = os.path.join(settings.BASE_DIR, 'payment', 'Voucher.svg')
     with open(basic_file, encoding='utf-8') as file:
         content = file.read()
 
-    for voucher in queryset:
+    for voucher in vouchers:
         filename = "Voucher-" + voucher.key + ".svg"
 
         if voucher.expires:
@@ -25,4 +24,9 @@ def generate_svg(modeladmin, request, queryset):
         file = ContentFile(content.replace('ABCDEF', voucher.key).replace("valid through 12/2017", date_string).encode('utf-8'))
         voucher.pdf_file.save(filename, file)
 
-generate_svg.short_description = "Generate Voucher SVG"
+
+# Admin action
+def admin_action_generate_svg(modeladmin, request, queryset):
+    return generate_voucher_svg(vouchers=queryset)
+
+admin_action_generate_svg.short_description = "Generate Voucher SVG"

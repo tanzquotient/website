@@ -1,21 +1,10 @@
-import datetime
-
-from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
-from django.urls import reverse
-from django.forms.widgets import SelectDateWidget
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.urls import reverse
 
+from courses.forms import VoucherGenerationForm
 from courses.models import *
-
-
-class VoucherGenerationForm(forms.Form):
-    amount = forms.IntegerField(label=_("Choose amount"), initial=20)
-    purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
-    expires_flag = forms.BooleanField(label=_("Set expire date?"), initial=False, required=False)
-    expires = forms.DateField(widget=SelectDateWidget, initial=datetime.date.today() + datetime.timedelta(days=365 * 2))
 
 
 @staff_member_required
@@ -26,14 +15,14 @@ def voucher_generation_view(request):
         form = VoucherGenerationForm(request.POST)
 
         if form.is_valid():
-            amount = form.cleaned_data['amount']
+            number_of_vouchers = form.cleaned_data['number_of_vouchers']
+            percentage = form.cleaned_data['percentage']
             purpose = form.cleaned_data['purpose']
             expires_flag = form.cleaned_data['expires_flag']
             expires = form.cleaned_data['expires']
 
-            # generate amount many vouchers
-            for i in range(0, amount):
-                v = Voucher(purpose=purpose, expires=expires if expires_flag else None)
+            for i in range(0, number_of_vouchers):
+                v = Voucher(purpose=purpose, percentage=percentage, expires=expires if expires_flag else None)
                 v.save()
 
             return HttpResponseRedirect(reverse('admin:courses_voucher_changelist'))
