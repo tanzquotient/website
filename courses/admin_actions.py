@@ -12,7 +12,7 @@ from payment.services import remind_of_payments
 from survey.models import SurveyInstance
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
-from .forms import VoucherGenerationForm
+from .forms import VoucherGenerationForm, SendVoucherForm
 
 
 def display(modeladmin, request, queryset):
@@ -243,7 +243,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     form = None
 
     if 'go' in request.POST:
-        form = VoucherGenerationForm(data=request.POST)
+        form = SendVoucherForm(data=request.POST)
 
         if form.is_valid():
             recipients = [subscription.user for subscription in queryset]
@@ -251,7 +251,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = VoucherGenerationForm()
+        form = SendVoucherForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
     context = {'form': form}
     render(request, 'courses/auth/action_send_voucher.html', context)

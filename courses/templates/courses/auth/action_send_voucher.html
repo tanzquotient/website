@@ -10,13 +10,7 @@
 
     <h1>{% trans "Voucher options" %}</h1>
 
-    {{ form.errors }}
-
-    {% include "courses/snippets/generic_input.html" with field=form.percentage only %}
-    {% include "courses/snippets/generic_input.html" with field=form.purpose only %}
-    {% include "courses/snippets/generic_input.html" with field=form.expires_flag only %}
-    {% include "courses/snippets/generic_input.html" with field=form.expires only %}
-
+    {{ form }}
 
     <input type="hidden" name="action" value="send_vouchers" />
     <input type="submit" name="go" value="Go" />
