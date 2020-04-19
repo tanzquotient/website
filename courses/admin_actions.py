@@ -255,7 +255,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
 
     context = {
         'form': form,
-        'action': send_vouchers_for_subscriptions,
+        'action': 'send_vouchers_for_subscriptions',
     }
     return render(request, 'courses/auth/action_send_voucher.html', context)
 
