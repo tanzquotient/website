@@ -254,7 +254,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
         form = SendVoucherForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
     context = {'form': form}
-    render(request, 'courses/auth/action_send_voucher.html', context)
+    return render(request, 'courses/auth/action_send_voucher.html', context)
 
 send_vouchers_for_subscriptions.short_description = "Send a voucher to users of selected subscriptions"
 
