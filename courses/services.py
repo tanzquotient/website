@@ -649,7 +649,7 @@ def send_vouchers(data, recipients):
             'first_name': recipient.first_name,
             'last_name': recipient.last_name,
             'voucher_key': voucher.key,
-            'voucher_file': voucher.pdf_file,
+            'voucher_url': voucher.pdf_file.url,
         }
 
         mail.send(
