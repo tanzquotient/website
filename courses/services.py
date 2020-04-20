@@ -657,7 +657,7 @@ def send_vouchers(data, recipients):
             sender=settings.DEFAULT_FROM_EMAIL,
             template='voucher',
             context=email_context,
-            attachments={'Voucher.svg': voucher.pdf_file.file}
+            attachments={'Voucher.pdf': voucher.pdf_file.file}
         )
 
 
