@@ -1,6 +1,6 @@
-from io import BytesIO
-
 import csv
+from io import StringIO
+
 from django.http import HttpResponse
 
 from . import export_zip, clean_filename
@@ -17,9 +17,9 @@ def export_csv(title, data, multiple=False):
     if multiple:
         files = dict()
         for count, item in enumerate(data):
-            file = BytesIO()
+            file = StringIO()
             write_csv(item['data'], file)
-            files["{}_{}.csv".format(count + 1, item['name'])] = file.getvalue()
+            files["{}_{}.csv".format(count + 1, item['name'])] = file.getvalue().encode('utf-8')
 
         return export_zip(title, files)
 
