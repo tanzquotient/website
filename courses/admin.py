@@ -7,7 +7,7 @@ from reversion.admin import VersionAdmin
 
 from courses.filters import *
 from groups.services import update_groups
-from payment.vouchergenerator import admin_action_generate_svg
+from payment.vouchergenerator import admin_action_generate_pdf
 
 
 class CourseInline(admin.TabularInline):
@@ -283,7 +283,7 @@ class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
     exclude = ('key',)
 
-    actions = [mark_voucher_as_used, admin_action_generate_svg]
+    actions = [mark_voucher_as_used, admin_action_generate_pdf]
 
     raw_id_fields = ('subscription',)
 

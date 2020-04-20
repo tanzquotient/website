@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 3508 1241" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+<svg width="100%" height="100%" viewBox="0 0 3500 1200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
     <g id="Layer1">
         <g transform="matrix(24.2912,0,0,8.5662,-5.68434e-14,0)">
             <rect x="0" y="0" width="144.773" height="144.773" style="fill:rgb(200,37,40);fill-rule:nonzero;"/>
@@ -64,13 +64,13 @@
                 <path d="M3039.29,1721.56C3038.73,1709.08 3034.71,1698.74 3027.25,1690.52C3019.78,1682.3 3009.15,1678.19 2995.36,1678.19C2988.93,1678.19 2982.98,1679.37 2977.5,1681.73C2972.02,1684.09 2967.2,1687.31 2963.04,1691.37C2958.89,1695.43 2955.58,1700.06 2953.12,1705.26C2950.66,1710.45 2949.25,1715.89 2948.87,1721.56L3039.29,1721.56ZM3058.85,1727.79C3058.85,1729.12 3058.85,1730.53 3058.85,1732.05C3058.85,1733.56 3058.76,1735.16 3058.57,1736.86L2948.59,1736.86C2948.78,1743.48 2950.1,1749.71 2952.55,1755.57C2955.01,1761.43 2958.41,1766.53 2962.76,1770.88C2967.11,1775.23 2972.21,1778.67 2978.07,1781.23C2983.92,1783.78 2990.26,1785.05 2997.06,1785.05C3007.07,1785.05 3015.72,1782.74 3022.99,1778.11C3030.27,1773.48 3035.8,1768.14 3039.58,1762.09L3054.03,1773.43C3046.1,1783.45 3037.36,1790.63 3027.81,1794.97C3018.27,1799.32 3008.02,1801.49 2997.06,1801.49C2987.23,1801.49 2978.11,1799.75 2969.7,1796.25C2961.29,1792.75 2954.07,1787.89 2948.02,1781.65C2941.97,1775.41 2937.2,1768.05 2933.7,1759.54C2930.21,1751.04 2928.46,1741.78 2928.46,1731.76C2928.46,1721.75 2930.16,1712.49 2933.56,1703.98C2936.96,1695.48 2941.69,1688.11 2947.74,1681.87C2953.78,1675.64 2960.87,1670.77 2968.99,1667.27C2977.12,1663.78 2985.91,1662.03 2995.36,1662.03C3005.75,1662.03 3014.92,1663.78 3022.85,1667.27C3030.79,1670.77 3037.41,1675.49 3042.7,1681.45C3047.99,1687.4 3052,1694.34 3054.74,1702.28C3057.48,1710.22 3058.85,1718.72 3058.85,1727.79Z" style="fill:white;fill-rule:nonzero;"/>
             </g>
             <g transform="matrix(0.298134,0,0,0.298134,969.883,-6.90567)">
-                <text x="1116.96px" y="1798.09px" style="font-family:'ArialMT';font-size:110.872px;fill:white;">valid through 12/2017</text>
+                <text x="3800px" y="2330px" dominant-baseline="middle" text-anchor="end" style="font-size:80px;fill:white;">Value: {{ percent }}%{{ valid }}</text>
             </g>
             <g transform="matrix(0.910937,0,0,0.646742,-1108.83,-207.921)">
                 <rect x="2418.25" y="865" width="807.559" height="177.879" style="fill:rgb(0,0,0);fill-opacity:0.33"/>
             </g>
             <g transform="matrix(0.661092,0,0,0.661092,-15.6532,-60.415)">
-                <text x="2034.47px" y="746.567px" style="font-weight:bold;font-family:'CourierNewPSMT';font-size:100px;fill:white;">ABCDEF</text>
+                <text x="2234.47px" y="746.567px" text-anchor="middle" style="font-weight:bold;font-family:monospace;font-size:100px;fill:white;">{{ code }}</text>
             </g>
         </g>
     </g>

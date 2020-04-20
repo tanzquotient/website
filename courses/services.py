@@ -16,7 +16,7 @@ import courses.models as models
 from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
     RegularLessonException, Subscribe, UserProfile, MatchingState, Voucher
 from courses.utils import export
-from payment.vouchergenerator import generate_voucher_svg
+from payment.vouchergenerator import generate_voucher_pdf
 from survey.models import SurveyInstance
 from tq_website import settings
 from utils.translation_utils import TranslationUtils
@@ -643,7 +643,7 @@ def send_vouchers(data, recipients):
     for recipient in recipients:
         voucher = Voucher(purpose=purpose, percentage=percentage, expires=expires if expires_flag else None)
         voucher.save()
-        generate_voucher_svg(vouchers=[voucher])
+        generate_voucher_pdf(vouchers=[voucher])
 
         email_context = {
             'first_name': recipient.first_name,

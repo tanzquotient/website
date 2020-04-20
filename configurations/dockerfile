@@ -22,9 +22,10 @@ RUN apk add --no-cache postgresql-libs && \
 
 # Pillow
 RUN apk add --no-cache zlib jpeg && \
+    apk add --no-cache libxml2-dev libxslt-dev python-dev && \
     apk add --no-cache --virtual .build-deps \
     build-base jpeg-dev zlib-dev && \
-    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==3.2.0 && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.1 && \
     apk del .build-deps
 
 # pyreverse: generate UML diagrams in comfortable formats

@@ -573,15 +573,16 @@ PAYMENT_ACCOUNT = {
 }
 
 # Logging
-sentry_sdk.init(
-    dsn="https://883ad6a3790e48aea0291f4a0d1d89c4@sentry.io/124755",
-    integrations=[
-        DjangoIntegration(),
-        CeleryIntegration(),
-        RedisIntegration(),
-    ],
-    environment='debug' if DEBUG else 'production',
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
+if not DEBUG:
+    sentry_sdk.init(
+        dsn="https://883ad6a3790e48aea0291f4a0d1d89c4@sentry.io/124755",
+        integrations=[
+            DjangoIntegration(),
+            CeleryIntegration(),
+            RedisIntegration(),
+        ],
+        environment='production',
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
