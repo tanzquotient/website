@@ -40,12 +40,12 @@ def send_email(group_email):
 
         headers = {}
         if group_email.reply_to is not None:
-            headers['Reply-To'] = group_email.reply_to.email_address
+            headers['Reply-to'] = group_email.reply_to.email_address
 
         if unsubscribe_context is not None:
             unsubscribe_code, _ = UnsubscribeCode.objects.get_or_create(user=user)
             unsubscribe_url = unsubscribe_code.get_unsubscribe_url(unsubscribe_context)
-            headers['List-Unsubscribe'] = unsubscribe_url
+            headers['List-unsubscribe'] = unsubscribe_url
             html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(unsubscribe_url)
 
         # Send email
