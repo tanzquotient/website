@@ -20,7 +20,7 @@ class UnsubscribeCode(Model):
             'user_id': self.user.id,
             'code': self.code
         })
-        return Site.objects.get_current().domain + url
+        return 'https://{}{}'.format(Site.objects.get_current().domain, url)
 
     def __str__(self):
         return self.code
