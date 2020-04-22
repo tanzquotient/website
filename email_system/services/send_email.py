@@ -40,7 +40,7 @@ def send_email(group_email):
 
         headers = {}
         if group_email.reply_to is not None:
-            headers['Reply-to'] = group_email.reply_to.email_address
+            headers['Reply-to'] = '<{}>'.format(group_email.reply_to.email_address)
 
         if unsubscribe_context is not None:
             unsubscribe_code, _ = UnsubscribeCode.objects.get_or_create(user=user)
