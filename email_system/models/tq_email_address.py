@@ -16,3 +16,4 @@ class TqEmailAddress(TranslatableModel):
 
     class Meta:
         verbose_name = _('Email Address')
+        verbose_name_plural = _('Email Addresses')
