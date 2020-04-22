@@ -19,3 +19,6 @@ class TqEmailAddress(TranslatableModel):
 
     def __str__(self):
         return self.email_address
+
+    class Meta:
+        verbose_name = _('Email Address')
