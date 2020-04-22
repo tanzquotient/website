@@ -7,17 +7,10 @@ RUN rm -rf /var/cache/apk/* && \
 
 RUN apk update
 
-# MySQL
-RUN apk add --no-cache mariadb-connector-c-dev mariadb-connector-c && \
-    apk add --no-cache --virtual .build-deps \
-    build-base mariadb-dev && \
-    pip3 install mysqlclient==1.4.6 && \
-    apk del .build-deps
-
 # Postgres
 RUN apk add --no-cache postgresql-libs && \
     apk add --no-cache --virtual .build-deps gcc postgresql-dev musl-dev && \
-    pip3 install psycopg2==2.8.4 && \
+    pip3 install psycopg2==2.8.5 && \
     apk del .build-deps
 
 # Pillow
@@ -36,7 +29,7 @@ RUN apk add --no-cache graphviz && \
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual .build-deps \
     build-base openssl-dev libffi-dev && \
-    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==2.8 && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==2.9.1 && \
     apk del .build-deps
 
 # gettext (needed to compile language files on the server)

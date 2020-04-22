@@ -1,28 +1,28 @@
-celery==4.4.0
-Django==2.2.11
+celery==4.4.2
+Django==2.2.12
 django-absolute==0.3
-django-analytical==2.5.0
+django-analytical==2.6.0
 django-celery-email==3.0.0
-django-celery-beat==1.6.0
-django-celery-results==1.2.0
+django-celery-beat==2.0.0
+django-celery-results==1.2.1
 django-cms==3.7.1
-django-filer==1.6.0
+django-filer==1.7.0
 django-filter==2.2.0
 django-formtools==2.2
 django-guardian==2.2.0
 django-parler==2.0.1
 django-parler-rest==2.1
-django-polymorphic==2.0.3
-django-post-office==3.3.0
-django-reversion==3.0.5
+django-polymorphic==2.1.2
+django-post-office==3.4.0
+django-reversion==3.0.7
 django-sekizai==1.1.0
-django-timezone-field==3.1
+django-timezone-field==4.0
 django-storages==1.9.1
 djangocms-admin-style==1.5.0
 djangocms-googlemap==1.4.0
-djangocms-link==2.5.0
+djangocms-link==2.6.0
 django-ckeditor==5.9.0
-djangocms-text-ckeditor==3.8.0
+djangocms-text-ckeditor==3.9.0
 djangorestframework==3.11.0
 easy-thumbnails==2.7
 openpyxl==3.0.3
@@ -34,18 +34,19 @@ django-allauth==0.41.0
 django-debug-toolbar==2.2
 redis==3.4.1
 django-redis==4.11.0
-cryptography==2.8
-django-countries==5.5
+cryptography==2.9.1
+django-countries==6.1.2
 django-ical==1.7.0
 pylint==2.4.4
-python-dotenv==0.11.0
+python-dotenv==0.13.0
 sphinx-automodapi==0.12
 pytz==2019.3
-boto3==1.12.33
+boto3==1.12.43
+# boto3 (1.12.43) requires docutils < 0.16
+docutils==0.15.2
 
 # DATABASE
-psycopg2==2.8.4
-mysqlclient==1.4.6
+psycopg2==2.8.5
 
 # Connection Django <--> Webserver
 gunicorn==20.0.4
