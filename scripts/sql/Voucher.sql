@@ -19,6 +19,5 @@ FROM courses_subscribe subscribe
 
 WHERE offering.name = 'FS2020 Q1'
   AND subscribe.state NOT IN ('rejected')
-  AND (COALESCE(payment.amount, 0) - subscribe.price_to_pay) < 0
 
 ORDER BY diff, usr.first_name, usr.last_name

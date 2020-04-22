@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-13 20:40+0000\n"
+"POT-Creation-Date: 2020-04-22 19:43+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,6 +88,7 @@ msgid "Can be left empty if Subject and Content are specified."
 msgstr "Kann leer gelassen werden, falls Betreff unf Inhalt angegeben werden."
 
 #: courses/admin_forms/send_course_email_form.py:20
+#: email_system/models/group_email.py:17
 msgid "Subject"
 msgstr "Betreff"
 
@@ -121,7 +122,9 @@ msgstr "Optional Umfrage auswählen"
 
 #: courses/admin_forms/send_course_email_form.py:47
 msgid "If specified, you can use the 'survey_url' placeholder."
-msgstr "Falls eine Umfrage ausgewählt ist, kann der 'survey_url' Platzhalter verwendet werden."
+msgstr ""
+"Falls eine Umfrage ausgewählt ist, kann der 'survey_url' Platzhalter "
+"verwendet werden."
 
 #: courses/admin_forms/send_course_email_form.py:53
 msgid "Optional: Expiration date for survey"
@@ -136,22 +139,16 @@ msgid ""
 "Subject not specified. Please specify either a template or enter the subject "
 "directly!"
 msgstr ""
-"Betreff nicht angegeben. Bitte gib ein Betreff an oder wähle eine Vorlage aus!"
+"Betreff nicht angegeben. Bitte gib ein Betreff an oder wähle eine Vorlage "
+"aus!"
 
 #: courses/admin_forms/send_course_email_form.py:72
 msgid ""
 "Content not specified. Please specify either a template or enter the content "
 "directly!"
 msgstr ""
-"Inhalt nicht angegeben. Bitte gib einen Inhalt an oder wähle eine Vorlage aus!"
-
-#: courses/admin_views.py:15
-msgid "Choose amount"
-msgstr "Wähle Betrag"
-
-#: courses/admin_views.py:17
-msgid "Set expire date?"
-msgstr "Ablaufdatum setzen?"
+"Inhalt nicht angegeben. Bitte gib einen Inhalt an oder wähle eine Vorlage "
+"aus!"
 
 #: courses/cms_apps.py:7
 msgid "Course Administration"
@@ -240,11 +237,21 @@ msgstr "Nachname"
 msgid "Geschlecht"
 msgstr "Geschlecht"
 
-#: courses/forms/user_edit_from.py:13
+#: courses/forms/send_voucher_form.py:13
+#: courses/forms/voucher_generation_form.py:12
+msgid "Percentage of voucher"
+msgstr ""
+
+#: courses/forms/send_voucher_form.py:15
+#: courses/forms/voucher_generation_form.py:14
+msgid "Set expire date?"
+msgstr "Ablaufdatum setzen?"
+
+#: courses/forms/user_edit_from.py:15
 msgid "Telephone number (Mobile)"
 msgstr "Telefonnummer (Mobil)"
 
-#: courses/forms/user_edit_from.py:14
+#: courses/forms/user_edit_from.py:16
 msgid ""
 "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
 "Teilen von Kursinhalten weitergegeben!"
@@ -252,20 +259,20 @@ msgstr ""
 "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
 "Teilen von Kursinhalten weitergegeben!"
 
-#: courses/forms/user_edit_from.py:17 courses/templates/user/profile.html:113
+#: courses/forms/user_edit_from.py:19 courses/templates/user/profile.html:113
 msgid "Student"
 msgstr "Student"
 
-#: courses/forms/user_edit_from.py:19
+#: courses/forms/user_edit_from.py:21
 #: courses/templates/courses/snippets/signup_user_form.html:34
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: courses/forms/user_edit_from.py:21
+#: courses/forms/user_edit_from.py:23
 msgid "Height (cm)"
 msgstr "Größe"
 
-#: courses/forms/user_edit_from.py:22
+#: courses/forms/user_edit_from.py:24
 msgid ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
@@ -273,51 +280,55 @@ msgstr ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
 
-#: courses/forms/user_edit_from.py:25
+#: courses/forms/user_edit_from.py:27
 msgid "Student card number"
 msgstr "Legi-Nummer"
 
-#: courses/forms/user_edit_from.py:27
+#: courses/forms/user_edit_from.py:29
 msgid "Subscribe to newsletter"
 msgstr "Newsletter abonnieren"
 
-#: courses/forms/user_edit_from.py:29
+#: courses/forms/user_edit_from.py:31
 msgid "I'd like to help TQ from time to time (Events etc.)"
 msgstr ""
 "Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei "
 "Veranstaltungen)"
 
-#: courses/forms/user_edit_from.py:31
+#: courses/forms/user_edit_from.py:33
 msgid "Street"
 msgstr "Strasse"
 
-#: courses/forms/user_edit_from.py:33
+#: courses/forms/user_edit_from.py:35
 msgid "Postal code"
 msgstr "PLZ"
 
-#: courses/forms/user_edit_from.py:35
+#: courses/forms/user_edit_from.py:37
 msgid "City"
 msgstr "Ort"
 
-#: courses/forms/user_edit_from.py:37
+#: courses/forms/user_edit_from.py:39
 msgid "Choose Year"
 msgstr "Wähle Jahr"
 
-#: courses/forms/user_edit_from.py:37
+#: courses/forms/user_edit_from.py:39
 msgid "Choose Month"
 msgstr "Wähle Monat"
 
-#: courses/forms/user_edit_from.py:37
+#: courses/forms/user_edit_from.py:39
 msgid "Choose Day"
 msgstr "Wähle Tag"
 
-#: courses/forms/user_edit_from.py:42
+#: courses/forms/user_edit_from.py:44
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
-#: courses/forms/user_edit_from.py:58
+#: courses/forms/user_edit_from.py:60
 msgid "Students have to enter their student card number."
 msgstr "Studenten müssen Ihre Legi Nummer eingeben"
+
+#: courses/forms/voucher_generation_form.py:11
+msgid "How many voucher should be generated?"
+msgstr ""
 
 #: courses/models/choices/gender.py:8
 #: courses/templates/courses/snippets/signup_user_form.html:39
@@ -331,19 +342,19 @@ msgstr "männlich"
 msgid "female"
 msgstr "weiblich"
 
-#: courses/services.py:90
+#: courses/services.py:91
 msgid "Irregular weekday"
 msgstr "Ungültiger Wochentag"
 
-#: courses/services.py:96
+#: courses/services.py:97
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/services.py:239
+#: courses/services.py:240
 msgid "Partner does not exist!"
 msgstr "Partner nicht gefunden!"
 
-#: courses/services.py:240
+#: courses/services.py:241
 msgid ""
 "The email you specified does not belong to any user. Make sure your partner "
 "has an active account."
@@ -351,87 +362,87 @@ msgstr ""
 "Die angegebene Emailadresse gehört zu keinem Benutzer. Stelle sicher, dass "
 "dein partner ein aktives Konto hat."
 
-#: courses/services.py:254
+#: courses/services.py:255
 msgid "You entered yourself as partner! Please enter a valid partner."
 msgstr "Du hast dich selbst als partner eingetragen! Das ist nicht möglich."
 
-#: courses/services.py:259
+#: courses/services.py:260
 msgid "The partner you entered is already subscribed with someone else!"
 msgstr ""
 "Der angegebene Partner hat sich schon mit einer anderen Person angemeldet!"
 
-#: courses/services.py:264
+#: courses/services.py:265
 msgid "You are already subscribed!"
 msgstr "Du bist bereits angemeldet!"
 
-#: courses/services.py:275
+#: courses/services.py:276
 msgid "Both, you and your partner are already subscribed!"
 msgstr "Du und dein Partner sind schon angemeldet!"
 
-#: courses/services.py:315
+#: courses/services.py:316
 msgid "Successfully subscribed"
 msgstr "Erfolgreich angemeldet"
 
-#: courses/services.py:316
+#: courses/services.py:317
 msgid "You will receive an email shortly"
 msgstr "Du bekommst in Kürze eine Email."
 
-#: courses/services.py:368
+#: courses/services.py:369
 msgid "{} couples matched successfully"
 msgstr "{} Paare erfolgreich zugeordnet"
 
-#: courses/services.py:387
+#: courses/services.py:388
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr "{} Einschreibungen ({} Paare) erfolgreich korrigiert"
 
-#: courses/services.py:412
+#: courses/services.py:413
 msgid "{} couples unmatched successfully"
 msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
-#: courses/services.py:415
+#: courses/services.py:416
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr ""
 "{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT "
 "sind"
 
-#: courses/services.py:419
+#: courses/services.py:420
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr ""
 "{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem "
 "ungültigen Zustand sind"
 
-#: courses/services.py:444
+#: courses/services.py:445
 msgid "{} couples broken up successfully"
 msgstr "{} Paare erfolgreich getrennt"
 
-#: courses/services.py:447
+#: courses/services.py:448
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr "{} Paare können nicht getrennt werden, da sie BESTÄTIGT sind"
 
-#: courses/services.py:451
+#: courses/services.py:452
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr ""
 "{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand "
 "sind"
 
-#: courses/services.py:489
+#: courses/services.py:490
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 "{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
 
-#: courses/services.py:508
+#: courses/services.py:509
 msgid "{} of {} confirmed successfully"
 msgstr "{} von {} erfolgreich bestätigt"
 
-#: courses/services.py:551
+#: courses/services.py:552
 msgid "{} unrejected successfully"
 msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
-#: courses/services.py:580
+#: courses/services.py:581
 msgid "{} of {} welcomed successfully"
 msgstr "{} von {} erfolgreich begrüsst"
 
-#: courses/services.py:594
+#: courses/services.py:595
 msgid "{} of {} teachers reset successfully"
 msgstr "{} von {} Lehrern erfolgreich zurückgesetzt"
 
@@ -448,6 +459,12 @@ msgstr "Empfänger"
 #: courses/templates/courses/auth/action_send_course_email.html:21
 msgid "The email will be sent to all participants of the following courses"
 msgstr "Die Email wird an Personen aus folgenden Kursen gesendet."
+
+#: courses/templates/courses/auth/action_send_voucher.html:11
+#, fuzzy
+#| msgid "Voucher purposes"
+msgid "Voucher options"
+msgstr "Gutscheinzweck"
 
 #: courses/templates/courses/auth/course_overview.html:5
 msgid "Course Overview"
@@ -538,6 +555,7 @@ msgid "Bank Account"
 msgstr "Bankkonto"
 
 #: courses/templates/courses/snippets/course_description.html:5
+#: email_system/models/tq_email_address.py:11
 #: payment/templates/payment/course/course.html:16
 msgid "Description"
 msgstr "Beschreibung"
@@ -700,7 +718,7 @@ msgstr "mit"
 #: courses/templates/courses/snippets/styles.html:55
 #: courses/templates/courses/snippets/user_form.html:5
 #: courses/templates/courses/snippets/user_modal.html:57
-#: courses/templates/courses/snippets/user_profile_form.html:6
+#: courses/templates/courses/snippets/user_profile_form.html:8
 #: events/templates/events/snippets/event_modal.html:46
 #: templates/account/change_password.html:20
 #: templates/account/change_password.html:26
@@ -709,7 +727,7 @@ msgstr "Schliessen"
 
 #: courses/templates/courses/snippets/signup_user_form.html:7
 #: courses/templates/courses/snippets/user_form.html:6
-#: courses/templates/courses/snippets/user_profile_form.html:7
+#: courses/templates/courses/snippets/user_profile_form.html:9
 msgid "Some inputs are invalid"
 msgstr "Einige Eingaben sind ungültig"
 
@@ -728,7 +746,7 @@ msgid "Name"
 msgstr "Name"
 
 #: courses/templates/courses/snippets/song_list.html:5
-#: tq_website/settings.py:338
+#: tq_website/settings.py:340
 msgid "Title"
 msgstr "Titel"
 
@@ -862,7 +880,7 @@ msgstr "Über"
 msgid "No info available"
 msgstr "Keine Informationen verfügbar"
 
-#: courses/templates/courses/snippets/user_profile_form.html:36
+#: courses/templates/courses/snippets/user_profile_form.html:38
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Zahlungsdaten eingeben (Nur für Lehrer und Helfer nötig)"
 
@@ -1156,6 +1174,55 @@ msgstr "Nächste Kurse"
 msgid "Form not valid. Pleas check your input again!"
 msgstr "Eingabe ungültig. Prüfe bitte deine Eingabe erneut!"
 
+#: email_system/apps.py:7 tq_website/cms_toolbars.py:24
+msgid "Emails"
+msgstr "E-Mails"
+
+#: email_system/models/generated_individual_email.py:12
+msgid "Generated individual Email"
+msgstr ""
+
+#: email_system/models/group_email.py:11
+msgid "Target group"
+msgstr ""
+
+#: email_system/models/group_email.py:12
+msgid "Reply-To address"
+msgstr ""
+
+#: email_system/models/group_email.py:18
+#, fuzzy
+#| msgid "Transfer Message"
+msgid "Message"
+msgstr "Mitteilungsfeld"
+
+#: email_system/models/group_email.py:18
+msgid "Content of the email"
+msgstr ""
+
+#: email_system/models/group_email.py:31
+#, fuzzy
+#| msgid "Email"
+msgid "Group Email"
+msgstr "E-Mail"
+
+#: email_system/templates/email_system/unsubscribe.html:5
+#: email_system/templates/email_system/unsubscribe.html:9
+#, fuzzy
+#| msgid "Subscribe"
+msgid "Unsubscribe"
+msgstr "Anmelden"
+
+#: email_system/templates/email_system/unsubscribe.html:16
+#, fuzzy
+#| msgid "Successfully subscribed"
+msgid "Sucesfully unsubscribed!"
+msgstr "Erfolgreich angemeldet"
+
+#: email_system/templates/email_system/unsubscribe.html:18
+msgid "Invalide unsubscribe url. Please send us an email to unsubscribe."
+msgstr ""
+
 #: events/cms_plugins.py:10 events/cms_toolbars.py:10 events/cms_toolbars.py:13
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -1220,6 +1287,10 @@ msgstr "Organisiert von"
 #: faq/cms_plugins.py:15
 msgid "FAQ"
 msgstr "FAQ"
+
+#: groups/apps.py:7
+msgid "Groups"
+msgstr ""
 
 #: organisation/cms_plugins.py:11
 msgid "Managing Committee"
@@ -1352,8 +1423,8 @@ msgstr "Kursmanagement"
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/course/course.html:27 tq_website/settings.py:291
-#: tq_website/settings.py:313
+#: payment/templates/payment/course/course.html:27 tq_website/settings.py:293
+#: tq_website/settings.py:315
 msgid "English"
 msgstr "Englisch"
 
@@ -1885,10 +1956,6 @@ msgstr "Vorstandsposten"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/cms_toolbars.py:24
-msgid "Emails"
-msgstr "E-Mails"
-
 #: tq_website/cms_toolbars.py:27
 msgid "Email templates"
 msgstr "E-Mail Vorlagen"
@@ -1913,17 +1980,20 @@ msgstr "Möchte gerne mithelfen"
 msgid "Files"
 msgstr "Dateien"
 
-#: tq_website/settings.py:290 tq_website/settings.py:305
+#: tq_website/settings.py:292 tq_website/settings.py:307
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:330
+#: tq_website/settings.py:332
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:334
+#: tq_website/settings.py:336
 msgid "Side content"
 msgstr "Seiteninhalt"
+
+#~ msgid "Choose amount"
+#~ msgstr "Wähle Betrag"
 
 #~ msgid "Select email template"
 #~ msgstr "Wähle eine E-Mail Vorlagen aus"

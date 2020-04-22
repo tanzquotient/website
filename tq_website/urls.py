@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 
 import courses.urls
 import courses.views as courses_views
+import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
@@ -56,6 +57,7 @@ urlpatterns += i18n_patterns(
     url(r'^survey/', include(survey.urls, namespace='survey')),
     url(r'^events/', include(events.urls, namespace='events')),
     url(r'^courses/', include(courses.urls, namespace='courses')),
+    url(r'^emails/', include(email_system.urls, namespace='email_system')),
     url(r'^', include(payment.urls, namespace='payment')),
     url(r'^', include(cms.urls))
 )

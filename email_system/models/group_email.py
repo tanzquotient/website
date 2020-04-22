@@ -9,6 +9,7 @@ from utils import TranslationUtils
 
 class GroupEmail(TranslatableModel):
     target_group = ForeignKey(verbose_name=_('Target group'), to=Group, related_name='tq_emails', on_delete=SET_NULL, blank=True, null=True)
+    reply_to = ForeignKey(verbose_name=_('Reply-To address'), to='TqEmailAddress', related_name='group_email_reply_tos', on_delete=SET_NULL, blank=True, null=True)
     sent_at = DateTimeField(null=True, blank=True)
 
     # Translated fields
