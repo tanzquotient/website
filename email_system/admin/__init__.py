@@ -1,2 +1,3 @@
 from .group_email_admin import GroupEmailAdmin
 from .generated_individual_email_admin import GeneratedIndividualEmailAdmin
+from .tq_email_address_admin import TqEmailAddressAdmin
