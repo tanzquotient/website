@@ -11,12 +11,6 @@ class TqEmailAddress(TranslatableModel):
         description=CharField(verbose_name=_('Description'), max_length=200, blank=True, null=True),
     )
 
-    def get_headers(self):
-        return {
-            'Reply-To': self.email_address,
-            'From': self.email_address,
-        }
-
     def __str__(self):
         return self.email_address
 

@@ -19,6 +19,9 @@ def update_groups(queryset=None):
         queryset = Group.objects
 
     for group_definition in GroupDefinitions.DEFINITIONS:
+        if group_definition.is_manual():
+            continue
+
         group = queryset.filter(name=group_definition.name)
         if not group.exists():
             continue

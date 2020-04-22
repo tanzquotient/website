@@ -23,6 +23,8 @@ def send_email(group_email):
         unsubscribe_context = GroupDefinitions.NEWSLETTER.name
     elif group_email.target_group.name == GroupDefinitions.GET_INVOLVED.name:
         unsubscribe_context = GroupDefinitions.GET_INVOLVED.name
+    elif group_email.target_group.name == GroupDefinitions.TEST.name:
+        unsubscribe_context = GroupDefinitions.TEST.name
 
     for user in group_email.target_group.user_set.all():
 
@@ -36,10 +38,9 @@ def send_email(group_email):
         subject = TranslationUtils.get_text_with_language_fallback(group_email, 'subject')
         html_message = TranslationUtils.get_text_with_language_fallback(group_email, 'message')
 
-        try:
-            headers = group_email.reply_to.get_headers()
-        except TqEmailAddress.DoesNotExist:
-            headers = {}
+        headers = {}
+        if group_email.reply_to is not None:
+            headers['Reply-To'] = group_email.reply_to.email_address,
 
         if unsubscribe_context is not None:
             unsubscribe_code = UnsubscribeCode.objects.get_or_create(user=user)

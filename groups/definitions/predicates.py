@@ -12,3 +12,4 @@ def get_involved(user):
 
 def is_board_member(user):
     return user.functions.exists()
+

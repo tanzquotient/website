@@ -9,6 +9,7 @@ class GroupDefinitions:
     NEWSLETTER = GroupDefinition(name='Newsletter', predicate=newsletter)
     GET_INVOLVED = GroupDefinition(name='Want to get involved', predicate=get_involved)
 
+    TEST = GroupDefinition(name='Test')
 
     DEFINITIONS = [
         ALL_TEACHERS,
@@ -16,4 +17,5 @@ class GroupDefinitions:
         BOARD_MEMBERS,
         NEWSLETTER,
         GET_INVOLVED,
+        TEST,
     ]

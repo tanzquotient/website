@@ -6,6 +6,12 @@ def unsubscribe(context, user_id, code):
     if not unsubscribe_code.exists():
         return False
 
+    if context == GroupDefinitions.TEST.name:
+        profile = unsubscribe_code.user.profile
+        profile.newsletter = profile.newsletter
+        profile.save()
+        return True
+
     if context == GroupDefinitions.NEWSLETTER.name:
         profile = unsubscribe_code.user.profile
         profile.newsletter = False
