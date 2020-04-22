@@ -1,10 +1,8 @@
-SELECT DISTINCT username,
+SELECT DISTINCT usr.username,
                 usr.first_name,
                 usr.last_name,
-                profile.phone_number,
-                usr.email,
+                subscribe.state,
                 course.name                                            as "Course name",
-                subscribe.usi,
                 COALESCE(payment.amount, 0)                            as paid,
                 subscribe.price_to_pay,
                 (subscribe.price_to_pay - COALESCE(payment.amount, 0)) as diff
@@ -17,10 +15,10 @@ FROM courses_subscribe subscribe
          JOIN auth_user usr on profile.user_id = usr.id
          LEFT JOIN payment_subscriptionpayment payment on subscribe.id = payment.subscription_id
          LEFT JOIN payment_payment bank_transaction on payment.payment_id = bank_transaction.id
+         LEFT JOIN refund2020 refund on usr.username = refund.username
 
 WHERE offering.name = 'FS2020 Q1'
   AND subscribe.state NOT IN ('rejected')
-  AND (paymentmethod IS NULL OR paymentmethod <> 'voucher')
-  AND (subscribe.price_to_pay - COALESCE(payment.amount, 0)) <> 0
+  AND (COALESCE(payment.amount, 0) - subscribe.price_to_pay) < 0
 
 ORDER BY diff, usr.first_name, usr.last_name

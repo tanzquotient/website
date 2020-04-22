@@ -89,7 +89,6 @@ maintenance.conf
 
 # Database stuff
 database_*
-*.sql
 
 # built documentation
 docs/sphinx/_build
