@@ -15,7 +15,7 @@ class UnsubscribeCode(Model):
     generated_at = DateTimeField(default=datetime.now, blank=False)
 
     def get_unsubscribe_url(self, context):
-        url = reverse('email_system', kwargs={
+        url = reverse('email_system:unsubscribe', kwargs={
             'context': context,
             'user_id': self.user.id,
             'code': self.code
