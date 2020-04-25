@@ -283,13 +283,6 @@ LANGUAGES = [
     ('en', ugettext('English')),
 ]
 
-PARLER_LANGUAGES = {
-    None: (
-        {'code': 'de', },
-        {'code': 'en', },
-    ),
-}
-
 CMS_LANGUAGES = {
     1: [
         {
