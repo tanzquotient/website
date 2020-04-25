@@ -475,7 +475,7 @@ REST_FRAMEWORK = {
 # PARLER #
 ##########
 PARLER_LANGUAGES = {
-    DEPLOYMENT_DOMAIN: (
+    SITE_ID: (
         {'code': 'en', },
         {'code': 'de', },
     ),
