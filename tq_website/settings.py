@@ -378,7 +378,7 @@ THUMBNAIL_PROCESSORS = (
 # Celery
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 CELERY_RESULT_BACKEND = 'django-db'
-BROKER_URL = "redis://redis/"
+BROKER_URL = os.environ.get('REDIS_BROKER_URL', 'redis://redis/')
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
