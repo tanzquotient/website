@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load parler_tags %}
+
+<div class="row">
+    {% for partner in partners %}
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card">
+                <a href="{{ partner.url }}">
+                    <img src="{{ partner.image.url }}"  alt="{{ partner.name }}"/>
+                </a>
+                <div class="card-content">
+                    <p class="card-title">{{ partner.name }}</p>
+                    {{ partner.description }}
+                </div>
+                <a href="{{ partner.url }}" class="card-action">{% trans "Visit partner" %}&nbsp;<i class="fa fa-external-link fa-lg"></i></a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

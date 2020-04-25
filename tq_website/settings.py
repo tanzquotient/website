@@ -78,6 +78,7 @@ INSTALLED_APPS += [
     'rest_framework',
     'groups.apps.GroupsConfig',
     'email_system.apps.EmailSystemConfig',
+    'partners.apps.PartnersConfig',
     'parler',
     'survey',
     'debug_toolbar',

@@ -391,3 +391,49 @@ img.pull-left {
     padding: 2px;
     transform: rotate(45deg);
 }
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.card img {
+    width: 100%;
+}
+
+.card .card-content {
+    padding: 0 15px;
+}
+
+.card .card-action {
+    text-align: center;
+    background-color: #c51718;
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.card .card-action:focus {
+    color: white;
+    background: #931516;
+}
+
+.card .card-action:hover {
+    color: white;
+    background: #931516;
+}
+
+.card .card-action:active {
+    color: white;
+    background: #6e000b;
+}
+
+.card .card-title {
+    font-weight: bold;
+    font-size: large;
+    margin: 10px 0;
+}
