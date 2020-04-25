@@ -129,8 +129,8 @@ FORMAT_MODULE_PATH = [
     'tq_website.formats',
 ]
 
-# loopback and docker gateway
-INTERNAL_IPS = ['127.0.0.1', '::1', '172.18.0.1']
+# loopback
+INTERNAL_IPS = ['127.0.0.1', '::1']
 
 ###############################################
 # Configuration of allauth account management #
