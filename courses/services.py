@@ -640,6 +640,8 @@ def send_vouchers(data, recipients):
     expires_flag = data['expires_flag']
     expires = data['expires']
 
+    emails = []
+
     for recipient in recipients:
         voucher = Voucher(purpose=purpose, percentage=percentage, expires=expires if expires_flag else None)
         voucher.save()
@@ -652,13 +654,16 @@ def send_vouchers(data, recipients):
             'voucher_url': voucher.pdf_file.url,
         }
 
-        mail.send(
+        emails.append(dict(
             recipients=[recipient.email],
             sender=settings.DEFAULT_FROM_EMAIL,
             template='voucher',
             context=email_context,
             attachments={'Voucher.pdf': voucher.pdf_file.file}
-        )
+        ))
+
+    for email in emails:
+        mail.send(**email)
 
 
 
@@ -670,6 +675,8 @@ def send_course_email(data, courses):
     send_to_teachers = data['send_to_teachers']
     survey = data['survey']
     survey_url_expire_date = data['survey_url_expire_date']
+
+    emails = []
 
     for course in courses:
         recipients = []
@@ -702,15 +709,15 @@ def send_course_email(data, courses):
             subject = email_subject or email_template.subject
             html_message = email_content or email_template.html_content
 
-            mail.send(
+            emails.append(dict(
                 recipients=[recipient.email],
                 sender=settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 html_message=html_message,
                 context=context,
-            )
+            ))
 
-
+    mail.send_many(emails)
 
 
 def export_subscriptions(course_ids, export_format):

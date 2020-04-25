@@ -26,6 +26,8 @@ def send_email(group_email):
     elif group_email.target_group.name == GroupDefinitions.TEST.name:
         unsubscribe_context = GroupDefinitions.TEST.name
 
+    emails = []
+
     for user in group_email.target_group.user_set.all():
 
         # Get context for email
@@ -48,15 +50,19 @@ def send_email(group_email):
             headers['List-unsubscribe'] = '<{}>'.format(unsubscribe_url)
             html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(unsubscribe_url)
 
-        # Send email
-        email = mail.send(
+        # Add email
+        emails.append(dict(
             recipients=[user.email],
             sender=settings.DEFAULT_FROM_EMAIL,
             subject=subject,
             headers=headers,
             html_message=html_message,
             context=context,
-        )
+        ))
+
+    for email in emails:
+        # Send email
+        email = mail.send(**email)
 
         # Save generated mail
         GeneratedIndividualEmail.objects.create(email=email, source=group_email)
