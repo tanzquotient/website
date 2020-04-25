@@ -105,7 +105,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-DEPLOYMENT_DOMAIN = int(os.environ.get("DEPLOYMENT_DOMAIN", 'localhost'))
+SITE_ID = 1 # Needed for DjangoCMS
+DEPLOYMENT_DOMAIN = os.environ.get("DEPLOYMENT_DOMAIN", 'localhost')
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -171,28 +172,27 @@ STATICFILES_FINDERS = (
 )
 
 
-USE_S3 = bool(os.environ.get("TQ_USE_S3", 'False') == 'True')
+S3_ENABLED = bool(os.environ.get("TQ_S3_ENABLED", 'False') == 'True')
 
-if USE_S3:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if S3_ENABLED:
+    DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
+    STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
+
+    BUCKET_MEDIA = os.environ.get('TQ_S3_BUCKET_MEDIA', 'tanzquotient-media')
+    BUCKET_STATIC = os.environ.get('TQ_S3_BUCKET_STATIC', 'tanzquotient-static')
+    BUCKET_POSTFINANCE = os.environ.get('TQ_S3_BUCKET_POSTFINANCE', 'tanzquotient-postfinance')
+
+    S3_CUSTOM_DOMAIN = os.environ.get('TQ_S3_CUSTOM_DOMAIN', '')
+    S3_ENDPOINT_URL = os.environ.get('TQ_S3_ENDPOINT_URL', '')
 
     AWS_ACCESS_KEY_ID = os.environ.get('TQ_S3_ACCESS_KEY', '')
     AWS_SECRET_ACCESS_KEY = os.environ.get('TQ_S3_SECRET_KEY', '')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('TQ_S3_BUCKET_DATA', 'tanzquotient-data')
     AWS_DEFAULT_ACL = None
     AWS_S3_REGION_NAME = os.environ.get('TQ_S3_REGION_NAME', '')
-    if os.environ.get('TQ_S3_ENDPOINT_URL', ''):
-        AWS_S3_ENDPOINT_URL = os.environ.get('TQ_S3_ENDPOINT_URL', '')
-    else:
-        AWS_S3_CUSTOM_DOMAIN = os.environ.get('TQ_S3_CUSTOM_DOMAIN', '').format(AWS_STORAGE_BUCKET_NAME)
 
     def postfinance_file_storage():
-        from storages.backends.s3boto3 import S3Boto3Storage
-        custom_domain = None
-        bucket_name = os.environ.get('TQ_S3_BUCKET_POSTFINANCE', 'tanzquotient-postfinance')
-        if not os.environ.get('TQ_S3_ENDPOINT_URL', ''):
-            custom_domain = os.environ.get('TQ_S3_CUSTOM_DOMAIN', '').format(AWS_STORAGE_BUCKET_NAME)
-        return S3Boto3Storage(bucket_name=bucket_name, custom_domain=custom_domain)
+        from tq_website.storages import PostfinanceStorage
+        return PostfinanceStorage()
 else:
     def postfinance_file_storage():
         return FileSystemStorage(location=os.path.join(BASE_DIR, 'postfinance'))
