@@ -69,7 +69,6 @@ services:
     command: server /data
 
 volumes:
-  db-volume: # Let Docker generate a place for this, doesn't matter for development
   postgres-volume: # Let Docker generate a place for this, doesn't matter for development
   s3-data-volume:
 
