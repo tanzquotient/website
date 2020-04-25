@@ -105,7 +105,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-SITE_ID = int(os.environ.get("TQ_SITE_ID", 100))
+DEPLOYMENT_DOMAIN = int(os.environ.get("DEPLOYMENT_DOMAIN", 'localhost'))
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -474,7 +474,7 @@ REST_FRAMEWORK = {
 # PARLER #
 ##########
 PARLER_LANGUAGES = {
-    SITE_ID: (
+    DEPLOYMENT_DOMAIN: (
         {'code': 'en', },
         {'code': 'de', },
     ),

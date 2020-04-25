@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.sites.models import Site
+from django.conf import settings
 from django.urls import reverse
 from post_office import mail, models as post_office_models
 
@@ -35,7 +35,7 @@ def send_subscription_confirmation(subscription):
 def _build_subscription_context(subscription):
     from payment import payment_processor
     conf = my_settings.PAYMENT_ACCOUNT['default']
-    current_site = Site.objects.get_current().domain
+    current_site = settings.DEPLOYMENT_DOMAIN
     voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
     return {
         'first_name': subscription.user.first_name,
@@ -114,7 +114,7 @@ def send_teacher_welcome(teach):
         return None
     course = teach.course
 
-    current_site = Site.objects.get_current().domain
+    current_site = settings.DEPLOYMENT_DOMAIN
     course_url = current_site + reverse('courses:course_detail', kwargs={'course_id': course.id})
     coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
     login_url = current_site + reverse('account_login')

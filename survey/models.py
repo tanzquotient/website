@@ -225,7 +225,7 @@ class SurveyInstance(models.Model):
 
 
     def create_full_url(self):
-        return "https://{}{}".format(Site.objects.get(id=settings.SITE_ID).domain, self.create_url())
+        return "https://{}{}".format(settings.DEPLOYMENT_DOMAIN, self.create_url())
 
     def __str__(self):
         if self.course:

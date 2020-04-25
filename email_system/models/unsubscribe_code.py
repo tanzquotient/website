@@ -1,8 +1,8 @@
 from datetime import datetime
 from uuid import uuid4
 
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.db.models import ForeignKey, DateTimeField, CharField, Model, CASCADE
 from django.urls import reverse
 
@@ -20,7 +20,7 @@ class UnsubscribeCode(Model):
             'user_id': self.user.id,
             'code': self.code
         })
-        return 'https://{}{}'.format(Site.objects.get_current().domain, url)
+        return 'https://{}{}'.format(settings.DEPLOYMENT_DOMAIN, url)
 
     def __str__(self):
         return self.code
