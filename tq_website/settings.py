@@ -28,18 +28,7 @@ DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 
-ALLOWED_HOSTS = [
-    # with . at beginning allows domain and subdomains
-    # with . at end allows FQDN
-    '.tq.ethz.ch.',
-    '.tq.vseth.ch.',
-    '.tq.vseth.ethz.ch.',
-    '.tanzquotient.vseth.ethz.ch.',
-    '.tanzquotient.org',
-    '46.231.204.51',
-    '192.168.99.100',
-    '127.0.0.1', 'localhost',
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", 'localhost').split(',')
 # This should be set to true since we use NGINX as a proxy
 USE_X_FORWARDED_HOST = True
 
