@@ -1,1 +1,2 @@
 from .partners_plugin import PartnersPlugin
+from .partner_courses_plugin import PartnerOfferingsPlugin

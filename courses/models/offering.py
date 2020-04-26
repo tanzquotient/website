@@ -27,6 +27,9 @@ class Offering(models.Model):
     def has_date_from(self):
         return self.get_start_year() is not None
 
+    def is_partner_offering(self):
+        return self.type == OfferingType.PARTNER
+
     def get_start_year(self):
         try:
             return self.period.date_from.year

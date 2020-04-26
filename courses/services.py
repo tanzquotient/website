@@ -90,7 +90,7 @@ def get_sections(offering, course_filter=None):
         if courses_without_weekday:
             offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
 
-    elif offering.type == OfferingType.IRREGULAR:
+    elif offering.type in [OfferingType.IRREGULAR, OfferingType.PARTNER]:
         courses_by_month = CourseManager.by_month(course_set)
         for (d, courses) in courses_by_month:
             if d is None:

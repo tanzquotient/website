@@ -8,6 +8,7 @@ from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
 from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState
+from partners.models import Partner
 
 
 class Course(TranslatableModel):
@@ -51,6 +52,7 @@ class Course(TranslatableModel):
 
     # For external courses only
     external_url = models.URLField(max_length=500, blank=True, null=True)
+    partner = models.ForeignKey(to=Partner, on_delete=models.SET_NULL, related_name='courses', blank=True, null=True)
 
     # Pricing
     price_with_legi = models.FloatField(blank=True, null=True, default=35)

@@ -1,11 +1,14 @@
 {% load i18n %}
-<h2>
-    {% if offering.is_preview %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
-    {{ offering.name }}
-</h2>
-{% if offering.period  %}
-    <p>{{ offering.period.date_as_string }}</p>
+{% if not hide_title %}
+    <h2>
+        {% if offering.is_preview %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
+        {{ offering.name }}
+    </h2>
+    {% if offering.period %}
+        <p>{{ offering.period.date_as_string }}</p>
+    {% endif %}
 {% endif %}
+
 
 <div class="hidden-xs">
     {% for d in sections %}
@@ -19,10 +22,16 @@
                     <thead>
                     <tr>
                         <th>{% trans "Course" %}</th>
-                        <th>{% trans "Location" %}</th>
+                        {% if offering.is_partner_offering %}
+                            <th>{% trans "Partner" %}</th>
+                        {% else %}
+                            <th>{% trans "Location" %}</th>
+                        {% endif %}
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Costs" %}</th>
-                        {% if not hide_subscribtion %}
+                        {% if offering.is_partner_offering %}
+                            <th>{% trans "External link" %}</th>
+                        {% elif not hide_subscribtion %}
                             <th>{% trans "Subscribe / Free places" %}</th>
                         {% endif %}
                     </tr>
@@ -36,14 +45,26 @@
                                 </a>
                             </td>
                             <td>
-                                {% if c.room %}
-                                    {% include "courses/snippets/room.html" with display_link=True room=c.room only %}
+                                {% if offering.is_partner_offering %}
+                                    {% if c.partner %}
+                                        <a href="{{ c.partner.url }}">{{ c.partner.name }}</a>
+                                    {% else %}
+                                        {% trans "Not specified" %}
+                                    {% endif %}
                                 {% else %}
-                                    {% trans "Currently unknown" %}
+                                    {% if c.room %}
+                                        {% include "courses/snippets/room.html" with display_link=True room=c.room only %}
+                                    {% else %}
+                                        {% trans "Currently unknown" %}
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>{% include "courses/snippets/lessons.html" with course=c display_link=False only %}</td>
-                            <td>{{ c.format_prices|default:"-" }}</td>
+                            {% if not c.format_prices and offering.is_partner_offering %}
+                                <td>{% trans "Unknown" %}</td>
+                            {% else %}
+                                <td>{{ c.format_prices|default:"-" }}</td>
+                            {% endif %}
                             {% if not hide_subscribtion %}
                                 <td>
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
@@ -81,7 +102,17 @@
                             <p class="list-group-item-text">
                                 <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong>
                             </p>
-                            <p class="list-group-item-text">{{ c.room|default:"Raum noch unbekannt" }}</p>
+                            {% if offering.is_partner_offering %}
+                                {% if c.partner %}
+                                    <p class="list-group-item-text">{{ c.partner.name }}</p>
+                                {% endif %}
+                            {% else %}
+                                {% if c.room %}
+                                    <p class="list-group-item-text">{{ c.room }}</p>
+                                {% else %}
+                                    <p class="list-group-item-text">{% trans "Raum noch unbekannt" %}</p>
+                                {% endif %}
+                            {% endif %}
                             {% if c.format_prices %}
                                 <p class="list-group-item-text">{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</p>
                             {% endif %}

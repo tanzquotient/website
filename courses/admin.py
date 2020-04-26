@@ -127,7 +127,7 @@ class CourseAdmin(TranslatableAdmin):
 
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description', 'external_url']}),
+            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description', 'external_url', 'partner']}),
         ('When?', {
             'fields': ['offering', 'period']}),
         ('Where?', {
