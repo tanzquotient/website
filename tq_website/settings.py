@@ -40,7 +40,6 @@ INSTALLED_APPS += [
     'ckeditor',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
-    'easy_thumbnails',
     'djangocms_googlemap',
     'djangocms_link',
     'cms',  # django CMS itself
@@ -340,19 +339,6 @@ CMS_PLACEHOLDER_CONF = {
         },
     },
 }
-
-##########################
-# Configuration of filer #
-##########################
-THUMBNAIL_HIGH_RESOLUTION = True
-
-THUMBNAIL_PROCESSORS = (
-    'easy_thumbnails.processors.colorspace',
-    'easy_thumbnails.processors.autocrop',
-    # 'easy_thumbnails.processors.scale_and_crop',
-    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
-    'easy_thumbnails.processors.filters',
-)
 
 ##################################################
 # Configuration of post_office plugin und celery #
