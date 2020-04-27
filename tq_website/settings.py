@@ -39,6 +39,7 @@ INSTALLED_APPS += [
     'treebeard',
     'ckeditor',
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
+    'easy_thumbnails', # filer requires this here
     'filer',
     'djangocms_googlemap',
     'djangocms_link',
