@@ -47,8 +47,8 @@ def match_payments():
     PaymentProcessor().process_payments()
 
 
-TASK_CONFIG_TEACHER_GROUP = {'name': 'update_groups', 'ignore_result': True}
+TASK_CONFIG_UPDATE_GROUPS = {'name': 'update_groups', 'ignore_result': True}
 
-@shared_task(**TASK_CONFIG_TEACHER_GROUP)
+@shared_task(**TASK_CONFIG_UPDATE_GROUPS)
 def task_update_groups():
     update_groups()
