@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 19:43+0000\n"
+"POT-Creation-Date: 2020-04-27 19:07+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,8 +55,8 @@ msgstr "Venue not yet set"
 
 #: cms_plugins/templates/cms_plugins/snippets/event_or_course_item.html:26
 #: courses/templates/courses/snippets/course_info.html:29
-#: courses/templates/courses/snippets/offering.html:24
-#: courses/templates/courses/snippets/offering.html:86
+#: courses/templates/courses/snippets/offering.html:31
+#: courses/templates/courses/snippets/offering.html:117
 #: courses/templates/user/snippets/subscription.html:32
 #: events/templates/events/snippets/event_list_entry.html:30
 msgid "Costs"
@@ -238,7 +238,7 @@ msgstr "Gender"
 #: courses/forms/send_voucher_form.py:13
 #: courses/forms/voucher_generation_form.py:12
 msgid "Percentage of voucher"
-msgstr ""
+msgstr "Percentage of voucher"
 
 #: courses/forms/send_voucher_form.py:15
 #: courses/forms/voucher_generation_form.py:14
@@ -322,7 +322,7 @@ msgstr "Students have to enter their student card number."
 
 #: courses/forms/voucher_generation_form.py:11
 msgid "How many voucher should be generated?"
-msgstr ""
+msgstr "How many voucher should be generated?"
 
 #: courses/models/choices/gender.py:8
 #: courses/templates/courses/snippets/signup_user_form.html:39
@@ -335,6 +335,18 @@ msgstr "male"
 #: courses/templates/user/snippets/course_as_teacher.html:26
 msgid "female"
 msgstr "female"
+
+#: courses/models/choices/offering_type.py:9
+msgid "Regular (weekly)"
+msgstr "Regular (weekly)"
+
+#: courses/models/choices/offering_type.py:10
+msgid "Irregular (e.g. workshops)"
+msgstr "Irregular (e.g. workshops)"
+
+#: courses/models/choices/offering_type.py:11
+msgid "Partner (external)"
+msgstr "Partner (external)"
 
 #: courses/services.py:91
 msgid "Irregular weekday"
@@ -447,10 +459,8 @@ msgid "The email will be sent to all participants of the following courses"
 msgstr "The email will be sent to all participants of the following courses"
 
 #: courses/templates/courses/auth/action_send_voucher.html:11
-#, fuzzy
-#| msgid "Voucher purposes"
 msgid "Voucher options"
-msgstr "Voucher purposes"
+msgstr "Voucher options"
 
 #: courses/templates/courses/auth/course_overview.html:5
 msgid "Course Overview"
@@ -526,8 +536,8 @@ msgid "Merge selected proposals"
 msgstr "Merge selected proposals"
 
 #: courses/templates/courses/list.html:21
-#: courses/templates/courses/snippets/offering.html:55
-#: courses/templates/courses/snippets/offering.html:92
+#: courses/templates/courses/snippets/offering.html:76
+#: courses/templates/courses/snippets/offering.html:123
 msgid "No courses available"
 msgstr "No courses available"
 
@@ -541,7 +551,7 @@ msgid "Bank Account"
 msgstr "Bank account"
 
 #: courses/templates/courses/snippets/course_description.html:5
-#: email_system/models/tq_email_address.py:11
+#: email_system/models/tq_email_address.py:11 partners/models/partner.py:16
 #: payment/templates/payment/course/course.html:16
 msgid "Description"
 msgstr "Description"
@@ -590,7 +600,7 @@ msgid "Raum"
 msgstr "Room"
 
 #: courses/templates/courses/snippets/course_info.html:34
-#: courses/templates/courses/snippets/offering.html:23
+#: courses/templates/courses/snippets/offering.html:30
 #: courses/templates/user/snippets/course_as_teacher.html:8
 #: courses/templates/user/snippets/subscription.html:11
 #: events/templates/events/snippets/event_list.html:10
@@ -602,7 +612,7 @@ msgid "Go to course"
 msgstr "Go to courses"
 
 #: courses/templates/courses/snippets/detail.html:4
-#: courses/templates/courses/snippets/offering.html:3
+#: courses/templates/courses/snippets/offering.html:4
 msgid "Preview"
 msgstr "Preview"
 
@@ -663,7 +673,7 @@ msgstr "Advanced"
 msgid "All levels"
 msgstr "All levels"
 
-#: courses/templates/courses/snippets/offering.html:21
+#: courses/templates/courses/snippets/offering.html:24
 #: payment/templates/payment/counter/details.html:27
 #: payment/templates/payment/course/confirm.html:25
 #: payment/templates/payment/finance/offering_detail.html:30
@@ -676,19 +686,41 @@ msgstr "All levels"
 msgid "Course"
 msgstr "Course"
 
-#: courses/templates/courses/snippets/offering.html:22
+#: courses/templates/courses/snippets/offering.html:26
+#: courses/templates/user/snippets/subscription.html:106
+msgid "Partner"
+msgstr "Partner"
+
+#: courses/templates/courses/snippets/offering.html:28
 #: courses/templates/user/snippets/course_as_teacher.html:14
 #: courses/templates/user/snippets/subscription.html:17
 msgid "Location"
 msgstr "Location"
 
-#: courses/templates/courses/snippets/offering.html:26
+#: courses/templates/courses/snippets/offering.html:33
+msgid "External link"
+msgstr "External link"
+
+#: courses/templates/courses/snippets/offering.html:35
 msgid "Subscribe / Free places"
 msgstr "Subscribe / Free places"
 
-#: courses/templates/courses/snippets/offering.html:42
+#: courses/templates/courses/snippets/offering.html:52
+msgid "Not specified"
+msgstr "Not specified"
+
+#: courses/templates/courses/snippets/offering.html:58
 msgid "Currently unknown"
 msgstr "Currently unknown"
+
+#: courses/templates/courses/snippets/offering.html:64
+#: payment/templates/payment/finance/account_detail.html:124
+msgid "Unknown"
+msgstr "Unknown"
+
+#: courses/templates/courses/snippets/offering.html:113
+msgid "Raum noch unbekannt"
+msgstr "Raum noch unbekannt"
 
 #: courses/templates/courses/snippets/regular_lesson_exceptions.html:5
 msgid "no lesson"
@@ -720,6 +752,7 @@ msgstr "Some inputs are invalid"
 #: courses/templates/courses/snippets/signup_user_form.html:12
 #: events/templates/events/snippets/event_list.html:8
 #: organisation/templates/organisation/managing_committee.html:7
+#: partners/models/partner.py:15
 #: payment/templates/payment/counter/details.html:21
 #: payment/templates/payment/course/confirm.html:21
 #: payment/templates/payment/course/course.html:139
@@ -732,7 +765,7 @@ msgid "Name"
 msgstr "Name"
 
 #: courses/templates/courses/snippets/song_list.html:5
-#: tq_website/settings.py:340
+#: tq_website/settings.py:323
 msgid "Title"
 msgstr "Title"
 
@@ -1142,10 +1175,6 @@ msgstr "Reimbursement pending."
 msgid "Paid subscription info"
 msgstr "We received your payment. Thank you!"
 
-#: courses/templates/user/snippets/subscription.html:106
-msgid "Partner"
-msgstr "Partner"
-
 #: courses/views.py:57
 msgid "Upcoming courses"
 msgstr "Upcoming courses"
@@ -1164,48 +1193,48 @@ msgstr "Emails"
 
 #: email_system/models/generated_individual_email.py:12
 msgid "Generated individual Email"
-msgstr ""
+msgstr "Generated individual Email"
 
 #: email_system/models/group_email.py:11
 msgid "Target group"
-msgstr ""
+msgstr "Target group"
 
 #: email_system/models/group_email.py:12
 msgid "Reply-To address"
-msgstr ""
+msgstr "Reply-To address"
 
 #: email_system/models/group_email.py:18
-#, fuzzy
-#| msgid "Transfer Message"
 msgid "Message"
-msgstr "Transfer Message"
+msgstr "Message"
 
 #: email_system/models/group_email.py:18
 msgid "Content of the email"
-msgstr ""
+msgstr "Content of the email"
 
 #: email_system/models/group_email.py:31
-#, fuzzy
-#| msgid "Email"
 msgid "Group Email"
-msgstr "Email"
+msgstr "Group Email"
+
+#: email_system/models/tq_email_address.py:18
+msgid "Email Address"
+msgstr "Email Address"
+
+#: email_system/models/tq_email_address.py:19
+msgid "Email Addresses"
+msgstr "Email Addresses"
 
 #: email_system/templates/email_system/unsubscribe.html:5
 #: email_system/templates/email_system/unsubscribe.html:9
-#, fuzzy
-#| msgid "Subscribe"
 msgid "Unsubscribe"
-msgstr "Subscribe"
+msgstr "Unsubscribe"
 
 #: email_system/templates/email_system/unsubscribe.html:16
-#, fuzzy
-#| msgid "Successfully subscribed"
 msgid "Sucesfully unsubscribed!"
-msgstr "Successfully subscribed"
+msgstr "Sucesfully unsubscribed!"
 
 #: email_system/templates/email_system/unsubscribe.html:18
 msgid "Invalide unsubscribe url. Please send us an email to unsubscribe."
-msgstr ""
+msgstr "Invalide unsubscribe url. Please send us an email to unsubscribe."
 
 #: events/cms_plugins.py:10 events/cms_toolbars.py:10 events/cms_toolbars.py:13
 msgid "Events"
@@ -1274,7 +1303,7 @@ msgstr "FAQ"
 
 #: groups/apps.py:7
 msgid "Groups"
-msgstr ""
+msgstr "Groups"
 
 #: organisation/cms_plugins.py:11
 msgid "Managing Committee"
@@ -1283,6 +1312,30 @@ msgstr "Managing Committee"
 #: organisation/templates/organisation/managing_committee.html:8
 msgid "Resort"
 msgstr "Area of responsibility"
+
+#: partners/apps.py:7 partners/cms_plugins/partners_plugin.py:11
+msgid "Partners"
+msgstr "Partners"
+
+#: partners/cms_plugins/partner_courses_plugin.py:11
+msgid "Partner Offerings"
+msgstr "Partner Offerings"
+
+#: partners/models/partner.py:10
+msgid "Image"
+msgstr "Image"
+
+#: partners/templates/partners/partner_offerings_plugin.html:7
+msgid "Currently no courses listed."
+msgstr "Currently no courses listed."
+
+#: partners/templates/partners/partner_offerings_plugin.html:8
+msgid "Check out our partners sites directly to find courses."
+msgstr "Check out our partners sites directly to find courses."
+
+#: partners/templates/partners/partners_plugin.html:15
+msgid "Visit partner"
+msgstr "Visit partner"
 
 #: payment/cms_toolbars.py:10
 msgid "Payment"
@@ -1407,8 +1460,8 @@ msgstr "Course Management"
 msgid "German"
 msgstr "German"
 
-#: payment/templates/payment/course/course.html:27 tq_website/settings.py:293
-#: tq_website/settings.py:315
+#: payment/templates/payment/course/course.html:27 tq_website/settings.py:283
+#: tq_website/settings.py:298
 msgid "English"
 msgstr "English"
 
@@ -1553,10 +1606,6 @@ msgstr "Debit"
 #: payment/templates/payment/finance/account_detail.html:55
 msgid "Comment"
 msgstr "Comment"
-
-#: payment/templates/payment/finance/account_detail.html:124
-msgid "Unknown"
-msgstr "Unknown"
 
 #: payment/templates/payment/finance/account_detail.html:136
 msgid "Save Comments"
@@ -1959,15 +2008,15 @@ msgstr "Willing to get involved"
 msgid "Files"
 msgstr "Files"
 
-#: tq_website/settings.py:292 tq_website/settings.py:307
+#: tq_website/settings.py:282 tq_website/settings.py:290
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:332
+#: tq_website/settings.py:315
 msgid "Main content"
 msgstr "Main content"
 
-#: tq_website/settings.py:336
+#: tq_website/settings.py:319
 msgid "Side content"
 msgstr "Side content"
 
