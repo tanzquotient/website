@@ -17,4 +17,5 @@ class Partner(TranslatableModel):
     )
 
     def __str__(self):
-        return " "
+        return TranslationUtils.get_text_with_language_fallback(self, "name") or '<no name>'
+

@@ -14,8 +14,8 @@ class GroupEmail(TranslatableModel):
 
     # Translated fields
     translations = TranslatedFields(
-        subject=CharField(verbose_name=_('Subject'), max_length=100, blank=True, null=True),
-        message=HTMLField(verbose_name=_('Message'), blank=True, null=True, help_text=_('Content of the email'))
+        subject=CharField(verbose_name=_('Subject'), max_length=100, blank=False),
+        message=HTMLField(verbose_name=_('Message'), blank=False, help_text=_('Content of the email'))
     )
 
     def is_sent(self):
