@@ -38,7 +38,7 @@ services:
     user: root # TODO not good :/
     volumes:
       - .:/webapps/tq_website
-    command: gunicorn -c /webapps/tq_website/configurations/gunicorn.py --chdir /webapps/tq_website tq_website.wsgi:application --reload
+    command: gunicorn -c file:/webapps/tq_website/configurations/gunicorn.py tq_website.wsgi:application
     links:
       - postgres
       - redis
