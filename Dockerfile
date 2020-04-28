@@ -28,7 +28,7 @@ COPY . .
 RUN chmod +x pre-start.sh && chmod +x map-envvars.sh
 
 # Install requirements
-RUN python3 -m pip install -r tq_website/configurations/python-requirements.txt
+RUN python3 -m pip install -r requirements.txt
 
 # Change permissions on the code so the app-user can access it
 RUN chown -R app-user:app-user .
