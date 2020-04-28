@@ -1,2 +1,0 @@
-DEBUG: [None, True]
-COMPOSE_FILE: [None, docker-compose-dev.yml]

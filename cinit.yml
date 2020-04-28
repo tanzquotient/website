@@ -10,12 +10,11 @@ programs:
       - celery-worker
 
   - name: map-envvars
-    path: /app/map-envvars.sh
+    path: /usr/bin/python3
     workdir: /app
     user: app-user
     args:
-      - ".env-template"
-      - ".env"
+      - "TODO generate script"
     before:
       - gunicorn
       - celery-beat

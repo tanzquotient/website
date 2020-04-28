@@ -1,0 +1,25 @@
+# This file defines environment variables for the TQ website
+
+# The format is as follows:
+# TQ_ENVIRONMENT_VAR: [SIP_ENVIRONMENT_VAR, default_value]
+#
+# Types to not really matter, the YAML parser takes care of that
+# Thus no need to define as strings (with "") unless explicitly needed (e.g. to list the allowed hosts)
+
+# docker-compose default overwrites (see https://docs.docker.com/compose/reference/envvars/)
+COMPOSE_FILE: [None, docker-compose-dev.yml]
+
+# Host name
+TQ_NGINX_HOST: [SIP_NGINX, localhost]
+
+# Ports
+TQ_NGINX_PORT: [None, 80]
+TQ_SSL_PORT: [None, 443]
+TQ_DJANGO_PORT: [None, 8000]
+
+# Deployment dependent configurations
+TQ_DEBUG: [None, False]
+DEPLOYMENT_DOMAIN: [None, tanzquotient.org]
+ALLOWED_HOSTS: [None, ".tanzquotient.org,127.0.0.1,localhost"]
+
+# TODO extend me

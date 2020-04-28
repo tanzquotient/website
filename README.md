@@ -13,9 +13,12 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ## Configuration
 
-The `map-envvars.sh` script maps all the environment variables that the SIP
-provides to the `TQ_XXX` env vars that the Django app expects (which are defined
-in the .env-template).
+The `scripts/generate_env.py` script is used to generate a `.env` file for Docker Compose and Django to use.
+
+TODO:
+* description and usage
+* pip3 install pyyaml => add to requirements.txt?
+* finish variables.yml
 
 
 ## Local development
