@@ -1,0 +1,15 @@
+---
+postgres:
+  - name: tq-website
+
+s3:
+  - name: tq-media
+  - name: tq-static
+  - name: tq-postfinance
+
+ingress:
+  - subdomain: www
+    cname: tanzquotient.org
+    http:
+      - path: /
+        port: 8080

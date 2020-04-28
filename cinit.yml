@@ -1,0 +1,55 @@
+programs:
+  - name: pre-start
+    path: /app/pre-start.sh
+    workdir: /app
+    user: app-user
+    args: [] 
+    before:
+      - gunicorn
+      - celery-beat
+      - celery-worker
+
+  - name: map-envvars
+    path: /app/map-envvars.sh
+    workdir: /app
+    user: app-user
+    args:
+      - "configurations/.env-template"
+      - ".env"
+    before:
+      - gunicorn
+      - celery-beat
+      - celery-worker
+
+  - name: gunicorn
+    path: /usr/local/bin/gunicorn
+    workdir: /app
+    user: app-user
+    args:
+      - "--bind 0.0.0.0:8080"
+      - "--workers 4"
+      - "tq_website.wsgi:application"
+
+  - name: celery-beat
+    path: /usr/local/bin/celery
+    workdir: /app
+    user: app-user
+    args:
+      - "--app tq_website"
+      - "beat"
+      - "--loglevel info"
+      - "--scheduler django"
+    after:
+      - gunicorn
+
+  - name: celery-worker
+    path: /usr/local/bin/celery
+    workdir: /app
+    user: app-user
+    args:
+      - "--app tq_website"
+      - "worker"
+      - "--loglevel info"
+    after:
+      - gunicorn
+
