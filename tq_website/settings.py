@@ -173,30 +173,41 @@ STATICFILES_FINDERS = (
 )
 
 
-S3_ENABLED = bool(os.environ.get("TQ_S3_ENABLED", 'False') == 'True')
 
-if S3_ENABLED:
-    DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
-    STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
+# Define default storages
+DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
+STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
 
-    BUCKET_MEDIA = os.environ.get('TQ_S3_BUCKET_MEDIA', 'tanzquotient-media')
-    BUCKET_STATIC = os.environ.get('TQ_S3_BUCKET_STATIC', 'tanzquotient-static')
-    BUCKET_POSTFINANCE = os.environ.get('TQ_S3_BUCKET_POSTFINANCE', 'tanzquotient-postfinance')
+# Media
+S3_MEDIA_BUCKET = os.environ.get('TQ_S3_MEDIA_BUCKET', 'tanzquotient-media')
+S3_MEDIA_HOST = os.environ.get('TQ_S3_MEDIA_HOST', '')
+S3_MEDIA_PORT = os.environ.get('TQ_S3_MEDIA_PORT', '')
+S3_MEDIA_REGION = os.environ.get('TQ_S3_MEDIA_REGION', '')
+S3_MEDIA_USE_SSL = bool(os.environ.get("TQ_S3_MEDIA_USE_SSL", 'True') == 'True')
+S3_MEDIA_CUSTOM_DOMAIN = os.environ.get('TQ_S3_MEDIA_CUSTOM_DOMAIN', '')
+S3_MEDIA_ACCESS_KEY = os.environ.get('TQ_S3_MEDIA_ACCESS_KEY', '')
+S3_MEDIA_SECRET_KEY = os.environ.get('TQ_S3_MEDIA_SECRET_KEY', '')
 
-    S3_CUSTOM_DOMAIN = os.environ.get('TQ_S3_CUSTOM_DOMAIN', '')
-    S3_ENDPOINT_URL = os.environ.get('TQ_S3_ENDPOINT_URL', '')
+# Static
+S3_STATIC_BUCKET = os.environ.get('TQ_S3_STATIC_BUCKET', 'tanzquotient-static')
+S3_STATIC_HOST = os.environ.get('TQ_S3_STATIC_HOST', '')
+S3_STATIC_PORT = os.environ.get('TQ_S3_STATIC_PORT', '')
+S3_STATIC_REGION = os.environ.get('TQ_S3_STATIC_REGION', '')
+S3_STATIC_USE_SSL = bool(os.environ.get("TQ_S3_STATIC_USE_SSL", 'True') == 'True')
+S3_STATIC_CUSTOM_DOMAIN = os.environ.get('TQ_S3_STATIC_CUSTOM_DOMAIN', '')
+S3_STATIC_ACCESS_KEY = os.environ.get('TQ_S3_STATIC_ACCESS_KEY', '')
+S3_STATIC_SECRET_KEY = os.environ.get('TQ_S3_STATIC_SECRET_KEY', '')
 
-    AWS_ACCESS_KEY_ID = os.environ.get('TQ_S3_ACCESS_KEY', '')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('TQ_S3_SECRET_KEY', '')
-    AWS_DEFAULT_ACL = None
-    AWS_S3_REGION_NAME = os.environ.get('TQ_S3_REGION_NAME', '')
+# Postfinance
+S3_POSTFINANCE_BUCKET = os.environ.get('TQ_S3_POSTFINANCE_BUCKET', 'tanzquotient-postfinance')
+S3_POSTFINANCE_HOST = os.environ.get('TQ_S3_POSTFINANCE_HOST', '')
+S3_POSTFINANCE_PORT = os.environ.get('TQ_S3_POSTFINANCE_PORT', '')
+S3_POSTFINANCE_REGION = os.environ.get('TQ_S3_POSTFINANCE_REGION', '')
+S3_POSTFINANCE_USE_SSL = bool(os.environ.get("TQ_S3_POSTFINANCE_USE_SSL", 'True') == 'True')
+S3_POSTFINANCE_CUSTOM_DOMAIN = os.environ.get('TQ_S3_POSTFINANCE_CUSTOM_DOMAIN', '')
+S3_POSTFINANCE_ACCESS_KEY = os.environ.get('TQ_S3_POSTFINANCE_ACCESS_KEY', '')
+S3_POSTFINANCE_SECRET_KEY = os.environ.get('TQ_S3_POSTFINANCE_SECRET_KEY', '')
 
-    def postfinance_file_storage():
-        from tq_website.storages import PostfinanceStorage
-        return PostfinanceStorage()
-else:
-    def postfinance_file_storage():
-        return FileSystemStorage(location=os.path.join(BASE_DIR, 'postfinance'))
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
