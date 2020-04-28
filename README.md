@@ -1,4 +1,4 @@
-# Tanzquotient (TQ) website
+# Tanzquotient (TQ) Website
 
 The website is built using Django, and uses redis for caching and celery as a
 task queue.
@@ -14,7 +14,7 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 ## Configuration
 
 The `map-envvars.sh` script maps all the environment variables that the SIP
-provides to the TQ_XXX env vars that the Django app expects (which are defined
+provides to the `TQ_XXX` env vars that the Django app expects (which are defined
 in the .env-template).
 
 
@@ -26,11 +26,21 @@ in the .env-template).
 3. Build the project in Docker: `docker-compose build --file docker-compose-dev.yml`
 4. Run the project in Docker: `docker-compose up --file docker-compose-dev.yml`
 5. Create minio storage buckets, see [minio docs][minio-get-started]
-6. Collect the static files: `docker exec -it tq-django python manage.py collectstatic`
-7. Apply the migrations: `docker exec -it tq-django python manage.py migrate`
+6. Run `./scripts/collectstatic.sh` to copy static files into storage bucket
+7. Fill your database:
+    * Option A: get a up-to-date database from a member of the [Tanzquotient IT team][tq-it-mail]. Restore dump locally.
+    * Option B: Run `./scripts/migrate.sh` to initialize tables. Create a new superuser, see [Django docs][django-docs].
 8. Find the website at [localhost:8000][local_instance]
 
-Furthermore, there is a sort-of-uptodate documentation at [ReadTheDocs][RTD].
+### Using Intellij or PyCharm
+
+Useful resources:
+
+* [Configure an interpreter using Docker Compose][intellij-docker-compose]
+* [Run/Debug Configuration: Django Server][intellij-run-django]
+
+## Documentation
+There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 
 
 ## TODOs
@@ -50,3 +60,7 @@ Furthermore, there is a sort-of-uptodate documentation at [ReadTheDocs][RTD].
 [RTD-user]: https://tq-website.readthedocs.io/en/latest/introduction/non_programmer_howto.html
 [minio-get-started]: https://docs.min.io/docs/minio-client-quickstart-guide.html
 [local_instance]: http://localhost:8000
+[tq-it-mail]: mailto:informatik@tq.vseth.ch
+[django-docs]: https://docs.djangoproject.com/en/2.2/
+[intellij-docker-compose]: https://www.jetbrains.com/help/pycharm/using-docker-compose-as-a-remote-interpreter.html#configuring-docker
+[intellij-run-django]: https://www.jetbrains.com/help/idea/run-debug-configuration-django-server.html
