@@ -20,6 +20,8 @@ services:
       POSTGRES_DB: tq_website
     volumes:
       - "postgres-volume:/var/lib/postgresql/data"
+    ports:
+      - "${TQ_DB_PORT_POSTGRES_DEBUG_HOST}:5432"
     expose:
       - "5432"
     restart: always
