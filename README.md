@@ -22,7 +22,7 @@ in the .env-template).
 
 0. Install [Docker][docker] and [Docker Compose][docker-compose]
 1. Clone this repo: `git clone <repo-url>`
-2. Copy the file specifying some required environment variables into place: `cp configurations/.env-template .env`
+2. Copy the file specifying some required environment variables into place: `cp .env-template .env`
 3. Build the project in Docker: `docker-compose build --file docker-compose-dev.yml`
 4. Run the project in Docker: `docker-compose up --file docker-compose-dev.yml`
 5. Create minio storage buckets, see [minio docs][minio-get-started]

@@ -14,7 +14,7 @@ programs:
     workdir: /app
     user: app-user
     args:
-      - "configurations/.env-template"
+      - ".env-template"
       - ".env"
     before:
       - gunicorn
