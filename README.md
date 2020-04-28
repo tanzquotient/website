@@ -1,14 +1,15 @@
 # Tanzquotient (TQ) website
 
-This deploys the TQ website on SIP.
-
 The website is built using Django, and uses redis for caching and celery as a
 task queue.
 
 Users can find a user documentation [here][RTD-user].
 
-The main repository lives on the [ETH Gitlab][eth-gitlab] and is/will be
-mirrored to Github.
+The main repository lives on the [ETH Gitlab][eth-gitlab] and is
+mirrored to [Github][github].
+
+The repository contains the needed configurations to deploy to [SIP][sip].
+
 
 ## Configuration
 
@@ -18,13 +19,13 @@ in the .env-template).
 
 ## Local development
 
-To develop locally:
-
 0. Install [Docker][docker] and [Docker Compose][docker-compose]
 1. Clone this repo: `git clone <repo-url>`
 2. Copy the file specifying some required environment variables into place: `cp configurations/.env-template .env`
-3. Run the project in Docker: `docker-compose up --file docker-compose-dev.yml`
-4. Find the website at localhost:8000
+3. Build the project in Docker: `docker-compose build --file docker-compose-dev.yml`
+4. Run the project in Docker: `docker-compose up --file docker-compose-dev.yml`
+5. Create minio storage buckets, see [minio docs][minio-get-started]
+6. Find the website at [localhost:8000][local_instance]
 
 Furthermore, there is a sort-of-uptodate documentation at [ReadTheDocs][RTD].
 
@@ -34,10 +35,14 @@ Furthermore, there is a sort-of-uptodate documentation at [ReadTheDocs][RTD].
 * S3 buckets: media+static accessible, postfinance private => do this in code?
 
 
+[github]: https://github.com/tanzquotient/tq_website
 [eth-gitlab]: https://gitlab.ethz.ch/vseth/0500-kom/0519-tq/website
 [docker]: https://docs.docker.com/engine/install/
 [docker-compose]: https://docs.docker.com/compose/install/
 [github]: https://github.com/tanzquotient/tq_website
+[sip]: https://dev.vseth.ethz.ch/
 [RTD]: https://tq-website.readthedocs.io/en/latest/
 [RTD-user]: https://tq-website.readthedocs.io/en/latest/introduction/non_programmer_howto.html
+[minio-get-started]: https://docs.min.io/docs/minio-client-quickstart-guide.html
+[local_instance]: http://localhost:8000
 

@@ -63,9 +63,8 @@ services:
     ports:
       - "9000:9000"
     environment:
-      MINIO_ACCESS_KEY: ${TQ_S3_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${TQ_S3_SECRET_KEY}
-      MINIO_REGION_NAME: ${TQ_S3_REGION_NAME}
+      MINIO_ACCESS_KEY: ${TQ_S3_MEDIA_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${TQ_S3_MEDIA_SECRET_KEY}
     command: server /data
 
 volumes:
