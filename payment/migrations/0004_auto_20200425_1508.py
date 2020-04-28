@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='postfinancefile',
             name='file',
-            field=models.FileField(storage=django.core.files.storage.FileSystemStorage(location='/webapps/tq_website/postfinance'), upload_to=''),
+            field=models.FileField(storage=django.core.files.storage.FileSystemStorage(location='/app/postfinance'), upload_to=''),
         ),
     ]

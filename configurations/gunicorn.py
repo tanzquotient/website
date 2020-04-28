@@ -10,7 +10,7 @@ workers = 3
 timeout = 300
 
 # Chdir to specified directory before apps loading
-chdir = '/webapps/tq_website'
+chdir = '/app/'
 
 # Restart workers when code changes.
 reload = False

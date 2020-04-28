@@ -45,10 +45,10 @@ RUN apk add --no-cache python3-dev
 # make (needed for building sphinx documentation)
 RUN apk add --no-cache make
 
-ADD requirements.txt /webapps/tq_website/requirements.txt
+ADD requirements.txt /app/requirements.txt
 
 RUN apk add --no-cache --virtual .build-deps build-base && \
-    pip3 install --upgrade -r /webapps/tq_website/requirements.txt && \
+    pip3 install --upgrade -r /app/requirements.txt && \
     apk del .build-deps
 
-WORKDIR /webapps/tq_website/
+WORKDIR /app/

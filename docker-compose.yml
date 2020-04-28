@@ -37,8 +37,8 @@ services:
       - .env
     user: root # TODO not good :/
     volumes:
-      - .:/webapps/tq_website
-    command: gunicorn -c file:/webapps/tq_website/configurations/gunicorn.py tq_website.wsgi:application
+      - .:/app/
+    command: gunicorn -c file:/app/configurations/gunicorn.py tq_website.wsgi:application
     links:
       - postgres
       - redis
@@ -50,9 +50,9 @@ services:
     image: nginx:mainline-alpine
     volumes:
       - ./configurations/nginx-ssl.conf:/etc/nginx/conf.d/tq_website.template
-      - ./collected_static:/webapps/tq_website/collected_static
-      - ./media:/webapps/tq_website/media
-      - ./maintenance.conf:/webapps/tq_website/maintenance.conf
+      - ./collected_static:/app/collected_static
+      - ./media:/app/media
+      - ./maintenance.conf:/app/maintenance.conf
       - /etc/letsencrypt:/etc/letsencrypt
     command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
     environment:
@@ -71,9 +71,9 @@ services:
     image: tq_website_django
     env_file:
       - .env
-    working_dir: /webapps/tq_website
+    working_dir: /app/
     volumes:
-      - .:/webapps/tq_website
+      - .:/app/
     command: celery -A tq_website beat -l info --pidfile="/tmp/celerybeat.pid" -S django
     links:
       - postgres
@@ -89,11 +89,11 @@ services:
     image: tq_website_django
     env_file:
       - .env
-    working_dir: /webapps/tq_website
+    working_dir: /app/
     environment:
       C_FORCE_ROOT: 1
     volumes:
-      - .:/webapps/tq_website
+      - .:/app/
     command: celery -A tq_website worker -l info
     links:
       - postgres
