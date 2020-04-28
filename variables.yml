@@ -4,22 +4,23 @@
 # TQ_ENVIRONMENT_VAR: [SIP_ENVIRONMENT_VAR, default_value]
 #
 # Types to not really matter, the YAML parser takes care of that
-# Thus no need to define as strings (with "") unless explicitly needed (e.g. to list the allowed hosts)
+# Thus no need to define as strings (with "") unless explicitly needed. 
+# The following can be used as null value: ~ 
 
 # docker-compose default overwrites (see https://docs.docker.com/compose/reference/envvars/)
-COMPOSE_FILE: [None, docker-compose-dev.yml]
+COMPOSE_FILE: [~, docker-compose-dev.yml]
 
 # Host name
 TQ_NGINX_HOST: [SIP_NGINX, localhost]
 
 # Ports
-TQ_NGINX_PORT: [None, 80]
-TQ_SSL_PORT: [None, 443]
-TQ_DJANGO_PORT: [None, 8000]
+TQ_NGINX_PORT: [~, 80]
+TQ_SSL_PORT: [~, 443]
+TQ_DJANGO_PORT: [~, 8000]
 
 # Deployment dependent configurations
-TQ_DEBUG: [None, False]
-DEPLOYMENT_DOMAIN: [None, tanzquotient.org]
-ALLOWED_HOSTS: [None, ".tanzquotient.org,127.0.0.1,localhost"]
+TQ_DEBUG: [~, false]
+DEPLOYMENT_DOMAIN: [~, tanzquotient.org]
+ALLOWED_HOSTS: [~, [.tanzquotient.org, 127.0.0.1, localhost]]
 
 # TODO extend me
