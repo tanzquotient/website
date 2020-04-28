@@ -35,7 +35,7 @@ services:
     container_name: tq-django
     build:
       context: .
-      dockerfile: configurations/dockerfile
+      dockerfile: Dockerfile-legacy
     image: tq_website_django # give this built image a name to use it below
     env_file:
       - .env

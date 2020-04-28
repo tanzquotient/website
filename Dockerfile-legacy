@@ -1,6 +1,10 @@
 FROM python:3.7-alpine
 MAINTAINER martin.zellner@gmail.com
 
+# Legacy Dockerfile
+# Used for the deploy on the TQ server as well as for local development
+# For the latter, consider migrating to a single Dockerfile maybe?
+
 # make sure to have the latest package index
 RUN rm -rf /var/cache/apk/* && \
     rm -rf /tmp/*
