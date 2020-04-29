@@ -13,12 +13,35 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ## Configuration
 
-The `scripts/generate_env.py` script is used to generate a `.env` file for Docker Compose and Django to use.
+`variables.yml` defines the variables needed for this project to run. The file is checked into the git repository. 
+**Do not modify** `variables.yml` unless you want to define new env variables or remove outdated variables.
+
+Add a file called `overrides.yml` to the project root to provide custom values for your setup. 
+This file is ignored by git. 
+**Do not add it to the repository**. The file is machine specific and could potentially contain secrets.
+The file needs to be of the following form:
+```yaml
+# General form for an entry
+<NAME_OF_VARIABLE>: <value>
+# You can add as many entries as you like
+```
+```yaml
+# Example
+COMPOSE_FILE: docker-compose-dev.yml
+TQ_DEBUG: true
+```
 
 TODO:
-* description and usage
-* pip3 install pyyaml => add to requirements.txt?
 * finish variables.yml
+
+### Generate environment
+0. Run `pip3 install -r requirements-dev.txt --user` to ensure you have the needed python packages installed.
+
+1. Run `./scripts/generate_env.py <default|sip> [--overrides overrides.yml]` to generate the environment.
+    * `default` will create a `.env` file for Docker Compose and Django to use.
+    * `sip` will read the variables provided by SIP and create a `.env` file
+
+
 
 
 ## Local development
