@@ -15,8 +15,38 @@ ingress:
         port: 8080
 
 env:
-  - name: SIP_DJANGO_SECRET_KEY
+  - name: SIP_TQ_DJANGO_SECRET_KEY
     secret:
       key: tq-django-secret-key
       create: random
+  - name: SIP_TQ_DEFAULT_FROM_EMAIL
+    value: "Tanzquotient <tanzen@tq.vseth.ch>"
+  - name: SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_FDS_USER
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_PAYMENT_ACCOUNT_IBAN
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_PAYMENT_ACCOUNT_SWIFT
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_PAYMENT_ACCOUNT_POST_NUMBER
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT
+    secret:
+      key: ""
+      create: provided
+  - name: SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY
+    secret:
+      key: ""
+      create: provided
 
