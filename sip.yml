@@ -13,3 +13,10 @@ ingress:
     http:
       - path: /
         port: 8080
+
+env:
+  - name: SIP_DJANGO_SECRET_KEY
+    secret:
+      key: tq-django-secret-key
+      create: random
+

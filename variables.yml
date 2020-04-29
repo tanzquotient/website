@@ -24,7 +24,7 @@ TQ_DJANGO_PORT: [~, 8000]
 
 # Deployment dependent configurations
 TQ_DEBUG: [~, false]
-TQ_SECRET_KEY: [TODO, overrideme]
+TQ_SECRET_KEY: [SIP_DJANGO_SECRET_KEY, overrideme]
 DEPLOYMENT_DOMAIN: [~, tanzquotient.org]
 ALLOWED_HOSTS: [~, [.tanzquotient.org, 127.0.0.1, localhost]]
 
