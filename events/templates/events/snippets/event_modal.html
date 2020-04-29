@@ -1,4 +1,3 @@
-{% load thumbnail %}
 {% load i18n %}
 {% trans "Not yet set" as not_yet_known %}
 {% trans "No entry fee" as no_entry_fee %}
@@ -39,7 +38,7 @@
                 {% endif %}
                 {% if event.image %}
                     <br/>
-                    <p class="list-group-item-text"><img src="{% thumbnail event.image 600x600 %}" alt=""/></p>
+                    <p class="list-group-item-text"><img src="{{ event.image.url }}" alt=""/></p>
                 {% endif %}
             </div>
             <div class="modal-footer">

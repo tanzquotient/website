@@ -58,30 +58,6 @@ class RowPlugin(CMSPluginBase):
         return context
 
 
-class ThumbnailPluginModel(CMSPlugin):
-    image = models.ImageField(blank=True, null=True)
-    image.help_text = "Image to show thumbnail for."
-    crop = models.BooleanField(blank=True, null=False, default=False)
-    crop.help_text = "If this thumbnail should be cropped to fit given size."
-    url = models.URLField(max_length=500, blank=True, null=True)
-    url.help_text = "URL to display on image click."
-
-
-class ThumbnailPlugin(CMSPluginBase):
-    name = _("Thumbnail")
-    model = ThumbnailPluginModel
-    render_template = "plugins/thumbnail.html"
-
-    text_enabled = True
-    allow_children = True
-
-    def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance
-        })
-        return context
-
-
 class UpcomingEventsAndCoursesPluginModel(CMSPlugin):
     delta_days = models.IntegerField(blank=True, null=True)
     delta_days.help_text = "Events and courses within the time delta (in days) from now on are shown." \
@@ -172,6 +148,5 @@ class CountdownPlugin(CMSPluginBase):
 plugin_pool.register_plugin(PageTitlePlugin)
 plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
-plugin_pool.register_plugin(ThumbnailPlugin)
 plugin_pool.register_plugin(CountdownPlugin)
 plugin_pool.register_plugin(UpcomingEventsAndCoursesPlugin)

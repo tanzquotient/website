@@ -1,4 +1,3 @@
-{% load thumbnail %}
 {% load i18n %}
 {% trans "No entry fee" as no_entry_fee %}
 <div class="hidden-xs">
@@ -32,7 +31,7 @@
                                     </p>
                                     {% if event.image %}
                                         <p class="text-left"><img
-                                                src="{% thumbnail event.image 350x150 crop upscale subject_location=event.image.subject_location %}"
+                                                src="{{ event.image.url }}"
                                                 alt=""/></p>
                                     {% endif %}
                                 </a>
