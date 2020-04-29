@@ -49,6 +49,6 @@ if __name__ == '__main__':
             if isinstance(value, list):
                 value = ",".join([str(item) for item in value])
             else:
-                value = str(value) if value else "" 
+                value = str(value) if value is not None else ""
                 
             env_file.write("{}={}\n".format(key, value))
