@@ -1,6 +1,6 @@
 programs:
   - name: pre-start
-    path: /app/pre-start.sh
+    path: /app/scripts/pre-start.sh
     workdir: /app
     user: app-user
     args: [] 

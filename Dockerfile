@@ -25,7 +25,7 @@ WORKDIR /app
 COPY . .
 
 # Ensure the scripts are executable
-RUN chmod +x pre-start.sh && chmod +x scripts/generate-env.py
+RUN chmod +x scripts/pre-start.sh && chmod +x scripts/generate-env.py
 
 # Install requirements
 RUN python3 -m pip install -r requirements.txt
