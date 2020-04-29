@@ -6,7 +6,9 @@
 # Types to not really matter, the YAML parser takes care of that
 # Thus no need to define as strings (with "") unless explicitly needed. 
 # The following can be used as null value: ~ 
-
+#
+# Documentation on the environment variables provided by SIP can be found here:
+# https://dev.vseth.ethz.ch/reference/gatekeeper
 
 # docker-compose default overwrites (see https://docs.docker.com/compose/reference/envvars/)
 COMPOSE_FILE: [~, docker-compose-dev.yml]
@@ -71,12 +73,12 @@ TQ_S3_POSTFINANCE_SECRET_KEY: [SIP_S3_TQ_POSTFINANCE_SECRET_KEY, overrideme]
 REDIS_BROKER_URL: [TODO, "redis://redis/"]
 
 # Email
-TQ_EMAIL_HOST: [TODO, ~]
-TQ_EMAIL_PORT: [TODO, 587]
-TQ_EMAIL_USE_TLS: [TODO, true]
-TQ_EMAIL_HOST_USER: [TODO, ~]
-TQ_EMAIL_HOST_PASSWORD: [TODO, ~]
-TQ_DEFAULT_FROM_EMAIL: [SIP_TQ_DEFAULT_FROM_EMAIL, ~]
+TQ_EMAIL_HOST: [SIP_SMTP_TQ_MAIL_HOST, ~]
+TQ_EMAIL_PORT: [SIP_SMTP_TQ_MAIL_PORT, 587]
+TQ_EMAIL_USE_TLS: [SIP_SMTP_TQ_MAIL_ENCRYPTION, true]
+TQ_EMAIL_HOST_USER: [SIP_SMTP_TQ_MAIL_MAIL_USER, ~]
+TQ_EMAIL_HOST_PASSWORD: [SIP_SMTP_TQ_MAIL_MAIL_PW, ~]
+TQ_DEFAULT_FROM_EMAIL: [SIP_SMTP_TQ_MAIL_FROM_MAIL, ~]
 
 # Analytics
 TQ_GOOGLE_ANALYTICS_PROPERTY_ID: [SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID, ~]

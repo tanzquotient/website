@@ -7,6 +7,10 @@ s3:
   - name: tq-static
   - name: tq-postfinance
 
+# TODO Do we get the right email account?
+smtp:
+  - name: tq-mail
+
 ingress:
   - subdomain: www
     cname: tanzquotient.org
@@ -19,8 +23,6 @@ env:
     secret:
       key: tq-django-secret-key
       create: random
-  - name: SIP_TQ_DEFAULT_FROM_EMAIL
-    value: "Tanzquotient <tanzen@tq.vseth.ch>"
   - name: SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID
     secret:
       key: ""
