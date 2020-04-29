@@ -57,3 +57,7 @@ sentry_sdk==0.14.3
 svglib==1.0.0
 PyPDF2==1.26.0
 Pillow==7.1.1
+
+# Parsing in the generate-env.py script
+pyyaml==5.3.1
+

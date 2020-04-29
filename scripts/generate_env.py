@@ -3,16 +3,21 @@
 import argparse
 import datetime
 import os
+import shutil
 import yaml
 
 # Location to store output file in
-ENV_FILE = 'generated.env'
+ENV_FILE = '.env'
+ENV_BACKUP = 'backup.env'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Generate the environment')
     parser.add_argument('type', choices=['default', 'sip'])
     parser.add_argument('--overrides')
     args = parser.parse_args()
+
+    # Backup old env file
+    shutil.copy(ENV_FILE, ENV_BACKUP)
 
     # Load variables
     with open('variables.yml') as var_file:

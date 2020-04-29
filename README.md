@@ -10,7 +10,6 @@ mirrored to [Github][github].
 
 The repository contains the needed configurations to deploy to [SIP][sip].
 
-
 ## Configuration
 
 `variables.yml` defines the variables needed for this project to run. The file is checked into the git repository. 
@@ -35,14 +34,12 @@ TODO:
 * finish variables.yml
 
 ### Generate environment
-0. Run `pip3 install -r requirements-dev.txt --user` to ensure you have the needed python packages installed.
+
+0. Run `pip3 install pyyaml --user` to ensure you have the needed python packages installed.
 
 1. Run `./scripts/generate_env.py <default|sip> [--overrides overrides.yml]` to generate the environment.
     * `default` will create a `.env` file for Docker Compose and Django to use.
     * `sip` will read the variables provided by SIP and create a `.env` file
-
-
-
 
 ## Local development
 
@@ -66,8 +63,8 @@ Useful resources:
 * [Run/Debug Configuration: Django Server][intellij-run-django]
 
 ## Documentation
-There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 
+There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 
 ## TODOs
 
