@@ -17,7 +17,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Backup old env file
-    shutil.copy(ENV_FILE, ENV_BACKUP)
+    if os.path.exists(ENV_FILE):
+        shutil.copy(ENV_FILE, ENV_BACKUP)
 
     # Load variables
     with open('variables.yml') as var_file:

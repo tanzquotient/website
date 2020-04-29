@@ -8,8 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os import environ
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -22,13 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("TQ_DEBUG", 'False') == 'True')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+DEBUG = bool(environ["TQ_DEBUG"] == 'True')
 
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", 'localhost').split(',')
+ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
 # This should be set to true since we use NGINX as a proxy
 USE_X_FORWARDED_HOST = True
 
@@ -107,7 +104,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1 # Needed for DjangoCMS
-DEPLOYMENT_DOMAIN = os.environ.get("DEPLOYMENT_DOMAIN", 'localhost')
+DEPLOYMENT_DOMAIN = environ["TQ_DEPLOYMENT_DOMAIN"]
 
 ROOT_URLCONF = 'tq_website.urls'
 
@@ -179,34 +176,34 @@ DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
 STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
 
 # Media
-S3_MEDIA_BUCKET = os.environ.get('TQ_S3_MEDIA_BUCKET', 'tanzquotient-media')
-S3_MEDIA_HOST = os.environ.get('TQ_S3_MEDIA_HOST', '')
-S3_MEDIA_PORT = os.environ.get('TQ_S3_MEDIA_PORT', '')
-S3_MEDIA_REGION = os.environ.get('TQ_S3_MEDIA_REGION', '')
-S3_MEDIA_USE_SSL = bool(os.environ.get("TQ_S3_MEDIA_USE_SSL", 'True') == 'True')
-S3_MEDIA_CUSTOM_DOMAIN = os.environ.get('TQ_S3_MEDIA_CUSTOM_DOMAIN', '')
-S3_MEDIA_ACCESS_KEY = os.environ.get('TQ_S3_MEDIA_ACCESS_KEY', '')
-S3_MEDIA_SECRET_KEY = os.environ.get('TQ_S3_MEDIA_SECRET_KEY', '')
+S3_MEDIA_BUCKET = environ['TQ_S3_MEDIA_BUCKET']
+S3_MEDIA_HOST = environ['TQ_S3_MEDIA_HOST']
+S3_MEDIA_PORT = environ['TQ_S3_MEDIA_PORT']
+S3_MEDIA_REGION = environ['TQ_S3_MEDIA_REGION']
+S3_MEDIA_USE_SSL = bool(environ["TQ_S3_MEDIA_USE_SSL"] == 'True')
+S3_MEDIA_CUSTOM_DOMAIN = environ['TQ_S3_MEDIA_CUSTOM_DOMAIN']
+S3_MEDIA_ACCESS_KEY = environ['TQ_S3_MEDIA_ACCESS_KEY']
+S3_MEDIA_SECRET_KEY = environ['TQ_S3_MEDIA_SECRET_KEY']
 
 # Static
-S3_STATIC_BUCKET = os.environ.get('TQ_S3_STATIC_BUCKET', 'tanzquotient-static')
-S3_STATIC_HOST = os.environ.get('TQ_S3_STATIC_HOST', '')
-S3_STATIC_PORT = os.environ.get('TQ_S3_STATIC_PORT', '')
-S3_STATIC_REGION = os.environ.get('TQ_S3_STATIC_REGION', '')
-S3_STATIC_USE_SSL = bool(os.environ.get("TQ_S3_STATIC_USE_SSL", 'True') == 'True')
-S3_STATIC_CUSTOM_DOMAIN = os.environ.get('TQ_S3_STATIC_CUSTOM_DOMAIN', '')
-S3_STATIC_ACCESS_KEY = os.environ.get('TQ_S3_STATIC_ACCESS_KEY', '')
-S3_STATIC_SECRET_KEY = os.environ.get('TQ_S3_STATIC_SECRET_KEY', '')
+S3_STATIC_BUCKET = environ['TQ_S3_STATIC_BUCKET']
+S3_STATIC_HOST = environ['TQ_S3_STATIC_HOST']
+S3_STATIC_PORT = environ['TQ_S3_STATIC_PORT']
+S3_STATIC_REGION = environ['TQ_S3_STATIC_REGION']
+S3_STATIC_USE_SSL = bool(environ["TQ_S3_STATIC_USE_SSL"] == 'True')
+S3_STATIC_CUSTOM_DOMAIN = environ['TQ_S3_STATIC_CUSTOM_DOMAIN']
+S3_STATIC_ACCESS_KEY = environ['TQ_S3_STATIC_ACCESS_KEY']
+S3_STATIC_SECRET_KEY = environ['TQ_S3_STATIC_SECRET_KEY']
 
 # Postfinance
-S3_POSTFINANCE_BUCKET = os.environ.get('TQ_S3_POSTFINANCE_BUCKET', 'tanzquotient-postfinance')
-S3_POSTFINANCE_HOST = os.environ.get('TQ_S3_POSTFINANCE_HOST', '')
-S3_POSTFINANCE_PORT = os.environ.get('TQ_S3_POSTFINANCE_PORT', '')
-S3_POSTFINANCE_REGION = os.environ.get('TQ_S3_POSTFINANCE_REGION', '')
-S3_POSTFINANCE_USE_SSL = bool(os.environ.get("TQ_S3_POSTFINANCE_USE_SSL", 'True') == 'True')
-S3_POSTFINANCE_CUSTOM_DOMAIN = os.environ.get('TQ_S3_POSTFINANCE_CUSTOM_DOMAIN', '')
-S3_POSTFINANCE_ACCESS_KEY = os.environ.get('TQ_S3_POSTFINANCE_ACCESS_KEY', '')
-S3_POSTFINANCE_SECRET_KEY = os.environ.get('TQ_S3_POSTFINANCE_SECRET_KEY', '')
+S3_POSTFINANCE_BUCKET = environ['TQ_S3_POSTFINANCE_BUCKET']
+S3_POSTFINANCE_HOST = environ['TQ_S3_POSTFINANCE_HOST']
+S3_POSTFINANCE_PORT = environ['TQ_S3_POSTFINANCE_PORT']
+S3_POSTFINANCE_REGION = environ['TQ_S3_POSTFINANCE_REGION']
+S3_POSTFINANCE_USE_SSL = bool(environ["TQ_S3_POSTFINANCE_USE_SSL"] == 'True')
+S3_POSTFINANCE_CUSTOM_DOMAIN = environ['TQ_S3_POSTFINANCE_CUSTOM_DOMAIN']
+S3_POSTFINANCE_ACCESS_KEY = environ['TQ_S3_POSTFINANCE_ACCESS_KEY']
+S3_POSTFINANCE_SECRET_KEY = environ['TQ_S3_POSTFINANCE_SECRET_KEY']
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -359,7 +356,7 @@ CMS_PLACEHOLDER_CONF = {
 # Celery
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 CELERY_RESULT_BACKEND = 'django-db'
-BROKER_URL = os.environ.get('REDIS_BROKER_URL', 'redis://redis/')
+BROKER_URL = environ['TQ_REDIS_BROKER_URL']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
@@ -492,7 +489,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("TQ_SECRET_KEY", '')
+SECRET_KEY = environ["TQ_SECRET_KEY"]
 
 # Caching
 CACHES = {
@@ -513,30 +510,30 @@ CACHES = {
 }
 
 # Configure the email host to send mails from
-EMAIL_HOST = os.environ.get("TQ_EMAIL_HOST", '')
-EMAIL_HOST_USER = os.environ.get("TQ_EMAIL_HOST_USER", '')
+EMAIL_HOST = environ["TQ_EMAIL_HOST"]
+EMAIL_HOST_USER = environ["TQ_EMAIL_HOST_USER"]
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = os.environ.get("TQ_EMAIL_HOST_PASSWORD", '')
-DEFAULT_FROM_EMAIL = os.environ.get("TQ_DEFAULT_FROM_EMAIL", '')
+EMAIL_HOST_PASSWORD = environ["TQ_EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': os.environ.get("TQ_DB_HOST_POSTGRES", 'tq-postgres'),
-        'PORT': os.environ.get("TQ_DB_PORT_POSTGRES", '5432'),
-        'NAME': 'tq_website',
-        'USER': os.environ.get("TQ_DB_USER_POSTGRES", ''),
-        'PASSWORD': os.environ.get("TQ_DB_PASSWORD_POSTGRES", ''),
+        'HOST': environ["TQ_DB_HOST_POSTGRES"],
+        'PORT': environ["TQ_DB_PORT_POSTGRES"],
+        'NAME': environ['TQ_POSTGRES_DATABASE_NAME'],
+        'USER': environ["TQ_DB_USER_POSTGRES"],
+        'PASSWORD': environ["TQ_DB_PASSWORD_POSTGRES"],
     }
 }
 
-GOOGLE_ANALYTICS_PROPERTY_ID = os.environ.get("TQ_GOOGLE_ANALYTICS_PROPERTY_ID", '')
+GOOGLE_ANALYTICS_PROPERTY_ID = environ["TQ_GOOGLE_ANALYTICS_PROPERTY_ID"]
 
 # Postfinance Backend
 FDS_HOST = 'fdsbc.post.ch'
-FDS_USER = os.environ.get("TQ_FDS_USER", '')
+FDS_USER = environ["TQ_FDS_USER"]
 FDS_PRIVATE_KEY = os.path.join(BASE_DIR, 'credentials', 'tq')
 FDS_HOST_KEY = os.path.join(BASE_DIR, u'credentials', u'host_key')
 FDS_DATA_PATH = 'fds_data'
@@ -545,11 +542,11 @@ FDS_PORT = 22
 # Postfinance Account
 PAYMENT_ACCOUNT = {
     'default': {
-        'IBAN': os.environ.get("TQ_PAYMENT_ACCOUNT_IBAN", ''),
-        'SWIFT': os.environ.get("TQ_PAYMENT_ACCOUNT_SWIFT", ''),
-        'post_number': os.environ.get("TQ_PAYMENT_ACCOUNT_POST_NUMBER", ''),
-        'recipient': ', '.join([os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT", ''),
-                                os.environ.get("TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY", '')])
+        'IBAN': environ["TQ_PAYMENT_ACCOUNT_IBAN"],
+        'SWIFT': environ["TQ_PAYMENT_ACCOUNT_SWIFT"],
+        'post_number': environ["TQ_PAYMENT_ACCOUNT_POST_NUMBER"],
+        'recipient': ', '.join([environ["TQ_PAYMENT_ACCOUNT_RECIPIENT"],
+                                environ["TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY"]])
     }
 }
 

@@ -30,9 +30,6 @@ COMPOSE_FILE: docker-compose-dev.yml
 TQ_DEBUG: true
 ```
 
-TODO:
-* finish variables.yml
-
 ### Generate environment
 
 0. Run `pip3 install pyyaml --user` to ensure you have the needed python packages installed.
