@@ -1,6 +1,5 @@
 {% extends "basis.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
 
 {% block content_title %}
     {% trans "Course Payment" %}
@@ -14,7 +13,7 @@
             <div class="panel-body">
                 <form class="form-horizontal" method="post">
                     {% csrf_token %}
-                    {% bootstrap_form form %}
+                    {{ form }}
                     <div class="col-sm-10">
 
                         <div class="form-group">
@@ -30,13 +29,11 @@
                             <div id="course">{{ subscription.get_price_to_pay }} CHF</div>
                         </div>
 
-                        {% buttons %}
-                            {% if not subscription.payed %}
-                                <button type="submit" class="btn btn-success">{% trans "Mark as Paid" %}</button>
-                            {% else %}
-                                <button disabled=true class="btn btn-success">{% trans "Already Paid" %}</button>
-                            {% endif %}
-                        {% endbuttons %}
+                        {% if not subscription.payed %}
+                            <button type="submit" class="btn btn-success">{% trans "Mark as Paid" %}</button>
+                        {% else %}
+                            <button disabled=true class="btn btn-success">{% trans "Already Paid" %}</button>
+                        {% endif %}
                         <div class="form-group">
                             <a href="{% url 'payment:voucherpayment_index' subscription.usi %}">Pay with voucher
                                 instead</a>

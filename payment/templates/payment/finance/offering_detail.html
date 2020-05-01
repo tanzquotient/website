@@ -1,6 +1,5 @@
 {% extends "basis.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
 
 {% block content_title %}
     {% trans "Finance" %}
@@ -49,12 +48,10 @@
                                     <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="subscription" value="{{ subscription.id }}">
-                                        {% buttons %}
                                             <button type="submit"
                                                     class="btn {% if subscription.get_last_payment_reminder %}btn-default{% else %}btn-primary{% endif %} btn-sm">
                                                 {% trans "Send Reminder" %}
                                             </button>
-                                        {% endbuttons %}
                                     </form>
                                 </td>
                             </tr>

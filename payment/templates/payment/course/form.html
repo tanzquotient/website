@@ -1,6 +1,5 @@
 {% extends "basis.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
 {% load sekizai_tags %}
 
 {% block content_title %}
@@ -14,15 +13,15 @@
         <div id="offering-tree"></div>
     </div>
     {% addtoblock "js" %}
-        <script>
-            function getTree() {
-                return {{ tree|safe }};
-            }
-            $('#offering-tree').treeview({
-                data: getTree(),
-                enableLinks: true
-            });
-        </script>
+    <script>
+        function getTree() {
+            return {{ tree|safe }};
+        }
+        $('#offering-tree').treeview({
+            data: getTree(),
+            enableLinks: true
+        });
+    </script>
     {% endaddtoblock %}
 {% endblock main_content %}
 

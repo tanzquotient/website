@@ -1,6 +1,5 @@
 {% extends "basis.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
 
 {% block content_title %}
     {% trans "Counter Payment" %}
@@ -8,14 +7,13 @@
 
 {% block main_content %}
     <div class="container">
-    <h2>{% trans "Enter USI" %}</h2>
-<form method="post">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">
-            {% trans "Submit" %}
-        </button>
-    {% endbuttons %}</form>
+        <h2>{% trans "Enter USI" %}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn btn-primary">
+                {% trans "Submit" %}
+            </button>
+        </form>
     </div>
 {% endblock main_content %}
