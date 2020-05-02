@@ -12,7 +12,7 @@ COPY cinit.yml /etc/cinit.d/tq-website.yml
 #TODO Test which libraries are actually needed
 #RUN apt install -y zlib jpeg libxml2-dev libxslt-dev python-dev \
 #    build-base jpeg-dev zlib-dev && \
-#    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.1
+#    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.2
 
 # Install dependencies:
 # - git to clone code from Github

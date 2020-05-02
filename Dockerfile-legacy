@@ -22,7 +22,7 @@ RUN apk add --no-cache zlib jpeg && \
     apk add --no-cache libxml2-dev libxslt-dev python-dev && \
     apk add --no-cache --virtual .build-deps \
     build-base jpeg-dev zlib-dev && \
-    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.1 && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.2 && \
     apk del .build-deps
 
 # pyreverse: generate UML diagrams in comfortable formats
@@ -33,7 +33,7 @@ RUN apk add --no-cache graphviz && \
 RUN apk add --no-cache openssl && \
     apk add --no-cache --virtual .build-deps \
     build-base openssl-dev libffi-dev && \
-    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==2.9.1 && \
+    LIBRARY_PATH=/lib:/usr/lib pip3 install cryptography==2.9.2 && \
     apk del .build-deps
 
 # gettext (needed to compile language files on the server)

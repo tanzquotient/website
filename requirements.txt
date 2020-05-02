@@ -6,7 +6,7 @@ django-celery-email==3.0.0
 django-celery-beat==2.0.0
 django-celery-results==1.2.1
 django-cms==3.7.2
-django-filer==1.7.0
+django-filer==1.7.1
 django-filter==2.2.0
 django-formtools==2.2
 django-guardian==2.2.0
@@ -28,18 +28,16 @@ base36==0.1.1
 paramiko==2.7.1
 django-allauth==0.41.0
 django-debug-toolbar==2.2
-redis==3.4.1
+redis==3.5.0
 django-redis==4.11.0
-cryptography==2.9.1
+cryptography==2.9.2
 django-countries==6.1.2
 django-ical==1.7.0
-pylint==2.4.4
+pylint==2.5.0
 python-dotenv==0.13.0
 sphinx-automodapi==0.12
-pytz==2019.3
-boto3==1.12.43
-# boto3 (1.12.43) requires docutils < 0.16
-docutils==0.15.2
+pytz==2020.1
+boto3==1.13.1
 
 # DATABASE
 psycopg2==2.8.5
@@ -53,7 +51,7 @@ sentry_sdk==0.14.3
 # Images and PDF
 svglib==1.0.0
 PyPDF2==1.26.0
-Pillow==7.1.1
+Pillow==7.1.2
 
 # Parsing in the generate-env.py script
 pyyaml==5.3.1
