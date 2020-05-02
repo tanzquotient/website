@@ -2,60 +2,42 @@
 {% load i18n %}
 
 {% if user.is_staff %}
-    <li>
-        <a href="{% url 'admin:index' %}">
-            <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
-        </a>
-    </li>
+    <a class="dropdown-item" href="{% url 'admin:index' %}">
+        <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
+    </a>
 {% endif %}
 {% if user.is_staff %}
-    <li>
-        <a href="{% url 'courses:subscription_overview' %}">
-            <span class="fa fa-bar-chart fa-lg"></span> {% trans "Statistics" %}
-        </a>
-    </li>
+    <a class="dropdown-item" href="{% url 'courses:subscription_overview' %}">
+        <span class="fa fa-bar-chart fa-lg"></span> {% trans "Statistics" %}
+    </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
-    <li>
-        <a href="{% url 'payment:coursepayment_index' %}">
-            <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}
-        </a>
-    </li>
+    <a class="dropdown-item" href="{% url 'payment:coursepayment_index' %}">
+        <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}
+    </a>
 {% endif %}
 {% if user.is_superuser or perms.courses.access_counterpayment %}
-    <li>
-        <a href="{% url 'payment:counterpayment_index' %}">
-            <span class="fa fa-money fa-lg"></span> {% trans "Counter payment" %}
-        </a>
-    </li>
+    <a class="dropdown-item" href="{% url 'payment:counterpayment_index' %}">
+        <span class="fa fa-money fa-lg"></span> {% trans "Counter payment" %}
+    </a>
 {% endif %}
 {% if user.is_superuser or perms.payment.change_payment %}
-    <li>
-        <a href="{% url 'payment:offering_finance_index_view' %}">
-            <span class="fa fa-credit-card fa-lg"></span> {% trans "Offering finance" %}
-        </a>
-    </li>
-    <li>
-        <a href="{% url 'payment:account_finance_index_view' %}">
-            <span class="fa fa-credit-card fa-lg"></span> {% trans "Account finance" %}
-        </a>
-    </li>
+    <a class="dropdown-item" href="{% url 'payment:offering_finance_index_view' %}">
+        <span class="fa fa-credit-card fa-lg"></span> {% trans "Offering finance" %}
+    </a>
+    <a class="dropdown-item" href="{% url 'payment:account_finance_index_view' %}">
+        <span class="fa fa-credit-card fa-lg"></span> {% trans "Account finance" %}
+    </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
-    <li role="separator" class="divider"></li>
+    <div class="dropdown-divider"></div>
 {% endif %}
-<li>
-    <a href="{% url 'user_dashboard' %}">
-        <span class="glyphicon glyphicon-th"></span>{% trans "Dashboard" %}
-    </a>
-</li>
-<li>
-    <a href="{% url 'profile' %}">
-        <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
-    </a>
-</li>
-<li>
-    <a href="{% url 'account_logout' %}">
-        <span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}
-    </a>
-</li>
+<a class="dropdown-item" href="{% url 'user_dashboard' %}">
+    <span class="glyphicon glyphicon-th"></span>{% trans "Dashboard" %}
+</a>
+<a class="dropdown-item" href="{% url 'profile' %}">
+    <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
+</a>
+<a class="dropdown-item" href="{% url 'account_logout' %}">
+    <span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}
+</a>
