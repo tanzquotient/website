@@ -7,7 +7,7 @@ from . import models
 from django.shortcuts import get_object_or_404
 import re
 import logging
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 log = logging.getLogger('tq')
 

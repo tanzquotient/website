@@ -1,5 +1,3 @@
-from daterange_filter.filter import DateRangeFilter
-
 from courses.filters import *
 from payment.admin_actions import *
 from payment.filters import *
@@ -18,7 +16,7 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'state', 'type', 'credit_debit', 'name', 'date', 'amount',
                     'amount_to_reimburse',
                     'currency_code', 'remittance_user_string', 'subscription_payments_amount_sum', 'list_subscriptions']
-    list_filter = ['state', 'type', 'credit_debit', ('date', DateRangeFilter)]
+    list_filter = ['state', 'type', 'credit_debit',]
     search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
                      'currency_code', 'remittance_user_string', 'filename']
 

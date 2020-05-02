@@ -1,5 +1,5 @@
 from django.db.models import CharField, ImageField, URLField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
 

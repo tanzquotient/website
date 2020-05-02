@@ -2,7 +2,7 @@ import django.contrib.auth as auth
 from django.conf import settings
 from django.db import models
 from django.db.models.fields import BooleanField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields

@@ -10,7 +10,7 @@ from django.db import transaction
 from django.db.models import Q, Prefetch
 from django.http import Http404, HttpResponseServerError
 from django.utils import dateformat
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import courses.models as models
 from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \

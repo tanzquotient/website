@@ -29,6 +29,9 @@ ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
 # This should be set to true since we use NGINX as a proxy
 USE_X_FORWARDED_HOST = True
 
+# In order for django CMS to function, X_FRAME_OPTIONS needs to be set to SAMEORIGIN
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 # Application definition
 INSTALLED_APPS = []
 
@@ -57,7 +60,6 @@ INSTALLED_APPS += [
     'django_celery_results',
     'djcelery_email',
     'post_office',
-    'daterange_filter',
     'guardian',
     'allauth',
     'allauth.account',
@@ -173,6 +175,9 @@ STATICFILES_FINDERS = (
 # Define default storages
 DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
 STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
+
+# Use ACL of bucket
+AWS_DEFAULT_ACL = None
 
 # Media
 S3_MEDIA_BUCKET = environ['TQ_S3_MEDIA_BUCKET']
