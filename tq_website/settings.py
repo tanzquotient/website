@@ -171,10 +171,13 @@ STATICFILES_FINDERS = (
 )
 
 
+S3_ENABLED = bool(environ["TQ_S3_ENABLED"] == 'True')
 
 # Define default storages
-DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
-STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
+if S3_ENABLED:
+    DEFAULT_FILE_STORAGE = 'tq_website.storages.MediaStorage'
+    STATICFILES_STORAGE = 'tq_website.storages.StaticStorage'
+
 
 # Use ACL of bucket
 AWS_DEFAULT_ACL = None

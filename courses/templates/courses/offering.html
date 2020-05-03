@@ -5,15 +5,9 @@
     {{ offering.name }}
 {% endblock title%}
 
-{% block lead %}
-    <header id="header_courses">
-        <div class="container">
-            <div class="row">
-                <h1 class="lead">{{ offering.name }}</h1>
-            </div>
-        </div>
-    </header>
-{% endblock lead %}
+{% block lead_title %}
+    {{ offering.name }}
+{% endblock %}
 
 {% block main_content %}
     <div class="container">

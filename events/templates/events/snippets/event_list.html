@@ -1,6 +1,6 @@
 {% load i18n %}
 {% trans "No entry fee" as no_entry_fee %}
-<div class="hidden-xs">
+<div class="d-none d-sm-block">
     <table class="table">
         <thead>
         <tr>
@@ -25,7 +25,7 @@
                                         {% if event.cancelled %}
                                             <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
                                         {% elif event.special %}
-                                            <i class="fa fa-star-o fa-lg"></i>
+                                            <i class="fa fa-star"></i>
                                         {% endif %}
                                         {{ event.get_name }}
                                     </p>
@@ -63,6 +63,6 @@
     </table>
 </div>
 
-<div class="visible-xs">
+<div class="d-block d-sm-none">
     {% include "events/snippets/event_list_xs.html" with events=events only %}
 </div>

@@ -1,244 +1,87 @@
 {% load analytical %}
-<!DOCTYPE html>
+
 {% load i18n %}
 {% load cms_tags sekizai_tags menu_tags %}
-
-<html lang="de">
 
 {% load static %}
 {% load account %}
 
+
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     {% analytical_head_top %}
+
+    <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-
-    <title>{% block title %}{% page_attribute "page_title" %}{% endblock %}</title>
-
     {% block meta %}{% endblock %}
 
+    <!-- Title -->
+    <title>{% block title %} {% page_attribute "page_title" %} {% endblock %}</title>
     <link rel="shortcut icon" href="{% static "elements/favicon_small.png" %}">
 
+    <!-- Bootstrap + Font Awesome -->
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d611616e0c.js" crossorigin="anonymous"></script>
 
-    <!-- Custom styles for our template -->
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" href="{% static "css/menu.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
 
+    <!-- Third party packages -->
     <link rel="stylesheet" href="{% static "css/bootstrap-treeview.min.css" %}">
-
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+    <!-- CSS render block -->
     {% render_block "css" %}
+
     {% analytical_head_bottom %}
 </head>
 
-<body class="home">
+<body class="{% page_attribute "slug" %}">
 {% analytical_body_top %}
+
 {% cms_toolbar %}
 
 {% block menu %}
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="{% static "elements/logo_transparent.svg" %}" height="60px" alt="TQ">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-content"
-                    aria-controls="menu-content" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    {% include "menu/main_menu.html" %}
+{% endblock %}
 
-            <div class="collapse navbar-collapse" id="menu-content">
-
-                <span class="w-100"></span>
-
-                <ul class="navbar-nav">
-
-
-                    {% show_menu 0 1 0 1 'menu.html' %}
-
-                    <!-- Facebook -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.facebook.com/tanzquotient">
-                            <span class="fa fa-facebook-square fa-lg"></span>
-                        </a>
-                    </li>
-
-                    <!-- Languages -->
-                    {% language_chooser 'language_chooser.html' %}
-
-                    <!-- User dropdown -->
-                    {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {% user_display user %}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% include "user_menu.html" %}
-                            </div>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Log in" %}</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+<header class="lead">
+    <div class="container">
+        <div class="title-wrapper row align-items-center justify-content-center">
+        <span class="lead-title">
+            {% placeholder title or %}
+                {% block lead_title %}
+                    {% page_attribute "page_title" %}
+                {% endblock %}
+            {% endplaceholder %}
+        </span>
         </div>
-    </nav>
-{% endblock menu %}
-
-{% block lead %}
-    <header class="light">
-        <div class="container">
-            <div class="row">
-                <h1 class="lead">
-                    {% block content_title %}
-
-                        {% placeholder title or %}
-                            {% page_attribute "page_title" %}
-                        {% endplaceholder %}
-
-                    {% endblock %}
-                </h1>
-            </div>
-        </div>
-    </header>
-{% endblock lead %}
+    </div>
+</header>
 
 {% block cms_content %}
-{% endblock cms_content %}
+{% endblock %}
 
 {% block main_content %}
-{% endblock main_content %}
+{% endblock %}
 
 {% block cms_bottom_content %}
-{% endblock cms_bottom_content %}
+{% endblock %}
 
-<footer id="footer" class="top-space">
-
-    <div class="footer1">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Contact" %}</h3>
-
-                    <div class="widget-body">
-                        {% include "snippets/contact_address.html" %}
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Follow us" %}</h3>
-
-                    <div class="widget-body">
-                        <p class="follow-me-icons">
-                            <a href="https://www.facebook.com/tanzquotient"><i
-                                    class="fa fa-facebook fa-2"></i></a>
-                            {% page_url 'calendar-instructions' as url %}
-                            {% if url %}
-                                <a href="{{ url }}"><i class="fa fa-calendar fa-2"></i></a>
-                            {% endif %}
-                            <a href="https://github.com/tanzquotient/tq_website"><i class="fa fa-github fa-2"></i></a>
-
-                        </p>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    <div class="widget-body">
-                        {% trans "Please send Website Feedback to" %}
-                        <a href="mailto:informatik@tq.vseth.ch">informatik@tq.vseth.ch</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Built with" %}</h3>
-
-                    <div class="widget-body">
-                        <a href="//www.djangoproject.com/">Django</a>
-                        <br/>
-                        <a href="//www.django-cms.org/">Django CMS</a>
-                        <br/>
-                        <a href="//getbootstrap.com/">Twitter Bootstrap</a>
-                        <br/>
-                        <a href="//www.python.org/">Python</a>
-                        <br/>
-                        {% trans "Design based on" %}: Progressus <a href="//gettemplate.com/" rel="designer">gettemplate</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Supported by" %}</h3>
-
-                    <div class="widget-body">
-                        {% trans "TQ is a commision of VSETH and VSUZH" %}
-                        <a href="https://vseth.ch"><img src="{% static "elements/vseth_logo.png" %}"
-                                                        style="height: 100px"
-                                                        class="img-responsive"
-                                                        alt="Responsive image"></a>
-                        <a href="http://vsuzh.ch"><img src="{% static "elements/vsuzh_logo.png" %}"
-                                                       class="img-responsive"
-                                                       alt="Responsive image"></a>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- /row of widgets -->
-        </div>
-    </div>
-
-    <div class="footer2">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-5 widget">
-                    <div class="widget-body">
-                        {% show_menu 0 1 0 1 'simple_menu.html' %}
-                    </div>
-                </div>
-
-                <div class="col-md-2 widget">
-                    <div class="widget-body">
-                        <p class="simplenav">
-                            {% if user.is_authenticated %}
-                                {% if user.is_staff %}
-                                    <a href="{% url 'admin:index' %}"><span
-                                            class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
-                                {% endif %}
-                                <a href="{% url 'account_logout' %}"><span
-                                        class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
-                            {% else %}
-                                <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-5 widget">
-                    <div class="widget-body">
-                        <p class="text-right">
-                            Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-            <!-- /row of widgets -->
-        </div>
-    </div>
-
-</footer>
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
 
 
-<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+<!-- JavaScript libs  -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -248,9 +91,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-<script src="{% static "js/headroom.min.js" %}"></script>
-<script src="{% static "js/jQuery.headroom.min.js" %}"></script>
-<script src="{% static "js/template.js" %}"></script>
 <script src="{% static "js/bootstrap-treeview.min.js" %}"></script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 

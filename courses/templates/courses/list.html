@@ -1,15 +1,9 @@
 {% extends "template_basic.html" %}
 {% load i18n %}
 
-{% block lead %}
-    <header id="header_courses">
-        <div class="container">
-            <div class="row">
-                <h1 class="lead">{% trans "Courses" %}</h1>
-            </div>
-        </div>
-    </header>
-{% endblock lead %}
+{% block lead_title %}
+    {% trans "Courses" %}
+{% endblock %}
 
 {% block main_content %}
     <div class="container">

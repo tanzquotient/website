@@ -3,7 +3,7 @@
 {% load sekizai_tags %}
 
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Course Management" %}
 {% endblock %}
 
@@ -20,33 +20,33 @@
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#editor-de" aria-controls="editor-de" role="tab"
+                        <li  role="presentation" class="active nav-item"><a class="nav-link" href="#editor-de" aria-controls="editor-de" role="tab"
                                                                   data-toggle="tab">{% trans "German" %}</a></li>
-                        <li role="presentation"><a href="#editor-en" aria-controls="editor-en" role="tab"
+                        <li  class="nav-item" role="presentation"><a class="nav-link" href="#editor-en" aria-controls="editor-en" role="tab"
                                                    data-toggle="tab">{% trans "English" %}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="editor-de">
+                        <div role="tabcard" class="tab-pane active" id="editor-de">
                             <textarea name="ckeditor-de" id="ckeditor-de" rows="20" cols="80">
                     {{ description_de|default:""|safe }}
                 </textarea>
 
                             The description will be displayed together with this general course type information:
-                            <div class="panel panel-default">
-                                <div class="panel-body">
+                            <div class="card card-default">
+                                <div class="card-body">
                                     {{ type_description_de|default:"<no description>"|safe }}
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="editor-en">
+                        <div role="tabcard" class="tab-pane" id="editor-en">
                             <textarea name="ckeditor-en" id="ckeditor-en" rows="20" cols="80">
                     {{ description_en|default:""|safe }}
                 </textarea>
                             The description will be displayed together with this general course type information:
-                            <div class="panel panel-default">
-                                <div class="panel-body">
+                            <div class="card card-default">
+                                <div class="card-body">
                                     {{ type_description_en|default:"<no description>"|safe }}
                                 </div>
                             </div>
@@ -84,9 +84,9 @@
                 <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Download" %}</a>
             </p>
 
-            <div class="visible-xs">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+            <div class="d-block d-sm-none">
+                <div class="card card-default">
+                    <div class="card-header">
                         {% trans "Amount" %}
                         <small class="pull-right">
                             <strong>{% trans "Amount Due" %}</strong>
@@ -118,7 +118,7 @@
                             </a>
                         {% endfor %}
                     </div>
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <p>{% trans "Total" %}</p>
                         <p>{{ payment_totals.paid }} CHF
                             <small class="pull-right">
@@ -128,9 +128,9 @@
                     </div>
                 </div>
             </div>
-            <div class="hidden-xs">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+            <div class="d-none d-sm-block">
+                <div class="card card-default">
+                    <div class="card-body">
                         <table class="table">
                             <thead>
                             <tr>

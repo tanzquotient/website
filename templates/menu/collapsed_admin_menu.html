@@ -1,0 +1,43 @@
+{% load cms_tags sekizai_tags menu_tags %}
+{% load i18n %}
+
+{% if user.is_staff %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin:index' %}">
+            {% trans "Admin area" %}
+        </a>
+    </li>
+{% endif %}
+{% if user.is_staff %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'courses:subscription_overview' %}">
+            </span> {% trans "Statistics" %}
+        </a>
+    </li>
+{% endif %}
+{% if user.is_staff or user.profile.is_teacher %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'payment:coursepayment_index' %}">
+            {% trans "Courses as teacher" %}
+        </a>
+    </li>
+{% endif %}
+{% if user.is_superuser or perms.courses.access_counterpayment %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'payment:counterpayment_index' %}">
+            {% trans "Counter payment" %}
+        </a>
+    </li>
+{% endif %}
+{% if user.is_superuser or perms.payment.change_payment %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'payment:offering_finance_index_view' %}">
+            {% trans "Offering finance" %}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'payment:account_finance_index_view' %}">
+            {% trans "Account finance" %}
+        </a>
+    </li>
+{% endif %}

@@ -1,33 +1,66 @@
+body {
+    font-size: 14px;
+}
+
+a {
+    color: #C51718;
+}
+
+table.table {
+    margin-bottom: 0;
+}
 
 .bg-primary {
     background-color: #C51718 !important;
 }
 
-.navbar.navbar-dark .navbar-nav .nav-item .nav-link {
-    font-weight: bold;
+.btn-primary {
+    background-color: #C51718;
+    border-color: #C51718;
+}
+
+.btn-primary:hover {
+    background-color: #9a1414;
+    border-color: #9a1414;
+}
+
+.btn-primary:focus {
+    background-color: #761010;
+    border-color: #761010;
+    box-shadow: 0 0 0 .2rem rgba(197, 23, 24, 0.5);
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+    background-color: #761010;
+    border-color: #761010;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(197, 23, 24, 0.5);
+}
+
+.list-group-item {
+    overflow: hidden;
+}
+
+.list-group-item-action {
+    color: black;
+}
+
+.banner {
+    position: absolute;
+    top: 20px;
+    right: -70px;
+    width: 200px;
+    background-color: #C51718;
     color: white;
-    padding: 10px;
-    margin: 0 2px;
-    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 8pt;
+    padding: 2px;
+    transform: rotate(45deg);
 }
 
-.navbar.navbar-dark .navbar-nav .nav-item .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.navbar.navbar-dark .navbar-nav .nav-item .nav-link:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.navbar.navbar-dark .navbar-nav .nav-item.active .nav-link {
-    color: #C51718;
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.navbar.navbar-dark .navbar-nav .nav-item.active .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-.navbar.navbar-dark .navbar-nav .nav-item.active .nav-link:focus {
-    background-color: rgba(255, 255, 255, 0.8);
+.cms-toolbar-expanded .navbar.sticky-top {
+    top: 46px;
 }

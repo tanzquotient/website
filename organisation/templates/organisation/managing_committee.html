@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="hidden-xs">
+<div class="d-none d-sm-block">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -33,7 +33,7 @@
     </table>
 </div>
 
-<div class="visible-xs">
+<div class="d-block d-sm-none">
     {% if users %}
         <div class="list-group">
             {% for user in users %}

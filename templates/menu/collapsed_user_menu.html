@@ -1,0 +1,26 @@
+{% load cms_tags sekizai_tags menu_tags %}
+{% load i18n %}
+
+{% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard' %}">
+            {% trans "Dashboard" %}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' %}">
+            {% trans "Profile" %}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'account_logout' %}">
+            {% trans "Logout" %}
+        </a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'account_login' %}">
+            {% trans "Log in" %}
+        </a>
+    </li>
+{% endif %}

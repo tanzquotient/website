@@ -1,8 +1,0 @@
-{% load menu_tags %}
-
-<p class="simplenav">
-    {% for child in children %}
-        <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-        {% if not forloop.last %}|{% endif %}
-    {% endfor %}
-</p>

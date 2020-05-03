@@ -1,0 +1,41 @@
+footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #999;
+}
+
+footer a {
+    color: #ccc;
+}
+
+footer h3 {
+    font-size: 17px;
+    font-weight: bold;
+    color: #ccc;
+    margin: 0 0 20px;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+footer .follow-me-icons {
+    font-size: 30px;
+}
+
+footer img {
+    max-width: 100%;
+    max-height: 100px;
+    height: auto;
+    width: auto;
+}
+
+footer .footer1 {
+    padding: 30px 0;
+    background-color: #232323;
+}
+
+footer .footer2 {
+    padding: 15px 0;
+    background-color: #191919;
+}
