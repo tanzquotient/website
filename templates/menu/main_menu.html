@@ -1,0 +1,30 @@
+{% load static %}
+{% load cms_tags menu_tags %}
+{% load i18n %}
+{% load account %}
+
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="{% static "elements/logo_transparent.svg" %}" height="60px" alt="TQ">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-content"
+                aria-controls="menu-content" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu-content">
+
+            <span class="w-100"></span>
+
+            <div class="d-none d-lg-block">
+                {% include "menu/expanded_menu.html" %}
+            </div>
+            <div class="d-block d-lg-none">
+                {% include "menu/collapsed_menu.html" %}
+            </div>
+
+
+        </div>
+    </div>
+</nav>

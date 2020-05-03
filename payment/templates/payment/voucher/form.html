@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Payment Status" %}
 {% endblock %}
 
@@ -9,8 +9,8 @@
     <div class="container">
         <h2>{% trans "Payment Details" %}</h2>
         <p>{% trans "Please check the payment details so you make sure you pay the right course" %}</p>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-10">
@@ -35,8 +35,8 @@
         </div>
         <h2>{% trans "Enter Voucher Code" %}</h2>
         <p>{% trans "You can enter your voucher code here. If you use it to pay the course the voucher will be marked as used." %}</p>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form }}

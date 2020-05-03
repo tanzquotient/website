@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Course Payment" %}
 {% endblock %}
 
@@ -9,8 +9,8 @@
     <div class="container">
         <h2>{% trans "Payment Details" %}</h2>
         <p>Please check the payment details.</p>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <form class="form-horizontal" method="post">
                     {% csrf_token %}
                     {{ form }}

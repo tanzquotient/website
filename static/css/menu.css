@@ -1,0 +1,52 @@
+.navbar.navbar-dark .nav-item .nav-link {
+    font-weight: bold;
+    color: white;
+    padding: 10px;
+    margin: 0 2px;
+    border-radius: 5px;
+}
+
+.navbar.navbar-dark .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar.navbar-dark .nav-item .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar.navbar-dark .expanded-menu .nav-item.active .nav-link {
+    color: #C51718;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.navbar.navbar-dark .expanded-menu .nav-item.active .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar.navbar-dark .expanded-menu .nav-item.active .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar.navbar-dark .collapse-menu .title {
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 6px;
+}
+.navbar.navbar-dark .collapse-menu .navbar-nav {
+    margin-bottom: 24px;
+}
+
+
+.navbar.navbar-dark .collapse-menu .nav-item .nav-link {
+    font-weight: normal;
+    font-size: larger;
+    padding: 5px 0;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+.navbar.navbar-dark .collapse-menu .nav-item.active .nav-link {
+    font-weight: bold;
+    color: white;
+}

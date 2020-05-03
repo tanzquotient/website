@@ -5,9 +5,7 @@
         {% for item in items %}
             {% with id=forloop.counter|floatformat %}
                 {% with modal_id="modal_upcoming-"|add:id %}
-                    <a class="list-group-item" href="#" data-toggle="modal" data-target="#{{ modal_id }}">
-                        {% include "cms_plugins/snippets/event_or_course_item.html" with item=item only %}
-                    </a>
+                    {% include "events/snippets/event_list_entry.html" with event=item modal_id=modal_id only %}
                     {% if item.event %}
                         {% include "events/snippets/event_modal.html" with event=item.event modal_id=modal_id only %}
                     {% elif item.course %}

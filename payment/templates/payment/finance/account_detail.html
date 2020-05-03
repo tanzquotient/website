@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Account Finance" %}
 {% endblock %}
 
@@ -39,8 +39,8 @@
 
         <form method="post">
             {% csrf_token %}
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card card-default">
+                <div class="card-body">
                     <table class="table">
                         <thead>
                         <tr>

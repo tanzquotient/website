@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Finance" %}
 {% endblock %}
 
@@ -29,8 +29,8 @@
             <a href="{% url "courses:export_offering_salary_excel" offering_id=offering.id %}">{% trans "Download Excel" %}</a>
         </p>
         </a>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <table class="table">
                     <thead>
                     <th>{% trans "Course" %}</th>

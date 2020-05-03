@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Finance" %}
 {% endblock %}
 
@@ -25,8 +25,8 @@
             <a href="{% url "payment:offering_finance_detail_view" offering.id %}">(show unpaid subscriptions)       </a>
 
         </p>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <table class="table">
                     <thead>
                     <th>{% trans "Course" %}</th>

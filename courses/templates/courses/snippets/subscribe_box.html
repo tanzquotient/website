@@ -2,11 +2,11 @@
 
 {% if course.is_subscription_allowed and course.has_free_places %}
     {% if not user.is_authenticated or course not in user.profile.get_subscribed_courses %}
-        <div id="subscribe" class="panel panel-success">
-            <div class="panel-heading">
+        <div id="subscribe" class="card border-success mt-4 mb-4">
+            <div class="card-header text-white bg-success">
                 {% trans "Sign up" %}
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 {% if user.is_authenticated %}
                     {% include "courses/snippets/subscribe_form.html" %}
                 {% else %}

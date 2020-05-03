@@ -1,0 +1,21 @@
+{% load menu_tags %}
+
+{% for child in children %}
+    <li class="nav-item {% if child.children %} dropdown{% endif %}{% if child.selected %} active{% endif %}"
+        xmlns="http://www.w3.org/1999/html">
+        {% if child.children %}
+            <a class="nav-link dropdown-toggle" href="#" id="{{ child.get_menu_title }}-dropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ child.get_menu_title }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">
+                    {{ child.get_menu_title }}
+                </a>
+            </div>
+        {% else %}
+            <a class="nav-link"
+               href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+        {% endif %}
+    </li>
+{% endfor %}

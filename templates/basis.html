@@ -1,255 +1,96 @@
 {% load analytical %}
-<!DOCTYPE html>
+
 {% load i18n %}
 {% load cms_tags sekizai_tags menu_tags %}
-
-<html lang="de">
 
 {% load static %}
 {% load account %}
 
+
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     {% analytical_head_top %}
+
+    <!-- Meta -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Sergey Pozhilov (GetTemplate.com)">
-
-    <title>{% block title %}{% page_attribute "page_title" %}{% endblock %}</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% block meta %}{% endblock %}
 
+    <!-- Title -->
+    <title>{% block title %} {% page_attribute "page_title" %} {% endblock %}</title>
     <link rel="shortcut icon" href="{% static "elements/favicon_small.png" %}">
 
+    <!-- Bootstrap + Font Awesome -->
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d611616e0c.js" crossorigin="anonymous"></script>
 
-    <!-- Custom styles for our template -->
-    <link rel="stylesheet" href="{% static "css/bootstrap-theme.css" %}" media="screen">
+    <!-- Custom styles -->
     <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" href="{% static "css/menu.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
+
+    <!-- Third party packages -->
     <link rel="stylesheet" href="{% static "css/bootstrap-treeview.min.css" %}">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-	<script src="{% static "js/html5shiv.js" %}"></script>
-	<script src="{% static "js/respond.min.js" %}"></script>
-	<![endif]-->
-
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+    <!-- CSS render block -->
     {% render_block "css" %}
+
     {% analytical_head_bottom %}
 </head>
 
-<body class="home">
+<body class="{% page_attribute "slug" %}">
 {% analytical_body_top %}
+
 {% cms_toolbar %}
 
 {% block menu %}
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top headroom">
-        <div class="container">
-            <div class="navbar-header">
-                <!-- Button for smallest screens -->
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pages"><i
-                        class="fa fa-bars"></i></button>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#language"><i
-                        class="fa fa-flag"></i></button>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#user"><i
-                        class="fa fa-user"></i></button>
-                <a class="navbar-brand" href="/"><img src="{% static "elements/logo_transparent.svg" %}" height="60px"
-                                                      alt="TQ"></a>
-            </div>
-            <div class=" hidden-xs">
-                <ul class="collapse navbar-collapse nav navbar-nav pull-right">
-                    {% if user.is_authenticated %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
-                                    class="fa fa-user"></i> {% user_display user %} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                {% include "user_menu.html" %}
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li><a href="{% url 'account_login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-user"></span></a></li>
-                    {% endif %}
-                </ul>
-            </div>
-            <div class="visible-xs">
-                <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="user">
-                    {% if user.is_authenticated %}
-                        {% include "user_menu.html" %}
-                    {% else %}
-                        <li><a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-            <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="language">
-                {% language_chooser %}
-            </ul>
-            <ul class="collapse navbar-collapse nav navbar-nav pull-right" id="pages">
-                {% show_menu 0 1 0 1 'menu.html' %}
-                <li><a
-                        href="https://www.facebook.com/tanzquotient"> <span
-                        class="fa fa-facebook-square fa-lg"></span></a></li>
-            </ul>
-            <!--/.nav-collapse -->
+    {% include "menu/main_menu.html" %}
+{% endblock %}
+
+<header class="lead">
+    <div class="container">
+        <div class="title-wrapper row align-items-center justify-content-center">
+        <span class="lead-title">
+            {% placeholder title or %}
+                {% block lead_title %}
+                    {% page_attribute "page_title" %}
+                {% endblock %}
+            {% endplaceholder %}
+        </span>
         </div>
     </div>
-    <!-- /.navbar -->
-{% endblock menu %}
-
-{% block lead %}
-    <header class="light">
-        <div class="container">
-            <div class="row">
-                <h1 class="lead">
-                    {% block content_title %}
-
-                        {% placeholder title or %}
-                            {% page_attribute "page_title" %}
-                        {% endplaceholder %}
-
-                    {% endblock %}
-                </h1>
-            </div>
-        </div>
-    </header>
-{% endblock lead %}
+</header>
 
 {% block cms_content %}
-{% endblock cms_content %}
+{% endblock %}
 
 {% block main_content %}
-{% endblock main_content %}
+{% endblock %}
 
 {% block cms_bottom_content %}
-{% endblock cms_bottom_content %}
+{% endblock %}
 
-<footer id="footer" class="top-space">
-
-    <div class="footer1">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Contact" %}</h3>
-
-                    <div class="widget-body">
-                        {% include "snippets/contact_address.html" %}
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Follow us" %}</h3>
-
-                    <div class="widget-body">
-                        <p class="follow-me-icons">
-                            <a href="https://www.facebook.com/tanzquotient"><i
-                                    class="fa fa-facebook fa-2"></i></a>
-                            {% page_url 'calendar-instructions' as url %}
-                            {% if url %}
-                                <a href="{{ url }}"><i class="fa fa-calendar fa-2"></i></a>
-                            {% endif %}
-                            <a href="https://github.com/tanzquotient/tq_website"><i class="fa fa-github fa-2"></i></a>
-
-                        </p>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    <div class="widget-body">
-                        {% trans "Please send Website Feedback to" %}
-                        <a href="mailto:informatik@tq.vseth.ch">informatik@tq.vseth.ch</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Built with" %}</h3>
-
-                    <div class="widget-body">
-                        <a href="//www.djangoproject.com/">Django</a>
-                        <br/>
-                        <a href="//www.django-cms.org/">Django CMS</a>
-                        <br/>
-                        <a href="//getbootstrap.com/">Twitter Bootstrap</a>
-                        <br/>
-                        <a href="//www.python.org/">Python</a>
-                        <br/>
-                        {% trans "Design based on" %}: Progressus <a href="//gettemplate.com/" rel="designer">gettemplate</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 widget">
-                    <h3 class="widget-title">{% trans "Supported by" %}</h3>
-
-                    <div class="widget-body">
-                        {% trans "TQ is a commision of VSETH and VSUZH" %}
-                        <a href="https://vseth.ch"><img src="{% static "elements/vseth_logo.png" %}"
-                                                  style="height: 100px"
-                                                  class="img-responsive"
-                                                  alt="Responsive image"></a>
-                        <a href="http://vsuzh.ch"><img src="{% static "elements/vsuzh_logo.png" %}"
-                                                  class="img-responsive"
-                                                  alt="Responsive image"></a>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- /row of widgets -->
-        </div>
-    </div>
-
-    <div class="footer2">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-5 widget">
-                    <div class="widget-body">
-                        {% show_menu 0 1 0 1 'simple_menu.html' %}
-                    </div>
-                </div>
-
-                <div class="col-md-2 widget">
-                    <div class="widget-body">
-                        <p class="simplenav">
-                            {% if user.is_authenticated %}
-                                {% if user.is_staff %}
-                                    <a href="{% url 'admin:index' %}"><span class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
-                                {% endif %}
-                                <a href="{% url 'account_logout' %}"><span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
-                            {% else %}
-                                <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-5 widget">
-                    <div class="widget-body">
-                        <p class="text-right">
-                            Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-            <!-- /row of widgets -->
-        </div>
-    </div>
-
-</footer>
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
 
 
-<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="{% static "js/headroom.min.js" %}"></script>
-<script src="{% static "js/jQuery.headroom.min.js" %}"></script>
-<script src="{% static "js/template.js" %}"></script>
+<!-- JavaScript libs  -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 <script src="{% static "js/bootstrap-treeview.min.js" %}"></script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 

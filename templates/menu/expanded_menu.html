@@ -1,0 +1,36 @@
+{% load static %}
+{% load cms_tags menu_tags %}
+{% load i18n %}
+{% load account %}
+
+<ul class="navbar-nav expanded-menu">
+
+    {% show_menu 0 1 0 1 'menu/pages.html' %}
+
+    <!-- Facebook -->
+    <li class="nav-item">
+        <a class="nav-link" href="https://www.facebook.com/tanzquotient" target="_blank">
+            <span class="fab fa-facebook-square"></span>
+        </a>
+    </li>
+
+    <!-- Languages -->
+    {% language_chooser 'menu/language_chooser.html' %}
+
+    <!-- User dropdown -->
+    {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% user_display user %}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% include "menu/user_menu.html" %}
+            </div>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Log in" %}</a>
+        </li>
+    {% endif %}
+</ul>

@@ -17,12 +17,12 @@
                 {% if count %}
                     {% if show.man and count.man > 0 %}
                         <span class="subscription_info_item">
-                            <span class="badge green"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
+                            <span class="badge badge-pill badge-success"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
                         </span>
                     {% endif %}
                     {% if show.woman and count.woman > 0 %}
                         <span class="subscription_info_item">
-                            <span class="badge green"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
+                            <span class="badge badge-pill badge-success"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
                         </span>
                     {% endif %}
                 {% endif %}
@@ -30,7 +30,7 @@
                 {% if count != None %}
                     <span class="subscription_info_item">
                 {% if show.total %}
-                    <span class="badge green">{{ count.total }} frei</span>
+                    <span class="badge badge-pill badge-success">{{ count.total }} frei</span>
                 {% elif count.total <= 0 %}
                     <em>(Warteliste)</em>
                 {% endif %}
@@ -47,7 +47,7 @@
         {% elif display_link and not is_detail_page %}
             <p>
                 <a href="{% url 'courses:course_detail' course.id %}#subscription">
-                    <i class="fa  fa-sign-in fa-lg"></i>
+                    <i class="fa fa-sign-in-alt"></i>
                     {% trans "Subscribe" %}
                 </a>
             </p>

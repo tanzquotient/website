@@ -1,0 +1,102 @@
+{% load analytical %}
+
+{% load i18n %}
+{% load cms_tags sekizai_tags menu_tags %}
+
+{% load static %}
+{% load account %}
+
+<footer>
+    <div class="footer1">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6">
+                    <h3>{% trans "Contact" %}</h3>
+                    <div>
+                        {% include "snippets/contact_address.html" %}
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 ">
+                    <h3>{% trans "Follow us" %}</h3>
+
+                    <div>
+                        <p class="follow-me-icons">
+                            <a href="https://www.facebook.com/tanzquotient"><i class="fab fa-facebook-square"></i></a>
+                            {% page_url 'calendar-instructions' as url %}
+                            {% if url %}
+                                <a href="{{ url }}"><i class="fa fa-calendar fa-2"></i></a>
+                            {% endif %}
+                            <a href="https://github.com/tanzquotient/tq_website"><i class="fab fa-github"></i></a>
+
+                        </p>
+                    </div>
+
+                    <div>
+                        {% trans "Please send Website Feedback to" %}
+                        <a href="mailto:informatik@tq.vseth.ch">informatik@tq.vseth.ch</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 ">
+                    <h3>{% trans "Built with" %}</h3>
+
+                    <div>
+                        <a href="//www.djangoproject.com/">Django</a>
+                        <br/>
+                        <a href="//www.django-cms.org/">Django CMS</a>
+                        <br/>
+                        <a href="//getbootstrap.com/">Twitter Bootstrap</a>
+                        <br/>
+                        <a href="//www.python.org/">Python</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 ">
+                    <h3>{% trans "Supported by" %}</h3>
+
+                    <div>
+                        {% trans "TQ is a commision of VSETH and VSUZH" %}
+                        <a href="https://vseth.ch"><img src="{% static "elements/vseth_logo.png" %}"
+                                                        alt="Responsive image"></a>
+                        <a href="http://vsuzh.ch"><img src="{% static "elements/vsuzh_logo.png" %}"
+                                                       alt="Responsive image"></a>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /row of s -->
+        </div>
+    </div>
+
+    <div class="footer2">
+        <div class="container">
+            <div class="d-flex flex-row justify-content-between">
+
+                <span>
+                    {% show_menu 0 1 0 1 'menu/bottom_menu.html' %}
+                </span>
+
+                <span>
+                        {% if user.is_authenticated %}
+                            {% if user.is_staff %}
+                                <a href="{% url 'admin:index' %}"><span
+                                        class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
+                            {% endif %}
+                            <a href="{% url 'account_logout' %}"><span
+                                    class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
+                        {% else %}
+                            <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
+                        {% endif %}
+                </span>
+
+                <span>Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.</span>
+
+            </div>
+            <!-- /row of s -->
+        </div>
+    </div>
+
+</footer>

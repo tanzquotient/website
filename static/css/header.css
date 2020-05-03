@@ -1,0 +1,59 @@
+header.lead {
+    background-image: url(../elements/home.jpg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    margin-bottom: 25px;
+}
+
+header.lead .title-wrapper {
+    height: 375px;
+}
+
+header.lead .lead-title {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: rgba(0,0,0,0.67);
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 10px;
+    margin: 0 10px;
+}
+
+@media ( max-width : 992px) {
+    header.lead .lead-title {
+        font-size: 36px;
+    }
+}
+
+
+/*
+ * Custom header images
+ */
+
+.about header.lead {
+    background-image: url(../elements/about.jpg);
+    background-position: 50% 37%;
+}
+
+.courses header.lead {
+    background-image: url(../elements/courses.jpg);
+}
+
+.events header.lead {
+    background-image: url(../elements/events.jpg);
+}
+
+.faq header.lead {
+    background-image: url(../elements/faq.jpg);
+}
+
+.partner header.lead {
+    background-image: url(../elements/partner.jpg);
+}
+
+.services header.lead {
+    background-image: url(../elements/services.jpg);
+}

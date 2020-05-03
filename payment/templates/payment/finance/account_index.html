@@ -1,7 +1,7 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block content_title %}
+{% block lead_title %}
     {% trans "Account Finance" %}
 {% endblock %}
 
@@ -9,8 +9,8 @@
     <div class="container">
         <h2>{% trans "Select period" %}</h2>
         <p>{% trans "Please period you want to show the transactions for." %}</p>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form }}

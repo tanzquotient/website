@@ -1,4 +1,4 @@
-<a href="{% url 'courses:list_style' subscription_type style_name %}" class="btn btn-default {% if selected and selected.lower == value.lower %} active {% endif %} ">
+<a href="{% url 'courses:list_style' subscription_type style_name %}" class="btn btn-light {% if selected and selected.lower == value.lower %} active {% endif %} ">
     {% if name %}
         {{ name }}
     {% else %}

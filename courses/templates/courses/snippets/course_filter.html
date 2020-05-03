@@ -2,24 +2,23 @@
 
 {% if filter.styles.available.count > 0 %}
     <h2>{% trans "Show courses" %}</h2>
-    <div class="row">
-        <div class="col-xs-12 margin-bottom-xs">
-            <div class="btn-group">
-                {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name="all" value="all" name=_("All styles") selected=filter.styles.selected %}
-                {% for style in filter.styles.available %}
-                    {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name=style.name value=style.name selected=filter.styles.selected %}
-                {% endfor %}
-                {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name="other"  value="other" name=_("Other") selected=filter.styles.selected %}
-            </div>
-        </div>
-        &nbsp;
-        <div class="col-xs-12">
-            <div class="btn-group">
-                {% include "courses/snippets/course_filter_button.html" with subscription_type="all" style_name=filter.styles.selected value="all" name=_("All types") selected=filter.subscription_type %}
-                {% include "courses/snippets/course_filter_button.html" with subscription_type="regular" style_name=filter.styles.selected value="regular" name=_("TQ courses") selected=filter.subscription_type %}
-                {% include "courses/snippets/course_filter_button.html" with subscription_type="open_class" style_name=filter.styles.selected value="open_class" name=_("Open classes") selected=filter.subscription_type %}
-                {% include "courses/snippets/course_filter_button.html" with subscription_type="external" style_name=filter.styles.selected value="external" name=_("External courses") selected=filter.subscription_type %}
-            </div>
+    <div>
+        <div class="btn-group">
+            {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name="all" value="all" name=_("All styles") selected=filter.styles.selected %}
+            {% for style in filter.styles.available %}
+                {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name=style.name value=style.name selected=filter.styles.selected %}
+            {% endfor %}
+            {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name="other"  value="other" name=_("Other") selected=filter.styles.selected %}
         </div>
     </div>
+    &nbsp;
+    <div>
+        <div class="btn-group">
+            {% include "courses/snippets/course_filter_button.html" with subscription_type="all" style_name=filter.styles.selected value="all" name=_("All types") selected=filter.subscription_type %}
+            {% include "courses/snippets/course_filter_button.html" with subscription_type="regular" style_name=filter.styles.selected value="regular" name=_("TQ courses") selected=filter.subscription_type %}
+            {% include "courses/snippets/course_filter_button.html" with subscription_type="open_class" style_name=filter.styles.selected value="open_class" name=_("Open classes") selected=filter.subscription_type %}
+            {% include "courses/snippets/course_filter_button.html" with subscription_type="external" style_name=filter.styles.selected value="external" name=_("External courses") selected=filter.subscription_type %}
+        </div>
+    </div>
+
 {% endif %}

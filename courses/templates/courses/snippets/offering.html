@@ -10,10 +10,10 @@
 {% endif %}
 
 
-<div class="hidden-xs">
+<div class="d-none d-sm-block">
     {% for d in sections %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default mb-4">
+            <div class="card-header">
                 {{ d.section_title }}
             </div>
 
@@ -81,40 +81,40 @@
     {% endfor %}
 </div>
 
-<div class="visible-xs">
+<div class="d-block d-sm-none">
     {% for d in sections %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default mb-4">
+            <div class="card-header">
                 {{ d.section_title }}
             </div>
             {% if d.courses %}
                 <div class="list-group">
                     {% for c in d.courses %}
-                        <a href="{% url 'courses:course_detail' c.id %}" class="list-group-item">
-                            <h4 class="list-group-item-heading">
+                        <a href="{% url 'courses:course_detail' c.id %}" class="list-group-item list-group-item-action">
+                            <strong class="list-group-item-heading">
                                 {{ c.type.name }}
-                            </h4>
+                            </strong>
                             {% if not hide_subscribtion %}
-                                <p class="list-group-item-text">
+                                <div>
                                     {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
-                                </p>
+                                </div>
                             {% endif %}
-                            <p class="list-group-item-text">
-                                <strong>{% include "courses/snippets/lessons.html" with course=c  display_link=False only %}</strong>
-                            </p>
+                            <div>
+                                {% include "courses/snippets/lessons.html" with course=c  display_link=False only %}
+                            </div>
                             {% if offering.is_partner_offering %}
                                 {% if c.partner %}
-                                    <p class="list-group-item-text">{{ c.partner.name }}</p>
+                                    <div>{{ c.partner.name }}</div>
                                 {% endif %}
                             {% else %}
                                 {% if c.room %}
-                                    <p class="list-group-item-text">{{ c.room }}</p>
+                                    <div>{{ c.room }}</div>
                                 {% else %}
-                                    <p class="list-group-item-text">{% trans "Raum noch unbekannt" %}</p>
+                                    <div>{% trans "Raum noch unbekannt" %}</div>
                                 {% endif %}
                             {% endif %}
                             {% if c.format_prices %}
-                                <p class="list-group-item-text">{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</p>
+                                <div>{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</div>
                             {% endif %}
                         </a>
                     {% endfor %}

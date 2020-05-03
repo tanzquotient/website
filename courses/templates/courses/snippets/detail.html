@@ -1,10 +1,10 @@
 {% load i18n %}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card card-default">
+    <div class="card-header">
         {% if not course.display %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
         {{ course.type.name }}
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-4">
                 <h4>{% trans "Info" %}</h4>
