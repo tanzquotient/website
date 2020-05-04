@@ -20,7 +20,11 @@
 
     <!-- Title -->
     <title>{% block title %} {% page_attribute "page_title" %} {% endblock %}</title>
-    <link rel="shortcut icon" href="{% static "elements/favicon_small.png" %}">
+    <link rel="shortcut icon" href="{% static "elements/favicon-32.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "elements/favicon-32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "elements/favicon-16.png" %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "elements/favicon-180.png" %}">
+
 
     <!-- Bootstrap + Font Awesome -->
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700">
