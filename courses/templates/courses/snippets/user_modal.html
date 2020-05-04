@@ -13,15 +13,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    {% if user.profile %}
+                {% if user.profile %}
+                    <div class="media">
                         {% if user.profile.picture %}
-                            <div class="col-xs-12 col-sm-6 col-md-4">
-                                <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
-                            </div>
+                            <img class="avatar mr-4" src="{{ user.profile.picture.url }}"
+                                 alt="{{ user.get_full_name }}">
                         {% endif %}
-                        {% if user.profile.is_teacher or user.profile.is_board_member %}
-                            <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="media-body">
+                            {% if user.profile.is_teacher or user.profile.is_board_member %}
                                 {% if user.profile.is_teacher %}
                                     <h4>
                                         {% trans "Teacher" %}
@@ -42,18 +41,22 @@
                                         {% endfor %}
                                     </p>
                                 {% endif %}
-                            </div>
-                        {% endif %}
-                        <div class="col-xs-12">
-                            <h4>{% trans "About" %}</h4>
-                            {% if user.profile.about_me %}
-                                <p>{{ user.profile.about_me|default:''|safe }}</p>
-                            {% else %}
-                                <p>{% trans "No info available" %} </p>
                             {% endif %}
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h4>{% trans "About" %}</h4>
+                                {% if user.profile.about_me %}
+                                    <p>{{ user.profile.about_me|default:''|safe }}</p>
+                                {% else %}
+                                    <p>{% trans "No info available" %} </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
