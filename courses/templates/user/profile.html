@@ -10,39 +10,36 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
+    <div class="row mb-4">
         {% if user.profile.picture %}
-            <div class="col-xs-4 col-sm-3 col-md-2">
-                <p>
-                    <img src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
-
-                </p>
+            <div class="col-12 col-sm-4">
+                <img class="avatar" src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
             </div>
         {% endif %}
-        <div class="col-xs-8 col-sm-9 col-md-10">
+        <div class="col-12 col-sm-8">
             <h3 class="media-heading">{{ user.get_full_name }}</h3>
-            <p>
+            <p class="m-0 mb-2">
                 <a href="{% url "user_dashboard" %}">
                     {% trans "Go to dashboard" %}
                     <i class="fa fa-arrow-circle-right fa-lg"></i>
                 </a>
             </p>
             {% url 'edit_profile' as edit_profile %}
-            <p>
+            <p class="m-0  mb-2">
                 <a href="{{ edit_profile }}">
                     {% trans "Edit profile" %}
                     <i class="fa fa-arrow-circle-right fa-lg"></i>
                 </a>
             </p>
             {% url 'account_email' as account_email %}
-            <p>
+            <p class="m-0  mb-2">
                 <a href="{{ account_email }}">
                     {% trans "Manage your email addresses" %}
                     <i class="fa fa-arrow-circle-right fa-lg"></i>
                 </a>
             </p>
             {% url 'change_password' as change_password %}
-            <p>
+            <p class="m-0 mb-2">
                 <a href="{{ change_password }}">
                     {% trans "Change your password" %}
                     <i class="fa fa-arrow-circle-right fa-lg"></i>
@@ -51,7 +48,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-sm-4">
+        <div class="col-12 col-sm-4">
             {% if user.profile.body_height or user.profile.birthdate or user.profile.nationality or user.profile.residence_permit or user.profile.ahv_number %}
 
                 <p>
@@ -84,7 +81,7 @@
                 {% include "courses/snippets/user_contact.html" with user=user only %}
             </p>
         </div>
-        <div class="col-xs-12 col-sm-4">
+        <div class="col-12 col-sm-4">
             {% if user.profile.address %}
                 <p>
                     <strong> {% trans "Address" %}</strong>
@@ -106,7 +103,7 @@
                 </p>
             {% endif %}
         </div>
-        <div class="col-xs-12 col-sm-4">
+        <div class="col-12 col-sm-4">
             <p>
                 <strong> {% trans "Student status" %}</strong>
                 <br/>
@@ -156,7 +153,7 @@
             </p>
         </div>
         {% if user.profile.about_me %}
-            <div class="col-xs-12">
+            <div class="col-12">
                 <p>
                     <strong> {% trans "About me" %}</strong>
                     <br/>
