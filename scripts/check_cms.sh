@@ -1,1 +1,1 @@
-docker-compose run --rm django python3 manage.py cms check
+docker-compose run --rm django python3 -Wa manage.py cms check
