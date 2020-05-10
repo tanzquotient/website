@@ -6,16 +6,45 @@ from django.db import models
 from events.models import Event
 
 
+class EventsPluginModel(CMSPlugin):
+    title = models.CharField(blank=True, null=True, max_length=50)
+    include_specials = models.BooleanField(blank=False, default=True)
+    include_regular = models.BooleanField(blank=False, default=True)
+    style = models.IntegerField(blank=False, choices=((0, _('List')), (1, _('Cards'))), default=0)
+
+
 class EventsPlugin(CMSPluginBase):
     name = _("Events")
-    model = CMSPlugin
+    model = EventsPluginModel
     render_template = "events/events.html"
+    text_enabled = False
+    allow_children = False
+
+
+    def render(self, context, instance, placeholder):
+        specials = [instance.include_specials, not instance.include_regular]
+        context.update({
+            'events': Event.displayed_events.future().filter(special__in=specials).all(),
+            'use_cards': instance.style == 1,
+            'title': instance.title,
+        })
+        return context
+
+
+class FeaturedEventPluginModel(CMSPlugin):
+    event = models.ForeignKey(to='Event', on_delete=models.PROTECT, related_name='featured_plugins', blank=False)
+
+
+class FeaturedEventPlugin(CMSPluginBase):
+    name = _("Featured Event")
+    model = FeaturedEventPluginModel
+    render_template = "events/snippets/event_card.html"
     text_enabled = False
     allow_children = False
 
     def render(self, context, instance, placeholder):
         context.update({
-            'events': Event.displayed_events.future().all(),
+            'event': instance.event,
         })
         return context
 
@@ -43,4 +72,5 @@ class EventsTeaserPlugin(CMSPluginBase):
 
 
 plugin_pool.register_plugin(EventsPlugin)
+plugin_pool.register_plugin(FeaturedEventPlugin)
 plugin_pool.register_plugin(EventsTeaserPlugin)

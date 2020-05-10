@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% if event.cancelled %}
+    <span class="banner">
+        <i class="fa fa-ban fa-lg"></i>
+        {% trans "Cancelled" %}
+    </span>
+{% elif event.special %}
+    <span class="banner">
+        <i class="fa fa-star"></i>
+        {% trans "Special" %}
+    </span>
+{% endif %}

@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load basic_tags %}
+
 {% trans "No entry fee" as no_entry_fee %}
 <div class="d-none d-sm-block">
     <table class="table">
@@ -19,7 +21,7 @@
                 <tr class="{% if event.special %}emphasize{% endif %}">
                     <td>
                         {% with event_id=event.id|stringformat:"s" %}
-                            {% with modal_id="modal_event-"|add:event_id %}
+                            {% with modal_id="modal-"|append_uuid %}
                                 <a href="#" data-toggle="modal" data-target="#{{ modal_id }}">
                                     <p>
                                         {% if event.cancelled %}
@@ -29,11 +31,6 @@
                                         {% endif %}
                                         {{ event.get_name }}
                                     </p>
-                                    {% if event.image %}
-                                        <p class="text-left"><img
-                                                src="{{ event.image.url }}"
-                                                alt=""/></p>
-                                    {% endif %}
                                 </a>
                                 {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
                             {% endwith %}
@@ -43,7 +40,7 @@
                     <td>{{ event.format_time }}</td>
                     <td>
                         {% if event.room %}
-                            {% include "courses/snippets/room.html" with display_link=True room=event.room only %}
+                            {{ event.room.name }}
                         {% else %}
                             {% trans "Venue not yet set" %}
                         {% endif %}

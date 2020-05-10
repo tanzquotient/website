@@ -1,6 +1,15 @@
 {% load i18n %}
 {% if events %}
-    {% include "events/snippets/event_list.html" with events=events only %}
+    <div class="mb-4">
+        {% if title %}
+            <h3>{{ title }}</h3>
+        {%  endif %}
+        {% if use_cards %}
+            {% include "events/snippets/event_cards.html"  %}
+        {% else %}
+            {% include "events/snippets/event_list.html" %}
+        {% endif %}
+    </div>
 {% else %}
     <div class="alert alert-info">{% trans "No events planned." %}</div>
 {% endif %}

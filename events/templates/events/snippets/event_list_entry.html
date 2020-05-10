@@ -5,30 +5,10 @@
 
 {% with event_id=event.id|stringformat:"s" %}
     <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item list-group-item-action">
-        {% if event.cancelled %}
-            <span class="banner">
-                        <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}
-                    </span>
-        {% elif event.special %}
-            <span class="banner">
-                        <i class="fa fa-star"></i> {% trans "Special" %}
-                    </span>
-        {% endif %}
-        <strong class="list-group-item-heading">
+        <strong>
             {{ event.name }}
         </strong>
-        <div>{{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}- {{ event.time_to|date:'H:i' }}</div>
-        {% if event.room %}
-            {{ event.room }}
-        {% else %}
-            {% trans "Venue not yet set" %}
-        {% endif %}
-        <div>
-            {% if event.format_prices %}
-                {% trans "Costs" %}: {{ event.format_prices }}
-            {% else %}
-                {% trans "Free of charge" %}
-            {% endif %}
-        </div>
+        {% include "events/snippets/event_banner.html" with event=event only %}
+        {% include "events/snippets/event_info.html" with event=event only %}
     </a>
 {% endwith %}

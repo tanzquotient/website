@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django import template
 
 register = template.Library()
@@ -17,3 +19,7 @@ def fence(value, s):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter
+def append_uuid(value):
+    return str(value) + str(uuid4())

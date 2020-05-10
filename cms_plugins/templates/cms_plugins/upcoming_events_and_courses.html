@@ -1,10 +1,11 @@
 {% load i18n %}
+{% load basic_tags %}
 
 {% if items|length > 0 %}
     <div class="list-group">
         {% for item in items %}
             {% with id=forloop.counter|floatformat %}
-                {% with modal_id="modal_upcoming-"|add:id %}
+                {% with modal_id="modal-"|append_uuid %}
                     {% include "events/snippets/event_list_entry.html" with event=item modal_id=modal_id only %}
                     {% if item.event %}
                         {% include "events/snippets/event_modal.html" with event=item.event modal_id=modal_id only %}

@@ -1,7 +1,9 @@
+{% load basic_tags %}
+
 {% if events %}
     <div class="list-group">
         {% for event in events %}
-            {% with modal_id="modal_event_xs-"|add:event.id %}
+            {% with modal_id="modal-"|append_uuid %}
                 {% include "events/snippets/event_list_entry.html" with event=event modal_id=modal_id only %}
                 {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
             {% endwith %}

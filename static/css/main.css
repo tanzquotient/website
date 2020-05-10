@@ -39,7 +39,7 @@ table.table {
     box-shadow: 0 0 0 .2rem rgba(197, 23, 24, 0.5);
 }
 
-.list-group-item {
+.list-group-item, .banner-container {
     overflow: hidden;
 }
 

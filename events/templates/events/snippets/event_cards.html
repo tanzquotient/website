@@ -1,0 +1,8 @@
+<div class="row mb-4">
+    {% for event in events %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            {% include "events/snippets/event_card.html" %}
+        </div>
+    {% endfor %}
+</div>
+

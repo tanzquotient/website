@@ -8,39 +8,69 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal_label_event-{{ event.id }}">
-                    {% if event.cancelled %}
-                        {% trans "Cancelled" %}:
-                    {% endif %}
-                    {{ event.get_name }}
-                    <small> {{ event.date }}</small>
+                   {% trans "Event details" %}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            {% if event.image %}
+                <img class="w-100" src="{{ event.image.url }}" alt=""/>
+            {% endif %}
             <div class="modal-body">
-                <p class="list-group-item-text"><b>{{ event.format_time|default:not_yet_known }}</b>,
+                <h5>
+                    {% if event.cancelled %}
+                        {% trans "Cancelled" %}:
+                    {% endif %}
+                    {{ event.get_name }}
+                </h5>
+                <div>
+                    {{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}-{{ event.time_to|date:'H:i' }}
+                </div>
+                <div>
                     {% if event.room %}
+                        <div class="mt-3">
+                            <strong>{% trans "Venue" %}</strong>
+                        </div>
+                        <div>
+                            {{ event.room }}
+                        </div>
+                        {% if event.room.address %}
+                            <div>{{ event.room.address }}</div>
+                        {% endif %}
                         {% if event.room.url %}
-                            <a href="{{ event.room.url }}" target="_blank">{{ event.room.name }}</a>
-                        {% else %}
-                            {{ event.room.name }}
+                            <div>{% include "snippets/map_link.html" with url=event.room.url only %}</div>
                         {% endif %}
                     {% else %}
                         {% trans "Venue not yet set" %}
-                    {% endif %}</p>
+                    {% endif %}
+                </div>
 
-                <p class="list-group-item-text">{{ event.format_prices|default:no_entry_fee }}</p>
+                <div>
+                    <div class="mt-3">
+                        <strong>{% trans "Entry fee" %}</strong>
+                    </div>
+                    <div>
+                        {{ event.format_prices|default:no_entry_fee }}
+                    </div>
+                </div>
+
                 {% if event.format_organisators %}
-                    <p class="list-group-item-text">{% trans "Organized by" %} {{ event.format_organisators }}</p>
+                    <div class="mt-3">
+                        <strong>{% trans "Organized by" %}</strong>
+                    </div>
+                    <div>
+                        {{ event.format_organisators }}
+                    </div>
                 {% endif %}
+
                 {% if event.get_description %}
-                    <br/>
-                    <p class="list-group-item-text">{{ event.get_description|safe }}</p>
-                {% endif %}
-                {% if event.image %}
-                    <br/>
-                    <p class="list-group-item-text"><img src="{{ event.image.url }}" alt=""/></p>
+                    <div class="mt-3">
+                        <strong>{% trans "Description" %}</strong>
+                    </div>
+                    <div>
+                        {{ event.get_description|safe }}
+                    </div>
                 {% endif %}
             </div>
             <div class="modal-footer">
