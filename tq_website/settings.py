@@ -17,6 +17,12 @@ from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 from django.core.files.storage import Storage, FileSystemStorage
 
+# Load environment if not present
+if "TQ_DEBUG" not in os.environ.keys():
+    from dotenv import load_dotenv
+    load_dotenv()
+    
+
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
