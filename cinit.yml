@@ -10,7 +10,7 @@ programs:
       - celery-worker
 
   - name: map-envvars
-    path: /app/scripts/generate-env.py
+    path: /app/scripts/generate_env.py
     workdir: /app
     user: app-user
     args:
