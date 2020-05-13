@@ -39,6 +39,9 @@ RUN apk add --no-cache openssl && \
 # gettext (needed to compile language files on the server)
 RUN apk add --no-cache gettext-dev
 
+# For resolving git version hashes
+RUN apk add --no-cache git
+
 # Python3
 RUN apk add --no-cache python3-dev
 
