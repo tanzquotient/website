@@ -24,6 +24,11 @@ env:
     secret:
       key: tq-django-secret-key
       create: random
+  # This does not really need to be a secret
+  - name: SIP_TQ_DJANGO_DEBUG
+    secret:
+      key: tq-django-debug
+      create: provided
   - name: SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID
     secret:
       key: tq-google-analytics-property-id

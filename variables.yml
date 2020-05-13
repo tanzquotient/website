@@ -25,7 +25,7 @@ TQ_DJANGO_PORT: [~, 8000]
 
 
 # Deployment dependent configurations
-TQ_DEBUG: [~, false]
+TQ_DEBUG: [SIP_TQ_DJANGO_DEBUG, false]
 TQ_ENVIRONMENT: [~, overrideme] # Used for sentry, reasanoble values would be: prod, staging, test, dev
 TQ_SECRET_KEY: [SIP_TQ_DJANGO_SECRET_KEY, overrideme]
 TQ_DEPLOYMENT_DOMAIN: [~, tanzquotient.org]
