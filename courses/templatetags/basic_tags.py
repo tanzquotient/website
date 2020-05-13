@@ -27,5 +27,5 @@ def append_uuid(value):
 @register.simple_tag
 def git_head():
     import subprocess
-    label = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip()
+    label = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip().decode()
     return label
