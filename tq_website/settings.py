@@ -388,6 +388,7 @@ POST_OFFICE = {
 # Logging #
 ###########
 
+# Note for DevOps: all the log files MUST be created before starting Django
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

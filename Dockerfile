@@ -30,6 +30,13 @@ RUN chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py
 # Install requirements
 RUN python3 -m pip install -r requirements.txt
 
+# Make sure log directory and files exist
+RUN mkdir -p logs && \
+    touch logs/django.log && \
+    touch logs/tq.log && \
+    touch logs/payments.log && \
+    touch logs/errors.log
+
 # Change permissions on the code so the app-user can access it
 RUN chown -R app-user:app-user .
 
