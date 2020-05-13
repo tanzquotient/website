@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_USER: ${TQ_DB_USER_POSTGRES}
       POSTGRES_PASSWORD: ${TQ_DB_PASSWORD_POSTGRES}
-      POSTGRES_DB: tq_website
+      POSTGRES_DB: ${TQ_DB_NAME_POSTGRES}
     volumes:
       - "../data-postgres:/var/lib/postgresql/data"
     expose:
