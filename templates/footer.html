@@ -5,6 +5,7 @@
 
 {% load static %}
 {% load account %}
+{% load basic_tags %}
 
 <footer>
     <div class="footer1">
@@ -90,6 +91,10 @@
                         {% else %}
                             <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
                         {% endif %}
+                </span>
+
+                <span>
+                    {% trans "Version" %}: {% git_head %}
                 </span>
 
                 <span>Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.</span>

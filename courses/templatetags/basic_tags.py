@@ -23,3 +23,9 @@ def get_item(dictionary, key):
 @register.filter
 def append_uuid(value):
     return str(value) + str(uuid4())
+
+@register.simple_tag
+def git_head():
+    import subprocess
+    label = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip()
+    return label
