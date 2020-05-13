@@ -11,9 +11,9 @@ services:
     image: postgres:12
     container_name: tq-postgres
     environment:
-      POSTGRES_USER: ${TQ_DB_USER_POSTGRES}
-      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD_POSTGRES}
-      POSTGRES_DB: ${TQ_DB_NAME_POSTGRES}
+      POSTGRES_USER: ${TQ_DB_USER}
+      POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
+      POSTGRES_DB: ${TQ_DB_NAME}
     volumes:
       - "../data-postgres:/var/lib/postgresql/data"
     expose:

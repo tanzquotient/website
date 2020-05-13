@@ -26,18 +26,19 @@ TQ_DJANGO_PORT: [~, 8000]
 
 # Deployment dependent configurations
 TQ_DEBUG: [~, false]
+TQ_ENVIRONMENT: [~, overrideme] # Used for sentry, reasanoble values would be: prod, staging, test, dev
 TQ_SECRET_KEY: [SIP_TQ_DJANGO_SECRET_KEY, overrideme]
 TQ_DEPLOYMENT_DOMAIN: [~, tanzquotient.org]
 TQ_ALLOWED_HOSTS: [~, [.tanzquotient.org, 127.0.0.1, localhost]]
 
 
 # Database
-TQ_DB_HOST_POSTGRES: [SIP_POSTGRES_TQ_WEBSITE_SERVER, tq-postgres]
-TQ_DB_PORT_POSTGRES_DEBUG_HOST: [~, 5432] # This port is used in the docker-compose-dev.yml to map the port to localhost
-TQ_DB_PORT_POSTGRES: [SIP_POSTGRES_TQ_WEBSITE_PORT, 5432]
-TQ_DB_USER_POSTGRES: [SIP_POSTGRES_TQ_WEBSITE_USER, root]
-TQ_DB_PASSWORD_POSTGRES: [SIP_POSTGRES_TQ_WEBSITE_PW, overrideme]
-TQ_DB_NAME_POSTGRES: [SIP_POSTGRES_TQ_WEBSITE_NAME, tq_website] # The name of the database to connect to
+TQ_DB_HOST: [SIP_POSTGRES_TQ_WEBSITE_SERVER, tq-postgres]
+TQ_DB_PORT: [SIP_POSTGRES_TQ_WEBSITE_PORT, 5432]
+TQ_DB_NAME: [SIP_POSTGRES_TQ_WEBSITE_NAME, tq_website] # The name of the database to connect to
+TQ_DB_USER: [SIP_POSTGRES_TQ_WEBSITE_USER, root]
+TQ_DB_PASSWORD: [SIP_POSTGRES_TQ_WEBSITE_PW, overrideme]
+TQ_DB_PORT_DEBUG_HOST: [~, 5432] # This port is used in the docker-compose-dev.yml to map the port to localhost
 
 
 # S3 Storage

@@ -535,11 +535,11 @@ DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': environ["TQ_DB_HOST_POSTGRES"],
-        'PORT': environ["TQ_DB_PORT_POSTGRES"],
-        'NAME': environ['TQ_DB_NAME_POSTGRES'],
-        'USER': environ["TQ_DB_USER_POSTGRES"],
-        'PASSWORD': environ["TQ_DB_PASSWORD_POSTGRES"],
+        'HOST': environ["TQ_DB_HOST"],
+        'PORT': environ["TQ_DB_PORT"],
+        'NAME': environ['TQ_DB_NAME'],
+        'USER': environ["TQ_DB_USER"],
+        'PASSWORD': environ["TQ_DB_PASSWORD"],
     }
 }
 
@@ -573,7 +573,7 @@ if not DEBUG:
             CeleryIntegration(),
             RedisIntegration(),
         ],
-        environment='production',
+        environment=environ["TQ_ENVIRONMENT"],
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True
