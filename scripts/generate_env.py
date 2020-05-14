@@ -36,13 +36,16 @@ if __name__ == '__main__':
         
         sip, default = 0, 1
         for key in variables.keys():
+            value = None
             if key in overrides.keys():
                 # Override has highest precedence
                 value = overrides[key]
-            elif args.type == 'sip' and variables[key][sip]:
-                # Try to use SIP env var but fall back to default if unavailable
-                value = os.environ.get(variables[key][sip], variables[key][default])
-            else:
+            elif args.type == 'sip' and variables[key][sip] is not None:
+                # Try to use SIP env var, fail if not available
+                sip_key = variables[key][sip]
+                value = os.environ[sip_key]
+
+            if value is None:
                 # Use default value
                 value = variables[key][default]
 
@@ -51,5 +54,6 @@ if __name__ == '__main__':
                 value = ",".join([str(item) for item in value])
             else:
                 value = str(value) if value is not None else ""
-                
-            env_file.write("{}={}\n".format(key, value))
+
+            line = "{}={}\n".format(key, value)
+            env_file.write(line)

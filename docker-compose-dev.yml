@@ -26,12 +26,6 @@ services:
       - "5432"
     restart: always
 
-  # Cache and message broker for celery (handles background tasks)
-  redis:
-    container_name: tq-redis
-    image: redis:5.0-alpine
-    restart: always
-
   # Django (serving with debug webserver)
   django:
     container_name: tq-django
@@ -49,7 +43,6 @@ services:
       - "${TQ_DJANGO_PORT}:8000"
     links:
       - postgres
-      - redis
       - minio
     restart: always
     depends_on:
