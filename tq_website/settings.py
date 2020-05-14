@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(environ["TQ_DEBUG"] == 'True')
+DEBUG = bool(environ["TQ_DEBUG"].lower() == 'true')
 
 
 ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
@@ -177,7 +177,7 @@ STATICFILES_FINDERS = (
 )
 
 
-S3_ENABLED = bool(environ["TQ_S3_ENABLED"] == 'True')
+S3_ENABLED = bool(environ["TQ_S3_ENABLED"].lower() == 'true')
 
 # Define default storages
 if S3_ENABLED:
@@ -193,7 +193,7 @@ S3_MEDIA_BUCKET = environ['TQ_S3_MEDIA_BUCKET']
 S3_MEDIA_HOST = environ['TQ_S3_MEDIA_HOST']
 S3_MEDIA_PORT = environ['TQ_S3_MEDIA_PORT']
 S3_MEDIA_REGION = environ['TQ_S3_MEDIA_REGION']
-S3_MEDIA_USE_SSL = bool(environ["TQ_S3_MEDIA_USE_SSL"] == 'True')
+S3_MEDIA_USE_SSL = bool(environ["TQ_S3_MEDIA_USE_SSL"].lower() == 'true')
 S3_MEDIA_CUSTOM_DOMAIN = environ['TQ_S3_MEDIA_CUSTOM_DOMAIN']
 S3_MEDIA_ACCESS_KEY = environ['TQ_S3_MEDIA_ACCESS_KEY']
 S3_MEDIA_SECRET_KEY = environ['TQ_S3_MEDIA_SECRET_KEY']
@@ -203,7 +203,7 @@ S3_STATIC_BUCKET = environ['TQ_S3_STATIC_BUCKET']
 S3_STATIC_HOST = environ['TQ_S3_STATIC_HOST']
 S3_STATIC_PORT = environ['TQ_S3_STATIC_PORT']
 S3_STATIC_REGION = environ['TQ_S3_STATIC_REGION']
-S3_STATIC_USE_SSL = bool(environ["TQ_S3_STATIC_USE_SSL"] == 'True')
+S3_STATIC_USE_SSL = bool(environ["TQ_S3_STATIC_USE_SSL"].lower() == 'true')
 S3_STATIC_CUSTOM_DOMAIN = environ['TQ_S3_STATIC_CUSTOM_DOMAIN']
 S3_STATIC_ACCESS_KEY = environ['TQ_S3_STATIC_ACCESS_KEY']
 S3_STATIC_SECRET_KEY = environ['TQ_S3_STATIC_SECRET_KEY']
@@ -213,7 +213,7 @@ S3_POSTFINANCE_BUCKET = environ['TQ_S3_POSTFINANCE_BUCKET']
 S3_POSTFINANCE_HOST = environ['TQ_S3_POSTFINANCE_HOST']
 S3_POSTFINANCE_PORT = environ['TQ_S3_POSTFINANCE_PORT']
 S3_POSTFINANCE_REGION = environ['TQ_S3_POSTFINANCE_REGION']
-S3_POSTFINANCE_USE_SSL = bool(environ["TQ_S3_POSTFINANCE_USE_SSL"] == 'True')
+S3_POSTFINANCE_USE_SSL = bool(environ["TQ_S3_POSTFINANCE_USE_SSL"].lower() == 'true')
 S3_POSTFINANCE_CUSTOM_DOMAIN = environ['TQ_S3_POSTFINANCE_CUSTOM_DOMAIN']
 S3_POSTFINANCE_ACCESS_KEY = environ['TQ_S3_POSTFINANCE_ACCESS_KEY']
 S3_POSTFINANCE_SECRET_KEY = environ['TQ_S3_POSTFINANCE_SECRET_KEY']
