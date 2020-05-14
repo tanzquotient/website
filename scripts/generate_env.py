@@ -43,6 +43,7 @@ if __name__ == '__main__':
             elif args.type == 'sip' and variables[key][sip] is not None:
                 # Try to use SIP env var, fail if not available
                 sip_key = variables[key][sip]
+                # Crash intentionally with KeyError if SIP variable is not available
                 value = os.environ[sip_key]
 
             if value is None:
