@@ -10,7 +10,7 @@
 # This script should be executed in the repository location (so that manage.py
 # is correctly resolved).
 
-echo .env
+cat .env
 
 # Apply the database migrations
 python3 manage.py migrate
