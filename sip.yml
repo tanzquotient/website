@@ -52,6 +52,10 @@ env:
     secret:
       key: tq-payment-account-recipient-zipcode-city
       create: provided
+  - name: SIP_TQ_REDIS_URL
+    secret:
+      key: tq-redis-url
+      value: provided
 
   # TODO These differe between deployments but aren't necessarily "secret"
   - name: SIP_TQ_DJANGO_DEBUG
