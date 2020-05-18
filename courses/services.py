@@ -662,6 +662,7 @@ def send_vouchers(data, recipients):
             attachments={'Voucher.pdf': voucher.pdf_file.file}
         ))
 
+    log.info('Sending {} emails'.format(len(emails)))
     for email in emails:
         mail.send(**email)
 
@@ -717,8 +718,9 @@ def send_course_email(data, courses):
                 context=context,
             ))
 
-        for email in emails:
-            mail.send(**email)
+    log.info('Sending {} emails'.format(len(emails)))
+    for email in emails:
+        mail.send(**email)
 
 
 def export_subscriptions(course_ids, export_format):
