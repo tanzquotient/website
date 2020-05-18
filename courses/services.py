@@ -717,7 +717,8 @@ def send_course_email(data, courses):
                 context=context,
             ))
 
-    mail.send_many(emails)
+        for email in emails:
+            mail.send(**email)
 
 
 def export_subscriptions(course_ids, export_format):
