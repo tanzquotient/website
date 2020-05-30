@@ -1,0 +1,3 @@
+COMPOSE_FILE: docker-compose-dev.yml
+TQ_DEBUG: True
+TQ_ENVIRONMENT: dev
