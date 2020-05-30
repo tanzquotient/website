@@ -7,6 +7,9 @@
 # Build docker container
 docker-compose build
 
+# Initialize minio
+./scripts/initialize_minio.sh
+
 # Initialize django
 ./scripts/collectstatic.sh
 ./scripts/migrate.sh
