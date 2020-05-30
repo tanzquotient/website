@@ -1,58 +1,68 @@
-celery==4.4.2
-Django==2.2.12
+# Django
+Django==3.0.6
+django-debug-toolbar==2.2
 django-absolute==0.3
 django-analytical==2.6.0
 django-celery-email==3.0.0
 django-celery-beat==2.0.0
 django-celery-results==1.2.1
-django-cms==3.7.2
 django-filer==1.7.1
 django-filter==2.2.0
 django-formtools==2.2
 django-guardian==2.2.0
 django-parler==2.0.1
-django-parler-rest==2.1
 django-polymorphic==2.1.2
-django-post-office==3.4.0
+django-post-office==3.4.1
 django-reversion==3.0.7
 django-timezone-field==4.0
-django-storages==1.9.1
-djangocms-admin-style==1.5.0
-djangocms-googlemap==1.4.0
-djangocms-link==2.6.0
-django-ckeditor==5.9.0
-djangocms-text-ckeditor==3.9.0
-djangorestframework==3.11.0
-openpyxl==3.0.3
-base36==0.1.1
-paramiko==2.7.1
-django-allauth==0.41.0
-django-debug-toolbar==2.2
-redis==3.5.0
-django-redis==4.11.0
-cryptography==2.9.2
 django-countries==6.1.2
 django-ical==1.7.0
-pylint==2.5.0
-python-dotenv==0.13.0
-sphinx-automodapi==0.12
-pytz==2020.1
-boto3==1.13.1
+django-ckeditor==5.9.0
+django-allauth==0.42.0
 
-# DATABASE
-psycopg2==2.8.5
+# Django CMS
+django-cms==3.7.3
+djangocms-admin-style==1.5.0
+djangocms-googlemap==1.4.0
+djangocms-link==2.6.1
+djangocms-text-ckeditor==3.9.1
 
-# Connection Django <--> Webserver
-gunicorn==20.0.4
+# Rest framework
+djangorestframework==3.11.0
+django-parler-rest==2.1
 
-# Logging
-sentry_sdk==0.14.3
+# Tasks
+celery==4.4.2
+redis==3.5.2
+django-redis==4.12.1
 
-# Images and PDF
+# Files and encoding
+openpyxl==3.0.3
+base36==0.1.1
 svglib==1.0.0
 PyPDF2==1.26.0
 Pillow==7.1.2
-
-# Parsing in the generate-env.py script
 pyyaml==5.3.1
 
+# SSH
+paramiko==2.7.1
+
+# Database
+psycopg2==2.8.5
+
+# Storage
+django-storages==1.9.1
+boto3==1.13.19
+
+# Webserver
+gunicorn==20.0.4
+
+# Logging
+sentry_sdk==0.14.4
+
+# Utils
+cryptography==2.9.2
+pylint==2.5.2
+python-dotenv==0.13.0
+sphinx-automodapi==0.12
+pytz==2020.1
