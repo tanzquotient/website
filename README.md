@@ -35,15 +35,17 @@ TQ_DEBUG: true
 
 ### Generate environment
 
-0. Run `pip3 install pyyaml --user` to ensure you have the needed python packages installed.
+0. Make sure pyyaml is installed
 
-1. Run `./scripts/generate_env.py <default|sip> [--overrides overrides.yml]` to generate the environment.
-    * `default` will create a `.env` file for Docker Compose and Django to use.
-    * `sip` will read the variables provided by SIP and create a `.env` file
+1. Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the environment.
+    * Without arguments it will create a `.env` file for Docker Compose and
+      Django to use.
+    * `--sip` will read the variables provided by SIP and create a `.env` file
+    * To use a different overrides file specify `--overrides`
 
 ## Local development
 
-0. Install [Docker][docker] and [Docker Compose][docker-compose]
+0. Make sure [Docker][docker], [Docker Compose][docker-compose] and pyyaml is installed
 1. Clone this repo: `git clone <repo-url>`
 2. Initialize the project: `./scripts/initialize_project.sh`
 3. Run the project: `docker-compose up`
