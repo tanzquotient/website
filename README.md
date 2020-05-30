@@ -14,9 +14,10 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 0. Make sure [Docker][docker], [Docker Compose][docker-compose] and `pyyaml` is installed
 1. Clone this repo: `git clone <repo-url>`
-2. Initialize the project: `./scripts/initialize_project.sh`
-3. Run the project: `docker-compose up`
-4. Find the website at [localhost:8000][local_instance]
+2. Install dev requirements: `pip install -r requirements-dev.txt`
+3. Initialize the project: `./scripts/initialize_project.sh`
+4. Run the project: `docker-compose up`
+5. Find the website at [localhost:8000][local_instance]
 
 ### Using Intellij or PyCharm
 
