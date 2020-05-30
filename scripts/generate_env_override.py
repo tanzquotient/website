@@ -16,7 +16,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if os.path.exists(OVERRIDE_FILE) and not args.force:
-        raise SystemExit('{} already exists'.format(OVERRIDE_FILE))
+        raise SystemExit('{} already exists - skipping'.format(OVERRIDE_FILE))
 
     # Load variables
     with open(VARIABLES_FILE) as var_file:
