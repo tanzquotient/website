@@ -12,7 +12,7 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ## Local Setup
 
-0. Make sure [Docker][docker], [Docker Compose][docker-compose] and `pyyaml` is installed
+0. Make sure [Docker][docker] and [Docker Compose][docker-compose] are installed.
 1. Clone this repo: `git clone <repo-url>`
 2. Install dev requirements: `pip install -r requirements-dev.txt`
 3. Initialize the project: `./scripts/initialize_project.sh`
@@ -29,8 +29,12 @@ Useful resources:
 
 ## Configuration
 
-`variables.yml` defines the variables needed for this project to run. The file is checked into the git repository. 
-**Do not modify** `variables.yml` unless you want to define new env variables or remove outdated variables.
+All configuration lives in an environment file: `.env`.
+The following elaborate scheme of scripts is used to generate it.
+
+The file `variables.yml` is the single source of truth by defining **all** environment variables needed for this project to run.
+The file is checked into the git repository. 
+**Do not modify** `variables.yml` unless you want to define new env variables or remove outdated ones.
 
 The file `overrides.yml` contains custom values for your setup. 
 A basic version will be generated when initializing the project.
@@ -38,13 +42,12 @@ This file is ignored by git.
 **Do not add it to the repository**. 
 The file is machine specific and could potentially contain secrets.
 
-The file needs to be of the following form:
+Both need to be of the following form:
+
 ```yaml
 # General form for an entry
 <NAME_OF_VARIABLE>: <value>
-# You can add as many entries as you like
-```
-```yaml
+
 # Example
 COMPOSE_FILE: docker-compose-dev.yml
 TQ_DEBUG: true
@@ -53,6 +56,7 @@ TQ_DEBUG: true
 ### Generate Environment
 
 Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the environment.
+
 * Without arguments it will create a `.env` file for Docker Compose and Django to use.
 * `--sip` will read the variables provided by [SIP][sip] and create a `.env` file
 * To use a different overrides file specify `--overrides`
@@ -65,8 +69,6 @@ There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 ## TODOs
 
 * redis sidecar: https://gitlab.ethz.ch/vseth/0403-isg/sip-sip-apps/sip-manager/-/issues/45
-* S3 buckets: media+static accessible, postfinance private => do this in code?
-* Applying migrations + collecting static files are automated for SIP, should be as well in the dev environment
 
 
 [github]: https://github.com/tanzquotient/tq_website
