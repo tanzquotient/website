@@ -13,4 +13,6 @@ docker-compose build
 # Initialize django
 ./scripts/collectstatic.sh
 ./scripts/migrate.sh
+
+# Load test data
 ./scripts/loaddata.sh
