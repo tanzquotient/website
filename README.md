@@ -10,6 +10,22 @@ mirrored to [Github][github].
 
 The repository contains the needed configurations to deploy to [SIP][sip].
 
+## Local Setup
+
+0. Make sure [Docker][docker], [Docker Compose][docker-compose] and `pyyaml` is installed
+1. Clone this repo: `git clone <repo-url>`
+2. Initialize the project: `./scripts/initialize_project.sh`
+3. Run the project: `docker-compose up`
+4. Find the website at [localhost:8000][local_instance]
+
+### Using Intellij or PyCharm
+
+Useful resources:
+
+* [Configure an interpreter using Docker Compose][intellij-docker-compose]
+* [Run/Debug Configuration: Django Server][intellij-run-django]
+
+
 ## Configuration
 
 `variables.yml` defines the variables needed for this project to run. The file is checked into the git repository. 
@@ -33,30 +49,13 @@ COMPOSE_FILE: docker-compose-dev.yml
 TQ_DEBUG: true
 ```
 
-### Generate environment
+### Generate Environment
 
-0. Make sure pyyaml is installed
+Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the environment.
+* Without arguments it will create a `.env` file for Docker Compose and Django to use.
+* `--sip` will read the variables provided by [SIP][sip] and create a `.env` file
+* To use a different overrides file specify `--overrides`
 
-1. Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the environment.
-    * Without arguments it will create a `.env` file for Docker Compose and
-      Django to use.
-    * `--sip` will read the variables provided by SIP and create a `.env` file
-    * To use a different overrides file specify `--overrides`
-
-## Local development
-
-0. Make sure [Docker][docker], [Docker Compose][docker-compose] and pyyaml is installed
-1. Clone this repo: `git clone <repo-url>`
-2. Initialize the project: `./scripts/initialize_project.sh`
-3. Run the project: `docker-compose up`
-4. Find the website at [localhost:8000][local_instance]
-
-### Using Intellij or PyCharm
-
-Useful resources:
-
-* [Configure an interpreter using Docker Compose][intellij-docker-compose]
-* [Run/Debug Configuration: Django Server][intellij-run-django]
 
 ## Documentation
 
