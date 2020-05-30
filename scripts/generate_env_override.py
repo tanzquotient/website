@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+# Script to generate a fresh overrides.yml.
+#
+# The generated overrides contains variables from two sources:
+#  - known variables in need of overriding in a dev environment (hardcoded in DEV_OVERRIDES)
+#  - all variables whose default is "overrideme"
+
 import argparse
 import os
 import yaml
@@ -26,15 +32,15 @@ if __name__ == '__main__':
     with open(DEV_OVERRIDES) as var_file:
         dev_overrides = yaml.safe_load(var_file)
 
-    # Store overrides to dict
+    # Combine dev_overrides and "overrideme"s
     overrides = dev_overrides
     for key in variables.keys():
         default = 1
-        value = variables[key][default]
-        if value == 'overrideme':
-            overrides[key] = overrides.get(key, value)
+        default_value = variables[key][default]
+        if default_value == 'overrideme':
+            overrides[key] = overrides.get(key, default_value)
 
-    # Write .env file
+    # Write overrides.yml file
     with open(OVERRIDE_FILE, 'w') as override_file:
         for key, value in overrides.items():
             line = "{}: {}\n".format(key, value)
