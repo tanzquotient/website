@@ -15,9 +15,12 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 `variables.yml` defines the variables needed for this project to run. The file is checked into the git repository. 
 **Do not modify** `variables.yml` unless you want to define new env variables or remove outdated variables.
 
-Add a file called `overrides.yml` to the project root to provide custom values for your setup. 
+The file `overrides.yml` contains custom values for your setup. 
+A basic version will be generated when initializing the project.
 This file is ignored by git. 
-**Do not add it to the repository**. The file is machine specific and could potentially contain secrets.
+**Do not add it to the repository**. 
+The file is machine specific and could potentially contain secrets.
+
 The file needs to be of the following form:
 ```yaml
 # General form for an entry
@@ -42,15 +45,9 @@ TQ_DEBUG: true
 
 0. Install [Docker][docker] and [Docker Compose][docker-compose]
 1. Clone this repo: `git clone <repo-url>`
-2. Copy the file specifying some required environment variables into place: `cp .env-template .env`
-3. Build the project in Docker: `docker-compose build --file docker-compose-dev.yml`
-4. Run the project in Docker: `docker-compose up --file docker-compose-dev.yml`
-5. Create minio storage buckets, see [minio docs][minio-get-started]
-6. Run `./scripts/collectstatic.sh` to copy static files into storage bucket
-7. Fill your database:
-    * Option A: get a up-to-date database from a member of the [Tanzquotient IT team][tq-it-mail]. Restore dump locally.
-    * Option B: Run `./scripts/migrate.sh` to initialize tables. Create a new superuser, see [Django docs][django-docs].
-8. Find the website at [localhost:8000][local_instance]
+2. Initialize the project: `./scripts/initialize_project.sh`
+3. Run the project: `docker-compose up`
+4. Find the website at [localhost:8000][local_instance]
 
 ### Using Intellij or PyCharm
 
