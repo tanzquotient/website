@@ -66,3 +66,4 @@ pylint==2.5.2
 python-dotenv==0.13.0
 sphinx-automodapi==0.12
 pytz==2020.1
+minio==5.0.10

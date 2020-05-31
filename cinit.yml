@@ -14,6 +14,7 @@ programs:
     env:
       - SIP_TQ_DJANGO_DEBUG:
       - SIP_TQ_ENVIRONMENT:
+      - SIP_TQ_ALLOWED_HOSTS:
       - SIP_TQ_DJANGO_SECRET_KEY:
       # Postgres
       - SIP_POSTGRES_TQ_WEBSITE_SERVER:

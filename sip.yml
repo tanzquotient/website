@@ -62,6 +62,10 @@ env:
     secret:
       key: tq-django-debug
       create: provided
+  - name: SIP_TQ_ALLOWED_HOSTS
+    secret:
+      key: tq-allowed-hosts
+      create: provided
   - name: SIP_TQ_ENVIRONMENT
     secret:
       key: tq-environment

@@ -18,7 +18,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from django.core.files.storage import Storage, FileSystemStorage
 
 # Load environment if not present
-if "TQ_DEBUG" not in os.environ.keys():
+if "TQ_DEBUG" not in environ.keys():
     from dotenv import load_dotenv
     load_dotenv()
     

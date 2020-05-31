@@ -29,7 +29,7 @@ TQ_DEBUG: [SIP_TQ_DJANGO_DEBUG, false]
 TQ_ENVIRONMENT: [SIP_TQ_ENVIRONMENT, overrideme] # Used for sentry, reasonable values would be: prod, staging, test, dev
 TQ_SECRET_KEY: [SIP_TQ_DJANGO_SECRET_KEY, overrideme]
 TQ_DEPLOYMENT_DOMAIN: [~, tanzquotient.org]
-TQ_ALLOWED_HOSTS: [~, [.tanzquotient.org, www.tq.tvseth.ethz.ch, 127.0.0.1, localhost]]
+TQ_ALLOWED_HOSTS: [SIP_TQ_ALLOWED_HOSTS, [127.0.0.1, localhost]]
 
 
 # Database

@@ -1,0 +1,7 @@
+COMPOSE_FILE: docker-compose-dev.yml
+TQ_DEBUG: True
+TQ_ENVIRONMENT: dev
+
+TQ_S3_MEDIA_CUSTOM_DOMAIN: 'localhost:9000/static'
+TQ_S3_STATIC_CUSTOM_DOMAIN: 'localhost:9000/static'
+TQ_S3_POSTFINANCE_CUSTOM_DOMAIN: 'localhost:9000/static'

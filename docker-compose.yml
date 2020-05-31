@@ -23,7 +23,7 @@ services:
   # Cache and message broker for celery (handles background tasks)
   redis:
     container_name: tq-redis
-    image: redis:5.0-alpine
+    image: redis:6.0-alpine
     restart: always
 
   # Django (serving with gunicorn)

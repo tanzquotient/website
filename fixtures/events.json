@@ -1,0 +1,29 @@
+[
+{
+  "model": "events.eventtranslation",
+  "pk": 1,
+  "fields": {
+    "language_code": "en",
+    "description": "",
+    "name": "Test",
+    "price_special": null,
+    "master": 1
+  }
+},
+{
+  "model": "events.event",
+  "pk": 1,
+  "fields": {
+    "date": "2020-05-30",
+    "time_from": "13:47:54",
+    "time_to": "13:47:54",
+    "cancelled": false,
+    "room": null,
+    "price_with_legi": null,
+    "price_without_legi": null,
+    "special": false,
+    "display": true,
+    "image": ""
+  }
+}
+]

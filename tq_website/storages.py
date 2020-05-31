@@ -7,6 +7,7 @@ class TqStorage(S3Boto3Storage):
     def __init__(self, bucket_name, host, port, region, use_ssl, custom_domain, access_key, secret_key):
         config = dict(
             use_ssl=use_ssl,
+            secure_urls=use_ssl,
             access_key=access_key,
             secret_key=secret_key,
             region_name=region

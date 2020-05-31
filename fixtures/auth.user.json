@@ -1,0 +1,38 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "!Wjx2hSd9JGobaEQ1j2ywgCcnPcos2JfzGkcoDaXf",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "AnonymousUser",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-05-30T11:36:18.962Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$BJ4he1fR0KEG$ExlVV4HqD0rCpRJ+3DBOyQmfMOAc699QUbVWyjJy6Ls=",
+    "last_login": "2020-05-30T11:38:29.270Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@tanzquotient.org",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-05-30T11:38:23.704Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

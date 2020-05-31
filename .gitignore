@@ -102,4 +102,4 @@ docs/sphinx/_static
 *fixture.yaml
 
 # Overrides file for env vars
-overrides.yml
+overrides*.yml
