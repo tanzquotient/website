@@ -12,7 +12,7 @@ class MusicPluginModel(CMSPlugin):
     styles.help_text ="Styles to be displayed in this plugin. Leave empty to show all styles."
 
     def copy_relations(self, old_instance):
-        self.styles.set(old_instance.styles)
+        self.styles.set(old_instance.styles.all())
 
 
 class MusicPlugin(CMSPluginBase):
