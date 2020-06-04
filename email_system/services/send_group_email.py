@@ -1,13 +1,12 @@
 from datetime import datetime
 
-from post_office import mail
-
 from courses.models import UserProfile
-from email_system.models import GeneratedIndividualEmail, TqEmailAddress
-from tq_website import settings
+from email_system.models import GeneratedIndividualEmail
 from groups.definitions import GroupDefinitions
-from ..models import UnsubscribeCode
+from tq_website import settings
 from utils import TranslationUtils
+from . import send_all_emails
+from ..models import UnsubscribeCode
 
 
 def _get_language(user):
@@ -17,7 +16,8 @@ def _get_language(user):
         return 'en'
 
 
-def send_email(group_email):
+
+def send_group_email(group_email):
     unsubscribe_context = None
     if group_email.target_group.name == GroupDefinitions.NEWSLETTER.name:
         unsubscribe_context = GroupDefinitions.NEWSLETTER.name
@@ -60,10 +60,8 @@ def send_email(group_email):
             context=context,
         ))
 
-    for email in emails:
-        # Send email
-        email = mail.send(**email)
-
+    sent_emails = send_all_emails(emails)
+    for email in sent_emails:
         # Save generated mail
         GeneratedIndividualEmail.objects.create(email=email, source=group_email)
 

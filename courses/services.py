@@ -16,6 +16,7 @@ import courses.models as models
 from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
     RegularLessonException, Subscribe, UserProfile, MatchingState, Voucher
 from courses.utils import export
+from email_system.services import send_all_emails
 from payment.vouchergenerator import generate_voucher_pdf
 from survey.models import SurveyInstance
 from tq_website import settings
@@ -663,8 +664,7 @@ def send_vouchers(data, recipients):
         ))
 
     log.info('Sending {} emails'.format(len(emails)))
-    for email in emails:
-        mail.send(**email)
+    send_all_emails(emails)
 
 
 
@@ -719,8 +719,7 @@ def send_course_email(data, courses):
             ))
 
     log.info('Sending {} emails'.format(len(emails)))
-    for email in emails:
-        mail.send(**email)
+    send_all_emails(emails)
 
 
 def export_subscriptions(course_ids, export_format):
