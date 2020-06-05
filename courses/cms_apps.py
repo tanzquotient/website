@@ -5,8 +5,10 @@ from django.utils.translation import gettext_lazy as _
 
 class CourseApphook(CMSApp):
     name = _("Course Administration")
-    urls = ["courses.urls"]
     app_name = "courses"
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return ["courses.urls"]
 
 
 apphook_pool.register(CourseApphook)
