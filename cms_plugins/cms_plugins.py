@@ -36,15 +36,14 @@ class PageTitlePlugin(CMSPluginBase):
 
 class AlertPluginModel(CMSPlugin):
     TYPES = (
-        ('primary', _('Primary')),
-        ('secondary', _('Secondary')),
-        ('success', _('Success')),
-        ('danger', _('Danger')),
-        ('warning', _('Warning')),
-        ('info', _('Info')),
-        ('light', _('Light')),
-        ('dark', _('Dark')),
-
+        ('primary', 'Primary'),
+        ('secondary', 'Secondary'),
+        ('success', 'Success'),
+        ('danger', 'Danger'),
+        ('warning', 'Warning'),
+        ('info', 'Info'),
+        ('light', 'Light'),
+        ('dark', 'Dark'),
     )
 
     title = models.CharField(max_length=100, blank=True, null=True)
