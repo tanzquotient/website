@@ -18,7 +18,7 @@ class PartnersPlugin(CMSPluginBase):
         language = get_language()
         if language is None:
             language = 'en'
-        partners = Partner.objects.translated(language).order_by('translations__name').all()
+        partners = Partner.objects.filter(active=True).translated(language).order_by('translations__name').all()
         context.update({
             'partners': partners,
         })

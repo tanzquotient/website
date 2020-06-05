@@ -1,4 +1,4 @@
-from django.db.models import CharField, ImageField, URLField
+from django.db.models import CharField, ImageField, URLField, BooleanField
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
@@ -9,6 +9,7 @@ from utils import TranslationUtils
 class Partner(TranslatableModel):
     image = ImageField(verbose_name=_('Image'), null=True, blank=True, upload_to='partners')
     url = URLField(blank=False, null=False)
+    active = BooleanField(default=True)
 
     # Translated fields
     translations = TranslatedFields(
