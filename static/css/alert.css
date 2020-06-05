@@ -2,3 +2,7 @@
     font-weight: 700;
     color: unset;
 }
+
+.alert p:last-child {
+    margin-bottom: 0;
+}
