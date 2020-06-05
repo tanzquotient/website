@@ -1,5 +1,6 @@
 {% extends "template_basic.html" %}
 {% load i18n %}
+{% load cms_tags %}
 
 {% block lead_title %}
     {% trans "Courses" %}
@@ -8,6 +9,7 @@
 {% block main_content %}
     <div class="container">
         {%  include "courses/snippets/course_filter.html" with filter=filter only %}
+        {% placeholder after_filter %}
         {% for o in offerings %}
             <p>{% include "courses/snippets/offering.html" with offering=o.offering sections=o.sections user=user only %}</p>
             {% empty %}

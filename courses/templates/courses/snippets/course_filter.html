@@ -1,7 +1,6 @@
 {% load i18n %}
 
 {% if filter.styles.available.count > 0 %}
-    <h2>{% trans "Show courses" %}</h2>
     <div>
         <div class="btn-group">
             {% include "courses/snippets/course_filter_button.html" with subscription_type=filter.subscription_type style_name="all" value="all" name=_("All styles") selected=filter.styles.selected %}
