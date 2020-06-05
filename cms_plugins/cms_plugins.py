@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
 from djangocms_link.models import Link
 
-from courses.models import IrregularLesson
+from courses.models import IrregularLesson, OfferingType
 from events.models import Event
 
 
@@ -82,6 +82,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
             .all()
 
         irregular_lessons = IrregularLesson.objects \
+            .exclude(course__offering__type=OfferingType.PARTNER) \
             .filter(date__gte=datetime.today()) \
             .order_by('date') \
             .prefetch_related('course', 'course__type', 'course__room') \

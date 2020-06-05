@@ -32,12 +32,14 @@ def get_all_offerings():
     return models.Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False):
+def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False, include_partner_offerings=False):
     """return offerings that have display flag on and order them by start date in ascending order"""
 
     queryset = Offering.objects.select_related('period').prefetch_related('period__cancellations')
     if only_regular_offerings:
         queryset = queryset.filter(type=OfferingType.REGULAR)
+    if not include_partner_offerings:
+        queryset = queryset.exclude(type=OfferingType.PARTNER)
 
     if force_preview or (request and request.user.is_staff):
         queryset = queryset.filter(Q(display=True) | Q(period__date_to__gte=date.today()))
