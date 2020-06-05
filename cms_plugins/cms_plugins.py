@@ -7,6 +7,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
 from djangocms_link.models import Link
+from djangocms_text_ckeditor.fields import HTMLField
 
 from courses.models import IrregularLesson, OfferingType
 from events.models import Event
@@ -29,6 +30,40 @@ class PageTitlePlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         context.update({
             'instance': instance
+        })
+        return context
+
+
+class AlertPluginModel(CMSPlugin):
+    TYPES = (
+        ('primary', _('Primary')),
+        ('secondary', _('Secondary')),
+        ('success', _('Success')),
+        ('danger', _('Danger')),
+        ('warning', _('Warning')),
+        ('info', _('Info')),
+        ('light', _('Light')),
+        ('dark', _('Dark')),
+
+    )
+
+    title = models.CharField(max_length=100, blank=True, null=True)
+    content = HTMLField(blank=False, null=False)
+    type = models.CharField(choices=TYPES, max_length=20, blank=False, null=False)
+
+
+class AlertPlugin(CMSPluginBase):
+    name = _("Alert")
+    model = AlertPluginModel
+    render_template = "cms_plugins/alert.html"
+    text_enabled = False
+    allow_children = False
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'title': instance.title,
+            'content': instance.content,
+            'type': instance.type,
         })
         return context
 
@@ -147,6 +182,7 @@ class CountdownPlugin(CMSPluginBase):
 
 
 plugin_pool.register_plugin(PageTitlePlugin)
+plugin_pool.register_plugin(AlertPlugin)
 plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
 plugin_pool.register_plugin(CountdownPlugin)
