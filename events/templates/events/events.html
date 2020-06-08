@@ -1,18 +1,20 @@
 {% load i18n %}
-{% if events.count != 0 %}
-    <div class="mb-4">
-        {% if title %}
-            <h3>{{ title }}</h3>
-        {%  endif %}
-        {% if text %}
-            {{ text }}
-        {%  endif %}
+
+<div class="mb-4">
+    {% if title %}
+        <h3>{{ title }}</h3>
+    {% endif %}
+    {% if text %}
+        {{ text }}
+    {% endif %}
+    {% if events.count != 0 %}
         {% if use_cards %}
-            {% include "events/snippets/event_cards.html"  %}
+            {% include "events/snippets/event_cards.html" %}
         {% else %}
             {% include "events/snippets/event_list.html" %}
         {% endif %}
-    </div>
-{% else %}
-    <div class="alert alert-info">{% trans "No events planned." %}</div>
-{% endif %}
+    {% else %}
+        <div class="alert alert-info">{% trans "No events planned." %}</div>
+    {% endif %}
+</div>
+
