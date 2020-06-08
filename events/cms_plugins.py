@@ -10,6 +10,7 @@ class EventsPluginModel(CMSPlugin):
     title = models.CharField(blank=True, null=True, max_length=50)
     include_specials = models.BooleanField(blank=False, default=True)
     include_regular = models.BooleanField(blank=False, default=True)
+    show_when_no_events = models.BooleanField(blank=False, default=False)
     style = models.IntegerField(blank=False, choices=((0, _('List')), (1, _('Cards'))), default=0)
 
 
@@ -26,6 +27,7 @@ class EventsPlugin(CMSPluginBase):
             'events': Event.displayed_events.future().filter(special__in=specials).all(),
             'use_cards': instance.style == 1,
             'title': instance.title,
+            'show_when_no_events': instance.show_when_no_events,
         })
         return context
 
@@ -54,6 +56,7 @@ class EventCategoryPlugin(CMSPluginBase):
             'title': instance.category.name,
             'text': instance.category.description,
             'hide_event_title': True,
+            'show_when_no_events': True,
         })
         return context
 
