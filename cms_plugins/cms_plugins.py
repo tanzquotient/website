@@ -67,6 +67,25 @@ class AlertPlugin(CMSPluginBase):
         return context
 
 
+class QuickLinksPluginModel(CMSPlugin):
+    title = models.CharField(max_length=100, blank=True, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class QuickLinksPlugin(CMSPluginBase):
+    name = _("Quick Links")
+    model = QuickLinksPluginModel
+    render_template = "cms_plugins/quick_links.html"
+    text_enabled = False
+    allow_children = True
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'instance': instance,
+        })
+        return context
+
+
 class ButtonPluginModel(Link):
     emphasize = models.BooleanField(blank=False, null=False, default=False)
     emphasize.help_text = "If this button should be visually emphasized."
@@ -78,9 +97,14 @@ class ButtonPlugin(LinkPlugin):
     render_template = "plugins/button.html"
 
 
+class RowPluginModel(CMSPlugin):
+    column_classes = models.CharField(max_length=200, blank=True, null=True)
+
+
 class RowPlugin(CMSPluginBase):
     name = _("Row")
     render_template = "plugins/row.html"
+    model = RowPluginModel
 
     text_enabled = True
     allow_children = True
@@ -182,6 +206,7 @@ class CountdownPlugin(CMSPluginBase):
 
 plugin_pool.register_plugin(PageTitlePlugin)
 plugin_pool.register_plugin(AlertPlugin)
+plugin_pool.register_plugin(QuickLinksPlugin)
 plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
 plugin_pool.register_plugin(CountdownPlugin)

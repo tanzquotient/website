@@ -6,6 +6,10 @@ a {
     color: #C51718;
 }
 
+a:hover {
+    color: #9a1414;
+}
+
 table.table {
     margin-bottom: 0;
 }

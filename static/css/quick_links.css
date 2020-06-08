@@ -1,0 +1,28 @@
+.quick-link .card-title {
+    font-weight: bold;
+    margin-bottom: 0;
+    font-size: larger;
+}
+
+.quick-link .list-group-flush .list-group-item:first-child {
+    border-top-width: 1px;
+}
+
+.quick-link .list-group-flush .list-group-item {
+    padding: 0;
+}
+
+.quick-link .list-group-flush .list-group-item a {
+    padding: .75rem 1.25rem;
+    display: block;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.quick-link .list-group-flush .list-group-item i {
+    position: absolute;
+    right: 1.25rem;
+    top: calc(50% - 6pt);
+    display: flex;
+    color: #C51718;
+}

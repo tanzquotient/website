@@ -1,0 +1,23 @@
+{% load cms_tags %}
+<div class="card quick-link mb-4">
+    <div class="card-body">
+        {% if instance.title %}
+            <div class="text-center card-title">
+                {{ instance.title }}
+            </div>
+        {% endif %}
+        {% if instance.text %}
+            <div class="text-center">
+                {{ instance.text }}
+            </div>
+        {% endif %}
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for plugin in instance.child_plugin_instances %}
+            <li class="list-group-item list-group-item-action">
+                {% render_plugin plugin %}
+                <i class="fas fa-chevron-right"></i>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
