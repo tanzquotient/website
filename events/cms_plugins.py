@@ -3,7 +3,7 @@ from cms.plugin_pool import plugin_pool
 from cms.models.pluginmodel import CMSPlugin
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-from events.models import Event
+from events.models import Event, EventCategory
 
 
 class EventsPluginModel(CMSPlugin):
@@ -20,13 +20,40 @@ class EventsPlugin(CMSPluginBase):
     text_enabled = False
     allow_children = False
 
-
     def render(self, context, instance, placeholder):
         specials = [instance.include_specials, not instance.include_regular]
         context.update({
             'events': Event.displayed_events.future().filter(special__in=specials).all(),
             'use_cards': instance.style == 1,
             'title': instance.title,
+        })
+        return context
+
+
+class EventCategoryPluginModel(CMSPlugin):
+    category = models.ForeignKey(
+        to=EventCategory,
+        related_name='plugins',
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+
+class EventCategoryPlugin(CMSPluginBase):
+    name = _("Event Category")
+    model = EventCategoryPluginModel
+    render_template = "events/events.html"
+    text_enabled = False
+    allow_children = False
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'events': Event.displayed_events.future().filter(category=instance.category).all(),
+            'use_cards': False,
+            'title': instance.category.name,
+            'text': instance.category.description,
+            'hide_event_title': True,
         })
         return context
 
@@ -72,5 +99,6 @@ class EventsTeaserPlugin(CMSPluginBase):
 
 
 plugin_pool.register_plugin(EventsPlugin)
+plugin_pool.register_plugin(EventCategoryPlugin)
 plugin_pool.register_plugin(FeaturedEventPlugin)
 plugin_pool.register_plugin(EventsTeaserPlugin)

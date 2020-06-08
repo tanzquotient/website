@@ -1,8 +1,11 @@
 {% load i18n %}
-{% if events %}
+{% if events.count != 0 %}
     <div class="mb-4">
         {% if title %}
             <h3>{{ title }}</h3>
+        {%  endif %}
+        {% if text %}
+            {{ text }}
         {%  endif %}
         {% if use_cards %}
             {% include "events/snippets/event_cards.html"  %}

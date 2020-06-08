@@ -6,12 +6,13 @@
     <table class="table">
         <thead>
         <tr>
-            <th>{% trans "Name" %}</th>
+            {% if not hide_event_title %}
+                <th>{% trans "Name" %}</th>
+            {% endif %}
             <th>{% trans "Date" %}</th>
             <th>{% trans "Time" %}</th>
             <th>{% trans "Venue" %}</th>
             <th>{% trans "Entry fee" %}</th>
-            <th>{% trans "Organizer" %}</th>
             <th></th>
         </tr>
         </thead>
@@ -19,23 +20,25 @@
             <tbody>
             {% for event in events %}
                 <tr class="{% if event.special %}emphasize{% endif %}">
-                    <td>
-                        {% with event_id=event.id|stringformat:"s" %}
-                            {% with modal_id="modal-"|append_uuid %}
-                                <a href="#" data-toggle="modal" data-target="#{{ modal_id }}">
-                                    <p>
-                                        {% if event.cancelled %}
-                                            <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
-                                        {% elif event.special %}
-                                            <i class="fa fa-star"></i>
-                                        {% endif %}
-                                        {{ event.get_name }}
-                                    </p>
-                                </a>
-                                {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
+                    {% if not hide_event_title %}
+                        <td>
+                            {% with event_id=event.id|stringformat:"s" %}
+                                {% with modal_id="modal-"|append_uuid %}
+                                    <a href="#" data-toggle="modal" data-target="#{{ modal_id }}">
+                                        <p>
+                                            {% if event.cancelled %}
+                                                <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
+                                            {% elif event.special %}
+                                                <i class="fa fa-star"></i>
+                                            {% endif %}
+                                            {{ event.get_name }}
+                                        </p>
+                                    </a>
+                                    {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
+                                {% endwith %}
                             {% endwith %}
-                        {% endwith %}
-                    </td>
+                        </td>
+                    {% endif %}
                     <td>{{ event.date }}</td>
                     <td>{{ event.format_time }}</td>
                     <td>
@@ -46,13 +49,6 @@
                         {% endif %}
                     </td>
                     <td>{{ event.format_prices|default:no_entry_fee }}</td>
-                    <td>{{ event.format_organisators }}</td>
-                    <td>
-                        <!-- Button trigger modal -->
-                        <p>
-
-                        </p>
-                    </td>
                 </tr>
             {% endfor %}
             </tbody>
