@@ -7,7 +7,7 @@
 
     {% if course.type.styles.all %}
         <strong>{% trans "Styles" %}</strong>
-        {% include "courses/snippets/styles.html" with type=course.type disable_modals=disable_modals only %}
+        {% include "courses/snippets/styles_modal.html" with type=course.type disable_modals=disable_modals only %}
     {% endif %}
 
     <strong>{% trans "Teachers" %}</strong>
@@ -21,7 +21,7 @@
         <strong>{% trans "Raum" %}</strong>
         <br/>
         <p>
-            {% include "courses/snippets/room.html" with display_link=True disable_modals=disable_modals room=course.room only %}
+            {% include "courses/snippets/room_modal.html" with display_link=True disable_modals=disable_modals room=course.room only %}
         </p>
     {% endif %}
 

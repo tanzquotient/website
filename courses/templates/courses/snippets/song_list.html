@@ -1,14 +1,15 @@
 {% load i18n %}
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>{% trans "Title" %}</th>
-        <th>{% trans "Artist" %}</th>
-        <th>{% trans "Length" %}</th>
-        <th>{% trans "Tempo (TPM)" %}</th>
-    </tr>
-    </thead>
-    {% if songs %}
+{% if songs %}
+    <h4>{% trans "Playlist" %}</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Artist" %}</th>
+            <th>{% trans "Length" %}</th>
+            <th>{% trans "Tempo (TPM)" %}</th>
+        </tr>
+        </thead>
         <tbody>
         {% for song in songs %}
             <tr>
@@ -25,5 +26,6 @@
             </tr>
         {% endfor %}
         </tbody>
-    {% endif %}
-</table>
+    </table>
+{% endif %}
+

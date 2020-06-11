@@ -47,13 +47,13 @@
                             <td>
                                 {% if offering.is_partner_offering %}
                                     {% if c.partner %}
-                                        <a href="{{ c.partner.url }}">{{ c.partner.name }}</a>
+                                        <a href="{{ c.partner.url }}" target="_blank">{{ c.partner.name }}</a>
                                     {% else %}
                                         {% trans "Not specified" %}
                                     {% endif %}
                                 {% else %}
                                     {% if c.room %}
-                                        {% include "courses/snippets/room.html" with display_link=True room=c.room only %}
+                                        {% include "courses/snippets/room_modal.html" with display_link=True room=c.room only %}
                                     {% else %}
                                         {% trans "Currently unknown" %}
                                     {% endif %}

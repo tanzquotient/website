@@ -12,7 +12,7 @@
         {% endif %}
         {% if exception.lesson_details %}
             {% if exception.lesson_details.room %}
-                {% include "courses/snippets/room.html" with display_link=display_link disable_modals=disable_modals room=exception.lesson_details.room only %}
+                {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=exception.lesson_details.room only %}
             {% endif %}
             {% if exception.lesson_details.teaching.all %}
                 {% trans "with" %}{% include "courses/snippets/course_teachers.html" with display_link=display_link disable_modals=disable_modals teachings=exception.lesson_details.teaching.all only %}
