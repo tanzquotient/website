@@ -13,7 +13,7 @@
             <p>
                 <strong>{% trans "Location" %}</strong>
                 <br/>
-                {% include "courses/snippets/room.html" with display_link=True room=course.room only %}
+                {% include "courses/snippets/room_modal.html" with display_link=True room=course.room only %}
             </p>
         {% endif %}
         {% if course.subscription_type == "regular" %}

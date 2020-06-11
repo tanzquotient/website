@@ -55,7 +55,6 @@ class EventCategoryPlugin(CMSPluginBase):
             'use_cards': False,
             'title': instance.category.name,
             'text': instance.category.description,
-            'hide_event_title': True,
             'show_when_no_events': True,
         })
         return context

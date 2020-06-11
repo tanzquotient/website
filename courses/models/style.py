@@ -20,6 +20,10 @@ class Style(TranslatableModel):
         description=HTMLField(verbose_name='[TR] Description', blank=True, null=True)
     )
 
+
+    def has_external_urls(self):
+        return self.url_info or self.url_video or self.url_playlist
+
     def __str__(self):
         return "{}".format(self.name)
 

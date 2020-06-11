@@ -1,0 +1,58 @@
+{% load i18n %}
+
+<p>
+    {% for s in type.styles.all %}
+        <!-- Button trigger modal -->
+        {% if disable_modals %}
+            {{ s.name }}{% if not forloop.last %}, {% endif %}
+        {% else %}
+            <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>{% if not forloop.last %}, {% endif %}
+
+        {% endif %}
+    {% endfor %}
+</p>
+
+
+{% if not disable_modals %}
+    {% for s in type.styles.all %}
+        <!-- Modal -->
+        <div class="modal fade" id="modal_style-{{ s.id }}" tabindex="-1" role="dialog" aria-labelledby="Style Info"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_label_event-{{ s.id }}">
+                            {{ s.name }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% if s.description %}
+                            <strong>{% trans "Description" %}</strong>
+                            <p>{{ s.description|safe }}</p>
+                        {% endif %}
+                        {% if s.url_info %}
+                            <p><a href="{{ s.url_info }}" target=”_blank”>{% trans "External Info" %}</a></p>
+                        {% endif %}
+                        {% if s.url_video %}
+                            <p>
+                                <a href="{{ s.url_video }}" target=”_blank”>{% trans "Video" %}</a>
+                            </p>
+                        {% endif %}
+                        {% if s.url_playlist %}
+                            <p>
+                                <a href="{{ s.url_playlist }}" target=”_blank”>{% trans "Playlist" %}</a>
+                            </p>
+                        {% endif %}
+                        <p>{% include "courses/snippets/song_list.html" with songs=s.songs.all only %}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

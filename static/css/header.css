@@ -26,6 +26,16 @@ header.lead .lead-title {
     header.lead .lead-title {
         font-size: 36px;
     }
+
+    header.lead .title-wrapper {
+        height: 200px;
+    }
+}
+
+@media ( max-width : 767px) {
+    header.lead .title-wrapper {
+        height: 150px;
+    }
 }
 
 
