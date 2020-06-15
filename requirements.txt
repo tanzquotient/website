@@ -7,16 +7,16 @@ django-celery-email==3.0.0
 django-celery-beat==2.0.0
 django-celery-results==1.2.1
 django-filer==1.7.1
-django-filter==2.2.0
+django-filter==2.3.0
 django-formtools==2.2
-django-guardian==2.2.0
+django-guardian==2.3.0
 django-parler==2.0.1
 django-polymorphic==2.1.2
 django-post-office==3.4.1
 django-reversion==3.0.7
 django-timezone-field==4.0
 django-countries==6.1.2
-django-ical==1.7.0
+django-ical==1.7.1
 django-ckeditor==5.9.0
 django-allauth==0.42.0
 
@@ -32,8 +32,8 @@ djangorestframework==3.11.0
 django-parler-rest==2.1
 
 # Tasks
-celery==4.4.2
-redis==3.5.2
+celery==4.4.5
+redis==3.5.3
 django-redis==4.12.1
 
 # Files and encoding
@@ -52,7 +52,7 @@ psycopg2==2.8.5
 
 # Storage
 django-storages==1.9.1
-boto3==1.13.19
+boto3==1.14.2
 
 # Webserver
 gunicorn==20.0.4
@@ -62,7 +62,7 @@ sentry_sdk==0.14.4
 
 # Utils
 cryptography==2.9.2
-pylint==2.5.2
+pylint==2.5.3
 python-dotenv==0.13.0
 sphinx-automodapi==0.12
 pytz==2020.1
