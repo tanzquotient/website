@@ -153,7 +153,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                 'time_to': event.time_to,
                 'name': event.get_name(),
                 'special': event.special,
-                'price': event.format_prices(),
+                'format_prices': event.format_prices(),
                 'room': event.room,
                 'cancelled': event.cancelled,
                 'event': event,
@@ -168,7 +168,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     'name': irregular_lesson.course.type.name,
                     'room': irregular_lesson.course.room,
                     'special': False,
-                    'price': irregular_lesson.course.format_prices(),
+                    'format_prices': irregular_lesson.course.format_prices(),
                     'course': irregular_lesson.course
                 })
 
