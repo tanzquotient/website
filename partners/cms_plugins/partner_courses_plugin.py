@@ -22,6 +22,7 @@ class PartnerOfferingsPlugin(CMSPluginBase):
             }
             for offering in Offering.objects.filter(type=OfferingType.PARTNER, display=True)
         ]
+        offerings = list(filter(lambda o: len(o['sections']) > 0, offerings))
         context.update({
             'offerings': offerings,
             'hide_title': len(offerings) <= 1
