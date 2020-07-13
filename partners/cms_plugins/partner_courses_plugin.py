@@ -18,7 +18,7 @@ class PartnerOfferingsPlugin(CMSPluginBase):
         offerings = [
             {
                 'offering': offering,
-                'sections': services.get_sections(offering)
+                'sections': services.get_sections(offering, course_filter=lambda c: c.is_displayed())
             }
             for offering in Offering.objects.filter(type=OfferingType.PARTNER, display=True)
         ]
