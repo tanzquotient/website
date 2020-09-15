@@ -64,15 +64,16 @@
     <div class="container">
         <div class="title-wrapper row align-items-center justify-content-center">
         <span class="lead-title">
-            {% placeholder title or %}
-                {% block lead_title %}
+            {% block lead_title %}
+                {% placeholder title or %}
                     {% page_attribute "page_title" %}
-                {% endblock %}
-            {% endplaceholder %}
+                {% endplaceholder %}
+            {% endblock %}
         </span>
         </div>
     </div>
 </header>
+
 
 {% block cms_content %}
 {% endblock %}

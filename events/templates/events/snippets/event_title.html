@@ -1,0 +1,6 @@
+{% load i18n %}
+
+{% if event.cancelled %}
+    <span class="text-danger"> {% trans "Cancelled" %}: </span>
+{% endif %}
+{{ event.get_name }}
