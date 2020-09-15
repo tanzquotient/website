@@ -10,10 +10,14 @@
             <h5 class="card-title">{{ event.get_name }}</h5>
             {% include "events/snippets/event_info.html" with event=event only %}
             <div class="mt-2">
-                <a href="{% url 'events:detail' event.id %}">
+                {% if false %}
+                    <a href="{% url 'events:detail' event.id %}">
+                        {% trans "Show details" %}
+                    </a>
+                {% endif %}
+                <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="card-link">
                     {% trans "Show details" %}
                 </a>
-                <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="card-link">{% trans "Show details" %}</a>
             </div>
         </div>
         {% include "events/snippets/event_banner.html" with event=event only %}
