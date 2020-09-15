@@ -626,7 +626,7 @@ def format_prices(price_with_legi, price_without_legi, price_special=None):
     elif price_without_legi:
         r = "mit Legi freier Eintritt (sonst {} CHF)".format(price_without_legi.__str__())
     else:
-        r = None  # handle this case in template!
+        r = _('No entry fee')
     return r
 
 

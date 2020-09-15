@@ -29,6 +29,10 @@ class Event(TranslatableModel):
     display.help_text = "Defines if this event should be displayed on the website."
     image = models.ImageField(blank=True, null=True)
     image.help_text = "Advertising image for this event."
+    reservation_enabled = models.BooleanField(null=False, default=False)
+    reservation_enabled.help_text = "Gives participants of the event the possibility to reserve in advance"
+    max_participants = models.IntegerField(blank=True, null=True)
+    max_participants.help_text = "Defines how many people can register. Leave empty for unlimited number."
 
     translations = TranslatedFields(
         description=HTMLField(
