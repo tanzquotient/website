@@ -69,10 +69,6 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
 
     context = {
         'offerings': c_offerings[::-1],
-        'historic_offerings': {
-            "regular": services.get_historic_offerings(offering_type=OfferingType.REGULAR),
-            "irregular": services.get_historic_offerings(offering_type=OfferingType.IRREGULAR),
-        },
         'filter': {
             'styles': {
                 'available': filter_styles,
@@ -82,6 +78,18 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
         }
     }
     return render(request, template_name, context)
+
+
+def archive(request):
+    template_name = "courses/archive.html"
+    context = {
+        'historic_offerings': {
+            "regular": services.get_historic_offerings(offering_type=OfferingType.REGULAR),
+            "irregular": services.get_historic_offerings(offering_type=OfferingType.IRREGULAR),
+        },
+    }
+    return render(request, template_name, context)
+
 
 
 @staff_member_required
