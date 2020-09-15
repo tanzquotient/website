@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^list/$', views.course_list, name='list'),
     url(r'^list/(?P<subscription_type>\w+)/(?P<style_name>\w+)/$', views.course_list, name='list_style'),
     url(r'^preview/$', views.course_list_preview, name='list_preview'),
+    url(r'^archive/$', views.archive, name='archive'),
     url(r'^(?P<course_id>\d+)/detail/$', views.course_detail, name='course_detail'),
     url(r'^(?P<course_id>\d+)/subscribe/$', views.subscribe, name='subscribe'),
     url(r'^offering/(?P<offering_id>\d+)/$', views.offering_by_id, name='offering_by_id'),

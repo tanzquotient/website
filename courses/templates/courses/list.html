@@ -16,6 +16,7 @@
             &nbsp;
             <div class="alert alert-info">{% trans "No courses available" %}</div>
         {% endfor %}
-        {% include "courses/snippets/historic_offerings_overview.html" with offerings=historic_offerings %}
+        <h2>{% trans "Archive" %}</h2>
+        <a href="{% url "courses:archive" %}">{% trans "Show past offerings" %}</a>
     </div>
 {% endblock main_content %}
