@@ -8,7 +8,7 @@ from parler.models import TranslatableModel, TranslatedFields
 from courses.models import Room
 from courses.services import format_prices
 from utils import TranslationUtils
-from . import EventCategory
+from . import EventCategory, EventRegistration
 from .. import managers
 
 
@@ -66,6 +66,8 @@ class Event(TranslatableModel):
         else:
             return _("Time not set yet")
 
+    format_time.short_description = "Time"
+
     def get_name(self):
         return TranslationUtils.get_text_with_language_fallback(self, 'name')
 
@@ -75,10 +77,20 @@ class Event(TranslatableModel):
     def get_price_special(self):
         return TranslationUtils.get_text_with_language_fallback(self, 'price_special')
 
-    format_time.short_description = "Time"
+    def free_spots(self):
+        if self.max_participants is None:
+            return None
+        else:
+            return max(0, self.max_participants - self.registrations.count())
+
+    def is_registered(self, user):
+        return user is not None and \
+               not user.is_anonymous and \
+               EventRegistration.objects.filter(user=user, event=self).exists()
 
     def __str__(self):
         return "{}".format(self.get_name())
 
     class Meta:
         ordering = ['-date', '-time_from']
+

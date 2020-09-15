@@ -11,52 +11,78 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="container">
+<div class="container">
+    {% if is_registration_confirmation %}
+        <div class="alert alert-success">
+            {% trans "Registration successful!" %}
+        </div>
+    {% endif %}
+    <h2>
+        {% include "events/snippets/event_title.html" %}
+    </h2>
+    <div class="row mt-3">
 
-        <h2>
-            {% include "events/snippets/event_title.html" %}
-        </h2>
-        <div class="row mt-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            {% include "events/snippets/event_extended_info.html" %}
+        </div>
 
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                {% include "events/snippets/event_extended_info.html" %}
+        <div class="col-12 col-sm-6 col-md-8 col-lg-9">
+
+            {% if event.max_participants %}
+                <div class="mb-3">
+                <div>
+                    <strong>{% trans "Limited number of guests" %}</strong>
+                </div>
+                <span style="font-size: medium" class="badge mt-2 badge-danger">
+                    {% trans "Max." %} {{ event.max_participants }}
+                </span>
+                {% with free_spots=event.free_spots %}
+                    {% if free_spots != None %}
+                        {% if free_spots > 0 %}
+                            <span style="font-size: medium" class="badge mt-2 badge-secondary">
+                                 {{ free_spots }} {% trans "available" %}
+                            </span>
+                        {% else %}
+                            <span style="font-size: medium" class="badge mt-2 badge-danger">
+                                 {% trans "fully booked" %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
             </div>
-
-            <div class="col-12 col-sm-6 col-md-8 col-lg-9">
-
-                {% if event.max_participants %}
-                    <div class="mb-3">
-                        <div>
-                            <strong>{% trans "Limited number of guests" %}</strong>
-                        </div>
-                        <span style="font-size: medium" class="badge mt-2 badge-danger">{% trans "Max." %} {{ event.max_participants }}</span>
+            {% endif %}
+            {% if event.reservation_enabled %}
+                <div class="mb-3">
+                    <div>
+                        <strong>{% trans "Registration" %}</strong>
                     </div>
-                {% endif %}
-                {% if event.reservation_enabled %}
-                    <div class="mb-3">
-                        <div>
-                            <strong>{% trans "Reservation" %}</strong>
-                        </div>
-                        <div>
-                            {% trans "Secure a spot for this event by making a reservation here." %}
-                        </div>
-                        <a href="{% url 'events:event_reserve' event.id %}" type="submit" class="btn btn-success mt-2">
-                            {% trans "Reserve now" %}
+                    <div>
+                        {% trans "Secure a spot for this event by registering here." %}
+                    </div>
+                    {% if user_registered %}
+                        <span style="font-size: medium" class="badge mt-2 badge-success">
+                                {% trans "You are registered" %}
+                            </span>
+                    {% else %}
+                        <a href="{% url 'events:register' event.id %}" type="submit" class="btn btn-success mt-2">
+                            {% trans "Register now" %}
                         </a>
-                    </div>
-                {% endif %}
-                {% if event.get_description %}
+                    {% endif %}
 
-                    <div>
-                        <strong>{% trans "Description" %}</strong>
-                    </div>
-                    <div>
-                        {{ event.get_description|safe }}
-                    </div>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+            {% if event.get_description %}
 
+                <div>
+                    <strong>{% trans "Description" %}</strong>
+                </div>
+                <div>
+                    {{ event.get_description|safe }}
+                </div>
+            {% endif %}
         </div>
 
     </div>
+
+</div>
 {% endblock main_content %}
