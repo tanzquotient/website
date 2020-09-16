@@ -3,12 +3,10 @@
 {% trans "No entry fee" as no_entry_fee %}
 {% trans "Venue not yet set" as venue_not_yet_set %}
 
-{% with event_id=event.id|stringformat:"s" %}
-    <a href="#" data-toggle="modal" data-target="#{{ modal_id }}" class="list-group-item list-group-item-action">
-        <strong>
-            {{ event.name }}
-        </strong>
-        {% include "events/snippets/event_banner.html" with event=event only %}
-        {% include "events/snippets/event_info.html" with event=event only %}
-    </a>
-{% endwith %}
+<a href="{{ item.detail_url }}" class="list-group-item list-group-item-action">
+    <strong>
+        {{ item.name }}
+    </strong>
+    {% include "events/snippets/event_banner.html" with event=item only %}
+    {% include "events/snippets/event_info.html" with event=item only %}
+</a>

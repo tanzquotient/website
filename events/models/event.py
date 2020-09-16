@@ -6,7 +6,7 @@ from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses.models import Room
-from courses.services import format_prices
+from courses.services import format_prices, reverse
 from utils import TranslationUtils
 from . import EventCategory, EventRegistration
 from .. import managers
@@ -29,8 +29,8 @@ class Event(TranslatableModel):
     display.help_text = "Defines if this event should be displayed on the website."
     image = models.ImageField(blank=True, null=True)
     image.help_text = "Advertising image for this event."
-    reservation_enabled = models.BooleanField(null=False, default=False)
-    reservation_enabled.help_text = "Gives participants of the event the possibility to reserve in advance"
+    registration_enabled = models.BooleanField(null=False, default=False)
+    registration_enabled.help_text = "Gives participants of the event the possibility to reserve in advance"
     max_participants = models.IntegerField(blank=True, null=True)
     max_participants.help_text = "Defines how many people can register. Leave empty for unlimited number."
 
@@ -87,6 +87,9 @@ class Event(TranslatableModel):
         return user is not None and \
                not user.is_anonymous and \
                EventRegistration.objects.filter(user=user, event=self).exists()
+
+    def detail_url(self):
+        return reverse('events:detail', kwargs={'event_id': self.id})
 
     def __str__(self):
         return "{}".format(self.get_name())

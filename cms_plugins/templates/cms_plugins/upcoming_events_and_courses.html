@@ -5,14 +5,7 @@
     <div class="list-group">
         {% for item in items %}
             {% with id=forloop.counter|floatformat %}
-                {% with modal_id="modal-"|append_uuid %}
-                    {% include "events/snippets/event_list_entry.html" with event=item modal_id=modal_id only %}
-                    {% if item.event %}
-                        {% include "events/snippets/event_modal.html" with event=item.event modal_id=modal_id only %}
-                    {% elif item.course %}
-                        {% include "courses/snippets/course_modal.html" with course=item.course modal_id=modal_id only %}
-                    {% endif %}
-                {% endwith %}
+                {% include "events/snippets/event_list_entry.html" with item=item only %}
             {% endwith %}
         {% endfor %}
     </div>

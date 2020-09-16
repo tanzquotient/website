@@ -4,6 +4,7 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from djangocms_link.cms_plugins import LinkPlugin
 from djangocms_link.models import Link
@@ -157,6 +158,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                 'room': event.room,
                 'cancelled': event.cancelled,
                 'event': event,
+                'detail_url': reverse('events:detail', kwargs={'event_id': event.id}),
             })
 
         for irregular_lesson in irregular_lessons:
@@ -169,7 +171,8 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     'room': irregular_lesson.course.room,
                     'special': False,
                     'format_prices': irregular_lesson.course.format_prices(),
-                    'course': irregular_lesson.course
+                    'course': irregular_lesson.course,
+                    'detail_url': reverse('courses:course_detail', kwargs={'course_id': irregular_lesson.course.id}),
                 })
 
         items.sort(key=lambda item: datetime.combine(item["date"], item["time_from"]))

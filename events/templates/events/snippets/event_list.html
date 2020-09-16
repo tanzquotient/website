@@ -22,21 +22,16 @@
                 <tr class="{% if event.special %}emphasize{% endif %}">
                     {% if not hide_event_title %}
                         <td>
-                            {% with event_id=event.id|stringformat:"s" %}
-                                {% with modal_id="modal-"|append_uuid %}
-                                    <a href="#" data-toggle="modal" data-target="#{{ modal_id }}">
-                                        <p>
-                                            {% if event.cancelled %}
-                                                <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
-                                            {% elif event.special %}
-                                                <i class="fa fa-star"></i>
-                                            {% endif %}
-                                            {{ event.get_name }}
-                                        </p>
-                                    </a>
-                                    {% include "events/snippets/event_modal.html" with event=event modal_id=modal_id only %}
-                                {% endwith %}
-                            {% endwith %}
+                            <a href="{% url 'events:detail' event.id %}">
+                                <p>
+                                    {% if event.cancelled %}
+                                        <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
+                                    {% elif event.special %}
+                                        <i class="fa fa-star"></i>
+                                    {% endif %}
+                                    {{ event.get_name }}
+                                </p>
+                            </a>
                         </td>
                     {% endif %}
                     <td>{{ event.date }}</td>
