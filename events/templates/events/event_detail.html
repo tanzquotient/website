@@ -70,14 +70,14 @@
                         <div>
                             {% trans "Remove your registration in case you are not coming to the event to give someone else your spot. Thanks!" %}
                         </div>
-                        <a href="{% url 'events:unregister' event.id %}" type="submit" role="button" class="btn btn-warning btn-lg active mt-2">
+                        <a href="{% url 'events:unregister' event.id %}" role="button" class="btn btn-warning mt-2">
                             {% trans "Unregister" %}
                         </a>
                     {% else %}
                         <div>
                             {% trans "Secure a spot for this event by registering here." %}
                         </div>
-                        <a href="{% url 'events:register' event.id %}" type="submit" role="button" class="btn btn-success mt-2 btn-lg active mt-2">
+                        <a href="{% url 'events:register' event.id %}" role="button" class="btn btn-success mt-2">
                             {% trans "Register now" %}
                         </a>
                     {% endif %}
