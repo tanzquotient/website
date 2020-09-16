@@ -38,7 +38,7 @@ env:
     secret:
       key: tq-fds-user
       create: provided
-  - name: TQ_FDS_PRIVATE_KEY
+  - name: SIP_TQ_FDS_PRIVATE_KEY
     secret:
       key: tq-fds-private-key
       value: provided
