@@ -2,34 +2,38 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-05 11:21+0000\n"
+"POT-Creation-Date: 2020-09-16 09:12+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: cms_plugins/cms_plugins.py:24
+#: cms_plugins/cms_plugins.py:25
 msgid "Page title"
 msgstr "Page title"
 
-#: cms_plugins/cms_plugins.py:55
+#: cms_plugins/cms_plugins.py:56
 msgid "Alert"
 msgstr "Alert"
 
-#: cms_plugins/cms_plugins.py:76
+#: cms_plugins/cms_plugins.py:77
+msgid "Quick Links"
+msgstr "Quick Links"
+
+#: cms_plugins/cms_plugins.py:96
 msgid "Button"
 msgstr "Button"
 
-#: cms_plugins/cms_plugins.py:82
+#: cms_plugins/cms_plugins.py:106
 msgid "Row"
 msgstr "Row"
 
-#: cms_plugins/cms_plugins.py:104
+#: cms_plugins/cms_plugins.py:129
 msgid "Upcoming events and courses"
 msgstr "Upcoming courses and events"
 
-#: cms_plugins/cms_plugins.py:170
+#: cms_plugins/cms_plugins.py:197
 msgid "Countdown"
 msgstr "Countdown"
 
@@ -410,6 +414,16 @@ msgstr "{} of {} welcomed successfully"
 msgid "{} of {} teachers reset successfully"
 msgstr "{} of {} teachers reset successfully"
 
+#: courses/services.py:629 events/templates/events/snippets/event_list.html:4
+#: events/templates/events/snippets/event_list_entry.html:3
+msgid "No entry fee"
+msgstr "No entry fee"
+
+#: courses/templates/courses/archive.html:6
+#: courses/templates/courses/list.html:19
+msgid "Archive"
+msgstr "Archive"
+
 #: courses/templates/courses/auth/action_send_course_email.html:11
 #: courses/templates/courses/snippets/user_contact.html:2
 msgid "Email"
@@ -507,6 +521,10 @@ msgstr "Merge selected proposals"
 msgid "No courses available"
 msgstr "No courses available"
 
+#: courses/templates/courses/list.html:20
+msgid "Show past offerings"
+msgstr "Show past offerings"
+
 #: courses/templates/courses/snippets/address_input.html:4
 #: courses/templates/user/profile.html:87
 msgid "Address"
@@ -517,9 +535,9 @@ msgid "Bank Account"
 msgstr "Bank account"
 
 #: courses/templates/courses/snippets/course_description.html:5
+#: courses/templates/courses/snippets/styles_modal.html:33
 #: email_system/models/tq_email_address.py:11
-#: events/templates/events/snippets/event_modal.html:69
-#: partners/models/partner.py:17
+#: events/templates/events/event_detail.html:90 partners/models/partner.py:17
 #: payment/templates/payment/course/course.html:15
 msgid "Description"
 msgstr "Description"
@@ -559,26 +577,9 @@ msgstr "Costs"
 #: courses/templates/courses/snippets/offering.html:30
 #: courses/templates/user/snippets/course_as_teacher.html:8
 #: courses/templates/user/snippets/subscription.html:11
-#: events/templates/events/snippets/event_list.html:11
+#: events/templates/events/snippets/event_list.html:13
 msgid "Time"
 msgstr "Time"
-
-#: courses/templates/courses/snippets/course_modal.html:17
-msgid "Go to course"
-msgstr "Go to courses"
-
-#: courses/templates/courses/snippets/course_modal.html:22
-#: courses/templates/courses/snippets/room.html:34
-#: courses/templates/courses/snippets/signup_user_form.html:6
-#: courses/templates/courses/snippets/styles.html:55
-#: courses/templates/courses/snippets/user_form.html:5
-#: courses/templates/courses/snippets/user_modal.html:62
-#: courses/templates/courses/snippets/user_profile_form.html:8
-#: events/templates/events/snippets/event_modal.html:77
-#: templates/account/change_password.html:20
-#: templates/account/change_password.html:26
-msgid "Close"
-msgstr "Close"
 
 #: courses/templates/courses/snippets/detail.html:4
 #: courses/templates/courses/snippets/offering.html:4
@@ -701,6 +702,17 @@ msgstr "no lesson"
 msgid "with"
 msgstr "with"
 
+#: courses/templates/courses/snippets/room_modal.html:33
+#: courses/templates/courses/snippets/signup_user_form.html:6
+#: courses/templates/courses/snippets/styles_modal.html:52
+#: courses/templates/courses/snippets/user_form.html:5
+#: courses/templates/courses/snippets/user_modal.html:62
+#: courses/templates/courses/snippets/user_profile_form.html:8
+#: templates/account/change_password.html:20
+#: templates/account/change_password.html:26
+msgid "Close"
+msgstr "Close"
+
 #: courses/templates/courses/snippets/signup_user_form.html:7
 #: courses/templates/courses/snippets/user_form.html:6
 #: courses/templates/courses/snippets/user_profile_form.html:9
@@ -708,7 +720,7 @@ msgid "Some inputs are invalid"
 msgstr "Some inputs are invalid"
 
 #: courses/templates/courses/snippets/signup_user_form.html:12
-#: events/templates/events/snippets/event_list.html:9
+#: events/templates/events/snippets/event_list.html:10
 #: partners/models/partner.py:16
 #: payment/templates/payment/counter/details.html:20
 #: payment/templates/payment/course/confirm.html:20
@@ -721,37 +733,35 @@ msgstr "Some inputs are invalid"
 msgid "Name"
 msgstr "Name"
 
-#: courses/templates/courses/snippets/song_list.html:5
+#: courses/templates/courses/snippets/song_list.html:3
+#: courses/templates/courses/snippets/styles_modal.html:46
+msgid "Playlist"
+msgstr "Playlist"
+
+#: courses/templates/courses/snippets/song_list.html:7
 #: tq_website/settings.py:344
 msgid "Title"
 msgstr "Title"
 
-#: courses/templates/courses/snippets/song_list.html:6
+#: courses/templates/courses/snippets/song_list.html:8
 msgid "Artist"
 msgstr "Artist"
 
-#: courses/templates/courses/snippets/song_list.html:7
+#: courses/templates/courses/snippets/song_list.html:9
 msgid "Length"
 msgstr "Length"
 
-#: courses/templates/courses/snippets/song_list.html:8
+#: courses/templates/courses/snippets/song_list.html:10
 msgid "Tempo (TPM)"
 msgstr "Tempo (TPM)"
 
-#: courses/templates/courses/snippets/styles.html:13
-#: courses/templates/courses/snippets/styles.html:44
+#: courses/templates/courses/snippets/styles_modal.html:37
+msgid "External Info"
+msgstr "External Info"
+
+#: courses/templates/courses/snippets/styles_modal.html:41
 msgid "Video"
 msgstr "Video"
-
-#: courses/templates/courses/snippets/styles.html:17
-#: courses/templates/courses/snippets/styles.html:48
-#: courses/templates/courses/snippets/styles.html:50
-msgid "Playlist"
-msgstr "Playlist"
-
-#: courses/templates/courses/snippets/styles.html:40
-msgid "More Info"
-msgstr "More info"
 
 #: courses/templates/courses/snippets/subscribe_box.html:7
 msgid "Sign up"
@@ -1141,7 +1151,7 @@ msgstr "Upcoming courses"
 msgid "Next courses"
 msgstr "Next courses"
 
-#: courses/views.py:150
+#: courses/views.py:158
 msgid "Form not valid. Pleas check your input again!"
 msgstr "Form not valid. Pleas check your input again!"
 
@@ -1194,28 +1204,34 @@ msgstr "Sucesfully unsubscribed!"
 msgid "Invalide unsubscribe url. Please send us an email to unsubscribe."
 msgstr "Invalide unsubscribe url. Please send us an email to unsubscribe."
 
-#: events/cms_plugins.py:13
-msgid "List"
-msgstr "List"
-
-#: events/cms_plugins.py:13
-msgid "Cards"
-msgstr "Cards"
-
-#: events/cms_plugins.py:17 events/cms_toolbars.py:10 events/cms_toolbars.py:13
+#: events/cms_apps.py:7 events/cms_plugins.py:18 events/cms_toolbars.py:10
+#: events/cms_toolbars.py:13
 msgid "Events"
 msgstr "Events"
 
-#: events/cms_plugins.py:39
+#: events/cms_plugins.py:14
+msgid "List"
+msgstr "List"
+
+#: events/cms_plugins.py:14
+msgid "Cards"
+msgstr "Cards"
+
+#: events/cms_plugins.py:46
+msgid "Event Category"
+msgstr "Event Category"
+
+#: events/cms_plugins.py:68
 msgid "Featured Event"
 msgstr "Featured Event"
 
-#: events/cms_plugins.py:60
+#: events/cms_plugins.py:89
 msgid "Events Teaser"
 msgstr "Events Teaser"
 
 #: events/filters/event_date_filter.py:10
-#: events/templates/events/snippets/event_list.html:10
+#: events/templates/events/snippets/event_extended_info.html:7
+#: events/templates/events/snippets/event_list.html:12
 #: payment/templates/payment/finance/account_detail.html:49
 msgid "Date"
 msgstr "Date"
@@ -1228,21 +1244,81 @@ msgstr "Upcoming"
 msgid "This year"
 msgstr "This year"
 
-#: events/models.py:76
+#: events/models/event.py:65
 msgid "from"
 msgstr "from"
 
-#: events/models.py:78
+#: events/models/event.py:67
 msgid "Time not set yet"
 msgstr "Time not set yet"
 
-#: events/templates/events/events.html:14
+#: events/templates/events/event_detail.html:10
+msgid "Event details"
+msgstr "Event Details"
+
+#: events/templates/events/event_detail.html:17
+msgid "Registration successful!"
+msgstr "Registration successful!"
+
+#: events/templates/events/event_detail.html:21
+msgid "Registration successfully removed!"
+msgstr "Registration successfully removed!"
+
+#: events/templates/events/event_detail.html:38
+msgid "Limited number of guests"
+msgstr "Limited number of guests"
+
+#: events/templates/events/event_detail.html:41
+msgid "Max."
+msgstr "Max."
+
+#: events/templates/events/event_detail.html:47
+msgid "available"
+msgstr "available"
+
+#: events/templates/events/event_detail.html:51
+msgid "fully booked"
+msgstr "fully booked"
+
+#: events/templates/events/event_detail.html:61
+msgid "Registration"
+msgstr "Registration"
+
+#: events/templates/events/event_detail.html:65
+msgid "You are registered"
+msgstr "You are registered"
+
+#: events/templates/events/event_detail.html:68
+msgid "You can not make it?"
+msgstr "You can not make it?"
+
+#: events/templates/events/event_detail.html:71
+msgid ""
+"Remove your registration in case you are not coming to the event to give "
+"someone else your spot. Thanks!"
+msgstr ""
+"Remove your registration in case you are not coming to the event to give "
+"someone else your spot. Thanks!"
+
+#: events/templates/events/event_detail.html:74
+msgid "Unregister"
+msgstr "Unregister"
+
+#: events/templates/events/event_detail.html:78
+msgid "Secure a spot for this event by registering here."
+msgstr "Secure a spot for this event by registering here."
+
+#: events/templates/events/event_detail.html:81
+msgid "Register now"
+msgstr "Register now"
+
+#: events/templates/events/events.html:18
 msgid "No events planned."
 msgstr "No events planned."
 
 #: events/templates/events/snippets/event_banner.html:6
 #: events/templates/events/snippets/event_list.html:28
-#: events/templates/events/snippets/event_modal.html:23
+#: events/templates/events/snippets/event_title.html:4
 msgid "Cancelled"
 msgstr "Cancelled"
 
@@ -1250,53 +1326,42 @@ msgstr "Cancelled"
 msgid "Special"
 msgstr "Special"
 
-#: events/templates/events/snippets/event_card.html:13
+#: events/templates/events/snippets/event_card.html:15
+msgid "Show details & register"
+msgstr "Show details & register"
+
+#: events/templates/events/snippets/event_card.html:17
 msgid "Show details"
 msgstr "Show details"
 
+#: events/templates/events/snippets/event_extended_info.html:15
+#: events/templates/events/snippets/event_list.html:14
+msgid "Venue"
+msgstr "Venue"
+
+#: events/templates/events/snippets/event_extended_info.html:27
 #: events/templates/events/snippets/event_info.html:7
-#: events/templates/events/snippets/event_list.html:45
+#: events/templates/events/snippets/event_list.html:43
 #: events/templates/events/snippets/event_list_entry.html:4
-#: events/templates/events/snippets/event_modal.html:45
 msgid "Venue not yet set"
 msgstr "Venue not yet set"
+
+#: events/templates/events/snippets/event_extended_info.html:32
+#: events/templates/events/snippets/event_list.html:15
+msgid "Entry fee"
+msgstr "Entry fee"
+
+#: events/templates/events/snippets/event_extended_info.html:41
+msgid "Organized by"
+msgstr "Organized by"
 
 #: events/templates/events/snippets/event_info.html:13
 msgid "Free of charge"
 msgstr "Free of charge"
 
-#: events/templates/events/snippets/event_list.html:4
-#: events/templates/events/snippets/event_list_entry.html:3
-#: events/templates/events/snippets/event_modal.html:3
-msgid "No entry fee"
-msgstr "No entry fee"
-
-#: events/templates/events/snippets/event_list.html:12
-#: events/templates/events/snippets/event_modal.html:33
-msgid "Venue"
-msgstr "Venue"
-
-#: events/templates/events/snippets/event_list.html:13
-#: events/templates/events/snippets/event_modal.html:51
-msgid "Entry fee"
-msgstr "Entry fee"
-
-#: events/templates/events/snippets/event_list.html:14
-msgid "Organizer"
-msgstr "Organizer"
-
 #: events/templates/events/snippets/event_list_entry.html:2
-#: events/templates/events/snippets/event_modal.html:2
 msgid "Not yet set"
 msgstr "Not yet set"
-
-#: events/templates/events/snippets/event_modal.html:11
-msgid "Event details"
-msgstr "Event Details"
-
-#: events/templates/events/snippets/event_modal.html:60
-msgid "Organized by"
-msgstr "Organized by"
 
 #: faq/cms_plugins.py:15
 msgid "FAQ"
@@ -2011,6 +2076,15 @@ msgstr "Main content"
 #: tq_website/settings.py:340
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid "Go to course"
+#~ msgstr "Go to courses"
+
+#~ msgid "More Info"
+#~ msgstr "More info"
+
+#~ msgid "Organizer"
+#~ msgstr "Organizer"
 
 #~ msgid "Thumbnail"
 #~ msgstr "Thumbnail"
