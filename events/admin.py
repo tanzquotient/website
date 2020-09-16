@@ -17,7 +17,7 @@ class EventAdmin(TranslatableAdmin):
 
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'category', 'reservation_enabled', 'max_participants', 'description', 'image']}),
+            'fields': ['name', 'category', 'registration_enabled', 'max_participants', 'description', 'image']}),
         ('When?', {
             'fields': ['date', 'time_from', 'time_to', 'cancelled']}),
         ('Where?', {
