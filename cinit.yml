@@ -5,7 +5,7 @@ programs:
     workdir: /app
     user: app-user
     args:
-      - "sip"
+      - "--sip"
     before:
       - pre-start
       - gunicorn
@@ -44,7 +44,7 @@ programs:
       # Redis
       - SIP_TQ_REDIS_URL:
       # Email
-      # TODO pass empty values as long as SIP has not SMTP support
+      # TODO pass empty values as long as SIP has no SMTP support
       - SIP_SMTP_TQ_MAIL_HOST: ""
       - SIP_SMTP_TQ_MAIL_PORT: ""
       - SIP_SMTP_TQ_MAIL_ENCRYPTION: ""
