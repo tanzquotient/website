@@ -5,7 +5,7 @@ programs:
     workdir: /app
     user: app-user
     args:
-      - "sip"
+      - "--sip"
     before:
       - pre-start
       - gunicorn
@@ -44,17 +44,18 @@ programs:
       # Redis
       - SIP_TQ_REDIS_URL:
       # Email
-      # TODO pass empty values as long as SIP has not SMTP support
-      - SIP_SMTP_TQ_MAIL_HOST: ""
-      - SIP_SMTP_TQ_MAIL_PORT: ""
-      - SIP_SMTP_TQ_MAIL_ENCRYPTION: ""
-      - SIP_SMTP_TQ_MAIL_MAIL_USER: ""
-      - SIP_SMTP_TQ_MAIL_MAIL_PW: ""
-      - SIP_SMTP_TQ_MAIL_FROM_MAIL: ""
+      # TODO (#272) Migrate to SIP' smtp
+      - SIP_SMTP_TQ_MAIL_HOST:
+      - SIP_SMTP_TQ_MAIL_PORT:
+      - SIP_SMTP_TQ_MAIL_ENCRYPTION:
+      - SIP_SMTP_TQ_MAIL_MAIL_USER:
+      - SIP_SMTP_TQ_MAIL_MAIL_PW:
+      - SIP_SMTP_TQ_MAIL_FROM_MAIL:
       # Analytics
       - SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID:
       # Postfinance FDS
       - SIP_TQ_FDS_USER:
+      - TQ_FDS_PRIVATE_KEY:
       # Account details
       - SIP_TQ_PAYMENT_ACCOUNT_IBAN:
       - SIP_TQ_PAYMENT_ACCOUNT_SWIFT:

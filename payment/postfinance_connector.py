@@ -1,24 +1,28 @@
+import base64
 import logging
 import re
 import xml.etree.ElementTree as ET
+from io import StringIO
 from datetime import datetime
 
 from django.core.files.base import ContentFile
 from django.db import DatabaseError
-from paramiko.client import SSHClient
+from paramiko.client import SSHClient, AutoAddPolicy
+from paramiko import RSAKey
 
 from payment.models import Payment, PostfinanceFile
 from payment.models.choices import CreditDebit, State
-from tq_website.settings import FDS_HOST_KEY, FDS_PORT, FDS_HOST, FDS_PRIVATE_KEY, FDS_USER
+from tq_website.settings import FDS_PORT, FDS_HOST, FDS_PRIVATE_KEY, FDS_USER
 
 log = logging.getLogger('payment')
 
 
 class FDSConnection:
     def __init__(self):
+        private_key = RSAKey.from_private_key(StringIO(FDS_PRIVATE_KEY))
         self.client = SSHClient()
-        self.client.load_host_keys(FDS_HOST_KEY)
-        self.client.connect(FDS_HOST, username=FDS_USER, key_filename=FDS_PRIVATE_KEY, port=FDS_PORT)
+        self.client.set_missing_host_key_policy(AutoAddPolicy())
+        self.client.connect(FDS_HOST, username=FDS_USER, pkey=private_key, port=FDS_PORT)
         self.sftp = self.client.open_sftp()
         log.info("Connected to FDS")
 
