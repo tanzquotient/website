@@ -418,8 +418,8 @@ def offering_overview(request, offering_id):
 
 
 @login_required
-def user_dashboard(request):
-    template_name = "user/dashboard.html"
+def user_courses(request):
+    template_name = "user/user_courses.html"
     context = {
         'user': request.user,
         'payment_account': settings.PAYMENT_ACCOUNT['default']

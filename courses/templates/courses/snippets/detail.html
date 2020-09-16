@@ -12,8 +12,8 @@
 
                 {% if user and course in user.profile.get_subscribed_courses %}
                     <p>
-                        <a href="{% url "user_dashboard" %}">
-                            {% trans "Go to dashboard to see status and further information" %}
+                        <a href="{% url "user_courses" %}">
+                            {% trans "Go to 'My Courses' to see the status and further information" %}
                             <i class="fa fa-arrow-circle-right fa-lg"></i>
                         </a>
                     </p>

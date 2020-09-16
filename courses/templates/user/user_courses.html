@@ -2,22 +2,14 @@
 {% load i18n %}
 
 {% block head_title %}
-    {% trans "Dashboard" %}
+    {% trans "My Courses" %}
 {% endblock %}
 
 {% block lead_title %}
-    {% trans "Dashboard" %}
+    {% trans "My Courses" %}
 {% endblock %}
 
 {% block content %}
-    <h1 class="media-heading">{{ user.get_full_name }}</h1>
-    <p>
-        <a href="{% url "profile" %}">
-            {% trans "Show my profile" %}
-            <i class="fa fa-arrow-circle-right fa-lg"></i>
-        </a>
-    </p>
-    <h2>{% trans "My courses" %}</h2>
     {% if user.profile.is_teacher %}
         <h3>{% trans "Teaching" %}</h3>
         <div class="row">

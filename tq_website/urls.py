@@ -46,7 +46,7 @@ urlpatterns += i18n_patterns(
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^password/$', courses_views.change_password, name='change_password'),
-    url(r'^profile/dashboard$', courses_views.user_dashboard, name='user_dashboard'),
+    url(r'^profile/courses$', courses_views.user_courses, name='user_courses'),
     url(r'^profile/edit$', courses_views.ProfileView.as_view(), name='edit_profile'),
     url(r'^profile/$', courses_views.user_profile, name='profile'),
     url(r'^survey/', include(survey.urls, namespace='survey')),

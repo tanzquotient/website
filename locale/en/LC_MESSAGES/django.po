@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-16 09:12+0000\n"
+"POT-Creation-Date: 2020-09-16 21:27+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -591,11 +591,11 @@ msgid "Info"
 msgstr "Info"
 
 #: courses/templates/courses/snippets/detail.html:16
-msgid "Go to dashboard to see status and further information"
-msgstr "Go to dashboard to see status and further information"
+msgid "Go to 'My Courses' to see the status and further information"
+msgstr "Go to 'My Courses' to see the status and further information"
 
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
-#: courses/templates/user/dashboard.html:53
+#: courses/templates/user/dashboard.html:45
 msgid "Past courses"
 msgstr "Past courses"
 
@@ -871,45 +871,38 @@ msgstr "Add salary payment info (only required for teachers and helpers)"
 
 #: courses/templates/user/dashboard.html:5
 #: courses/templates/user/dashboard.html:9
+#: payment/templates/payment/course/form.html:6
 #: templates/menu/collapsed_user_menu.html:7 templates/menu/user_menu.html:36
-msgid "Dashboard"
-msgstr "Dashboard"
+msgid "My Courses"
+msgstr "My Courses"
 
-#: courses/templates/user/dashboard.html:16
-msgid "Show my profile"
-msgstr "Show my profile"
-
-#: courses/templates/user/dashboard.html:20
-msgid "My courses"
-msgstr "My courses"
-
-#: courses/templates/user/dashboard.html:22
+#: courses/templates/user/dashboard.html:14
 msgid "Teaching"
 msgstr "Teaching"
 
-#: courses/templates/user/dashboard.html:30
+#: courses/templates/user/dashboard.html:22
 msgid "There are currently no ongoing courses."
 msgstr "There are currently no ongoing courses"
 
-#: courses/templates/user/dashboard.html:35
+#: courses/templates/user/dashboard.html:27
 msgid "Show all courses "
 msgstr "Show all Courses"
 
-#: courses/templates/user/dashboard.html:40
+#: courses/templates/user/dashboard.html:32
 msgid "Current courses"
 msgstr "Current courses"
 
-#: courses/templates/user/dashboard.html:44
+#: courses/templates/user/dashboard.html:36
 msgid "No courses"
 msgstr "No courses"
 
-#: courses/templates/user/dashboard.html:48
+#: courses/templates/user/dashboard.html:40
 msgid "Show available courses"
 msgstr "Show available courses"
 
 #: courses/templates/user/profile.html:23
-msgid "Go to dashboard"
-msgstr "Go to dashboard"
+msgid "Show my courses"
+msgstr "Show my courses"
 
 #: courses/templates/user/profile.html:30
 msgid "Edit profile"
@@ -1604,10 +1597,6 @@ msgstr "You should have"
 msgid "of collected money."
 msgstr "of collected money."
 
-#: payment/templates/payment/course/form.html:6
-msgid "My Courses"
-msgstr "My Courses"
-
 #: payment/templates/payment/course/form.html:11
 msgid "Select Course"
 msgstr "Select Course"
@@ -2077,6 +2066,18 @@ msgstr "Main content"
 msgid "Side content"
 msgstr "Side content"
 
+#~ msgid "Dashboard"
+#~ msgstr "Dashboard"
+
+#~ msgid "Show my profile"
+#~ msgstr "Show my profile"
+
+#~ msgid "My courses"
+#~ msgstr "My courses"
+
+#~ msgid "Go to dashboard"
+#~ msgstr "Go to dashboard"
+
 #~ msgid "Go to course"
 #~ msgstr "Go to courses"
 
@@ -2088,9 +2089,6 @@ msgstr "Side content"
 
 #~ msgid "Thumbnail"
 #~ msgstr "Thumbnail"
-
-#~ msgid "Show courses"
-#~ msgstr "Show courses"
 
 #~ msgid "All types"
 #~ msgstr "All types"
