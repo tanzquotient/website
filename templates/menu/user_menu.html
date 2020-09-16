@@ -38,6 +38,6 @@
 <a class="dropdown-item" href="{% url 'profile' %}">
     <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
 </a>
-<a class="dropdown-item" href="{% url 'account_logout' %}">
+<a class="dropdown-item" href="{% url 'account_logout' %}?next={{ request.path }}">
     <span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}
 </a>

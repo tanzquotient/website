@@ -83,10 +83,16 @@ class Event(TranslatableModel):
         else:
             return max(0, self.max_participants - self.registrations.count())
 
+    def fully_booked(self):
+        return self.free_spots() <= 0
+
     def is_registered(self, user):
         return user is not None and \
                not user.is_anonymous and \
                EventRegistration.objects.filter(user=user, event=self).exists()
+
+    def registration_possible(self):
+        return self.registration_enabled and not self.fully_booked()
 
     def detail_url(self):
         return reverse('events:detail', kwargs={'event_id': self.id})

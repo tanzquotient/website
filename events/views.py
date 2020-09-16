@@ -27,6 +27,17 @@ def register(request, event_id):
     return redirect('events:registration_confirmation', event_id)
 
 
+@login_required
+def unregister(request, event_id):
+    user_id = request.user.id
+    try:
+        registration = EventRegistration.objects.get(user_id=user_id, event_id=event_id)
+        registration.delete()
+    except EventRegistration.DoesNotExist:
+        pass  # Already unregistered
+    return redirect('events:registration_removed', event_id)
+
+
 def registration_confirmation(request, event_id):
     template_name = "events/event_detail.html"
     event = get_object_or_404(Event, pk=event_id)
@@ -34,5 +45,16 @@ def registration_confirmation(request, event_id):
         'event': event,
         'user_registered': event.is_registered(request.user),
         'is_registration_confirmation': True,
+    }
+    return render(request, template_name, context)
+
+
+def registration_removed(request, event_id):
+    template_name = "events/event_detail.html"
+    event = get_object_or_404(Event, pk=event_id)
+    context = {
+        'event': event,
+        'user_registered': event.is_registered(request.user),
+        'is_registration_removed': True,
     }
     return render(request, template_name, context)

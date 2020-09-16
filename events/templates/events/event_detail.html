@@ -16,6 +16,10 @@
         <div class="alert alert-success">
             {% trans "Registration successful!" %}
         </div>
+    {% elif is_registration_removed %}
+        <div class="alert alert-success">
+            {% trans "Registration successfully removed!" %}
+        </div>
     {% endif %}
     <h2>
         {% include "events/snippets/event_title.html" %}
@@ -51,19 +55,28 @@
                 {% endwith %}
             </div>
             {% endif %}
-            {% if event.registration_enabled %}
+            {% if event.registration_possible or user_registered %}
                 <div class="mb-3">
                     <div>
                         <strong>{% trans "Registration" %}</strong>
                     </div>
-                    <div>
-                        {% trans "Secure a spot for this event by registering here." %}
-                    </div>
                     {% if user_registered %}
                         <span style="font-size: medium" class="badge mt-2 badge-success">
                                 {% trans "You are registered" %}
-                            </span>
+                        </span>
+                        <div class="mt-3">
+                            <strong>{% trans "You can not make it?" %}</strong>
+                        </div>
+                        <div>
+                            {% trans "Remove your registration in case you are not coming to the event to give someone else your spot. Thanks!" %}
+                        </div>
+                        <a href="{% url 'events:unregister' event.id %}" type="submit" class="btn btn-warning mt-2">
+                            {% trans "Unregister" %}
+                        </a>
                     {% else %}
+                        <div>
+                            {% trans "Secure a spot for this event by registering here." %}
+                        </div>
                         <a href="{% url 'events:register' event.id %}" type="submit" class="btn btn-success mt-2">
                             {% trans "Register now" %}
                         </a>

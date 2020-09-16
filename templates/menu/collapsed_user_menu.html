@@ -13,7 +13,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'account_logout' %}">
+        <a class="nav-link" href="{% url 'account_logout' %}?next={{ request.path }}">
             {% trans "Logout" %}
         </a>
     </li>

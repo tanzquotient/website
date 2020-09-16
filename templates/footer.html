@@ -86,7 +86,7 @@
                                 <a href="{% url 'admin:index' %}"><span
                                         class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
                             {% endif %}
-                            <a href="{% url 'account_logout' %}"><span
+                            <a href="{% url 'account_logout' %}?next={{ request.path }}"><span
                                     class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
                         {% else %}
                             <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
