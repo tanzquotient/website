@@ -18,6 +18,12 @@ ingress:
       - path: /
         port: 8080
 
+sidecars:
+  - name: redis
+    template: redis
+    values:
+      version: "6.0.8"
+
 # When editing those, you MUST update the deployment(s) with sipctl as well!
 env:
   - name: SIP_TQ_DJANGO_SECRET_KEY
@@ -57,7 +63,7 @@ env:
       key: tq-redis-url
       value: provided
 
-  # TODO These differe between deployments but aren't necessarily "secret"
+  # These differ between deployments but aren't necessarily "secret"
   - name: SIP_TQ_DJANGO_DEBUG
     secret:
       key: tq-django-debug
