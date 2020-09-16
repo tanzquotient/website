@@ -44,13 +44,13 @@ programs:
       # Redis
       - SIP_TQ_REDIS_URL:
       # Email
-      # TODO pass empty values as long as SIP has no SMTP support
-      - SIP_SMTP_TQ_MAIL_HOST: ""
-      - SIP_SMTP_TQ_MAIL_PORT: ""
-      - SIP_SMTP_TQ_MAIL_ENCRYPTION: ""
-      - SIP_SMTP_TQ_MAIL_MAIL_USER: ""
-      - SIP_SMTP_TQ_MAIL_MAIL_PW: ""
-      - SIP_SMTP_TQ_MAIL_FROM_MAIL: ""
+      # TODO (#272) Migrate to SIP' smtp
+      - SIP_SMTP_TQ_MAIL_HOST:
+      - SIP_SMTP_TQ_MAIL_PORT:
+      - SIP_SMTP_TQ_MAIL_ENCRYPTION:
+      - SIP_SMTP_TQ_MAIL_MAIL_USER:
+      - SIP_SMTP_TQ_MAIL_MAIL_PW:
+      - SIP_SMTP_TQ_MAIL_FROM_MAIL:
       # Analytics
       - SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID:
       # Postfinance FDS

@@ -7,9 +7,9 @@ s3:
   - name: tq-static
   - name: tq-postfinance
 
-# TODO Do we get the right email account?
-smtp:
-  - name: tq-mail
+# TODO (#272) Migrate to SIP' smtp
+#smtp:
+#  - name: tq-mail
 
 ingress:
   - subdomain: www
@@ -80,4 +80,30 @@ env:
     secret:
       key: tq-environment
       create: provided
+
+  # TODO(#272) Migrate to SIP' smtp
+  - name: SIP_SMTP_TQ_MAIL_HOST:
+    secret:
+      key: tq-mail-host
+      value: provided
+  - name: SIP_SMTP_TQ_MAIL_PORT:
+    secret:
+      key: tq-mail-port
+      value: provided
+  - name: SIP_SMTP_TQ_MAIL_ENCRYPTION:
+    secret:
+      key: tq-mail-encryption
+      value: provided
+  - name: SIP_SMTP_TQ_MAIL_USER:
+    secret:
+      key: tq-mail-user
+      value: provided
+  - name: SIP_SMTP_TQ_MAIL_PW:
+    secret:
+      key: tq-mail-pw
+      value: provided
+  - name: SIP_SMTP_TQ_MAIL_FROM_MAIL:
+    secret:
+      key: tq-mail-from-mail
+      value: provided
 
