@@ -38,6 +38,10 @@ env:
     secret:
       key: tq-fds-user
       create: provided
+  - name: TQ_FDS_PRIVATE_KEY
+    secret:
+      key: tq-fds-private-key
+      value: provided
   - name: SIP_TQ_PAYMENT_ACCOUNT_IBAN
     secret:
       key: tq-payment-account-iban

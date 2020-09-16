@@ -55,6 +55,7 @@ programs:
       - SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID:
       # Postfinance FDS
       - SIP_TQ_FDS_USER:
+      - TQ_FDS_PRIVATE_KEY:
       # Account details
       - SIP_TQ_PAYMENT_ACCOUNT_IBAN:
       - SIP_TQ_PAYMENT_ACCOUNT_SWIFT:
