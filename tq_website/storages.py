@@ -17,7 +17,7 @@ class TqStorage(S3Boto3Storage):
         else:
             protocol = 'https' if use_ssl else 'http'
             config['endpoint_url'] = "{}://{}:{}".format(protocol, host, port)
-        super().__init__(bucket=bucket_name, **config)
+        super().__init__(bucket_name=bucket_name, **config)
 
 
 class MediaStorage(TqStorage):
