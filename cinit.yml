@@ -47,6 +47,7 @@ programs:
       # TODO (#272) Migrate to SIP' smtp
       - SIP_SMTP_TQ_MAIL_HOST:
       - SIP_SMTP_TQ_MAIL_PORT:
+      - SIP_SMTP_TQ_MAIL_USE_TLS:
       - SIP_SMTP_TQ_MAIL_ENCRYPTION:
       - SIP_SMTP_TQ_MAIL_MAIL_USER:
       - SIP_SMTP_TQ_MAIL_MAIL_PW:

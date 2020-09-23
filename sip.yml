@@ -94,6 +94,10 @@ env:
     secret:
       key: tq-mail-encryption
       value: provided
+  - name: SIP_SMTP_TQ_MAIL_USE_TLS
+    secret:
+      key: tq-mail-use-tls
+      value: provided
   - name: SIP_SMTP_TQ_MAIL_MAIL_USER
     secret:
       key: tq-mail-user
