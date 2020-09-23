@@ -66,10 +66,6 @@ Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the envir
 
 There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 
-## TODOs
-
-* redis sidecar: https://gitlab.ethz.ch/vseth/0403-isg/sip-sip-apps/sip-manager/-/issues/45
-
 
 [github]: https://github.com/tanzquotient/tq_website
 [eth-gitlab]: https://gitlab.ethz.ch/vseth/0500-kom/0519-tq/website
