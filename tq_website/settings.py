@@ -145,7 +145,7 @@ ANONYMOUS_USER_ID = -1
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 # default redirect URL after login (if no GET parameter next is given)
-LOGIN_REDIRECT_URL = "/profile/dashboard"
+LOGIN_REDIRECT_URL = "/profile/courses"
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-16 09:12+0000\n"
+"POT-Creation-Date: 2020-09-16 21:27+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -605,11 +605,11 @@ msgid "Info"
 msgstr "Infos"
 
 #: courses/templates/courses/snippets/detail.html:16
-msgid "Go to dashboard to see status and further information"
-msgstr "Gehe zum Dashboard, um den Status und weitere Informationen zu sehen"
+msgid "Go to 'My Courses' to see the status and further information"
+msgstr "Gehe zu 'Meine Kurse', um den Status und weitere Informationen zu sehen"
 
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
-#: courses/templates/user/dashboard.html:53
+#: courses/templates/user/dashboard.html:45
 msgid "Past courses"
 msgstr "Vergangene Kurse"
 
@@ -886,45 +886,38 @@ msgstr "Zahlungsdaten eingeben (Nur für Lehrer und Helfer nötig)"
 
 #: courses/templates/user/dashboard.html:5
 #: courses/templates/user/dashboard.html:9
+#: payment/templates/payment/course/form.html:6
 #: templates/menu/collapsed_user_menu.html:7 templates/menu/user_menu.html:36
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: courses/templates/user/dashboard.html:16
-msgid "Show my profile"
-msgstr "Profil anzeigen"
-
-#: courses/templates/user/dashboard.html:20
-msgid "My courses"
+msgid "My Courses"
 msgstr "Meine Kurse"
 
-#: courses/templates/user/dashboard.html:22
+#: courses/templates/user/dashboard.html:14
 msgid "Teaching"
 msgstr "Unterrichten"
 
-#: courses/templates/user/dashboard.html:30
+#: courses/templates/user/dashboard.html:22
 msgid "There are currently no ongoing courses."
 msgstr "Derzeit sind keine Kurse verfügbar."
 
-#: courses/templates/user/dashboard.html:35
+#: courses/templates/user/dashboard.html:27
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/dashboard.html:40
+#: courses/templates/user/dashboard.html:32
 msgid "Current courses"
 msgstr "Aktuelle Kurse"
 
-#: courses/templates/user/dashboard.html:44
+#: courses/templates/user/dashboard.html:36
 msgid "No courses"
 msgstr "Keine Kurse"
 
-#: courses/templates/user/dashboard.html:48
+#: courses/templates/user/dashboard.html:40
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
 #: courses/templates/user/profile.html:23
-msgid "Go to dashboard"
-msgstr "Zum Dashboard"
+msgid "Show my courses"
+msgstr "Meine Kurse anzeigen"
 
 #: courses/templates/user/profile.html:30
 msgid "Edit profile"
@@ -1312,7 +1305,8 @@ msgstr "Du kannst nicht kommen?"
 msgid ""
 "Remove your registration in case you are not coming to the event to give "
 "someone else your spot. Thanks!"
-msgstr "Bitte hier abmelden, falls du nicht kommen kannst. Das gibt einer anderen "
+msgstr ""
+"Bitte hier abmelden, falls du nicht kommen kannst. Das gibt einer anderen "
 "Person die Möglichkeit einen Platz zu bekommen."
 
 #: events/templates/events/event_detail.html:74
@@ -1618,10 +1612,6 @@ msgstr "Du solltest"
 #: payment/templates/payment/course/course.html:195
 msgid "of collected money."
 msgstr "an eingesammeltem Geld haben."
-
-#: payment/templates/payment/course/form.html:6
-msgid "My Courses"
-msgstr "Meine Kurse"
 
 #: payment/templates/payment/course/form.html:11
 msgid "Select Course"
@@ -2097,6 +2087,18 @@ msgstr "Hauptinhalt"
 msgid "Side content"
 msgstr "Seiteninhalt"
 
+#~ msgid "Dashboard"
+#~ msgstr "Dashboard"
+
+#~ msgid "Show my profile"
+#~ msgstr "Profil anzeigen"
+
+#~ msgid "My courses"
+#~ msgstr "Meine Kurse"
+
+#~ msgid "Go to dashboard"
+#~ msgstr "Zum Dashboard"
+
 #~ msgid "Go to course"
 #~ msgstr "Zum Kurs"
 
@@ -2108,9 +2110,6 @@ msgstr "Seiteninhalt"
 
 #~ msgid "Thumbnail"
 #~ msgstr "Thumbnail"
-
-#~ msgid "Show courses"
-#~ msgstr "Kurse anzeigen"
 
 #~ msgid "All types"
 #~ msgstr "Alle Typen"
