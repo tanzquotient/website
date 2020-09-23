@@ -22,8 +22,6 @@ if "TQ_DEBUG" not in environ.keys():
     from dotenv import load_dotenv
     load_dotenv()
 
-print(environ)
-
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
