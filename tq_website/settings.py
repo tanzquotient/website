@@ -21,7 +21,8 @@ from django.core.files.storage import Storage, FileSystemStorage
 if "TQ_DEBUG" not in environ.keys():
     from dotenv import load_dotenv
     load_dotenv()
-    
+
+print(environ)
 
 ugettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
