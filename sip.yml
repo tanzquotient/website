@@ -18,7 +18,7 @@ ingress:
       - path: /
         port: 8080
 
-sidecars:
+sidecar:
   - name: redis
     template: redis
     values:

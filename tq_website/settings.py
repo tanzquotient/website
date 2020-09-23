@@ -512,7 +512,7 @@ CACHES = {
         'LOCATION': 'tq_website',
     } if DEBUG else {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS_BROKER_URL', 'redis://redis/'),
+        'LOCATION': environ['TQ_REDIS_BROKER_URL'],
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
