@@ -1,5 +1,6 @@
 import datetime
 
+from events import services
 from events.models import Event
 
 
@@ -25,3 +26,23 @@ def copy_event(modeladmin, request, queryset):
 
 
 copy_event.short_description = "Create copy of selected events (adding one week)"
+
+
+def export_registrations_csv(modeladmin, request, queryset):
+    event_ids = []
+    for c in queryset:
+        event_ids.append(c.id)
+    return services.export_registrations(event_ids, 'csv')
+
+
+export_registrations_csv.short_description = "Export registrations (CSV)"
+
+
+def export_registrations_excel(modeladmin, request, queryset):
+    event_ids = []
+    for c in queryset:
+        event_ids.append(c.id)
+    return services.export_registrations(event_ids, 'xlsx')
+
+
+export_registrations_excel.short_description = "Export registrations (Excel)"

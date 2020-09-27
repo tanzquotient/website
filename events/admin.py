@@ -13,7 +13,7 @@ class EventAdmin(TranslatableAdmin):
 
     model = Event
 
-    actions = [copy_event, ]
+    actions = [copy_event, export_registrations_csv, export_registrations_excel]
 
     fieldsets = [
         ('What?', {
