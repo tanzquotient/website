@@ -9,7 +9,7 @@ def export_registrations(event_ids, export_format):
     export_data = []
     for event_id in event_ids:
         event = get_object_or_404(Event, pk=event_id)
-        registrations = event.registrations
+        registrations = event.registrations.all()
 
         data = [['First name', 'Last name', 'Address', 'Email', 'Phone']]
 
