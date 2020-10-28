@@ -27,5 +27,5 @@ fi
 
 # Collect the static files and save them to STATIC_ROOT (defined in the Django
 # project's settings.py)
-python3 manage.py collectstatic --no-input
+python3 manage.py collectstatic --no-input -v 3
 
