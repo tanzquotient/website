@@ -1036,7 +1036,7 @@ msgstr "Participants (Excel)"
 
 #: courses/templates/user/snippets/course_as_teacher.html:56
 msgid "Participants (CSV)"
-msgstr "Participants (Excel)"
+msgstr "Participants (CSV)"
 
 #: courses/templates/user/snippets/course_as_teacher.html:58
 msgid "Contacts (vCard)"

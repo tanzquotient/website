@@ -743,10 +743,10 @@ def export_subscriptions(course_ids, export_format):
             data = [subscription.user for subscription in subscriptions]
         else:
             data.append(
-                ['Vorname', 'Nachname', 'Geschlecht', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen', 'Erfahrung'])
+                ['Vorname', 'Nachname', 'Geschlecht', 'Adresse', 'E-Mail', 'Mobile', 'Legi-Nr.', 'Zu bezahlen', 'Erfahrung'])
 
             for s in subscriptions:
-                data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, s.user.email,
+                data.append([s.user.first_name, s.user.last_name, s.user.profile.gender, str(s.user.profile.address), s.user.email,
                              s.user.profile.phone_number, s.user.profile.legi, s.get_price_to_pay(), s.experience])
 
         export_data.append({'name': course_name, 'data': data})
