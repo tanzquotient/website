@@ -10,7 +10,7 @@ class TqStorage(S3Boto3Storage):
             secure_urls=use_ssl,
             access_key=access_key,
             secret_key=secret_key,
-            region_name=region
+            region_name=region,
         )
         if custom_domain:
             config['custom_domain'] = custom_domain.format(bucket_name)

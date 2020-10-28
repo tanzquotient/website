@@ -187,6 +187,9 @@ if S3_ENABLED:
 # Use ACL of bucket
 AWS_DEFAULT_ACL = None
 
+# Use new signature version
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
 # Media
 S3_MEDIA_BUCKET = environ['TQ_S3_MEDIA_BUCKET']
 S3_MEDIA_HOST = environ['TQ_S3_MEDIA_HOST']
