@@ -4,13 +4,14 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 class TqStorage(S3Boto3Storage):
 
-    def __init__(self, bucket_name, host, port, region, use_ssl, custom_domain, access_key, secret_key):
+    def __init__(self, bucket_name, host, port, region, use_ssl, custom_domain, access_key, secret_key, querystring_auth=True):
         config = dict(
             use_ssl=use_ssl,
             secure_urls=use_ssl,
             access_key=access_key,
             secret_key=secret_key,
             region_name=region,
+            querystring_auth=querystring_auth,
         )
         if custom_domain:
             config['custom_domain'] = custom_domain.format(bucket_name)
@@ -45,6 +46,7 @@ class StaticStorage(TqStorage):
             custom_domain=settings.S3_STATIC_CUSTOM_DOMAIN,
             access_key=settings.S3_STATIC_ACCESS_KEY,
             secret_key=settings.S3_STATIC_SECRET_KEY,
+            querystring_auth=False,
         )
 
 
