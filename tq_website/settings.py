@@ -366,7 +366,7 @@ CMS_PLACEHOLDER_CONF = {
 ##################################################
 
 # Celery
-CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+CELERY_ACCEPT_CONTENT = ['json', 'yaml']
 CELERY_RESULT_BACKEND = 'django-db'
 BROKER_URL = environ['TQ_REDIS_BROKER_URL']
 CELERY_TASK_SERIALIZER = 'json'
