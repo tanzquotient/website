@@ -190,6 +190,9 @@ AWS_DEFAULT_ACL = None
 # Use new signature version
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 
+# Disable querystring auth (overridden by some storages)
+AWS_QUERYSTRING_AUTH = False
+
 # Media
 S3_MEDIA_BUCKET = environ['TQ_S3_MEDIA_BUCKET']
 S3_MEDIA_HOST = environ['TQ_S3_MEDIA_HOST']

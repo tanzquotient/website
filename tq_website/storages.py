@@ -32,6 +32,7 @@ class MediaStorage(TqStorage):
             custom_domain=settings.S3_MEDIA_CUSTOM_DOMAIN,
             access_key=settings.S3_MEDIA_ACCESS_KEY,
             secret_key=settings.S3_MEDIA_SECRET_KEY,
+            querystring_auth=True,
         )
 
 
@@ -61,4 +62,5 @@ class PostfinanceStorage(TqStorage):
             custom_domain=settings.S3_POSTFINANCE_CUSTOM_DOMAIN,
             access_key=settings.S3_POSTFINANCE_ACCESS_KEY,
             secret_key=settings.S3_POSTFINANCE_SECRET_KEY,
+            querystring_auth=True,
         )
