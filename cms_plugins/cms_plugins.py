@@ -162,6 +162,8 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
             })
 
         for irregular_lesson in irregular_lessons:
+            if not irregular_lesson.course.is_displayed():
+                continue
             if len(irregular_lesson.course.get_lessons()) == 1:
                 items.append({
                     'date': irregular_lesson.date,
