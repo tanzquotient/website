@@ -1,5 +1,5 @@
 # Django
-Django==3.1.5
+Django==3.1.6
 django-debug-toolbar==3.2
 django-absolute==0.3
 django-analytical==3.0.0
