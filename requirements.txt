@@ -1,6 +1,6 @@
 # Django
 Django==3.1.5
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
 django-absolute==0.3
 django-analytical==3.0.0
 django-celery-email==3.0.0
