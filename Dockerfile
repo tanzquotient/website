@@ -17,7 +17,7 @@ COPY cinit.yml /etc/cinit.d/tq-website.yml
 # Install dependencies:
 # - git to clone code from Github
 # - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
-RUN apt install -y git libpq-dev
+RUN apt install -y git libpq-dev cargo rust
 
 WORKDIR /app
 
