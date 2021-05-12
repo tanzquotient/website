@@ -59,7 +59,7 @@ def copy_courses(modeladmin, request, queryset):
 
     if not form:
         form = CopyCourseForm(
-            initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME),
+            initial={'_selected_action': map(str, queryset.values_list('id', flat=True)),
                      'offering': services.get_subsequent_offering(),
                      'set_preceeding_course': True})
 
@@ -252,7 +252,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = SendVoucherForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        form = SendVoucherForm(initial={'_selected_action': map(str, queryset.values_list('id', flat=True))})
 
     context = {
         'form': form,
@@ -273,7 +273,7 @@ def send_course_email(modeladmin, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = SendCourseEmailForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        form = SendCourseEmailForm(initial={'_selected_action': map(str, queryset.values_list('id', flat=True))})
 
     return render(request, 'courses/auth/action_send_course_email.html', {'courses': queryset,
                                                                  'evaluate_form': form,
