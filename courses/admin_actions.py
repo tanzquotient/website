@@ -116,8 +116,9 @@ def reject_subscriptions(self, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
+        selected_action = map(str, queryset.values_list('id', flat=True))
         form = RejectForm(
-            initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME), 'send_email': True})
+            initial={'_selected_action': selected_action, 'send_email': True})
 
     return render(request, 'courses/auth/action_reject.html', {'subscriptions': queryset,
                                                                'reason_form': form,
