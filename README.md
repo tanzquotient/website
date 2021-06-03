@@ -49,7 +49,7 @@ Both need to be of the following form:
 <NAME_OF_VARIABLE>: <value>
 
 # Example
-COMPOSE_FILE: docker-compose-dev.yml
+COMPOSE_FILE: docker-compose.yml
 TQ_DEBUG: true
 ```
 

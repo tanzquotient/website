@@ -1,10 +1,14 @@
 version: '2'
-services:
 
-# Docker-Compose file to run the TQ website in production
+# This Compose file can be used in a development environment.
 #
-# Security consideration: using port: mappings will expose the ports to the world, using expose: makes
-# them only accessible in the local Docker network
+# Useful commands:
+#
+# Run this: docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.yml up -d --build
+# Restore DB dump: docker exec -i tq_website_db_1 mysql -u root -p"ROOTPASSWORD" tq_website < dump.sql
+# Connect to Postgres: docker exec -it tq-postgres psql -U root -d tq_website
+
+services:
 
   # Database (Postgres)
   postgres:
@@ -15,18 +19,14 @@ services:
       POSTGRES_PASSWORD: ${TQ_DB_PASSWORD}
       POSTGRES_DB: ${TQ_DB_NAME}
     volumes:
-      - "../data-postgres:/var/lib/postgresql/data"
+      - "postgres-volume:/var/lib/postgresql/data"
+    ports:
+      - "${TQ_DB_PORT_DEBUG_HOST}:5432"
     expose:
       - "5432"
     restart: always
 
-  # Cache and message broker for celery (handles background tasks)
-  redis:
-    container_name: tq-redis
-    image: redis:6.0-alpine
-    restart: always
-
-  # Django (serving with gunicorn)
+  # Django (serving with debug webserver)
   django:
     container_name: tq-django
     build:
@@ -35,67 +35,34 @@ services:
     image: tq_website_django # give this built image a name to use it below
     env_file:
       - .env
-    user: root # TODO not good :/
+    user: root
     volumes:
-      - .:/app/
-    command: gunicorn -c file:/app/configurations/gunicorn.py tq_website.wsgi:application
-    links:
-      - postgres
-      - redis
-    restart: always
-
-  # Webserver
-  nginx:
-    container_name: tq-nginx
-    image: nginx:mainline-alpine
-    volumes:
-      - ./configurations/nginx-ssl.conf:/etc/nginx/conf.d/tq_website.template
-      - ./collected_static:/app/collected_static
-      - ./media:/app/media
-      - ./maintenance.conf:/app/maintenance.conf
-      - /etc/letsencrypt:/etc/letsencrypt
-    command: nginx -g 'daemon off;' -c '/etc/nginx/conf.d/tq_website.template'
-    environment:
-      - NGINX_HOST=${TQ_NGINX_HOST}
-      - NGINX_PORT=${TQ_NGINX_PORT}
+      - .:/app/:Z
+    command: python3 -Wd manage.py runserver 0.0.0.0:8000
     ports:
-      - "${TQ_NGINX_PORT}:80"
-      - "${TQ_SSL_PORT}:443"
-    links:
-      - django
-    restart: always
-
-  # Celery Beat
-  beat:
-    container_name: tq-beat
-    image: tq_website_django
-    env_file:
-      - .env
-    working_dir: /app/
-    volumes:
-      - .:/app/
-    command: celery -A tq_website beat -l info --pidfile="/tmp/celerybeat.pid" -S django
+      - "${TQ_DJANGO_PORT}:8000"
     links:
       - postgres
-      - redis
-    depends_on:
-      - django # ensure the image is built before running this container
+      - minio
     restart: always
-
-  worker:
-    container_name: tq-worker
     depends_on:
-      - django # ensure the image is built before running this container
-    image: tq_website_django
-    env_file:
-      - .env
-    working_dir: /app/
+      - postgres
+      - minio
+
+  # S3 storage
+  minio:
+    container_name: tq-data
+    image: minio/minio
+    volumes:
+      - s3-data-volume:/data
+    ports:
+      - "9000:9000"
     environment:
-      C_FORCE_ROOT: 1
-    volumes:
-      - .:/app/
-    command: celery -A tq_website worker -l info
-    links:
-      - postgres
-      - redis
-    restart: always
+      MINIO_ACCESS_KEY: ${TQ_S3_MEDIA_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${TQ_S3_MEDIA_SECRET_KEY}
+    command: server /data
+
+volumes:
+  postgres-volume: # Let Docker generate a place for this, doesn't matter for development
+  s3-data-volume:
+
