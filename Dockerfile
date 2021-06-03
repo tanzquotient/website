@@ -3,21 +3,18 @@
 #
 # Dockerfile for the tq-website
 
-FROM eu.gcr.io/vseth-public/python36:charlie
+FROM eu.gcr.io/vseth-public/base:delta
 
 # Copy cinit file
 COPY cinit.yml /etc/cinit.d/tq-website.yml
 
-# Pillow
-#TODO Test which libraries are actually needed
-#RUN apt install -y zlib jpeg libxml2-dev libxslt-dev python-dev \
-#    build-base jpeg-dev zlib-dev && \
-#    LIBRARY_PATH=/lib:/usr/lib pip3 install Pillow==7.1.2
+# Install python
+RUN apt install -y python3 python3-pip python3-setuptools
 
 # Install dependencies:
 # - git to clone code from Github
 # - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
-RUN apt install -y git libpq-dev
+RUN apt install -y --no-install-recommends git libpq-dev
 
 WORKDIR /app
 
@@ -28,6 +25,7 @@ COPY . .
 RUN chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py && chmod +x scripts/post-start.sh
 
 # Install requirements
+RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install -r requirements.txt
 
 # Make sure log directory and files exist
