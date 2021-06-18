@@ -9,7 +9,7 @@ from django_countries.fields import CountryField
 from djangocms_text_ckeditor.fields import HTMLField
 
 from courses import managers
-from . import Address, BankAccount, Gender, StudentStatus, Residence
+from . import Address, BankAccount, Gender, StudentStatus, Residence, Subscribe
 
 
 class UserProfile(models.Model):
@@ -114,7 +114,10 @@ class UserProfile(models.Model):
         return [s.course for s in self.get_subscriptions()]
 
     def get_past_subscriptions(self):
-        return filter(lambda s: s.course.is_over(), self.get_subscriptions())
+        sql = 'SELECT * FROM courses_subscribe ' \
+              'WHERE user_id = %s AND course_id IN (SELECT id FROM past_courses) ' \
+              'ORDER BY id DESC'
+        return Subscribe.objects.raw(sql, [self.user_id])
 
     def get_current_teaching_courses(self):
         courses = [t.course for t in self.user.teaching_courses.all() if not t.course.is_over()]
@@ -123,7 +126,10 @@ class UserProfile(models.Model):
         return courses
 
     def get_current_subscriptions(self):
-        return filter(lambda s: not s.course.is_over(), self.get_subscriptions())
+        sql = 'SELECT * FROM courses_subscribe ' \
+              'WHERE user_id = %s AND course_id IN (SELECT id FROM current_courses) ' \
+              'ORDER BY id DESC'
+        return Subscribe.objects.raw(sql, [self.user_id])
 
     def get_student_status(self):
         return StudentStatus.TEXT[self.student_status]

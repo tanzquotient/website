@@ -12,20 +12,14 @@
                     <br/>
                     {% include "courses/snippets/lessons.html" with course=subscription.course only %}
                 </p>
-                {% if subscription.course.room %}
-                    <p>
-                        <strong>{% trans "Location" %}</strong>
+                <p>
+                    <strong>{% trans "More Info" %}</strong>
+                    <a href="{% url "courses:course_detail" subscription.course_id %}">
                         <br/>
-                        {% include "courses/snippets/room_modal.html" with display_link=True room=subscription.course.room only %}
-                    </p>
-                {% endif %}
-                {% if subscription.course.teaching.all %}
-                    <p>
-                        <strong>{% trans "Teachers" %}</strong>
-                        <br/>
-                        {% include "courses/snippets/course_teachers.html" with display_link=True teachings=subscription.course.teaching.all only %}
-                    </p>
-                {% endif %}
+                        {% trans "Course details" %}
+                        <i class="fa fa-arrow-circle-right fa-lg"></i>
+                    </a>
+                </p>
             </div>
             <div class="col-xs-12 col-sm-4">
                 <p>
@@ -99,7 +93,7 @@
                 </p>
             </div>
         </div>
-        <div class="row">
+        <div>
             {% if subscription.partner %}
                 <div class="col-xs-12">
                     <p>

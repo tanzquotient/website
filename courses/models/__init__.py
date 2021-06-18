@@ -1,6 +1,7 @@
 from .choices import *
 from .address import Address
 from .bank_account import BankAccount
+from .subscribe import Subscribe
 from .user_profile import UserProfile
 from .style import Style
 from .room import Room
@@ -13,7 +14,6 @@ from .regular_lesson_exception import RegularLessonException
 from .irregular_lesson import IrregularLesson
 from .course_type import CourseType
 from .course import Course
-from .subscribe import Subscribe
 from .period_cancellation import PeriodCancellation
 from .course_succession import CourseSuccession
 from .confirmation import Confirmation
