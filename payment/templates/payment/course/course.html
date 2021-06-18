@@ -103,7 +103,7 @@
                                         {{ subscription.usi }}
                                     </small>
                                     {% if subscription.payed %}
-                                        <span class="label label-default pull-right">{{ subscription.paymentmethod }}</span>
+                                        <span class="badge badge-default pull-right">{{ subscription.paymentmethod }}</span>
                                     {% endif %}
                                 </h4>
 
@@ -160,7 +160,7 @@
                                             <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
                                                class="btn btn-default btn-xs">{% trans "Pay" %}</a>
                                         {% else %}
-                                            <span class="label label-default">{{ subscription.paymentmethod }}</span>
+                                            <span class="badge badge-default">{{ subscription.paymentmethod }}</span>
                                         {% endif %}
                                     </td>
                                 </tr>

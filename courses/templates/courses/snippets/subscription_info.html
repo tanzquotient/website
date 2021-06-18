@@ -40,7 +40,7 @@
         </div>
         {% if user and course in user.profile.get_subscribed_courses %}
             <p>
-                <span class="label label-success">{% trans "Subscribed" %}</span>
+                <span class="badge badge-success">{% trans "Subscribed" %}</span>
             </p>
         {% elif not course.has_free_places%}
             {% include "courses/snippets/subscription_info_overbooked.html" %}

@@ -29,7 +29,7 @@
                         {{ subscription.get_price_to_pay }} CHF
                         {% if subscription.state == 'confirmed' and not subscription.payed %}
                             <br/>
-                            <span class="label label-warning">{% trans "Unpaid" %}</span>
+                            <span class="badge badge-warning">{% trans "Unpaid" %}</span>
                             <br/>
                             {% trans "Unpaid subscription info" %}
                         {% endif %}
@@ -66,27 +66,27 @@
                     <strong>{% trans "State" %}</strong>
                     <br/>
                     {% if subscription.state == 'new' %}
-                        <span class="label label-info">{% trans "Subscription received" %}</span>
+                        <span class="badge badge-info">{% trans "Subscription received" %}</span>
                         <br/>
                         {% trans "New subscription info" %}
                     {% elif subscription.state == 'confirmed' %}
-                        <span class="label label-success">{% trans "Subscription confirmed" %}</span>
+                        <span class="badge badge-success">{% trans "Subscription confirmed" %}</span>
                         <br/>
                         {% trans "Confirmed subscription info" %}
                     {% elif subscription.state == 'rejected' %}
-                        <span class="label label-danger">{% trans "Rejected" %}</span>
+                        <span class="badge badge-danger">{% trans "Rejected" %}</span>
                         <br/>
                         {% trans "Rejected subscription info" %}
                     {% elif subscription.state == 'completed' %}
-                        <span class="label label-success">{% trans "Completed" %}</span>
+                        <span class="badge badge-success">{% trans "Completed" %}</span>
                         <br/>
                         {% trans "Completed subscription info" %}
                     {% elif subscription.state == 'to_reimburse' %}
-                        <span class="label label-primary">{% trans "To reimburse" %}</span>
+                        <span class="badge badge-primary">{% trans "To reimburse" %}</span>
                         <br/>
                         {% trans "To reimburse subscription info" %}
                     {% elif subscription.state == 'payed' %}
-                        <span class="label label-success">{% trans "Paid" %}</span>
+                        <span class="badge badge-success">{% trans "Paid" %}</span>
                         <br/>
                         {% trans "Paid subscription info" %}
                     {% endif %}

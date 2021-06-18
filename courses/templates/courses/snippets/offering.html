@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if not hide_title %}
     <h2>
-        {% if offering.is_preview %}<span class="label label-info">{% trans "Preview" %}</span>{% endif %}
+        {% if offering.is_preview %}<span class="badge badge-info">{% trans "Preview" %}</span>{% endif %}
         {{ offering.name }}
     </h2>
     {% if offering.period %}
