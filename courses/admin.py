@@ -278,6 +278,11 @@ class RoomAdmin(TranslatableAdmin):
     pass
 
 
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
