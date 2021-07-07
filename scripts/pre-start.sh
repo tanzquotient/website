@@ -17,6 +17,10 @@
 # Apply the database migrations
 python3 manage.py migrate
 
+# Django CMS stuff
+python3 -Wa manage.py cms check
+python3 manage.py cms fix-tree
+
 # Load dummy data
 debug=`echo $TQ_DEBUG | awk '{print tolower($0)}'`
 echo "$debug"
