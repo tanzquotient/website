@@ -84,6 +84,8 @@ class Event(TranslatableModel):
             return max(0, self.max_participants - self.registrations.count())
 
     def fully_booked(self):
+        if self.max_participants is None:
+            return False # There is no limit => Can not be fully booked
         return self.free_spots() <= 0
 
     def is_registered(self, user):
