@@ -8,7 +8,7 @@ from parler.models import TranslatableModel, TranslatedFields
 from courses.models import Room
 from courses.services import format_prices, reverse
 from utils import TranslationUtils
-from . import EventCategory, EventRegistration
+from . import EventRegistration
 from .. import managers
 
 
@@ -16,7 +16,7 @@ class Event(TranslatableModel):
     date = models.DateField()
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
-    category = models.ForeignKey(EventCategory, related_name='events', blank=True, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey('EventCategory', related_name='events', blank=True, null=True, on_delete=models.SET_NULL)
     cancelled = models.BooleanField(blank=False, null=False, default=False)
     room = models.ForeignKey(Room, related_name='events', blank=True, null=True, on_delete=models.SET_NULL)
     price_with_legi = models.FloatField(blank=True, null=True)

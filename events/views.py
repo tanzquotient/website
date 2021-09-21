@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404, redirect
 
-from events.models import Event
+from events.models import Event, EventCategory
 from events.models.event_registration import EventRegistration
 
 
@@ -14,6 +14,20 @@ def detail(request, event_id):
         'user_registered': event.is_registered(request.user)
     }
     return render(request, template_name, context)
+
+
+def category_detail(request, category_id):
+    template_name = "events/category_detail.html"
+    category = get_object_or_404(EventCategory, pk=category_id)
+    context = {
+        'events': Event.displayed_events.future().filter(category=category).all(),
+        'use_cards': False,
+        'title': category.name,
+        'text': category.description,
+        'show_when_no_events': True,
+    }
+    return render(request, template_name, context)
+
 
 
 @login_required

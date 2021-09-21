@@ -1,0 +1,13 @@
+from .event_category_plugin import EventCategoryPlugin
+from .events_plugin import EventsPlugin
+from .events_teaser_plugin import EventsTeaserPlugin
+from .featured_event_categories_plugin import FeaturedEventCategoriesPlugin
+from .featured_event_plugin import FeaturedEventPlugin
+
+from cms.plugin_pool import plugin_pool
+
+plugin_pool.register_plugin(EventsPlugin)
+plugin_pool.register_plugin(EventCategoryPlugin)
+plugin_pool.register_plugin(FeaturedEventPlugin)
+plugin_pool.register_plugin(FeaturedEventCategoriesPlugin)
+plugin_pool.register_plugin(EventsTeaserPlugin)

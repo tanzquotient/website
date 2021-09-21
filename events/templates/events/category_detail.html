@@ -1,0 +1,17 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block lead_title %}
+    {{ title }}
+{% endblock %}
+
+{% block main_content %}
+<div class="container">
+    {% include "events/events.html" %}
+</div>
+{% endblock main_content %}

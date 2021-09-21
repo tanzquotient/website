@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load basic_tags %}
+
+{% with modal_id="modal-"|append_uuid %}
+    <div class="card quick-link mb-4 banner-container">
+        {% if category.image %}
+            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+            {% if category.teaser %}
+                <div>
+                    {{ category.teaser }}
+                </div>
+            {% endif %}
+        </div>
+
+        <ul class="list-group list-group-flush">
+            {% for event in category.get_next_events %}
+                <li class="list-group-item list-group-item-action">
+                    <a href="{% url 'events:detail' event.id %}">
+                        <div>{{ event.date|date:'D, d.m.Y' }}, {{ event.time_from|date:'H:i' }}-{{ event.time_to|date:'H:i' }}</div>
+                    </a>
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+            {% endfor %}
+            <li class="list-group-item list-group-item-action">
+                <a href="{% url 'events:category_detail' category.id %}">
+                    {% trans "More" %}
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endwith %}
+

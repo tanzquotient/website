@@ -1,0 +1,7 @@
+<div class="row mb-4">
+    {% for category in categories %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            {% include "events/snippets/event_category_card.html" %}
+        </div>
+    {% endfor %}
+</div>
