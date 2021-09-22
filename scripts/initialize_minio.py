@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-
 import os
 import json
 
 from minio import Minio
-from minio.error import BucketAlreadyOwnedByYou
+from minio.error import MinioException
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,21 +20,21 @@ try:
     print('creating media bucket')
     minio_client.make_bucket(os.environ.get('TQ_S3_MEDIA_BUCKET'),
                              location=os.environ.get('TQ_S3_MEDIA_REGION'))
-except BucketAlreadyOwnedByYou:
+except MinioException:
     pass
 
 try:
     print('creating static bucket')
     minio_client.make_bucket(os.environ.get('TQ_S3_STATIC_BUCKET'),
                              location=os.environ.get('TQ_S3_STATIC_REGION'))
-except BucketAlreadyOwnedByYou:
+except MinioException:
     pass
 
 try:
     print('creating postfinance bucket')
     minio_client.make_bucket(os.environ.get('TQ_S3_POSTFINANCE_BUCKET'),
                              location=os.environ.get('TQ_S3_POSTFINANCE_REGION'))
-except BucketAlreadyOwnedByYou:
+except MinioException:
     pass
 
 print('configure static bucket')

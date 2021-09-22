@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose run --rm django python manage.py loaddata fixtures/*
+docker-compose run --rm django python3 manage.py loaddata fixtures/*
