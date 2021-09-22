@@ -9,7 +9,7 @@ FROM eu.gcr.io/vseth-public/base:delta
 COPY cinit.yml /etc/cinit.d/tq-website.yml
 
 # Install python
-RUN apt install -y python python3 python3-pip python3-setuptools
+RUN apt install -y python3 python3-pip python3-setuptools
 
 # Install dependencies:
 # - git to clone code from Github
