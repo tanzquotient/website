@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose run --rm django python "scripts/initialize_minio.py"
+docker-compose run --rm django python3 "scripts/initialize_minio.py"

@@ -16,6 +16,8 @@ RUN apt install -y python3 python3-pip python3-setuptools
 # - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
 RUN apt install -y --no-install-recommends git libpq-dev
 
+RUN mkdir -p /app
+
 WORKDIR /app
 
 # Copy the code into the container
@@ -34,6 +36,9 @@ RUN mkdir -p logs && \
     touch logs/tq.log && \
     touch logs/payments.log && \
     touch logs/errors.log
+
+RUN mkdir -p ~/.aws
+RUN echo "[default]\nregion=europe-west-2" > ~/.aws/config
 
 # Change permissions on the code so the app-user can access it
 RUN chown -R app-user:app-user .
