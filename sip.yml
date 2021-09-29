@@ -24,6 +24,14 @@ sidecar:
     values:
       version: "6.0.8"
 
+resources:
+  requests:
+    memory: 2G
+    cpu: 1000m
+  limits:
+     memory: 4G
+     cpu: 2000m
+
 # When editing those, you MUST update the deployment(s) with sipctl as well!
 env:
   - name: SIP_TQ_DJANGO_SECRET_KEY
