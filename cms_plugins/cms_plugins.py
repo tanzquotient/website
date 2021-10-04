@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
@@ -177,7 +177,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     'detail_url': reverse('courses:course_detail', kwargs={'course_id': irregular_lesson.course.id}),
                 })
 
-        items.sort(key=lambda item: datetime.combine(item["date"], item["time_from"]))
+        items.sort(key=lambda item: datetime.combine(item["date"], item["time_from"] or time()))
         items = items[0:instance.max_displayed]
 
         context.update({

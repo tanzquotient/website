@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-16 21:27+0000\n"
+"POT-Creation-Date: 2021-10-04 18:07+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,7 @@ msgstr "Row"
 msgid "Upcoming events and courses"
 msgstr "Upcoming courses and events"
 
-#: cms_plugins/cms_plugins.py:197
+#: cms_plugins/cms_plugins.py:199
 msgid "Countdown"
 msgstr "Countdown"
 
@@ -508,6 +508,7 @@ msgid "All Offerings"
 msgstr "All offerings"
 
 #: courses/templates/courses/course_detail.html:10
+#: courses/templates/user/snippets/subscription.html:19
 msgid "Course details"
 msgstr "Course details"
 
@@ -555,7 +556,6 @@ msgid "Level"
 msgstr "Level"
 
 #: courses/templates/courses/snippets/course_info.html:13
-#: courses/templates/user/snippets/subscription.html:24
 #: payment/templates/payment/finance/offering_overview_subscribers.html:21
 #: payment/templates/payment/finance/offering_overview_teachers.html:23
 msgid "Teachers"
@@ -568,7 +568,7 @@ msgstr "Room"
 #: courses/templates/courses/snippets/course_info.html:29
 #: courses/templates/courses/snippets/offering.html:31
 #: courses/templates/courses/snippets/offering.html:117
-#: courses/templates/user/snippets/subscription.html:32
+#: courses/templates/user/snippets/subscription.html:26
 #: events/templates/events/snippets/event_info.html:11
 msgid "Costs"
 msgstr "Costs"
@@ -595,7 +595,7 @@ msgid "Go to 'My Courses' to see the status and further information"
 msgstr "Go to 'My Courses' to see the status and further information"
 
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
-#: courses/templates/user/dashboard.html:45
+#: courses/templates/user/user_courses.html:50
 msgid "Past courses"
 msgstr "Past courses"
 
@@ -658,13 +658,12 @@ msgid "Course"
 msgstr "Course"
 
 #: courses/templates/courses/snippets/offering.html:26
-#: courses/templates/user/snippets/subscription.html:106
+#: courses/templates/user/snippets/subscription.html:100
 msgid "Partner"
 msgstr "Partner"
 
 #: courses/templates/courses/snippets/offering.html:28
 #: courses/templates/user/snippets/course_as_teacher.html:14
-#: courses/templates/user/snippets/subscription.html:17
 msgid "Location"
 msgstr "Location"
 
@@ -739,7 +738,7 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: courses/templates/courses/snippets/song_list.html:7
-#: tq_website/settings.py:344
+#: tq_website/settings.py:349
 msgid "Title"
 msgstr "Title"
 
@@ -869,37 +868,6 @@ msgstr "No info available"
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Add salary payment info (only required for teachers and helpers)"
 
-#: courses/templates/user/dashboard.html:5
-#: courses/templates/user/dashboard.html:9
-#: payment/templates/payment/course/form.html:6
-#: templates/menu/collapsed_user_menu.html:7 templates/menu/user_menu.html:36
-msgid "My Courses"
-msgstr "My Courses"
-
-#: courses/templates/user/dashboard.html:14
-msgid "Teaching"
-msgstr "Teaching"
-
-#: courses/templates/user/dashboard.html:22
-msgid "There are currently no ongoing courses."
-msgstr "There are currently no ongoing courses"
-
-#: courses/templates/user/dashboard.html:27
-msgid "Show all courses "
-msgstr "Show all Courses"
-
-#: courses/templates/user/dashboard.html:32
-msgid "Current courses"
-msgstr "Current courses"
-
-#: courses/templates/user/dashboard.html:36
-msgid "No courses"
-msgstr "No courses"
-
-#: courses/templates/user/dashboard.html:40
-msgid "Show available courses"
-msgstr "Show available courses"
-
 #: courses/templates/user/profile.html:23
 msgid "Show my courses"
 msgstr "Show my courses"
@@ -949,7 +917,7 @@ msgid "Bank account"
 msgstr "Bank account"
 
 #: courses/templates/user/profile.html:100
-#: courses/templates/user/snippets/subscription.html:50
+#: courses/templates/user/snippets/subscription.html:44
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -1017,7 +985,7 @@ msgid "Payment status"
 msgstr "Payment Status"
 
 #: courses/templates/user/snippets/course_as_teacher.html:43
-#: courses/templates/user/snippets/subscription.html:95
+#: courses/templates/user/snippets/subscription.html:89
 #: payment/templates/payment/finance/offering_overview_subscribers.html:35
 msgid "Paid"
 msgstr "Paid"
@@ -1046,95 +1014,130 @@ msgstr "Contacts (vCard)"
 msgid "Details & edit"
 msgstr "Details & edit"
 
-#: courses/templates/user/snippets/subscription.html:38
+#: courses/templates/user/snippets/subscription.html:16
+msgid "More Info"
+msgstr "More info"
+
+#: courses/templates/user/snippets/subscription.html:32
 #: payment/templates/payment/finance/offering_overview_subscribers.html:34
 msgid "Unpaid"
 msgstr "Unpaid"
 
-#: courses/templates/user/snippets/subscription.html:40
+#: courses/templates/user/snippets/subscription.html:34
 msgid "Unpaid subscription info"
 msgstr "Please transfer the course price before to the following account."
 
-#: courses/templates/user/snippets/subscription.html:43
+#: courses/templates/user/snippets/subscription.html:37
 msgid "free of charge"
 msgstr "free of charge"
 
-#: courses/templates/user/snippets/subscription.html:48
+#: courses/templates/user/snippets/subscription.html:42
 msgid "Transfer to"
 msgstr "Transfer to"
 
-#: courses/templates/user/snippets/subscription.html:52
+#: courses/templates/user/snippets/subscription.html:46
 msgid "Accout number"
 msgstr "Account number"
 
-#: courses/templates/user/snippets/subscription.html:54
+#: courses/templates/user/snippets/subscription.html:48
 msgid "SWIFT/BIC"
 msgstr "SWIFT/BIC"
 
-#: courses/templates/user/snippets/subscription.html:56
+#: courses/templates/user/snippets/subscription.html:50
 msgid "Recipient"
 msgstr "Recipient"
 
-#: courses/templates/user/snippets/subscription.html:58
+#: courses/templates/user/snippets/subscription.html:52
 msgid "Transfer Message"
 msgstr "Transfer Message"
 
-#: courses/templates/user/snippets/subscription.html:61
+#: courses/templates/user/snippets/subscription.html:55
 msgid "Use voucher"
 msgstr "Use voucher"
 
-#: courses/templates/user/snippets/subscription.html:64
+#: courses/templates/user/snippets/subscription.html:58
 msgid "Reedeem voucher here"
 msgstr "Redeem voucher here"
 
-#: courses/templates/user/snippets/subscription.html:72
+#: courses/templates/user/snippets/subscription.html:66
 msgid "State"
 msgstr "State"
 
-#: courses/templates/user/snippets/subscription.html:75
+#: courses/templates/user/snippets/subscription.html:69
 msgid "Subscription received"
 msgstr "Subscription received"
 
-#: courses/templates/user/snippets/subscription.html:77
+#: courses/templates/user/snippets/subscription.html:71
 msgid "New subscription info"
 msgstr "We received your subscription. Please wait for the confirmation."
 
-#: courses/templates/user/snippets/subscription.html:79
+#: courses/templates/user/snippets/subscription.html:73
 msgid "Subscription confirmed"
 msgstr "Subscription confirmed"
 
-#: courses/templates/user/snippets/subscription.html:81
+#: courses/templates/user/snippets/subscription.html:75
 msgid "Confirmed subscription info"
 msgstr ""
 "Your subscription is now definitive. A place in the course is guaranteed"
 
-#: courses/templates/user/snippets/subscription.html:83
+#: courses/templates/user/snippets/subscription.html:77
 msgid "Rejected"
 msgstr "Rejected"
 
-#: courses/templates/user/snippets/subscription.html:85
+#: courses/templates/user/snippets/subscription.html:79
 msgid "Rejected subscription info"
 msgstr "Unfortunately, we had to reject your subscription."
 
-#: courses/templates/user/snippets/subscription.html:87
+#: courses/templates/user/snippets/subscription.html:81
 msgid "Completed"
 msgstr "Completed"
 
-#: courses/templates/user/snippets/subscription.html:89
+#: courses/templates/user/snippets/subscription.html:83
 msgid "Completed subscription info"
 msgstr "Everything done!"
 
-#: courses/templates/user/snippets/subscription.html:91
+#: courses/templates/user/snippets/subscription.html:85
 msgid "To reimburse"
 msgstr "To reimburse"
 
-#: courses/templates/user/snippets/subscription.html:93
+#: courses/templates/user/snippets/subscription.html:87
 msgid "To reimburse subscription info"
 msgstr "Reimbursement pending."
 
-#: courses/templates/user/snippets/subscription.html:97
+#: courses/templates/user/snippets/subscription.html:91
 msgid "Paid subscription info"
 msgstr "We received your payment. Thank you!"
+
+#: courses/templates/user/user_courses.html:5
+#: courses/templates/user/user_courses.html:9
+#: payment/templates/payment/course/form.html:6
+#: templates/menu/collapsed_user_menu.html:7 templates/menu/user_menu.html:36
+msgid "My Courses"
+msgstr "My Courses"
+
+#: courses/templates/user/user_courses.html:14
+msgid "Teaching"
+msgstr "Teaching"
+
+#: courses/templates/user/user_courses.html:22
+msgid "There are currently no ongoing courses."
+msgstr "There are currently no ongoing courses"
+
+#: courses/templates/user/user_courses.html:28
+msgid "Show all courses "
+msgstr "Show all Courses"
+
+#: courses/templates/user/user_courses.html:34
+msgid "Current courses"
+msgstr "Current courses"
+
+#: courses/templates/user/user_courses.html:39
+msgid "No courses"
+msgstr "No courses"
+
+#: courses/templates/user/user_courses.html:44
+msgid "Show available courses"
+msgstr "Show available courses"
 
 #: courses/views.py:57
 msgid "Upcoming courses"
@@ -1197,30 +1200,36 @@ msgstr "Sucesfully unsubscribed!"
 msgid "Invalide unsubscribe url. Please send us an email to unsubscribe."
 msgstr "Invalide unsubscribe url. Please send us an email to unsubscribe."
 
-#: events/cms_apps.py:7 events/cms_plugins.py:18 events/cms_toolbars.py:10
-#: events/cms_toolbars.py:13
+#: events/cms_apps.py:7 events/cms_plugins/events_plugin.py:18
+#: events/cms_toolbars.py:10 events/cms_toolbars.py:13
 msgid "Events"
 msgstr "Events"
 
-#: events/cms_plugins.py:14
-msgid "List"
-msgstr "List"
-
-#: events/cms_plugins.py:14
-msgid "Cards"
-msgstr "Cards"
-
-#: events/cms_plugins.py:46
+#: events/cms_plugins/event_category_plugin.py:20
 msgid "Event Category"
 msgstr "Event Category"
 
-#: events/cms_plugins.py:68
-msgid "Featured Event"
-msgstr "Featured Event"
+#: events/cms_plugins/events_plugin.py:14
+msgid "List"
+msgstr "List"
 
-#: events/cms_plugins.py:89
+#: events/cms_plugins/events_plugin.py:14
+msgid "Cards"
+msgstr "Cards"
+
+#: events/cms_plugins/events_teaser_plugin.py:17
 msgid "Events Teaser"
 msgstr "Events Teaser"
+
+#: events/cms_plugins/featured_event_categories_plugin.py:13
+#, fuzzy
+#| msgid "Featured Event"
+msgid "Featured Event Categories"
+msgstr "Featured Event"
+
+#: events/cms_plugins/featured_event_plugin.py:12
+msgid "Featured Event"
+msgstr "Featured Event"
 
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:7
@@ -1326,6 +1335,12 @@ msgstr "Show details & register"
 #: events/templates/events/snippets/event_card.html:17
 msgid "Show details"
 msgstr "Show details"
+
+#: events/templates/events/snippets/event_category_card.html:29
+#, fuzzy
+#| msgid "More Info"
+msgid "More"
+msgstr "More info"
 
 #: events/templates/events/snippets/event_extended_info.html:15
 #: events/templates/events/snippets/event_list.html:14
@@ -1515,8 +1530,8 @@ msgstr "Course Management"
 msgid "German"
 msgstr "German"
 
-#: payment/templates/payment/course/course.html:26 tq_website/settings.py:304
-#: tq_website/settings.py:319
+#: payment/templates/payment/course/course.html:26 tq_website/settings.py:309
+#: tq_website/settings.py:324
 msgid "English"
 msgstr "English"
 
@@ -1951,6 +1966,37 @@ msgstr "Add E-mail"
 msgid "Do you really want to remove the selected e-mail address?"
 msgstr "Do you really want to remove the selected e-mail address?"
 
+#: templates/account/login.html:6 templates/account/login.html:12
+#: templates/account/login.html:29
+#, fuzzy
+#| msgid "Sign up"
+msgid "Sign In"
+msgstr "Sign up"
+
+#: templates/account/login.html:18
+#, fuzzy
+#| msgid "Email Address"
+msgid "Email address"
+msgstr "Email Address"
+
+#: templates/account/login.html:22
+msgid "Password"
+msgstr ""
+
+#: templates/account/login.html:31
+msgid "or"
+msgstr ""
+
+#: templates/account/login.html:33
+#, fuzzy
+#| msgid "Already have an account?"
+msgid "create a new account"
+msgstr "Already have an account?"
+
+#: templates/account/login.html:37
+msgid "Forgot Password?"
+msgstr ""
+
 #: templates/account/signup.html:5
 msgid "Signup"
 msgstr "Signup"
@@ -2054,15 +2100,15 @@ msgstr "Association functions"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:303 tq_website/settings.py:311
+#: tq_website/settings.py:308 tq_website/settings.py:316
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:336
+#: tq_website/settings.py:341
 msgid "Main content"
 msgstr "Main content"
 
-#: tq_website/settings.py:340
+#: tq_website/settings.py:345
 msgid "Side content"
 msgstr "Side content"
 
@@ -2080,9 +2126,6 @@ msgstr "Side content"
 
 #~ msgid "Go to course"
 #~ msgstr "Go to courses"
-
-#~ msgid "More Info"
-#~ msgstr "More info"
 
 #~ msgid "Organizer"
 #~ msgstr "Organizer"
