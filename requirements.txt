@@ -1,24 +1,24 @@
 # Django
-Django==3.2.5
-django-debug-toolbar==3.2.1
+Django==3.2.8
+django-debug-toolbar==3.2.2
 django-absolute==0.3
 django-analytical==3.0.0
 django-celery-email==3.0.0
 django-celery-beat==2.2.1
 django-celery-results==2.2.0
 django-filer==2.0.2
-django-filter==2.4.0
+django-filter==21.1
 django-formtools==2.3
 django-guardian==2.4.0
 django-parler==2.2
 django-polymorphic==3.0.0
 django-post-office==3.5.3
-django-reversion==3.0.9
-django-timezone-field==4.2
+django-reversion==4.0.0
+django-timezone-field==4.2.1
 django-countries==7.2.1
 django-ical==1.8.0
 django-ckeditor==6.1.0
-django-allauth==0.44.0
+django-allauth==0.45.0
 
 # Django CMS
 django-cms==3.9.0
@@ -37,11 +37,11 @@ redis==3.5.3
 django-redis==5.0.0
 
 # Files and encoding
-openpyxl==3.0.7
+openpyxl==3.0.9
 base36==0.1.1
 svglib==1.1.0
 PyPDF2==1.26.0
-Pillow==8.3.1
+Pillow==8.3.2
 pyyaml==5.4.1
 
 # SSH
@@ -52,18 +52,18 @@ psycopg2==2.9.1
 
 # Storage
 django-storages==1.11.1
-boto3==1.17.106
+boto3==1.18.54
 
 # Webserver
 gunicorn==20.1.0
 
 # Logging
-sentry_sdk==1.2.0
+sentry_sdk==1.4.3
 
 # Utils
-cryptography==3.4.7
-pylint==2.9.3
-python-dotenv==0.18.0
+cryptography==35.0.0
+pylint==2.11.1
+python-dotenv==0.19.0
 sphinx-automodapi==0.13
-pytz==2021.1
-minio==7.0.4
+pytz==2021.3
+minio==7.1.0
