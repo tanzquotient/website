@@ -15,8 +15,8 @@
                     {% endif %}
 
                     <h5 class="m-0">
-                        <a href="#" data-toggle="modal"
-                           data-target="#user_modal-{{ user.id }}">{{ user.get_full_name }}</a>
+                        <a href="#" data-bs-toggle="modal"
+                           data-bs-target="#user_modal-{{ user.id }}">{{ user.get_full_name }}</a>
                     </h5>
                     <p class="m-0">
                         {% for function in user.functions.all %}

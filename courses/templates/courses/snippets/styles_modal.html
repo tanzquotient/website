@@ -6,7 +6,7 @@
         {% if disable_modals %}
             {{ s.name }}{% if not forloop.last %}, {% endif %}
         {% else %}
-            <a href="#" data-toggle="modal" data-target="#modal_style-{{ s.id }}">{{ s.name }}</a>{% if not forloop.last %}, {% endif %}
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_style-{{ s.id }}">{{ s.name }}</a>{% if not forloop.last %}, {% endif %}
 
         {% endif %}
     {% endfor %}
@@ -24,8 +24,8 @@
                         <h5 class="modal-title" id="modal_label_event-{{ s.id }}">
                             {{ s.name }}
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -49,7 +49,7 @@
                         <p>{% include "courses/snippets/song_list.html" with songs=s.songs.all only %}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
                     </div>
                 </div>
             </div>

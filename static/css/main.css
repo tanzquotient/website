@@ -4,10 +4,12 @@ body {
 
 a {
     color: #C51718;
+    text-decoration: none;
 }
 
 a:hover {
     color: #9a1414;
+    text-decoration: underline;
 }
 
 table.table {

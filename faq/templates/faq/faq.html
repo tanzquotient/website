@@ -2,7 +2,7 @@
     {% for q in questions %}
         <div class="card card-default mb-1">
             <div class="card-header" role="tab" id="heading-{{ q.id }}">
-                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ q.id }}"
+                    <a class="collapsed" data-bs-toggle="collapse" data-parent="#accordion" href="#collapse-{{ q.id }}"
                        aria-expanded="false" aria-controls="collapse-{{ q.id }}">
                         {{ q.question_text }}
                     </a>

@@ -3,7 +3,7 @@
 {% if display_link and not disable_modals and room.has_additional_info %}
 
     <!-- Button trigger modal -->
-    <a href="#" data-toggle="modal" data-target="#modal_room-{{ room.id }}">{{ room.name }}</a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modal_room-{{ room.id }}">{{ room.name }}</a>
 
     <!-- Modal -->
     <div class="modal fade" id="modal_room-{{ room.id }}" tabindex="-1" role="dialog" aria-labelledby="Room Info"
@@ -14,8 +14,8 @@
                     <h5 class="modal-title" id="modal_label_event-{{ room.id }}">
                         {{ room.name }}
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -30,7 +30,7 @@
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
                 </div>
             </div>
         </div>

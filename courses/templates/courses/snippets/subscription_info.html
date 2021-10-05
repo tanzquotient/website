@@ -17,12 +17,12 @@
                 {% if count %}
                     {% if show.man and count.man > 0 %}
                         <span class="subscription_info_item">
-                            <span class="badge badge-pill badge-success"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
+                            <span class="badge rounded-pill bg-success"> <i class="fa fa-mars"></i> {{ count.man }} frei</span>
                         </span>
                     {% endif %}
                     {% if show.woman and count.woman > 0 %}
                         <span class="subscription_info_item">
-                            <span class="badge badge-pill badge-success"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
+                            <span class="badge rounded-pill bg-success"><i class="fa fa-venus"></i> {{ count.woman }} frei</span>
                         </span>
                     {% endif %}
                 {% endif %}
@@ -30,7 +30,7 @@
                 {% if count != None %}
                     <span class="subscription_info_item">
                 {% if show.total %}
-                    <span class="badge badge-pill badge-success">{{ count.total }} frei</span>
+                    <span class="badge rounded-pill bg-success">{{ count.total }} frei</span>
                 {% elif count.total <= 0 %}
                     <em>(Warteliste)</em>
                 {% endif %}
@@ -40,7 +40,7 @@
         </div>
         {% if user and course in user.profile.get_subscribed_courses %}
             <p>
-                <span class="badge badge-success">{% trans "Subscribed" %}</span>
+                <span class="badge bg-success">{% trans "Subscribed" %}</span>
             </p>
         {% elif not course.has_free_places%}
             {% include "courses/snippets/subscription_info_overbooked.html" %}

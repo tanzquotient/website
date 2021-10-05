@@ -37,17 +37,17 @@
                 <div>
                     <strong>{% trans "Limited number of guests" %}</strong>
                 </div>
-                <span style="font-size: medium" class="badge mt-2 badge-danger">
+                <span style="font-size: medium" class="badge mt-2 bg-danger">
                     {% trans "Max." %} {{ event.max_participants }}
                 </span>
                 {% with free_spots=event.free_spots %}
                     {% if free_spots != None %}
                         {% if free_spots > 0 %}
-                            <span style="font-size: medium" class="badge mt-2 badge-secondary">
+                            <span style="font-size: medium" class="badge mt-2 bg-secondary">
                                  {{ free_spots }} {% trans "available" %}
                             </span>
                         {% else %}
-                            <span style="font-size: medium" class="badge mt-2 badge-danger">
+                            <span style="font-size: medium" class="badge mt-2 bg-danger">
                                  {% trans "fully booked" %}
                             </span>
                         {% endif %}
@@ -61,7 +61,7 @@
                         <strong>{% trans "Registration" %}</strong>
                     </div>
                     {% if user_registered %}
-                        <span style="font-size: medium" class="badge mt-2 badge-success">
+                        <span style="font-size: medium" class="badge mt-2 bg-success">
                                 {% trans "You are registered" %}
                         </span>
                         <div class="mt-3">

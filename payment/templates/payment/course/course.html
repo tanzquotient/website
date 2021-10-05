@@ -21,9 +21,9 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li  role="presentation" class="active nav-item"><a class="nav-link" href="#editor-de" aria-controls="editor-de" role="tab"
-                                                                  data-toggle="tab">{% trans "German" %}</a></li>
+                                                                  data-bs-toggle="tab">{% trans "German" %}</a></li>
                         <li  class="nav-item" role="presentation"><a class="nav-link" href="#editor-en" aria-controls="editor-en" role="tab"
-                                                   data-toggle="tab">{% trans "English" %}</a></li>
+                                                   data-bs-toggle="tab">{% trans "English" %}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -103,7 +103,7 @@
                                         {{ subscription.usi }}
                                     </small>
                                     {% if subscription.payed %}
-                                        <span class="badge badge-default pull-right">{{ subscription.paymentmethod }}</span>
+                                        <span class="badge bg-default pull-right">{{ subscription.paymentmethod }}</span>
                                     {% endif %}
                                 </h4>
 
@@ -160,7 +160,7 @@
                                             <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
                                                class="btn btn-default btn-xs">{% trans "Pay" %}</a>
                                         {% else %}
-                                            <span class="badge badge-default">{{ subscription.paymentmethod }}</span>
+                                            <span class="badge bg-default">{{ subscription.paymentmethod }}</span>
                                         {% endif %}
                                     </td>
                                 </tr>

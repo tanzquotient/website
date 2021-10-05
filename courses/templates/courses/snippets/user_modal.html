@@ -8,15 +8,15 @@
                 <h5 class="modal-title"
                     id="modal_label_profile-{{ user.id }}">{{ user.get_full_name }}
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body">
                 {% if user.profile %}
                     <div class="media">
                         {% if user.profile.picture %}
-                            <img class="avatar mr-4" src="{{ user.profile.picture.url }}"
+                            <img class="avatar me-4" src="{{ user.profile.picture.url }}"
                                  alt="{{ user.get_full_name }}">
                         {% endif %}
                         <div class="media-body">
@@ -59,7 +59,7 @@
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
     </div>

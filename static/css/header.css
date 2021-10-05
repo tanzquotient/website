@@ -20,6 +20,7 @@ header.lead .lead-title {
     padding: 5px 20px;
     border-radius: 10px;
     margin: 0 10px;
+    width: unset;
 }
 
 @media ( max-width : 992px) {

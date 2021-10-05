@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="card card-default">
     <div class="card-header">
-        {% if not course.display %}<span class="badge badge-info">{% trans "Preview" %}</span>{% endif %}
+        {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
         {{ course.type.name }}
     </div>
     <div class="card-body">
