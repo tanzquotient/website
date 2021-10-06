@@ -3,7 +3,7 @@
 #
 # Dockerfile for the tq-website
 
-FROM eu.gcr.io/vseth-public/base:delta
+FROM eu.gcr.io/vseth-public/base:echo
 
 # Copy cinit file
 COPY cinit.yml /etc/cinit.d/tq-website.yml

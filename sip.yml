@@ -26,11 +26,11 @@ sidecar:
 
 resources:
   requests:
-    memory: 2G
-    cpu: 1000m
+    memory: 4G
+    cpu: 2000m
   limits:
-     memory: 4G
-     cpu: 2000m
+     memory: 8G
+     cpu: 4000m
 
 # When editing those, you MUST update the deployment(s) with sipctl as well!
 env:
