@@ -291,24 +291,16 @@ def offering_time_chart_dict(offering):
     for c in offering.course_set.all():
         trace = dict()
         trace['name'] = c.name
-        trace['x'] = []
-        trace['y'] = []
-        counter = 0
-        last = None
-        for s in c.subscriptions.order_by('date').all():
-            if last is None:
-                last = s.date.date()
-            if s.date.date() == last:
-                counter += 1
-            else:
-                # save temp
-                trace['x'].append(str(s.date.date()))
-                trace['y'].append(counter)
-                counter += 1
-                last = s.date.date()
-        if last is not None:
-            trace['x'].append(str(last))
-            trace['y'].append(counter)
+        values = dict()
+        for s in c.subscriptions.all():
+            key = str(s.date.date())
+            values[key] = values.get(key, 0) + 1
+
+        tuples = [(x, y) for x, y in values.items()]
+
+        trace['x'] = [x for x, _ in tuples]
+        trace['y'] = [y for _, y in tuples]
+
         traces.append(trace)
 
     trace_total = dict()
@@ -316,6 +308,7 @@ def offering_time_chart_dict(offering):
     trace_total['y'] = []
     counter = 0
     last = None
+
     for s in Subscribe.objects.filter(course__offering__id=offering.id).order_by('date').all():
         if last is None:
             last = s.date.date()
@@ -324,7 +317,7 @@ def offering_time_chart_dict(offering):
         else:
             # save temp
             print("add counter {}".format(counter))
-            trace_total['x'].append(str(s.date.date()))
+            trace_total['x'].append(str(last))
             trace_total['y'].append(counter)
             counter += 1
             last = s.date.date()

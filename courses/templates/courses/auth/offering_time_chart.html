@@ -5,22 +5,22 @@
     document.addEventListener('DOMContentLoaded', function () {
         {% for trace in chart.traces %}
             var trace{{ forloop.counter }} = {
-                type: 'scatter',
+                type: 'bar',
                 name: '{{ trace.name }}',
-                x: [{{ trace.x|fence:"'"|join:"," }}],
-                y: [{{ trace.y|join:"," }}],
-                line: {shape: 'spline'},
+                x: {{ trace.x }},
+                y: {{ trace.y }},
                 mode: 'lines',
             };
+            console.log({{ trace.y }})
         {% endfor %}
 
         var trace_total = {
             type: 'scatter',
             name: 'TOTAL',
-            x: [{{ chart.trace_total.x|fence:"'"|join:"," }}],
-            y: [{{ chart.trace_total.y|join:"," }}],
+            x: {{ chart.trace_total.x }},
+            y: {{ chart.trace_total.y }},
             yaxis: 'y2',
-            line: {shape: 'spline', color: 'rgba(0,0,0,0.5)', width: 6,},
+            line: { color: '#C51718', width: 5,},
             mode: 'lines',
         };
 
@@ -30,6 +30,7 @@
         var layout = {
             title: 'Timeline',
             height: 800,
+            barmode: 'stack',
             xaxis: {
                 title: 'date',
                 type: 'date',
@@ -48,6 +49,8 @@
                 traceorder:"reversed",
             }
         };
+
+        console.log(data)
 
         Plotly.newPlot(document.getElementById('chart-time-{{ offering.id }}'), data, layout);
     });
