@@ -18,15 +18,14 @@ def generate_voucher_pdf(vouchers):
     for voucher in vouchers:
         filename = "Voucher-" + voucher.key + ".pdf"
 
-        if voucher.expires:
-            date_string = ", Valid through: " + voucher.expires.strftime("%d.%m.%Y")
-        else:
-            date_string = ""
+        issued = voucher.issued.strftime("%d.%m.%Y")
+        expires = voucher.expires.strftime("%d.%m.%Y") if voucher.expires else "never"
 
         content = base_content \
-            .replace('{{ code }}', voucher.key) \
-            .replace("{{ valid }}", date_string) \
-            .replace("{{ percent }}", str(voucher.percentage))
+            .replace('{{ issued }}', issued) \
+            .replace("{{ expires }}", expires) \
+            .replace("{{ code }}", voucher.key) \
+            .replace("{{ percent }}", "{}%".format(str(voucher.percentage)))
         tmpdir = gettempdir()
         temp_path = os.path.join(tmpdir, 'voucher.svg')
         with open(temp_path, mode="wb") as temp_file:
