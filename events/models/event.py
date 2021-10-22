@@ -100,7 +100,7 @@ class Event(TranslatableModel):
         return reverse('events:detail', kwargs={'event_id': self.id})
 
     def __str__(self):
-        return "{}".format(self.get_name())
+        return "{} ({})".format(self.get_name(), self.date.strftime('%d.%m.%Y'))
 
     class Meta:
         ordering = ['-date', '-time_from']

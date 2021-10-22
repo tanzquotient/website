@@ -3,7 +3,7 @@ from parler.admin import TranslatableAdmin
 
 from events.admin_actions import *
 from events.filters.event_date_filter import EventDateFilter
-from events.models import Event, EventCategory
+from events.models import Event, EventCategory, EventRegistration
 
 
 @admin.register(Event)
@@ -34,3 +34,10 @@ class EventCategoryAdmin(TranslatableAdmin):
     list_display = ('name', 'description')
     fields = ('name', 'teaser', 'description', 'is_featured', 'image')
     model = EventCategory
+
+
+@admin.register(EventRegistration)
+class EventRegistrationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'event', 'user', 'timestamp']
+    list_filter = ['event']
+    model = EventRegistration
