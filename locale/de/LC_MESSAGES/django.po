@@ -1891,11 +1891,11 @@ msgstr "Senden erfolgreich. Vielen Dank für deine Zeit!"
 #: survey/views.py:87
 msgid ""
 "There is a technical problem with your link. We are very sorry. Please "
-"inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to "
+"inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still want to "
 "take part in the survey"
 msgstr ""
 "Es gibt ein technisches Problem mit deinem Link. Das tut uns leid. Bitte "
-"informiere uns auf informatik@tq.vseth.ch MIT DEINEM VOLLSTÄNDIGEN NAMEN, "
+"informiere uns auf informatik@tanzquotient.org MIT DEINEM VOLLSTÄNDIGEN NAMEN, "
 "falls du immer noch an der Umfrage teilnehmen möchtest."
 
 #: survey/views.py:96

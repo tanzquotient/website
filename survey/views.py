@@ -84,7 +84,7 @@ def survey_invitation(request):
             inst_id = services.decode_id(id_str, c)
             if not inst_id:
                 request.session['msg'] = _(
-                    "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tq.vseth.ch WITH YOUR FULL NAME if you still want to take part in the survey")
+                    "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still want to take part in the survey")
                 return redirect('survey:survey_error')
             log.debug(inst_id)
             survey_instance = _get_survey_inst(inst_id)

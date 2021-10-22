@@ -77,7 +77,7 @@ There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 [RTD-user]: https://tq-website.readthedocs.io/en/latest/introduction/non_programmer_howto.html
 [minio-get-started]: https://docs.min.io/docs/minio-client-quickstart-guide.html
 [local_instance]: http://localhost:8000
-[tq-it-mail]: mailto:informatik@tq.vseth.ch
+[tq-it-mail]: mailto:informatik@tanzquotient.org
 [django-docs]: https://docs.djangoproject.com/en/2.2/
 [intellij-docker-compose]: https://www.jetbrains.com/help/pycharm/using-docker-compose-as-a-remote-interpreter.html#configuring-docker
 [intellij-run-django]: https://www.jetbrains.com/help/idea/run-debug-configuration-django-server.html

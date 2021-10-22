@@ -8,7 +8,7 @@ Liebe Grüsse
 
 Dein TQ
 tanzquotient.org
-Bei Fragen wende dich an informatik@tq.vseth.ch
+Bei Fragen wende dich an informatik@tanzquotient.org
 
 ________________
 
@@ -19,5 +19,5 @@ Best regards,
 
 Your TQ
 tanzquotient.org
-If you have any questions, contact us: informatik@tq.vseth.ch
+If you have any questions, contact us: informatik@tanzquotient.org
 {% endautoescape %}

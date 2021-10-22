@@ -35,7 +35,7 @@ When I try to enrol my partner, the system says that nobody with this email is r
 
 - **Solution (student):**
 
-  Contact the website admin by email informatik [at] tq.vseth.ch, or use the support chat `<https://t.me/joinchat/AlE6nw89dgmPvObM8kcKQA>`_.
+  Contact the website admin by email informatik [at] tanzquotient.org, or use the support chat `<https://t.me/joinchat/AlE6nw89dgmPvObM8kcKQA>`_.
 
 - **Solution (TQ responsible person):**
 
