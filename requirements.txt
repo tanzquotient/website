@@ -19,6 +19,7 @@ django-countries==7.2.1
 django-ical==1.8.0
 django-ckeditor==6.1.0
 django-allauth==0.45.0
+django-photologue==3.14
 
 # Django CMS
 django-cms==3.9.0

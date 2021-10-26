@@ -1,5 +1,6 @@
 import cms.urls
 import django.views.i18n
+import photologue.urls
 import rest_framework.urls
 from django.conf import settings
 from django.conf.urls import include, url
@@ -53,6 +54,7 @@ urlpatterns += i18n_patterns(
     url(r'^events/', include(events.urls, namespace='events')),
     url(r'^courses/', include(courses.urls, namespace='courses')),
     url(r'^emails/', include(email_system.urls, namespace='email_system')),
+    url(r'^photos/', include(photologue.urls, namespace='photos')),
     url(r'^', include(payment.urls, namespace='payment')),
-    url(r'^', include(cms.urls))
+    url(r'^', include(cms.urls)),
 )
