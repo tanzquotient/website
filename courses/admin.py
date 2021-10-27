@@ -191,10 +191,9 @@ class SubscribeChangeList(ChangeList):
 @admin.register(Subscribe)
 class SubscribeAdmin(VersionAdmin):
     list_display = (
-        'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'get_user_gender',
-        'get_user_body_height',
-        'get_user_email', 'get_user_student_status', 'experience', 'comment', 'price_to_pay', 'get_payment_state',
-        'get_calculated_experience', 'date')
+        'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'lead_follow',
+        'get_user_gender', 'get_user_body_height', 'get_user_email', 'get_user_student_status',
+        'experience', 'comment', 'price_to_pay', 'get_payment_state', 'get_calculated_experience', 'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'state')
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'usi']

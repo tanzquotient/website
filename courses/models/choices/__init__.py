@@ -8,3 +8,4 @@ from .matching_state import MatchingState
 from .rejection_reason import RejectionReason
 from .offering_type import OfferingType
 from .course_subscription_type import CourseSubscriptionType
+from .leadfollow import LeadFollow

@@ -10,34 +10,44 @@ from reversion import revisions as reversion
 
 from courses import managers
 from courses.emailcenter import send_online_payment_successful
-from . import MatchingState, SubscribeState, PaymentMethod
+from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow
 
 
 @reversion.register()
 class Subscribe(models.Model):
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions', on_delete=models.PROTECT)
+    # Identifying data
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='subscriptions', on_delete=models.PROTECT)
     course = models.ForeignKey('Course', related_name='subscriptions', on_delete=models.PROTECT)
-    date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
-    date.help_text = 'The date/time when the subscription was made.'
-    partner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
-                                null=True, on_delete=models.PROTECT)
-    matching_state = models.CharField(max_length=30,
-                                      choices=MatchingState.CHOICES, blank=False, null=False,
-                                      default=MatchingState.UNKNOWN, db_index=True)
+
+    # Partner, matching, lead/follow preference
+    partner = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
+        null=True, on_delete=models.PROTECT)
+    matching_state = models.CharField(
+        max_length=30, blank=False, null=False, db_index=True,
+        choices=MatchingState.CHOICES, default=MatchingState.UNKNOWN)
+    lead_follow = models.CharField(
+        max_length=1, blank=False, null=False,
+        default=LeadFollow.NO_PREFERENCE, choices=LeadFollow.CHOICES)
+
+    # Experience and comment
     experience = models.TextField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     comment.help_text = 'A optional comment made by the user during subscription.'
 
-    state = models.CharField(max_length=30,
-                             choices=SubscribeState.CHOICES, blank=False, null=False,
-                             default=SubscribeState.NEW, db_index=True)
+    # Timestamp and State
+    date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    date.help_text = 'The date/time when the subscription was made.'
+    state = models.CharField(max_length=30, blank=False, null=False, db_index=True,
+                             choices=SubscribeState.CHOICES, default=SubscribeState.NEW)
+
+    # Payment stuff
     usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = 'Unique subscription identifier: 4 characters identifier, 2 characters checksum'
     price_to_pay = models.FloatField(blank=True, null=True, default=None)
-
     paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
+    # Objects
     objects = managers.SubscribeQuerySet.as_manager()
 
     def generate_usi(self):
