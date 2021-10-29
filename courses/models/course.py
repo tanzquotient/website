@@ -478,13 +478,6 @@ class Course(TranslatableModel):
     # position field for ordering columns (grappelli feature)
     position = models.PositiveSmallIntegerField('Position', default=0)
 
-    def get_subscribe_form(self, data=None):
-        from courses.forms import CoupleSubscriptionForm, SingleSubscriptionForm
-        if self.type.couple_course:
-            return CoupleSubscriptionForm(data=data)
-        else:
-            return SingleSubscriptionForm(data=data)
-
     class Meta:
         ordering = ['position', 'name']
 

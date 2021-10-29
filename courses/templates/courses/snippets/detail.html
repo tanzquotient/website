@@ -8,8 +8,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-4">
                 <h4>{% trans "Info" %}</h4>
-                <p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}</p>
-
+                {% include "courses/snippets/subscribe_button.html" %}
                 {% if user and course in user.profile.get_subscribed_courses %}
                     <p>
                         <a href="{% url "user_courses" %}">

@@ -1,6 +1,80 @@
 {% load i18n %}
 {% load static %}
 
+<form action="{% url 'courses:subscribe' course.id %}" method="post">
+    {% csrf_token %}
+
+    <div class="nav mt-4 btn-group" id="pills-tab" role="group">
+        <input type="radio" class="btn-check" name="single_or_couple" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" checked/>
+        <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
+        <input type="radio" class="btn-check" name="single_or_couple" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab"/>
+        <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
+    </div>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
+            <div>
+                <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-lg-6">
+                    <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
+                        <input type="radio" class="btn-check" name="lead_follow" id="lead" autocomplete="off" >
+                        <label class="btn btn-outline-success" for="lead">{% trans "Lead" %}</label>
+
+                        <input type="radio" class="btn-check" name="lead_follow" id="no_preference" autocomplete="off" checked>
+                        <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
+
+                        <input type="radio" class="btn-check" name="lead_follow" id="follow" autocomplete="off">
+                        <label class="btn btn-outline-success" for="follow">{% trans "Follow" %}</label>
+                    </div>
+                </div>
+            </div>
+            <div id="lead_follow_help" class="form-text">
+                {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+            </div>
+        </div>
+        <div class="tab-pane fade mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
+            <div>
+                <label for="partner_email" class="form-label"><strong>{% trans "Email address" %}</strong></label>
+                <input type="email" class="form-control" id="partner_email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">{% trans "Provide the email address your partner used to register on this website." %}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <label class="form-label" for="comment"><strong>{% trans "Comment" %}</strong></label>
+        <textarea class="form-control" placeholder='{% trans "Anything else you want to tell us?" %}' id="comment" rows="4"></textarea>
+    </div>
+
+    <div class="mt-3">
+        <div>
+            <label><strong>{% trans "General terms and conditions" %}</strong></label>
+        </div>
+        {% if LANGUAGE_CODE == "de" %}
+            <a href="{% static "elements/AGB_DE.pdf" %}">
+        {% else %}
+            <a href="{% static "elements/GTC_EN.pdf" %}">
+        {% endif %}
+        <i class="fa fa-arrow-circle-right"></i>
+        {% trans "View the general terms and conditions" %}
+        </a>
+
+        <div class="form-check mt-2" >
+            <input class="form-check-input" type="checkbox" value="" id="general_terms" required="required">
+            <label class="form-check-label" for="general_terms">
+                {% trans "I accept the general terms and conditions." %}
+            </label>
+        </div>
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">{% trans "Sign Up" %}</button>
+    </div>
+</form>
+
+
+{% comment %}
+
 
 <div class="col-sm-10">
     <p class="text-info row">
@@ -96,3 +170,4 @@
         </div>
     </form>
 </div>
+{% endcomment %}

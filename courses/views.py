@@ -17,6 +17,7 @@ from courses.forms import UserEditForm, create_initial_from_user, TeacherEditFor
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
 from . import services
+from .forms.subscribe_form import SubscribeForm
 from .models import *
 from .utils import course_filter
 
@@ -108,37 +109,21 @@ def offering_by_id(request, offering_id):
 
 
 def course_detail(request, course_id):
-    """
-    This view provides a form to enrol in a course
-
-    Redirects:
-    courses:course_list         if no course with the given ID exists
-    """
-    template_name = "courses/course_detail.html"
-
-    # Query course object
-    course = Course.objects.filter(id=course_id)
-
-    # if there is no course with this id --> redirect user to course list
-    if not course.exists():
-        return redirect('courses:list')
-
-    # Get course object
-    course = course.get()
-
     context = {
         'menu': "courses",
-        'course': course,
-        'user': request.user,
-        'form': course.get_subscribe_form()
+        'course': get_object_or_404(Course.objects, id=course_id),
+        'user': request.user
     }
+    return render(request, "courses/course_detail.html", context)
 
-    # Add message if available
-    if 'message' in request.session:
-        context['message'] =  request.session.get('message', None)
-        del request.session['message']
 
-    return render(request, template_name, context)
+@login_required
+def subscribe_form(request, course_id):
+    context = {
+        'course': get_object_or_404(Course.objects, id=course_id),
+        'form': SubscribeForm()
+    }
+    return render(request, "courses/course_subscribe_form.html", context)
 
 
 @login_required
@@ -148,29 +133,25 @@ def subscribe(request, course_id):
     """
 
     # get course and form
-    course = Course.objects.get(id=course_id)
-    form = course.get_subscribe_form(data=request.POST)
+    course = get_object_or_404(Course.objects, id=course_id)
+    form = SubscribeForm(data=request.POST)
 
     # check whether it's valid:
     if not form.is_valid():
         request.session['message'] = {
             'tag': 'danger',
-            'text': _('Form not valid. Pleas check your input again!')
+            'text': _('Form not valid. Please check your input again!')
         }
-        return redirect('courses:course_detail', course_id)
-
-    # Get subscription data
-    subscription_data = {
-        'user': request.user,
-        'experience': form.cleaned_data.get('experience', None),
-        'comment': form.cleaned_data.get('comment', None),
-        'partner_email': form.cleaned_data.get('partner_email', None)
-    }
+        # TODO: somehow transmit filled form/message here
+        return redirect('courses:subscribe_form', course_id)
 
     # Subscribe
-    subscription_result = services.subscribe(course_id, subscription_data)
-    request.session['message'] = subscription_result
-    return redirect('courses:course_detail', course_id)
+    subscription_result = services.subscribe(course_id, request.user, form.cleaned_data)
+    context = {
+        "subscription": subscription_result,
+        "course": course
+    }
+    return render(request, "courses/subscribed_successfully", course_id)
 
 
 @staff_member_required
@@ -220,9 +201,9 @@ def duplicate_users(request):
         'user_aliases': user_aliases
     })
     return render(request, template_name, context)
-
-
 # helper function
+
+
 def offering_place_chart_dict(offering):
     labels = []
     series_confirmed = []
@@ -283,9 +264,9 @@ def progress_chart_dict():
         'series_single': series_single,
         'height': 25 * len(labels) + 90,
     }
-
-
 # helper function
+
+
 def offering_time_chart_dict(offering):
     traces = []
     for c in offering.course_set.all():
@@ -427,12 +408,11 @@ def user_profile(request):
         'user': request.user
     }
     return render(request, template_name, context)
-
-
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = 'courses/auth/profile.html'
     form_class = UserEditForm
+
     success_url = reverse_lazy('edit_profile')
 
     def get_form_class(self):
@@ -456,10 +436,11 @@ class ProfileView(FormView):
         context['is_profile_complete'] = user.profile.is_complete()
         context['profile_missing_values'] = user.profile.missing_values()
         return context
-
     def form_valid(self, form):
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
+
+
 
 
 @login_required

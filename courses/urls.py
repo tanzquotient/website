@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^preview/$', views.course_list_preview, name='list_preview'),
     url(r'^archive/$', views.archive, name='archive'),
     url(r'^(?P<course_id>\d+)/detail/$', views.course_detail, name='course_detail'),
+    url(r'^(?P<course_id>\d+)/subscribe_form/$', views.subscribe_form, name='subscribe_form'),
     url(r'^(?P<course_id>\d+)/subscribe/$', views.subscribe, name='subscribe'),
     url(r'^offering/(?P<offering_id>\d+)/$', views.offering_by_id, name='offering_by_id'),
     url(r'^auth/$', views.subscription_overview,

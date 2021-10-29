@@ -224,12 +224,11 @@ def clean_username(name):
 
 
 @transaction.atomic
-def subscribe(course_id, data):
+def subscribe(course_id, user, data):
     """Actually enrols a user or a pair of users in a course"""
 
     # Get course and user
     course = Course.objects.get(id=course_id)
-    user = data['user']
 
     # Get partner, if specified
     partner = None

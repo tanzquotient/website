@@ -1,0 +1,29 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ course.type.name }}
+{% endblock %}
+
+{% block lead_title %}
+    {% trans "Course subscription" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        {% load i18n %}
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3 mb-4">
+                <h4>{% trans "Info" %}</h4>
+                {#  % include "courses/snippets/course_info.html" %}#}
+                TODO: Remove comment
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
+                <h4>{% trans "Sign Up" %}</h4>
+                {% include "courses/snippets/subscribe_form.html" %}
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}
