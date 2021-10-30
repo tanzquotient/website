@@ -4,50 +4,54 @@
 <form action="{% url 'courses:subscribe' course.id %}" method="post">
     {% csrf_token %}
 
-    <div class="nav mt-4 btn-group" id="pills-tab" role="group">
-        <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
-        <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
-        <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab" {% if form.single_or_couple.value == 'c' %} checked {% endif %}/>
-        <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
-    </div>
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
-            <div>
-                <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-lg-6">
-                    <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
-                        <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead" {% if form.lead_follow.value == 'l' %} checked {% endif %} >
-                        <label class="btn btn-outline-success" for="lead">{% trans "Lead" %}</label>
+    {% if course.type.couple_course %}
+        <div class="nav mt-4 btn-group" id="pills-tab" role="group">
+            <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
+            <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
+            <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab" {% if form.single_or_couple.value == 'c' %} checked {% endif %}/>
+            <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
+        </div>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
+                <div>
+                    <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
+                            <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead" {% if form.lead_follow.value == 'l' %} checked {% endif %} >
+                            <label class="btn btn-outline-success" for="lead">{% trans "Lead" %}</label>
 
-                        <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference" {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
-                        <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
+                            <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference" {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
+                            <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
 
-                        <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow" {% if form.lead_follow.value == 'f' %} checked {% endif %}>
-                        <label class="btn btn-outline-success" for="follow">{% trans "Follow" %}</label>
+                            <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow" {% if form.lead_follow.value == 'f' %} checked {% endif %}>
+                            <label class="btn btn-outline-success" for="follow">{% trans "Follow" %}</label>
+                        </div>
                     </div>
                 </div>
+                <div id="lead_follow_help" class="form-text">
+                    {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+                </div>
             </div>
-            <div id="lead_follow_help" class="form-text">
-                {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+            <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
+                <div>
+                    <label for="partner_email" class="form-label"><strong>{% trans "Email address" %}</strong></label>
+                    <input type="email" class="form-control {% if form.partner_email.errors %} is-invalid {% endif %}"
+                           name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}{% endif %}"
+                           aria-describedby="emailHelp">
+                    {% for error in form.partner_email.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                    <div id="emailHelp" class="form-text">{% trans "Provide the email address your partner used to register on this website." %}</div>
+                </div>
             </div>
         </div>
-        <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
-            <div>
-                <label for="partner_email" class="form-label"><strong>{% trans "Email address" %}</strong></label>
-                <input type="email" class="form-control {% if form.partner_email.errors %} is-invalid {% endif %}"
-                       name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}{% endif %}"
-                       aria-describedby="emailHelp">
-                {% for error in form.partner_email.errors %}
-                    <div class="invalid-feedback">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-                <div id="emailHelp" class="form-text">{% trans "Provide the email address your partner used to register on this website." %}</div>
-            </div>
-        </div>
-    </div>
+    {% else %}
+        <input type="hidden" id="single_or_couple" name="single_or_couple" value="s">
+    {% endif %}
 
     <div class="mt-3">
         <label class="form-label" for="comment"><strong>{% trans "Comment" %}</strong></label>
