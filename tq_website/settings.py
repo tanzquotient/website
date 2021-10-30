@@ -380,13 +380,17 @@ BROKER_URL = environ['TQ_REDIS_BROKER_URL']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-# using post office as the default email backend 
+# using post office as the default email backend
 EMAIL_BACKEND = 'post_office.EmailBackend'
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = os.path.join(os.getcwd(), 'emails')
 
 POST_OFFICE = {
     'BACKENDS': {
         # using djcelery's email backend as a backend for post office
-        'default': 'djcelery_email.backends.CeleryEmailBackend',
+        'default': EMAIL_BACKEND if DEBUG else 'djcelery_email.backends.CeleryEmailBackend',
     },
     'DEFAULT_PRIORITY': 'now'
 }

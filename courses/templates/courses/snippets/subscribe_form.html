@@ -5,26 +5,26 @@
     {% csrf_token %}
 
     <div class="nav mt-4 btn-group" id="pills-tab" role="group">
-        <input type="radio" class="btn-check" name="single_or_couple" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" checked/>
+        <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
         <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
-        <input type="radio" class="btn-check" name="single_or_couple" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab"/>
+        <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab" {% if form.single_or_couple.value == 'c' %} checked {% endif %}/>
         <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
     </div>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
+        <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
             <div>
                 <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-lg-6">
                     <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
-                        <input type="radio" class="btn-check" name="lead_follow" id="lead" autocomplete="off" >
+                        <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead" {% if form.lead_follow.value == 'l' %} checked {% endif %} >
                         <label class="btn btn-outline-success" for="lead">{% trans "Lead" %}</label>
 
-                        <input type="radio" class="btn-check" name="lead_follow" id="no_preference" autocomplete="off" checked>
+                        <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference" {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
                         <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
 
-                        <input type="radio" class="btn-check" name="lead_follow" id="follow" autocomplete="off">
+                        <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow" {% if form.lead_follow.value == 'f' %} checked {% endif %}>
                         <label class="btn btn-outline-success" for="follow">{% trans "Follow" %}</label>
                     </div>
                 </div>
@@ -33,10 +33,17 @@
                 {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
             </div>
         </div>
-        <div class="tab-pane fade mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
+        <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
             <div>
                 <label for="partner_email" class="form-label"><strong>{% trans "Email address" %}</strong></label>
-                <input type="email" class="form-control" id="partner_email" aria-describedby="emailHelp">
+                <input type="email" class="form-control {% if form.partner_email.errors %} is-invalid {% endif %}"
+                       name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}{% endif %}"
+                       aria-describedby="emailHelp">
+                {% for error in form.partner_email.errors %}
+                    <div class="invalid-feedback">
+                        {{ error }}
+                    </div>
+                {% endfor %}
                 <div id="emailHelp" class="form-text">{% trans "Provide the email address your partner used to register on this website." %}</div>
             </div>
         </div>
@@ -44,130 +51,30 @@
 
     <div class="mt-3">
         <label class="form-label" for="comment"><strong>{% trans "Comment" %}</strong></label>
-        <textarea class="form-control" placeholder='{% trans "Anything else you want to tell us?" %}' id="comment" rows="4"></textarea>
+        <textarea class="form-control" rows="4"
+                  placeholder='{% trans "Anything else you want to tell us?" %}'
+                  name="comment" id="comment">{% if form.comment.value %}{{ form.comment.value }}{% endif %}</textarea>
     </div>
 
     <div class="mt-3">
         <div>
             <label><strong>{% trans "General terms and conditions" %}</strong></label>
         </div>
-        {% if LANGUAGE_CODE == "de" %}
-            <a href="{% static "elements/AGB_DE.pdf" %}">
-        {% else %}
-            <a href="{% static "elements/GTC_EN.pdf" %}">
-        {% endif %}
-        <i class="fa fa-arrow-circle-right"></i>
-        {% trans "View the general terms and conditions" %}
+        <a href="{% if LANGUAGE_CODE == "de" %}{% static "elements/AGB_DE.pdf" %}{% else %}{% static "elements/GTC_EN.pdf" %}{% endif %}">
+            <i class="fa fa-arrow-circle-right"></i>
+            {% trans "View the general terms and conditions" %}
         </a>
-
         <div class="form-check mt-2" >
-            <input class="form-check-input" type="checkbox" value="" id="general_terms" required="required">
+            <input class="form-check-input {% if form.general_terms.errors %} is-invalid {% endif %}" type="checkbox" name="general_terms" id="general_terms" required="required" {% if form.general_terms.value %} checked {% endif %} >
             <label class="form-check-label" for="general_terms">
                 {% trans "I accept the general terms and conditions." %}
             </label>
+            <div class="invalid-feedback">
+                {% trans "You must accept the general terms and conditions." %}
+            </div>
         </div>
     </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-success">{% trans "Sign Up" %}</button>
     </div>
 </form>
-
-
-{% comment %}
-
-
-<div class="col-sm-10">
-    <p class="text-info row">
-        {% trans "The experience and comment fields below are not required." %}
-    </p>
-    {% if course.type.couple_course %}
-        <p class="text-info row">
-            {% trans "If you wish to enroll with a partner, he/she needs to have an account. In this case, please enter the corresponding email address." %}
-        </p>
-    {% endif %}
-    <form class="form-horizontal" role="form" action="{% url 'courses:subscribe' course.id %}" method="post">
-
-        {% csrf_token %}
-
-        {{ form.non_field_errors }}
-
-        <div id="form-group-{{ form.experience.id_for_label }}"
-             class="form-group has-feedback {% if form.experience.errors %}has-error{% endif %}">
-            <label for="{{ form.experience.id_for_label }}"
-                   class="col-sm-2 control-label">{{ form.experience.label }}</label>
-
-            <div class="col-sm-10">
-                {{ form.experience }}
-                {% if form.experience.errors %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                {% endif %}
-                {% if form.experience.help_text %}
-                    <p class="help-block">{{ form.experience.help_text }}</p>
-                {% endif %}
-                {% include "courses/snippets/field_errors.html" with field=form.experience %}
-            </div>
-        </div>
-
-        <div id="form-group-{{ form.comment.id_for_label }}"
-             class="form-group has-feedback {% if form.comment.errors %}has-error{% endif %}">
-            <label for="{{ form.comment.id_for_label }}"
-                   class="col-sm-2 control-label">{{ form.comment.label }}</label>
-            <div class="col-sm-10">
-                {{ form.comment }}
-                {% if form.comment.errors %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                {% endif %}
-                {% if form.comment.help_text %}
-                    <p class="help-block">{{ form.comment.help_text }}</p>
-                {% endif %}
-                {% include "courses/snippets/field_errors.html" with field=form.comment %}
-            </div>
-        </div>
-
-        {% if course.type.couple_course %}
-            <div id="form-group-{{ form.partner_email.id_for_label }}"
-                 class="form-group has-feedback {% if form.partner_email.errors %}has-error{% endif %}">
-                <label for="{{ form.partner_email.id_for_label }}"
-                       class="col-sm-2 control-label">{{ form.partner_email.label }}</label>
-                <div class="col-sm-10">
-                    {{ form.partner_email }}
-                    {% if form.partner_email.errors %}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    {% endif %}
-                    {% if form.partner_email.help_text %}
-                        <p class="help-block">{{ form.partner_email.help_text }}</p>
-                    {% endif %}
-                    {% include "courses/snippets/field_errors.html" with field=form.partner_email %}
-                </div>
-            </div>
-        {% endif %}
-
-        <div id="form-group-{{ form.general_terms.id_for_label }}"
-             class="form-group has-feedback {% if form.general_terms.errors %}has-error{% endif %}">
-            <label for="{{ form.general_terms.id_for_label }}"
-                   class="col-sm-2 control-label">{% trans "I/We accept the GTC" %}</label>
-            <div class="col-sm-10">
-                {{ form.general_terms }}
-                {% if form.general_terms.errors %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                {% endif %}
-                {% if form.general_terms.help_text %}
-                    <p class="help-block">{{ form.general_terms.help_text }}</p>
-                {% endif %}
-            </div>
-            {% get_current_language as LANGUAGE_CODE %}
-            {% if LANGUAGE_CODE == "de" %}
-                <p>(<a href="{% static "elements/AGB_DE.pdf" %}">{% trans "View our GTC" %}</a>)</p>
-            {% else %}
-                <p>(<a href="{% static "elements/GTC_EN.pdf" %}">{% trans "View our GTC" %}</a>)</p>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-success" name="subscribe" value="subscribe">
-                {% trans "Subscribe" %}
-            </button>
-        </div>
-    </form>
-</div>
-{% endcomment %}

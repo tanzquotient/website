@@ -39,18 +39,24 @@
             {% endif %}
         </div>
         {% if user and course in user.profile.get_subscribed_courses %}
-            <p>
-                <span class="badge bg-success">{% trans "Subscribed" %}</span>
-            </p>
+            {% if is_detail_page %}
+                <div class="mt-2 alert alert-success" role="alert">
+                    <h5 class="alert-heading">{% trans "Subscribed" %}</h5>
+                    <hr>
+                    <p>
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Go to 'My Courses' to see the status and further information" %}
+                        </a>
+                    </p>
+                </div>
+            {% else %}
+                <span class="badge rounded-pill bg-success">{% trans "Subscribed" %}</span>
+            {% endif %}
         {% elif not course.has_free_places%}
             {% include "courses/snippets/subscription_info_overbooked.html" %}
-        {% elif display_link and not is_detail_page %}
-            <p>
-                <a href="{% url 'courses:course_detail' course.id %}#subscription">
-                    <i class="fa fa-sign-in-alt"></i>
-                    {% trans "Subscribe" %}
-                </a>
-            </p>
+        {% elif is_detail_page %}
+            <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success mt-2 mb-3" role="button">{%  trans "Subscribe now" %}</a>
         {% endif %}
     {% elif course.subscription_opens_soon %}
         <em>{% trans "Registration opens soon" %}</em>

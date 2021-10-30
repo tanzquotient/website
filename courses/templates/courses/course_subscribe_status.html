@@ -1,0 +1,57 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ course.type.name }}
+{% endblock %}
+
+{% block lead_title %}
+    {% trans "Course subscription" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        {% load i18n %}
+        <div class="row">
+            <div class="d-none d-sm-block col-sm-5 col-md-4 col-lg-3 mb-4">
+                <h4>{% trans "Info" %}</h4>
+                {% include "courses/snippets/course_info.html" with disable_modals=True %}
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">{% trans "You signed up successfully!" %}</h4>
+                    <p>
+                        {% trans "Thank you for subscribing to this course. The final confirmation will be sent out in the following days." %}
+                    </p>
+                    {% if subscription.partner %}
+                        <hr>
+                        <p>
+                            <strong>{% trans "Partner" %}</strong>
+                            <br/>
+                            {{ subscription.partner.get_full_name }}
+                            <br/>
+                            {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                        </p>
+                    {% endif %}
+
+                    <hr>
+                    <p>
+                        <a href="{% url 'user_courses' %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Show all my courses" %}
+                        </a>
+                    </p>
+                    <hr>
+                    <p>
+                        <a href="{% url 'courses:list' %}">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            {% trans "Go back to the course list" %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}

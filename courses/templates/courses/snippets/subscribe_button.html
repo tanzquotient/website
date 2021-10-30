@@ -1,12 +1,6 @@
 {% load i18n %}
 
+<p></p>
 {% if course.is_subscription_allowed and course.has_free_places %}
-    <a href="{% url 'courses:subscribe_form' course_id=course.id %}" class="btn btn-success" role="button">{%  trans "Subscribe" %}</a>
-{% elif not course.is_subscription_allowed %}
-
-{%  else  %} {# not course.has_free_places #}
-
 {%  endif %}
-
-<p>{% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}</p>
 

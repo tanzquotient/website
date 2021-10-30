@@ -1,11 +1,64 @@
 from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
-from courses.models import LeadFollow
+from courses.models import LeadFollow, SingleCouple
 
 
 class SubscribeForm(forms.Form):
-    single_or_couple = forms.ChoiceField(choices=("single", "couple"), required=True)
+    single_or_couple = forms.ChoiceField(choices=SingleCouple.CHOICES, required=True)
     lead_follow = forms.ChoiceField(choices=LeadFollow.CHOICES, required=False)
     partner_email = forms.EmailField(required=False)
-    comment = forms.CharField(max_length=1000, required=False)
+    comment = forms.CharField(required=False)
     general_terms = forms.BooleanField(required=True)
+
+    def __init__(self, user, course, data=None):
+        super().__init__(data=data)
+        self.user = user
+        self.course = course
+
+    def clean(self):
+        cleaned_data = super().clean()
+        single_or_couple = cleaned_data.get("single_or_couple")
+        partner_email = cleaned_data.get("partner_email")
+
+        if single_or_couple == SingleCouple.COUPLE:
+
+            if not partner_email:
+                error = ValidationError(
+                    message=_('You need to enter the email address of your partner.'),
+                    code='partner email missing')
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+            if not User.objects.filter(email=partner_email).exists():
+                error = ValidationError(
+                    message=_('No user found with this email address. Please make sure your partner has an account'),
+                    code='no user for partner email')
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+            partner = User.objects.get(email=partner_email)
+
+            if self.user == partner:
+                error = ValidationError(
+                    message=_('You entered yourself as partner! Please enter someone else.'),
+                    code='partner equals user'
+                )
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+            if self.course.subscriptions.filter(user=partner).exists():
+                error = ValidationError(
+                    message=_('The partner you entered is already signed up.'),
+                    code='partner already signed up'
+                )
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+        return cleaned_data
+
+
+
+

@@ -8,13 +8,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Q, Prefetch
-from django.http import Http404, HttpResponseServerError
+from django.http import Http404
 from django.utils import dateformat
 from django.utils.translation import gettext as _
 
 import courses.models as models
-from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLesson, \
-    RegularLessonException, Subscribe, UserProfile, MatchingState, Voucher
+from courses.models import Offering, OfferingType, Course, Weekday, IrregularLesson, RegularLessonException, \
+    Subscribe, MatchingState, Voucher, SingleCouple, LeadFollow
 from courses.utils import export
 from email_system.services import send_all_emails
 from payment.vouchergenerator import generate_voucher_pdf
@@ -32,7 +32,8 @@ def get_all_offerings():
     return models.Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False, include_partner_offerings=False):
+def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False,
+                             include_partner_offerings=False):
     """return offerings that have display flag on and order them by start date in ascending order"""
 
     queryset = Offering.objects.select_related('period').prefetch_related('period__cancellations')
@@ -65,7 +66,6 @@ def get_historic_offerings(offering_type=None):
         offerings_dict[year].append(offering)
 
     return sorted([(k, v) for k, v in offerings_dict.items()], key=lambda t: t[0], reverse=True)
-
 
 
 def get_sections(offering, course_filter=None):
@@ -224,78 +224,28 @@ def clean_username(name):
 
 
 @transaction.atomic
-def subscribe(course_id, user, data):
-    """Actually enrols a user or a pair of users in a course"""
+def subscribe(course, user, data):
+    """Enrolls a user (and optionally a partner) in a course"""
 
-    # Get course and user
-    course = Course.objects.get(id=course_id)
-
-    # Get partner, if specified
-    partner = None
-    partner_email = data['partner_email']
-    if partner_email:
-        # Try to find by email address
-        partner = User.objects.filter(email=partner_email)
-        if not partner.exists():
-            return dict(
-                tag='danger',
-                text=_('Partner does not exist!'),
-                long_text=_('The email you specified does not belong to any user. Make sure your partner has an active account.')
-            )
-
-        # Get user object for partner
-        partner = partner.first()
-
-    # Find existing subscriptions
-    user_subscription = course.subscriptions.filter(user=user)
-    partner_subscription = course.subscriptions.filter(user=partner)
-
-    # Errors
-    if user == partner:
-        return dict(
-            tag='danger',
-            text=_('You entered yourself as partner! Please enter a valid partner.')
-        )
-    if partner_subscription.exists() and partner_subscription.get().partner not in [None, user]:
-        return dict(
-            tag='danger',
-            text=_('The partner you entered is already subscribed with someone else!')
-        )
-    if user_subscription.exists() and partner is None:
-        return dict(
-            tag='warning',
-            text=_('You are already subscribed!')
-        )
-    if user_subscription.exists() and partner_subscription.exists():
-        # Link partners if not already done
-        if user_subscription.get().partner is None and partner_subscription.get().partner is None:
-            user_subscription.get().partner = partner
-            partner_subscription.get().partner = user
-            user_subscription.get().matching_state = MatchingState.COUPLE
-            partner_subscription.get().matching_state = MatchingState.COUPLE
-        return dict(
-            tag='warning',
-            text=_('Both, you and your partner are already subscribed!')
-        )
-
-
-    # Get relevant info
-    experience = data['experience']
-    comment = data['comment']
-
-    # Get or create user subscription
-    if not user_subscription.exists():
-        user_subscription = Subscribe(user=user, course=course, experience=experience, comment=comment)
-    else:
-        user_subscription = user_subscription.get()
+    user_subscription = Subscribe(
+        user=user,
+        course=course,
+        lead_follow=data.get('lead_follow', LeadFollow.NO_PREFERENCE),
+        experience=data.get('experience', None),
+        comment=data.get('experience', None),
+    )
 
     # Handle couple subscription
-    if partner:
-        # Get or create partner subscription
-        if not partner_subscription.exists():
-            partner_subscription = Subscribe(user=partner, course=course, experience=experience, comment=comment)
-        else:
-            partner_subscription = partner_subscription.get()
+    if data['single_or_couple'] == SingleCouple.COUPLE:
+        partner = User.objects.get(email=data['partner_email'])
+
+        partner_subscription = Subscribe(
+            user=partner,
+            course=course,
+            lead_follow=LeadFollow.partner(data.get('lead_follow', LeadFollow.NO_PREFERENCE)),
+            experience=data.get('experience', None),
+            comment=data.get('experience', None),
+        )
 
         # Link subscriptions
         user_subscription.partner = partner
@@ -307,17 +257,12 @@ def subscribe(course_id, user, data):
         partner_subscription.save()
         send_subscription_confirmation(partner_subscription)
 
-
     # Finish user subscription
     user_subscription.derive_matching_state()
     user_subscription.save()
     send_subscription_confirmation(user_subscription)
 
-    return dict(
-        tag='success',
-        text=_('Successfully subscribed'),
-        long_text=_('You will receive an email shortly')
-    )
+    return user_subscription
 
 
 # creates a copy of course and sets its offering to the next offering in the future
@@ -336,11 +281,11 @@ def copy_course(course, to=None, set_preceeding_course=False):
             cs.save()
 
 
-# matches partners within the same course, considering their subscription time (fairness!) and respects also body_height (second criteria)
-DEFAULT_BODY_HEIGHT = 170
-
-
 def match_partners(subscriptions, request=None):
+    # matches partners within the same course, considering their subscription time (fairness!) and
+    # respects also body_height (second criteria)
+    DEFAULT_BODY_HEIGHT = 170
+
     courses = subscriptions.values_list('course', flat=True)
     match_count = 0
     for course_id in courses:

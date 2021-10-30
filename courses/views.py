@@ -119,39 +119,32 @@ def course_detail(request, course_id):
 
 @login_required
 def subscribe_form(request, course_id):
+    course = get_object_or_404(Course.objects, id=course_id)
+
+    # If user already signed up: redirect to course detail
+    # This can happen when the user is not logged in, presses on subscribe, has to log in, and lands here
+    if course.subscriptions.filter(user=request.user).exists():
+        return redirect('courses:course_detail', course_id=course_id)
+
+    # Get form
+    form_data = request.POST if request.method == 'POST' else None
+    form = SubscribeForm(user=request.user, course=course, data=form_data)
+
+    # Sign up user for course if form is valid
+    if form.is_valid():
+        subscription = services.subscribe(course, request.user, form.cleaned_data)
+        context = {
+            'course': course,
+            'subscription': subscription,
+        }
+        return render(request, "courses/course_subscribe_status.html", context=context)
+
+    # Render sign up form
     context = {
-        'course': get_object_or_404(Course.objects, id=course_id),
-        'form': SubscribeForm()
+        'course': course,
+        'form': form
     }
     return render(request, "courses/course_subscribe_form.html", context)
-
-
-@login_required
-def subscribe(request, course_id):
-    """
-    This view actually performs the enrolment in a given course.
-    """
-
-    # get course and form
-    course = get_object_or_404(Course.objects, id=course_id)
-    form = SubscribeForm(data=request.POST)
-
-    # check whether it's valid:
-    if not form.is_valid():
-        request.session['message'] = {
-            'tag': 'danger',
-            'text': _('Form not valid. Please check your input again!')
-        }
-        # TODO: somehow transmit filled form/message here
-        return redirect('courses:subscribe_form', course_id)
-
-    # Subscribe
-    subscription_result = services.subscribe(course_id, request.user, form.cleaned_data)
-    context = {
-        "subscription": subscription_result,
-        "course": course
-    }
-    return render(request, "courses/subscribed_successfully", course_id)
 
 
 @staff_member_required

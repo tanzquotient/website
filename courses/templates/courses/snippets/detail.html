@@ -1,27 +1,14 @@
 {% load i18n %}
-<div class="card card-default">
-    <div class="card-header">
-        {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
-        {{ course.type.name }}
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 mb-4">
+        <h4>
+            {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
+            {{ course.type.name }}
+        </h4>
+        {% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}
+        {% include "courses/snippets/course_info.html" %}
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-4">
-                <h4>{% trans "Info" %}</h4>
-                {% include "courses/snippets/subscribe_button.html" %}
-                {% if user and course in user.profile.get_subscribed_courses %}
-                    <p>
-                        <a href="{% url "user_courses" %}">
-                            {% trans "Go to 'My Courses' to see the status and further information" %}
-                            <i class="fa fa-arrow-circle-right fa-lg"></i>
-                        </a>
-                    </p>
-                {% endif %}
-                {% include "courses/snippets/course_info.html" %}
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-8">
-                {% include "courses/snippets/course_description.html" %}
-            </div>
-        </div>
+    <div class="col-xs-12 col-sm-6 col-md-8">
+        {% include "courses/snippets/course_description.html" %}
     </div>
 </div>
