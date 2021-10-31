@@ -1,3 +1,5 @@
+from django.contrib import admin
+
 from courses.filters import *
 from payment.admin_actions import *
 from payment.filters import *

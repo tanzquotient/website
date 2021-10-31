@@ -1,18 +1,14 @@
-from django import forms
-from django.contrib import admin
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-import survey.services as survey_services
 from courses.models import *
 from payment.services import remind_of_payments
-from survey.models import SurveyInstance
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
-from .forms import VoucherGenerationForm, SendVoucherForm
+from .forms import SendVoucherForm
 
 
 def display(modeladmin, request, queryset):

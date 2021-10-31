@@ -201,8 +201,9 @@ def duplicate_users(request):
 def offering_place_chart_dict(offering):
     labels = []
     series_confirmed = []
-    series_men_count = []
-    series_women_count = []
+    series_leaders_count = []
+    series_followers_count = []
+    series_no_preference_count = []
     series_free = []
     courses = offering.course_set.all()
 
@@ -214,22 +215,25 @@ def offering_place_chart_dict(offering):
                                                     escape(course.name)))
         accepted_count = subscriptions.accepted().count()
         series_confirmed.append(str(accepted_count))
-        mc = subscriptions.new().men().count()
-        wc = subscriptions.new().women().count()
-        series_men_count.append(str(mc))
-        series_women_count.append(str(wc))
+        leaders_count = subscriptions.new().leaders().count()
+        followers_count = subscriptions.new().followers().count()
+        no_preference_count = subscriptions.new().no_lead_follow_preference().count()
+        series_leaders_count.append(str(leaders_count))
+        series_followers_count.append(str(followers_count))
+        series_no_preference_count.append(str(no_preference_count))
         maximum = course.max_subscribers
         if maximum:
-            freec = max(0, maximum - accepted_count - mc - wc)
+            free_count = max(0, maximum - accepted_count - leaders_count - followers_count - no_preference_count)
         else:
-            freec = 0
-        series_free.append(str(freec))
+            free_count = 0
+        series_free.append(str(free_count))
 
     return {
         'labels': labels,
         'series_confirmed': series_confirmed,
-        'series_men': series_men_count,
-        'series_women': series_women_count,
+        'series_leaders': series_leaders_count,
+        'series_followers': series_followers_count,
+        'series_no_preference': series_no_preference_count,
         'series_free': series_free,
         'height': 25 * len(labels) + 90,
     }
@@ -351,23 +355,25 @@ def course_overview(request, course_id):
     # because does not have access to default manager methods
     subscriptions = Subscribe.objects.filter(course=course)
 
-    cc = subscriptions.accepted().count()
-    mc = subscriptions.new().men().count()
-    wc = subscriptions.new().women().count()
+    accepted_count = subscriptions.accepted().count()
+    leaders_count = subscriptions.new().leaders().count()
+    followers_count = subscriptions.new().followers().count()
+    no_preference_count = subscriptions.new().no_lead_follow_preference().count()
     maximum = course.max_subscribers
     if maximum:
-        freec = max(0, maximum - cc - mc - wc)
+        free_count = max(0, maximum - accepted_count - leaders_count - followers_count - no_preference_count)
     else:
-        freec = 0
+        free_count = 0
 
     context['course'] = course
     context['place_chart'] = {
         'label': course.name,
-        'confirmed': cc,
-        'men': mc,
-        'women': wc,
-        'free': freec,
-        'total': cc + mc + wc + freec
+        'confirmed': accepted_count,
+        'leaders': leaders_count,
+        'followers': followers_count,
+        'no_preference': no_preference_count,
+        'free': free_count,
+        'total': accepted_count + leaders_count + followers_count + free_count + no_preference_count
     }
     return render(request, template_name, context)
 

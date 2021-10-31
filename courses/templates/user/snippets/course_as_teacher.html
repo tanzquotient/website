@@ -22,17 +22,6 @@
                 <br/>
                 {% if course.get_confirmed_count %}
                     {% trans "Confirmed" %}: {{ course.get_confirmed_count }}
-                    {% if  course.confirmed_men_count !=  course.confirmed_women_count %}
-                        ({{ course.confirmed_men_count }} {% trans "male" %}, {{ course.confirmed_women_count }} {% trans "female" %})
-                    {% endif %}
-                {% endif %}
-                {% if course.unconfirmed_men_count %}
-                    <br/>
-                    {% trans "Unconfirmed men" %}: {{ course.unconfirmed_men_count }}
-                {% endif %}
-                {% if course.unconfirmed_women_count %}
-                    <br/>
-                    {% trans "Unconfirmed women" %}: {{ course.unconfirmed_women_count }}
                 {% endif %}
             </p>
             <p>

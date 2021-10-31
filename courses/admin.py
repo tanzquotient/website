@@ -1,12 +1,10 @@
 # Register your models here.
-
+from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
-from django.contrib.auth.admin import GroupAdmin
 from parler.admin import TranslatableAdmin
 from reversion.admin import VersionAdmin
 
 from courses.filters import *
-from groups.services import update_groups
 from payment.vouchergenerator import admin_action_generate_pdf
 
 

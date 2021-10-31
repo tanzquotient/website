@@ -7,7 +7,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState, LeadFollow
+from courses.models import PaymentMethod, Weekday, CourseSubscriptionType, LeadFollow
 from partners.models import Partner
 
 
@@ -190,32 +190,8 @@ class Course(TranslatableModel):
     def men_count(self):
         return self.subscriptions.active().men().count()
 
-    def confirmed_men_count(self):
-        return self.subscriptions.accepted().men().count()
-
-    def confirmed_women_count(self):
-        return self.subscriptions.accepted().women().count()
-
-    def unconfirmed_men_count(self):
-        return self.subscriptions.active().men().count() - self.subscriptions.accepted().men().count()
-
-    def unconfirmed_women_count(self):
-        return self.subscriptions.active().women().count() - self.subscriptions.accepted().women().count()
-
-    def women_count(self):
-        return self.subscriptions.active().women().count()
-
     def single_men_count(self):
         return self.subscriptions.active().single_men().count()
-
-    def single_women_count(self):
-        return self.subscriptions.active().single_women().count()
-
-    def men_needed(self):
-        return self.single_men_count() < self.single_women_count()
-
-    def women_needed(self):
-        return self.single_women_count() < self.single_men_count()
 
     def has_style(self, style_name):
         if style_name is None:

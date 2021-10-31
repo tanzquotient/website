@@ -47,7 +47,7 @@
             </div>
             <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
                 <div>
-                    <label for="partner_email" class="form-label"><strong>{% trans "Email address" %}</strong></label>
+                    <label for="partner_email" class="form-label"><strong>{% trans "Email address of your partner" %}</strong></label>
                     <input type="email" class="form-control {% if form.partner_email.errors %} is-invalid {% endif %}"
                            name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}{% endif %}"
                            aria-describedby="emailHelp">
