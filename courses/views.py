@@ -121,9 +121,10 @@ def course_detail(request, course_id):
 def subscribe_form(request, course_id):
     course = get_object_or_404(Course.objects, id=course_id)
 
-    # If user already signed up: redirect to course detail
-    # This can happen when the user is not logged in, presses on subscribe, has to log in, and lands here
-    if course.subscriptions.filter(user=request.user).exists():
+    # If user already signed up or sign up not possible: redirect to course detail
+    if course.subscriptions.filter(user=request.user).exists() \
+            or not course.is_subscription_allowed() \
+            or not course.has_free_places:
         return redirect('courses:course_detail', course_id=course_id)
 
     # Get form

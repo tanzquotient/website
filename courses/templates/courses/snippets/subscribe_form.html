@@ -19,18 +19,29 @@
                 <div class="row">
                     <div class="col-xs-12 col-lg-6">
                         <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
-                            <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead" {% if form.lead_follow.value == 'l' %} checked {% endif %} >
-                            <label class="btn btn-outline-success" for="lead">{% trans "Lead" %}</label>
+                            <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead"
+                                    {% if form.lead_follow.value == 'l' %} checked {% endif %}
+                                    {% if not course.has_free_places_for_leaders %} disabled {% endif %}>
+                            <label class="btn {% if course.has_free_places_for_leaders %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="lead">{% trans "Lead" %}</label>
 
-                            <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference" {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
+                            <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference"
+                                    {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
                             <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
 
-                            <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow" {% if form.lead_follow.value == 'f' %} checked {% endif %}>
-                            <label class="btn btn-outline-success" for="follow">{% trans "Follow" %}</label>
+                            <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow"
+                                    {% if form.lead_follow.value == 'f' %} checked {% endif %}
+                                    {% if not course.has_free_places_for_followers %} disabled {% endif %}>
+                            <label class="btn {% if course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="follow">{% trans "Follow" %}</label>
                         </div>
                     </div>
                 </div>
                 <div id="lead_follow_help" class="form-text">
+                    {% if not course.has_free_places_for_leaders %}
+                        <div class="text-warning">{% trans "There are no spots available for leaders anymore." %}</div>
+                    {% endif %}
+                    {% if not course.has_free_places_for_followers %}
+                        <div class="text-warning">{% trans "There are no spots available for followers anymore." %}</div>
+                    {% endif %}
                     {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
                 </div>
             </div>

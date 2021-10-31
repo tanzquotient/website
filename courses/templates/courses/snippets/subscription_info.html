@@ -33,8 +33,8 @@
 
             {% if user and course in user.profile.get_subscribed_courses %}
                 {% if is_detail_page %}
-                    <div class="mt-2 alert alert-success" role="alert">
-                        <h5 class="alert-heading">{% trans "Subscribed" %}</h5>
+                    <div class="mt-2 alert alert-info" role="alert">
+                        <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
                         <hr>
                         <p>
                             <a href="{% url "user_courses" %}">
@@ -44,12 +44,14 @@
                         </p>
                     </div>
                 {% else %}
-                    <span class="badge rounded-pill bg-success">{% trans "Subscribed" %}</span>
+                    <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
                 {% endif %}
 
             {% elif is_detail_page and course.has_free_places %}
-                <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success mt-2 mb-3"
-                   role="button">{% trans "Subscribe now" %}</a>
+                <div class="mt-2 mb-3">
+                    <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success"
+                       role="button">{% trans "Subscribe now" %}</a>
+                </div>
             {% endif %}
 
         {% elif course.subscription_opens_soon %}
