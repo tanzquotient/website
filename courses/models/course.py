@@ -7,7 +7,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState
+from courses.models import PaymentMethod, Weekday, Gender, CourseSubscriptionType, MatchingState, LeadFollow
 from partners.models import Partner
 
 
@@ -147,50 +147,42 @@ class Course(TranslatableModel):
         return None
 
     def show_free_places_count(self):
-        """ only show free_places_count if it can be calculated """
-        counts = self.get_free_places_count()
-        if counts is not None:
-            return {
-                'total': counts['total'] > 0,
-                'man': counts['man'] > 0,
-                'woman': counts['woman'] > 0
-            }
-        else:
-            return None
+        return self.max_subscribers is not None
 
     def has_free_places(self):
-        counts = self.get_free_places_count()
-        if counts is not None:
-            return counts['total'] > 0 or counts['man'] > 0 or counts['woman'] > 0
-        else:
+        return self.max_subscribers is None or self.get_free_places_count() > 0
+
+    def has_free_places_for_leaders(self):
+        return self.has_free_places_for(LeadFollow.LEAD)
+
+    def has_free_places_for_followers(self):
+        return self.has_free_places_for(LeadFollow.FOLLOW)
+
+    def has_free_places_for(self, lead_or_follow):
+        if self.max_subscribers is None:
             return True
 
-    def get_free_places_count(self):
-        """ Creates a dict with the free places totally and for men/women separately """
-        if self.max_subscribers is not None:
-            subscriptions = self.subscriptions.active()
+        free_places = self.get_free_places_count()
+        if free_places == 0:
+            return False
 
-            c = self.max_subscribers - subscriptions.count()
-            if self.type.couple_course:
-                matched_count = subscriptions.filter(matching_state__in=MatchingState.MATCHED_STATES).count()
-                unmatched_male_count = subscriptions.filter(user__profile__gender=Gender.MALE, matching_state__in=MatchingState.TO_MATCH_STATES).count()
-                unmatched_female_count = subscriptions.filter(user__profile__gender=Gender.FEMALE, matching_state__in=MatchingState.TO_MATCH_STATES).count()
-                effective_max = (self.max_subscribers - matched_count) // 2
-                cm = effective_max - unmatched_male_count
-                cw = effective_max - unmatched_female_count
-            else:
-                cm = c
-                cw = c
-            c = int(max(c, 0))
-            cm = int(max(cm, 0))
-            cw = int(max(cw, 0))
-            return {
-                'total': c,
-                'man': cm,
-                'woman': cw
-            }
-        else:
+        free_for_preference = (self.max_subscribers - self.subscriptions.matched().count()) // 2
+        count_for_preference = self.subscriptions.single_with_preference(lead_or_follow).count()
+
+        return free_for_preference > count_for_preference
+
+    def get_free_places_count(self):
+
+        # No maximum => free places is not defined
+        if self.max_subscribers is None:
             return None
+
+        subscriptions = self.subscriptions.active()
+
+        total_count = self.max_subscribers - subscriptions.count()
+        total_count = int(max(total_count, 0))
+
+        return total_count
 
     def get_confirmed_count(self):
         return self.subscriptions.accepted().count()

@@ -3,7 +3,7 @@ from datetime import date
 from django.db import models
 from parler.managers import TranslatableManager
 
-from courses.models import Gender, SubscribeState
+from courses.models import Gender, SubscribeState, LeadFollow, MatchingState
 
 
 class UserProfileManager(models.Manager):
@@ -79,20 +79,25 @@ class BankAccountManager(models.Manager):
 
 
 # construction to allow chaining of queryset methods (chaining manager methods is not possible)
-# read https://www.google.ch/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwjOlbrz1-_LAhVHPRQKHXkqD-EQygQIKjAB&url=https%3A%2F%2Fdocs.djangoproject.com%2Fen%2F1.9%2Ftopics%2Fdb%2Fmanagers%2F%23using-managers-for-related-object-access&usg=AFQjCNEJzw5qfnl5vQoOrHbtdK-iaxkG7g&sig2=lC0IkWiubBDk9C0iAjj7Iw
-# and read http://stackoverflow.com/questions/6067195/how-does-use-for-related-fields-work-in-django
 class SubscribeQuerySet(models.QuerySet):
-    def men(self):
-        return self.filter(user__profile__gender=Gender.MALE)
 
-    def women(self):
-        return self.filter(user__profile__gender=Gender.FEMALE)
+    def leaders(self):
+        return self.active().filter(lead_follow=LeadFollow.LEAD)
 
-    def single_men(self):
-        return self.filter(partner__isnull=True, user__profile__gender=Gender.MALE)
+    def followers(self):
+        return self.active().filter(lead_follow=LeadFollow.FOLLOW)
 
-    def single_women(self):
-        return self.filter(partner__isnull=True, user__profile__gender=Gender.FEMALE)
+    def no_lead_follow_preference(self):
+        return self.active().filter(lead_follow=LeadFollow.NO_PREFERENCE)
+
+    def single(self):
+        return self.active().filter(matching_state__in=MatchingState.TO_MATCH_STATES)
+
+    def single_with_preference(self, lead_or_follow):
+        return self.active().filter(matching_state__in=MatchingState.TO_MATCH_STATES, lead_follow=lead_or_follow)
+
+    def matched(self):
+        return self.active().filter(matching_state__in=MatchingState.MATCHED_STATES)
 
     def accepted(self):
         return self.filter(state__in=SubscribeState.ACCEPTED_STATES)
