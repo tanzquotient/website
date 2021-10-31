@@ -1,4 +1,3 @@
-from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 
 

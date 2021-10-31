@@ -3,7 +3,7 @@ from datetime import date
 from django.db import models
 from parler.managers import TranslatableManager
 
-from courses.models import Gender, SubscribeState, LeadFollow, MatchingState
+from courses.models import SubscribeState, LeadFollow, MatchingState
 
 
 class UserProfileManager(models.Manager):

@@ -2,12 +2,12 @@ import logging
 
 from django.contrib.auth.models import User
 
-from courses.models import UserProfile
-
 log = logging.getLogger('merge_duplicate_users')
 
 
 def merge_duplicate_users(to_merge):
+    from courses.models import UserProfile
+
     for primary, aliases in to_merge.items():
         user = User.objects.get(id=primary)
         user_aliases = list(User.objects.filter(id__in=aliases))
@@ -75,6 +75,8 @@ def merge_duplicate_users(to_merge):
 
 
 def _get_value_from_most_recent_alias_profile(alias_ids, profile, field):
+    from courses.models import UserProfile
+
 
     value = getattr(profile, field)
     if value:

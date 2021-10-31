@@ -1,6 +1,5 @@
 from payment.models.choices import State, Type
 from payment.payment_processor import PaymentProcessor
-from payment.models import Payment
 
 
 def process_payments(modeladmin, request, queryset):

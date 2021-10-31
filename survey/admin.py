@@ -1,10 +1,9 @@
 from django.contrib import admin
 from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
-import courses
 from courses.filters import SubscribeOfferingListFilter, SubscribeCourseListFilter
-from .admin_actions import *
 from survey.models import *
+from .admin_actions import *
 
 
 class QuestionGroupInline(TranslatableTabularInline):

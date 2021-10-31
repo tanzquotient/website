@@ -1,5 +1,4 @@
 # Register your models here.
-from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from parler.admin import TranslatableAdmin
 from reversion.admin import VersionAdmin

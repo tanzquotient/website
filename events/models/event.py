@@ -1,12 +1,13 @@
 from django.db import models
 from django.db.models.fields import BooleanField
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses.models import Room
-from courses.services import format_prices, reverse
+from courses.services import format_prices
 from utils import TranslationUtils
 from . import EventRegistration
 from .. import managers

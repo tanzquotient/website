@@ -1,9 +1,11 @@
-from django.contrib import messages
+from django.contrib import admin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+import courses.services.matching.change_matching
+import courses.services.matching.do_matching
 from courses.models import *
 from payment.services import remind_of_payments
 from . import services
@@ -11,34 +13,27 @@ from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailL
 from .forms import SendVoucherForm
 
 
+@admin.action(description="Set displayed")
 def display(modeladmin, request, queryset):
     queryset.update(display=True)
 
 
-display.short_description = "Set displayed"
-
-
+@admin.action(description= "Set undisplayed")
 def undisplay(modeladmin, request, queryset):
     queryset.update(display=False)
 
 
-undisplay.short_description = "Set undisplayed"
-
-
+@admin.action(description="Activate")
 def activate(modeladmin, request, queryset):
     queryset.update(active=True)
 
 
-activate.short_description = "Activate"
-
-
+@admin.action(description="Deactivate")
 def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
 
 
-deactivate.short_description = "Deactivate"
-
-
+@admin.action(description="Create copy of courses in another offering")
 def copy_courses(modeladmin, request, queryset):
     form = None
 
@@ -49,7 +44,7 @@ def copy_courses(modeladmin, request, queryset):
             offering = form.cleaned_data['offering']
 
             for c in queryset:
-                services.copy_course(c, to=offering, set_preceeding_course=form.cleaned_data['set_preceeding_course'])
+                services.courses.copy_course(c, to=offering, set_preceeding_course=form.cleaned_data['set_preceeding_course'])
 
             return HttpResponseRedirect(request.get_full_path())
 
@@ -64,40 +59,30 @@ def copy_courses(modeladmin, request, queryset):
                                                                     })
 
 
-copy_courses.short_description = "Create copy of courses in another offering"
-
-
+@admin.action(description="Confirm selected subscriptions")
 def confirm_subscriptions(modeladmin, request, queryset):
     # manually send confirmation mails
-    services.confirm_subscriptions(queryset, request)
+    services.subscriptions.confirm_subscriptions(queryset, request)
 
 
-confirm_subscriptions.short_description = "Confirm selected subscriptions"
-
-
+@admin.action(description="Confirm selected subscriptions (allow singles in couple courses)")
 def confirm_subscriptions_allow_singles(modeladmin, request, queryset):
     # manually send confirmation mails
-    services.confirm_subscriptions(queryset, request, True)
+    services.subscriptions.confirm_subscriptions(queryset, request, True)
 
 
-confirm_subscriptions_allow_singles.short_description = "Confirm selected subscriptions (allow singles in couple courses)"
-
-
+@admin.action(description="Unconfirm subscriptions (be sure to reconfirm them later!)")
 def unconfirm_subscriptions(modeladmin, request, queryset):
     # manually send confirmation mails
-    services.unconfirm_subscriptions(queryset, request)
+    services.subscriptions.unconfirm_subscriptions(queryset, request)
 
 
-unconfirm_subscriptions.short_description = "Unconfirm subscriptions (be sure to reconfirm them later!)"
-
-
+@admin.action(description="Send payment reminder to the selected subscriptions (which are in TO_PAY state)")
 def payment_reminder(modeladmin, request, queryset):
     remind_of_payments(queryset, request)
 
-payment_reminder.short_description = "Send payment reminder to the selected subscriptions (which are in TO_PAY state)"
 
-
-
+@admin.action(description="Reject selected subscriptions")
 def reject_subscriptions(self, request, queryset):
     form = None
 
@@ -107,7 +92,7 @@ def reject_subscriptions(self, request, queryset):
         if form.is_valid():
             reason = form.cleaned_data['reason']
 
-            services.reject_subscriptions(queryset, reason, form.cleaned_data['send_email'])
+            services.subscriptions.reject_subscriptions(queryset, reason, form.cleaned_data['send_email'])
 
             return HttpResponseRedirect(request.get_full_path())
 
@@ -121,60 +106,45 @@ def reject_subscriptions(self, request, queryset):
                                                                })
 
 
-reject_subscriptions.short_description = "Reject selected subscriptions"
-
-
+@admin.action(description="Unreject subscriptions")
 def unreject_subscriptions(modeladmin, request, queryset):
     # manually send confirmation mails
-    services.unreject_subscriptions(queryset, request)
+    services.subscriptions.unreject_subscriptions(queryset, request)
 
 
-unreject_subscriptions.short_description = "Unreject subscriptions"
-
-
+@admin.action(description="Match partners (chronologically, body height optimal)")
 def match_partners(modeladmin, request, queryset):
     services.match_partners(queryset, request)
 
 
-match_partners.short_description = "Match partners (chronologically, body height optimal)"
-
-
+@admin.action(description="Unmatch partners (both partners must be selected and unconfirmed)")
 def unmatch_partners(modeladmin, request, queryset):
-    services.unmatch_partners(queryset, request)
+    courses.services.matching.change_matching.unmatch_partners(queryset, request)
 
 
-unmatch_partners.short_description = "Unmatch partners (both partners must be selected and unconfirmed)"
-
-
+@admin.action(description="Break up (unmatch) couple (both couple partners must be selected and unconfirmed)")
 def breakup_couple(modeladmin, request, queryset):
-    services.breakup_couple(queryset, request)
+    courses.services.matching.change_matching.breakup_couple(queryset, request)
 
 
-breakup_couple.short_description = "Break up (unmatch) couple (both couple partners must be selected and unconfirmed)"
-
-
+@admin.action(description="Correct matching_state to COUPLE (both partners must be matched together, can already be confirmed)")
 def correct_matching_state_to_couple(modeladmin, request, queryset):
-    services.correct_matching_state_to_couple(queryset, request)
-
-
-correct_matching_state_to_couple.short_description = "Correct matching_state to COUPLE (both partners must be matched together, can already be confirmed)"
+    courses.services.matching.change_matching.correct_matching_state_to_couple(queryset, request)
 
 
 def welcome_teachers(modeladmin, request, queryset):
-    services.welcome_teachers(queryset, request)
+    services.teachers.welcome_teachers(queryset, request)
 
 
 def welcome_teachers_reset_flag(modeladmin, request, queryset):
-    services.welcome_teachers_reset_flag(queryset, request)
+    services.teachers.welcome_teachers_reset_flag(queryset, request)
 
-
+@admin.action(description="Set selected subscriptions as paid")
 def set_subscriptions_as_paid(modeladmin, request, queryset):
     queryset.filter(state=SubscribeState.CONFIRMED).update(state=SubscribeState.COMPLETED)
 
 
-set_subscriptions_as_paid.short_description = "Set selected subscriptions as paid"
-
-
+@admin.action(description="Export confirmed subscriptions of selected courses as CSV")
 def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     ids = []
     for c in queryset:
@@ -182,9 +152,7 @@ def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'csv')
 
 
-export_confirmed_subscriptions_csv.short_description = "Export confirmed subscriptions of selected courses as CSV"
-
-
+@admin.action(description="Export confirmed subscriptions of selected courses as Google Contacts readable CSV")
 def export_confirmed_subscriptions_csv_google(modeladmin, request, queryset):
     ids = []
     for c in queryset:
@@ -192,9 +160,7 @@ def export_confirmed_subscriptions_csv_google(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'csv_google')
 
 
-export_confirmed_subscriptions_csv_google.short_description = "Export confirmed subscriptions of selected courses as Google Contacts readable CSV"
-
-
+@admin.action(description="Export confirmed subscriptions of selected courses as vCard")
 def export_confirmed_subscriptions_vcard(modeladmin, request, queryset):
     ids = []
     for c in queryset:
@@ -202,9 +168,7 @@ def export_confirmed_subscriptions_vcard(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'vcard')
 
 
-export_confirmed_subscriptions_vcard.short_description = "Export confirmed subscriptions of selected courses as vCard"
-
-
+@admin.action(description="Export confirmed subscriptions of selected courses as XLSX")
 def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
     ids = []
     for c in queryset:
@@ -212,30 +176,24 @@ def export_confirmed_subscriptions_xlsx(modeladmin, request, queryset):
     return services.export_subscriptions(ids, 'xlsx')
 
 
-export_confirmed_subscriptions_xlsx.short_description = "Export confirmed subscriptions of selected courses as XLSX"
-
-
+@admin.action(description="Export teacher payment information as CSV")
 def export_teacher_payment_information_csv(modeladmin, request, queryset):
     return services.export_teacher_payment_information(offerings=queryset.all())
 
-export_teacher_payment_information_csv.short_description = "Export teacher payment information as CSV"
 
-
+@admin.action(description="Export teacher payment information as Excel")
 def export_teacher_payment_information_excel(modeladmin, request, queryset):
     return services.export_teacher_payment_information(offerings=queryset.all(), export_format='excel')
 
-export_teacher_payment_information_excel.short_description = "Export teacher payment information as Excel"
 
-
+@admin.action(description="Mark selected vouchers as used")
 def mark_voucher_as_used(modeladmin, request, queryset):
     # mark vouchers as used
     for voucher in queryset:
         voucher.mark_as_used(user=request.user, comment="by admin action")
 
 
-mark_voucher_as_used.short_description = "Mark selected vouchers as used"
-
-
+@admin.action(description="Send a voucher to users of selected subscriptions")
 def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     form = None
 
@@ -244,7 +202,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
 
         if form.is_valid():
             recipients = [subscription.user for subscription in queryset]
-            services.send_vouchers(data=form.cleaned_data, recipients=recipients)
+            services.courses.send_vouchers(data=form.cleaned_data, recipients=recipients)
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
@@ -256,8 +214,8 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     }
     return render(request, 'courses/auth/action_send_voucher.html', context)
 
-send_vouchers_for_subscriptions.short_description = "Send a voucher to users of selected subscriptions"
 
+@admin.action(description="Send an email to all participants of the selected course(s)")
 def send_course_email(modeladmin, request, queryset):
     form = None
 
@@ -265,7 +223,7 @@ def send_course_email(modeladmin, request, queryset):
         form = SendCourseEmailForm(data=request.POST)
 
         if form.is_valid():
-            services.send_course_email(data=form.cleaned_data, courses=queryset)
+            services.courses.send_course_email(data=form.cleaned_data, courses=queryset)
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
@@ -276,9 +234,7 @@ def send_course_email(modeladmin, request, queryset):
                                                                           })
 
 
-send_course_email.short_description = "Send an email to all participants of the selected course(s)"
-
-
+@admin.action(description="Undo voucher payment")
 def undo_voucher_payment(modeladmin, request, queryset):
     for subscription in queryset:
         if subscription.state in [SubscribeState.PAID,
@@ -291,9 +247,7 @@ def undo_voucher_payment(modeladmin, request, queryset):
             subscription.save()
 
 
-undo_voucher_payment.short_description = "Undo voucher payment"
-
-
+@admin.action(description="raise price to pay to fit amount")
 def raise_price_to_pay(modeladmin, request, queryset):
     for subscription_payment in queryset:
         if subscription_payment.balance() > 0:
@@ -302,9 +256,7 @@ def raise_price_to_pay(modeladmin, request, queryset):
             s.save()
 
 
-raise_price_to_pay.short_description = "raise price to pay to fit amount"
-
-
+@admin.action(description="List emails of selected subscribers")
 def emaillist(modeladmin, request, queryset):
     form = None
 
@@ -324,9 +276,7 @@ def emaillist(modeladmin, request, queryset):
     })
 
 
-emaillist.short_description = "List emails of selected subscribers"
-
-
+@admin.action(description="List emails of accepted participants")
 def offering_emaillist(modeladmin, request, queryset):
     form = None
 
@@ -346,8 +296,6 @@ def offering_emaillist(modeladmin, request, queryset):
         'message': "Email addresses of accepted subscribers of offerings {}".format(", ".join(map(str, queryset.all())))
     })
 
-
-offering_emaillist.short_description = "List emails of accepted participants"
 
 def make_inactive(modeladmin, request, queryset):
     for user in queryset:

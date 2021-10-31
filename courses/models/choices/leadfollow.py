@@ -19,3 +19,17 @@ class LeadFollow:
         if preference == LeadFollow.FOLLOW:
             return LeadFollow.LEAD
         return LeadFollow.NO_PREFERENCE
+
+    @staticmethod
+    def is_compatible(preference_a, preference_b):
+        return (preference_a, preference_b) in [
+            (LeadFollow.LEAD, LeadFollow.FOLLOW),
+            (LeadFollow.LEAD, LeadFollow.NO_PREFERENCE),
+
+            (LeadFollow.FOLLOW, LeadFollow.LEAD),
+            (LeadFollow.FOLLOW, LeadFollow.NO_PREFERENCE),
+
+            (LeadFollow.NO_PREFERENCE, LeadFollow.LEAD),
+            (LeadFollow.NO_PREFERENCE, LeadFollow.FOLLOW),
+            (LeadFollow.NO_PREFERENCE, LeadFollow.NO_PREFERENCE),
+        ]

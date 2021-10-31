@@ -186,6 +186,6 @@ def create_course_info(course):
         s += '{}\n'.format(course.get_period())
     if course.format_cancellations():
         s += 'Ausfälle: {}\n'.format(course.format_cancellations())
-    if course.format_prices:
+    if course.format_prices():
         s += 'Kosten: {}\n'.format(course.format_prices())
     return s.strip('\n')

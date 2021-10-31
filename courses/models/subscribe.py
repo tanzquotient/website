@@ -9,7 +9,6 @@ from django.db.models import Q
 from reversion import revisions as reversion
 
 from courses import managers
-from courses.emailcenter import send_online_payment_successful
 from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow
 
 
@@ -87,7 +86,7 @@ class Subscribe(models.Model):
 
     def get_calculated_experience(self):
         """returns similar courses that the user did before in the system"""
-        from courses.services import calculate_relevant_experience
+        from ..services.general import calculate_relevant_experience
 
         preceding_courses_done = []
         for predecessor in self.course.preceding_courses.all():
@@ -132,6 +131,7 @@ class Subscribe(models.Model):
                     reversion.set_user(user)
                 reversion.set_comment('Paid using payment method ' + payment_method)
             if self.paymentmethod == PaymentMethod.ONLINE:
+                from courses.emailcenter import send_online_payment_successful
                 send_online_payment_successful(self)
             return True
         else:
@@ -148,6 +148,7 @@ class Subscribe(models.Model):
                 if user is not None:
                     reversion.set_user(user)
                 reversion.set_comment('Paid using payment method ' + PaymentMethod.VOUCHER)
+                from courses.emailcenter import send_online_payment_successful
                 send_online_payment_successful(self)
             self.save()
 

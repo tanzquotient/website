@@ -1,14 +1,13 @@
-import base64
 import logging
 import re
 import xml.etree.ElementTree as ET
-from io import StringIO
 from datetime import datetime
+from io import StringIO
 
 from django.core.files.base import ContentFile
 from django.db import DatabaseError
-from paramiko.client import SSHClient, AutoAddPolicy
 from paramiko import RSAKey
+from paramiko.client import SSHClient, AutoAddPolicy
 
 from payment.models import Payment, PostfinanceFile
 from payment.models.choices import CreditDebit, State

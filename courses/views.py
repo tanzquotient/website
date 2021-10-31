@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, date
+from datetime import date
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -90,7 +90,6 @@ def archive(request):
         },
     }
     return render(request, template_name, context)
-
 
 
 @staff_member_required
@@ -436,11 +435,10 @@ class ProfileView(FormView):
         context['is_profile_complete'] = user.profile.is_complete()
         context['profile_missing_values'] = user.profile.missing_values()
         return context
+
     def form_valid(self, form):
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
-
-
 
 
 @login_required

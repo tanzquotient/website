@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date
 
 from django.conf import settings
 from django.contrib.auth import user_logged_in
