@@ -9,8 +9,8 @@ log = logging.getLogger('payment')
 
 USI_PREFIX = "USI-"
 # also accept USL since I is often typed as L
-RE_USI_STRICT = re.compile(r'[USILusil]{3}[\- _]*(?P<usi>([a-zA-Z0-9]{6}))')
-#  USI-25PN10  SPESENBETRAG 0.00 CHF SHA REFERENZEN: NOTPROVIDED 9930304TI1930428 211101CH07TE6AX7
+RE_USI_STRICT = re.compile(r'[USILusil]{3}[\- _]*(?P<usi>[a-zA-Z0-9]{6})')
+
 
 class PaymentProcessor:
     def process_payments(self, queryset=Payment.objects):
