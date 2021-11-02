@@ -30,6 +30,7 @@ class PaymentProcessor:
 
         for payment in new_payments:
             if payment.remittance_user_string:
+                log.info("Got remittance_user_string: {}".format(payment.remittance_user_string))
                 matches = RE_USI_STRICT.findall(payment.remittance_user_string)
 
                 # if no matches, try removing all spaces first
@@ -41,9 +42,16 @@ class PaymentProcessor:
                     payment.save()
 
                     for usi in matches:
-                        subscription_query = Subscribe.objects.filter(usi=usi.lower(), state=SubscribeState.CONFIRMED)
+                        subscription_query = Subscribe.objects.filter(usi=usi.lower())
                         if subscription_query.count() == 1:
                             matched_subscription = subscription_query.first()
+
+                            if matched_subscription.state != SubscribeState.CONFIRMED:
+                                log.warning("The state of {} is something other than confirmed. Got: {}"
+                                            .format(matched_subscription, matched_subscription.state))
+                                payment.state = State.MANUAL
+                                payment.save()
+                                continue
 
                             # check if payment amount sufficient
                             to_pay = matched_subscription.get_price_to_pay()
@@ -65,19 +73,11 @@ class PaymentProcessor:
                                 "Implementation Error: Payment {0} is not related to a unique Subscription".format(
                                     payment))
                             break
-                        # elif course_query.count() == 1:
-                        #    course = course_query.first()
-                        #    log.info("Matched payment to course payment {}".format(course))
-                        #    CoursePayment(course=course, payment=payment, amount=payment.amount).save()
-                        #    payment.type = Type.COURSE_PAYMENT_TRANSFER
-                        #    payment.state = State.PROCESSED
-                        #    payment.save()
-                        #    break
                         else:
                             log.warning("USI {0} was not found for payment {1}.".format(usi, payment))
                     self._check_balance(payment)
                 else:
-                    log.info("No USI was recognized in payment {0}.".format(payment))
+                    log.warning("No USI was recognized in payment {0}.".format(payment))
                     # try to detect if it is a teacher transfer
                     # TODO improve this with a code for teachers when they transfer course payments
                     payment.state = State.MANUAL
