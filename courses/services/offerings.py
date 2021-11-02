@@ -81,7 +81,7 @@ def get_sections(offering, course_filter=None):
         for (d, courses) in courses_by_month:
             if d is None:
                 section_title = _("Unknown month")
-            elif 1 < d.month < 12:
+            elif 1 < d.month <= 12:
                 # use the django formatter for date objects
                 section_title = dateformat.format(d, 'F Y')
             else:
