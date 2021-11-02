@@ -62,16 +62,18 @@
                         {% trans "Body height" %}: {{ user.profile.body_height }}cm
                     {% endif %}
                     <br/>
-                    {% if  user.profile.nationality %}
-                        {% trans "Nationality" %}: {{ user.profile.get_nationality }}
-                    {% endif %}
-                    <br/>
-                    {% if  user.profile.residence_permit %}
-                        {% trans "Residence permit" %}: {{ user.profile.residence_permit }}
-                    {% endif %}
-                    <br/>
-                    {% if  user.profile.ahv_number %}
-                        {% trans "AHV number" %}: {{ user.profile.ahv_number }}
+                    {% if user.is_teacher %}
+                        {% if  user.profile.nationality %}
+                            {% trans "Nationality" %}: {{ user.profile.get_nationality }}
+                        {% endif %}
+                        <br/>
+                        {% if  user.profile.residence_permit %}
+                            {% trans "Residence permit" %}: {{ user.profile.residence_permit }}
+                        {% endif %}
+                        <br/>
+                        {% if  user.profile.ahv_number %}
+                            {% trans "AHV number" %}: {{ user.profile.ahv_number }}
+                        {% endif %}
                     {% endif %}
                 </p>
             {% endif %}
