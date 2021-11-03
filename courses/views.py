@@ -205,7 +205,7 @@ def offering_place_chart_dict(offering):
     series_followers_count = []
     series_no_preference_count = []
     series_free = []
-    courses = offering.course_set.all()
+    courses = offering.course_set.reverse().all()
 
     for course in courses:
         # NOTE: do not use the related manager with 'course.subscriptions',
@@ -252,7 +252,7 @@ def progress_chart_dict():
     series_single = []
     series_unconfirmed = []
 
-    for o in Offering.objects.filter(type=OfferingType.REGULAR).all():
+    for o in Offering.objects.filter(type=OfferingType.REGULAR).reverse().all():
         subscriptions = Subscribe.objects.filter(course__offering=o)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
                                                     escape(o.name)))
@@ -278,7 +278,7 @@ def progress_chart_dict():
 
 def offering_time_chart_dict(offering):
     traces = []
-    for c in offering.course_set.all():
+    for c in offering.course_set.reverse().all():
         trace = dict()
         trace['name'] = c.name
         values = dict()
