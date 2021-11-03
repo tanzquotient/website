@@ -26,7 +26,18 @@
             },
         };
 
-        var data = [trace1, trace2];
+        var trace3 = {
+            y: y,
+            x: [{{ chart.series_unconfirmed|join:"," }}],
+            orientation: 'h',
+            name: 'Not confirmed',
+            type: 'bar',
+            marker: {
+                color: '#C8C8C87F',
+            },
+        };
+
+        var data = [trace1, trace2, trace3];
 
         var layout = {
             title: 'Subscriptions over regular offerings',

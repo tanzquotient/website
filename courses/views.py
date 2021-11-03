@@ -250,23 +250,27 @@ def progress_chart_dict():
     labels = []
     series_couple = []
     series_single = []
+    series_unconfirmed = []
 
     for o in Offering.objects.filter(type=OfferingType.REGULAR).all():
         subscriptions = Subscribe.objects.filter(course__offering=o)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
                                                     escape(o.name)))
         accepted = subscriptions.accepted()
-        total_count = accepted.count()
+        accepted_count = accepted.count()
         couple_count = accepted.filter(matching_state=MatchingState.COUPLE).count()
-        single_count = total_count - couple_count
+        single_count = accepted_count - couple_count
+        unconfirmed_count = subscriptions.active().count() - accepted_count
 
         series_couple.append(str(couple_count))
         series_single.append(str(single_count))
+        series_unconfirmed.append(str(unconfirmed_count))
 
     return {
         'labels': labels,
         'series_couple': series_couple,
         'series_single': series_single,
+        'series_unconfirmed': series_unconfirmed,
         'height': 25 * len(labels) + 90,
     }
 # helper function
