@@ -4,7 +4,7 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         var y = [{{ chart.labels|fence:"'"|join:"," }}];
-        var trace1 = {
+        var trace0 = {
             y: y,
             x: [{{ chart.series_confirmed|join:"," }}],
             orientation: 'h',
@@ -12,6 +12,17 @@
             type: 'bar',
             marker: {
                 color: '#c51f1b',
+            },
+        };
+
+        var trace1 = {
+            y: y,
+            x: [{{ chart.series_matched|join:"," }}],
+            orientation: 'h',
+            name: 'Matched',
+            type: 'bar',
+            marker: {
+                color: '#dc7374',
             },
         };
 
@@ -59,7 +70,7 @@
             },
         };
 
-        var data = [trace1, trace2, trace3, trace4, trace5];
+        var data = [trace0, trace1, trace2, trace3, trace4, trace5];
 
         var layout = {
             title: 'Subscription state',

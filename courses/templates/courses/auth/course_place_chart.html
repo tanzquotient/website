@@ -8,7 +8,7 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         var y = ['>'];
-        var trace1 = {
+        var trace0 = {
             y: y,
             x: [{{ place_chart.confirmed }},],
             orientation: 'h',
@@ -20,11 +20,23 @@
             hoverinfo:"none",
         };
 
+        var trace1 = {
+            y: y,
+            x: [{{ place_chart.matched }},],
+            orientation: 'h',
+            name: 'Matched',
+            type: 'bar',
+            marker: {
+                color: '#dc7374',
+            },
+            hoverinfo:"none",
+        };
+
         var trace2 = {
             y: y,
             x: [{{ place_chart.leaders }},],
             orientation: 'h',
-            name: 'Men',
+            name: 'Leaders',
             type: 'bar',
             marker: {
                 color: '#99ccff',
@@ -36,7 +48,7 @@
             y: y,
             x: [{{ place_chart.followers }},],
             orientation: 'h',
-            name: 'Women',
+            name: 'Followers',
             type: 'bar',
             marker: {
                 color: '#00ff99',
@@ -48,7 +60,7 @@
             y: y,
             x: [{{ place_chart.no_preference }},],
             orientation: 'h',
-            name: 'Women',
+            name: 'No Preference',
             type: 'bar',
             marker: {
                 color: '#fffb00',
@@ -68,7 +80,7 @@
             hoverinfo:"none",
         };
 
-        var data = [trace1, trace2, trace3, trace4, trace5];
+        var data = [trace0, trace1, trace2, trace3, trace4, trace5];
 
         var layout = {
             autosize: true,

@@ -200,6 +200,7 @@ def duplicate_users(request):
 def offering_place_chart_dict(offering):
     labels = []
     series_confirmed = []
+    series_matched = []
     series_leaders_count = []
     series_followers_count = []
     series_no_preference_count = []
@@ -212,24 +213,31 @@ def offering_place_chart_dict(offering):
         subscriptions = Subscribe.objects.filter(course=course)
         labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
                                                     escape(course.name)))
-        accepted_count = subscriptions.accepted().count()
-        series_confirmed.append(str(accepted_count))
-        leaders_count = subscriptions.new().leaders().count()
-        followers_count = subscriptions.new().followers().count()
-        no_preference_count = subscriptions.new().no_lead_follow_preference().count()
+
+        total_count = subscriptions.active().count()
+        confirmed_count = subscriptions.accepted().count()
+        matched_count = subscriptions.new().matched().count()
+        leaders_count = subscriptions.new().single().leaders().count()
+        followers_count = subscriptions.new().single().followers().count()
+        no_preference_count = total_count - matched_count - confirmed_count - leaders_count - followers_count
+        maximum = course.max_subscribers
+        if maximum:
+            free_count = max(0, maximum - total_count)
+        else:
+            free_count = 0
+
+        series_confirmed.append(str(confirmed_count))
+        series_matched.append(str(matched_count))
         series_leaders_count.append(str(leaders_count))
         series_followers_count.append(str(followers_count))
         series_no_preference_count.append(str(no_preference_count))
-        maximum = course.max_subscribers
-        if maximum:
-            free_count = max(0, maximum - accepted_count - leaders_count - followers_count - no_preference_count)
-        else:
-            free_count = 0
+
         series_free.append(str(free_count))
 
     return {
         'labels': labels,
         'series_confirmed': series_confirmed,
+        'series_matched': series_matched,
         'series_leaders': series_leaders_count,
         'series_followers': series_followers_count,
         'series_no_preference': series_no_preference_count,
@@ -354,25 +362,29 @@ def course_overview(request, course_id):
     # because does not have access to default manager methods
     subscriptions = Subscribe.objects.filter(course=course)
 
-    accepted_count = subscriptions.accepted().count()
-    leaders_count = subscriptions.new().leaders().count()
-    followers_count = subscriptions.new().followers().count()
-    no_preference_count = subscriptions.new().no_lead_follow_preference().count()
+    total_count = subscriptions.active().count()
+    confirmed_count = subscriptions.accepted().count()
+    matched_count = subscriptions.new().matched().count()
+    leaders_count = subscriptions.new().single().leaders().count()
+    followers_count = subscriptions.new().single().followers().count()
+    no_preference_count = total_count - matched_count - confirmed_count - leaders_count - followers_count
+
     maximum = course.max_subscribers
     if maximum:
-        free_count = max(0, maximum - accepted_count - leaders_count - followers_count - no_preference_count)
+        free_count = max(0, maximum - total_count)
     else:
         free_count = 0
 
     context['course'] = course
     context['place_chart'] = {
         'label': course.name,
-        'confirmed': accepted_count,
+        'confirmed': confirmed_count,
+        'matched': matched_count,
         'leaders': leaders_count,
         'followers': followers_count,
         'no_preference': no_preference_count,
         'free': free_count,
-        'total': accepted_count + leaders_count + followers_count + free_count + no_preference_count
+        'total': total_count
     }
     return render(request, template_name, context)
 
