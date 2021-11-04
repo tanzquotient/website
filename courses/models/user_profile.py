@@ -106,9 +106,7 @@ class UserProfile(models.Model):
         return styles
 
     def get_subscriptions(self):
-        subscriptions = list(self.user.subscriptions.all())
-        subscriptions.sort(key=lambda s: s.course.get_first_lesson_date() or date.min, reverse=True)
-        return subscriptions
+        return self.user.subscriptions.order_by('-date').all()
 
     def get_subscribed_courses(self):
         return [s.course for s in self.get_subscriptions()]

@@ -12,7 +12,7 @@
 {% block content %}
     {% if user.profile.is_teacher %}
         <h3>{% trans "Teaching" %}</h3>
-        <div>
+        <div class="row">
             {% for course in user.profile.get_current_teaching_courses %}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                     {% include "user/snippets/course_as_teacher.html" with course=course only %}
@@ -31,12 +31,12 @@
         </p>
     {% endif %}
 
-    <h3>{% trans "Current courses" %}</h3>
-    {% with subscriptions=user.profile.get_current_subscriptions  %}
+    <h3>{% trans "My Subscriptions" %}</h3>
+    {% with subscriptions=user.profile.get_subscriptions  %}
         {% for subscription in subscriptions %}
             {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account only %}
         {% empty %}
-            <p>{% trans "No courses" %}</p>
+            <p>{% trans "No subscriptions" %}</p>
         {% endfor %}
     {% endwith %}
     <p>
@@ -45,13 +45,5 @@
             <i class="fa fa-arrow-circle-right fa-lg"></i>
         </a>
     </p>
-    {% with subscriptions=user.profile.get_past_subscriptions  %}
-        {% if subscriptions %}
-            <h3>{% trans "Past courses" %}</h3>
-            {% for subscription in subscriptions %}
-                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account only %}
-            {% endfor %}
-        {% endif %}
-    {%  endwith %}
 
 {% endblock %}

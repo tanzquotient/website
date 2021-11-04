@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 21:01+0100\n"
+"POT-Creation-Date: 2021-11-04 12:16+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -217,11 +217,11 @@ msgstr "Prozentuelle Ermässigung des Gutscheins"
 msgid "Set expire date?"
 msgstr "Ablaufdatum setzen?"
 
-#: courses/forms/subscribe_form.py:30
+#: courses/forms/subscribe_form.py:36
 msgid "You need to enter the email address of your partner."
 msgstr "Du musst die Emailadresse deines Partners angeben."
 
-#: courses/forms/subscribe_form.py:37
+#: courses/forms/subscribe_form.py:43
 msgid ""
 "No user found with this email address. Please make sure your partner has an "
 "account"
@@ -229,11 +229,11 @@ msgstr ""
 "Die angegebene Emailadresse gehört zu keinem Benutzer. Stelle sicher, dass "
 "dein Partner bzw. deine Partnerin ein aktives Konto hat."
 
-#: courses/forms/subscribe_form.py:46
+#: courses/forms/subscribe_form.py:52
 msgid "You entered yourself as partner! Please enter someone else."
 msgstr "Du hast dich selbst eingetragen! Das ist nicht möglich."
 
-#: courses/forms/subscribe_form.py:54
+#: courses/forms/subscribe_form.py:60
 msgid "The partner you entered is already signed up."
 msgstr "Die angegebene Person ist bereits angemeldet."
 
@@ -249,7 +249,7 @@ msgstr ""
 "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
 "Teilen von Kursinhalten weitergegeben!"
 
-#: courses/forms/user_edit_from.py:19 courses/templates/user/profile.html:110
+#: courses/forms/user_edit_from.py:19 courses/templates/user/profile.html:112
 msgid "Student"
 msgstr "Student"
 
@@ -418,15 +418,15 @@ msgstr "Ungültiger Wochentag"
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/services/subscriptions.py:93
+#: courses/services/subscriptions.py:95
 msgid "{} of {} confirmed successfully"
 msgstr "{} von {} erfolgreich bestätigt"
 
-#: courses/services/subscriptions.py:136
+#: courses/services/subscriptions.py:138
 msgid "{} unrejected successfully"
 msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
-#: courses/services/subscriptions.py:144
+#: courses/services/subscriptions.py:146
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 "{} Einschreibungen wurden nicht bestätigt, da kein Partner gesetzt wurde"
@@ -556,7 +556,9 @@ msgstr "Du hast dich erfolgreich angemeldet"
 msgid ""
 "Thank you for subscribing to this course. The final confirmation will be "
 "sent out in the following days."
-msgstr "Danke für die Anmeldung. Die endgültige Anmeldebestätigung kommt in den nächsten Tagen per Email."
+msgstr ""
+"Danke für die Anmeldung. Die endgültige Anmeldebestätigung kommt in den "
+"nächsten Tagen per Email."
 
 #: courses/templates/courses/course_subscribe_status.html:30
 #: courses/templates/courses/snippets/offering.html:26
@@ -587,7 +589,7 @@ msgid "Show past offerings"
 msgstr "Vergangene Angebote anzeigen"
 
 #: courses/templates/courses/snippets/address_input.html:4
-#: courses/templates/user/profile.html:87
+#: courses/templates/user/profile.html:89
 msgid "Address"
 msgstr "Adresse"
 
@@ -647,7 +649,6 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
-#: courses/templates/user/user_courses.html:50
 msgid "Past courses"
 msgstr "Vergangene Kurse"
 
@@ -846,7 +847,9 @@ msgid ""
 "The leader is responsible for guiding the couple, the guided partner is "
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
 "and ladies are following."
-msgstr "Im veralteten Sinn ist die Führung die Aufgabe des Herren. Mittlerweile ist aber auch die umgekehrte Variante gerne gesehen."
+msgstr ""
+"Im veralteten Sinn ist die Führung die Aufgabe des Herren. Mittlerweile ist "
+"aber auch die umgekehrte Variante gerne gesehen."
 
 #: courses/templates/courses/snippets/subscribe_form.html:50
 msgid "Email address of your partner"
@@ -855,7 +858,9 @@ msgstr "Email Adresse deines Partners"
 #: courses/templates/courses/snippets/subscribe_form.html:59
 msgid ""
 "Provide the email address your partner used to register on this website."
-msgstr "Gib die Email-Adresse an, mit der sich dein Partner / deine Partnerin auf dieser Website registriert hat."
+msgstr ""
+"Gib die Email-Adresse an, mit der sich dein Partner / deine Partnerin auf "
+"dieser Website registriert hat."
 
 #: courses/templates/courses/snippets/subscribe_form.html:68
 #: payment/templates/payment/finance/account_detail.html:54
@@ -936,7 +941,7 @@ msgid "Phone"
 msgstr "Telefon"
 
 #: courses/templates/courses/snippets/user_modal.html:26
-#: courses/templates/user/profile.html:121
+#: courses/templates/user/profile.html:123
 msgid "Teacher"
 msgstr "Lehrer"
 
@@ -949,7 +954,7 @@ msgid "Courses thaught for TQ"
 msgstr "Für den TQ unterrichtete Kurse"
 
 #: courses/templates/courses/snippets/user_modal.html:34
-#: courses/templates/user/profile.html:125
+#: courses/templates/user/profile.html:127
 msgid "Board member"
 msgstr "Vorstand"
 
@@ -993,70 +998,70 @@ msgstr "Geburtsdatum"
 msgid "Body height"
 msgstr "Körpergrösse"
 
-#: courses/templates/user/profile.html:66
+#: courses/templates/user/profile.html:67
 msgid "Nationality"
 msgstr "Nationalität"
 
-#: courses/templates/user/profile.html:70
+#: courses/templates/user/profile.html:71
 msgid "Residence permit"
 msgstr "Aufenthaltsbewilligung"
 
-#: courses/templates/user/profile.html:74
+#: courses/templates/user/profile.html:75
 msgid "AHV number"
 msgstr "AHV Nummer"
 
-#: courses/templates/user/profile.html:79 templates/footer.html:16
+#: courses/templates/user/profile.html:81 templates/footer.html:16
 msgid "Contact"
 msgstr "Kontakt"
 
-#: courses/templates/user/profile.html:98
+#: courses/templates/user/profile.html:100
 msgid "Bank account"
 msgstr "Kontonummer"
 
-#: courses/templates/user/profile.html:100
+#: courses/templates/user/profile.html:102
 #: courses/templates/user/snippets/subscription.html:44
 msgid "IBAN"
 msgstr "IBAN"
 
-#: courses/templates/user/profile.html:102
+#: courses/templates/user/profile.html:104
 msgid "Bank"
 msgstr "Bank"
 
-#: courses/templates/user/profile.html:108
+#: courses/templates/user/profile.html:110
 msgid "Student status"
 msgstr "Studierendenstatus"
 
-#: courses/templates/user/profile.html:113
+#: courses/templates/user/profile.html:115
 msgid "Legi"
 msgstr "Legi"
 
-#: courses/templates/user/profile.html:118
+#: courses/templates/user/profile.html:120
 msgid "Functions"
 msgstr "Funktionen"
 
-#: courses/templates/user/profile.html:136
+#: courses/templates/user/profile.html:138
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: courses/templates/user/profile.html:138
+#: courses/templates/user/profile.html:140
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: courses/templates/user/profile.html:140
-#: courses/templates/user/profile.html:148
+#: courses/templates/user/profile.html:142
+#: courses/templates/user/profile.html:150
 msgid "Yes"
 msgstr "Ja"
 
-#: courses/templates/user/profile.html:142
-#: courses/templates/user/profile.html:150
+#: courses/templates/user/profile.html:144
+#: courses/templates/user/profile.html:152
 msgid "No"
 msgstr "Nein"
 
-#: courses/templates/user/profile.html:146
+#: courses/templates/user/profile.html:148
 msgid "Get involved"
 msgstr "Get involved"
 
-#: courses/templates/user/profile.html:158
+#: courses/templates/user/profile.html:160
 msgid "About me"
 msgstr "Über mich"
 
@@ -1214,12 +1219,12 @@ msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
 #: courses/templates/user/user_courses.html:34
-msgid "Current courses"
-msgstr "Aktuelle Kurse"
+msgid "My Subscriptions"
+msgstr "Meine Anmeldungen"
 
 #: courses/templates/user/user_courses.html:39
-msgid "No courses"
-msgstr "Keine Kurse"
+msgid "No subscriptions"
+msgstr "Keine Anmeldungen"
 
 #: courses/templates/user/user_courses.html:44
 msgid "Show available courses"
@@ -2201,3 +2206,9 @@ msgstr "Hauptinhalt"
 #: tq_website/settings.py:347
 msgid "Side content"
 msgstr "Seiteninhalt"
+
+#~ msgid "Current courses"
+#~ msgstr "Aktuelle Kurse"
+
+#~ msgid "No courses"
+#~ msgstr "Keine Kurse"
