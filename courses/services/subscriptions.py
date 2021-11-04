@@ -19,7 +19,7 @@ def subscribe(course, user, data):
         course=course,
         lead_follow=data.get('lead_follow', LeadFollow.NO_PREFERENCE),
         experience=data.get('experience', None),
-        comment=data.get('experience', None),
+        comment=data.get('comment', None),
     )
 
     # Handle couple subscription
@@ -31,7 +31,7 @@ def subscribe(course, user, data):
             course=course,
             lead_follow=LeadFollow.partner(data.get('lead_follow', LeadFollow.NO_PREFERENCE)),
             experience=data.get('experience', None),
-            comment=data.get('experience', None),
+            comment=data.get('comment', None),
         )
 
         # Link subscriptions
