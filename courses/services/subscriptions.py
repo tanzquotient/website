@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from courses import models as models
 from courses.emailcenter import send_subscription_confirmation, send_participation_confirmation, \
     detect_rejection_reason, send_rejection
-from courses.models import Subscribe, LeadFollow, SingleCouple, MatchingState
+from courses.models import Subscribe, LeadFollow, SingleCouple, MatchingState, SubscribeState
 from courses.services.general import log
 
 
@@ -59,13 +59,15 @@ def confirm_subscription(subscription, request=None, allow_single_in_couple_cour
         raise NoPartnerException()
 
     if subscription.state == models.SubscribeState.NEW:
-        subscription.state = models.SubscribeState.CONFIRMED
+        subscription.generate_price_to_pay()  # Make sure the price is generated
+        new_state = SubscribeState.COMPLETED if not subscription.price_to_pay else SubscribeState.CONFIRMED
+        subscription.state = new_state
         subscription.save()
 
-        m = send_participation_confirmation(subscription)
-        if m:
+        mail = send_participation_confirmation(subscription)
+        if mail:
             # log that we sent the confirmation
-            c = models.Confirmation(subscription=subscription, mail=m)
+            c = models.Confirmation(subscription=subscription, mail=mail)
             c.save()
             return True
         else:
