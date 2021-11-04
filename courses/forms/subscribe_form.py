@@ -23,6 +23,12 @@ class SubscribeForm(forms.Form):
         single_or_couple = cleaned_data.get("single_or_couple")
         partner_email = cleaned_data.get("partner_email")
 
+        if not cleaned_data.get("lead_follow"):
+            cleaned_data["lead_follow"] = LeadFollow.NO_PREFERENCE
+
+        if "comment" in cleaned_data and cleaned_data["comment"].strip() == '':
+            del cleaned_data["comment"]
+
         if single_or_couple == SingleCouple.COUPLE:
 
             if not partner_email:
