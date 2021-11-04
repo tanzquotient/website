@@ -44,7 +44,7 @@ def subscribe(course, user, data):
         partner_subscription.save()
         send_subscription_confirmation(partner_subscription)
 
-    # Finish user subscription
+    # Finish user subscriptiong
     user_subscription.derive_matching_state()
     user_subscription.save()
     send_subscription_confirmation(user_subscription)
