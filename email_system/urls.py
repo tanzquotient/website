@@ -1,9 +1,9 @@
-from django.conf.urls import url
-from email_system.apps import EmailSystemConfig
+from django.urls import path
 
 from email_system import views
+from email_system.apps import EmailSystemConfig
 
 app_name = EmailSystemConfig.name
 urlpatterns = [
-    url(r'^unsubscribe/(?P<context>[\w\s0-9_-]+)/(?P<user_id>\d+)/(?P<code>[\w-]+)/$', views.unsubscribe, name='unsubscribe'),
+    path('unsubscribe/<str:context>/<int:user_id>/<slug:code>/', views.unsubscribe, name='unsubscribe'),
 ]

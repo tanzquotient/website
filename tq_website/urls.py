@@ -3,11 +3,12 @@ import django.views.i18n
 import photologue.urls
 import rest_framework.urls
 from django.conf import settings
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import path
 from django.views.generic import TemplateView
 
 import courses.urls
@@ -18,43 +19,43 @@ import payment.urls
 import survey.urls
 
 urlpatterns = [
-    # url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")), # comment out robots or change it when site is finished
-    url(r'^jsi18n/(?P<packages>\S+?)/$', django.views.i18n.JavaScriptCatalog.as_view()),
-    url(r'^check/$', courses_views.confirmation_check, name='confirmation_check'),
-    url(r'^duplicate-users/$', courses_views.duplicate_users, name="duplicate_users"),
-    url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
+    path('jsi18n/<packages>/', django.views.i18n.JavaScriptCatalog.as_view()),
+    path('check/', courses_views.confirmation_check, name='confirmation_check'),
+    path('duplicate-users/', courses_views.duplicate_users, name="duplicate_users"),
+    path('api-auth/', include(rest_framework.urls, namespace='rest_framework')),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path('__debug__/', include(debug_toolbar.urls)),
     ]
 
 # for testing error pages
 if settings.DEBUG:
-    urlpatterns += [url(r'^400/$', TemplateView.as_view(template_name='400.html')),
-                    url(r'^403/$', TemplateView.as_view(template_name='403.html')),
-                    url(r'^404/$', TemplateView.as_view(template_name='404.html')),
-                    url(r'^500/$', TemplateView.as_view(template_name='500.html')),
-                    ]
+    urlpatterns += [
+        path('400/', TemplateView.as_view(template_name='400.html')),
+        path('403/', TemplateView.as_view(template_name='403.html')),
+        path('404/', TemplateView.as_view(template_name='404.html')),
+        path('500/', TemplateView.as_view(template_name='500.html')),
+]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('allauth.urls')),
-    url(r'^password/$', courses_views.change_password, name='change_password'),
-    url(r'^profile/courses$', courses_views.user_courses, name='user_courses'),
-    url(r'^profile/edit$', courses_views.ProfileView.as_view(), name='edit_profile'),
-    url(r'^profile/$', courses_views.user_profile, name='profile'),
-    url(r'^survey/', include(survey.urls, namespace='survey')),
-    url(r'^events/', include(events.urls, namespace='events')),
-    url(r'^courses/', include(courses.urls, namespace='courses')),
-    url(r'^emails/', include(email_system.urls, namespace='email_system')),
-    url(r'^photos/', include(photologue.urls, namespace='photos')),
-    url(r'^', include(payment.urls, namespace='payment')),
-    url(r'^', include(cms.urls)),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('password/', courses_views.change_password, name='change_password'),
+    path('profile/courses', courses_views.user_courses, name='user_courses'),
+    path('profile/edit', courses_views.ProfileView.as_view(), name='edit_profile'),
+    path('profile/', courses_views.user_profile, name='profile'),
+    path('survey/', include(survey.urls, namespace='survey')),
+    path('events/', include(events.urls, namespace='events')),
+    path('courses/', include(courses.urls, namespace='courses')),
+    path('emails/', include(email_system.urls, namespace='email_system')),
+    path('photos/', include(photologue.urls, namespace='photos')),
+    path('', include(payment.urls, namespace='payment')),
+    path('', include(cms.urls)),
 )
