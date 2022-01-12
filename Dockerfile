@@ -8,6 +8,9 @@ FROM eu.gcr.io/vseth-public/base:echo
 # Copy cinit file
 COPY cinit.yml /etc/cinit.d/tq-website.yml
 
+# Run apt update
+RUN apt update -y
+
 # Install python
 RUN apt install -y python3 python3-pip python3-setuptools
 
