@@ -29,18 +29,8 @@ LOG_DIR = os.path.join(BASE_DIR, 'logs')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(environ["TQ_DEBUG"].lower() == 'true')
 
-
-ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
-# This should be set to true since we use NGINX as a proxy
-USE_X_FORWARDED_HOST = True
-
-# In order for django CMS to function, X_FRAME_OPTIONS needs to be set to SAMEORIGIN
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-
 # Application definition
-INSTALLED_APPS = []
-
-INSTALLED_APPS += [
+INSTALLED_APPS = [
     'treebeard',
     'ckeditor',
     'photologue',  # Django gallery plugin
@@ -110,32 +100,29 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-SITE_ID = 1 # Needed for DjangoCMS
+SITE_ID = 1  # Needed for DjangoCMS
 DEPLOYMENT_DOMAIN = environ["TQ_DEPLOYMENT_DOMAIN"]
-
+ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
+INTERNAL_IPS = ['127.0.0.1', '::1']  # loopback
+USE_X_FORWARDED_HOST = True  # This should be set to true since we use NGINX as a proxy
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # In order for django CMS to function, X_FRAME_OPTIONS needs to be set to SAMEORIGIN
+WSGI_APPLICATION = 'tq_website.wsgi.application'
 ROOT_URLCONF = 'tq_website.urls'
 
-WSGI_APPLICATION = 'tq_website.wsgi.application'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'de'
-
 TIME_ZONE = 'CET'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 FORMAT_MODULE_PATH = [
     'tq_website.formats',
 ]
 
-# loopback
-INTERNAL_IPS = ['127.0.0.1', '::1']
 
 ###############################################
 # Configuration of allauth account management #
@@ -560,6 +547,7 @@ EMAIL_HOST_PASSWORD = environ["TQ_EMAIL_HOST_PASSWORD"]
 DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 
 # Database
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
