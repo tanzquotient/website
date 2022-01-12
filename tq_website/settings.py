@@ -47,7 +47,6 @@ INSTALLED_APPS += [
     'sortedm2m',  # required for photologue
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'easy_thumbnails', # filer requires this here
-    'filer',
     'djangocms_googlemap',
     'djangocms_link',
     'cms',  # django CMS itself
