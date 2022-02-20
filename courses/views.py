@@ -125,7 +125,7 @@ def subscribe_form(request, course_id):
 
     # If user already signed up or sign up not possible: redirect to course detail
     if course.subscriptions.filter(user=request.user).exists() \
-            or not course.is_subscription_allowed() \
+            or (not course.is_subscription_allowed() and not user.is_staff)  \
             or not course.has_free_places:
         return redirect('courses:course_detail', course_id=course_id)
 
