@@ -102,7 +102,7 @@ def offering_by_id(request, offering_id):
     template_name = 'courses/offering.html'
     offering = get_object_or_404(Offering.objects, id=offering_id)
     if not offering.is_public():
-        raise Http404(message)
+        raise Http404()
     context = {
         "offering": offering,
         "sections": services.get_sections(offering)
