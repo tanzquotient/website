@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.generic.edit import FormView
+from django.http import Http404
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
@@ -100,6 +101,8 @@ def course_list_preview(request):
 def offering_by_id(request, offering_id):
     template_name = 'courses/offering.html'
     offering = get_object_or_404(Offering.objects, id=offering_id)
+    if not offering.is_public():
+        raise Http404(message)
     context = {
         "offering": offering,
         "sections": services.get_sections(offering)
