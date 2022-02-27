@@ -189,6 +189,11 @@ class Subscribe(models.Model):
         else:
             return None
 
+    def get_partner_name(self):
+        if not self.partner:
+            return None
+        return f"{self.partner.first_name} {self.partner.last_name}"
+
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
         if self.partner == self.user:
