@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from reversion import revisions as reversion
+from django.utils.translation import gettext_lazy as _
+
 
 from courses import managers
 from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow
@@ -193,6 +195,13 @@ class Subscribe(models.Model):
         if not self.partner:
             return None
         return f"{self.partner.first_name} {self.partner.last_name}"
+
+    def get_lead_follow_text(self):
+        if self.lead_follow == LeadFollow.NO_PREFERENCE:
+            return '-'
+        if self.lead_follow == LeadFollow.LEAD:
+            return _('lead')
+        return _('follow')
 
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
