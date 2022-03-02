@@ -93,7 +93,7 @@
                         </small>
                     </div>
                     <div class="list-group">
-                        {% for subscription in participatory|dictsort:"payed" %}
+                        {% for subscription in participatory %}
                             <a {% if not subscription.payed %}href=
                                    "{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
                                class="list-group-item {% if subscription.payed %}disabled{% endif %}">
@@ -144,7 +144,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for subscription in participatory|dictsort:"payed" %}
+                            {% for subscription in participatory %}
                                 <tr>
                                     <td>{{ subscription.usi }}</td>
                                     <td>{{ subscription.user.get_full_name }}</td>

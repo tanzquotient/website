@@ -200,8 +200,8 @@ class Subscribe(models.Model):
         if self.lead_follow == LeadFollow.NO_PREFERENCE:
             return '-'
         if self.lead_follow == LeadFollow.LEAD:
-            return _('lead')
-        return _('follow')
+            return str(_('lead'))
+        return str(_('follow'))
 
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
