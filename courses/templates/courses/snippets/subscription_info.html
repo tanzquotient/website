@@ -14,7 +14,7 @@
     {% else %} {# Regular case: subscription in general possible #}
         {% if course.is_subscription_allowed or user.is_staff %}
             {% if not course.is_subscription_allowed  and user.is_staff %}
-                {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register already." %}
+                {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
             {% endif %}
             {% if not course.has_free_places %}
                 <span class="badge rounded-pill bg-danger">{% trans "fully booked" %}</span>

@@ -31,6 +31,22 @@ class SubscribeForm(forms.Form):
 
         if single_or_couple == SingleCouple.COUPLE:
 
+            if not self.course.has_free_places_for_leaders():
+                error = ValidationError(
+                    message=_('You can not sign up with a partner anymore, '
+                              'since one of you needs to be the leader and there are no more spots for leaders.'),
+                    code='leaders fully booked')
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+            if not self.course.has_free_places_for_followers():
+                error = ValidationError(
+                    message=_('You can not sign up with a partner anymore, '
+                              'since one of you needs to be the follower and there are no more spots for followers.'),
+                    code='leaders fully booked')
+                self.add_error('partner_email', error)
+                return cleaned_data
+
             if not partner_email:
                 error = ValidationError(
                     message=_('You need to enter the email address of your partner.'),

@@ -5,10 +5,27 @@
     {% csrf_token %}
 
     {% if course.type.couple_course %}
+
+        <div id="lead_follow_help" class="form-text">
+            {% if not course.has_free_places_for_leaders %}
+                <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
+            {% endif %}
+            {% if not course.has_free_places_for_followers %}
+                <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
+            {% endif %}
+        </div>
+
         <div class="nav mt-4 btn-group" id="pills-tab" role="group">
-            <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab" {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
+            <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab"
+                    {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
             <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
-            <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab" {% if form.single_or_couple.value == 'c' %} checked {% endif %}/>
+            <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab"
+                    {% if form.single_or_couple.value == 'c' %} checked {% endif %}
+                    {% comment  %}
+                    If either leader or follower spots are fully booked, couples can not sign up anymore,
+                    as one of them would subscribe as the fully booked role.
+                    {% endcomment %}
+                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %} disabled {% endif %} />
             <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
         </div>
         <div class="tab-content" id="pills-tabContent">
