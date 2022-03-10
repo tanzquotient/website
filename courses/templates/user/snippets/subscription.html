@@ -94,6 +94,15 @@
             </div>
         </div>
         <div>
+            {% if subscription.course.type.couple_course %}
+                <div class="col-xs-12">
+                    <p>
+                        <strong>{% trans "Your Role" %}</strong>
+                        <br/>
+                        {{ subscription.get_assigned_role_str }}
+                    </p>
+                </div>
+            {% endif %}
             {% if subscription.partner %}
                 <div class="col-xs-12">
                     <p>

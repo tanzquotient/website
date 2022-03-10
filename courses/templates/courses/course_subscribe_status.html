@@ -24,15 +24,22 @@
                     <p>
                         {% trans "Thank you for subscribing to this course. The final confirmation will be sent out in the following days." %}
                     </p>
-                    {% if subscription.partner %}
+                    {% if subscription.course.type.couple_course %}
                         <hr>
                         <p>
-                            <strong>{% trans "Partner" %}</strong>
+                            <strong>{% trans "Your Role" %}</strong>
                             <br/>
-                            {{ subscription.partner.get_full_name }}
-                            <br/>
-                            {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                            {{ subscription.get_assigned_role_str }}
                         </p>
+                        {% if subscription.partner %}
+                            <p>
+                                <strong>{% trans "Partner" %}</strong>
+                                <br/>
+                                {{ subscription.partner.get_full_name }}
+                                <br/>
+                                {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                            </p>
+                        {% endif %}
                     {% endif %}
 
                     <hr>

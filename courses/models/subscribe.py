@@ -196,12 +196,46 @@ class Subscribe(models.Model):
             return None
         return f"{self.partner.first_name} {self.partner.last_name}"
 
-    def get_lead_follow_text(self):
-        if self.lead_follow == LeadFollow.NO_PREFERENCE:
-            return '-'
-        if self.lead_follow == LeadFollow.LEAD:
-            return str(_('lead'))
-        return str(_('follow'))
+    def get_assigned_role_str(self) -> str:
+        role = self.assigned_role()
+        if role == LeadFollow.NO_PREFERENCE:
+            return str(_('no preference'))
+        if not self.was_role_assigned():
+            if role == LeadFollow.LEAD:
+                return str(_('leader'))
+            return str(_('follower'))
+        else:
+            if role == LeadFollow.LEAD:
+                return str(_('no preference, assigned as leader'))
+            return str(_('no preference, assigned as follower'))
+
+    def assigned_role(self):
+
+        # User specified role
+        if self.lead_follow != LeadFollow.NO_PREFERENCE:
+            return self.lead_follow
+
+        # Role specified by partner
+        partner_subscription = self.get_partner_subscription()
+        if partner_subscription is not None:
+            return LeadFollow.partner(partner_subscription.lead_follow)
+        
+        # No role specified and no partner
+        return LeadFollow.NO_PREFERENCE
+        
+    def is_role_specified(self) -> bool:
+        return self.assigned_role() != LeadFollow.NO_PREFERENCE
+
+    def was_role_assigned(self) -> bool:
+        return self.lead_follow == LeadFollow.NO_PREFERENCE and self.assigned_role() != LeadFollow.NO_PREFERENCE
+
+    def partner_subscription(self):
+        if self.partner is None:
+            return None
+
+        partner_subscription_query = self.course.subscriptions.filter(user=self.partner)
+        if partner_subscription_query.count() == 1:
+            return partner_subscription_query.get()
 
     def clean(self):
         # Don't allow subscriptions with partner equals to subscriber
