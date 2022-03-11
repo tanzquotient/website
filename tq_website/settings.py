@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
-    'djangocms_admin_style',
-    # for the admin skin. You **must** add 'djangocms_admin_style' in the list **before** 'django.contrib.admin'.
+    'djangocms_admin_style',  # You must add 'djangocms_admin_style' in the list before 'django.contrib.admin'.
     'django.contrib.messages',  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     'django.contrib.admin',
     'django.contrib.auth',

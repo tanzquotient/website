@@ -57,10 +57,11 @@ services:
       - s3-data-volume:/data
     ports:
       - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ACCESS_KEY: ${TQ_S3_MEDIA_ACCESS_KEY}
       MINIO_SECRET_KEY: ${TQ_S3_MEDIA_SECRET_KEY}
-    command: server /data
+    command: server --console-address ":9001" /data
 
 volumes:
   postgres-volume: # Let Docker generate a place for this, doesn't matter for development
