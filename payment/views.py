@@ -40,7 +40,7 @@ class VoucherPaymentIndexView(FormView):
         context['subscription'] = subscription
 
         # if the user has already paid, show the payment-success view
-        if subscription.payed():
+        if subscription.paid():
             self.template_name = 'payment/voucher/payment_success.html'
 
         return context
@@ -73,7 +73,7 @@ class VoucherPaymentSuccessView(TemplateView):
         subscription = Subscribe.objects.filter(usi=usi).first()
 
         # ensure that the payment success page is only displayed if the subscription is actually paid.
-        if subscription.payed():
+        if subscription.paid():
             self.template_name = 'payment/voucher/payment_success.html'
         else:
             self.template_name = 'payment/voucher/remaining_amount.html'

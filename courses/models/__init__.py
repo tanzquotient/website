@@ -1,4 +1,5 @@
 from .choices import *
+from .offering import Offering
 from .address import Address
 from .bank_account import BankAccount
 from .subscribe import Subscribe
@@ -21,5 +22,4 @@ from .rejection import Rejection
 from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
-from .offering import Offering
 from .song import Song
