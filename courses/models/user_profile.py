@@ -1,3 +1,4 @@
+import uuid
 from datetime import date
 
 from django.conf import settings
@@ -10,6 +11,11 @@ from djangocms_text_ckeditor.fields import HTMLField
 
 from courses import managers
 from . import Address, BankAccount, Gender, StudentStatus, Residence, Subscribe
+
+
+def upload_path(instance, filename):
+    extension = filename.split('.')[-1]
+    return f'profile_pictures/{uuid.uuid4()}.{extension}'
 
 
 class UserProfile(models.Model):
@@ -33,7 +39,7 @@ class UserProfile(models.Model):
     get_involved = models.BooleanField(default=False)
     get_involved.help_text = "If this user is interested to get involved with our organisation."
 
-    picture = models.ImageField(null=True, blank=True, upload_to='profile_pictures')
+    picture = models.ImageField(null=True, blank=True, upload_to=upload_path)
     about_me = HTMLField(blank=True, null=True)
 
     birthdate = models.DateField(blank=True, null=True)

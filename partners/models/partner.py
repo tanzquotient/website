@@ -1,3 +1,5 @@
+import uuid
+
 from django.db.models import CharField, ImageField, URLField, BooleanField
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
@@ -6,8 +8,13 @@ from parler.models import TranslatedFields, TranslatableModel
 from utils import TranslationUtils
 
 
+def upload_path(instance, filename):
+    extension = filename.split('.')[-1]
+    return f'partners/{uuid.uuid4()}.{extension}'
+
+
 class Partner(TranslatableModel):
-    image = ImageField(verbose_name=_('Image'), null=True, blank=True, upload_to='partners')
+    image = ImageField(verbose_name=_('Image'), null=True, blank=True, upload_to=upload_path)
     url = URLField(blank=False, null=False)
     active = BooleanField(default=True)
 
