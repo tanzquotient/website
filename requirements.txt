@@ -2,7 +2,7 @@
 Django==3.2.12  # django-cms does not yet support django 4.0
 django-debug-toolbar==3.2.4
 django-absolute==0.3
-django-analytical==3.0.0
+django-analytical==3.1.0
 django-filter==21.1
 django-guardian==2.4.0
 django-parler==2.3
@@ -37,21 +37,21 @@ PyPDF2==1.26.0
 pyyaml==6.0
 
 # SSH
-paramiko==2.9.2
+paramiko==2.10.3
 
 # Database
 psycopg2==2.9.3
 
 # Storage
 django-storages==1.12.3
-boto3==1.21.17
+boto3==1.21.24
 minio==7.1.5
 
 # Webserver
 gunicorn==20.1.0
 
 # Logging
-sentry_sdk==1.5.7
+sentry_sdk==1.5.8
 
 # Utils
 pylint==2.12.2
