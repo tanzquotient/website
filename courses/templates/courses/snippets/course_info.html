@@ -10,11 +10,13 @@
         {% include "courses/snippets/styles_modal.html" with type=course.type disable_modals=disable_modals only %}
     {% endif %}
 
-    <strong>{% trans "Teachers" %}</strong>
-    <br/>
-    <p>
-        {% include "courses/snippets/course_teachers.html" with display_link=True disable_modals=disable_modals teachings=course.teaching.all only %}
-    </p>
+    {% if course.teaching.exists %}
+        <strong>{% trans "Teachers" %}</strong>
+        <br/>
+        <p>
+            {% include "courses/snippets/course_teachers.html" with display_link=True disable_modals=disable_modals teachings=course.teaching.all only %}
+        </p>
+    {% endif %}
 
 
     {% if course.room %}
