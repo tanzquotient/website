@@ -28,12 +28,13 @@ def format_prices(price_with_legi: Number, price_without_legi: Number, price_spe
         return _('No entry fee')
 
     if not price_with_legi and price_without_legi:
-        return f"{_('free for students')}, {_('otherwise {} CHF').format(price_without_legi)}"
+        return _('free for students') + ", " + _('otherwise {:g} CHF').format(price_without_legi)
 
     if price_with_legi == price_without_legi or (price_with_legi and not price_without_legi):
-        return f"{price_with_legi} CHF"
+        return f"{price_with_legi:g} CHF"
 
-    return f"{_('{} CHF for students').format(price_with_legi)}, {_('otherwise {} CHF').format(price_without_legi)}"
+    return _('{:g} CHF for students').format(price_with_legi) + ", " + _('otherwise {:g} CHF').format(
+        price_without_legi)
 
 
 def model_attribute_language_fallback(model, attribute) -> str:

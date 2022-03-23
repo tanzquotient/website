@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-23 14:18+0100\n"
+"POT-Creation-Date: 2022-03-23 14:55+0100\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,7 @@ msgstr "Row"
 msgid "Upcoming events and courses"
 msgstr "Upcoming courses and events"
 
-#: cms_plugins/cms_plugins.py:195
+#: cms_plugins/cms_plugins.py:199
 msgid "Countdown"
 msgstr "Countdown"
 
@@ -397,6 +397,18 @@ msgstr "no preference, assigned as follower"
 #: events/templates/events/snippets/event_list_entry.html:3
 msgid "No entry fee"
 msgstr "No entry fee"
+
+#: courses/services/general.py:31
+msgid "free for students"
+msgstr "free for students"
+
+#: courses/services/general.py:31 courses/services/general.py:36
+msgid "otherwise {:g} CHF"
+msgstr "otherwise {:g} CHF"
+
+#: courses/services/general.py:36
+msgid "{:g} CHF for students"
+msgstr "{:g} CHF for students"
 
 #: courses/services/matching/change_matching.py:23
 msgid "{} subscriptions ({} couples) corrected successfully"
@@ -845,9 +857,10 @@ msgstr ""
 msgid ""
 "There are no spots available for followers anymore. You can therefore only "
 "sign up as a leader (without a partner)."
-msgstr "There are no spots available for followers anymore."
-"There are no spots available for followers anymore. You can therefore only "
-"sign up as a leader (without a partner)."
+msgstr ""
+"There are no spots available for followers anymore.There are no spots "
+"available for followers anymore. You can therefore only sign up as a leader "
+"(without a partner)."
 
 #: courses/templates/courses/snippets/subscribe_form.html:21
 msgid "Without partner"
