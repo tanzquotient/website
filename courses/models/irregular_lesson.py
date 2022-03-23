@@ -18,10 +18,11 @@ class IrregularLesson(models.Model):
     class Meta:
         ordering = ['date', 'time_from']
 
-    def get_total_time(self):
+    def get_total_time(self) -> datetime.timedelta:
         return datetime.datetime.combine(self.date, self.time_to) - datetime.datetime.combine(self.date, self.time_from)
 
-    def __str__(self):
-        s = "{}, {}, {}-{}".format(self.course, self.date, self.time_from.strftime("%H:%M"),
-                                  self.time_to.strftime("%H:%M"))
-        return s
+    def format_duration(self) -> str:
+        return f'{self.date}, {self.time_from.strftime("%H:%M")}-{self.time_to.strftime("%H:%M")}'
+
+    def __str__(self) -> str:
+        return f"{self.course}, {self.format_duration()}"

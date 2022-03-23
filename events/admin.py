@@ -8,7 +8,7 @@ from events.models import Event, EventCategory, EventRegistration
 
 @admin.register(Event)
 class EventAdmin(TranslatableAdmin):
-    list_display = ('name', 'date', 'format_time', 'room', 'special', 'display')
+    list_display = ('name', 'date', 'special', 'display', 'time_from', 'date_to', 'time_to', 'room')
     list_filter = (EventDateFilter, 'room',)
 
     model = Event
@@ -16,16 +16,11 @@ class EventAdmin(TranslatableAdmin):
     actions = [copy_event, export_registrations_csv, export_registrations_excel]
 
     fieldsets = [
-        ('What?', {
-            'fields': ['name', 'category', 'registration_enabled', 'max_participants', 'description', 'image']}),
-        ('When?', {
-            'fields': ['date', 'time_from', 'time_to', 'cancelled']}),
-        ('Where?', {
-            'fields': ['room', ]}),
-        ('Billing', {
-            'fields': ['price_with_legi', 'price_without_legi', 'price_special', ]}),
-        ('Admin', {
-            'fields': ['special', 'display'],}),
+        ('Info', {'fields': ['name', 'category', 'description', 'image']}),
+        ('Options', {'fields': ['special', 'display', 'cancelled', 'registration_enabled', 'max_participants']}),
+        ('Date & Time', {'fields': ['date', 'time_from', 'date_to', 'time_to']}),
+        ('Location', {'fields': ['room']}),
+        ('Price schema', {'fields': ['price_with_legi', 'price_without_legi', 'price_special']}),
     ]
 
 

@@ -19,7 +19,7 @@
             {% for event in category.get_next_events %}
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'events:detail' event.id %}">
-                        <div>{{ event.date|date:'D, d.m.Y' }}, {{ event.time_from|date:'H:i' }}-{{ event.time_to|date:'H:i' }}</div>
+                        <div>{{ event.format_duration }}</div>
                     </a>
                     <i class="fas fa-chevron-right"></i>
                 </li>

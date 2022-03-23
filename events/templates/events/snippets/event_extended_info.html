@@ -7,7 +7,7 @@
     <strong>{% trans "Date" %}</strong>
 </div>
 <div>
-    {{ event.date|date:'D, d. N Y' }}, {{ event.time_from|date:'H:i' }}-{{ event.time_to|date:'H:i' }}
+    {{ event.format_duration }}
 </div>
 <div>
     {% if event.room %}

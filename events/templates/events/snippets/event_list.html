@@ -9,8 +9,7 @@
             {% if not hide_event_title %}
                 <th>{% trans "Name" %}</th>
             {% endif %}
-            <th>{% trans "Date" %}</th>
-            <th>{% trans "Time" %}</th>
+            <th>{% trans "Date & Time" %}</th>
             <th>{% trans "Venue" %}</th>
             <th>{% trans "Entry fee" %}</th>
             <th></th>
@@ -34,8 +33,7 @@
                             </a>
                         </td>
                     {% endif %}
-                    <td>{{ event.date }}</td>
-                    <td>{{ event.format_time }}</td>
+                    <td>{{ event.format_duration }}</td>
                     <td>
                         {% if event.room %}
                             {{ event.room.name }}

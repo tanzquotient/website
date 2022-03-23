@@ -149,9 +149,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
 
         for event in events:
             items.append({
-                'date': event.date,
-                'time_from': event.time_from,
-                'time_to': event.time_to,
+                'format_duration': event.format_duration(),
                 'name': event.get_name(),
                 'special': event.special,
                 'format_prices': event.format_prices(),
@@ -166,9 +164,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                 continue
             if len(irregular_lesson.course.get_lessons()) == 1:
                 items.append({
-                    'date': irregular_lesson.date,
-                    'time_from': irregular_lesson.time_from,
-                    'time_to': irregular_lesson.time_to,
+                    'format_duration': irregular_lesson.format_duration(),
                     'name': irregular_lesson.course.type.name,
                     'room': irregular_lesson.course.room,
                     'special': False,

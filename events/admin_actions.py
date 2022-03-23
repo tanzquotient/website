@@ -4,10 +4,12 @@ from events import services
 from events.models import Event
 
 
-def copy_event(modeladmin, request, queryset):
+def copy_event(modeladmin, request, queryset) -> None:
     for event in queryset:
         old_id = event.id
         event.date = event.date + datetime.timedelta(days=7)
+        if event.date_to:
+            event.date_to = event.date_to + datetime.timedelta(days=7)
         event.id = None
         event.save()
         old_event = Event.objects.get(id=old_id)

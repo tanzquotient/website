@@ -46,6 +46,8 @@ class EventFeed(ICalFeed):
 
     def item_end_datetime(self, item):
         date = item.date
+        if item.date_to:
+            date = item.date_to
         if item.time_to is None:
             # no end time is available
             return date
