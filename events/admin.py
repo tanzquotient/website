@@ -8,7 +8,7 @@ from events.models import Event, EventCategory, EventRegistration
 
 @admin.register(Event)
 class EventAdmin(TranslatableAdmin):
-    list_display = ('name', 'date', 'special', 'display', 'time_from', 'date_to', 'time_to', 'room')
+    list_display = ('name', 'special', 'display', 'date', 'time_from', 'date_to', 'time_to', 'room')
     list_filter = (EventDateFilter, 'room',)
 
     model = Event
