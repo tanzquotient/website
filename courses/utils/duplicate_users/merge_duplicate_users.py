@@ -1,11 +1,12 @@
 import logging
+from typing import Optional, Any
 
 from django.contrib.auth.models import User
 
 log = logging.getLogger('merge_duplicate_users')
 
 
-def merge_duplicate_users(to_merge):
+def merge_duplicate_users(to_merge) -> None:
     from courses.models import UserProfile
 
     for primary, aliases in to_merge.items():
@@ -54,10 +55,6 @@ def merge_duplicate_users(to_merge):
                 survey_instance.user = user
                 survey_instance.save()
 
-            for organising in alias.organising.all():
-                organising.organiser = user
-                organising.save()
-
             for teaching in alias.teaching_courses.all():
                 teaching.teacher = user
                 teaching.save()
@@ -74,9 +71,8 @@ def merge_duplicate_users(to_merge):
             alias.delete()
 
 
-def _get_value_from_most_recent_alias_profile(alias_ids, profile, field):
+def _get_value_from_most_recent_alias_profile(alias_ids, profile, field) -> Optional[Any]:
     from courses.models import UserProfile
-
 
     value = getattr(profile, field)
     if value:
