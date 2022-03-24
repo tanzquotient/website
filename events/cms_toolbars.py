@@ -12,8 +12,8 @@ class EventsToolbar(CMSToolbar):
             url = reverse('admin:events_event_changelist')
             menu.add_sideframe_item(_('Events'), url=url)
         if self.request.user.has_perm('events.change_eventregistration'):
-            url = reverse('admin:events_event_eventregistration_changelist')
+            url = reverse('admin:events_eventregistration_changelist')
             menu.add_sideframe_item(_('Event Registrations'), url=url)
         if self.request.user.has_perm('events.change_eventcategory'):
-            url = reverse('admin:events_event_eventcategory_changelist')
+            url = reverse('admin:events_eventcategory_changelist')
             menu.add_sideframe_item(_('Event Categories'), url=url)
