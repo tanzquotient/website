@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Optional
 
 from django.db import models
 
@@ -11,10 +12,10 @@ class RegularLesson(models.Model):
     time_from = models.TimeField()
     time_to = models.TimeField()
 
-    def get_weekday_number(self):
+    def get_weekday_number(self) -> int:
         return Weekday.NUMBERS[self.weekday]
 
-    def get_total_time(self):
+    def get_total_time(self) -> Optional[timedelta]:
         period = self.course.get_period()
         if not period or not period.date_from or not period.date_to:
             return None  # time cannot be calculated because period is unknown
@@ -36,7 +37,7 @@ class RegularLesson(models.Model):
 
         return amount_lessons * time_per_lesson
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{}, {}, {}-{}".format(self.course, Weekday.WEEKDAYS_TRANSLATIONS_DE[self.weekday],
                                       self.time_from.strftime("%H:%M"),
                                       self.time_to.strftime("%H:%M"))

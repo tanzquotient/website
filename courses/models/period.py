@@ -10,17 +10,17 @@ class Period(models.Model):
     date_to.help_text = "The end date of this period. Can be left empty. " \
                         "If both are left empty, this period is displayed as 'on request'."
 
-    def format_date(self, d):
+    def format_date(self, d) -> str:
         return d.strftime('%d. %b %Y')
 
     format_date.short_description = 'Period from/to'
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.name:
             return "{} ({})".format(self.name, self.date_as_string())
         return self.date_as_string()
 
-    def date_as_string(self):
+    def date_as_string(self) -> str:
         if self.date_from and self.date_to:
             return "{} - {}".format(self.format_date(self.date_from), self.format_date(self.date_to))
         elif self.date_from:

@@ -858,9 +858,8 @@ msgid ""
 "There are no spots available for followers anymore. You can therefore only "
 "sign up as a leader (without a partner)."
 msgstr ""
-"There are no spots available for followers anymore.There are no spots "
-"available for followers anymore. You can therefore only sign up as a leader "
-"(without a partner)."
+"There are no spots available for followers anymore. You can therefore only "
+"sign up as a leader (without a partner)."
 
 #: courses/templates/courses/snippets/subscribe_form.html:21
 msgid "Without partner"

@@ -5,16 +5,6 @@
     {% csrf_token %}
 
     {% if course.type.couple_course %}
-
-        <div id="lead_follow_help" class="form-text">
-            {% if not course.has_free_places_for_leaders %}
-                <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
-            {% endif %}
-            {% if not course.has_free_places_for_followers %}
-                <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
-            {% endif %}
-        </div>
-
         <div class="nav mt-4 btn-group" id="pills-tab" role="group">
             <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab"
                     {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
@@ -28,6 +18,15 @@
                     {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %} disabled {% endif %} />
             <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
         </div>
+        <div id="lead_follow_help" class="form-text">
+            {% if not course.has_free_places_for_leaders %}
+                <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
+            {% endif %}
+            {% if not course.has_free_places_for_followers %}
+                <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
+            {% endif %}
+        </div>
+
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-4" id="single-tab" role="tabpanel" aria-labelledby="single">
                 <div>
