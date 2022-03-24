@@ -14,15 +14,15 @@ class CourseType(TranslatableModel):
                               help_text="This text is added to the description of each course instance.")
     )
 
-    def get_level(self):
+    def get_level(self) -> int:
         return self.level if self.level else ""
 
-    def format_styles(self):
+    def format_styles(self) -> str:
         return ', '.join(map(str, self.styles.all()))
 
     format_styles.short_description = "Styles"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{}".format(self.name)
 
     class Meta:

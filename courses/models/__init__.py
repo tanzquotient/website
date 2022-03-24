@@ -3,7 +3,6 @@ from .offering import Offering
 from .address import Address
 from .bank_account import BankAccount
 from .subscribe import Subscribe
-from .user_profile import UserProfile
 from .style import Style
 from .room import Room
 from .period import Period
@@ -23,3 +22,4 @@ from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
 from .song import Song
+from .user_profile import UserProfile

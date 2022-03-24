@@ -399,7 +399,7 @@ class Course(TranslatableModel):
     get_teachers_welcomed.short_description = 'Teachers welcomed'
     get_teachers_welcomed.boolean = True
 
-    def get_total_time(self) -> dict[str, Optional[Number]]:
+    def get_total_time(self) -> dict[str, Optional[float]]:
         totals = {
             'total': None,
             'regular': None,

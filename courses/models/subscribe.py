@@ -5,11 +5,10 @@ import hashlib
 from typing import Optional
 
 import base36
-from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Model, ForeignKey, PROTECT, TextField, CharField, DateTimeField, FloatField
 from reversion import revisions as reversion
 from django.utils.translation import gettext_lazy as _
 
@@ -19,38 +18,34 @@ from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow, Offering
 
 
 @reversion.register()
-class Subscribe(models.Model):
+class Subscribe(Model):
     # Identifying data
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='subscriptions', on_delete=models.PROTECT)
-    course = models.ForeignKey('Course', related_name='subscriptions', on_delete=models.PROTECT)
+    user = ForeignKey(to=User, related_name='subscriptions', on_delete=PROTECT)
+    course = ForeignKey('Course', related_name='subscriptions', on_delete=PROTECT)
 
     # Partner, matching, lead/follow preference
-    partner = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, related_name='subscriptions_as_partner', blank=True,
-        null=True, on_delete=models.PROTECT)
-    matching_state = models.CharField(
-        max_length=30, blank=False, null=False, db_index=True,
-        choices=MatchingState.CHOICES, default=MatchingState.UNKNOWN)
-    lead_follow = models.CharField(
-        max_length=1, blank=False, null=False,
-        default=LeadFollow.NO_PREFERENCE, choices=LeadFollow.CHOICES)
+    partner = ForeignKey(User, related_name='subscriptions_as_partner', blank=True, null=True, on_delete=PROTECT)
+    matching_state = CharField(max_length=30, blank=False, null=False, db_index=True, choices=MatchingState.CHOICES,
+                               default=MatchingState.UNKNOWN)
+    lead_follow = CharField(max_length=1, blank=False, null=False, default=LeadFollow.NO_PREFERENCE,
+                            choices=LeadFollow.CHOICES)
 
     # Experience and comment
-    experience = models.TextField(blank=True, null=True)
-    comment = models.TextField(blank=True, null=True)
+    experience = TextField(blank=True, null=True)
+    comment = TextField(blank=True, null=True)
     comment.help_text = 'A optional comment made by the user during subscription.'
 
     # Timestamp and State
-    date = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    date = DateTimeField(blank=False, null=False, auto_now_add=True)
     date.help_text = 'The date/time when the subscription was made.'
-    state = models.CharField(max_length=30, blank=False, null=False, db_index=True,
-                             choices=SubscribeState.CHOICES, default=SubscribeState.NEW)
+    state = CharField(max_length=30, blank=False, null=False, db_index=True, choices=SubscribeState.CHOICES,
+                      default=SubscribeState.NEW)
 
     # Payment stuff
-    usi = models.CharField(max_length=6, blank=True, null=False, default="------", unique=True)
+    usi = CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = 'Unique subscription identifier: 4 characters identifier, 2 characters checksum'
-    price_to_pay = models.FloatField(blank=True, null=True, default=None)
-    paymentmethod = models.CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
+    price_to_pay = FloatField(blank=True, null=True, default=None)
+    paymentmethod = CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
     # Objects
     objects = managers.SubscribeQuerySet.as_manager()
@@ -195,7 +190,7 @@ class Subscribe(models.Model):
         else:
             return None
 
-    def get_partner_name(self) -> str:
+    def get_partner_name(self) -> Optional[str]:
         if not self.partner:
             return None
         return f"{self.partner.first_name} {self.partner.last_name}"
