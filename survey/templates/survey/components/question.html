@@ -1,11 +1,8 @@
-<div class="card card-default">
-    <div class="card-header">
+<div>
+    <div>
         <strong>{{ question.text }}</strong>
     </div>
-    <div class="card-body">
-        {% if question.note %}
-            <div class="alert alert-info alert-empty" role="alert">{{ question.note }}</div>
-        {% endif %}
+    <div class="my-2">
         {% if question.type == 'c' %}
             {% include "survey/components/question_singlechoice.html" with question=question only %}
         {% elif question.type == 'cf' %}
@@ -20,4 +17,9 @@
             {% include "survey/components/question_freeform.html" with question=question only %}
         {% endif %}
     </div>
+    {% if question.note %}
+        <div class="mb-2 text-muted">{{ question.note }}</div>
+    {% endif %}
 </div>
+
+

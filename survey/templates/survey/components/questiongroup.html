@@ -1,7 +1,19 @@
-{% if group.intro_text %}
-    <div class="alert alert-info" role="alert">{{ group.intro_text }}</div>
-{% endif %}
-{% for question in group.question_set.all %}
-    {% include "survey/components/question.html" with question=question only %}
-{% endfor %}
-<hr>
+<div class="card mb-4">
+    {% if group.title %}
+        <div class="card-header">
+            <strong>{{ group.title }}</strong>
+        </div>
+    {% endif %}
+    {% if group.intro_text %}
+        <div class="card-body">
+            {{ group.intro_text }}
+        </div>
+    {% endif %}
+    <ul class="list-group list-group-flush">
+        {% for question in group.question_set.all %}
+            <li class="list-group-item">
+                {% include "survey/components/question.html" with question=question only %}
+            </li>
+        {% endfor %}
+    <ul>
+</div>

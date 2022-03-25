@@ -1,6 +1,7 @@
 {% for choice in question.choice_set.all %}
-    <div class="input-group">
-        <input type="checkbox" id="q{{ question.id }}-c{{ choice.id }}" name="q{{ question.id }}-c{{ choice.id }}">
-        <label for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox"
+               id="q{{ question.id }}-c{{ choice.id }}" name="q{{ question.id }}-c{{ choice.id }}">
+        <label  class="form-check-label" for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
     </div>
 {% endfor %}

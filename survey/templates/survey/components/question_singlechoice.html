@@ -3,4 +3,9 @@
         <input type="radio" id="q{{ question.id }}-c{{ choice.id }}" name="q{{ question.id }}" value="{{ choice.id }}">
         <label for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
     </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio"
+               id="q{{ question.id }}-c{{ choice.id }}" name="q{{ question.id }}" value="{{ choice.id }}">
+        <label class="form-check-label" for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
+    </div>
 {% endfor %}

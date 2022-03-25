@@ -1,7 +1,9 @@
+{% load i18n %}
+
 {% include "survey/components/question_multiplechoice.html"%}
-<div class="input-group">
-    <div class="input-group-addon">
-        <input type="checkbox" id="q{{ question.id }}-freechoice" name="q{{ question.id }}-freechoice">
-    </div>
-    <input type="text" class="form-control" name="q{{ question.id }}-freeform"/>
+<div class="col-auto">
+    <label for="q{{ question.id }}-freechoice" class="col-form-label">{% trans "Other" %}</label>
+</div>
+<div class="col-auto">
+    <input type="text" id="q{{ question.id }}-freechoice" name="q{{ question.id }}-freechoice" class="form-control">
 </div>

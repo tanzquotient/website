@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from . import services
 from . import models
@@ -130,14 +130,15 @@ def survey_error(request):
 
 
 @staff_member_required
-def survey_test(request, survey_id):
-    template_name = "survey/survey.html"
+def survey_test(request, survey_id) -> HttpResponse:
 
     get_object_or_404(models.Survey, pk=survey_id)
     survey = models.Survey.objects.filter(pk=survey_id).prefetch_related('questiongroup_set',
                                                                          'questiongroup_set__question_set',
                                                                          'questiongroup_set__question_set__scale_template').first()
-    context = {'inst': models.SurveyInstance(survey=survey),
-               'intro_text': survey.intro_text}
+    context = {
+        'inst': models.SurveyInstance(survey=survey),
+        'intro_text': survey.intro_text
+    }
 
-    return render(request, template_name, context)
+    return render(request, "survey/survey.html", context)
