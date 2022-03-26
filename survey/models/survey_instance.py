@@ -26,7 +26,7 @@ class SurveyInstance(Model):
         return self.create_url()
 
     def create_url(self) -> str:
-        return reverse('survey:survey_invitation', kwargs=dict(id=self.url_key))
+        return reverse('survey:survey_with_key', kwargs=dict(survey_id=self.survey.id, url_key=self.url_key))
 
     def create_full_url(self) -> str:
         return f"https://{settings.DEPLOYMENT_DOMAIN}{self.create_url()}"

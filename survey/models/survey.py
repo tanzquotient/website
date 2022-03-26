@@ -15,11 +15,6 @@ class Survey(TranslatableModel):
         intro_text=TextField(verbose_name='[TR] Intro text', blank=True, null=True),
     )
 
-    def get_test_url(self) -> str:
-        return reverse("survey:survey_test", kwargs={'survey_id': self.id})
-
-    get_test_url.short_description = "Test url"
-
     def copy(self) -> Survey:
         old = Survey.objects.get(pk=self.id)
         self.pk = None

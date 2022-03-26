@@ -18,7 +18,7 @@ class QuestionGroup(TranslatableModel):
     )
 
     class Meta:
-        ordering = ['position']
+        ordering = ['survey__name', 'position']
         unique_together = (('name', 'survey'),)
 
     def copy(self, survey: Survey) -> QuestionGroup:
@@ -35,4 +35,4 @@ class QuestionGroup(TranslatableModel):
         return self
 
     def __str__(self) -> str:
-        return "{} ({})".format(self.name, self.survey.name if self.survey else "<unset survey>")
+        return self.name
