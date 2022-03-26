@@ -1,13 +1,14 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils import timezone
-from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect
-from . import services
-from . import models
-from django.shortcuts import get_object_or_404
-import re
 import logging
-from django.utils.translation import gettext as _
+from collections import defaultdict
+from typing import Optional
+
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
+
+from tq_website import settings
+from . import models
+from .models import Survey, SurveyInstance, Answer
 
 log = logging.getLogger('tq')
 
@@ -15,130 +16,43 @@ log = logging.getLogger('tq')
 # Create your views here.
 
 
-def _get_survey_inst(inst_id):
-    get_object_or_404(models.SurveyInstance, pk=inst_id)
-    return models.SurveyInstance.objects.filter(pk=inst_id).prefetch_related('survey__questiongroup_set',
-                                                                             'survey__questiongroup_set__question_set',
-                                                                             'survey__questiongroup_set__question_set__scale_template').first()
+def _get_survey_instance(url_key: str):
+    get_object_or_404(models.SurveyInstance, url_key=url_key)
+    return models.SurveyInstance.objects.filter(url_key=url_key) \
+        .prefetch_related('survey__questiongroup_set',
+                          'survey__questiongroup_set__question_set',
+                          'survey__questiongroup_set__question_set__scale').get()
 
 
-def survey_invitation(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST' and 'send' in request.POST:
-        if 'inst_id' not in request.session:
-            raise Http404()
-        inst_id = request.session['inst_id']
-        del request.session['inst_id']
-        survey_instance = _get_survey_inst(inst_id)
+def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpResponse:
 
-        prog = re.compile(r'^q(?P<question>\d+)-?c?(?P<choice>\S+)?$')
-        for key, value in request.POST.items():
-            if not key:
-                log.debug(u"ignore {}".format(key))
-                continue
-            m = prog.match(key)
-            if not m:
-                log.debug(u"no match {}".format(key))
-                continue
-            q = m.group('question')
-            c = m.group('choice')
-            if not q:
-                log.debug(u"question could not be parsed in {}".format(key))
-                continue
+    survey = get_object_or_404(Survey, pk=survey_id)
 
-            question = get_object_or_404(models.Question, pk=int(q))
-            try:
-                if question.type in [models.Question.Type.SINGLE_CHOICE,
-                                     models.Question.Type.SINGLE_CHOICE_WITH_FREE_FORM]:
-                    if c == 'freechoice':
-                        continue
-                    if c:
-                        a = models.Answer.create(survey_instance, question, c, value)
-                    else:
-                        a = models.Answer.create(survey_instance, question, int(value))
-                else:
-                    if not c:
-                        log.error("Fatal programming error: answer of survey not in correct format")
-                        continue
-                    if c == 'freechoice':
-                        # ignore
-                        continue
-                    a = models.Answer.create(survey_instance, question, c, value)
-                a.save()
-            except Exception as e:
-                log.error("Fatal programming error: {}".format(e.message))
+    # TODO: Check if user filled out survey already
 
-        survey_instance.last_update = timezone.now()
+    if url_key:
+        survey_instance = _get_survey_instance(url_key)
+
+    else:
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+
+        survey_instance = SurveyInstance(survey=survey, user=request.user)
         survey_instance.save()
 
-        return redirect('survey:survey_done')
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        if 'inst_id' in request.session:
-            del request.session['inst_id']
+    if request.method == 'POST':
+        answers = defaultdict(list)
+        for question_and_choice_id, value in request.POST.items():
+            question_id = question_and_choice_id.split("-")[0]
+            if question_id.isdigit() and value:
+                answers[int(question_id)].append(value)
 
-        template_name = "survey/survey.html"
-        if 'id' in request.GET and 'c' in request.GET:
-            id_str = request.GET['id']
-            c = request.GET['c']
-            inst_id = services.decode_id(id_str, c)
-            if not inst_id:
-                request.session['msg'] = _(
-                    "There is a technical problem with your link. We are very sorry. Please inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still want to take part in the survey")
-                return redirect('survey:survey_error')
-            log.debug(inst_id)
-            survey_instance = _get_survey_inst(inst_id)
+        Answer.objects.bulk_create([Answer(
+            survey_instance=survey_instance,
+            question_id=question_id,
+            value=";".join(values)
+        ) for question_id, values in answers.items()])
 
-            request.session['inst_id'] = inst_id
+        return render(request, "survey/survey_done.html")
 
-            # check if survey was already filled out -> show error message
-            if survey_instance.last_update is not None:
-                request.session['msg'] = _("This survey was already filled out")
-                return redirect('survey:survey_error')
-            if survey_instance.url_expire_date is not None and survey_instance.url_expire_date <= timezone.now():
-                request.session['msg'] = _("This survey link has expired")
-                return redirect('survey:survey_error')
-
-            intro_text = survey_instance.survey.intro_text or ""
-            intro_text = re.sub(r"\{\{\s*name\s*\}\}", survey_instance.user.first_name, intro_text)
-            intro_text = re.sub(r"\{\{\s*offering\s*\}\}", str(survey_instance.course.offering), intro_text)
-            intro_text = re.sub(r"\{\{\s*course\s*\}\}", str(survey_instance.course) or "",
-                                intro_text)
-            intro_text = re.sub(r"\{\{\s*teachers\s*\}\}",
-                                survey_instance.course.format_teachers() if survey_instance.course else "",
-                                intro_text)
-        else:
-            raise Http404("no GET arguments supplied: do not know which survey instance to load")
-
-        context = {'inst': survey_instance,
-                   'intro_text': intro_text}
-
-        return render(request, template_name, context)
-
-
-def survey_done(request):
-    template_name = "survey/survey_done.html"
-    return render(request, template_name, {})
-
-
-def survey_error(request):
-    template_name = "survey/survey_error.html"
-
-    message = request.session.get('msg', _("Error"))
-
-    return render(request, template_name, {'message': message})
-
-
-@staff_member_required
-def survey_test(request, survey_id) -> HttpResponse:
-
-    get_object_or_404(models.Survey, pk=survey_id)
-    survey = models.Survey.objects.filter(pk=survey_id).prefetch_related('questiongroup_set',
-                                                                         'questiongroup_set__question_set',
-                                                                         'questiongroup_set__question_set__scale_template').first()
-    context = {
-        'inst': models.SurveyInstance(survey=survey),
-        'intro_text': survey.intro_text
-    }
-
-    return render(request, "survey/survey.html", context)
+    return render(request, "survey/survey.html", {'survey_instance': survey_instance})

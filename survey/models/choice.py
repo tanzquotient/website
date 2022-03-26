@@ -9,6 +9,7 @@ from utils import TranslationUtils
 class Choice(TranslatableModel):
     question = models.ForeignKey('Question', blank=False, null=True, on_delete=models.CASCADE)
     position = models.PositiveSmallIntegerField("Position", default=0)
+    value = models.CharField(max_length=32)
 
     translations = TranslatedFields(
         label=models.CharField(verbose_name='[TR] Label', max_length=255)

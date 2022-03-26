@@ -15,6 +15,7 @@ class QuestionInline(TranslatableTabularInline):
     model = Question
     exclude = ('text', 'note')
 
+
 class ChoiceInline(TranslatableTabularInline):
     model = Choice
 
@@ -43,9 +44,9 @@ class QuestionAdmin(TranslatableAdmin):
     list_filter = ('question_group__survey', )
 
 
-@admin.register(ScaleTemplate)
-class ScaleTemplateAdmin(TranslatableAdmin):
-    model = ScaleTemplate
+@admin.register(Scale)
+class ScaleAdmin(TranslatableAdmin):
+    model = Scale
 
 
 @admin.register(Choice)
@@ -63,11 +64,11 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
     raw_id_fields = ('course',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'url_expire_date', 'last_update','invitation_sent')
 
-    actions = [send_invitations,let_url_expire_now]
+    actions = [let_url_expire_now]
 
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('id','survey_instance', 'question', 'choice', 'text')
+    list_display = ('id', 'survey_instance', 'question', 'value')
     model = Answer
     raw_id_fields = ('question', 'survey_instance')

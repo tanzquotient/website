@@ -1,14 +1,16 @@
 <div>
     <div class="d-inline me-3">
-        {{ question.scale_template.low }}
+        {{ question.scale.low }}
     </div>
-    {% for value in "12345" %}
-        <div class="form-check form-check-inline">
-            <input type="radio" class="form-check-input" name="q{{ question.id }}-radio" id="q{{ question.id }}-radio-{{ value }}" value="{{ value }}" autocomplete="off">
-            <label class="form-check-label" for="q{{ question.id }}-radio-{{ value }}">{{ value }}</label>
-        </div>
-    {% endfor %}
     <div class="d-inline">
-        {{ question.scale_template.up }}
+        {% for value in "12345" %}
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="{{ question.id }}" id="q{{ question.id }}-radio-{{ value }}" value="{{ value }}" autocomplete="off">
+                <label class="form-check-label" for="q{{ question.id }}-radio-{{ value }}">{{ value }}</label>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-inline">
+        {{ question.scale.up }}
     </div>
 </div>

@@ -11,6 +11,7 @@ class Survey(TranslatableModel):
     name = CharField(max_length=255, blank=False)
 
     translations = TranslatedFields(
+        title=CharField(verbose_name='[TR] Title', max_length=64, blank=True, null=True),
         intro_text=TextField(verbose_name='[TR] Intro text', blank=True, null=True),
     )
 
@@ -24,7 +25,7 @@ class Survey(TranslatableModel):
         self.pk = None
         i = 1
         while True:
-            self.name = old.name + "(Copy {})".format(i)
+            self.name = f"{old.name} (Copy {i})"
             if not Survey.objects.filter(name=self.name).exists():
                 break
             i += 1
@@ -32,8 +33,8 @@ class Survey(TranslatableModel):
 
         TranslationUtils.copy_translations(old, self)
 
-        for qg in old.questiongroup_set.all():
-            qg.copy(self)
+        for question_group in old.questiongroup_set.all():
+            question_group.copy(self)
 
         return self
 

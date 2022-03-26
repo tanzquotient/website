@@ -37,4 +37,4 @@ class SurveySerializer(TranslatableModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ('id', 'choice', 'text', 'value')
+        fields = ('id', 'value')

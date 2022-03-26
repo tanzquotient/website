@@ -55,5 +55,6 @@ sentry_sdk==1.5.8
 
 # Utils
 pylint==2.12.2
+shortuuid==1.0.8
 python-dotenv==0.19.2
 sphinx-automodapi==0.14.1
