@@ -1,0 +1,17 @@
+{% load i18n %}
+<div>
+    <div>
+        <em>{% trans "This survey is about the following course:"%}</em>
+    </div>
+
+    <div class="mb-4 mt-2">
+        <strong>{{ course.type.name }}</strong>
+        <br/>
+        {% include "courses/snippets/lessons.html" with course=course display_link=False disable_modals=True only %}
+        <br/>
+        {% trans "Teachers" %}:
+        {% include "courses/snippets/course_teachers.html" with display_link=True disable_modals=True teachings=course.teaching.all only %}
+    </div>
+</div>
+
+

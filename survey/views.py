@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from datetime import datetime
 from typing import Optional
 
 from django.http import HttpResponse
@@ -8,7 +9,8 @@ from django.shortcuts import render, redirect
 
 from tq_website import settings
 from . import models
-from .models import Survey, SurveyInstance, Answer
+from .models import Survey, Answer
+from .services import get_or_create_survey_instance
 
 log = logging.getLogger('tq')
 
@@ -28,17 +30,17 @@ def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpR
 
     survey = get_object_or_404(Survey, pk=survey_id)
 
-    # TODO: Check if user filled out survey already
-
+    # Get survey instance
     if url_key:
         survey_instance = _get_survey_instance(url_key)
-
     else:
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        survey_instance = get_or_create_survey_instance(survey, request.user)
 
-        survey_instance = SurveyInstance(survey=survey, user=request.user)
-        survey_instance.save()
+    if survey_instance.is_completed():
+        context = {'already_completed': True, 'survey_instance': survey_instance}
+        return render(request, "survey/survey_done.html", context)
 
     if request.method == 'POST':
         answers = defaultdict(list)
@@ -52,7 +54,9 @@ def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpR
             question_id=question_id,
             value=";".join(values)
         ) for question_id, values in answers.items()])
+        survey_instance.last_update = datetime.now()
+        survey_instance.save()
 
-        return render(request, "survey/survey_done.html")
+        return render(request, "survey/survey_done.html", {'survey_instance': survey_instance})
 
     return render(request, "survey/survey.html", {'survey_instance': survey_instance})

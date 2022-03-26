@@ -11,8 +11,14 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="alert alert-info">{% trans "Successfully sent. Thank you for your time!" %}</div>
+            <div class="col">
+                {% include "survey/components/survey_header.html" with survey_instance=survey_instance only %}
+
+                {% if already_completed %}
+                    <div class="alert alert-success">{% trans "You already completed this survey. Thank you for your time!" %}</div>
+                {% else %}
+                    <div class="alert alert-success">{% trans "Successfully sent. Thank you for your time!" %}</div>
+                {% endif %}
             </div>
         </div>
     </div>

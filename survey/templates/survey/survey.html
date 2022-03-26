@@ -12,14 +12,14 @@
     <div class="container">
         <div class="row">
             <div class="col">
+
+                {% include "survey/components/survey_header.html" with survey_instance=survey_instance only %}
+
                 <form role="form" action="{% url 'survey:survey_with_key' survey_instance.survey.id survey_instance.url_key %}" method="post">
                     {% csrf_token %}
-                    <strong>{{ survey_instance.survey.intro_text }}</strong><br/><br/>
-
                     {% for group in survey_instance.survey.questiongroup_set.all %}
                         {% include "survey/components/questiongroup.html" with group=group only %}
                     {% endfor %}
-
                     <button type="submit" class="btn btn-success" name="send" value="send">
                         {% trans "Senden" %}
                     </button>

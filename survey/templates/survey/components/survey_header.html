@@ -1,0 +1,13 @@
+<div>
+    {% if survey_instance.survey.title %}
+        <h1>{{ survey_instance.survey.title }}</h1>
+    {% endif %}
+    {% if survey_instance.survey.intro_text %}
+        <p class="lead">{{ survey_instance.survey.intro_text }}</p>
+    {% endif %}
+    {% if survey_instance.course %}
+        {% include "survey/components/survey_course_hint.html" with course=survey_instance.course only %}
+    {% endif %}
+</div>
+
+

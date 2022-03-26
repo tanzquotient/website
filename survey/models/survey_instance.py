@@ -19,6 +19,9 @@ class SurveyInstance(Model):
     url_key = CharField(unique=True, default=shortuuid.uuid, blank=False, null=False, max_length=32)
     invitation_sent = BooleanField(default=False)
 
+    def is_completed(self) -> bool:
+        return self.answers.count() > 0
+
     def get_url(self) -> str:
         return self.create_url()
 
