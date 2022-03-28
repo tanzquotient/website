@@ -24,7 +24,7 @@ services:
       - "${TQ_DB_PORT_DEBUG_HOST}:5432"
     expose:
       - "5432"
-    restart: always
+    restart: unless-stopped
 
   # Django (serving with debug webserver)
   django:
@@ -44,7 +44,7 @@ services:
     links:
       - postgres
       - minio
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
       - minio
@@ -62,6 +62,7 @@ services:
       MINIO_ACCESS_KEY: ${TQ_S3_MEDIA_ACCESS_KEY}
       MINIO_SECRET_KEY: ${TQ_S3_MEDIA_SECRET_KEY}
     command: server --console-address ":9001" /data
+    restart: unless-stopped
 
 volumes:
   postgres-volume: # Let Docker generate a place for this, doesn't matter for development
