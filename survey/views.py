@@ -15,9 +15,6 @@ from .services import get_or_create_survey_instance
 log = logging.getLogger('tq')
 
 
-# Create your views here.
-
-
 def _get_survey_instance(url_key: str):
     get_object_or_404(models.SurveyInstance, url_key=url_key)
     return models.SurveyInstance.objects.filter(url_key=url_key) \
@@ -38,7 +35,7 @@ def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpR
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
         survey_instance = get_or_create_survey_instance(survey, request.user)
 
-    if survey_instance.is_completed():
+    if survey_instance.has_answers():
         context = {'already_completed': True, 'survey_instance': survey_instance}
         return render(request, "survey/survey_done.html", context)
 
@@ -54,9 +51,12 @@ def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpR
             question_id=question_id,
             value=";".join(values)
         ) for question_id, values in answers.items()])
-        survey_instance.last_update = datetime.now()
-        survey_instance.save()
 
-        return render(request, "survey/survey_done.html", {'survey_instance': survey_instance})
+        if survey_instance.has_answers():
+            survey_instance.is_completed = True
+            survey_instance.last_update = datetime.now()
+            survey_instance.save()
+
+            return render(request, "survey/survey_done.html", {'survey_instance': survey_instance})
 
     return render(request, "survey/survey.html", {'survey_instance': survey_instance})

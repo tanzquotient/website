@@ -18,8 +18,9 @@ class SurveyInstance(Model):
     url_expire_date = DateTimeField(blank=True, null=True)
     url_key = CharField(unique=True, default=shortuuid.uuid, blank=False, null=False, max_length=32)
     invitation_sent = BooleanField(default=False)
+    is_completed = BooleanField(default=False)
 
-    def is_completed(self) -> bool:
+    def has_answers(self) -> bool:
         return self.answers.count() > 0
 
     def get_url(self) -> str:

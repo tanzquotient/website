@@ -28,5 +28,8 @@ class Choice(TranslatableModel):
         TranslationUtils.copy_translations(old, self)
         return self
 
+    def __str__(self) -> str:
+        return self.value
+
     class Meta:
         ordering = ['position']
