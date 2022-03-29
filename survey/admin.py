@@ -22,7 +22,7 @@ class QuestionGroupInline(TranslatableStackedInline):
     def questions(instance) -> str:
         url = reverse(f'admin:survey_questiongroup_change', args=[instance.pk])
         return mark_safe(f'''
-        <div><strong><a href="{url}"> 🖉 Edit Questions</a></strong></div>
+        <div><strong><a href="{url}" target="_blank">&#x1F589; Edit Questions</a></strong></div>
         <div><strong>Currently:</strong> {', '.join([q.text for q in instance.question_set.all()])} </div>
         ''') if instance.pk else 'Please save survey before editing questions'
 
@@ -40,7 +40,7 @@ class QuestionInline(TranslatableStackedInline):
     def choices(instance) -> str:
         url = reverse(f'admin:survey_question_change', args=[instance.pk])
         return mark_safe(f'''
-        <div><strong><a href="{url}"> 🖉 Edit Choices</a></strong></div>
+        <div><strong><a href="{url}" target="_blank"><i class="fa-solid fa-pencil"></i>&#x1F589; Edit Choices</a></strong></div>
         <div><strong>Currently:</strong> {", ".join([c.value for c in instance.choice_set.all()]) or "no choices set"}</div>
          <div class="help">Only need for single/multiple choice questions</div>
         '''if instance.pk else '''
@@ -81,14 +81,20 @@ class QuestionAdmin(TranslatableAdmin):
     list_display = ('id', 'name', 'type')
     model = Question
     inlines = (ChoiceInline,)
-    exclude = ['name', 'question_group', 'type', 'scale', 'display', 'position', 'text', 'note']
+    fieldsets = [('Question Group Details', {
+        'fields': ['name', 'question_group', 'type', 'scale', 'display', 'position', 'text', 'note'],
+        'classes': ['collapse']
+    })]
     list_filter = ('question_group__survey', )
 
 
 @admin.register(QuestionGroup)
 class QuestionGroupAdmin(TranslatableAdmin):
     model = QuestionGroup
-    exclude = ['name', 'survey', 'position', 'title', 'intro_text']
+    fieldsets = [('Question Group Details', {
+        'fields': ['name', 'survey', 'position', 'title', 'intro_text'],
+        'classes': ['collapse']
+    })]
     inlines = (QuestionInline,)
 
 
