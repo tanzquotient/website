@@ -1,16 +1,36 @@
 <div>
-    <div class="d-inline me-3">
-        {{ question.scale.low }}
+    <!-- Horizontal on larger devices -->
+    <div class="d-md-block d-none">
+        <div class="d-inline me-3">
+            {{ question.scale.low }}
+        </div>
+        <div class="d-inline">
+            {% for value in "12345" %}
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" name="{{ question.id }}" id="q{{ question.id }}-radio-{{ value }}" value="{{ value }}" autocomplete="off">
+                    <label class="form-check-label" for="q{{ question.id }}-radio-{{ value }}">{{ value }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="d-inline">
+            {{ question.scale.up }}
+        </div>
     </div>
-    <div class="d-inline">
+
+    <!-- Vertical on smaller devices -->
+    <div class="d-md-none d-block">
         {% for value in "12345" %}
-            <div class="form-check form-check-inline">
+            <div class="form-check">
                 <input type="radio" class="form-check-input" name="{{ question.id }}" id="q{{ question.id }}-radio-{{ value }}" value="{{ value }}" autocomplete="off">
-                <label class="form-check-label" for="q{{ question.id }}-radio-{{ value }}">{{ value }}</label>
+                <label class="form-check-label" for="q{{ question.id }}-radio-{{ value }}">
+                    {{ value }}
+                    {%  if forloop.first %}
+                        - {{ question.scale.low }}
+                    {% elif forloop.last %}
+                        - {{ question.scale.up }}
+                    {% endif %}
+                </label>
             </div>
         {% endfor %}
-    </div>
-    <div class="d-inline">
-        {{ question.scale.up }}
     </div>
 </div>
