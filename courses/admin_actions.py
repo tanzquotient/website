@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -216,7 +216,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
 
 
 @admin.action(description="Send an email to all participants of the selected course(s)")
-def send_course_email(modeladmin, request, queryset):
+def send_course_email(modeladmin, request, queryset) -> HttpResponse:
     form = None
 
     if 'go' in request.POST:
@@ -229,9 +229,7 @@ def send_course_email(modeladmin, request, queryset):
     if not form:
         form = SendCourseEmailForm(initial={'_selected_action': map(str, queryset.values_list('id', flat=True))})
 
-    return render(request, 'courses/auth/action_send_course_email.html', {'courses': queryset,
-                                                                 'evaluate_form': form,
-                                                                          })
+    return render(request, 'courses/auth/action_send_course_email.html', {'courses': queryset, 'evaluate_form': form})
 
 
 @admin.action(description="Undo voucher payment")

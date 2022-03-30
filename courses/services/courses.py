@@ -1,10 +1,16 @@
+from datetime import datetime
+from typing import Iterable, Any, Optional
+
+from django.contrib.auth.models import User
+from post_office.models import EmailTemplate
+
 from courses import models as models
-from courses.models import Voucher
+from courses.models import Voucher, Course
 from courses.services import get_subsequent_offering
 from courses.services.general import log
 from email_system.services import send_all_emails
 from payment.vouchergenerator import generate_voucher_pdf
-from survey.models import SurveyInstance
+from survey.models import SurveyInstance, Survey
 from tq_website import settings
 
 
@@ -23,19 +29,19 @@ def copy_course(course, to=None, set_preceeding_course=False):
             cs.save()
 
 
-def send_course_email(data, courses):
-    email_template = data['email_template']
-    email_subject = data['email_subject']
-    email_content = data['email_content']
-    send_to_participants = data['send_to_participants']
-    send_to_teachers = data['send_to_teachers']
-    survey = data['survey']
-    survey_url_expire_date = data['survey_url_expire_date']
+def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
+    email_template: Optional[EmailTemplate] = data['email_template']
+    email_subject: Optional[str] = data['email_subject']
+    email_content: Optional[str] = data['email_content']
+    send_to_participants: bool = data['send_to_participants']
+    send_to_teachers: bool = data['send_to_teachers']
+    survey: Optional[Survey] = data['survey']
+    survey_url_expire_date: Optional[datetime] = data['survey_url_expire_date']
 
     emails = []
 
     for course in courses:
-        recipients = []
+        recipients: list[User] = []
         if send_to_participants:
             recipients += [p.user for p in course.participatory().all()]
         if send_to_teachers:
@@ -62,8 +68,8 @@ def send_course_email(data, courses):
                 context['survey_url'] = survey_instance.create_full_url()
                 context['survey_expiration'] = survey_instance.url_expire_date
 
-            subject = email_subject or email_template.subject
-            html_message = email_content or email_template.html_content
+            subject: str = email_subject or email_template.subject
+            html_message: str = email_content or email_template.html_content or email_template.content
 
             emails.append(dict(
                 recipients=[recipient.email],
