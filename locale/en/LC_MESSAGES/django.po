@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-23 14:55+0100\n"
+"POT-Creation-Date: 2022-03-30 19:01+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -352,7 +352,7 @@ msgstr "lead"
 msgid "follow"
 msgstr "follow"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:206
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:201
 msgid "no preference"
 msgstr "no preference"
 
@@ -376,19 +376,19 @@ msgstr "single"
 msgid "couple"
 msgstr "couple"
 
-#: courses/models/subscribe.py:209
+#: courses/models/subscribe.py:204
 msgid "leader"
 msgstr "leader"
 
-#: courses/models/subscribe.py:210
+#: courses/models/subscribe.py:205
 msgid "follower"
 msgstr "follower"
 
-#: courses/models/subscribe.py:213
+#: courses/models/subscribe.py:208
 msgid "no preference, assigned as leader"
 msgstr "no preference, assigned as leader"
 
-#: courses/models/subscribe.py:214
+#: courses/models/subscribe.py:209
 msgid "no preference, assigned as follower"
 msgstr "no preference, assigned as follower"
 
@@ -574,7 +574,7 @@ msgid "Info"
 msgstr "Info"
 
 #: courses/templates/courses/course_subscribe_form.html:22
-#: courses/templates/courses/snippets/subscribe_form.html:111
+#: courses/templates/courses/snippets/subscribe_form.html:110
 #: templates/account/signup.html:8 templates/account/signup.html:24
 msgid "Sign Up"
 msgstr "Sign Up"
@@ -646,6 +646,8 @@ msgid "All styles"
 msgstr "All styles"
 
 #: courses/templates/courses/snippets/course_filter.html:10
+#: survey/templates/survey/components/question_multiplechoice_freeform.html:5
+#: survey/templates/survey/components/question_singlechoice_freeform.html:5
 msgid "Other"
 msgstr "Other"
 
@@ -656,6 +658,7 @@ msgstr "Level"
 #: courses/templates/courses/snippets/course_info.html:14
 #: payment/templates/payment/finance/offering_overview_subscribers.html:21
 #: payment/templates/payment/finance/offering_overview_teachers.html:23
+#: survey/templates/survey/components/survey_course_hint.html:12
 msgid "Teachers"
 msgstr "Teachers"
 
@@ -846,54 +849,54 @@ msgid "Video"
 msgstr "Video"
 
 #: courses/templates/courses/snippets/subscribe_form.html:11
-msgid ""
-"There are no spots available for leaders anymore. You can therefore only "
-"sign up as a follower (without a partner)."
-msgstr ""
-"There are no spots available for leaders anymore. You can therefore only "
-"sign up as a follower (without a partner)."
-
-#: courses/templates/courses/snippets/subscribe_form.html:14
-msgid ""
-"There are no spots available for followers anymore. You can therefore only "
-"sign up as a leader (without a partner)."
-msgstr ""
-"There are no spots available for followers anymore. You can therefore only "
-"sign up as a leader (without a partner)."
-
-#: courses/templates/courses/snippets/subscribe_form.html:21
 msgid "Without partner"
 msgstr "Without partner"
 
-#: courses/templates/courses/snippets/subscribe_form.html:30
+#: courses/templates/courses/snippets/subscribe_form.html:20
 msgid "With partner"
 msgstr "With partner"
 
-#: courses/templates/courses/snippets/subscribe_form.html:35
+#: courses/templates/courses/snippets/subscribe_form.html:24
+msgid ""
+"There are no spots available for leaders anymore. You can therefore only "
+"sign up as a follower (without a partner)."
+msgstr ""
+"There are no spots available for leaders anymore. You can therefore only "
+"sign up as a follower (without a partner)."
+
+#: courses/templates/courses/snippets/subscribe_form.html:27
+msgid ""
+"There are no spots available for followers anymore. You can therefore only "
+"sign up as a leader (without a partner)."
+msgstr ""
+"There are no spots available for followers anymore. You can therefore only "
+"sign up as a leader (without a partner)."
+
+#: courses/templates/courses/snippets/subscribe_form.html:34
 msgid "Do you want to lead or follow?"
 msgstr "Do you want to lead or follow?"
 
-#: courses/templates/courses/snippets/subscribe_form.html:43
+#: courses/templates/courses/snippets/subscribe_form.html:42
 msgid "Lead"
 msgstr "Lead"
 
-#: courses/templates/courses/snippets/subscribe_form.html:47
+#: courses/templates/courses/snippets/subscribe_form.html:46
 msgid "No preference"
 msgstr "No preference"
 
-#: courses/templates/courses/snippets/subscribe_form.html:52
+#: courses/templates/courses/snippets/subscribe_form.html:51
 msgid "Follow"
 msgstr "Follow"
 
-#: courses/templates/courses/snippets/subscribe_form.html:58
+#: courses/templates/courses/snippets/subscribe_form.html:57
 msgid "There are no spots available for leaders anymore."
 msgstr "There are no spots available for leaders anymore."
 
-#: courses/templates/courses/snippets/subscribe_form.html:61
+#: courses/templates/courses/snippets/subscribe_form.html:60
 msgid "There are no spots available for followers anymore."
 msgstr "There are no spots available for followers anymore."
 
-#: courses/templates/courses/snippets/subscribe_form.html:63
+#: courses/templates/courses/snippets/subscribe_form.html:62
 msgid ""
 "The leader is responsible for guiding the couple, the guided partner is "
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
@@ -903,38 +906,38 @@ msgstr ""
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
 "and ladies are following."
 
-#: courses/templates/courses/snippets/subscribe_form.html:68
+#: courses/templates/courses/snippets/subscribe_form.html:67
 msgid "Email address of your partner"
 msgstr "Email address of your partner"
 
-#: courses/templates/courses/snippets/subscribe_form.html:77
+#: courses/templates/courses/snippets/subscribe_form.html:76
 msgid ""
 "Provide the email address your partner used to register on this website."
 msgstr ""
 "Provide the email address your partner used to register on this website."
 
-#: courses/templates/courses/snippets/subscribe_form.html:86
+#: courses/templates/courses/snippets/subscribe_form.html:85
 #: payment/templates/payment/finance/account_detail.html:54
 msgid "Comment"
 msgstr "Comment"
 
-#: courses/templates/courses/snippets/subscribe_form.html:88
+#: courses/templates/courses/snippets/subscribe_form.html:87
 msgid "Anything else you want to tell us?"
 msgstr "Anything else you want to tell us?"
 
-#: courses/templates/courses/snippets/subscribe_form.html:94
+#: courses/templates/courses/snippets/subscribe_form.html:93
 msgid "General terms and conditions"
 msgstr "General terms and conditions"
 
-#: courses/templates/courses/snippets/subscribe_form.html:98
+#: courses/templates/courses/snippets/subscribe_form.html:97
 msgid "View the general terms and conditions"
 msgstr "View the general terms and conditions"
 
-#: courses/templates/courses/snippets/subscribe_form.html:103
+#: courses/templates/courses/snippets/subscribe_form.html:102
 msgid "I accept the general terms and conditions."
 msgstr "I accept the general terms and conditions."
 
-#: courses/templates/courses/snippets/subscribe_form.html:106
+#: courses/templates/courses/snippets/subscribe_form.html:105
 msgid "You must accept the general terms and conditions."
 msgstr "You must accept the general terms and conditions."
 
@@ -1372,6 +1375,14 @@ msgstr "Featured Event Categories"
 #: events/cms_plugins/featured_event_plugin.py:12
 msgid "Featured Event"
 msgstr "Featured Event"
+
+#: events/cms_toolbars.py:16
+msgid "Event Registrations"
+msgstr "Event Registrations"
+
+#: events/cms_toolbars.py:19
+msgid "Event Categories"
+msgstr "Event Categories"
 
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:7
@@ -1966,59 +1977,29 @@ msgstr "Survey"
 msgid "Surveys"
 msgstr "Surveys"
 
-#: survey/cms_toolbars.py:16
-msgid "Question groups"
-msgstr "Question groups"
-
 #: survey/cms_toolbars.py:19
-msgid "Questions"
-msgstr "Questions"
-
-#: survey/cms_toolbars.py:22
-msgid "Templates for scale questions"
-msgstr "Templates for scale questions"
-
-#: survey/cms_toolbars.py:25
-msgid "Choices"
-msgstr "Choices"
-
-#: survey/cms_toolbars.py:31
 msgid "Answers"
 msgstr "Answers"
 
-#: survey/cms_toolbars.py:34
+#: survey/cms_toolbars.py:22
 msgid "Survey Instances"
 msgstr "Survey Instances"
 
-#: survey/templates/survey/survey.html:25
+#: survey/templates/survey/components/survey_course_hint.html:4
+msgid "This survey is about the following course:"
+msgstr "This survey is about the following course:"
+
+#: survey/templates/survey/survey.html:24
 msgid "Senden"
 msgstr "Senden"
 
-#: survey/templates/survey/survey_done.html:15
+#: survey/templates/survey/survey_done.html:18
+msgid "You already completed this survey. Thank you for your time!"
+msgstr "You already completed this survey. Thank you for your time!"
+
+#: survey/templates/survey/survey_done.html:20
 msgid "Successfully sent. Thank you for your time!"
 msgstr "Successfully sent. Thank you for your time!"
-
-#: survey/views.py:87
-msgid ""
-"There is a technical problem with your link. We are very sorry. Please "
-"inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still "
-"want to take part in the survey"
-msgstr ""
-"There is a technical problem with your link. We are very sorry. Please "
-"inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still "
-"want to take part in the survey"
-
-#: survey/views.py:96
-msgid "This survey was already filled out"
-msgstr "This survey was already filled out"
-
-#: survey/views.py:99
-msgid "This survey link has expired"
-msgstr "This survey link has expired"
-
-#: survey/views.py:127
-msgid "Error"
-msgstr "Error"
 
 #: templates/account/base.html:9 templates/account/email.html:5
 #: templates/menu/collapsed_menu.html:16
@@ -2249,6 +2230,33 @@ msgstr "Main content"
 #: tq_website/settings.py:332
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid "Question groups"
+#~ msgstr "Question groups"
+
+#~ msgid "Questions"
+#~ msgstr "Questions"
+
+#~ msgid "Templates for scale questions"
+#~ msgstr "Templates for scale questions"
+
+#~ msgid "Choices"
+#~ msgstr "Choices"
+
+#~ msgid ""
+#~ "There is a technical problem with your link. We are very sorry. Please "
+#~ "inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still "
+#~ "want to take part in the survey"
+#~ msgstr ""
+#~ "There is a technical problem with your link. We are very sorry. Please "
+#~ "inform us on informatik@tanzquotient.org WITH YOUR FULL NAME if you still "
+#~ "want to take part in the survey"
+
+#~ msgid "This survey link has expired"
+#~ msgstr "This survey link has expired"
+
+#~ msgid "Error"
+#~ msgstr "Error"
 
 #~ msgid "from"
 #~ msgstr "from"
