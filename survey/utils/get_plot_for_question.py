@@ -1,13 +1,13 @@
 from collections import Counter
-from typing import Optional
+from typing import Optional, Iterable
 
 from plotly.graph_objs import Figure
 from plotly.offline import plot
 from django.utils.translation import gettext_lazy as _
 
-
+from courses.models import Offering, Course
 from utils.plots import bar_chart, pie_chart
-from survey.models import Question
+from survey.models import Question, Answer
 from survey.models.types import QuestionType
 
 
@@ -18,8 +18,8 @@ def _plot(figure: Figure) -> str:
     return plot(figure, output_type='div', include_plotlyjs=False, config=config)
 
 
-def _plot_for_scale(question: Question) -> str:
-    answer_counts = Counter([answer.value for answer in question.answers.all()])
+def _plot_for_scale(question: Question, answer_set: Iterable[Answer]) -> str:
+    answer_counts = Counter([answer.value for answer in answer_set])
     values = [answer_counts.get(str(v), 0) for v in range(1, 6)]
     labels = [
         f"{question.scale.low} - 1" if question.scale else "1",
@@ -43,15 +43,15 @@ def _get_data_from_choices(question: Question, answers: list[str]):
     return values, labels
 
 
-def _plot_for_single_choice(question: Question) -> str:
-    answers = [answer.value for answer in question.answers.all() if answer.value]
+def _plot_for_single_choice(question: Question, answer_set: Iterable[Answer]) -> str:
+    answers = [answer.value for answer in answer_set if answer.value]
     values, labels = _get_data_from_choices(question, answers)
     return _plot(pie_chart(values, labels))
 
 
-def _plot_for_multiple_choice(question: Question) -> str:
+def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) -> str:
     answers = []
-    for answer in question.answers.all():
+    for answer in answer_set:
         for value in answer.value.split(';'):
             if value:
                 answers.append(value)
@@ -61,12 +61,19 @@ def _plot_for_multiple_choice(question: Question) -> str:
     return _plot(bar_chart(values, labels))
 
 
-def get_plot_for_question(question: Question) -> Optional[str]:
+def get_plot_for_question(question: Question, selected_offering: Offering, selected_course: Course) -> Optional[str]:
+    answer_set = question.answers
+    if selected_offering:
+        answer_set = answer_set.filter(survey_instance__course__offering=selected_offering)
+    if selected_course:
+        answer_set = answer_set.filter(survey_instance__course=selected_course)
+    answer_set = answer_set.all()
+
     if question.type == QuestionType.SCALE:
-        return _plot_for_scale(question)
+        return _plot_for_scale(question, answer_set)
     if question.type in [QuestionType.SINGLE_CHOICE, QuestionType.SINGLE_CHOICE_WITH_FREE_FORM]:
-        return _plot_for_single_choice(question)
+        return _plot_for_single_choice(question, answer_set)
     if question.type in [QuestionType.MULTIPLE_CHOICE, QuestionType.MULTIPLE_CHOICE_WITH_FREE_FORM]:
-        return _plot_for_multiple_choice(question)
+        return _plot_for_multiple_choice(question, answer_set)
 
     return None

@@ -1,25 +1,20 @@
 from collections import Counter
-from typing import Optional
+from typing import Iterable
 
-from plotly.graph_objs import Figure
-from plotly.offline import plot
-from django.utils.translation import gettext_lazy as _
-
-
-from utils.plots import bar_chart, pie_chart
-from survey.models import Question
+from courses.models import Offering, Course
+from survey.models import Question, Answer
 from survey.models.types import QuestionType
 
 
-def _free_form_single_choice(question: Question) -> list[str]:
-    answers = [answer.value for answer in question.answers.all() if answer.value]
+def _free_form_single_choice(question: Question, answer_set: Iterable[Answer]) -> list[str]:
+    answers = [answer.value for answer in answer_set if answer.value]
     choices = {choice.value for choice in question.choice_set.all()}
     return [answer for answer in answers if answer not in choices]
 
 
-def _free_form_multiple_choice(question: Question) -> list[str]:
+def _free_form_multiple_choice(question: Question, answer_set: Iterable[Answer]) -> list[str]:
     answers = []
-    for answer in question.answers.all():
+    for answer in answer_set:
         for value in answer.value.split(';'):
             if value:
                 answers.append(value)
@@ -28,15 +23,24 @@ def _free_form_multiple_choice(question: Question) -> list[str]:
     return [answer for answer in answers if answer not in choices]
 
 
-def get_free_form_answers_for_question(question: Question) -> list[str]:
+def get_free_form_answers_for_question(question: Question, selected_offering: Offering, selected_course: Course) \
+        -> list[str]:
+
+    answer_set = question.answers
+    if selected_offering:
+        answer_set = answer_set.filter(survey_instance__course__offering=selected_offering)
+    if selected_course:
+        answer_set = answer_set.filter(survey_instance__course=selected_course)
+    answer_set = answer_set.all()
+
     values = []
 
     if question.type == QuestionType.SINGLE_CHOICE_WITH_FREE_FORM:
-        values = _free_form_single_choice(question)
+        values = _free_form_single_choice(question, answer_set)
     elif question.type == QuestionType.MULTIPLE_CHOICE_WITH_FREE_FORM:
-        values = _free_form_multiple_choice(question)
+        values = _free_form_multiple_choice(question, answer_set)
     elif question.type == QuestionType.FREE_FORM:
-        values = [answer.value for answer in question.answers.all() if answer.value]
+        values = [answer.value for answer in answer_set if answer.value]
 
     counts = Counter(values)
     value_count_tuples = [(value, count) for value, count in counts.items()]

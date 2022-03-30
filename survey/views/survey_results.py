@@ -2,6 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 
+from courses.models import Offering, Course
 from ..models import Survey
 
 
@@ -17,6 +18,25 @@ def survey_results(request: HttpRequest, survey_id: int) -> HttpResponse:
         'questiongroup_set__question_set__scale__translations',
         'questiongroup_set__question_set__choice_set',
         'questiongroup_set__question_set__choice_set__translations',
-        'questiongroup_set__question_set__answers'
+        'questiongroup_set__question_set__answers',
     ).first()
-    return render(request, "survey/results.html", context={'survey': survey})
+
+    offerings = Offering.objects.filter(course__survey_instances__survey=survey).distinct().order_by('name').all()
+    courses = Course.objects.filter(survey_instances__survey=survey).distinct().order_by('name').all()
+
+    selected_course = None
+    selected_offering = offerings.first() if offerings.count() == 1 else None
+
+    if 'course_id' in request.GET and request.GET['course_id']:
+        selected_course = get_object_or_404(Course, id=request.GET['course_id'])
+    if 'offering_id' in request.GET and request.GET['offering_id']:
+        selected_offering = get_object_or_404(Offering, id=request.GET['offering_id'])
+
+    context = dict(
+        survey=survey,
+        offerings=offerings,
+        courses=courses,
+        selected_offering=selected_offering,
+        selected_course=selected_course,
+    )
+    return render(request, "survey/results.html", context=context)
