@@ -4,20 +4,19 @@ from datetime import datetime
 from typing import Optional
 
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
+from ..models import Survey, Answer, SurveyInstance
+from ..services import get_or_create_survey_instance
 from tq_website import settings
-from . import models
-from .models import Survey, Answer
-from .services import get_or_create_survey_instance
+
 
 log = logging.getLogger('tq')
 
 
 def _get_survey_instance(url_key: str):
-    get_object_or_404(models.SurveyInstance, url_key=url_key)
-    return models.SurveyInstance.objects.filter(url_key=url_key) \
+    get_object_or_404(SurveyInstance, url_key=url_key)
+    return SurveyInstance.objects.filter(url_key=url_key) \
         .prefetch_related('survey__questiongroup_set',
                           'survey__questiongroup_set__question_set',
                           'survey__questiongroup_set__question_set__scale').get()

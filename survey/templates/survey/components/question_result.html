@@ -1,0 +1,49 @@
+{% load i18n %}
+
+<div class="card">
+    <div class="card-header">
+        {{ question.text }}
+    </div>
+    {% if plot %}
+        <div class="card-body">
+            {% autoescape off %}
+                {{ plot }}
+            {% endautoescape %}
+        </div>
+    {% endif %}
+    {% if free_form_answers %}
+        <ul class="list-group list-group-flush">
+            {% for free_form_answer in free_form_answers|slice:':5' %}
+                <li class="list-group-item">{{ free_form_answer }}</li>
+            {% endfor %}
+        </ul>
+        {% if free_form_answers|length > 5 %}
+            <div class="collapse show collapse-{{ question.id }}" id="collapse-{{ question.id }}-toggle">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a data-bs-toggle="collapse" href=".collapse-{{ question.id }}" aria-expanded="false"
+                           aria-controls="collapse-{{ question.id }}-extended collapse-{{ question.id }}-toggle">
+                            {% trans "Show all answers" %}
+
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        {% if free_form_answers|length > 5 %}
+            <div class="collapse collapse-{{ question.id }}" id="collapse-{{ question.id }}-extended">
+                <ul class="list-group list-group-flush">
+                    {% for free_form_answer in free_form_answers|slice:'5:' %}
+                        <li class="list-group-item">{{ free_form_answer }}</li>
+                    {% endfor %}
+                    <li class="list-group-item">
+                        <a data-bs-toggle="collapse" href=".collapse-{{ question.id }}" aria-expanded="false"
+                           aria-controls="collapse-{{ question.id }}-extended collapse-{{ question.id }}-toggle">
+                            {% trans "Collapse answers" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

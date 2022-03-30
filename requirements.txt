@@ -54,6 +54,7 @@ gunicorn==20.1.0
 sentry_sdk==1.5.8
 
 # Utils
+plotly==5.6.0       # For charts and graphs
 pylint==2.12.2
 shortuuid==1.0.8
 python-dotenv==0.19.2
