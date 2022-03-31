@@ -1,0 +1,28 @@
+{% extends "basis.html" %}
+
+{% load static i18n %}
+{% load survey_tags %}
+
+
+{% block lead_title %}
+    {% trans "Survey Results" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        {% if survey.title %}
+            <h1>{% trans "All Surveys" %}</h1>
+        {% endif %}
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
+            {% for survey in surveys %}
+                <div class="col">
+                    {% survey_card survey %}
+                </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+{% endblock main_content %}

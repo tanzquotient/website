@@ -1,0 +1,36 @@
+{% load i18n %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ survey.name }}</h5>
+        {% trans "Used for:" %}
+        {% if offerings %}
+            {% for offering in offerings %}
+                {{ offering.name }}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            {% trans "Nothing yet" %}
+        {% endif %}
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div>{{ survey.survey_instances.count }} {% trans "survey invitations sent" %}</div>
+            <div>{{ answers_count }} {% trans "answers received" %}</div>
+            <div class="mt-2">
+                <a href="{% url 'survey:results' survey.id %}" class="card-link">
+                    <i class="fas fa-poll-h"></i> {% trans "Show results" %}
+                </a>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div>{{ survey.questiongroup_set.count }} {% trans "question groups" %}</div>
+            <div>{{ questions.count }} {% trans "questions in total" %}</div>
+            <div class="mt-2">
+                <a href="{% url 'admin:survey_survey_change' survey.id %}" class="card-link">
+                    <i class="fas fa-edit"></i> {% trans "Edit survey" %}
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>

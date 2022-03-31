@@ -1,0 +1,27 @@
+{%  load i18n %}
+
+<!-- Filter by offering -->
+{% if offerings|length > 1 %}
+    <div class="my-2">
+        <a href="{% url "survey:results" survey.id %}"
+           class="btn btn-sm mb-1 {% if not selected_offering %} btn-success {% else %} btn-outline-success {% endif %}"
+           aria-current="page">{% trans "All offerings" %}</a>
+        {% for offering in offerings %}
+            <a href="{% url "survey:results" survey.id %}?offering_id={{ offering.id }}"
+               class="btn btn-sm mb-1 {% if selected_offering and selected_offering == offering %} btn-success {% else %} btn-outline-success {% endif %}">{{ offering.name }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Filter by course -->
+{% if selected_offering and courses|length > 1 %}
+    <div class="my-2">
+        <a href="{% url "survey:results" survey.id %}?offering_id={{ selected_offering.id }}"
+           class="btn btn-sm mb-1 {% if not selected_course %} btn-success {% else %} btn-outline-success {% endif %}"
+           aria-current="page">{% trans "All courses" %}</a>
+        {% for course in courses %}
+            <a href="{% url "survey:results" survey.id %}?offering_id={{ selected_offering.id }}&course_id={{ course.id }}"
+               class="btn btn-sm mb-1 {% if selected_course and selected_course == course %} btn-success {% else %} btn-outline-success {% endif %}">{{ course.name }}</a>
+        {% endfor %}
+    </div>
+{% endif %}

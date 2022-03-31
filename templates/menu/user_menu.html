@@ -5,10 +5,11 @@
     <a class="dropdown-item" href="{% url 'admin:index' %}">
         <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
     </a>
-{% endif %}
-{% if user.is_staff %}
     <a class="dropdown-item" href="{% url 'courses:subscription_overview' %}">
         <span class="fa fa-bar-chart fa-lg"></span> {% trans "Statistics" %}
+    </a>
+    <a class="dropdown-item" href="{% url 'survey:overview' %}">
+        <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
     </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
