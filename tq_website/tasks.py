@@ -1,17 +1,12 @@
+from celery import shared_task
 from django.conf import settings
+from post_office.mail import send_queued
 
 from groups.services import update_groups
-
-try:
-    from celery import shared_task
-except ImportError:
-    from celery.decorators import task as shared_task
+from payment.payment_processor import PaymentProcessor
+from payment.postfinance_connector import FDSConnection, ISO2022Parser
 
 # Make sure our AppConf is loaded properly.
-
-from post_office.mail import send_queued
-from payment.postfinance_connector import FDSConnection, ISO2022Parser
-from payment.payment_processor import PaymentProcessor
 
 # Messages *must* be dicts, not instances of the EmailMessage class
 # This is because we expect Celery to use JSON encoding, and we want to prevent

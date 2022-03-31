@@ -235,14 +235,14 @@ msgstr ""
 
 #: courses/forms/subscribe_form.py:52
 msgid "You need to enter the email address of your partner."
-msgstr "Du musst die Emailadresse deines Partners angeben."
+msgstr "Du musst die Mailadresse deines Partners angeben."
 
 #: courses/forms/subscribe_form.py:59
 msgid ""
 "No user found with this email address. Please make sure your partner has an "
 "account"
 msgstr ""
-"Die angegebene Emailadresse gehört zu keinem Benutzer. Stelle sicher, dass "
+"Die angegebene Mailadresse gehört zu keinem Benutzer. Stelle sicher, dass "
 "dein Partner bzw. deine Partnerin ein aktives Konto hat."
 
 #: courses/forms/subscribe_form.py:68
@@ -334,7 +334,7 @@ msgstr "Studenten müssen Ihre Legi Nummer eingeben"
 
 #: courses/forms/voucher_generation_form.py:11
 msgid "How many voucher should be generated?"
-msgstr "Wieviele Gutscheine sollen generiert werden?"
+msgstr "Wie viele Gutscheine sollen generiert werden?"
 
 #: courses/models/choices/gender.py:10
 #: courses/templates/courses/snippets/signup_user_form.html:39
@@ -1025,7 +1025,7 @@ msgid "Teaching for TQ since"
 msgstr "Unterrichtet im TQ seit"
 
 #: courses/templates/courses/snippets/user_modal.html:31
-msgid "Courses thaught for TQ"
+msgid "Courses taught for TQ"
 msgstr "Für den TQ unterrichtete Kurse"
 
 #: courses/templates/courses/snippets/user_modal.html:34
@@ -1205,7 +1205,7 @@ msgid "Transfer to"
 msgstr "Überweisen an"
 
 #: courses/templates/user/snippets/subscription.html:46
-msgid "Accout number"
+msgid "Account number"
 msgstr "Kontonummer"
 
 #: courses/templates/user/snippets/subscription.html:48
@@ -1225,7 +1225,7 @@ msgid "Use voucher"
 msgstr "Gutschein verwenden"
 
 #: courses/templates/user/snippets/subscription.html:58
-msgid "Reedeem voucher here"
+msgid "Redeem voucher here"
 msgstr "Gutschein hier einlösen"
 
 #: courses/templates/user/snippets/subscription.html:66
@@ -1355,7 +1355,7 @@ msgid "Unsubscribe"
 msgstr "Abmelden"
 
 #: email_system/templates/email_system/unsubscribe.html:16
-msgid "Sucesfully unsubscribed!"
+msgid "Successfully unsubscribed!"
 msgstr "Erfolgreich abgemeldet"
 
 #: email_system/templates/email_system/unsubscribe.html:18
@@ -1369,7 +1369,7 @@ msgstr "Veranstaltungen"
 
 #: events/cms_plugins/event_category_plugin.py:20
 msgid "Event Category"
-msgstr "Eventkategorie"
+msgstr "Veranstaltungskategorie"
 
 #: events/cms_plugins/events_plugin.py:14
 msgid "List"
@@ -1739,7 +1739,7 @@ msgstr "E-Mail"
 
 #: payment/templates/payment/course/course.html:140
 msgid "Mobile"
-msgstr "Natel"
+msgstr "Handynummer"
 
 #: payment/templates/payment/course/course.html:143
 msgid "Actions"
@@ -1796,7 +1796,7 @@ msgstr "mit angewendeten Filtern"
 
 #: payment/templates/payment/finance/account_detail.html:31
 msgid "Transaction list"
-msgstr "Transaktionenlist"
+msgstr "Transaktionsliste"
 
 #: payment/templates/payment/finance/account_detail.html:32
 msgid "Show"
@@ -1880,7 +1880,7 @@ msgstr "Zusammenfassung der Lehrerdaten hier herunterladen:"
 
 #: payment/templates/payment/finance/offering_overview_teachers.html:37
 msgid "Hourly wage(s)"
-msgstr "Studenlohn"
+msgstr "Stundenlohn"
 
 #: payment/templates/payment/finance/offering_overview_teachers.html:38
 msgid "Regular course hours"
@@ -1949,7 +1949,7 @@ msgid "Successfully Paid"
 msgstr "Zahlung erfolgreich"
 
 #: payment/templates/payment/voucher/payment_success.html:11
-msgid "The follwing course has been successfully paid."
+msgid "The following course has been successfully paid."
 msgstr ""
 "Der folgende Kurs wurde erfolgreich gezahlt. Du wirst eine E-Mail erhalten, "
 "welche deine Zahlung bestätigt."
@@ -2006,7 +2006,7 @@ msgstr "Einzelne Umfragen"
 
 #: survey/templates/survey/components/survey_course_hint.html:4
 msgid "This survey is about the following course:"
-msgstr "Diese Umfrage biezieht sich auf folgenden Kurs:"
+msgstr "Diese Umfrage bezieht sich auf folgenden Kurs:"
 
 #: survey/templates/survey/survey.html:24
 msgid "Senden"
@@ -2083,7 +2083,7 @@ msgid ""
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
 "Du hast zurzeit keine E-Mail Adresse eingerichtet. Du solltest wirklich eine "
-"hinzufügen, damit du etwa Mitteilungen emfangen oder dein Passwort "
+"hinzufügen, damit du etwa Mitteilungen empfangen oder dein Passwort "
 "zurücksetzen kannst."
 
 #: templates/account/email.html:74
@@ -2148,8 +2148,8 @@ msgid "Supported by"
 msgstr "Unterstützt von"
 
 #: templates/footer.html:61
-msgid "TQ is a commision of VSETH and VSUZH"
-msgstr "TQ ist eine Kommision des VSETH und VSUZH"
+msgid "TQ is a commission of VSETH and VSUZH"
+msgstr "TQ ist eine Kommission des VSETH und VSUZH"
 
 #: templates/footer.html:87 templates/menu/collapsed_admin_menu.html:7
 #: templates/menu/user_menu.html:6

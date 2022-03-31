@@ -43,7 +43,7 @@
                         <br/>
                         {% trans "IBAN" %}: {{ payment_account.IBAN }}
                         <br/>
-                        {% trans "Accout number" %}: {{ payment_account.post_number }}
+                        {% trans "Account number" %}: {{ payment_account.post_number }}
                         <br/>
                         {% trans "SWIFT/BIC" %}: {{ payment_account.SWIFT }}
                         <br/>
@@ -55,7 +55,7 @@
                         <strong>{% trans "Use voucher" %}</strong>
                         <br/>
                         <a href="{% url "payment:voucherpayment_index" usi=subscription.usi %}">
-                            {% trans "Reedeem voucher here" %}
+                            {% trans "Redeem voucher here" %}
                             <i class="fa fa-arrow-circle-right fa-lg"></i>
                         </a>
                     </p>

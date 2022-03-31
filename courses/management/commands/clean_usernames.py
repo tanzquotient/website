@@ -2,14 +2,16 @@
 import logging
 
 from django.contrib.auth.models import User
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 
 from courses import services
 
 log = logging.getLogger('tq')
 
-class Command(NoArgsCommand):
-    def handle_noargs(self, **options):
+
+class Command(BaseCommand):
+
+    def handle(self, **options):
         log.info('run management command: {}'.format(__file__))
         for user in User.objects.all():
             try:

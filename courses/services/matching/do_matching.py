@@ -13,8 +13,8 @@ log = logging.getLogger('matching')
 def _get_lists_for_partition(subscribes):
     """
     Returns lists needed for partitioning.
-        a is the larger set out of leaders and followers
-        b is the other set from leaders/followers
+        'a' is the larger set out of leaders and followers
+        'b' is the other set from leaders/followers
     """
     leaders = [s for s in subscribes if s.lead_follow == LeadFollow.LEAD]
     followers = [s for s in subscribes if s.lead_follow == LeadFollow.FOLLOW]

@@ -1011,7 +1011,7 @@ msgid "Teaching for TQ since"
 msgstr "Teaching for TQ since"
 
 #: courses/templates/courses/snippets/user_modal.html:31
-msgid "Courses thaught for TQ"
+msgid "Courses taught for TQ"
 msgstr "Courses taught for TQ"
 
 #: courses/templates/courses/snippets/user_modal.html:34
@@ -1191,7 +1191,7 @@ msgid "Transfer to"
 msgstr "Transfer to"
 
 #: courses/templates/user/snippets/subscription.html:46
-msgid "Accout number"
+msgid "Account number"
 msgstr "Account number"
 
 #: courses/templates/user/snippets/subscription.html:48
@@ -1211,7 +1211,7 @@ msgid "Use voucher"
 msgstr "Use voucher"
 
 #: courses/templates/user/snippets/subscription.html:58
-msgid "Reedeem voucher here"
+msgid "Redeem voucher here"
 msgstr "Redeem voucher here"
 
 #: courses/templates/user/snippets/subscription.html:66
@@ -1340,8 +1340,8 @@ msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
 #: email_system/templates/email_system/unsubscribe.html:16
-msgid "Sucesfully unsubscribed!"
-msgstr "Sucesfully unsubscribed!"
+msgid "Successfully unsubscribed!"
+msgstr "Successfully unsubscribed!"
 
 #: email_system/templates/email_system/unsubscribe.html:18
 msgid "Invalide unsubscribe url. Please send us an email to unsubscribe."
@@ -1932,8 +1932,8 @@ msgid "Successfully Paid"
 msgstr "Successfully Paid"
 
 #: payment/templates/payment/voucher/payment_success.html:11
-msgid "The follwing course has been successfully paid."
-msgstr "The follwing course has been successfully paid."
+msgid "The following course has been successfully paid."
+msgstr "The following course has been successfully paid."
 
 #: payment/templates/payment/voucher/remaining_amount.html:10
 msgid "Voucher Applied"
@@ -2128,8 +2128,8 @@ msgid "Supported by"
 msgstr "Supported by"
 
 #: templates/footer.html:61
-msgid "TQ is a commision of VSETH and VSUZH"
-msgstr "TQ is a commision of VSETH and VSUZH"
+msgid "TQ is a commission of VSETH and VSUZH"
+msgstr "TQ is a commission of VSETH and VSUZH"
 
 #: templates/footer.html:87 templates/menu/collapsed_admin_menu.html:7
 #: templates/menu/user_menu.html:6
