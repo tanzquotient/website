@@ -16,6 +16,11 @@
 
         {% include "survey/components/filter.html" %}
 
+        <div class="alert alert-info" role="alert">
+            <div></div>
+            <div><strong>{{ answers_count }} {% trans "answers" %}</strong>  ({{ survey_instances.count }} {% trans "survey invitations sent" %})</div>
+        </div>
+
         {% for group in survey.questiongroup_set.all %}
             <div class="mb-4">
                 {% if group.title %}

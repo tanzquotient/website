@@ -2,7 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 
-from courses.models import Offering, Course, offering
+from courses.models import Offering, Course
 from ..models import Survey
 
 
@@ -34,11 +34,19 @@ def survey_results(request: HttpRequest, survey_id: int) -> HttpResponse:
     if 'course_id' in request.GET and request.GET['course_id']:
         selected_course = get_object_or_404(Course, id=request.GET['course_id'])
 
+    survey_instances = survey.survey_instances
+    if selected_course:
+        survey_instances = survey_instances.filter(course=selected_course)
+    if selected_offering:
+        survey_instances = survey_instances.filter(course__offering=selected_offering)
+
     context = dict(
         survey=survey,
         offerings=offerings,
         courses=courses,
         selected_offering=selected_offering,
         selected_course=selected_course,
+        survey_instances=survey_instances,
+        answers_count=survey_instances.filter(is_completed=True).count()
     )
     return render(request, "survey/results.html", context=context)
