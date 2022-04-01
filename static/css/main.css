@@ -11,6 +11,10 @@ a:hover {
     color: #9a1414;
 }
 
+.bg-tanzquotient {
+    background-color: #C51718;
+}
+
 
 /* Custom banner used for e.g. special events */
 .list-group-item, .banner-container {
