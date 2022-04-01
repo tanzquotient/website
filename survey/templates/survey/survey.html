@@ -1,19 +1,22 @@
 {% extends "basis.html" %}
 
 {% load static i18n %}
+{% load menu_tags %}
 
 {% block lead_title %}
     {% trans "Survey" %}
 {% endblock %}
 
 {% block main_content %}
-    <h2></h2>
-
     <div class="container">
         <div class="row">
             <div class="col">
 
                 {% include "survey/components/survey_header.html" with survey_instance=survey_instance only %}
+
+                <div class="my-2">
+                    {% language_chooser 'survey/components/language_chooser.html' %}
+                </div>
 
                 <form role="form" action="{% url 'survey:survey_with_key' survey_instance.survey.id survey_instance.url_key %}" method="post">
                     {% csrf_token %}

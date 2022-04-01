@@ -1,0 +1,13 @@
+{% load i18n menu_tags %}
+
+{% if languages|length > 1 %}
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        {% for language in languages %}
+            {% if current_language == language.0 %}
+                <a role="button" href="{% page_language_url language.0 %}" class="btn btn-sm btn-success">{{ language.1 }}</a>
+            {% else %}
+                <a role="button" href="{% page_language_url language.0 %}" class="btn btn-sm btn-outline-success">{{ language.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
