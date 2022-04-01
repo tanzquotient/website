@@ -15,6 +15,14 @@ a:hover {
     background-color: #C51718;
 }
 
+.bg-footer-light {
+    background-color: #232323
+}
+
+.bg-footer-dark {
+    background-color: #191919;
+}
+
 
 /* Custom banner used for e.g. special events */
 .list-group-item, .banner-container {

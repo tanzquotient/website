@@ -1,0 +1,13 @@
+{% load i18n menu_tags %}
+
+{% if languages|length > 1 %}
+    {% for language in languages %}
+        <a class="dropdown-item" href="{% page_language_url language.0 %}" title="{% trans "Change to language:" %} {{ language.1 }}">
+            {% if current_language == language.0 %}
+                <strong>{{ language.1 }}</strong> <i class="fa-solid fa-circle-check"></i>
+            {% else %}
+                {{ language.1 }}
+            {% endif %}
+        </a>
+    {% endfor %}
+{% endif %}

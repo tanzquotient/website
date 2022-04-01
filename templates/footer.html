@@ -8,62 +8,56 @@
 {% load basic_tags %}
 
 <footer>
-    <div class="footer1">
+    <div class="bg-footer-light text-light mt-4 pt-4 pb-5">
         <div class="container">
-            <div class="row">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4" bg-footer-light">
 
-                <div class="col-md-3 col-sm-6">
-                    <h3>{% trans "Contact" %}</h3>
+                <div class="col">
+                    <div class="mb-3 fs-4 fw-bold">{% trans "Contact" %}</div>
                     <div>
-                        {% include "snippets/contact_address.html" %}
+                        <div>Tanzquotient</div>
+                        <div>Kommission des VSETH & VSUZH</div>
+                        <div>Universitätsstrasse 6</div>
+                        <div>8092 Zürich</div>
+                        <div><a class="text-light" href="mailto:kontakt@tanzquotient.org">kontakt@tanzquotient.org</a></div>
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6 ">
-                    <h3>{% trans "Follow us" %}</h3>
+                <div class="col ">
+                    <div class="mb-3 fs-4 fw-bold">{% trans "Follow us" %}</div>
 
                     <div>
                         <p class="follow-me-icons">
-                            <a href="https://www.facebook.com/tanzquotient"><i class="fab fa-facebook-square"></i></a>
-                            {% page_url 'calendar-instructions' as url %}
-                            {% if url %}
-                                <a href="{{ url }}"><i class="fa fa-calendar fa-2"></i></a>
-                            {% endif %}
-                            <a href="https://github.com/tanzquotient/tq_website"><i class="fab fa-github"></i></a>
-
+                            <a class="text-light me-2 fs-2" href="https://www.facebook.com/tanzquotient" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                            <a class="text-light me-2 fs-2" href="https://www.instagram.com/tanzquotient" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                            <!-- Having the whatsapp link here is fine, as it is public anyway --->
+                            <a class="text-light me-2 fs-2" href="https://chat.whatsapp.com/EqPY67plOJaDW2UH5xGOY2" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                            <a class="text-light me-2 fs-2" href="https://github.com/tanzquotient/website" target="_blank"><i class="fa-brands fa-github"></i></a>
                         </p>
                     </div>
 
                     <div>
                         {% trans "Please send Website Feedback to" %}
-                        <a href="mailto:informatik@tanzquotient.org">informatik@tanzquotient.org</a>
+                        <a class="text-light" href="mailto:informatik@tanzquotient.org">informatik@tanzquotient.org</a>
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6 ">
-                    <h3>{% trans "Built with" %}</h3>
+                <div class="col ">
+                    <div class="mb-3 fs-4 fw-bold">{% trans "Built with" %}</div>
 
                     <div>
-                        <a href="//www.djangoproject.com/">Django</a>
-                        <br/>
-                        <a href="//www.django-cms.org/">Django CMS</a>
-                        <br/>
-                        <a href="//getbootstrap.com/">Twitter Bootstrap</a>
-                        <br/>
-                        <a href="//www.python.org/">Python</a>
+                        <div><a class="text-light" href="//www.djangoproject.com/">Django</a></div>
+                        <div><a class="text-light" href="//www.django-cms.org/">Django CMS</a></div>
+                        <div><a class="text-light" href="//getbootstrap.com/">Bootstrap</a></div>
+                        <div><a class="text-light" href="//www.python.org/">Python</a></div>
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6 ">
-                    <h3>{% trans "Supported by" %}</h3>
-
-                    <div>
-                        {% trans "TQ is a commission of VSETH and VSUZH" %}
-                        <a href="https://vseth.ch"><img src="{% static "elements/vseth_logo.png" %}"
-                                                        alt="Responsive image"></a>
-                        <a href="http://vsuzh.ch"><img src="{% static "elements/vsuzh_logo.png" %}"
-                                                       alt="Responsive image"></a>
-
+                <div class="col ">
+                    <div class="mb-3 fs-4 fw-bold">{% trans "We are part of" %}</div>
+                    <div class="row">
+                        <div class="mb-4 col-7"><a href="https://vseth.ch"><img class="mg-fluid" src="{% static "elements/vseth_logo.svg" %}" alt="VSETH Logo"></a></div>
+                        <div class="col-9"><a href="http://vsuzh.ch"><img class="mg-fluid" src="{% static "elements/vsuzh_logo.svg" %}" alt="VSUZH Logo"></a></div>
                     </div>
                 </div>
 
@@ -72,24 +66,22 @@
         </div>
     </div>
 
-    <div class="footer2">
-        <div class="container">
-            <div class="d-flex flex-row justify-content-between">
+    <div class="bg-footer-dark">
+        <div class="container py-2 text-light">
+            <div class="d-flex flex-lg-row g-2 flex-column justify-content-between">
 
-                <span>
+                <span class="my-1">
                     {% show_menu 0 1 0 1 'menu/bottom_menu.html' %}
                 </span>
 
-                <span>
+                <span class="my-1">
                         {% if user.is_authenticated %}
                             {% if user.is_staff %}
-                                <a href="{% url 'admin:index' %}"><span
-                                        class="fa fa-cog fa-lg"></span>{% trans "Admin area" %}</a>|
+                                <a class="text-light" href="{% url 'admin:index' %}">{% trans "Admin area" %}</a> &nbsp;|&nbsp;
                             {% endif %}
-                            <a href="{% url 'account_logout' %}?next={{ request.path }}"><span
-                                    class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}</a>
+                            <a class="text-light" href="{% url 'account_logout' %}?next={{ request.path }}">{% trans "Logout" %}</a>
                         {% else %}
-                            <a href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
+                            <a class="text-light" href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Login" %}</a>
                         {% endif %}
                 </span>
 
@@ -97,7 +89,7 @@
 {#                    {% trans "Version" %} {% git_head %}#}
 {#                </span>#}
 
-                <span>Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.</span>
+                <span class="my-1">Copyright &copy; 2008 - {% now "Y" %} Tanzquotient.</span>
 
             </div>
             <!-- /row of s -->

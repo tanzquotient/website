@@ -3,9 +3,8 @@
 {% load i18n %}
 {% load account %}
 
-<hr/>
 
-<div class="row collapse-menu text-white mt-2">
+<div class="row collapse-menu text-white mt-4">
     <div class="col-6">
         <div class="title">{% trans "Pages" %}</div>
         <ul class="navbar-nav">
@@ -15,16 +14,16 @@
     <div class="col-6">
         <div class="title">{% trans "Account" %}</div>
         <ul class="navbar-nav">
-            {% include 'menu/collapsed_user_menu.html' %}
+            {% include 'menu/mobile_user_menu.html' %}
         </ul>
         <div class="title">{% trans "Language" %}</div>
         <ul class="navbar-nav">
-            {% language_chooser 'menu/language_chooser.html' %}
+            {% language_chooser 'menu/mobile_language_chooser.html' %}
         </ul>
         {% if user.is_staff or user.profile.is_teacher %}
             <div class="title">{% trans "Advanced" %}</div>
             <ul class="navbar-nav">
-                {% include 'menu/collapsed_admin_menu.html' %}
+                {% include 'menu/mobile_admin_menu.html' %}
             </ul>
         {% endif %}
     </div>

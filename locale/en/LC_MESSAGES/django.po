@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-30 19:01+0200\n"
+"POT-Creation-Date: 2022-04-01 20:39+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -515,7 +515,8 @@ msgstr "Download Excel"
 #: courses/templates/courses/auth/profile.html:5
 #: courses/templates/user/profile.html:5 courses/templates/user/profile.html:9
 #: templates/account/change_password.html:5
-#: templates/menu/collapsed_user_menu.html:12 templates/menu/user_menu.html:39
+#: templates/menu/desktop_user_menu.html:40
+#: templates/menu/mobile_user_menu.html:12
 msgid "Profile"
 msgstr "Profile"
 
@@ -648,6 +649,7 @@ msgstr "All styles"
 #: courses/templates/courses/snippets/course_filter.html:10
 #: survey/templates/survey/components/question_multiplechoice_freeform.html:5
 #: survey/templates/survey/components/question_singlechoice_freeform.html:5
+#: survey/utils/get_plot_for_question.py:41
 msgid "Other"
 msgstr "Other"
 
@@ -727,7 +729,7 @@ msgid "Intermediate"
 msgstr "Intermediate"
 
 #: courses/templates/courses/snippets/level.html:9
-#: templates/menu/collapsed_menu.html:25
+#: templates/menu/mobile_menu.html:24
 msgid "Advanced"
 msgstr "Advanced"
 
@@ -1262,7 +1264,8 @@ msgstr "We received your payment. Thank you!"
 #: courses/templates/user/user_courses.html:5
 #: courses/templates/user/user_courses.html:9
 #: payment/templates/payment/course/form.html:6
-#: templates/menu/collapsed_user_menu.html:7 templates/menu/user_menu.html:36
+#: templates/menu/desktop_user_menu.html:37
+#: templates/menu/mobile_user_menu.html:7
 msgid "My Courses"
 msgstr "My Courses"
 
@@ -1656,7 +1659,11 @@ msgstr "Already Paid"
 msgid "Enter USI"
 msgstr "Enter USI"
 
-#: payment/templates/payment/counter/form.html:15
+#: payment/templates/payment/counter/form.html:14
+msgid "Eindeutige Kursnummer (USI)"
+msgstr "Unique subscription identifier (USI)"
+
+#: payment/templates/payment/counter/form.html:17
 msgid "Submit"
 msgstr "Submit"
 
@@ -1696,6 +1703,7 @@ msgstr ""
 "Additionally you can download the contact data of the participants here:"
 
 #: payment/templates/payment/course/course.html:84
+#: survey/templates/survey/components/download.html:3
 msgid "Download"
 msgstr "Download"
 
@@ -1811,7 +1819,7 @@ msgstr "Credit"
 msgid "Debit"
 msgstr "Debit"
 
-#: payment/templates/payment/finance/account_detail.html:134
+#: payment/templates/payment/finance/account_detail.html:132
 msgid "Save Comments"
 msgstr "Save Comments"
 
@@ -1969,11 +1977,12 @@ msgstr " successfully marked as paid."
 
 #: survey/cms_toolbars.py:10 survey/templates/survey/survey.html:6
 #: survey/templates/survey/survey_done.html:6
-#: survey/templates/survey/survey_error.html:6
 msgid "Survey"
 msgstr "Survey"
 
-#: survey/cms_toolbars.py:13
+#: survey/cms_toolbars.py:13 survey/templates/survey/overview.html:8
+#: templates/menu/desktop_user_menu.html:12
+#: templates/menu/mobile_admin_menu.html:17
 msgid "Surveys"
 msgstr "Surveys"
 
@@ -1985,9 +1994,70 @@ msgstr "Answers"
 msgid "Survey Instances"
 msgstr "Survey Instances"
 
+#: survey/templates/survey/components/filter.html:8
+msgid "All offerings"
+msgstr "All offerings"
+
+#: survey/templates/survey/components/filter.html:21
+msgid "All courses"
+msgstr "All courses"
+
+#: survey/templates/survey/components/question_result.html:26
+msgid "Show all answers"
+msgstr "Show all answers"
+
+#: survey/templates/survey/components/question_result.html:42
+msgid "Collapse answers"
+msgstr "Collapse answers"
+
+#: survey/templates/survey/components/survey_card.html:6
+msgid "Used for:"
+msgstr "Used for:"
+
+#: survey/templates/survey/components/survey_card.html:13
+msgid "Nothing yet"
+msgstr "Nothing yet"
+
+#: survey/templates/survey/components/survey_card.html:18
+#: survey/templates/survey/results.html:23
+msgid "survey invitations sent"
+msgstr "survey invitations sent"
+
+#: survey/templates/survey/components/survey_card.html:19
+msgid "answers received"
+msgstr "answers received"
+
+#: survey/templates/survey/components/survey_card.html:22
+msgid "Show results"
+msgstr "Show results"
+
+#: survey/templates/survey/components/survey_card.html:27
+msgid "question groups"
+msgstr "question groups"
+
+#: survey/templates/survey/components/survey_card.html:28
+msgid "questions in total"
+msgstr "questions in total"
+
+#: survey/templates/survey/components/survey_card.html:31
+msgid "Edit survey"
+msgstr "Edit survey"
+
 #: survey/templates/survey/components/survey_course_hint.html:4
 msgid "This survey is about the following course:"
 msgstr "This survey is about the following course:"
+
+#: survey/templates/survey/overview.html:14
+msgid "All Surveys"
+msgstr "All Surveys"
+
+#: survey/templates/survey/results.html:8
+msgid "Survey Results"
+msgstr "Survey Results"
+
+#: survey/templates/survey/results.html:23
+msgid "answers"
+msgstr "answers"
 
 #: survey/templates/survey/survey.html:24
 msgid "Senden"
@@ -2002,7 +2072,7 @@ msgid "Successfully sent. Thank you for your time!"
 msgstr "Successfully sent. Thank you for your time!"
 
 #: templates/account/base.html:9 templates/account/email.html:5
-#: templates/menu/collapsed_menu.html:16
+#: templates/menu/mobile_menu.html:15
 msgid "Account"
 msgstr "Account"
 
@@ -2107,76 +2177,85 @@ msgstr "Signup"
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
-#: templates/account/signup.html:11 templates/footer.html:92
+#: templates/account/signup.html:11 templates/footer.html:84
 msgid "Login"
 msgstr "Log in"
 
-#: templates/footer.html:23
+#: templates/error_base.html:22
+msgid "Take Me Home"
+msgstr "Take Me Home"
+
+#: templates/error_base.html:25
+msgid "Contact support"
+msgstr "Contact support"
+
+#: templates/footer.html:27
 msgid "Follow us"
 msgstr "Follow us"
 
-#: templates/footer.html:38
+#: templates/footer.html:40
 msgid "Please send Website Feedback to"
 msgstr "Please send Website Feedback to"
 
-#: templates/footer.html:44
+#: templates/footer.html:46
 msgid "Built with"
 msgstr "Built with"
 
-#: templates/footer.html:58
-msgid "Supported by"
-msgstr "Supported by"
+#: templates/footer.html:57
+msgid "We are part of"
+msgstr "We are part of"
 
-#: templates/footer.html:61
-msgid "TQ is a commission of VSETH and VSUZH"
-msgstr "TQ is a commission of VSETH and VSUZH"
-
-#: templates/footer.html:87 templates/menu/collapsed_admin_menu.html:7
-#: templates/menu/user_menu.html:6
+#: templates/footer.html:80 templates/menu/desktop_user_menu.html:6
+#: templates/menu/mobile_admin_menu.html:7
 msgid "Admin area"
 msgstr "Admin area"
 
-#: templates/footer.html:90 templates/menu/collapsed_user_menu.html:17
-#: templates/menu/user_menu.html:42
+#: templates/footer.html:82 templates/menu/desktop_user_menu.html:43
+#: templates/menu/mobile_user_menu.html:17
 msgid "Logout"
 msgstr "Logout"
 
-#: templates/menu/collapsed_admin_menu.html:14 templates/menu/user_menu.html:11
-msgid "Statistics"
-msgstr "Statistics"
+#: templates/menu/desktop_language_chooser.html:5
+#: templates/menu/mobile_language_chooser.html:6
+msgid "Change to language:"
+msgstr "Change to language:"
 
-#: templates/menu/collapsed_admin_menu.html:21 templates/menu/user_menu.html:16
-msgid "Courses as teacher"
-msgstr "Courses as teacher"
-
-#: templates/menu/collapsed_admin_menu.html:28 templates/menu/user_menu.html:21
-msgid "Counter payment"
-msgstr "Counter payment"
-
-#: templates/menu/collapsed_admin_menu.html:35 templates/menu/user_menu.html:26
-msgid "Offering finance"
-msgstr "Offering finance"
-
-#: templates/menu/collapsed_admin_menu.html:40 templates/menu/user_menu.html:29
-msgid "Account finance"
-msgstr "Account finance"
-
-#: templates/menu/collapsed_menu.html:10
-msgid "Pages"
-msgstr "Pages"
-
-#: templates/menu/collapsed_menu.html:20
-msgid "Language"
-msgstr "Language"
-
-#: templates/menu/collapsed_user_menu.html:23
-#: templates/menu/expanded_menu.html:33
+#: templates/menu/desktop_menu.html:37 templates/menu/mobile_user_menu.html:23
 msgid "Log in"
 msgstr "Log in"
 
-#: templates/menu/language_chooser.html:6
-msgid "Change to language:"
-msgstr "Change to language:"
+#: templates/menu/desktop_user_menu.html:9
+#: templates/menu/mobile_admin_menu.html:12
+msgid "Statistics"
+msgstr "Statistics"
+
+#: templates/menu/desktop_user_menu.html:17
+#: templates/menu/mobile_admin_menu.html:24
+msgid "Courses as teacher"
+msgstr "Courses as teacher"
+
+#: templates/menu/desktop_user_menu.html:22
+#: templates/menu/mobile_admin_menu.html:31
+msgid "Counter payment"
+msgstr "Counter payment"
+
+#: templates/menu/desktop_user_menu.html:27
+#: templates/menu/mobile_admin_menu.html:38
+msgid "Offering finance"
+msgstr "Offering finance"
+
+#: templates/menu/desktop_user_menu.html:30
+#: templates/menu/mobile_admin_menu.html:43
+msgid "Account finance"
+msgstr "Account finance"
+
+#: templates/menu/mobile_menu.html:9
+msgid "Pages"
+msgstr "Pages"
+
+#: templates/menu/mobile_menu.html:19
+msgid "Language"
+msgstr "Language"
 
 #: templates/photologue/gallery_archive.html:4
 #: templates/photologue/gallery_archive.html:10
@@ -2231,8 +2310,11 @@ msgstr "Main content"
 msgid "Side content"
 msgstr "Side content"
 
-#~ msgid "Question groups"
-#~ msgstr "Question groups"
+#~ msgid "Supported by"
+#~ msgstr "Supported by"
+
+#~ msgid "TQ is a commission of VSETH and VSUZH"
+#~ msgstr "TQ is a commission of VSETH and VSUZH"
 
 #~ msgid "Questions"
 #~ msgstr "Questions"
