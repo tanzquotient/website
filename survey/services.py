@@ -1,16 +1,18 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
+from courses.models import Course, Offering
 from courses.utils import export
 from survey.models import Survey, SurveyInstance
 
 
-def export_surveys(surveys: Iterable[Survey]) -> HttpResponse:
+def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = None, course: Optional[Course] = None,
+                   export_format: str = None) -> HttpResponse:
 
-    export_format = "excel"
     export_data = {}
+    export_format = export_format or "excel"
 
     multiple_surveys = len(list(surveys)) > 1
 
@@ -26,8 +28,13 @@ def export_surveys(surveys: Iterable[Survey]) -> HttpResponse:
         if key_all not in export_data:
             export_data[key_all] = [header]
 
-        for instance in survey.survey_instances.filter(is_completed=True)\
-                .prefetch_related('answers', 'answers__question').all():
+        survey_instances = survey.survey_instances.filter(is_completed=True)
+        if offering:
+            survey_instances = survey_instances.filter(course__offering=offering)
+        if course:
+            survey_instances = survey_instances.filter(course=course)
+
+        for instance in survey_instances.prefetch_related('answers', 'answers__question').all():
             if not instance.has_answers():
                 instance.is_completed = False
                 instance.save()
@@ -53,10 +60,17 @@ def export_surveys(surveys: Iterable[Survey]) -> HttpResponse:
             export_data[key].append(row)
             export_data[key_all].append(row)
 
+    if len(export_data.keys()) == 2:  # All + specific (but they are identical
+        multiple = False
+        data = list(export_data.values())[0]
+    else:
+        multiple = True
+        data = [dict(name=k, data=v) for k, v in export_data.items()]
+
     return export(export_format=export_format,
                   title="Survey results",
-                  data=[dict(name=k, data=v) for k, v in export_data.items()],
-                  multiple=True)
+                  data=data,
+                  multiple=multiple)
 
 
 def get_or_create_survey_instance(survey: Survey, user: User) -> SurveyInstance:

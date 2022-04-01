@@ -7,7 +7,7 @@ from ..models import Survey
 
 
 @staff_member_required
-def survey_results(request: HttpRequest, survey_id: int) -> HttpResponse:
+def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     get_object_or_404(Survey, id=survey_id)
     survey = Survey.objects.filter(id=survey_id).prefetch_related(
         'questiongroup_set',

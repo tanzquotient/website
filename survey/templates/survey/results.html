@@ -14,11 +14,17 @@
             <h1>{{ survey.title }}</h1>
         {% endif %}
 
-        {% include "survey/components/filter.html" %}
+        {% if user.is_staff %}
+            {% include "survey/components/filter.html" %}
+        {% endif %}
 
         <div class="alert alert-info" role="alert">
-            <div></div>
-            <div><strong>{{ answers_count }} {% trans "answers" %}</strong>  ({{ survey_instances.count }} {% trans "survey invitations sent" %})</div>
+            <div class="d-flex justify-content-between">
+                <div class="align-self-center"><strong>{{ answers_count }} {% trans "answers" %}</strong>  ({{ survey_instances.count }} {% trans "survey invitations sent" %})</div>
+                {% if user.is_staff %}
+                    {% include "survey/components/download.html" %}
+                {% endif %}
+            </div>
         </div>
 
         {% for group in survey.questiongroup_set.all %}
