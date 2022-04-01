@@ -10,10 +10,11 @@
         <h2>{% trans "Enter USI" %}</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form }}
-            <button type="submit" class="btn btn-primary">
-                {% trans "Submit" %}
-            </button>
+            <div class="mb-3">
+                <label for="id_usi" class="form-label">{% trans "Eindeutige Kursnummer (USI)" %}</label>
+                <input type="text" class="form-control" name="usi" maxlength="10" id="id_usi">
+            </div>
+            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
         </form>
     </div>
 {% endblock main_content %}

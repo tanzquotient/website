@@ -13,9 +13,8 @@
                     <div class="card-text">
                         {{ partner.description }}
                     </div>
-                    <a href="{{ partner.url }}" target="_blank" class="btn btn-primary">
-                        {% trans "Visit partner" %}
-                        <i class="fas fa-external-link-alt"></i>
+                    <a href="{{ partner.url }}" target="_blank" class="card-link">
+                        <i class="fas fa-external-link-alt"></i> {% trans "Visit partner" %}
                     </a>
                 </div>
 

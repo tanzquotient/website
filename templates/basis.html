@@ -60,19 +60,21 @@
     {% include "menu/main_menu.html" %}
 {% endblock %}
 
-<header class="lead">
-    <div class="container">
-        <div class="title-wrapper row align-items-center justify-content-center">
-        <span class="lead-title">
-            {% block lead_title %}
-                {% placeholder title or %}
-                    {% page_attribute "page_title" %}
-                {% endplaceholder %}
-            {% endblock %}
-        </span>
+{% block lead %}
+    <header class="lead">
+        <div class="container">
+            <div class="title-wrapper row align-items-center justify-content-center">
+            <span class="lead-title">
+                {% block lead_title %}
+                    {% placeholder title or %}
+                        {% page_attribute "page_title" %}
+                    {% endplaceholder %}
+                {% endblock %}
+            </span>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
+{% endblock %}
 
 
 {% block cms_content %}

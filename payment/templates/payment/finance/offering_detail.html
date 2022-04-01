@@ -49,7 +49,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="subscription" value="{{ subscription.id }}">
                                             <button type="submit"
-                                                    class="btn {% if subscription.get_last_payment_reminder %}btn-default{% else %}btn-primary{% endif %} btn-sm">
+                                                    class="btn btn-warning btn-sm">
                                                 {% trans "Send Reminder" %}
                                             </button>
                                     </form>

@@ -1,9 +1,14 @@
 {% extends "error_base.html" %}
 
-{% block message %}
-    <h4>400 Bad Request</h4>
+{% block title %}
+    Bad Request
+{% endblock %}
 
-    <div class="error-details">
-        This request is invalid, maybe your session is in an invalid state!
-    </div>
-{% endblock message %}
+{% block error_title %}
+    Bad Request
+{% endblock %}
+
+{% block error_message %}
+    This request is invalid, maybe your session is in an invalid state!
+{% endblock %}
+

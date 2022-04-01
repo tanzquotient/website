@@ -2,55 +2,19 @@ body {
     font-size: 14px;
 }
 
+/* Make links red to fit the theme of tanzquotient */
 a {
     color: #C51718;
-    text-decoration: none;
 }
 
 a:hover {
     color: #9a1414;
-    text-decoration: underline;
 }
 
-table.table {
-    margin-bottom: 0;
-}
 
-.bg-primary {
-    background-color: #C51718 !important;
-}
-
-.btn-primary {
-    background-color: #C51718;
-    border-color: #C51718;
-}
-
-.btn-primary:hover {
-    background-color: #9a1414;
-    border-color: #9a1414;
-}
-
-.btn-primary:focus {
-    background-color: #761010;
-    border-color: #761010;
-    box-shadow: 0 0 0 .2rem rgba(197, 23, 24, 0.5);
-}
-
-.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
-    background-color: #761010;
-    border-color: #761010;
-}
-
-.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show > .btn-primary.dropdown-toggle:focus {
-    box-shadow: 0 0 0 .2rem rgba(197, 23, 24, 0.5);
-}
-
+/* Custom banner used for e.g. special events */
 .list-group-item, .banner-container {
     overflow: hidden;
-}
-
-.list-group-item-action {
-    color: black;
 }
 
 .banner {
@@ -67,6 +31,7 @@ table.table {
     transform: rotate(45deg);
 }
 
+/* Make sure Django CMS toolbar does not overlap with nav bar*/
 .cms-toolbar-expanded .navbar.sticky-top {
     top: 46px;
 }

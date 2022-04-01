@@ -1,9 +1,13 @@
 {% extends "error_base.html" %}
 
-{% block message %}
-    <h4>500 Server Error</h4>
+{% block title %}
+    Server Error
+{% endblock %}
 
-    <div class="error-details">
-        A server error occurred!
-    </div>
-{% endblock message %}
+{% block error_title %}
+    Server Error
+{% endblock %}
+
+{% block error_message %}
+    A server error occurred. Please report this error - thank you!
+{% endblock %}
