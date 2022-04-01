@@ -1,20 +1,18 @@
-<div id="accordion" role="tablist" aria-multiselectable="true">
+<div class="accordion my-4" id="faq-accordion">
     {% for q in questions %}
-        <div class="card card-default mb-1">
-            <div class="card-header" role="tab" id="heading-{{ q.id }}">
-                    <a class="collapsed" data-bs-toggle="collapse" data-parent="#accordion" href="#collapse-{{ q.id }}"
-                       aria-expanded="false" aria-controls="collapse-{{ q.id }}">
-                        {{ q.question_text }}
-                    </a>
-            </div>
-            <div id="collapse-{{ q.id }}" class="card-collapse collapse" role="tabcard"
-                 aria-labelledby="heading-{{ q.id }}">
-                <div class="card-body">
-                    {{ q.answer_text }}
-                </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading-question-{{ q.id }}">
+            <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-question-{{ q.id }}" aria-expanded="false" aria-controls="collapse-question-{{ q.id }}">
+                <strong>{{ q.question_text }}</strong>
+            </button>
+        </h2>
+        <div id="collapse-question-{{ q.id }}" class="accordion-collapse collapse" aria-labelledby="heading-question-{{ q.id }}" data-bs-parent="#faq-accordion">
+            <div class="accordion-body fs-6 py-4">
+                {{ q.answer_text }}
             </div>
         </div>
-        {% empty %}
+    </div>
+    {% empty %}
         <div class="alert alert-info">No questions to be displayed.</div>
     {% endfor %}
 </div>
