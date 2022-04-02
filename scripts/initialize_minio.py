@@ -31,9 +31,9 @@ except MinioException:
     pass
 
 try:
-    print('creating postfinance bucket')
-    minio_client.make_bucket(os.environ.get('TQ_S3_POSTFINANCE_BUCKET'),
-                             location=os.environ.get('TQ_S3_POSTFINANCE_REGION'))
+    print('creating finance bucket')
+    minio_client.make_bucket(os.environ.get('TQ_S3_FINANCE_BUCKET'),
+                             location=os.environ.get('TQ_S3_FINANCE_REGION'))
 except MinioException:
     pass
 

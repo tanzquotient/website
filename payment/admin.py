@@ -28,7 +28,7 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 @admin.register(FinanceFile)
-class PostfinanceFileAdmin(admin.ModelAdmin):
+class FinanceFileAdmin(admin.ModelAdmin):
     list_display = ['name', 'processed', 'downloaded_at']
     list_filter = ['processed']
     search_fields = ['name']
