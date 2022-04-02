@@ -29,10 +29,10 @@ class PaymentAdmin(admin.ModelAdmin):
 
 @admin.register(FinanceFile)
 class FinanceFileAdmin(admin.ModelAdmin):
-    list_display = ['name', 'processed', 'downloaded_at']
+    list_display = ['name', 'processed', 'created_at']
     list_filter = ['processed']
     search_fields = ['name']
-    readonly_fields = ['name', 'file', 'downloaded_at']
+    readonly_fields = ['created_at']
 
 
 @admin.register(SubscriptionPayment)

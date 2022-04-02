@@ -9,10 +9,10 @@ class FinanceFile(Model):
     file = FileField(storage=FinanceStorage())
     type = CharField(max_length=32, choices=FinanceFileType.CHOICES, default=FinanceFileType.POSTFINANCE_XML)
     processed = BooleanField(default=False)
-    downloaded_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.name
 
     class Meta:
-        ordering = ['-downloaded_at']
+        ordering = ['-created_at']
