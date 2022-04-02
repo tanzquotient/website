@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='postfinancefile',
             name='file',
-            field=models.FileField(storage=tq_website.storages.PostfinanceStorage(), upload_to=''),
+            field=models.FileField(storage=tq_website.storages.FinanceStorage(), upload_to=''),
         ),
     ]

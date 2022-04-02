@@ -3,21 +3,22 @@ import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from io import StringIO
+from typing import Iterable
 
 from django.core.files.base import ContentFile
 from django.db import DatabaseError
 from paramiko import RSAKey
 from paramiko.client import SSHClient, AutoAddPolicy
 
-from payment.models import Payment, PostfinanceFile
-from payment.models.choices import CreditDebit, State
+from payment.models import Payment, FinanceFile
+from payment.models.choices import CreditDebit, State, FinanceFileType
 from tq_website.settings import FDS_PORT, FDS_HOST, FDS_PRIVATE_KEY, FDS_USER
 
 log = logging.getLogger('payment')
 
 
 class FDSConnection:
-    def __init__(self):
+    def __init__(self) -> None:
         private_key = RSAKey.from_private_key(StringIO(FDS_PRIVATE_KEY))
         self.client = SSHClient()
         self.client.set_missing_host_key_policy(AutoAddPolicy())
@@ -25,7 +26,7 @@ class FDSConnection:
         self.sftp = self.client.open_sftp()
         log.info("Connected to FDS")
 
-    def get_files(self):
+    def get_files(self) -> None:
         log.info("Receiving files from FDS...")
 
         # Iterate over all remote files
@@ -33,32 +34,31 @@ class FDSConnection:
         filenames = self.sftp.listdir()
         log.info("Found {} files on server".format(filenames))
         for filename in filenames:
-            if not PostfinanceFile.objects.filter(name=filename).exists():
+            if not FinanceFile.objects.filter(name=filename).exists():
                 log.info("Receiving {}".format(filename))
                 with self.sftp.open(filename) as file:
                     content = file.read()
                 if isinstance(content, str):
                     content = content.encode('utf-8')
                 content_file = ContentFile(content)
-                db_file = PostfinanceFile.objects.create(name=filename, downloaded_at=datetime.now())
+                db_file = FinanceFile.objects.create(name=filename, type=FinanceFileType.POSTFINANCE_XML)
                 db_file.file.save(filename, content_file)
                 log.info("Saved {}".format(filename))
             else:
                 log.info("Skipping already existing file: {}".format(filename))
 
 
+def find_fds_files(include_processed: bool = False) -> Iterable[FinanceFile]:
+    query = FinanceFile.objects.filter(type=FinanceFileType.POSTFINANCE_XML)
+    if not include_processed:
+        query = query.filter(processed=False)
 
-
-def find_fds_files(include_processed=False):
-    if include_processed:
-        return PostfinanceFile.objects
-    return PostfinanceFile.objects.filter(processed=False).all()
-
+    return query.all()
 
 
 class ISO2022Parser:
     @staticmethod
-    def parse(reparse=False, dry_run=False):
+    def parse(reparse: bool = False, dry_run: bool = False) -> int:
         count = 0
         for file in find_fds_files(include_processed=reparse):
             payments = ISO2022Parser.parse_file(file)
@@ -70,7 +70,7 @@ class ISO2022Parser:
         return count
 
     @staticmethod
-    def parse_user_string(string):
+    def parse_user_string(string: str) -> dict:
         data = {'account_nr': "",
                 'name': "",
                 'street': "",
@@ -111,7 +111,7 @@ class ISO2022Parser:
         return data
 
     @staticmethod
-    def parse_file(db_file):
+    def parse_file(db_file: FinanceFile) -> list[Payment]:
         filename = db_file.name
         log.info("parse file {}".format(filename))
         if db_file.processed:
@@ -184,7 +184,7 @@ class ISO2022Parser:
         return payments
 
     @staticmethod
-    def save_payments(payments):
+    def save_payments(payments: Iterable[Payment]) -> None:
         for payment in payments:
             try:
                 payment.save()

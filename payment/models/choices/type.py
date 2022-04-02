@@ -5,7 +5,6 @@ class Type:
     IRRELEVANT = 'irrelevant'
     UNKNOWN = 'unknown'
 
-
     CHOICES = (
         (SUBSCRIPTION_PAYMENT, 'subscription payment'),
         (SUBSCRIPTION_PAYMENT_TO_REIMBURSE, 'subscription payment (to reimburse)'),

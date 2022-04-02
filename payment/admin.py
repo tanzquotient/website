@@ -27,7 +27,7 @@ class PaymentAdmin(admin.ModelAdmin):
                        'currency_code', 'remittance_user_string', 'filename', 'file', 'iban', 'bic')
 
 
-@admin.register(PostfinanceFile)
+@admin.register(FinanceFile)
 class PostfinanceFileAdmin(admin.ModelAdmin):
     list_display = ['name', 'processed', 'downloaded_at']
     list_filter = ['processed']

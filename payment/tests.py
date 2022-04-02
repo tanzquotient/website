@@ -11,18 +11,18 @@ from django.test import TestCase, override_settings
 @override_settings(FDS_PORT=22)
 class PostFinanceConnectorTest(TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         # empty data directory
         #for f in os.listdir():
         #    os.remove(f)
         pass
 
-    def test_get_files(self):
-        '''Tests FDSConnection.get_files().
+    def test_get_files(self) -> None:
+        """Tests FDSConnection.get_files().
 
         PRE:
         The development server is running.
-        '''
+        """
         #files = os.listdir(sftp-test)
         #connection = FDSConnection()
         #connection.get_files()
