@@ -1,16 +1,20 @@
 import logging
+from typing import Optional
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.urls import reverse
-from post_office import mail, models as post_office_models
+from post_office.models import Email
 
 import courses.models
+from courses.models import Subscribe, Teach, Course
+from email_system.services import send_email
 from tq_website import settings as my_settings
 
 log = logging.getLogger('tq')
 
 
-def send_subscription_confirmation(subscription):
+def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
@@ -29,10 +33,15 @@ def send_subscription_confirmation(subscription):
     else:
         template = 'subscription_confirmation_without_partner_nocouple'
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+        template=template,
+        context=context
+    )
 
 
-def _build_subscription_context(subscription):
+def _build_subscription_context(subscription: Subscribe) -> dict:
     from payment import payment_processor
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = settings.DEPLOYMENT_DOMAIN
@@ -44,13 +53,14 @@ def _build_subscription_context(subscription):
         'course_info': create_course_info(subscription.course),
         'usi': payment_processor.USI_PREFIX + subscription.usi,
         'account_IBAN': conf['IBAN'],
+        'account_SWIFT': conf['SWIFT'],
         'account_recipient': conf['recipient'],
         'account_post_number': conf['post_number'] or '-',
         'voucher_url': voucher_url
     }
 
 
-def send_participation_confirmation(subscription):
+def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
 
     if subscription.partner is not None:
@@ -65,10 +75,15 @@ def send_participation_confirmation(subscription):
     else:
         template = 'participation_confirmation_without_partner_nocouple'
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+        template=template,
+        context=context
+    )
 
 
-def send_online_payment_successful(subscription):
+def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
@@ -77,26 +92,41 @@ def send_online_payment_successful(subscription):
 
     template = 'online_payment_successful'
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_FINANCES,
+        template=template,
+        context=context
+    )
 
 
-def send_sorry_for_incorrect_reminder(subscription):
+def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
 
     template = 'sorry_incorrect_payment_reminder'
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_FINANCES,
+        template=template,
+        context=context
+    )
 
 
-def send_payment_reminder(subscription):
+def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
 
     template = 'payment_reminder'
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_FINANCES,
+        template=template,
+        context=context
+    )
 
 
-def send_rejection(subscription, reason):
+def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
@@ -105,10 +135,15 @@ def send_rejection(subscription, reason):
 
     template = 'rejection_{}'.format(reason)
 
-    return _email_helper(subscription.user.email, template, context)
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+        template=template,
+        context=context
+    )
 
 
-def send_teacher_welcome(teach):
+def send_teacher_welcome(teach: Teach) -> Optional[Email]:
     teacher = teach.teacher
     if not teacher.email:
         return None
@@ -136,38 +171,29 @@ def send_teacher_welcome(teach):
 
     template = 'teacher_welcome'
 
-    return _email_helper(teacher.email, template, context)
+    return send_email(
+        to=teacher.email,
+        reply_to=settings.EMAIL_ADDRESS_COURSES,
+        template=template,
+        context=context
+    )
 
 
-def detect_rejection_reason(subscription):
+def detect_rejection_reason(subscription: Subscribe) -> str:
     """
     detect the reason why the subscription is rejected
     :return: the reason as constant from Rejection.Reason
     """
     reason = courses.models.RejectionReason.UNKNOWN
     counts = subscription.course.get_free_places_count()
-    if counts and counts['total'] == 0:
+    if counts and counts == 0:
         reason = courses.models.RejectionReason.OVERBOOKED
     elif subscription.course.type.couple_course and subscription.partner is None:
         reason = courses.models.RejectionReason.NO_PARTNER
     return reason
 
 
-def _email_helper(email, template, context):
-    """Sending facility. Catches errors due to not existent template."""
-    try:
-        return mail.send(
-            [email],
-            my_settings.DEFAULT_FROM_EMAIL,
-            template=template,
-            context=context,
-        )
-    except post_office_models.EmailTemplate.DoesNotExist as e:
-        log.error("Email Template missing with name: {}".format(template))
-        return None
-
-
-def create_user_info(user):
+def create_user_info(user: User) -> str:
     s = '{}\n'.format(user.get_full_name())
     if user.email:
         s += user.email + "\n"
@@ -176,7 +202,7 @@ def create_user_info(user):
     return s.strip('\n')
 
 
-def create_course_info(course):
+def create_course_info(course: Course) -> str:
     s = '{}\n{}'.format(course.type.name, course.format_lessons())
     if course.room:
         s += ', {}\n'.format(course.room)

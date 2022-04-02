@@ -72,8 +72,8 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
             html_message: str = email_content or email_template.html_content
 
             emails.append(dict(
-                recipients=[recipient.email],
-                sender=settings.DEFAULT_FROM_EMAIL,
+                to=recipient.email,
+                reply_to=settings.EMAIL_ADDRESS_COURSES,
                 subject=subject,
                 message=email_template.content,
                 html_message=html_message,
@@ -105,8 +105,7 @@ def send_vouchers(data, recipients):
         }
 
         emails.append(dict(
-            recipients=[recipient.email],
-            sender=settings.DEFAULT_FROM_EMAIL,
+            to=recipient.email,
             template='voucher',
             context=email_context,
             attachments={'Voucher.pdf': voucher.pdf_file.file}

@@ -1,23 +1,21 @@
 from datetime import datetime
 
 from courses.models import UserProfile
-from email_system.models import GeneratedIndividualEmail
+from email_system.models import GeneratedIndividualEmail, GroupEmail
 from groups.definitions import GroupDefinitions
-from tq_website import settings
 from utils import TranslationUtils
 from . import send_all_emails
 from ..models import UnsubscribeCode
 
 
-def _get_language(user):
+def _get_language(user) -> str:
     try:
         return user.profile.language
     except UserProfile.DoesNotExist:
         return 'en'
 
 
-
-def send_group_email(group_email):
+def send_group_email(group_email: GroupEmail) -> None:
     unsubscribe_context = None
     if group_email.target_group.name == GroupDefinitions.NEWSLETTER.name:
         unsubscribe_context = GroupDefinitions.NEWSLETTER.name
@@ -52,8 +50,7 @@ def send_group_email(group_email):
 
         # Add email
         emails.append(dict(
-            recipients=[user.email],
-            sender=settings.DEFAULT_FROM_EMAIL,
+            to=user.email,
             subject=subject,
             headers=headers,
             html_message=html_message,
