@@ -4,46 +4,36 @@ from post_office.mail import send_queued
 
 from groups.services import update_groups
 from payment.payment_processor import PaymentProcessor
-from payment.postfinance_connector import FDSConnection, ISO2022Parser
-
-# Make sure our AppConf is loaded properly.
-
-# Messages *must* be dicts, not instances of the EmailMessage class
-# This is because we expect Celery to use JSON encoding, and we want to prevent
-# code assuming otherwise.
-
-TASK_CONFIG_EMAILS = {'name': 'post_office_send_queued_emails', 'ignore_result': True}
-TASK_CONFIG_EMAILS.update(settings.CELERY_EMAIL_TASK_CONFIG)
-
-@shared_task(**TASK_CONFIG_EMAILS)
-def send_queued_emails():
-    return send_queued()
+from payment.postfinance_connector import FDSConnection
+from payment.parser import ISO2022Parser, ZkbCsvParser
 
 
-TASK_CONFIG_FDS = {'name': 'payment_get_fds_files', 'ignore_result': True}
+@shared_task(name='post_office_send_queued_emails', ignore_result=True, **settings.CELERY_EMAIL_TASK_CONFIG)
+def send_queued_emails() -> None:
+    send_queued()
 
-@shared_task(**TASK_CONFIG_FDS)
-def get_fds_files():
+
+@shared_task(name='payment_get_fds_files', ignore_result=True)
+def get_fds_files() -> None:
     fds_connector = FDSConnection()
-    return fds_connector.get_files()
-
-TASK_CONFIG_PARSE = {'name': 'payment_parse_fds_files', 'ignore_result': True}
-
-@shared_task(**TASK_CONFIG_PARSE)
-def parse_iso_20022_files():
-    parser = ISO2022Parser()
-    return parser.parse()
+    fds_connector.get_files()
 
 
-TASK_CONFIG_MATCH = {'name': 'payment_match', 'ignore_result': True}
+@shared_task(name='payment_parse_fds_files', ignore_result=True)
+def parse_iso_20022_files() -> None:
+    ISO2022Parser.parse_files_and_save_payments()
 
-@shared_task(**TASK_CONFIG_MATCH)
-def match_payments():
+
+@shared_task(name='payment_parse_zkb_csv_files', ignore_result=True)
+def payment_parse_zkb_csv_files() -> None:
+    ZkbCsvParser.parse_files_and_save_payments()
+
+
+@shared_task(name='payment_match', ignore_result=True)
+def match_payments() -> None:
     PaymentProcessor().process_payments()
 
 
-TASK_CONFIG_UPDATE_GROUPS = {'name': 'update_groups', 'ignore_result': True}
-
-@shared_task(**TASK_CONFIG_UPDATE_GROUPS)
-def task_update_groups():
+@shared_task(name='update_groups', ignore_result=True)
+def task_update_groups() -> None:
     update_groups()

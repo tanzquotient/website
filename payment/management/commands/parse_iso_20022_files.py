@@ -2,7 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from payment.postfinance_connector import ISO2022Parser
+from payment.parser.iso_2022_parser import ISO2022Parser
 
 log = logging.getLogger('tq')
 
@@ -28,6 +28,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         log.info('run management command: {}'.format(__file__))
-        parser = ISO2022Parser()
-        count = parser.parse(reparse=options['reparse'], dry_run=options['dry_run'])
+        count = ISO2022Parser.parse_files_and_save_payments(reparse=options['reparse'], dry_run=options['dry_run'])
         log.info('found and parsed {} new transactions'.format(count))

@@ -11,6 +11,12 @@ class FinanceFile(Model):
     processed = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None) -> None:
+        super().save(force_insert, force_update, using, update_fields)
+        if self.type == FinanceFileType.ZKB_CSV:
+            from payment.parser import ZkbCsvParser
+            ZkbCsvParser.parse_files_and_save_payments()
+
     def __str__(self) -> str:
         return self.name
 

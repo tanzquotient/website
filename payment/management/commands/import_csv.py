@@ -5,7 +5,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from payment.models import *
-from payment.postfinance_connector import ISO2022Parser
+from payment.parser.iso_2022_parser import ISO2022Parser
 
 log = logging.getLogger('tq')
 
