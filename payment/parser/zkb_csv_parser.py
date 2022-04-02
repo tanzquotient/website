@@ -58,4 +58,7 @@ class ZkbCsvParser:
                 payment.address = ','.join(parts[1:]) if len(parts) > 1 else ''
                 payment.remittance_user_string = row['Zahlungszweck']
 
+        finance_file.processed = True
+        finance_file.save()
+
         return payments
