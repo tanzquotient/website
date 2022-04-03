@@ -1,6 +1,7 @@
 import codecs
 import csv
 from datetime import datetime
+from decimal import Decimal
 from io import StringIO
 
 from payment.models import Payment, FinanceFile
@@ -47,10 +48,10 @@ class ZkbCsvParser:
                 payment.currency_code = 'CHF'
                 if row['Gutschrift CHF']:
                     payment.credit_debit = CreditDebit.CREDIT
-                    payment.amount = float(row['Gutschrift CHF'])
+                    payment.amount = Decimal(row['Gutschrift CHF'])
                 else:
                     payment.credit_debit = CreditDebit.DEBIT
-                    payment.amount = float(row['Belastung CHF'])
+                    payment.amount = Decimal(row['Belastung CHF'])
             elif payment is not None:
                 text: str = row['Buchungstext']
                 parts = text.split(',')

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
+from decimal import Decimal
 from numbers import Number
 from typing import Optional, Union, Iterable
 
@@ -61,8 +62,8 @@ class Course(TranslatableModel):
     partner = models.ForeignKey(to=Partner, on_delete=models.SET_NULL, related_name='courses', blank=True, null=True)
 
     # Pricing
-    price_with_legi = models.FloatField(blank=True, null=True, default=35)
-    price_without_legi = models.FloatField(blank=True, null=True, default=70)
+    price_with_legi = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(35))
+    price_without_legi = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(70))
     price_special = models.CharField(max_length=255, blank=True, null=True)
     price_special.help_text = "Set this only if you want a different price schema."
 

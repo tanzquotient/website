@@ -6,14 +6,13 @@ from decimal import Decimal
 from typing import Optional
 
 import base36
-from django.contrib import messages
 from django.contrib import admin
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db.models import Q, Model, ForeignKey, PROTECT, TextField, CharField, DateTimeField, FloatField
-from reversion import revisions as reversion
+from django.db.models import Q, Model, ForeignKey, PROTECT, TextField, CharField, DateTimeField, DecimalField
 from django.utils.translation import gettext_lazy as _
-
+from reversion import revisions as reversion
 
 from courses import managers
 from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow, Offering, StudentStatus, PriceReduction
@@ -46,7 +45,7 @@ class Subscribe(Model):
     # Payment stuff
     usi = CharField(max_length=6, blank=True, null=False, default="------", unique=True)
     usi.help_text = 'Unique subscription identifier: 4 characters identifier, 2 characters checksum'
-    price_to_pay = FloatField(blank=True, null=True, default=None)
+    price_to_pay = DecimalField(blank=True, null=True, default=None, decimal_places=2, max_digits=6)
     paymentmethod = CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
     # Objects
@@ -145,23 +144,23 @@ class Subscribe(Model):
         else:
             return False
 
-    def _compute_price_to_pay(self) -> float:
+    def _compute_price_to_pay(self) -> Decimal:
         if self.user.profile.student_status == StudentStatus.NO:
-            return self.course.price_without_legi or 0
-        return self.course.price_with_legi or 0
+            return self.course.price_without_legi or Decimal(0)
+        return self.course.price_with_legi or Decimal(0)
 
     def generate_price_to_pay(self) -> None:
         self.price_to_pay = self._compute_price_to_pay()
 
-    def get_price_to_pay(self) -> float:
+    def get_price_to_pay(self) -> Decimal:
         if not self.price_to_pay:
             self.generate_price_to_pay()
             self.save()
-        return self.price_to_pay
+        return Decimal(self.price_to_pay)
 
     def price_after_reductions(self) -> Decimal:
         self.generate_price_to_pay()
-        price = Decimal(self.price_to_pay or 0)
+        price = self.get_price_to_pay()
 
         # Subtract reductions
         for price_reduction in self.price_reductions.all():

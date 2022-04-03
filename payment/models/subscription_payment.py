@@ -4,6 +4,7 @@ from django.db import models
 from courses.models import Subscribe
 from . import Payment
 
+
 class SubscriptionPayment(models.Model):
     """
     A Subscription Payment is a matched intermediate object.
@@ -11,7 +12,7 @@ class SubscriptionPayment(models.Model):
     """
     payment = models.ForeignKey(Payment, related_name='subscription_payments', on_delete=models.PROTECT)
     subscription = models.ForeignKey(Subscribe, related_name='subscription_payments', on_delete=models.PROTECT)
-    amount = models.FloatField()
+    amount = models.DecimalField(decimal_places=2, max_digits=6)
 
     def clean(self):
         # Don't allow larger amount then available amount of payment

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models import TimeField, BooleanField, DateField, FloatField, ForeignKey, ImageField, CharField, \
+from django.db.models import TimeField, BooleanField, DateField, DecimalField, ForeignKey, ImageField, CharField, \
     IntegerField, SET_NULL
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -23,8 +23,10 @@ class Event(TranslatableModel):
     cancelled = BooleanField(default=False)
     category = ForeignKey('EventCategory', related_name='events', blank=True, null=True, on_delete=SET_NULL)
     room = ForeignKey(Room, related_name='events', blank=True, null=True, on_delete=SET_NULL)
-    price_with_legi = FloatField(blank=True, null=True, help_text="Leave this empty for free entrance")
-    price_without_legi = FloatField(blank=True, null=True, help_text="Leave this empty for free entrance")
+    price_with_legi = DecimalField(blank=True, null=True, decimal_places=2, max_digits=6,
+                                   help_text="Leave this empty for free entrance")
+    price_without_legi = DecimalField(blank=True, null=True, decimal_places=2, max_digits=6,
+                                      help_text="Leave this empty for free entrance")
     special = BooleanField(blank=True, default=False,
                            help_text="If this is a special event that should be emphasized on the website")
     display = BooleanField(default=True, help_text="Defines if this event should be displayed on the website.")

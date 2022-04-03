@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="text-end">{{ subscription.price_to_pay }}&nbsp;CHF</td>
+                <td class="text-end">{{ subscription.get_price_to_pay }}&nbsp;CHF</td>
             </tr>
             {% for price_reduction in subscription.price_reductions.all %}
                 <tr>

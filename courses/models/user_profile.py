@@ -1,10 +1,11 @@
 import uuid
 from datetime import date
+from decimal import Decimal
 from typing import Optional, Iterable
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
-from django.db.models import Model, IntegerField, BooleanField, ImageField, DateField, FloatField, OneToOneField, \
+from django.db.models import Model, IntegerField, BooleanField, ImageField, DateField, DecimalField, OneToOneField, \
     CharField, ForeignKey, PROTECT
 from django.db.models import CASCADE
 from django.dispatch import receiver
@@ -46,7 +47,7 @@ class UserProfile(Model):
     residence_permit = CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
     ahv_number = CharField(max_length=255, blank=True, null=True)
     bank_account = OneToOneField(BankAccount, related_name='user_profile', blank=True, null=True, on_delete=CASCADE)
-    default_hourly_wage = FloatField(default=30.0)
+    default_hourly_wage = DecimalField(default=Decimal(30), decimal_places=2, max_digits=6)
     default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
 
     objects = managers.UserProfileManager()

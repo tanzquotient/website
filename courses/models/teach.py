@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Optional
 
 from django.contrib.auth.models import User
@@ -8,15 +9,15 @@ class Teach(models.Model):
     teacher = models.ForeignKey(User, related_name='teaching_courses', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', related_name='teaching', on_delete=models.CASCADE)
     welcomed = models.BooleanField(default=False)
-    hourly_wage = models.FloatField(blank=True, null=True)
+    hourly_wage = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=6)
     hourly_wage.help_text = 'Hourly wage, leave empty to copy default wage from teacher profile.'
 
-    def get_wage(self) -> Optional[float]:
+    def get_wage(self) -> Optional[Decimal]:
         time = self.course.get_total_time()['total']
         if time is None or self.hourly_wage is None:
             return None
 
-        return time * self.hourly_wage
+        return Decimal(time) * self.hourly_wage
 
     def save(self, *args, **kwargs) -> None:
         if self.hourly_wage is None:

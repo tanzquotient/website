@@ -10,4 +10,4 @@ class CoursePayment(models.Model):
     """
     payment = models.ForeignKey(Payment, related_name='course_payments', on_delete=models.PROTECT)
     course = models.ForeignKey(Course, related_name='course_payments', on_delete=models.PROTECT)
-    amount = models.FloatField()
+    amount = models.DecimalField(decimal_places=2, max_digits=6)

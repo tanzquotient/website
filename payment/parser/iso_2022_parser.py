@@ -1,6 +1,7 @@
 import logging
 import re
 from datetime import datetime
+from decimal import Decimal
 from typing import Iterable
 from xml.etree import ElementTree as ET
 
@@ -113,7 +114,7 @@ class ISO2022Parser:
 
             # unique reference number by postfinance
             payment.transaction_id = transaction_id
-            payment.amount = float(find_or_empty(transaction, 'Amt') or 0.0)
+            payment.amount = Decimal(find_or_empty(transaction, 'Amt') or 0)
             payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
 
             # Credit or Debit

@@ -1,6 +1,7 @@
 import csv
 import datetime
 import logging
+from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 
@@ -36,7 +37,7 @@ class Command(BaseCommand):
             pay.remittance_user_string = transaction["note"]
             pay.credit_debit = "credit"
             try:
-                pay.amount = float(amount)
+                pay.amount = Decimal(amount)
                 pay.save()
             except:
-                print("Could not convert {} to float".format(amount))
+                print("Could not convert {} to Decimal".format(amount))
