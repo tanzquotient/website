@@ -7,6 +7,21 @@
 
 {% block main_content %}
     <div class="container">
+        {% if voucher_applied %}
+            <div class="alert alert-success">
+                <h4 class="alert-heading">{% trans "Voucher applied" %}</h4>
+                <p>
+                    {% trans "The voucher has been successfully applied (see details below)." %}
+                </p>
+                {% if voucher_for_remainder %}
+                    <hr>
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div class="align-self-center">{% trans "The voucher used was valued more than the remaining amount for this course. Download the voucher for the remainder by clicking the following button." %}</div>
+                        <a role="button" href="{{ voucher_for_remainder.pdf_file.url }}" class="btn btn-light"><i class="fas fa-download"></i> {% trans "Download" %}</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
         {% if subscription.paid %}
             <div class="alert alert-success">
                 {% translate "This subscription has been fully paid. Thank you!" %}
@@ -47,11 +62,18 @@
                 </td>
                 <td class="text-end">{{ subscription.get_price_to_pay }}&nbsp;CHF</td>
             </tr>
-            {% for price_reduction in subscription.price_reductions.all %}
+            {% for price_reduction in subscription.price_reductions.all|dictsort:"created_at" %}
                 <tr>
                     <td>{% trans "Voucher" %}</td>
                     <td>{% trans "Code" %}: {{ price_reduction.used_voucher.key }}, {% trans "Value" %}: {{ price_reduction.used_voucher.value_string }}</td>
                     <td  class="text-end">-&nbsp;{{ price_reduction.amount }}&nbsp;CHF</td>
+                </tr>
+            {% endfor %}
+            {% for subscription_payment in subscription.subscription_payments.all %}
+                <tr>
+                    <td>{% trans "Payment" %}</td>
+                    <td>{% trans "Date" %}: {{ subscription_payment.payment.date}}</td>
+                    <td  class="text-end">-&nbsp;{{ subscription_payment.amount }}&nbsp;CHF</td>
                 </tr>
             {% endfor %}
             {% if not subscription.paid and subscription.open_amount > 0 %}
@@ -60,9 +82,14 @@
                     <td>
                         <form method="post">
                             {% csrf_token %}
-                            <div class="row gy-2 gx-3 align-items-center">
+                            <div class="row gy-2 gx-3">
                                 <div class="col-auto">
-                                    <input class="form-control form-control-sm" type="text" maxlength="6" minlength="6" required name="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="default input example">
+                                    <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}" type="text" maxlength="6" minlength="6" required name="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="default input example">
+                                    {% for error in voucher_form.voucher_code.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
                                 </div>
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-sm btn-success">

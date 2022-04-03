@@ -188,7 +188,7 @@ class Subscribe(Model):
                                       comment=f"Applied voucher {voucher.key}")
 
         open_amount = self.open_amount()
-        if open_amount == 0:
+        if open_amount.is_zero():
             self.mark_as_paid(PaymentMethod.VOUCHER, user)
 
         return open_amount

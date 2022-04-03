@@ -71,8 +71,10 @@ class Voucher(Model):
         voucher_for_remainder = None
         if open_amount_before < reduction_amount:  # reduction more than open amount
             remainder = reduction_amount - open_amount_before
+            reduction_amount = open_amount_before
             voucher_for_remainder = Voucher.objects.create(amount=remainder, purpose=self.purpose, expires=self.expires)
-        else:
+
+        if reduction_amount > 0:
             subscription.apply_price_reduction(reduction_amount, self, user)
 
         self.mark_as_used(subscription, user, comment=f"Used to pay subscription {subscription.usi}.")
@@ -81,7 +83,7 @@ class Voucher(Model):
 
     def get_reduction_amount(self, base_value: Decimal) -> Decimal:
         if self.percentage:  # This is a percentage voucher
-            return base_value * self.percentage / 100
+            return base_value * Decimal(self.percentage) / Decimal(100)
 
         return Decimal(self.amount)
 

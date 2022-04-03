@@ -141,7 +141,7 @@ class PaymentProcessor:
         if payment.state in [State.NEW, State.MANUAL] and payment.type == Type.SUBSCRIPTION_PAYMENT:
             remaining_amount = payment.amount - payment.subscription_payments_amount_sum()
 
-            if remaining_amount == 0:
+            if remaining_amount.is_zero():
                 payment.state = State.MATCHED
                 payment.amount_to_reimburse = 0
                 payment.save()

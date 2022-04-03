@@ -17,7 +17,7 @@ class PriceReduction(Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None) -> None:
         super().save(force_insert, force_update, using, update_fields)
-        if self.subscription.open_amount() == 0 and not self.subscription.paid():
+        if self.subscription.open_amount().is_zero() and not self.subscription.paid():
             self.subscription.mark_as_paid(PaymentMethod.PRICE_REDUCTION)
 
     def __str__(self) -> str:

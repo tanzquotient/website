@@ -81,6 +81,11 @@
                         <span class="badge bg-success">{% trans "Paid" %}</span>
                         <br/>
                         {% trans "Paid subscription info" %}
+                        <br/>
+                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                            {% trans "Show details" %}
+                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                        </a>
                     {% endif %}
                 </p>
             </div>
