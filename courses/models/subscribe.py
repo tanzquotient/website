@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import datetime
-import hashlib
 from decimal import Decimal
 from typing import Optional
 
-import base36
 from django.contrib import admin
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -15,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion
 
 from courses import managers
+from utils import CodeGenerator
 from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow, Offering, StudentStatus, PriceReduction
 
 
@@ -43,8 +42,8 @@ class Subscribe(Model):
                       default=SubscribeState.NEW)
 
     # Payment stuff
-    usi = CharField(max_length=6, blank=True, null=False, default="------", unique=True)
-    usi.help_text = 'Unique subscription identifier: 4 characters identifier, 2 characters checksum'
+    usi = CharField(max_length=6, blank=True, null=False, default=CodeGenerator.short_uuid_without_ambiguous_characters, unique=True)
+    usi.help_text = 'Unique subscription identifier: Randomly generated'
     price_to_pay = DecimalField(blank=True, null=True, default=None, decimal_places=2, max_digits=6)
     paymentmethod = CharField(max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True)
 
@@ -52,9 +51,10 @@ class Subscribe(Model):
     objects = managers.SubscribeQuerySet.as_manager()
 
     def generate_usi(self) -> str:
-        checksum = hashlib.md5()
-        checksum.update(str(self.id).encode('utf-8'))
-        return (base36.dumps(self.id).zfill(4)[:4] + checksum.hexdigest()[:2]).lower()
+        if self.usi:
+            return self.usi  # Be sure to not regenerate USI
+        usi = CodeGenerator.short_uuid_without_ambiguous_characters()
+        return usi if not Subscribe.objects.filter(usi=usi).exists() else self.generate_usi()
 
     def get_offering(self) -> Offering:
         return self.course.offering
@@ -273,7 +273,8 @@ class Subscribe(Model):
     def save(self, *args, **kwargs) -> None:
         self.derive_matching_state()
         super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
-        self.usi = self.generate_usi()
+        if not self.usi:
+            self.usi = self.generate_usi()
         if not self.price_to_pay:
             self.generate_price_to_pay()
         super(Subscribe, self).save(*args, **kwargs)

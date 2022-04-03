@@ -57,7 +57,7 @@ class PaymentProcessor:
 
             # Try to create a subscription payment for each subscription_id
             for subscription_id in subscription_ids:
-                subscription_query = Subscribe.objects.filter(usi=subscription_id)
+                subscription_query = Subscribe.objects.filter(usi__iexact=subscription_id)
 
                 num_subscriptions = subscription_query.count()
                 if num_subscriptions > 1:
@@ -110,7 +110,7 @@ class PaymentProcessor:
 
         # There could be potentially many subscription identifiers for one payment
         # Convert to lowercase, since values are stored as lowercase in database (postgres is case sensitiv)
-        subscription_ids = [subscription_id.lower() for subscription_id in matches]
+        subscription_ids = [subscription_id for subscription_id in matches]
         log.info(f"Found the following subscription id(s): {', '.join(subscription_ids)}")
         return subscription_ids
 
