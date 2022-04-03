@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-01 20:39+0200\n"
+"POT-Creation-Date: 2022-04-03 23:02+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -206,12 +206,11 @@ msgid "Geschlecht"
 msgstr "Gender"
 
 #: courses/forms/send_voucher_form.py:13
-#: courses/forms/voucher_generation_form.py:12
 msgid "Percentage of voucher"
 msgstr "Percentage of voucher"
 
 #: courses/forms/send_voucher_form.py:15
-#: courses/forms/voucher_generation_form.py:14
+#: courses/forms/voucher_generation_form.py:16
 msgid "Set expire date?"
 msgstr "Set expire date"
 
@@ -326,9 +325,17 @@ msgstr "Hint: you can also enter HTML code"
 msgid "Students have to enter their student card number."
 msgstr "Students have to enter their student card number."
 
-#: courses/forms/voucher_generation_form.py:11
+#: courses/forms/voucher_generation_form.py:12
 msgid "How many voucher should be generated?"
 msgstr "How many voucher should be generated?"
+
+#: courses/forms/voucher_generation_form.py:13 courses/models/voucher.py:28
+msgid "Reduction in percent (0-100)."
+msgstr "Reduction in percent (0-100)."
+
+#: courses/forms/voucher_generation_form.py:14 courses/models/voucher.py:27
+msgid "Value of the voucher in CHF."
+msgstr "Value of the voucher in CHF."
 
 #: courses/models/choices/gender.py:10
 #: courses/templates/courses/snippets/signup_user_form.html:39
@@ -352,7 +359,7 @@ msgstr "lead"
 msgid "follow"
 msgstr "follow"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:201
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:230
 msgid "no preference"
 msgstr "no preference"
 
@@ -376,21 +383,37 @@ msgstr "single"
 msgid "couple"
 msgstr "couple"
 
-#: courses/models/subscribe.py:204
+#: courses/models/subscribe.py:233
 msgid "leader"
 msgstr "leader"
 
-#: courses/models/subscribe.py:205
+#: courses/models/subscribe.py:234
 msgid "follower"
 msgstr "follower"
 
-#: courses/models/subscribe.py:208
+#: courses/models/subscribe.py:237
 msgid "no preference, assigned as leader"
 msgstr "no preference, assigned as leader"
 
-#: courses/models/subscribe.py:209
+#: courses/models/subscribe.py:238
 msgid "no preference, assigned as follower"
 msgstr "no preference, assigned as follower"
+
+#: courses/models/voucher.py:29
+msgid "Used to redeem voucher."
+msgstr "Used to redeem voucher."
+
+#: courses/models/voucher.py:31
+msgid "If not set, the voucher will not expire."
+msgstr "If not set, the voucher will not expire."
+
+#: courses/models/voucher.py:33
+msgid "Will be generated."
+msgstr "Will be generated."
+
+#: courses/models/voucher.py:35
+msgid "The voucher was applied for this subscription."
+msgstr "The voucher was applied for this subscription."
 
 #: courses/services/general.py:28
 #: events/templates/events/snippets/event_list.html:4
@@ -571,6 +594,7 @@ msgstr "Course subscription"
 
 #: courses/templates/courses/course_subscribe_form.html:18
 #: courses/templates/courses/course_subscribe_status.html:18
+#: payment/templates/payment/subscription/index.html:46
 msgid "Info"
 msgstr "Info"
 
@@ -593,13 +617,13 @@ msgstr ""
 "sent out in the following days."
 
 #: courses/templates/courses/course_subscribe_status.html:30
-#: courses/templates/user/snippets/subscription.html:100
+#: courses/templates/user/snippets/subscription.html:97
 msgid "Your Role"
 msgstr "Your Role"
 
 #: courses/templates/courses/course_subscribe_status.html:36
 #: courses/templates/courses/snippets/offering.html:26
-#: courses/templates/user/snippets/subscription.html:109
+#: courses/templates/user/snippets/subscription.html:106
 msgid "Partner"
 msgstr "Partner"
 
@@ -743,10 +767,7 @@ msgstr "All levels"
 #: payment/templates/payment/finance/offering_detail.html:29
 #: payment/templates/payment/finance/offering_overview_subscribers.html:32
 #: payment/templates/payment/finance/offering_overview_teachers.html:36
-#: payment/templates/payment/voucher/form.html:23
-#: payment/templates/payment/voucher/payment_failed.html:23
-#: payment/templates/payment/voucher/payment_success.html:23
-#: payment/templates/payment/voucher/remaining_amount.html:23
+#: payment/templates/payment/subscription/index.html:56
 msgid "Course"
 msgstr "Course"
 
@@ -793,7 +814,7 @@ msgstr "with"
 #: courses/templates/courses/snippets/signup_user_form.html:6
 #: courses/templates/courses/snippets/styles_modal.html:52
 #: courses/templates/courses/snippets/user_form.html:5
-#: courses/templates/courses/snippets/user_modal.html:62
+#: courses/templates/courses/snippets/user_modal.html:60
 #: courses/templates/courses/snippets/user_profile_form.html:8
 #: templates/account/change_password.html:20
 #: templates/account/change_password.html:26
@@ -813,10 +834,6 @@ msgstr "Some inputs are invalid"
 #: payment/templates/payment/course/confirm.html:20
 #: payment/templates/payment/course/course.html:138
 #: payment/templates/payment/finance/offering_detail.html:25
-#: payment/templates/payment/voucher/form.html:17
-#: payment/templates/payment/voucher/payment_failed.html:17
-#: payment/templates/payment/voucher/payment_success.html:17
-#: payment/templates/payment/voucher/remaining_amount.html:17
 msgid "Name"
 msgstr "Name"
 
@@ -979,7 +996,7 @@ msgstr "Followers: fully booked"
 
 #: courses/templates/courses/snippets/subscription_info.html:39
 #: courses/templates/courses/snippets/subscription_info.html:49
-#: courses/templates/user/snippets/subscription.html:69
+#: courses/templates/user/snippets/subscription.html:61
 msgid "Subscription received"
 msgstr "Subscription received"
 
@@ -1021,17 +1038,38 @@ msgstr "Courses taught for TQ"
 msgid "Board member"
 msgstr "Board member"
 
-#: courses/templates/courses/snippets/user_modal.html:50
+#: courses/templates/courses/snippets/user_modal.html:49
 msgid "About"
 msgstr "About"
 
-#: courses/templates/courses/snippets/user_modal.html:54
+#: courses/templates/courses/snippets/user_modal.html:53
 msgid "No info available"
 msgstr "No info available"
 
 #: courses/templates/courses/snippets/user_profile_form.html:38
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Add salary payment info (only required for teachers and helpers)"
+
+#: courses/templates/payment/account/info.html:4
+#: courses/templates/user/profile.html:102
+msgid "IBAN"
+msgstr "IBAN"
+
+#: courses/templates/payment/account/info.html:6
+msgid "Account number"
+msgstr "Account number"
+
+#: courses/templates/payment/account/info.html:8
+msgid "SWIFT/BIC"
+msgstr "SWIFT/BIC"
+
+#: courses/templates/payment/account/info.html:10
+msgid "Recipient"
+msgstr "Recipient"
+
+#: courses/templates/payment/account/info.html:12
+msgid "Transfer Message"
+msgstr "Transfer Message"
 
 #: courses/templates/user/profile.html:23
 msgid "Show my courses"
@@ -1080,11 +1118,6 @@ msgstr "Contact"
 #: courses/templates/user/profile.html:100
 msgid "Bank account"
 msgstr "Bank account"
-
-#: courses/templates/user/profile.html:102
-#: courses/templates/user/snippets/subscription.html:44
-msgid "IBAN"
-msgstr "IBAN"
 
 #: courses/templates/user/profile.html:104
 msgid "Bank"
@@ -1142,7 +1175,7 @@ msgid "Payment status"
 msgstr "Payment Status"
 
 #: courses/templates/user/snippets/course_as_teacher.html:32
-#: courses/templates/user/snippets/subscription.html:89
+#: courses/templates/user/snippets/subscription.html:81
 #: payment/templates/payment/finance/offering_overview_subscribers.html:35
 msgid "Paid"
 msgstr "Paid"
@@ -1181,6 +1214,7 @@ msgid "Unpaid"
 msgstr "Unpaid"
 
 #: courses/templates/user/snippets/subscription.html:34
+#: payment/templates/payment/subscription/index.html:33
 msgid "Unpaid subscription info"
 msgstr "Please transfer the open course fee to the following account."
 
@@ -1192,74 +1226,63 @@ msgstr "free of charge"
 msgid "Transfer to"
 msgstr "Transfer to"
 
-#: courses/templates/user/snippets/subscription.html:46
-msgid "Account number"
-msgstr "Account number"
-
-#: courses/templates/user/snippets/subscription.html:48
-msgid "SWIFT/BIC"
-msgstr "SWIFT/BIC"
-
-#: courses/templates/user/snippets/subscription.html:50
-msgid "Recipient"
-msgstr "Recipient"
-
-#: courses/templates/user/snippets/subscription.html:52
-msgid "Transfer Message"
-msgstr "Transfer Message"
-
-#: courses/templates/user/snippets/subscription.html:55
+#: courses/templates/user/snippets/subscription.html:47
 msgid "Use voucher"
 msgstr "Use voucher"
 
-#: courses/templates/user/snippets/subscription.html:58
+#: courses/templates/user/snippets/subscription.html:50
 msgid "Redeem voucher here"
 msgstr "Redeem voucher here"
 
-#: courses/templates/user/snippets/subscription.html:66
+#: courses/templates/user/snippets/subscription.html:58
 msgid "State"
 msgstr "State"
 
-#: courses/templates/user/snippets/subscription.html:71
+#: courses/templates/user/snippets/subscription.html:63
 msgid "New subscription info"
 msgstr "We received your subscription. Please wait for the confirmation."
 
-#: courses/templates/user/snippets/subscription.html:73
+#: courses/templates/user/snippets/subscription.html:65
 msgid "Subscription confirmed"
 msgstr "Subscription confirmed"
 
-#: courses/templates/user/snippets/subscription.html:75
+#: courses/templates/user/snippets/subscription.html:67
 msgid "Confirmed subscription info"
 msgstr ""
 "Your subscription is now definitive. A place in the course is guaranteed"
 
-#: courses/templates/user/snippets/subscription.html:77
+#: courses/templates/user/snippets/subscription.html:69
 msgid "Rejected"
 msgstr "Rejected"
 
-#: courses/templates/user/snippets/subscription.html:79
+#: courses/templates/user/snippets/subscription.html:71
 msgid "Rejected subscription info"
 msgstr "Unfortunately, we had to reject your subscription."
 
-#: courses/templates/user/snippets/subscription.html:81
+#: courses/templates/user/snippets/subscription.html:73
 msgid "Completed"
 msgstr "Completed"
 
-#: courses/templates/user/snippets/subscription.html:83
+#: courses/templates/user/snippets/subscription.html:75
 msgid "Completed subscription info"
 msgstr "Everything done!"
 
-#: courses/templates/user/snippets/subscription.html:85
+#: courses/templates/user/snippets/subscription.html:77
 msgid "To reimburse"
 msgstr "To reimburse"
 
-#: courses/templates/user/snippets/subscription.html:87
+#: courses/templates/user/snippets/subscription.html:79
 msgid "To reimburse subscription info"
 msgstr "Reimbursement pending."
 
-#: courses/templates/user/snippets/subscription.html:91
+#: courses/templates/user/snippets/subscription.html:83
 msgid "Paid subscription info"
 msgstr "We received your payment. Thank you!"
+
+#: courses/templates/user/snippets/subscription.html:86
+#: events/templates/events/snippets/event_card.html:17
+msgid "Show details"
+msgstr "Show details"
 
 #: courses/templates/user/user_courses.html:5
 #: courses/templates/user/user_courses.html:9
@@ -1390,6 +1413,7 @@ msgstr "Event Categories"
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:7
 #: payment/templates/payment/finance/account_detail.html:49
+#: payment/templates/payment/subscription/index.html:75
 msgid "Date"
 msgstr "Date"
 
@@ -1475,10 +1499,6 @@ msgstr "Special"
 msgid "Show details & register"
 msgstr "Show details & register"
 
-#: events/templates/events/snippets/event_card.html:17
-msgid "Show details"
-msgstr "Show details"
-
 #: events/templates/events/snippets/event_category_card.html:29
 msgid "More"
 msgstr "More"
@@ -1553,11 +1573,13 @@ msgid "Visit partner"
 msgstr "Visit partner"
 
 #: payment/cms_toolbars.py:10
+#: payment/templates/payment/subscription/index.html:74
 msgid "Payment"
 msgstr "Payment"
 
 #: payment/cms_toolbars.py:13
 #: payment/templates/payment/finance/offering_overview_subscribers.html:36
+#: payment/templates/payment/subscription/index.html:67
 msgid "Voucher"
 msgstr "Voucher"
 
@@ -1621,7 +1643,15 @@ msgstr "Select year"
 msgid "Select month"
 msgstr "Select month"
 
-#: payment/services.py:27
+#: payment/models/choices/finance_file_type.py:9
+msgid "Postfinance XML"
+msgstr "Postfinance XML"
+
+#: payment/models/choices/finance_file_type.py:10
+msgid "ZKB CSV"
+msgstr "ZKB CSV"
+
+#: payment/services.py:32
 msgid "{} of {} reminded successfully"
 msgstr "{} of {} reminded successfully"
 
@@ -1633,25 +1663,27 @@ msgstr "Counter Payment"
 
 #: payment/templates/payment/counter/details.html:10
 #: payment/templates/payment/course/confirm.html:10
-#: payment/templates/payment/voucher/form.html:10
 msgid "Payment Details"
 msgstr "Payment Details"
 
 #: payment/templates/payment/counter/details.html:32
-#: payment/templates/payment/course/confirm.html:28
-#: payment/templates/payment/course/course.html:90
-#: payment/templates/payment/course/course.html:141
-#: payment/templates/payment/finance/offering_detail.html:27
-msgid "Amount"
-msgstr "Amount"
+#: payment/templates/payment/course/confirm.html:29
+msgid "Total Amount"
+msgstr "Total Amount"
 
-#: payment/templates/payment/counter/details.html:41
+#: payment/templates/payment/counter/details.html:36
 #: payment/templates/payment/course/confirm.html:33
+#: payment/templates/payment/subscription/index.html:109
+msgid "Open Amount"
+msgstr "Open Amount"
+
+#: payment/templates/payment/counter/details.html:45
+#: payment/templates/payment/course/confirm.html:39
 msgid "Mark as Paid"
 msgstr "Mark as Paid"
 
-#: payment/templates/payment/counter/details.html:44
-#: payment/templates/payment/course/confirm.html:35
+#: payment/templates/payment/counter/details.html:48
+#: payment/templates/payment/course/confirm.html:41
 msgid "Already Paid"
 msgstr "Already Paid"
 
@@ -1703,9 +1735,16 @@ msgstr ""
 "Additionally you can download the contact data of the participants here:"
 
 #: payment/templates/payment/course/course.html:84
+#: payment/templates/payment/subscription/index.html:20
 #: survey/templates/survey/components/download.html:3
 msgid "Download"
 msgstr "Download"
+
+#: payment/templates/payment/course/course.html:90
+#: payment/templates/payment/course/course.html:141
+#: payment/templates/payment/finance/offering_detail.html:27
+msgid "Amount"
+msgstr "Amount"
 
 #: payment/templates/payment/course/course.html:92
 #: payment/templates/payment/course/course.html:142
@@ -1890,92 +1929,76 @@ msgstr "Total hours"
 msgid "Total wage(s) (CHF)"
 msgstr "Total wage(s) (CHF)"
 
-#: payment/templates/payment/voucher/form.html:5
-#: payment/templates/payment/voucher/payment_success.html:5
+#: payment/templates/payment/subscription/index.html:5
 msgid "Payment Status"
 msgstr "Payment Status"
 
-#: payment/templates/payment/voucher/form.html:11
+#: payment/templates/payment/subscription/index.html:12
+msgid "Voucher applied"
+msgstr "Voucher applied"
+
+#: payment/templates/payment/subscription/index.html:14
+msgid "The voucher has been successfully applied (see details below)."
+msgstr "The voucher has been successfully applied (see details below)."
+
+#: payment/templates/payment/subscription/index.html:19
 msgid ""
-"Please check the payment details so you make sure you pay the right course"
+"The voucher used was valued more than the remaining amount for this course. "
+"Download the voucher for the remainder by clicking the following button."
 msgstr ""
-"Please check the payment details so you make sure you pay the right course"
+"The voucher used was valued more than the open amount for this course. "
+"Download the voucher for the remainder by clicking the following button."
 
-#: payment/templates/payment/voucher/form.html:29
-msgid "Amount to Pay"
-msgstr "Amount to Pay"
+#: payment/templates/payment/subscription/index.html:27
+msgid "This subscription has been fully paid. Thank you!"
+msgstr "This subscription has been fully paid. Thank you!"
 
-#: payment/templates/payment/voucher/form.html:36
-msgid "Enter Voucher Code"
-msgstr "Enter Voucher Code"
+#: payment/templates/payment/subscription/index.html:31
+msgid "Open amount"
+msgstr "Open amount"
 
-#: payment/templates/payment/voucher/form.html:37
-msgid ""
-"You can enter your voucher code here. If you use it to pay the course the "
-"voucher will be marked as used."
-msgstr ""
-"You can enter your voucher code here. If you use it to pay the course the "
-"voucher will be marked as used."
+#: payment/templates/payment/subscription/index.html:34
+msgid "If you've got any vouchers, you may apply them below."
+msgstr "If you've got any vouchers, you may apply them below."
 
-#: payment/templates/payment/voucher/form.html:44
-#: payment/templates/payment/voucher/payment_failed.html:5
-#: payment/templates/payment/voucher/remaining_amount.html:5
-msgid "Pay With Voucher"
-msgstr "Pay With Voucher"
+#: payment/templates/payment/subscription/index.html:45
+msgid "Item"
+msgstr "Item"
 
-#: payment/templates/payment/voucher/payment_failed.html:10
-msgid "Payment Failed"
-msgstr "Payment Failed"
+#: payment/templates/payment/subscription/index.html:47
+#: payment/templates/payment/subscription/index.html:68
+msgid "Value"
+msgstr "Value"
 
-#: payment/templates/payment/voucher/payment_failed.html:11
-msgid ""
-"The course payment for the following course has failed. Please contact the "
-"TQ. "
-msgstr ""
-"The course payment for the following course has failed. Please contact the "
-"TQ. "
+#: payment/templates/payment/subscription/index.html:52
+msgid "Dance course"
+msgstr "Dance course"
 
-#: payment/templates/payment/voucher/payment_success.html:10
-msgid "Successfully Paid"
-msgstr "Successfully Paid"
+#: payment/templates/payment/subscription/index.html:59
+msgid "Participant"
+msgstr "Participant"
 
-#: payment/templates/payment/voucher/payment_success.html:11
-msgid "The following course has been successfully paid."
-msgstr "The following course has been successfully paid."
+#: payment/templates/payment/subscription/index.html:68
+msgid "Code"
+msgstr "Code"
 
-#: payment/templates/payment/voucher/remaining_amount.html:10
-msgid "Voucher Applied"
-msgstr "Voucher Applied"
+#: payment/templates/payment/subscription/index.html:87
+msgid "Voucher code"
+msgstr "Voucher code"
 
-#: payment/templates/payment/voucher/remaining_amount.html:11
-msgid ""
-"Your voucher was successfully applied to the following course. Please pay "
-"the remaining amount as described in the course confirmation mail."
-msgstr ""
-"Your voucher was successfully applied to the following course. Please pay "
-"the remaining amount as described in the course confirmation mail."
+#: payment/templates/payment/subscription/index.html:96
+msgid "Redeem Voucher"
+msgstr "Redeem Voucher"
 
-#: payment/templates/payment/voucher/remaining_amount.html:29
-msgid "Subscription Identifier (for online payments)"
-msgstr "Subscription Identifier (for online payments)"
-
-#: payment/templates/payment/voucher/remaining_amount.html:35
-msgid "Remaining Amount to Pay"
-msgstr "Remaining Amount to Pay"
-
-#: payment/views.py:66
-msgid "Voucher was successfully applied to Subscription"
-msgstr "Voucher was successfully applied to Subscription"
-
-#: payment/views.py:125
+#: payment/views/counter_payment_detail_view.py:37
 msgid "successfully marked as paid."
 msgstr "successfully marked as paid."
 
-#: payment/views.py:264
+#: payment/views/course_payment_confirm.py:29
 msgid " successfully marked as paid."
 msgstr " successfully marked as paid."
 
-#: survey/cms_toolbars.py:10 survey/templates/survey/survey.html:6
+#: survey/cms_toolbars.py:10 survey/templates/survey/survey.html:7
 #: survey/templates/survey/survey_done.html:6
 msgid "Survey"
 msgstr "Survey"
@@ -2059,7 +2082,7 @@ msgstr "Survey Results"
 msgid "answers"
 msgstr "answers"
 
-#: survey/templates/survey/survey.html:24
+#: survey/templates/survey/survey.html:27
 msgid "Senden"
 msgstr "Senden"
 
@@ -2309,6 +2332,56 @@ msgstr "Main content"
 #: tq_website/settings.py:332
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid ""
+#~ "Please check the payment details so you make sure you pay the right course"
+#~ msgstr ""
+#~ "Please check the payment details so you make sure you pay the right course"
+
+#~ msgid "Amount to Pay"
+#~ msgstr "Amount to Pay"
+
+#~ msgid "Enter Voucher Code"
+#~ msgstr "Enter Voucher Code"
+
+#~ msgid ""
+#~ "You can enter your voucher code here. If you use it to pay the course the "
+#~ "voucher will be marked as used."
+#~ msgstr ""
+#~ "You can enter your voucher code here. If you use it to pay the course the "
+#~ "voucher will be marked as used."
+
+#~ msgid "Pay With Voucher"
+#~ msgstr "Pay With Voucher"
+
+#~ msgid "Payment Failed"
+#~ msgstr "Payment Failed"
+
+#~ msgid ""
+#~ "The course payment for the following course has failed. Please contact "
+#~ "the TQ. "
+#~ msgstr ""
+#~ "The course payment for the following course has failed. Please contact "
+#~ "the TQ. "
+
+#~ msgid "Successfully Paid"
+#~ msgstr "Successfully Paid"
+
+#~ msgid "The following course has been successfully paid."
+#~ msgstr "The following course has been successfully paid."
+
+#~ msgid ""
+#~ "Your voucher was successfully applied to the following course. Please pay "
+#~ "the remaining amount as described in the course confirmation mail."
+#~ msgstr ""
+#~ "Your voucher was successfully applied to the following course. Please pay "
+#~ "the remaining amount as described in the course confirmation mail."
+
+#~ msgid "Subscription Identifier (for online payments)"
+#~ msgstr "Subscription Identifier (for online payments)"
+
+#~ msgid "Remaining Amount to Pay"
+#~ msgstr "Remaining Amount to Pay"
 
 #~ msgid "Supported by"
 #~ msgstr "Supported by"
