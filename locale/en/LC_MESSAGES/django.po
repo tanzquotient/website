@@ -1182,7 +1182,7 @@ msgstr "Unpaid"
 
 #: courses/templates/user/snippets/subscription.html:34
 msgid "Unpaid subscription info"
-msgstr "Please transfer the course price before to the following account."
+msgstr "Please transfer the open course fee to the following account."
 
 #: courses/templates/user/snippets/subscription.html:37
 msgid "free of charge"

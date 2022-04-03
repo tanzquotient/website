@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from courses.models import Course, Offering
-from courses.utils import export
+from utils import export
 from survey.models import Survey, SurveyInstance
 
 

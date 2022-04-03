@@ -1,6 +1,6 @@
 from courses import models as models
 from courses.services.general import log
-from courses.utils import export
+from utils import export
 
 
 def export_subscriptions(course_ids, export_format):

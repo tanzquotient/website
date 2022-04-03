@@ -1,10 +1,10 @@
-import shortuuid
-
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Model, DateTimeField, BooleanField, ForeignKey, CharField, PROTECT, SET_NULL
 from django.urls import reverse
 from post_office.models import EmailTemplate
+
+from utils import CodeGenerator
 
 
 class SurveyInstance(Model):
@@ -16,7 +16,7 @@ class SurveyInstance(Model):
     date = DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = DateTimeField(blank=True, null=True, auto_now=True)
     url_expire_date = DateTimeField(blank=True, null=True)
-    url_key = CharField(unique=True, default=shortuuid.uuid, blank=False, null=False, max_length=32)
+    url_key = CharField(unique=True, default=CodeGenerator.short_uuid, blank=False, null=False, max_length=32)
     invitation_sent = BooleanField(default=False)
     is_completed = BooleanField(default=False)
 

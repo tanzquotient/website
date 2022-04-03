@@ -38,7 +38,7 @@
                                 <td>{{ subscription.user.get_full_name }}</td>
                                 <td>{{ subscription.get_user_email }}</td>
                                 <td>{{ subscription.get_price_to_pay }} CHF</td>
-                                <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}
+                                <td>{% if not subscription.paid %}{{ subscription.open_amount }}{% else %}
                                     0{% endif %}
                                     CHF
                                 </td>

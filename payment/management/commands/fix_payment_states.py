@@ -16,7 +16,7 @@ class Command(BaseCommand):
         count = 0
         for sp in SubscriptionPayment.objects.all():
             s = sp.subscription
-            if s.state == SubscribeState.CONFIRMED and s.get_price_to_pay() == sp.amount:
+            if s.state == SubscribeState.CONFIRMED and s.open_amount() == 0:
                 count += 1
                 print("{} - {} - {}".format(s.id, s.usi, s))
                 s.state = SubscribeState.PAID

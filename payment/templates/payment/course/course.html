@@ -110,8 +110,8 @@
                                 <p class="list-group-item-text">{{ subscription.get_user_email }}</p>
                                 <p class="list-group-item-text">{{ subscription.get_price_to_pay }}
                                     CHF
-                                    <small class="pull-right">{% if not subscription.payed %}
-                                        <strong>{{ subscription.get_price_to_pay }} CHF</strong>{% else %}
+                                    <small class="pull-right">{% if not subscription.paid %}
+                                        <strong>{{ subscription.open_amount }} CHF</strong>{% else %}
                                         0 CHF{% endif %}
                                     </small>
                                 </p>
@@ -151,7 +151,7 @@
                                     <td>{{ subscription.get_user_email }}</td>
                                     <td>{{ subscription.get_user_mobile }}</td>
                                     <td>{{ subscription.get_price_to_pay }} CHF</td>
-                                    <td>{% if not subscription.payed %}{{ subscription.get_price_to_pay }}{% else %}
+                                    <td>{% if not subscription.paid %}{{ subscription.open_amount }}{% else %}
                                         0{% endif %}
                                         CHF
                                     </td>

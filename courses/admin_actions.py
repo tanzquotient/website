@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib import messages
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -233,7 +234,7 @@ def send_course_email(modeladmin, request, queryset) -> HttpResponse:
 
 
 @admin.action(description="Undo voucher payment")
-def undo_voucher_payment(modeladmin, request, queryset):
+def undo_voucher_payment(modeladmin, request, queryset: QuerySet[Subscribe]):
     for subscription in queryset:
         if subscription.state in [SubscribeState.PAID,
                                   SubscribeState.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
@@ -242,16 +243,18 @@ def undo_voucher_payment(modeladmin, request, queryset):
                 voucher.subscription = None
                 voucher.used = False
                 voucher.save()
-            subscription.save()
+                subscription.price_reductions.filter(used_voucher=voucher).delete()
+        subscription.save()
 
 
 @admin.action(description="raise price to pay to fit amount")
 def raise_price_to_pay(modeladmin, request, queryset):
     for subscription_payment in queryset:
-        if subscription_payment.balance() > 0:
-            s = subscription_payment.subscription
-            s.price_to_pay = subscription_payment.amount
-            s.save()
+        subscription: Subscribe = subscription_payment.subscription
+        balance = subscription.sum_of_payments() - subscription.price_after_reductions()
+        if balance > 0:
+            subscription.price_to_pay += balance
+            subscription.save()
 
 
 @admin.action(description="List emails of selected subscribers")

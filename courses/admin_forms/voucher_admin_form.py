@@ -1,20 +1,13 @@
-import datetime
+from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 
-from django import forms
-from django.forms import ValidationError
-from django.forms.widgets import SelectDateWidget
-from django.utils.translation import gettext as _
-
-from ..models import VoucherPurpose
+from courses.models import Voucher
 
 
-class VoucherGenerationForm(forms.Form):
-    number_of_vouchers = forms.IntegerField(label=_("How many voucher should be generated?"), initial=20)
-    percentage = forms.IntegerField(label=_('Reduction in percent (0-100).'), required=False)
-    amount = forms.IntegerField(label=_('Value of the voucher in CHF.'), required=False)
-    purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
-    expires_flag = forms.BooleanField(label=_("Set expire date?"), initial=False, required=False)
-    expires = forms.DateField(widget=SelectDateWidget, initial=datetime.date.today() + datetime.timedelta(days=365))
+class VoucherAdminForm(ModelForm):
+    class Meta:
+        model = Voucher
+        fields = '__all__'
 
     def clean(self) -> dict:
         cleaned_data = super().clean()

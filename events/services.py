@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from courses.utils import export
+from utils import export
 from events.models import Event
 
 

@@ -24,7 +24,7 @@ def validate_usi_exists(raw_usi):
         raise ValidationError(_('The specified USI does not exist'))
 
 
-def voucher_valid(code):
+def voucher_valid(code: str) -> None:
     """
     Validates if a voucher is valid
     :param code: the voucher key to be validated
@@ -52,7 +52,7 @@ class USIForm(forms.Form):
 
 
 class VoucherForm(forms.Form):
-    voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid, ])
+    voucher_code = forms.CharField(max_length=6, label=_("Voucher Code"), validators=[voucher_valid])
 
 
 class AccountFinanceIndexForm(forms.Form):

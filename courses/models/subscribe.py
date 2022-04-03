@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import datetime
 import hashlib
+from decimal import Decimal
 from typing import Optional
 
 import base36
 from django.contrib import messages
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Model, ForeignKey, PROTECT, TextField, CharField, DateTimeField, FloatField
@@ -14,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 from courses import managers
-from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow, Offering
+from . import MatchingState, SubscribeState, PaymentMethod, LeadFollow, Offering, StudentStatus, PriceReduction
 
 
 @reversion.register()
@@ -102,9 +104,16 @@ class Subscribe(Model):
 
     get_calculated_experience.short_description = "Calculated experience"
 
+    """"
+    ----------------------------------------------------------------
+    Payment
+    ----------------------------------------------------------------
+    """
+
     def paid(self) -> bool:
         return self.state in SubscribeState.PAID_STATES
 
+    @admin.action(description='Paid?')
     def get_payment_state(self) -> str:
         """searches for courses that the user did before in the system"""
         c = self.user.subscriptions.filter(state=SubscribeState.CONFIRMED, course__offering__active=False).filter(
@@ -118,8 +127,6 @@ class Subscribe(Model):
             # this user didn't pay for other courses
             r += ', owes {} more'.format(c)
         return r
-
-    get_payment_state.short_description = 'Paid?'
 
     def mark_as_paid(self, payment_method, user=None) -> bool:
         if self.state == SubscribeState.CONFIRMED:
@@ -138,37 +145,67 @@ class Subscribe(Model):
         else:
             return False
 
-    def apply_voucher(self, voucher, user=None) -> bool:
-        price = self.get_price_to_pay()
-        with reversion.create_revision():
-            voucher_value = price * (float(voucher.percentage) / 100.0)
-            self.price_to_pay = price - voucher_value
-            if price == voucher_value and self.state == SubscribeState.CONFIRMED:
-                self.state = SubscribeState.PAID
-                self.paymentmethod = PaymentMethod.VOUCHER
-                if user is not None:
-                    reversion.set_user(user)
-                reversion.set_comment('Paid using payment method ' + PaymentMethod.VOUCHER)
-                from courses.emailcenter import send_online_payment_successful
-                send_online_payment_successful(self)
-            self.save()
-
-        return price == voucher_value
+    def _compute_price_to_pay(self) -> float:
+        if self.user.profile.student_status == StudentStatus.NO:
+            return self.course.price_without_legi or 0
+        return self.course.price_with_legi or 0
 
     def generate_price_to_pay(self) -> None:
-        if self.user.profile.student_status == 'no':
-            self.price_to_pay = self.course.price_without_legi
-        else:
-            self.price_to_pay = self.course.price_with_legi
-        # happens when course has no price(s) set
-        if self.price_to_pay is None:
-            self.price_to_pay = 0
+        self.price_to_pay = self._compute_price_to_pay()
 
     def get_price_to_pay(self) -> float:
         if not self.price_to_pay:
             self.generate_price_to_pay()
             self.save()
         return self.price_to_pay
+
+    def price_after_reductions(self) -> Decimal:
+        self.generate_price_to_pay()
+        price = Decimal(self.price_to_pay or 0)
+
+        # Subtract reductions
+        for price_reduction in self.price_reductions.all():
+            price -= price_reduction.amount
+
+        return price
+
+    def sum_of_payments(self) -> Decimal:
+        sum_of_payments = 0
+
+        # Add subscription payments
+        for payment in self.subscription_payments.all():
+            sum_of_payments += payment.amount
+
+        return Decimal(sum_of_payments)
+
+    def open_amount(self) -> Decimal:
+        open_amount = self.price_after_reductions() - self.sum_of_payments()
+
+        # Open amount is non-negative
+        return max(Decimal(0), open_amount)
+
+    def apply_price_reduction(self, amount: Decimal, voucher, user: Optional[User] = None) -> Decimal:
+        PriceReduction.objects.create(subscription=self, amount=amount, used_voucher=voucher,
+                                      comment=f"Applied voucher {voucher.key}")
+
+        open_amount = self.open_amount()
+        if open_amount == 0:
+            self.mark_as_paid(PaymentMethod.VOUCHER, user)
+
+        return open_amount
+
+    def get_last_payment_reminder(self) -> Optional[datetime.date]:
+        q = self.payment_reminders
+        if q.count():
+            return q.first().date
+        else:
+            return None
+
+    """"
+    ----------------------------------------------------------------
+    Partner & Matching
+    ----------------------------------------------------------------
+    """
 
     def derive_matching_state(self) -> None:
         """derives the matching state from the current information (if couple course and if partner set or not)"""
@@ -182,13 +219,6 @@ class Subscribe(Model):
         else:
             self.matching_state = MatchingState.NOT_REQUIRED
             # DO NOT save here since this method is also called from save()
-
-    def get_last_payment_reminder(self) -> Optional[datetime.date]:
-        q = self.payment_reminders
-        if q.count():
-            return q.first().date
-        else:
-            return None
 
     def get_partner_name(self) -> Optional[str]:
         if not self.partner:

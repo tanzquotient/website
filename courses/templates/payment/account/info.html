@@ -1,0 +1,12 @@
+{% load i18n %}
+
+
+{% trans "IBAN" %}: {{ payment_account.IBAN }}
+<br/>
+{% trans "Account number" %}: {{ payment_account.post_number }}
+<br/>
+{% trans "SWIFT/BIC" %}: {{ payment_account.SWIFT }}
+<br/>
+{% trans "Recipient" %}: {{ payment_account.recipient }}
+<br/>
+<strong>{% trans "Transfer Message" %}:</strong> USI-{{ subscription.usi }}

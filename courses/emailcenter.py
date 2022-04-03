@@ -45,7 +45,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
     from payment import payment_processor
     conf = my_settings.PAYMENT_ACCOUNT['default']
     current_site = settings.DEPLOYMENT_DOMAIN
-    voucher_url = current_site + reverse('payment:voucherpayment_index', kwargs={'usi': subscription.usi})
+    voucher_url = current_site + reverse('payment:subscription_payment', kwargs={'usi': subscription.usi})
     return {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,

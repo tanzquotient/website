@@ -20,10 +20,11 @@ class Command(BaseCommand):
                     s = sp.subscription
                     if not s.paymentmethod:
                         msg_method.append("{} - {} - {}".format(s.id, s.usi, s))
-                    if sp.balance() != 0:
-                        msg_amount.append(
-                            "{} - {} - {} - balance: {}".format(s.id, s.usi, s,
-                                                                sp.balance()))
+                    if s.sum_of_payments() != s.price_after_reductions():
+                        msg_amount.append(f"{s.id} - {s.usi} - {s}: "
+                                          f"price after reductions: {s.price_after_reductions()}, "
+                                          f"sum of payments: {s.sum_of_payments()}")
+
         # Output
         print('payment method not set')
         for msg in msg_method:

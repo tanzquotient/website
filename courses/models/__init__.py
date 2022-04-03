@@ -2,6 +2,7 @@ from .choices import *
 from .offering import Offering
 from .address import Address
 from .bank_account import BankAccount
+from .price_reduction import PriceReduction
 from .subscribe import Subscribe
 from .style import Style
 from .room import Room

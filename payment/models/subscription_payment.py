@@ -13,9 +13,6 @@ class SubscriptionPayment(models.Model):
     subscription = models.ForeignKey(Subscribe, related_name='subscription_payments', on_delete=models.PROTECT)
     amount = models.FloatField()
 
-    def balance(self):
-        return self.amount - self.subscription.get_price_to_pay()
-
     def clean(self):
         # Don't allow larger amount then available amount of payment
         if self.amount and (self.amount > self.payment.amount):

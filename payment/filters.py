@@ -27,10 +27,14 @@ class SubscriptionPaymentFilter(SimpleListFilter):
         """
 
         if self.value() == 'consistent':
-            return queryset.filter(id__in=[sp.id for sp in queryset.all() if sp.balance() == 0])
+            return queryset.filter(id__in=[
+                sp.id for sp in queryset.all()
+                if sp.subscription.sum_of_payments() == sp.subscription.price_after_reductions()])
         elif self.value() == 'overpaid':
-            return queryset.filter(id__in=[sp.id for sp in queryset.all() if sp.balance() > 0])
+            return queryset.filter(id__in=[
+                sp.id for sp in queryset.all()
+                if sp.subscription.sum_of_payments() > sp.subscription.price_after_reductions()])
         elif self.value() == 'underpaid':
-            return queryset.filter(id__in=[sp.id for sp in queryset.all() if sp.balance() < 0])
+            return queryset.filter(id__in=[sp.id for sp in queryset.all() if sp.subscription.open_amount() > 0])
         else:
             return queryset

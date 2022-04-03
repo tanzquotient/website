@@ -71,7 +71,7 @@ class PaymentProcessor:
                     continue
 
                 # Now we know there is exactly one subscription
-                matched_subscription = subscription_query.get()
+                matched_subscription: Subscribe = subscription_query.get()
 
                 # Only confirmed subscriptions should be paid
                 if matched_subscription.state != SubscribeState.CONFIRMED:
@@ -81,15 +81,8 @@ class PaymentProcessor:
                     payment.save()
                     continue
 
-                # check if there is a price set for the subscription
                 # Whether the paid amount is sufficient is checked during PaymentProcessor._check_balance(payment)
-                to_pay = matched_subscription.get_price_to_pay()
-                if to_pay is None:
-                    log.warning(f"Received payment {payment} which is related to a course with undefined prices.")
-                    payment.state = State.MANUAL
-                    payment.save()
-                    continue
-
+                to_pay = matched_subscription.price_after_reductions()
                 SubscriptionPayment.objects.create(payment=payment, subscription=matched_subscription, amount=to_pay)
                 log.info('Matched payment {0} to subscription {1}'.format(payment, subscription_query))
 

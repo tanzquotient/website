@@ -3,8 +3,9 @@ from django.contrib.admin.views.main import ChangeList
 from parler.admin import TranslatableAdmin
 from reversion.admin import VersionAdmin
 
+from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
-from payment.vouchergenerator import admin_action_generate_pdf
+from payment.utils.generate_voucher_pdf import admin_action_generate_pdf
 
 
 class CourseInline(admin.TabularInline):
@@ -281,12 +282,10 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
+    form = VoucherAdminForm
     list_display = ('purpose', 'key', 'issued', 'expires', 'used', 'pdf_file')
-    exclude = ('key',)
-
     actions = [mark_voucher_as_used, admin_action_generate_pdf]
-
-    raw_id_fields = ('subscription',)
+    readonly_fields = ('key', 'used', 'pdf_file', 'subscription')
 
 
 @admin.register(VoucherPurpose)

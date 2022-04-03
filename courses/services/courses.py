@@ -9,7 +9,7 @@ from courses.models import Voucher, Course
 from courses.services import get_subsequent_offering
 from courses.services.general import log
 from email_system.services import send_all_emails
-from payment.vouchergenerator import generate_voucher_pdf
+from payment.utils.generate_voucher_pdf import generate_voucher_pdfs
 from survey.models import SurveyInstance, Survey
 from tq_website import settings
 
@@ -95,7 +95,7 @@ def send_vouchers(data, recipients):
     for recipient in recipients:
         voucher = Voucher(purpose=purpose, percentage=percentage, expires=expires if expires_flag else None)
         voucher.save()
-        generate_voucher_pdf(vouchers=[voucher])
+        generate_voucher_pdfs(vouchers=[voucher])
 
         email_context = {
             'first_name': recipient.first_name,

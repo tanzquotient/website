@@ -37,7 +37,7 @@ class FinanceFileAdmin(admin.ModelAdmin):
 
 @admin.register(SubscriptionPayment)
 class SubscriptionPaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'payment', 'subscription', 'amount', 'balance']
+    list_display = ['id', 'payment', 'subscription', 'amount']
     raw_id_fields = ['payment', 'subscription']
     list_filter = [SubscriptionPaymentFilter]
     search_fields = ['id', 'amount']

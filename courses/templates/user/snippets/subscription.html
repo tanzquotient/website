@@ -27,7 +27,7 @@
                     {% if subscription.get_price_to_pay %}
                         <br/>
                         {{ subscription.get_price_to_pay }} CHF
-                        {% if subscription.state == 'confirmed' and not subscription.payed %}
+                        {% if subscription.state == 'confirmed' and not subscription.paid %}
                             <br/>
                             <span class="badge bg-warning">{% trans "Unpaid" %}</span>
                             <br/>
@@ -37,24 +37,16 @@
                         {% trans "free of charge" %}
                     {% endif %}
                 </p>
-                {% if subscription.get_price_to_pay and subscription.state == 'confirmed' and not subscription.payed %}
+                {% if subscription.open_amount and subscription.state == 'confirmed' and not subscription.paid %}
                     <p>
                         <strong>{% trans "Transfer to" %}</strong>
                         <br/>
-                        {% trans "IBAN" %}: {{ payment_account.IBAN }}
-                        <br/>
-                        {% trans "Account number" %}: {{ payment_account.post_number }}
-                        <br/>
-                        {% trans "SWIFT/BIC" %}: {{ payment_account.SWIFT }}
-                        <br/>
-                        {% trans "Recipient" %}: {{ payment_account.recipient }}
-                        <br/>
-                        {% trans "Transfer Message" %}: USI-{{ subscription.usi }}
+                        {% include "payment/account/info.html" %}
                     </p>
                     <p>
                         <strong>{% trans "Use voucher" %}</strong>
                         <br/>
-                        <a href="{% url "payment:voucherpayment_index" usi=subscription.usi %}">
+                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
                             {% trans "Redeem voucher here" %}
                             <i class="fa fa-arrow-circle-right fa-lg"></i>
                         </a>
