@@ -13,7 +13,7 @@ class FinanceFile(Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None) -> None:
         super().save(force_insert, force_update, using, update_fields)
-        if self.type == FinanceFileType.ZKB_CSV:
+        if self.type == FinanceFileType.ZKB_CSV and not self.processed:
             from payment.parser import ZkbCsvParser
             ZkbCsvParser.parse_files_and_save_payments()
 
