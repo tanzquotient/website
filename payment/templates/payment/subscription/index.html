@@ -22,7 +22,7 @@
                 {% endif %}
             </div>
         {% endif %}
-        {% if subscription.paid %}
+        {% if subscription.paid or subscription.open_amount.is_zero %}
             <div class="alert alert-success">
                 {% translate "This subscription has been fully paid. Thank you!" %}
             </div>
