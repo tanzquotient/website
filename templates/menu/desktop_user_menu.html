@@ -13,7 +13,7 @@
     </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
-    <a class="dropdown-item" href="{% url 'payment:coursepayment_index' %}">
+    <a class="dropdown-item" href="{% url 'payment:courses_as_teacher_list' %}">
         <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}
     </a>
 {% endif %}

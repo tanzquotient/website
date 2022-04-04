@@ -1,6 +1,9 @@
-from django.db import models
-from . import OfferingType
 from datetime import date
+from typing import Optional
+
+from django.db import models
+
+from . import OfferingType
 
 
 class Offering(models.Model):
@@ -17,31 +20,34 @@ class Offering(models.Model):
     preview = models.BooleanField(default=False)
     preview.help_text = 'Defines if the offering should be displayed as preview'
 
-    def is_public(self):
+    def is_public(self) -> bool:
         return self.display or self.is_historic()
 
-    def is_preview(self):
+    def is_preview(self) -> bool:
         return self.preview
 
-    def is_historic(self):
+    def is_historic(self) -> bool:
         if self.active or self.preview or self.display or not self.has_date_from():
             return False
 
         return self.period.date_from < date.today()
 
-    def has_date_from(self):
+    def has_date_from(self) -> bool:
         return self.get_start_year() is not None
 
-    def is_partner_offering(self):
+    def is_partner_offering(self) -> bool:
         return self.type == OfferingType.PARTNER
 
-    def get_start_year(self):
+    def get_start_year(self) -> Optional[int]:
         try:
             return self.period.date_from.year
         except:
             return None
 
-    def __str__(self):
+    def get_teacher_ids(self) -> set[int]:
+        return {teaching.teacher_id for course in self.course_set.all() for teaching in course.teaching.all()}
+
+    def __str__(self) -> str:
         return '{}'.format(self.name)
 
     class Meta:

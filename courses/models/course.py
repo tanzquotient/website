@@ -127,6 +127,9 @@ class Course(TranslatableModel):
 
     format_teachers.short_description = "Teachers"
 
+    def get_teacher_ids(self) -> set[int]:
+        return {t.teacher_id for t in self.teaching.all()}
+
     def format_prices(self) -> str:
         from courses.services import format_prices
         return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)

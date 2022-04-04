@@ -7,7 +7,7 @@ from payment.views import TeacherOfCourseOnly
 
 
 class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
-    template_name = 'payment/course/course.html'
+    template_name = 'payment/courses/course.html'
 
     def get_context_data(self, **kwargs):
         course = Course.objects.filter(id=kwargs['course']).first()

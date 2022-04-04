@@ -20,7 +20,7 @@
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'payment:coursepayment_index' %}">
+        <a class="nav-link" href="{% url 'payment:courses_as_teacher_list' %}">
             {% trans "Courses as teacher" %}
         </a>
     </li>

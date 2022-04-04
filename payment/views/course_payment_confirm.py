@@ -9,7 +9,7 @@ from . import TeacherOfCourseOnly
 
 
 class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
-    template_name = 'payment/course/confirm.html'
+    template_name = 'payment/courses/confirm.html'
     form_class = forms.Form
 
     def get_context_data(self, **kwargs):
