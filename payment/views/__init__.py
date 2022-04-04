@@ -1,3 +1,5 @@
+from .teacher_only import TeacherOnly
+from .teachers_of_course_only import TeacherOfCourseOnly
 from .account_finance_detail_view import AccountFinanceDetailView
 from .account_finance_index_view import AccountFinanceIndexView
 from .counter_payment_detail_view import CounterPaymentDetailView
@@ -13,5 +15,3 @@ from .offering_finance_index_view import OfferingFinanceIndexView
 from .offering_finance_overview_subscribers import OfferingFinanceOverviewSubscribers
 from .offering_finance_overview_teachers import OfferingFinanceOverviewTeachers
 from .subscription_payment_view import subscription_payment_view
-from .teacher_only import TeacherOnly
-from .teachers_of_course_only import TeacherOfCourseOnly
