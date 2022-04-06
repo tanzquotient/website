@@ -12,6 +12,11 @@
         <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
     </a>
 {% endif %}
+{% if not user.is_staff and user.profile.is_teacher %}
+    <a class="dropdown-item" href="{% url 'survey:overview_as_teacher' %}">
+        <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
+    </a>
+{% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
     <a class="dropdown-item" href="{% url 'payment:courses_as_teacher_list' %}">
         <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}

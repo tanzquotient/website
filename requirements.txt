@@ -10,7 +10,7 @@ django-post-office==3.6.0
 django-reversion==5.0.0
 django-countries==7.3.2
 django-ical==1.8.3
-django-ckeditor==6.2.0
+django-ckeditor==6.3.0
 django-allauth==0.50.0
 django-photologue==3.15.1
 
@@ -24,7 +24,7 @@ djangorestframework==3.13.1
 django-parler-rest==2.1
 
 # Tasks
-celery==5.2.3
+celery==5.2.6
 django-celery-email==3.0.0
 django-celery-beat==2.2.1
 django-celery-results==2.3.0
@@ -46,7 +46,7 @@ psycopg2==2.9.3
 
 # Storage
 django-storages==1.12.3
-boto3==1.21.32
+boto3==1.21.35
 minio==7.1.5
 
 # Webserver
@@ -56,9 +56,10 @@ gunicorn==20.1.0
 sentry_sdk==1.5.8
 
 # Utils
-plotly==5.6.0       # For charts and graphs
+plotly==5.7.0       # For charts and graphs
 pytz==2022.1
 pylint==2.13.4
 shortuuid==1.0.8
+django-hijack==3.2.0    # Superuser can impersonate other users
 python-dotenv==0.20.0
 sphinx-automodapi==0.14.1

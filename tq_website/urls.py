@@ -56,6 +56,7 @@ urlpatterns += i18n_patterns(
     path('courses/', include(courses.urls, namespace='courses')),
     path('emails/', include(email_system.urls, namespace='email_system')),
     path('photos/', include(photologue.urls, namespace='photos')),
+    path('hijack/', include('hijack.urls')),
     path('', include(payment.urls, namespace='payment')),
     path('', include(cms.urls)),
 )

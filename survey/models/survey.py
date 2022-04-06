@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from django.db.models import TextField, CharField
-from django.urls import reverse
+from django.db.models import TextField, CharField, BooleanField
+from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
 from utils import TranslationUtils
@@ -9,6 +9,8 @@ from utils import TranslationUtils
 
 class Survey(TranslatableModel):
     name = CharField(max_length=255, blank=False)
+    teachers_allowed = BooleanField(default=False, help_text=_("If set to true, teachers will be able to view the "
+                                                               "answers for their courses."))
 
     translations = TranslatedFields(
         title=CharField(verbose_name='[TR] Title', max_length=64, blank=True, null=True),

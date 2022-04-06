@@ -2,16 +2,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from hijack.contrib.admin import HijackUserAdminMixin
 
 from courses.admin import UserProfileInline, SubscribeInlineForUser
 from courses.admin_actions import make_inactive
 
 
-class TQUserAdmin(UserAdmin):
-    list_display = ('id',) + UserAdmin.list_display + ('is_active',)
+class TQUserAdmin(HijackUserAdminMixin, UserAdmin):
+    list_display = ('id',) + UserAdmin.list_display + ('is_active', )
     inlines = list(UserAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
     list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
     actions = [make_inactive] + UserAdmin.actions
+
+    def get_hijack_user(self, instance) -> User:
+        return instance
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

@@ -16,6 +16,7 @@ from courses import managers
 from courses.models import PaymentMethod, Weekday, CourseSubscriptionType, LeadFollow, Subscribe, Period, \
     RegularLesson, IrregularLesson, RegularLessonException
 from partners.models import Partner
+from survey.models import Survey
 
 
 class Course(TranslatableModel):
@@ -124,6 +125,9 @@ class Course(TranslatableModel):
 
     def get_teachers(self) -> list[User]:
         return [t.teacher for t in self.teaching.all()]
+
+    def surveys(self) -> set[Survey]:
+        return {survey_instance.survey for survey_instance in self.survey_instances.all()}
 
     format_teachers.short_description = "Teachers"
 

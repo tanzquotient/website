@@ -1,0 +1,47 @@
+{% extends "basis.html" %}
+
+{% load static i18n %}
+{% load survey_tags %}
+
+
+{% block lead_title %}
+    {% trans "Surveys" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+            {% for course in courses %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            {% if course.offering %}{{ course.offering.name }}, {% endif %}{{ course.type.name }}
+                        </div>
+                        {% for survey in course.surveys %}
+                            {% if survey.teachers_allowed %}
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item">
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <div class="align-self-center">
+                                                <span class="fa fa-poll-h fa-lg"></span> {{ survey.title }}
+                                            </div>
+                                            <a class="btn btn-success btn-sm align-self-center" role="button" href="{% url "survey:results" survey.id %}?course_id={{ course.id }}">
+                                                <i class="fa-solid fa-eye"></i> {% trans "Show results" %}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% if not courses %}
+        <div class="alert alert-warning">
+            {% trans "There are no surveys yet for courses you have taught. If you think this is a mistake, please contact us." %}
+        </div>
+    {% endif %}
+
+    </div>
+{% endblock main_content %}

@@ -1,4 +1,5 @@
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 
@@ -6,9 +7,17 @@ from courses.models import Offering, Course
 from ..models import Survey
 
 
-@staff_member_required
+@login_required
 def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     get_object_or_404(Survey, id=survey_id)
+
+    selected_course = None
+    if 'course_id' in request.GET and request.GET['course_id']:
+        selected_course = get_object_or_404(Course, id=request.GET['course_id'])
+
+    if not request.user.is_staff and not (selected_course and request.user in selected_course.get_teachers()):
+        raise PermissionDenied
+
     survey = Survey.objects.filter(id=survey_id).prefetch_related(
         'questiongroup_set',
         'questiongroup_set__translations',
@@ -29,10 +38,6 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     courses = []
     if selected_offering:
         courses = selected_offering.course_set.filter(survey_instances__survey=survey).distinct().order_by('name').all()
-
-    selected_course = None
-    if 'course_id' in request.GET and request.GET['course_id']:
-        selected_course = get_object_or_404(Course, id=request.GET['course_id'])
 
     survey_instances = survey.survey_instances
     if selected_course:

@@ -18,6 +18,13 @@
         </a>
     </li>
 {% endif %}
+{% if not user.is_staff and user.profile.is_teacher %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'survey:overview_as_teacher' %}">
+            {% trans "Surveys" %}
+        </a>
+    </li>
+{% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'payment:courses_as_teacher_list' %}">

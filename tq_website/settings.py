@@ -33,11 +33,13 @@ DEBUG = bool(environ["TQ_DEBUG"].lower() == 'true')
 INSTALLED_APPS = [
     'treebeard',
     'ckeditor',
+    'hijack',  # Ability to impersonate other users
+    # 'hijack.contrib.admin',
     'photologue',  # Django gallery plugin
     'sortedm2m',  # required for photologue
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
-    'easy_thumbnails', # filer requires this here
+    'easy_thumbnails',  # filer requires this here
     'djangocms_link',
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
@@ -79,8 +81,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -91,6 +93,7 @@ MIDDLEWARE = [
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
+    'hijack.middleware.HijackUserMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
