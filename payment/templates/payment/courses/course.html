@@ -40,65 +40,70 @@
             </div>
 
             <h3 class="mb-0">{% trans "Participants" %}</h3>
-            <div class="btn-group my-3">
-                <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="fas fa-download"></i> {% trans "Download" %}</a>
-                <button role="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export" course.id %}">Excel</a></li>
-                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_csv" course.id %}">CSV</a></li>
-                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (.vcard)" %}</a></li>
-                </ul>
-            </div>
 
-            <div class="d-block d-md-none">
-                <div class="list-group">
-                    {% for subscription in participatory %}
-                        <div class="list-group-item">
-                            <div><strong>{{ subscription.user.get_full_name }}</strong></div>
-                            <div><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></div>
-                            {% if subscription.user.profile.phone_number %}
-                                <div>{{ subscription.user.profile.phone_number }}</div>
-                            {% endif %}
-                            {% if course.type.couple_course %}
-                                <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
-                                <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+            {% if not participatory %}
+                <div class="alert alert-info my-3">{% trans "Participants will show up here, once they have been confirmed." %}</div>
+            {% else %}
+                <div class="btn-group my-3">
+                    <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="fas fa-download"></i> {% trans "Download" %}</a>
+                    <button role="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export" course.id %}">Excel</a></li>
+                        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_csv" course.id %}">CSV</a></li>
+                        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (.vcard)" %}</a></li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="d-none d-md-block">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>{% trans "Name" %}</th>
-                        <th>{% trans "E-Mail" %}</th>
-                        <th>{% trans "Mobile" %}</th>
-                        {% if course.type.couple_course %}
-                            <th>{% trans "Lead/Follow" %}</th>
-                            <th>{% trans "Partner" %}</th>
-                        {% endif %}
+                <div class="d-block d-md-none">
+                    <div class="list-group">
+                        {% for subscription in participatory %}
+                            <div class="list-group-item">
+                                <div><strong>{{ subscription.user.get_full_name }}</strong></div>
+                                <div><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></div>
+                                {% if subscription.user.profile.phone_number %}
+                                    <div>{{ subscription.user.profile.phone_number }}</div>
+                                {% endif %}
+                                {% if course.type.couple_course %}
+                                    <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
+                                    <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for subscription in participatory %}
+                <div class="d-none d-md-block">
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td>{{ subscription.user.get_full_name }}</td>
-                            <td><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></td>
-                            <td>{{ subscription.user.profile.phone_number }}</td>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "E-Mail" %}</th>
+                            <th>{% trans "Mobile" %}</th>
                             {% if course.type.couple_course %}
-                                <td>{{ subscription.get_assigned_role_str }}</td>
-                                <td>{{ subscription.get_partner_name }}</td>
+                                <th>{% trans "Lead/Follow" %}</th>
+                                <th>{% trans "Partner" %}</th>
                             {% endif %}
+
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                        {% for subscription in participatory %}
+                            <tr>
+                                <td>{{ subscription.user.get_full_name }}</td>
+                                <td><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></td>
+                                <td>{{ subscription.user.profile.phone_number }}</td>
+                                {% if course.type.couple_course %}
+                                    <td>{{ subscription.get_assigned_role_str }}</td>
+                                    <td>{{ subscription.get_partner_name }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
         </div>
     {% endwith %}
 {% endblock main_content %}
