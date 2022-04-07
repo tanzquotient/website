@@ -1,6 +1,5 @@
 {% extends "basis.html" %}
 {% load i18n %}
-{% load sekizai_tags %}
 
 
 {% block lead_title %}
@@ -10,64 +9,35 @@
 {% block main_content %}
     {% with course.payment_totals as payment_totals %}
         <div class="container">
-            <h2>{{ course }}</h2>
+            <h2 class="mb-0">{{ course.type.name }}</h2>
+            {% if course.offering %}
+                <div class="fs-5">{{ course.offering.name }} </div>
+            {% endif %}
+            <div class="my-2 fs-6">{{ course.format_teachers }}</div>
+            <a class="my-2 btn btn-success btn-sm align-self-center" role="button" href="{% url 'courses:course_detail' course.id %}">
+                <i class="fa-solid fa-eye"></i> {% trans "Show course page" %}
+            </a>
+            <div class="my-3">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="nav-item">
+                        <a class="nav-link active" href="#editor-de" aria-controls="editor-de" role="tab" data-bs-toggle="tab">{% trans "German" %}</a>
+                    </li>
+                    <li  class="nav-item" role="presentation">
+                        <a class="nav-link" href="#editor-en" aria-controls="editor-en" role="tab" data-bs-toggle="tab">{% trans "English" %}</a>
+                    </li>
+                </ul>
 
-            <h3>{% trans "Description" %}</h3>
-            <form class="form-horizontal" role="form" action="{% url 'payment:coursepayment_detail' course.id %}"
-                  method="post">
-                {% csrf_token %}
-                <div>
-
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li  role="presentation" class="active nav-item"><a class="nav-link" href="#editor-de" aria-controls="editor-de" role="tab"
-                                                                  data-bs-toggle="tab">{% trans "German" %}</a></li>
-                        <li  class="nav-item" role="presentation"><a class="nav-link" href="#editor-en" aria-controls="editor-en" role="tab"
-                                                   data-bs-toggle="tab">{% trans "English" %}</a></li>
-                    </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabcard" class="tab-pane active" id="editor-de">
-                            <textarea name="ckeditor-de" id="ckeditor-de" rows="20" cols="80">
-                    {{ description_de|default:""|safe }}
-                </textarea>
-
-                            The description will be displayed together with this general course type information:
-                            <div class="card card-default">
-                                <div class="card-body">
-                                    {{ type_description_de|default:"<no description>"|safe }}
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabcard" class="tab-pane" id="editor-en">
-                            <textarea name="ckeditor-en" id="ckeditor-en" rows="20" cols="80">
-                    {{ description_en|default:""|safe }}
-                </textarea>
-                            The description will be displayed together with this general course type information:
-                            <div class="card card-default">
-                                <div class="card-body">
-                                    {{ type_description_en|default:"<no description>"|safe }}
-                                </div>
-                            </div>
-                        </div>
+                <!-- Tab panes -->
+                <div class="tab-content p-3 border border-top-0">
+                    <div role="tabpanel" class="tab-pane active" id="editor-de">
+                        {% include "payment/courses/snippets/course_description.html" with language="de" type_description=type_description_de description=description_de %}
                     </div>
-
+                    <div role="tabpanel" class="tab-pane" id="editor-en">
+                        {% include "payment/courses/snippets/course_description.html" with language="en" type_description=type_description_en description=description_en %}
+                    </div>
                 </div>
-
-
-                {% addtoblock "js" %}
-                    <script>
-                        CKEDITOR.replace('ckeditor-de', {'height': 300});
-                        CKEDITOR.replace('ckeditor-en', {'height': 300});
-                    </script>
-                {% endaddtoblock %}
-
-                <button type="submit" class="btn btn-default" name="save" value="save">
-                    Save
-                </button>
-                <span class="help-block">(You can save both language versions at once)</span>
-            </form>
+            </div>
 
             <h3>{% trans "Participants" %}</h3>
 

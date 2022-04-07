@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.urls import reverse
 from django.views.generic import TemplateView
 
@@ -21,17 +21,19 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         context['participatory'] = course.subscriptions.accepted().select_related('user')
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
         """
 
-        c = Course.objects.filter(id=kwargs['course']).first()
-        c.set_current_language('de')
-        c.description = request.POST['ckeditor-de']
-        c.set_current_language('en')
-        c.description = request.POST['ckeditor-en']
-        c.save()
+        course = Course.objects.filter(id=kwargs['course']).first()
+        for language in ['de', 'en']:
+            key = f"description-{language}"
+            if key in request.POST and request.POST[key]:
+                course.set_current_language(language)
+                course.description = request.POST[key]
+
+        course.save()
 
         return HttpResponseRedirect(reverse('payment:coursepayment_detail', kwargs={'course': self.kwargs['course']}))
