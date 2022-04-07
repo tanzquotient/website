@@ -39,131 +39,66 @@
                 </div>
             </div>
 
-            <h3>{% trans "Participants" %}</h3>
-
-            <p>{% trans "Please mark the students that paid in the course in cash." %}</p>
-
-            <p>
-                {% trans "If you do not have internet access in the course room, you can download this list before:" %}
-                <a href="{% url "payment:coursepayment_export" course.id %}">{% trans "Download Excel" %}</a>,
-                <a href="{% url "payment:coursepayment_export_csv" course.id %}">{% trans "Download CSV" %}</a>
-            </p>
-
-            <p>
-                {% trans "Additionally you can download the contact data of the participants here:" %}
-                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Download" %}</a>
-            </p>
-
-            <div class="d-block d-sm-none">
-                <div class="card card-default">
-                    <div class="card-header">
-                        {% trans "Amount" %}
-                        <small class="pull-right">
-                            <strong>{% trans "Amount Due" %}</strong>
-                        </small>
-                    </div>
-                    <div class="list-group">
-                        {% for subscription in participatory %}
-                            <a {% if not subscription.payed %}href=
-                                   "{% url "payment:coursepayment_confirm" course.id subscription.usi %}"{% endif %}
-                               class="list-group-item {% if subscription.payed %}disabled{% endif %}">
-                                <h4 class="list-group-item-heading">
-                                    {{ subscription.user.get_full_name }}
-                                    <small>
-                                        {{ subscription.usi }}
-                                    </small>
-                                    {% if subscription.payed %}
-                                        <span class="badge bg-default pull-right">{{ subscription.paymentmethod }}</span>
-                                    {% endif %}
-                                </h4>
-
-                                <p class="list-group-item-text">{{ subscription.get_user_email }}</p>
-                                <p class="list-group-item-text">{{ subscription.get_price_to_pay }}
-                                    CHF
-                                    <small class="pull-right">{% if not subscription.paid %}
-                                        <strong>{{ subscription.open_amount }} CHF</strong>{% else %}
-                                        0 CHF{% endif %}
-                                    </small>
-                                </p>
-                            </a>
-                        {% endfor %}
-                    </div>
-                    <div class="card-footer">
-                        <p>{% trans "Total" %}</p>
-                        <p>{{ payment_totals.paid }} CHF
-                            <small class="pull-right">
-                                <strong>{{ payment_totals.unpaid }} CHF</strong>
-                            </small>
-                        </p>
-                    </div>
-                </div>
+            <h3 class="mb-0">{% trans "Participants" %}</h3>
+            <div class="btn-group my-3">
+                <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="fas fa-download"></i> {% trans "Download" %}</a>
+                <button role="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export" course.id %}">Excel</a></li>
+                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_csv" course.id %}">CSV</a></li>
+                    <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (.vcard)" %}</a></li>
+                </ul>
             </div>
-            <div class="d-none d-sm-block">
-                <div class="card card-default">
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>{% trans "USI" %}</th>
-                                <th>{% trans "Name" %}</th>
-                                <th>{% trans "E-Mail" %}</th>
-                                <th>{% trans "Mobile" %}</th>
-                                <th>{% trans "Amount" %}</th>
-                                <th>{% trans "Amount Due" %}</th>
-                                <th>{% trans "Actions" %}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for subscription in participatory %}
-                                <tr>
-                                    <td>{{ subscription.usi }}</td>
-                                    <td>{{ subscription.user.get_full_name }}</td>
-                                    <td>{{ subscription.get_user_email }}</td>
-                                    <td>{{ subscription.get_user_mobile }}</td>
-                                    <td>{{ subscription.get_price_to_pay }} CHF</td>
-                                    <td>{% if not subscription.paid %}{{ subscription.open_amount }}{% else %}
-                                        0{% endif %}
-                                        CHF
-                                    </td>
-                                    <td>
-                                        {% if not subscription.payed %}
-                                            <a href="{% url "payment:coursepayment_confirm" course.id subscription.usi %}"
-                                               class="btn btn-default btn-xs">{% trans "Pay" %}</a>
-                                        {% else %}
-                                            <span class="badge bg-default">{{ subscription.paymentmethod }}</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <th>{% trans "Total" %}:</th>
-                                <th>{{ payment_totals.paid }} CHF</th>
-                                <th>{{ payment_totals.unpaid }} CHF</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <th>{% trans "paid in course" %}:</th>
-                                <th>{{ payment_totals.paid_course }} CHF</th>
-                                <td></td>
-                                <th></th>
-                            </tr>
 
-                            </tfoot>
-                        </table>
-                    </div>
+            <div class="d-block d-md-none">
+                <div class="list-group">
+                    {% for subscription in participatory %}
+                        <div class="list-group-item">
+                            <div><strong>{{ subscription.user.get_full_name }}</strong></div>
+                            <div><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></div>
+                            {% if subscription.user.profile.phone_number %}
+                                <div>{{ subscription.user.profile.phone_number }}</div>
+                            {% endif %}
+                            {% if course.type.couple_course %}
+                                <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
+                                <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
 
-            <h4>{% trans "Payment Summary" %}</h4>
-            <p>{{ payment_totals.paid_count }} {% trans "people already paid the course." %}</p>
-            <p>{% trans "You should have" %} {{ payment_totals.paid_course }} CHF {% trans 'of collected money.' %}</p>
+            <div class="d-none d-md-block">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "E-Mail" %}</th>
+                        <th>{% trans "Mobile" %}</th>
+                        {% if course.type.couple_course %}
+                            <th>{% trans "Lead/Follow" %}</th>
+                            <th>{% trans "Partner" %}</th>
+                        {% endif %}
 
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subscription in participatory %}
+                        <tr>
+                            <td>{{ subscription.user.get_full_name }}</td>
+                            <td><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></td>
+                            <td>{{ subscription.user.profile.phone_number }}</td>
+                            {% if course.type.couple_course %}
+                                <td>{{ subscription.get_assigned_role_str }}</td>
+                                <td>{{ subscription.get_partner_name }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     {% endwith %}
 {% endblock main_content %}
