@@ -36,12 +36,12 @@
             </div>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-default" type="submit"
+                <div class="my-2">
+                    <button class="btn btn-sm btn-primary" type="submit"
                             name="action_primary">{% trans 'Make Primary' %}</button>
-                    <button class="btn btn-default" type="submit"
+                    <button class="btn btn-sm btn-success" type="submit"
                             name="action_send">{% trans 'Re-send Verification' %}</button>
-                    <button class="btn btn-default" type="submit" name="action_remove">{% trans 'Remove' %}</button>
+                    <button class="btn btn-sm btn-danger" type="submit" name="action_remove">{% trans 'Remove' %}</button>
                 </div>
             </div>
         </form>
@@ -58,7 +58,7 @@
         {% csrf_token %}
         {% with field=form.email %}
             <div id="form-group-{{ field.id_for_label }}"
-                 class="form-group has-feedback {% if field.errors %}has-error{% endif %}">
+                 class="row form-group has-feedback {% if field.errors %}has-error{% endif %}">
                 <div class="col-sm-offset-2 col-sm-6">
                     <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}"
                            placeholder="{{ field.label }}" value="{{ field.value|default:'' }}"/>
@@ -71,7 +71,7 @@
                     {% include "courses/snippets/field_errors.html" %}
                 </div>
             <div class="col-sm-4">
-                <button class="btn btn-default" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+                <button class="btn btn-primary" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
             </div>
             </div>
         {% endwith %}
