@@ -285,10 +285,12 @@ class Course(TranslatableModel):
 
     def get_regular_lesson_cancellation_dates(self) -> list[date]:
         def is_applicable(cancelled_date) -> bool:
-            period = self.get_period()
             weekdays = [Weekday.NUMBERS[r.weekday] for r in self.regular_lessons.all()]
+            if cancelled_date.weekday() not in weekdays:
+                return False
 
-            return cancelled_date.weekday() in weekdays and period.date_from <= cancelled_date <= period.date_to
+            period = self.get_period()
+            return period is None or period.date_from <= cancelled_date <= period.date_to
 
         return [d for d in self.get_cancellation_dates() if is_applicable(d)]
 

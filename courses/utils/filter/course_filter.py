@@ -20,7 +20,7 @@ def _course_filter_style(course: Course, style_name: str, filter_styles: Iterabl
 
 
 def _course_filter_type(course: Course, subscription_type: str) -> bool:
-    return subscription_type.lower() == course.subscription_type
+    return subscription_type == 'all' or subscription_type.lower() == course.subscription_type
 
 
 def course_filter(course: Course, preview_mode: bool, subscription_type: str, style_name: str,

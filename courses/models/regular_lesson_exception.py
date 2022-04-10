@@ -27,11 +27,12 @@ class RegularLessonException(models.Model):
     def get_time_to(self):
         return self.time_to or self.regular_lesson.time_to
 
-    def is_applicable(self):
-        period = self.regular_lesson.course.get_period()
+    def is_applicable(self) -> bool:
+        if self.date.weekday() != Weekday.NUMBERS[self.regular_lesson.weekday]:
+            return False
 
-        return self.date.weekday() == Weekday.NUMBERS[self.regular_lesson.weekday] and \
-               period.date_from <= self.date <= period.date_to
+        period = self.regular_lesson.course.get_period()
+        return period is None or period.date_from <= self.date <= period.date_to
 
     class Meta:
         ordering = ['date']
