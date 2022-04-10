@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import QuerySet
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -81,8 +82,14 @@ class Course(TranslatableModel):
 
     objects = managers.CourseManager()
 
-    def participatory(self) -> Subscribe:
+    def participatory(self) -> QuerySet[Subscribe]:
         return self.subscriptions.accepted()
+
+    def participants(self) -> set[User]:
+        return {subscription.user for subscription in self.subscriptions.accepted()}
+
+    def subscribed_user_ids(self) -> set[int]:
+        return {subscription.user_id for subscription in self.subscriptions if subscription.is_active()}
 
     def payment_totals(self) -> dict[str, Number]:
         """calculate different statistics in one method (performance optimization)"""
@@ -180,7 +187,8 @@ class Course(TranslatableModel):
         if free_places == 0:
             return False
 
-        total_for_preference = (self.max_subscribers - self.subscriptions.matched().count()) / 2
+        matched_count = len({subscription for subscription in self.subscriptions if subscription.is_matched()})
+        total_for_preference = (self.max_subscribers - matched_count) / 2
         current_count_for_preference = self.subscriptions.single_with_preference(lead_or_follow).count()
         free_for_preference = total_for_preference - current_count_for_preference
 
@@ -192,9 +200,10 @@ class Course(TranslatableModel):
         if self.max_subscribers is None:
             return None
 
-        subscriptions = self.subscriptions.active()
+        active_subscriptions_count = \
+            len({subscription for subscription in self.subscriptions.all() if subscription.is_active()})
 
-        total_count = self.max_subscribers - subscriptions.count()
+        total_count = self.max_subscribers - active_subscriptions_count
         total_count = int(max(total_count, 0))
 
         return total_count

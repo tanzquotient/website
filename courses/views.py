@@ -7,21 +7,23 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.db.models import Prefetch
 from django.forms import Form
-from django.urls import reverse, reverse_lazy
+from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.generic.edit import FormView
-from django.http import Http404, HttpResponse, HttpRequest
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
 from . import services
 from .forms.subscribe_form import SubscribeForm
-from .models import Course, Style, Offering, OfferingType, Subscribe, MatchingState, StudentStatus
+from .models import Course, Style, Offering, OfferingType, Subscribe, MatchingState, StudentStatus, IrregularLesson, \
+    RegularLessonException
 from .utils import course_filter
 
 log = logging.getLogger('tq')
@@ -40,7 +42,19 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
     def matches_filter(c: Course) -> bool:
         return course_filter(c, show_preview, subscription_type, style_name, filter_styles)
 
-    offerings = services.get_offerings_to_display(show_preview)
+    offerings = services.get_offerings_to_display(show_preview).prefetch_related(
+        'period__cancellations',
+        'course_set__type',
+        'course_set__period__cancellations',
+        'course_set__regular_lessons',
+        'course_set__room__address',
+        'course_set__room__translations',
+        Prefetch('course_set__irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
+        Prefetch('course_set__regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
+        Prefetch('course_set__subscriptions', queryset=Subscribe.objects.active(), to_attr='active_subscriptions'),
+        'course_set__subscriptions',
+    )
+
     c_offerings = []
     for offering in offerings:
         offering_sections = services.get_sections(offering, matches_filter)

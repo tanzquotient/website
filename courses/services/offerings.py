@@ -1,7 +1,8 @@
 from datetime import date
+from typing import Iterable
 
 from django.db.models import Q, Prefetch, QuerySet
-from django.http import Http404, HttpRequest
+from django.http import Http404
 from django.utils import dateformat
 from django.utils.translation import gettext as _
 
@@ -25,7 +26,7 @@ def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
     else:
         queryset = queryset.filter(display=True)
 
-    return queryset.select_related('period').prefetch_related('period__cancellations').order_by('-period__date_from')
+    return queryset.select_related('period').order_by('-period__date_from')
 
 
 def get_historic_offerings(offering_type=None):
@@ -48,12 +49,7 @@ def get_historic_offerings(offering_type=None):
 
 def get_sections(offering, course_filter=None):
     offering_sections = []
-    course_set = offering.course_set.select_related('period', 'type', 'room').prefetch_related(
-        'regular_lessons',
-        Prefetch('irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
-        Prefetch('regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
-        'period__cancellations',
-    )
+    course_set = offering.course_set
 
     if not course_filter:
         course_filter = lambda c: True
@@ -101,9 +97,16 @@ def get_sections(offering, course_filter=None):
     return offering_sections
 
 
-def get_upcoming_courses_without_offering():
-    courses = Course.objects.filter(
-        display=True, offering__isnull=True
+def get_upcoming_courses_without_offering() -> Iterable[Course]:
+    courses = Course.objects.filter(display=True, offering__isnull=True).prefetch_related(
+        'type',
+        'period__cancellations',
+        'regular_lessons',
+        'room__address',
+        'room__translations',
+        'subscriptions',
+        Prefetch('irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
+        Prefetch('regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
     )
 
     return [course for course in courses if not course.is_over()]

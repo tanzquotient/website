@@ -56,6 +56,12 @@ class Subscribe(Model):
         usi = CodeGenerator.short_uuid_without_ambiguous_characters()
         return usi if not Subscribe.objects.filter(usi=usi).exists() else self.generate_usi()
 
+    def is_active(self) -> bool:
+        return self.state not in SubscribeState.REJECTED_STATES
+
+    def is_matched(self) -> bool:
+        return self.is_active() and self.matching_state in MatchingState.MATCHED_STATES
+
     def get_offering(self) -> Offering:
         return self.course.offering
 
