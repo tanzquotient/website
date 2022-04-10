@@ -89,7 +89,7 @@ class Course(TranslatableModel):
         return {subscription.user for subscription in self.subscriptions.accepted()}
 
     def subscribed_user_ids(self) -> set[int]:
-        return {subscription.user_id for subscription in self.subscriptions if subscription.is_active()}
+        return {subscription.user_id for subscription in self.subscriptions.all() if subscription.is_active()}
 
     def payment_totals(self) -> dict[str, Number]:
         """calculate different statistics in one method (performance optimization)"""
@@ -187,9 +187,10 @@ class Course(TranslatableModel):
         if free_places == 0:
             return False
 
-        matched_count = len({subscription for subscription in self.subscriptions if subscription.is_matched()})
+        matched_count = len({s for s in self.subscriptions.all() if s.is_matched()})
         total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = self.subscriptions.single_with_preference(lead_or_follow).count()
+        current_count_for_preference = \
+            len({s for s in self.subscriptions.all() if s.is_single_with_preference(lead_or_follow)})
         free_for_preference = total_for_preference - current_count_for_preference
 
         return free_for_preference >= 1

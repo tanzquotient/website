@@ -62,6 +62,10 @@ class Subscribe(Model):
     def is_matched(self) -> bool:
         return self.is_active() and self.matching_state in MatchingState.MATCHED_STATES
 
+    def is_single_with_preference(self, lead_or_follow: str) -> bool:
+        return self.is_active() and self.matching_state in MatchingState.TO_MATCH_STATES \
+               and self.lead_follow == lead_or_follow
+
     def get_offering(self) -> Offering:
         return self.course.offering
 
