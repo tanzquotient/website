@@ -1,25 +1,27 @@
 import logging
 from datetime import date
+from typing import Type
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.forms import Form
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.generic.edit import FormView
-from django.http import Http404
+from django.http import Http404, HttpResponse, HttpRequest
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
 from . import services
 from .forms.subscribe_form import SubscribeForm
-from .models import *
+from .models import Course, Style, Offering, OfferingType, Subscribe, MatchingState, StudentStatus
 from .utils import course_filter
 
 log = logging.getLogger('tq')
@@ -27,18 +29,18 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request, subscription_type="all", style_name="all", force_preview=False):
+def course_list(request, subscription_type="all", style_name="all", force_preview=False) -> HttpResponse:
     template_name = "courses/list.html"
 
     # unpublished courses should be shown with a preview marker
-    preview_mode = request and request.user.is_staff or force_preview
+    show_preview = (request and request.user.is_staff) or force_preview
 
     filter_styles = Style.objects.filter(filter_enabled=True)
 
-    def matches_filter(c):
-        return course_filter(c, preview_mode, subscription_type, style_name, filter_styles)
+    def matches_filter(c: Course) -> bool:
+        return course_filter(c, show_preview, subscription_type, style_name, filter_styles)
 
-    offerings = services.get_offerings_to_display(request, preview_mode)
+    offerings = services.get_offerings_to_display(show_preview)
     c_offerings = []
     for offering in offerings:
         offering_sections = services.get_sections(offering, matches_filter)
@@ -70,7 +72,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
         })
 
     context = {
-        'offerings': c_offerings[::-1],
+        'offerings': c_offerings,
         'filter': {
             'styles': {
                 'available': filter_styles,
@@ -82,7 +84,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
     return render(request, template_name, context)
 
 
-def archive(request):
+def archive(request: HttpRequest) -> HttpResponse:
     template_name = "courses/archive.html"
     context = {
         'historic_offerings': {
@@ -94,11 +96,11 @@ def archive(request):
 
 
 @staff_member_required
-def course_list_preview(request):
+def course_list_preview(request) -> HttpResponse:
     return course_list(request, force_preview=True)
 
 
-def offering_by_id(request, offering_id):
+def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
     template_name = 'courses/offering.html'
     offering = get_object_or_404(Offering.objects, id=offering_id)
     if not offering.is_public():
@@ -110,7 +112,7 @@ def offering_by_id(request, offering_id):
     return render(request, template_name, context)
 
 
-def course_detail(request, course_id):
+def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     context = {
         'menu': "courses",
         'course': get_object_or_404(Course.objects, id=course_id),
@@ -120,7 +122,7 @@ def course_detail(request, course_id):
 
 
 @login_required
-def subscribe_form(request, course_id):
+def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
     course = get_object_or_404(Course.objects, id=course_id)
 
     # If user already signed up or sign up not possible: redirect to course detail
@@ -151,7 +153,7 @@ def subscribe_form(request, course_id):
 
 
 @staff_member_required
-def confirmation_check(request):
+def confirmation_check(request: HttpRequest) -> HttpResponse:
     template_name = "courses/confirmation_check.html"
     context = {}
 
@@ -163,7 +165,7 @@ def confirmation_check(request):
 
 
 @staff_member_required
-def duplicate_users(request):
+def duplicate_users(request: HttpRequest) -> HttpResponse:
     template_name = "courses/duplicate_users.html"
     context = {}
     users = []
@@ -200,7 +202,7 @@ def duplicate_users(request):
 # helper function
 
 
-def offering_place_chart_dict(offering):
+def offering_place_chart_dict(offering: Offering) -> dict:
     labels = []
     series_confirmed = []
     series_matched = []
@@ -249,7 +251,7 @@ def offering_place_chart_dict(offering):
     }
 
 
-def progress_chart_dict():
+def progress_chart_dict() -> dict:
     labels = []
     series_couple = []
     series_single = []
@@ -279,7 +281,7 @@ def progress_chart_dict():
 # helper function
 
 
-def offering_time_chart_dict(offering):
+def offering_time_chart_dict(offering: Offering) -> dict:
     traces = []
     for c in offering.course_set.reverse().all():
         trace = dict()
@@ -328,24 +330,24 @@ def offering_time_chart_dict(offering):
 
 
 @staff_member_required
-def subscription_overview(request):
+def subscription_overview(request: HttpRequest) -> HttpResponse:
     template_name = "courses/auth/subscription_overview.html"
     context = {}
 
     offering_charts = []
-    for o in services.get_offerings_to_display(request):
+    for o in services.get_offerings_to_display():
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
-    ETH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.ETH))
-    UZH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.UNI))
-    PH_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.PH))
+    eth_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.ETH))
+    uzh_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.UNI))
+    ph_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.PH))
     other_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.OTHER))
     no_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.NO))
 
     university_chart = {
-        'ETH_count': ETH_count,
-        'UZH_count': UZH_count,
-        'PH_count': PH_count,
+        'ETH_count': eth_count,
+        'UZH_count': uzh_count,
+        'PH_count': ph_count,
         'no_count': no_count,
         'other_count': other_count,
     }
@@ -360,7 +362,7 @@ def subscription_overview(request):
 
 
 @staff_member_required
-def course_overview(request, course_id):
+def course_overview(request: HttpRequest, course_id: int) -> HttpResponse:
     template_name = "courses/auth/course_overview.html"
     context = {}
 
@@ -397,7 +399,7 @@ def course_overview(request, course_id):
 
 
 @staff_member_required
-def offering_overview(request, offering_id):
+def offering_overview(request: HttpRequest, offering_id: int) -> HttpResponse:
     template_name = "courses/auth/offering_overview.html"
     context = {}
 
@@ -410,7 +412,7 @@ def offering_overview(request, offering_id):
 
 
 @login_required
-def user_courses(request):
+def user_courses(request: HttpRequest) -> HttpResponse:
     template_name = "user/user_courses.html"
     context = {
         'user': request.user,
@@ -420,12 +422,14 @@ def user_courses(request):
 
 
 @login_required
-def user_profile(request):
+def user_profile(request: HttpRequest) -> HttpResponse:
     template_name = "user/profile.html"
     context = {
         'user': request.user
     }
     return render(request, template_name, context)
+
+
 @method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = 'courses/auth/profile.html'
@@ -433,16 +437,16 @@ class ProfileView(FormView):
 
     success_url = reverse_lazy('edit_profile')
 
-    def get_form_class(self):
+    def get_form_class(self) -> Type[Form]:
         if self.request.user.profile.is_teacher():
             return TeacherEditForm
         return super().get_form_class()
 
-    def get_initial(self):
+    def get_initial(self) -> dict:
         initial = create_initial_from_user(self.request.user)
         return initial
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         # Call the base implementation first to get a context
         context = super(ProfileView, self).get_context_data(**kwargs)
 
@@ -455,13 +459,13 @@ class ProfileView(FormView):
         context['profile_missing_values'] = user.profile.missing_values()
         return context
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> HttpResponse:
         services.update_user(self.request.user, form.cleaned_data)
         return super(ProfileView, self).form_valid(form)
 
 
 @login_required
-def change_password(request):
+def change_password(request: HttpRequest) -> HttpResponse:
     success = True
     initial = True
     if request.method == 'POST':
@@ -483,36 +487,36 @@ def change_password(request):
 
 
 @staff_member_required
-def export_summary(request):
+def export_summary(request: HttpRequest) -> HttpResponse:
     from courses import services
     return services.export_summary('csv')
 
 
 @staff_member_required
-def export_summary_excel(request):
+def export_summary_excel(request: HttpRequest) -> HttpResponse:
     from courses import services
     return services.export_summary('xlsx')
 
 
 @staff_member_required
-def export_offering_summary(request, offering_id):
+def export_offering_summary(request: HttpRequest, offering_id: int) -> HttpResponse:
     from courses import services
     return services.export_summary('csv', [Offering.objects.filter(pk=offering_id).first()])
 
 
 @staff_member_required
-def export_offering_summary_excel(request, offering_id):
+def export_offering_summary_excel(request: HttpRequest, offering_id: int) -> HttpResponse:
     from courses import services
     return services.export_summary('xlsx', [Offering.objects.filter(pk=offering_id).first()])
 
 
 @staff_member_required
-def export_offering_teacher_payment_information(request, offering_id):
+def export_offering_teacher_payment_information(request: HttpRequest, offering_id: int) -> HttpResponse:
     from courses import services
     return services.export_teacher_payment_information('csv', [Offering.objects.filter(pk=offering_id).first()])
 
 
 @staff_member_required
-def export_offering_teacher_payment_information_excel(request, offering_id):
+def export_offering_teacher_payment_information_excel(request: HttpRequest, offering_id: int) -> HttpResponse:
     from courses import services
     return services.export_teacher_payment_information('xlsx', [Offering.objects.filter(pk=offering_id).first()])

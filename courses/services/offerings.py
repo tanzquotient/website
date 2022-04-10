@@ -1,7 +1,7 @@
 from datetime import date
 
-from django.db.models import Q, Prefetch
-from django.http import Http404
+from django.db.models import Q, Prefetch, QuerySet
+from django.http import Http404, HttpRequest
 from django.utils import dateformat
 from django.utils.translation import gettext as _
 
@@ -12,25 +12,20 @@ from courses.services.general import log
 
 
 def get_all_offerings():
-    return models.Offering.objects.order_by('period__date_from', '-active')
+    return Offering.objects.order_by('period__date_from', '-active')
 
 
-def get_offerings_to_display(request=None, force_preview=False, only_regular_offerings=False,
-                             include_partner_offerings=False):
+def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
     """return offerings that have display flag on and order them by start date in ascending order"""
 
-    queryset = Offering.objects.select_related('period').prefetch_related('period__cancellations')
-    if only_regular_offerings:
-        queryset = queryset.filter(type=OfferingType.REGULAR)
-    if not include_partner_offerings:
-        queryset = queryset.exclude(type=OfferingType.PARTNER)
+    queryset = Offering.objects.exclude(type=OfferingType.PARTNER)
 
-    if force_preview or (request and request.user.is_staff):
-        queryset = queryset.filter(Q(display=True) | Q(period__date_to__gte=date.today()))
+    if preview:
+        queryset = queryset.filter(Q(display=True) | Q(preview=True))
     else:
         queryset = queryset.filter(display=True)
 
-    return queryset.order_by('period__date_from')
+    return queryset.select_related('period').prefetch_related('period__cancellations').order_by('-period__date_from')
 
 
 def get_historic_offerings(offering_type=None):

@@ -218,7 +218,7 @@ class Course(TranslatableModel):
 
         return False
 
-    def is_displayed(self, preview=False) -> bool:
+    def is_displayed(self, preview: bool = False) -> bool:
         if self.offering is None:
             return self.display
         else:
