@@ -1,5 +1,5 @@
 # Django
-Django==3.2.12  # django-cms does not yet support django 4.0
+Django==3.2.13  # django-cms does not yet support django 4.0
 django-debug-toolbar==3.2.4
 django-absolute==0.3
 django-analytical==3.1.0
@@ -10,7 +10,7 @@ django-post-office==3.6.0
 django-reversion==5.0.0
 django-countries==7.3.2
 django-ical==1.8.3
-django-ckeditor==6.3.0
+django-ckeditor==6.3.2
 django-allauth==0.50.0
 django-photologue==3.15.1
 
@@ -34,7 +34,7 @@ django-redis==5.2.0
 openpyxl==3.0.9
 base36==0.1.1
 svglib==1.2.1
-PyPDF2==1.26.0
+PyPDF2==1.27.3
 reportlab==3.6.9
 pyyaml==6.0
 
@@ -46,8 +46,8 @@ psycopg2==2.9.3
 
 # Storage
 django-storages==1.12.3
-boto3==1.21.35
-minio==7.1.5
+boto3==1.21.37
+minio==7.1.6
 
 # Webserver
 gunicorn==20.1.0
@@ -58,7 +58,7 @@ sentry_sdk==1.5.8
 # Utils
 plotly==5.7.0       # For charts and graphs
 pytz==2022.1
-pylint==2.13.4
+pylint==2.13.5
 shortuuid==1.0.8
 django-hijack==3.2.0    # Superuser can impersonate other users
 python-dotenv==0.20.0
