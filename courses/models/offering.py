@@ -21,12 +21,12 @@ class Offering(models.Model):
     preview.help_text = 'Defines if the offering should be displayed as preview'
 
     def is_public(self) -> bool:
-        return self.display or self.is_historic()
+        return self.display or self.is_over()
 
     def is_preview(self) -> bool:
         return self.preview
 
-    def is_historic(self) -> bool:
+    def is_over(self) -> bool:
         if self.active or self.preview or self.display or not self.has_date_from():
             return False
 

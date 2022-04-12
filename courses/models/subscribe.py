@@ -120,7 +120,18 @@ class Subscribe(Model):
     """
 
     def paid(self) -> bool:
-        return self.state in SubscribeState.PAID_STATES
+        if self.state in SubscribeState.PAID_STATES:
+            return True
+
+        # If open amount == 0, but not reflected in self.state
+        if self.open_amount().is_zero():
+            return self.mark_as_paid(self.paymentmethod)
+
+    def is_payment_overdue(self) -> bool:
+        if self.paid() or self.state not in SubscribeState.TO_PAY_STATES:
+            return False
+
+        return self.course.is_over() and (self.course.offering is None or self.course.offering.is_over())
 
     @admin.action(description='Paid?')
     def get_payment_state(self) -> str:
@@ -146,7 +157,7 @@ class Subscribe(Model):
                 self.save()
                 if user is not None:
                     reversion.set_user(user)
-                reversion.set_comment('Paid using payment method ' + payment_method)
+                reversion.set_comment(f'Paid using payment method {payment_method}')
             if self.paymentmethod == PaymentMethod.ONLINE:
                 from courses.emailcenter import send_online_payment_successful
                 send_online_payment_successful(self)

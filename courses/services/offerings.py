@@ -35,7 +35,7 @@ def get_historic_offerings(offering_type=None):
     if offering_type:
         queryset = Offering.objects.filter(type=offering_type)
 
-    offerings = [o for o in queryset if o.is_historic() and o.has_date_from()]
+    offerings = [o for o in queryset if o.is_over() and o.has_date_from()]
     offerings_dict = {}
 
     for offering in offerings:

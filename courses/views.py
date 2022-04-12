@@ -145,6 +145,13 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
             or not course.has_free_places:
         return redirect('courses:course_detail', course_id=course_id)
 
+    # If user is has overdue payments -> block subscribing to new courses
+    if request.user.profile.subscriptions_with_overdue_payment():
+        return render(request, "courses/overdue_payments.html", dict(
+            email_address=settings.EMAIL_ADDRESS_FINANCES,
+            payment_account=settings.PAYMENT_ACCOUNT['default']
+        ))
+
     # Get form
     form_data = request.POST if request.method == 'POST' else None
     form = SubscribeForm(user=request.user, course=course, data=form_data)

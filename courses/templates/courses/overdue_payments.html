@@ -1,0 +1,29 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ course.type.name }}
+{% endblock %}
+
+{% block lead_title %}
+    {% trans "Overdue payments" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="alert alert-danger">
+            <h4 class="alert-heading">{% trans "Overdue payments" %}</h4>
+            <div>
+                {% trans "You can not subscribe to any courses, since you have at least one overdue payment. Once we have received all open payments, you will be able to subscribe again." %}
+            </div>
+        </div>
+        {% for subscription in user.profile.subscriptions_with_overdue_payment %}
+            {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account only %}
+        {% endfor %}
+        <div>
+            {% trans "If you think there has been a mistake on our side, please contact us at:" %}
+            <a href="mailto:{{ email_address }}">{{ email_address }}</a>
+        </div>
+    </div>
+{% endblock main_content %}

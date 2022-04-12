@@ -115,6 +115,9 @@ class UserProfile(Model):
     def get_subscriptions(self) -> Iterable[Subscribe]:
         return self.user.subscriptions.order_by('-date').all()
 
+    def subscriptions_with_overdue_payment(self) -> Iterable[Subscribe]:
+        return [subscription for subscription in self.get_subscriptions() if subscription.is_payment_overdue()]
+
     def get_subscribed_courses(self) -> Iterable[Course]:
         return [s.course for s in self.get_subscriptions()]
 

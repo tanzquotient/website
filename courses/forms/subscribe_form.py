@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import LeadFollow, SingleCouple
+from courses.models import LeadFollow, SingleCouple, Course
 
 
 class SubscribeForm(forms.Form):
@@ -11,14 +11,14 @@ class SubscribeForm(forms.Form):
     lead_follow = forms.ChoiceField(choices=LeadFollow.CHOICES, required=False)
     partner_email = forms.EmailField(required=False)
     comment = forms.CharField(required=False)
-    general_terms = forms.BooleanField(required=True)
+    general_terms = forms.BooleanField()
 
-    def __init__(self, user, course, data=None):
+    def __init__(self, user: User, course: Course, data: dict = None) -> None:
         super().__init__(data=data)
         self.user = user
         self.course = course
 
-    def clean(self):
+    def clean(self) -> dict:
         cleaned_data = super().clean()
         single_or_couple = cleaned_data.get("single_or_couple")
         partner_email = cleaned_data.get("partner_email")
@@ -75,6 +75,15 @@ class SubscribeForm(forms.Form):
                 error = ValidationError(
                     message=_('The partner you entered is already signed up.'),
                     code='partner already signed up'
+                )
+                self.add_error('partner_email', error)
+                return cleaned_data
+
+            if partner.profile.subscriptions_with_overdue_payment():
+                error = ValidationError(
+                    message=_('The partner you entered has overdue payments '
+                              'and can therefore not sign up for any courses.'),
+                    code='partner has overdue payments'
                 )
                 self.add_error('partner_email', error)
                 return cleaned_data
