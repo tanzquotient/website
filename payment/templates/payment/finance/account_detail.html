@@ -1,5 +1,5 @@
 {% extends "basis.html" %}
-{% load i18n %}
+{% load i18n l10n humanize %}
 
 {% block lead_title %}
     {% trans "Account Finance" %}
@@ -7,28 +7,23 @@
 
 {% block main_content %}
     <div class="container">
-        <ol class="breadcrumb">
-            <li><a href="{% url 'payment:account_finance_index_view' %}">{% trans "Periods" %}</a></li>
-            <li class="active">{{ month_name|default:'' }} {{ year|default:'' }}</li>
-        </ol>
+        <h2 class="mb-0">{% trans "Account transactions" %}</h2>
+        <div class="fs-5">{{ month_name|default:'' }} {{ year|default:'' }}</div>
 
-        <h2>{% trans "Account transactions" %}</h2>
-        <p>{{ month_name|default:'' }} {{ year|default:'' }}</p>
-
-        <h3>{% trans "Summary" %}</h3>
+        <h3 class="mt-3">{% trans "Summary" %}</h3>
         <p>{% trans "with filters respected" %}</p>
-        <table class="table">
+        <table class="border table">
             <tbody>
             {% for k,v in summary.items %}
                 <tr>
                     <th>{{ k }}</th>
-                    <td>{{ v|default:"-" }}</td>
+                    <td class="text-end">{{ v|intcomma|localize }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <h3>{% trans "Transaction list" %}</h3>
+        <h3 class="mt-3">{% trans "Transaction list" %}</h3>
         {% trans "Show" %}
             {% if filter is True %}
                 <a href="{% url "payment:account_finance_detail_view" %}?year={{ year }}&month={{ month }}">{% trans "with" %}</a>
@@ -39,96 +34,61 @@
 
         <form method="post">
             {% csrf_token %}
-            <div class="card card-default">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>{% trans "ID" %}</th>
-                            <th>{% trans "Date" %}</th>
-                            <th>{% trans "Type" %}</th>
-                            <th class="text-right">{% trans "Credit" %}</th>
-                            <th></th>
-                            <th class="text-right">{% trans "Debit" %}</th>
-                            <th>{% trans "Comment" %}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for p in payments %}
-                            <tr>
-                                <td>
-                                    <button class="dropdown-toggle" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#{{ p.id }}" aria-expanded="false"
-                                            aria-controls="{{ p.id }}">
-                                        <span class="fa fa-caret-right"></span>
-                                    </button>
-                                </td>
-                                <td>{{ p.id }}</td>
-                                <td>{{ p.date|date:'d. M Y'  }}</td>
-                                <td>{{ p.type }}</td>
-                                <td class="text-right">
-                                    {% if p.credit_debit == "credit" %}
-                                        +{{ p.amount }} {{ p.currency_code }}
-                                    {% elif p.credit_debit == "unknown" %}
-                                        {{ p.amount }} {{ p.currency_code }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if p.credit_debit == "unknown" %}
-                                        <span class="fa fa-long-arrow-left"></span>
-                                        <span class="fa fa-question-circle-o"></span>
-                                        <span class="fa fa-long-arrow-right"></span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-right">
-                                    {% if p.credit_debit == "debit" %}
-                                        -{{ p.amount }} {{ p.currency_code }}
-                                    {% elif p.credit_debit == "unknown" %}
-                                        {{ p.amount }} {{ p.currency_code }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <textarea name="comment-{{ p.id }}" id="comment-{{ p.id }}" rows="2"
-                                              cols="20">{{ p.comment|default:""|safe }}</textarea>
-                                </td>
-                            </tr>
-                            <tr class="collapse" id="{{ p.id }}">
-                                <td></td>
-                                <td colspan="7">
-                                    {{ p.name }}, {{ p.address }}, {{ p.iban }}, {{ p.bic }}
-                                    <br/>
-                                    {{ p.remittance_user_string }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th><strong>{% trans "Total" %}</strong></th>
-                            <th class="text-right">{{ total_credit }} CHF</th>
-                            <th class="text-right">{{ total_unknown|default:"" }} CHF</th>
-                            <th class="text-right">{{ total_debit }} CHF</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th class="text-right">{% if total_unknown %}({% trans "Unknown" %}){% endif %}</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </tfoot>
+        <div class="table-responsive mt-3">
+            <table class="table border table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th class="text-right">{% trans "Credit" %}</th>
+                    <th class="text-right">{% trans "Debit" %}</th>
+                    <th>{% trans "Comment" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in payments %}
+                    <tr>
+                        <td>{{ p.date|date:'d.m.Y'|localize  }}</td>
+                        <td>
+                            {{ p.type }}
+                            <div class="text-muted small" style="max-width: 450px;">
+                                {% if p.name %} <div class="text-truncate">{{ p.name }}</div> {% endif %}
+                                {% if p.address %} <div class="text-truncate">{{ p.address }}</div> {% endif %}
+                                {% if p.iban %} <div class="text-truncate">{{ p.iban }}</div> {% endif %}
+                                {% if p.bic %} <div class="text-truncate">{{ p.bic }}</div> {% endif %}
+                                {% if p.remittance_user_string %} <div>{{ p.remittance_user_string }}</div> {% endif %}
+                            </div>
 
-                    </table>
-                </div>
-            </div>
+                        </td>
+                        <td class="text-right">
+                            {% if p.credit_debit == "credit" %}
+                                {{ p.amount }} {{ p.currency_code }}
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            {% if p.credit_debit == "debit" %}
+                                {{ p.amount }} {{ p.currency_code }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <textarea class="form-control"  style="width: 100%;" name="comment-{{ p.id }}" id="comment-{{ p.id }}" rows="2">{{ p.comment|default:""|safe }}</textarea>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th><strong>{% trans "Total" %}</strong></th>
+                    <th></th>
+                    <th class="text-right">{{ total_credit|intcomma|localize }} CHF</th>
+                    <th class="text-right">{{ total_debit|intcomma|localize }} CHF</th>
+                    <th></th>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+
             <button type="submit" class="btn btn-success btn-sm">{% trans "Save Comments" %}</button>
         </form>
     </div>
