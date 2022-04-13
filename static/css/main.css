@@ -11,6 +11,19 @@ a:hover {
     color: #9a1414;
 }
 
+.text-tanzquotient {
+    color: #C51718;
+}
+
+a.text-tanzquotient:hover {
+    color: #9a1414;
+}
+
+
+a.text-tanzquotient:focus {
+    color: #8b1313;
+}
+
 .bg-tanzquotient {
     background-color: #C51718;
 }

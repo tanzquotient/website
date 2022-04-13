@@ -7,17 +7,17 @@
 
 {% block main_content %}
     <div class="container">
-        <ol class="breadcrumb">
-            <li class="active">{% trans "Offerings" %}</li>
-        </ol>
+        <h2>{% trans "Offerings" %}</h2>
+        <ul>
+            {% for offering in offerings %}
+                <li>
+                    <a href="{% url "payment:offering_finance_overview_subscribers" offering.id %}">{{ offering.name }}</a>
+                    {% if offering.period %}
+                        ({{ offering.period }})
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
 
-    <br/>
-
-        {% for offering in offerings %}
-            <p>
-                <a href="{% url "payment:offering_finance_overview_subscribers" offering.id %}">{{ offering.name }}</a>
-                ({{ offering.period|default:'' }})
-            </p>
-        {% endfor %}
     </div>
 {% endblock main_content %}

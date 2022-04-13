@@ -1,4 +1,6 @@
+from collections import defaultdict
 from datetime import date
+from decimal import Decimal
 from typing import Optional
 
 from django.db import models
@@ -46,6 +48,13 @@ class Offering(models.Model):
 
     def get_teacher_ids(self) -> set[int]:
         return {teaching.teacher_id for course in self.course_set.all() for teaching in course.teaching.all()}
+
+    def payment_totals(self) -> dict[str, Decimal]:
+        totals = defaultdict(Decimal)
+        for course in self.course_set.all():
+            for key, value in course.payment_totals().items():
+                totals[key] += value
+        return totals
 
     def __str__(self) -> str:
         return '{}'.format(self.name)
