@@ -17,13 +17,14 @@
         </p>
         
         <h2>{% trans "Subscriptions by universities" %}</h2>
-        
-        <p>{% include "courses/auth/student_university_chart.html" with chart=university_chart only %}</p>
-        
+        {% autoescape off %}
+            {{ university_chart }}
+        {% endautoescape %}
 
         <h2>{% trans "Overall Progress" %}</h2>
-
-        <p>{% include "courses/auth/progress_chart.html" with chart=progress_chart only %}</p>
+        {% autoescape off %}
+            {{ progress_chart }}
+        {% endautoescape %}
 
         {% for o in offering_charts %}
             <h2>{{ o.offering.name }}

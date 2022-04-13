@@ -14,15 +14,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
-from . import services
+from utils.plots import plot_figure
+from . import services, figures
 from .forms.subscribe_form import SubscribeForm
-from .models import Course, Style, Offering, OfferingType, Subscribe, MatchingState, StudentStatus, IrregularLesson, \
+from .models import Course, Style, Offering, OfferingType, Subscribe, IrregularLesson, \
     RegularLessonException
 from .utils import course_filter
 
@@ -271,34 +272,6 @@ def offering_place_chart_dict(offering: Offering) -> dict:
         'height': 25 * len(labels) + 90,
     }
 
-
-def progress_chart_dict() -> dict:
-    labels = []
-    series_couple = []
-    series_single = []
-    series_unconfirmed = []
-
-    for o in Offering.objects.filter(type=OfferingType.REGULAR).reverse().all():
-        subscriptions = Subscribe.objects.filter(course__offering=o)
-        labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:offering_overview', args=[o.id]),
-                                                    escape(o.name)))
-        accepted = subscriptions.accepted()
-        accepted_count = accepted.count()
-        couple_count = accepted.filter(matching_state=MatchingState.COUPLE).count()
-        single_count = accepted_count - couple_count
-        unconfirmed_count = subscriptions.active().count() - accepted_count
-
-        series_couple.append(str(couple_count))
-        series_single.append(str(single_count))
-        series_unconfirmed.append(str(unconfirmed_count))
-
-    return {
-        'labels': labels,
-        'series_couple': series_couple,
-        'series_single': series_single,
-        'series_unconfirmed': series_unconfirmed,
-        'height': 25 * len(labels) + 90,
-    }
 # helper function
 
 
@@ -352,34 +325,17 @@ def offering_time_chart_dict(offering: Offering) -> dict:
 
 @staff_member_required
 def subscription_overview(request: HttpRequest) -> HttpResponse:
-    template_name = "courses/auth/subscription_overview.html"
-    context = {}
-
     offering_charts = []
     for o in services.get_offerings_to_display():
         offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
 
-    eth_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.ETH))
-    uzh_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.UNI))
-    ph_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.PH))
-    other_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.OTHER))
-    no_count = len(Subscribe.objects.filter(user__profile__student_status=StudentStatus.NO))
-
-    university_chart = {
-        'ETH_count': eth_count,
-        'UZH_count': uzh_count,
-        'PH_count': ph_count,
-        'no_count': no_count,
-        'other_count': other_count,
-    }
-
-    context.update({
-        'progress_chart': progress_chart_dict(),
+    context = {
         'offering_charts': offering_charts,
         'all_offerings': services.get_all_offerings(),
-        'university_chart': university_chart
-    })
-    return render(request, template_name, context)
+        'university_chart': plot_figure(figures.subscriptions_by_university()),
+        'progress_chart': plot_figure(figures.offering_progress()),
+    }
+    return render(request, "courses/auth/subscription_overview.html", context)
 
 
 @staff_member_required

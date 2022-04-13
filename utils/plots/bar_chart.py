@@ -3,7 +3,7 @@ from typing import Any
 from plotly.graph_objs import Figure, Bar, Layout
 
 
-def bar_chart(values: list[Any], labels: list[Any]) -> Figure:
+def bar_chart(values: list[Any], labels: list[str]) -> Figure:
     labels.reverse()
     values.reverse()
     values_sum = max(sum(values), 1)

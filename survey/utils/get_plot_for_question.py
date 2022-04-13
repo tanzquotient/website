@@ -1,21 +1,12 @@
 from collections import Counter
 from typing import Optional, Iterable
 
-from plotly.graph_objs import Figure
-from plotly.offline import plot
 from django.utils.translation import gettext_lazy as _
 
 from courses.models import Offering, Course
-from utils.plots import bar_chart, pie_chart
 from survey.models import Question, Answer
 from survey.models.types import QuestionType
-
-
-def _plot(figure: Figure) -> str:
-    config = dict(
-        displayModeBar=False,
-    )
-    return plot(figure, output_type='div', include_plotlyjs=False, config=config)
+from utils.plots import bar_chart, pie_chart, plot_figure
 
 
 def _plot_for_scale(question: Question, answer_set: Iterable[Answer]) -> str:
@@ -28,7 +19,7 @@ def _plot_for_scale(question: Question, answer_set: Iterable[Answer]) -> str:
         "4",
         f"{question.scale.up} - 5" if question.scale else "5",
     ]
-    return _plot(bar_chart(values, labels))
+    return plot_figure(bar_chart(values, labels))
 
 
 def _get_data_from_choices(question: Question, answers: list[str]):
@@ -46,7 +37,7 @@ def _get_data_from_choices(question: Question, answers: list[str]):
 def _plot_for_single_choice(question: Question, answer_set: Iterable[Answer]) -> str:
     answers = [answer.value for answer in answer_set if answer.value]
     values, labels = _get_data_from_choices(question, answers)
-    return _plot(pie_chart(values, labels))
+    return plot_figure(pie_chart(values, labels))
 
 
 def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) -> str:
@@ -58,7 +49,7 @@ def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) 
 
     values, labels = _get_data_from_choices(question, answers)
 
-    return _plot(bar_chart(values, labels))
+    return plot_figure(bar_chart(values, labels))
 
 
 def get_plot_for_question(question: Question, selected_offering: Offering, selected_course: Course) -> Optional[str]:
