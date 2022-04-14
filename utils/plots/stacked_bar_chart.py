@@ -23,7 +23,7 @@ def stacked_bar_chart(labels: list[str], data: list[DataSeries]) -> Figure:
             margin=dict(l=0, r=0, t=0, b=0, pad=10),
             hovermode='y',
             barmode='stack',
-            hoverlabel=Hoverlabel(),
+            dragmode=False,
             xaxis=XAxis(fixedrange=True),
             yaxis=YAxis(fixedrange=True),
             legend=Legend(x=0.5, y=1.02, orientation='h', yanchor='bottom', xanchor='center')

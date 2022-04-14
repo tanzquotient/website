@@ -8,8 +8,8 @@ from courses.models import Offering, OfferingType, Subscribe, MatchingState, Lea
 from utils.plots import stacked_bar_chart, DataSeries
 
 
-def offering_lead_follow_couple() -> Figure:
-    offerings = list(Offering.objects.filter(type=OfferingType.REGULAR).reverse().all())
+def offering_lead_follow_couple(offering_type: str) -> Figure:
+    offerings = list(Offering.objects.filter(type=offering_type).reverse().all())
 
     return stacked_bar_chart(
         labels=[

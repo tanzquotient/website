@@ -6,8 +6,8 @@ from courses.models import Offering, OfferingType, Subscribe, MatchingState
 from utils.plots import stacked_bar_chart, DataSeries
 
 
-def offering_matching_status() -> Figure:
-    offerings = list(Offering.objects.filter(type=OfferingType.REGULAR).reverse().all())
+def offering_matching_status(offering_type: str) -> Figure:
+    offerings = list(Offering.objects.filter(type=offering_type).reverse().all())
 
     colors = {
         MatchingState.COUPLE: '#936fac',

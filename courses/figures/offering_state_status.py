@@ -2,12 +2,12 @@ from django.urls import reverse
 from django.utils.html import escape
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, OfferingType, Subscribe, SubscribeState
+from courses.models import Offering, Subscribe, SubscribeState
 from utils.plots import stacked_bar_chart, DataSeries
 
 
-def offering_state_status() -> Figure:
-    offerings = list(Offering.objects.filter(type=OfferingType.REGULAR).reverse().all())
+def offering_state_status(offering_type: str) -> Figure:
+    offerings = list(Offering.objects.filter(type=offering_type).reverse().all())
 
     colors = {
         SubscribeState.NEW: '#936fac',

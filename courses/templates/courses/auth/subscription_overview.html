@@ -8,57 +8,10 @@
 
 {% block main_content %}
     <div class="container">
-        <p>
-            {% trans "Download summary of all offerings here:" %}
-            <a href="{% url "courses:export_summary_excel" %}">{% trans "Download Excel" %}</a>,
-            <a href="{% url "courses:export_summary" %}">{% trans "Download CSV" %}</a>
-        </p>
-
         <h2>{% trans "Regular Offerings" %}</h2>
-        <div class="row row-cols-1 row-cols-lg-2 g-3 my-3">
-            <div class="col">
-                <h3>{% trans "By subscription state" %}</h3>
-                {% autoescape off %}
-                    {{ offering_state_status_chart }}
-                {% endautoescape %}
-            </div>
-            <div class="col">
-                <h3>{% trans "By affiliation" %}</h3>
-                {% autoescape off %}
-                    {{ offering_by_student_status_chart }}
-                {% endautoescape %}
-            </div>
-            <div class="col">
-                <h3>{% trans "By matching state" %}</h3>
-                {% autoescape off %}
-                    {{ offering_matching_status_chart }}
-                {% endautoescape %}
-            </div>
-            <div class="col">
-                <h3>{% trans "By Lead and Follow" %}</h3>
-                {% autoescape off %}
-                    {{ offering_lead_follow_couple_chart }}
-                {% endautoescape %}
-            </div>
-        </div>
+        {% include "courses/auth/offering_subscription_charts.html" with charts=reg %}
 
-        {% for o in offering_charts %}
-            <h2>{{ o.offering.name }}
-                <small>{{ o.offering.period|default:'' }}
-                </small>
-            </h2>
-            <a href="{% url "courses:offering_overview" o.offering.id %}">(all details)</a>
-            <p>{% include "courses/auth/offering_place_chart.html" with chart=o.place_chart offering=o.offering only %}</p>
-            {% empty %}
-            <div class="alert alert-info">Keine Kurse verfügbar.</div>
-        {% endfor %}
-
-
-        <h3>{% trans "All Offerings" %}</h3>
-        <ul>
-            {% for o in all_offerings %}
-                <li><a href="{% url "courses:offering_overview" o.id %}">{{ o.name }}</a></li>
-            {% endfor %}
-        </ul>
+        <h2>{% trans "Workshops" %}</h2>
+        {% include "courses/auth/offering_subscription_charts.html" with charts=irr %}
     </div>
 {% endblock main_content %}

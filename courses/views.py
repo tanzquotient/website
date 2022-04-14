@@ -325,18 +325,14 @@ def offering_time_chart_dict(offering: Offering) -> dict:
 
 @staff_member_required
 def subscription_overview(request: HttpRequest) -> HttpResponse:
-    offering_charts = []
-    for o in services.get_offerings_to_display():
-        offering_charts.append({'offering': o, 'place_chart': offering_place_chart_dict(o)})
-
-    context = {
-        'offering_charts': offering_charts,
-        'all_offerings': services.get_all_offerings(),
-        'offering_state_status_chart': plot_figure(figures.offering_state_status()),
-        'offering_matching_status_chart': plot_figure(figures.offering_matching_status()),
-        'offering_by_student_status_chart': plot_figure(figures.offering_by_student_status()),
-        'offering_lead_follow_couple_chart': plot_figure(figures.offering_lead_follow_couple()),
-    }
+    context = dict()
+    for offering_type in [OfferingType.REGULAR, OfferingType.IRREGULAR]:
+        context[offering_type] = [
+            dict(title=_('By subscription status'), figure=plot_figure(figures.offering_state_status(offering_type))),
+            dict(title=_('By affiliation'), figure=plot_figure(figures.offering_by_student_status(offering_type))),
+            dict(title=_('By matching states'), figure=plot_figure(figures.offering_matching_status(offering_type))),
+            dict(title=_('By lead and follow'), figure=plot_figure(figures.offering_lead_follow_couple(offering_type))),
+        ]
     return render(request, "courses/auth/subscription_overview.html", context)
 
 

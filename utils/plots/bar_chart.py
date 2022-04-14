@@ -28,6 +28,7 @@ def bar_chart(values: list[Any], labels: list[str]) -> Figure:
                 pad=10,
             ),
             hovermode='y',
+            dragmode=False,
             xaxis=dict(fixedrange=True),
             yaxis=dict(fixedrange=True),
         )

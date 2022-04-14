@@ -24,6 +24,7 @@ def pie_chart(values: list[Any], labels: list[Any]) -> Figure:
                 pad=10,
             ),
             hovermode='y',
+            dragmode=False,
             xaxis=dict(fixedrange=True),
             yaxis=dict(fixedrange=True),
         )
