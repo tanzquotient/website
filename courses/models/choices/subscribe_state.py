@@ -9,7 +9,7 @@ class SubscribeState:
     CHOICES = (
         (NEW, 'new'),
         (CONFIRMED, 'confirmed (to pay)'),
-        (PAID, 'payed'),
+        (PAID, 'paid'),
         (COMPLETED, 'completed'),
         (REJECTED, 'rejected'),
         (TO_REIMBURSE, 'to reimburse'))

@@ -332,8 +332,10 @@ def subscription_overview(request: HttpRequest) -> HttpResponse:
     context = {
         'offering_charts': offering_charts,
         'all_offerings': services.get_all_offerings(),
-        'university_chart': plot_figure(figures.subscriptions_by_university()),
-        'progress_chart': plot_figure(figures.offering_progress()),
+        'offering_state_status_chart': plot_figure(figures.offering_state_status()),
+        'offering_matching_status_chart': plot_figure(figures.offering_matching_status()),
+        'offering_by_student_status_chart': plot_figure(figures.offering_by_student_status()),
+        'offering_lead_follow_couple_chart': plot_figure(figures.offering_lead_follow_couple()),
     }
     return render(request, "courses/auth/subscription_overview.html", context)
 

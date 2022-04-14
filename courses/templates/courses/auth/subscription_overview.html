@@ -7,24 +7,40 @@
 {% endblock %}
 
 {% block main_content %}
-    <h2></h2>
-
     <div class="container">
         <p>
             {% trans "Download summary of all offerings here:" %}
             <a href="{% url "courses:export_summary_excel" %}">{% trans "Download Excel" %}</a>,
             <a href="{% url "courses:export_summary" %}">{% trans "Download CSV" %}</a>
         </p>
-        
-        <h2>{% trans "Subscriptions by universities" %}</h2>
-        {% autoescape off %}
-            {{ university_chart }}
-        {% endautoescape %}
 
-        <h2>{% trans "Overall Progress" %}</h2>
-        {% autoescape off %}
-            {{ progress_chart }}
-        {% endautoescape %}
+        <h2>{% trans "Regular Offerings" %}</h2>
+        <div class="row row-cols-1 row-cols-lg-2 g-3 my-3">
+            <div class="col">
+                <h3>{% trans "By subscription state" %}</h3>
+                {% autoescape off %}
+                    {{ offering_state_status_chart }}
+                {% endautoescape %}
+            </div>
+            <div class="col">
+                <h3>{% trans "By affiliation" %}</h3>
+                {% autoescape off %}
+                    {{ offering_by_student_status_chart }}
+                {% endautoescape %}
+            </div>
+            <div class="col">
+                <h3>{% trans "By matching state" %}</h3>
+                {% autoescape off %}
+                    {{ offering_matching_status_chart }}
+                {% endautoescape %}
+            </div>
+            <div class="col">
+                <h3>{% trans "By Lead and Follow" %}</h3>
+                {% autoescape off %}
+                    {{ offering_lead_follow_couple_chart }}
+                {% endautoescape %}
+            </div>
+        </div>
 
         {% for o in offering_charts %}
             <h2>{{ o.offering.name }}
