@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-12 14:50+0200\n"
+"POT-Creation-Date: 2022-04-14 22:16+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -130,10 +130,7 @@ msgstr "Music of dance styles"
 msgid "Courses"
 msgstr "Courses"
 
-#: courses/cms_toolbars.py:13 payment/templates/payment/finance/index.html:11
-#: payment/templates/payment/finance/offering_detail.html:11
-#: payment/templates/payment/finance/offering_overview_subscribers.html:11
-#: payment/templates/payment/finance/offering_overview_teachers.html:11
+#: courses/cms_toolbars.py:13 payment/templates/payment/finance/index.html:10
 msgid "Offerings"
 msgstr "Offerings"
 
@@ -142,8 +139,6 @@ msgid "All Courses"
 msgstr "All Courses"
 
 #: courses/cms_toolbars.py:19
-#: payment/templates/payment/finance/offering_overview_subscribers.html:20
-#: payment/templates/payment/finance/offering_overview_teachers.html:21
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
@@ -161,7 +156,6 @@ msgid "Songs"
 msgstr "Songs"
 
 #: courses/cms_toolbars.py:34
-#: payment/templates/payment/finance/account_detail.html:11
 msgid "Periods"
 msgstr "Periods"
 
@@ -192,6 +186,29 @@ msgstr "Merge duplicate users"
 #: courses/cms_toolbars.py:57
 msgid "Check confirmations"
 msgstr "Check confirmations"
+
+#: courses/figures/offering_lead_follow_couple.py:20
+msgid "Couples"
+msgstr "Couples"
+
+#: courses/figures/offering_lead_follow_couple.py:26
+#: courses/templates/courses/snippets/subscribe_form.html:42
+msgid "Lead"
+msgstr "Lead"
+
+#: courses/figures/offering_lead_follow_couple.py:36
+#: courses/templates/courses/snippets/subscribe_form.html:46
+msgid "No preference"
+msgstr "No preference"
+
+#: courses/figures/offering_lead_follow_couple.py:46
+#: courses/templates/courses/snippets/subscribe_form.html:51
+msgid "Follow"
+msgstr "Follow"
+
+#: courses/figures/offering_lead_follow_couple.py:56
+msgid "Not required"
+msgstr "Not required"
 
 #: courses/forms/custom_signup_form.py:15
 msgid "Vorname"
@@ -537,8 +554,7 @@ msgstr "Download summary of this offering here:"
 
 #: courses/templates/courses/auth/offering_overview.html:14
 #: courses/templates/courses/auth/offering_overview.html:15
-#: courses/templates/courses/auth/subscription_overview.html:15
-#: payment/templates/payment/finance/offering_overview_teachers.html:29
+#: payment/templates/payment/finance/offering_overview_teachers.html:30
 msgid "Download Excel"
 msgstr "Download Excel"
 
@@ -567,26 +583,14 @@ msgstr "Update Profile"
 msgid "Subscription Overview"
 msgstr "Subscription overview"
 
+#: courses/templates/courses/auth/subscription_overview.html:11
+#: courses/templates/courses/snippets/historic_offerings_overview.html:6
+msgid "Regular offerings"
+msgstr "Regular offerings"
+
 #: courses/templates/courses/auth/subscription_overview.html:14
-msgid "Download summary of all offerings here:"
-msgstr "Download summary of all offerings here:"
-
-#: courses/templates/courses/auth/subscription_overview.html:16
-#: payment/templates/payment/finance/offering_overview_teachers.html:28
-msgid "Download CSV"
-msgstr "Download CSV"
-
-#: courses/templates/courses/auth/subscription_overview.html:19
-msgid "Subscriptions by universities"
-msgstr "Subscriptions by universities"
-
-#: courses/templates/courses/auth/subscription_overview.html:24
-msgid "Overall Progress"
-msgstr "Overall Progress"
-
-#: courses/templates/courses/auth/subscription_overview.html:40
-msgid "All Offerings"
-msgstr "All offerings"
+msgid "Workshops"
+msgstr "Workshops"
 
 #: courses/templates/courses/course_detail.html:10
 #: courses/templates/user/snippets/subscription.html:19
@@ -701,7 +705,7 @@ msgstr "All styles"
 #: courses/templates/courses/snippets/course_filter.html:10
 #: survey/templates/survey/components/question_multiplechoice_freeform.html:5
 #: survey/templates/survey/components/question_singlechoice_freeform.html:5
-#: survey/utils/get_plot_for_question.py:41
+#: survey/utils/get_plot_for_question.py:32
 msgid "Other"
 msgstr "Other"
 
@@ -710,7 +714,8 @@ msgid "Level"
 msgstr "Level"
 
 #: courses/templates/courses/snippets/course_info.html:14
-#: payment/templates/payment/finance/offering_overview_subscribers.html:21
+#: payment/templates/payment/finance/offering_detail.html:23
+#: payment/templates/payment/finance/offering_overview_subscribers.html:23
 #: payment/templates/payment/finance/offering_overview_teachers.html:23
 #: survey/templates/survey/components/survey_course_hint.html:12
 msgid "Teachers"
@@ -744,10 +749,6 @@ msgstr "Preview"
 msgid "Past courses"
 msgstr "Past courses"
 
-#: courses/templates/courses/snippets/historic_offerings_overview.html:6
-msgid "Regular offerings"
-msgstr "Regular offerings"
-
 #: courses/templates/courses/snippets/historic_offerings_overview.html:23
 msgid "Workshops and other irregular offerings"
 msgstr "Workshops and other irregular offerings"
@@ -773,28 +774,33 @@ msgid "Time unknown"
 msgstr "Time unknown"
 
 #: courses/templates/courses/snippets/level.html:5
+msgid "All levels"
+msgstr "All levels"
+
+#: courses/templates/courses/snippets/level.html:7
 msgid "Beginner"
 msgstr "Beginner"
 
-#: courses/templates/courses/snippets/level.html:7
+#: courses/templates/courses/snippets/level.html:9
 msgid "Intermediate"
 msgstr "Intermediate"
 
-#: courses/templates/courses/snippets/level.html:9
+#: courses/templates/courses/snippets/level.html:11
 #: templates/menu/mobile_menu.html:24
 msgid "Advanced"
 msgstr "Advanced"
 
-#: courses/templates/courses/snippets/level.html:12
-msgid "All levels"
-msgstr "All levels"
+#: courses/templates/courses/snippets/level.html:14
+#: courses/templates/courses/snippets/offering.html:52
+msgid "Not specified"
+msgstr "Not specified"
 
 #: courses/templates/courses/snippets/offering.html:24
 #: payment/templates/payment/counter/details.html:26
 #: payment/templates/payment/courses/confirm.html:24
-#: payment/templates/payment/finance/offering_detail.html:29
+#: payment/templates/payment/finance/offering_detail.html:33
 #: payment/templates/payment/finance/offering_overview_subscribers.html:32
-#: payment/templates/payment/finance/offering_overview_teachers.html:36
+#: payment/templates/payment/finance/offering_overview_teachers.html:35
 #: payment/templates/payment/subscription/index.html:56
 msgid "Course"
 msgstr "Course"
@@ -812,16 +818,11 @@ msgstr "External link"
 msgid "Status"
 msgstr "Status"
 
-#: courses/templates/courses/snippets/offering.html:52
-msgid "Not specified"
-msgstr "Not specified"
-
 #: courses/templates/courses/snippets/offering.html:58
 msgid "Currently unknown"
 msgstr "Currently unknown"
 
 #: courses/templates/courses/snippets/offering.html:64
-#: payment/templates/payment/finance/account_detail.html:123
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -834,7 +835,7 @@ msgid "no lesson"
 msgstr "no lesson"
 
 #: courses/templates/courses/snippets/regular_lesson_exceptions.html:18
-#: payment/templates/payment/finance/account_detail.html:34
+#: payment/templates/payment/finance/account_detail.html:29
 msgid "with"
 msgstr "with"
 
@@ -861,7 +862,7 @@ msgstr "Some inputs are invalid"
 #: payment/templates/payment/counter/details.html:20
 #: payment/templates/payment/courses/confirm.html:20
 #: payment/templates/payment/courses/course.html:81
-#: payment/templates/payment/finance/offering_detail.html:25
+#: payment/templates/payment/finance/offering_detail.html:30
 msgid "Name"
 msgstr "Name"
 
@@ -871,7 +872,7 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: courses/templates/courses/snippets/song_list.html:7
-#: tq_website/settings.py:339
+#: tq_website/settings.py:340
 msgid "Title"
 msgstr "Title"
 
@@ -923,18 +924,6 @@ msgstr ""
 msgid "Do you want to lead or follow?"
 msgstr "Do you want to lead or follow?"
 
-#: courses/templates/courses/snippets/subscribe_form.html:42
-msgid "Lead"
-msgstr "Lead"
-
-#: courses/templates/courses/snippets/subscribe_form.html:46
-msgid "No preference"
-msgstr "No preference"
-
-#: courses/templates/courses/snippets/subscribe_form.html:51
-msgid "Follow"
-msgstr "Follow"
-
 #: courses/templates/courses/snippets/subscribe_form.html:57
 msgid "There are no spots available for leaders anymore."
 msgstr "There are no spots available for leaders anymore."
@@ -964,7 +953,7 @@ msgstr ""
 "Provide the email address your partner used to register on this website."
 
 #: courses/templates/courses/snippets/subscribe_form.html:85
-#: payment/templates/payment/finance/account_detail.html:54
+#: payment/templates/payment/finance/account_detail.html:45
 msgid "Comment"
 msgstr "Comment"
 
@@ -1352,13 +1341,29 @@ msgstr "No Subscriptions"
 msgid "Show available courses"
 msgstr "Show available courses"
 
-#: courses/views.py:75
+#: courses/views.py:76
 msgid "Upcoming courses"
 msgstr "Upcoming courses"
 
-#: courses/views.py:82
+#: courses/views.py:83
 msgid "Next courses"
 msgstr "Next courses"
+
+#: courses/views.py:331
+msgid "By subscription status"
+msgstr "By subscription status"
+
+#: courses/views.py:332
+msgid "By affiliation"
+msgstr "By affiliation"
+
+#: courses/views.py:333
+msgid "By matching states"
+msgstr "By matching states"
+
+#: courses/views.py:334
+msgid "By lead and follow"
+msgstr "By lead and follow"
 
 #: email_system/apps.py:7
 msgid "Emails"
@@ -1448,7 +1453,7 @@ msgstr "Event Categories"
 
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:7
-#: payment/templates/payment/finance/account_detail.html:49
+#: payment/templates/payment/finance/account_detail.html:41
 #: payment/templates/payment/subscription/index.html:75
 msgid "Date"
 msgstr "Date"
@@ -1614,7 +1619,7 @@ msgid "Payment"
 msgstr "Payment"
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/finance/offering_overview_subscribers.html:36
+#: payment/templates/payment/finance/offering_overview_subscribers.html:40
 #: payment/templates/payment/subscription/index.html:67
 msgid "Voucher"
 msgstr "Voucher"
@@ -1709,6 +1714,7 @@ msgstr "Total Amount"
 
 #: payment/templates/payment/counter/details.html:36
 #: payment/templates/payment/courses/confirm.html:33
+#: payment/templates/payment/finance/offering_detail.html:32
 #: payment/templates/payment/subscription/index.html:109
 msgid "Open Amount"
 msgstr "Open Amount"
@@ -1751,8 +1757,8 @@ msgstr "Show course page"
 msgid "German"
 msgstr "German"
 
-#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:299
-#: tq_website/settings.py:314
+#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:300
+#: tq_website/settings.py:315
 msgid "English"
 msgstr "English"
 
@@ -1776,7 +1782,7 @@ msgid "Lead/Follow"
 msgstr "Lead/Follow"
 
 #: payment/templates/payment/courses/course.html:82
-#: payment/templates/payment/finance/offering_detail.html:26
+#: payment/templates/payment/finance/offering_detail.html:31
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -1829,56 +1835,53 @@ msgstr "Save"
 msgid "Account Finance"
 msgstr "Account Finance"
 
-#: payment/templates/payment/finance/account_detail.html:15
+#: payment/templates/payment/finance/account_detail.html:10
 msgid "Account transactions"
 msgstr "Account transactions"
 
-#: payment/templates/payment/finance/account_detail.html:18
+#: payment/templates/payment/finance/account_detail.html:13
 msgid "Summary"
 msgstr "Summary"
 
-#: payment/templates/payment/finance/account_detail.html:19
+#: payment/templates/payment/finance/account_detail.html:14
 msgid "with filters respected"
 msgstr "with filters respected"
 
-#: payment/templates/payment/finance/account_detail.html:31
+#: payment/templates/payment/finance/account_detail.html:26
 msgid "Transaction list"
 msgstr "Transaction list"
 
-#: payment/templates/payment/finance/account_detail.html:32
+#: payment/templates/payment/finance/account_detail.html:27
 msgid "Show"
 msgstr "Show"
 
-#: payment/templates/payment/finance/account_detail.html:36
+#: payment/templates/payment/finance/account_detail.html:31
 msgid "without"
 msgstr "without"
 
-#: payment/templates/payment/finance/account_detail.html:38
+#: payment/templates/payment/finance/account_detail.html:33
 msgid "subscription payments"
 msgstr "Subscription payments"
 
-#: payment/templates/payment/finance/account_detail.html:48
-msgid "ID"
-msgstr "ID"
+#: payment/templates/payment/finance/account_detail.html:42
+msgid "Details"
+msgstr "Details"
 
-#: payment/templates/payment/finance/account_detail.html:50
-msgid "Type"
-msgstr "Type"
-
-#: payment/templates/payment/finance/account_detail.html:51
+#: payment/templates/payment/finance/account_detail.html:43
 msgid "Credit"
 msgstr "Credit"
 
-#: payment/templates/payment/finance/account_detail.html:53
+#: payment/templates/payment/finance/account_detail.html:44
 msgid "Debit"
 msgstr "Debit"
 
-#: payment/templates/payment/finance/account_detail.html:111
+#: payment/templates/payment/finance/account_detail.html:81
 #: payment/templates/payment/finance/offering_overview_subscribers.html:33
+#: payment/templates/payment/finance/offering_overview_subscribers.html:76
 msgid "Total"
 msgstr "Total"
 
-#: payment/templates/payment/finance/account_detail.html:132
+#: payment/templates/payment/finance/account_detail.html:92
 msgid "Save Comments"
 msgstr "Save Comments"
 
@@ -1901,23 +1904,19 @@ msgstr "Show transactions"
 msgid "Finance"
 msgstr "Finance"
 
-#: payment/templates/payment/finance/offering_detail.html:13
+#: payment/templates/payment/finance/offering_detail.html:17
+#: payment/templates/payment/finance/offering_overview_subscribers.html:17
+#: payment/templates/payment/finance/offering_overview_teachers.html:17
+msgid "Subscription Totals"
+msgstr "Subscription Totals"
+
+#: payment/templates/payment/finance/offering_detail.html:20
+#: payment/templates/payment/finance/offering_overview_subscribers.html:20
+#: payment/templates/payment/finance/offering_overview_teachers.html:20
 msgid "Unpaid Subscriptions"
 msgstr "Unpaid Subscriptions"
 
-#: payment/templates/payment/finance/offering_detail.html:24
-msgid "USI"
-msgstr "USI"
-
-#: payment/templates/payment/finance/offering_detail.html:27
-msgid "Amount"
-msgstr "Amount"
-
-#: payment/templates/payment/finance/offering_detail.html:28
-msgid "Amount Due"
-msgstr "Amount Due"
-
-#: payment/templates/payment/finance/offering_detail.html:30
+#: payment/templates/payment/finance/offering_detail.html:34
 msgid "Last reminded"
 msgstr "Last reminded"
 
@@ -1925,39 +1924,43 @@ msgstr "Last reminded"
 msgid "Send Reminder"
 msgstr "Send Reminder"
 
-#: payment/templates/payment/finance/offering_overview_subscribers.html:36
+#: payment/templates/payment/finance/offering_overview_subscribers.html:37
 msgid "Cash"
 msgstr "Cash"
 
-#: payment/templates/payment/finance/offering_overview_subscribers.html:36
+#: payment/templates/payment/finance/offering_overview_subscribers.html:43
 msgid "Online"
 msgstr "Online"
 
-#: payment/templates/payment/finance/offering_overview_subscribers.html:37
+#: payment/templates/payment/finance/offering_overview_subscribers.html:46
 msgid "Counter"
 msgstr "Counter"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:27
+#: payment/templates/payment/finance/offering_overview_teachers.html:28
 msgid "Download summary of teacher payment information here:"
 msgstr "Download summary of teacher payment information here:"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:37
+#: payment/templates/payment/finance/offering_overview_teachers.html:29
+msgid "Download CSV"
+msgstr "Download CSV"
+
+#: payment/templates/payment/finance/offering_overview_teachers.html:36
 msgid "Hourly wage(s)"
 msgstr "Hourly wage(s)"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:38
+#: payment/templates/payment/finance/offering_overview_teachers.html:37
 msgid "Regular course hours"
 msgstr "Regular course hours"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:39
+#: payment/templates/payment/finance/offering_overview_teachers.html:38
 msgid "Irregular course hours"
 msgstr "Irregular course hours"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:40
+#: payment/templates/payment/finance/offering_overview_teachers.html:39
 msgid "Total hours"
 msgstr "Total hours"
 
-#: payment/templates/payment/finance/offering_overview_teachers.html:41
+#: payment/templates/payment/finance/offering_overview_teachers.html:40
 msgid "Total wage(s) (CHF)"
 msgstr "Total wage(s) (CHF)"
 
@@ -2380,17 +2383,44 @@ msgstr "Association functions"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:298 tq_website/settings.py:306
+#: tq_website/settings.py:299 tq_website/settings.py:307
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:331
+#: tq_website/settings.py:332
 msgid "Main content"
 msgstr "Main content"
 
-#: tq_website/settings.py:335
+#: tq_website/settings.py:336
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid "Download summary of all offerings here:"
+#~ msgstr "Download summary of all offerings here:"
+
+#~ msgid "Subscriptions by universities"
+#~ msgstr "Subscriptions by universities"
+
+#~ msgid "Overall Progress"
+#~ msgstr "Overall Progress"
+
+#~ msgid "All Offerings"
+#~ msgstr "All offerings"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "USI"
+#~ msgstr "USI"
+
+#~ msgid "Amount"
+#~ msgstr "Amount"
+
+#~ msgid "Amount Due"
+#~ msgstr "Amount Due"
 
 #~ msgid "Transfer to"
 #~ msgstr "Transfer to"

@@ -17,7 +17,7 @@ def offering_lead_follow_couple(offering_type: str) -> Figure:
         ],
         data=[
             DataSeries(
-                name=str(_('Couple')),
+                name=str(_('Couples')),
                 values=[Subscribe.objects.filter(matching_state=MatchingState.COUPLE, course__offering=offering).count()
                         for offering in offerings],
                 color='#936fac',
@@ -33,7 +33,7 @@ def offering_lead_follow_couple(offering_type: str) -> Figure:
                 color='#348aa7'
             ),
             DataSeries(
-                name=str(_('No Preference')),
+                name=str(_('No preference')),
                 values=[Subscribe.objects.filter(
                     course__offering=offering,
                     lead_follow=LeadFollow.NO_PREFERENCE,
