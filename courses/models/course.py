@@ -105,25 +105,25 @@ class Course(TranslatableModel):
             'paid_counter': 0,
         }
         accepted = self.subscriptions.accepted()
-        for s in accepted.all():
-            price = s.get_price_to_pay() or 0
-            totals['to_pay'] += price
+        for subscription in accepted.all():
+            amount = subscription.get_price_to_pay() or 0
+            totals['to_pay'] += amount
 
         paid = accepted.paid()
         totals['paid_count'] = paid.count()
         totals['not_paid_count'] = accepted.count() - paid.count()
-        for s in paid.all():
-            price = s.get_price_to_pay() or 0
-            totals['paid'] += price
-            if s.paymentmethod == PaymentMethod.ONLINE:
-                totals['paid_online'] += price
-            if s.paymentmethod == PaymentMethod.VOUCHER:
-                totals['paid_voucher'] += price
-            if s.paymentmethod == PaymentMethod.COURSE:
-                totals['paid_course'] += price
-            if s.paymentmethod == PaymentMethod.COUNTER:
-                totals['paid_counter'] += price
-        totals['unpaid'] = totals['to_pay'] - totals['paid']
+        for subscription in paid.all():
+            amount = subscription.sum_of_payments() or 0
+            totals['paid'] += amount
+            totals['paid_voucher'] += subscription.sum_of_reductions()
+            if subscription.paymentmethod == PaymentMethod.ONLINE:
+                totals['paid_online'] += amount
+            if subscription.paymentmethod == PaymentMethod.COURSE:
+                totals['paid_course'] += amount
+            if subscription.paymentmethod == PaymentMethod.COUNTER:
+                totals['paid_counter'] += amount
+
+        totals['unpaid'] = totals['to_pay'] - totals['paid'] - totals['paid_voucher']
 
         return totals
 

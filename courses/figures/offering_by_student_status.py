@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, OfferingType, Subscribe, StudentStatus
+from courses.models import Offering, Subscribe, StudentStatus
 from utils.plots import stacked_bar_chart, DataSeries
 
 
@@ -24,7 +24,7 @@ def offering_by_student_status(offering_type: str) -> Figure:
         data=[
             DataSeries(
                 name=label,
-                values=[Subscribe.objects.filter(user__profile__student_status=key, course__offering=o).count()
+                values=[Subscribe.objects.active().filter(user__profile__student_status=key, course__offering=o).count()
                         for o in offerings],
                 color=colors.get(key)
             ) for key, label in StudentStatus.CHOICES

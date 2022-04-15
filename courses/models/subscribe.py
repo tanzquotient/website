@@ -181,13 +181,16 @@ class Subscribe(Model):
 
     def price_after_reductions(self) -> Decimal:
         self.generate_price_to_pay()
-        price = self.get_price_to_pay()
+        return self.get_price_to_pay() - self.sum_of_reductions()
 
-        # Subtract reductions
+    def sum_of_reductions(self) -> Decimal:
+        sum_of_reductions = Decimal(0)
+
+        # Add up reductions
         for price_reduction in self.price_reductions.all():
-            price -= price_reduction.amount
+            sum_of_reductions += price_reduction.amount
 
-        return price
+        return sum_of_reductions
 
     def sum_of_payments(self) -> Decimal:
         sum_of_payments = 0
