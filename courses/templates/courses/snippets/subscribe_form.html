@@ -58,7 +58,13 @@
                     {% if not course.has_free_places_for_followers %}
                         <div class="text-warning">{% trans "There are no spots available for followers anymore." %}</div>
                     {% endif %}
-                    {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+                    <div>
+                        {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+                    </div>
+                    <div>
+                        {% trans "Please note, that we will assign partners based on lead / follow preferences, not based on gender." %}
+                        {% trans "If you indicate no preference, we will assign you a fixed role based on the number of leaders and followers signed up for this course." %}
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">

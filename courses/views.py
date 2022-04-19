@@ -320,6 +320,7 @@ def offering_time_chart_dict(offering: Offering) -> dict:
     return {
         'traces': traces,
         'trace_total': trace_total,
+        'trace_total': trace_total,
     }
 
 

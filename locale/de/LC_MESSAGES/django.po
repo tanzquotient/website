@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-14 22:16+0200\n"
+"POT-Creation-Date: 2022-04-19 09:55+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -189,26 +189,26 @@ msgstr "Doppelte Benutzer:innen zusammenführen"
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
-#: courses/figures/offering_lead_follow_couple.py:20
+#: courses/figures/offering_lead_follow_couple.py:19
 msgid "Couples"
 msgstr "Paare"
 
-#: courses/figures/offering_lead_follow_couple.py:26
+#: courses/figures/offering_lead_follow_couple.py:25
 #: courses/templates/courses/snippets/subscribe_form.html:42
 msgid "Lead"
 msgstr "Führen"
 
-#: courses/figures/offering_lead_follow_couple.py:36
+#: courses/figures/offering_lead_follow_couple.py:35
 #: courses/templates/courses/snippets/subscribe_form.html:46
 msgid "No preference"
 msgstr "Keine Präferenz"
 
-#: courses/figures/offering_lead_follow_couple.py:46
+#: courses/figures/offering_lead_follow_couple.py:45
 #: courses/templates/courses/snippets/subscribe_form.html:51
 msgid "Follow"
 msgstr "Geführt werden"
 
-#: courses/figures/offering_lead_follow_couple.py:56
+#: courses/figures/offering_lead_follow_couple.py:55
 msgid "Not required"
 msgstr "Nicht benötigt"
 
@@ -390,7 +390,7 @@ msgstr "führen"
 msgid "follow"
 msgstr "folgen"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:251
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:254
 msgid "no preference"
 msgstr "keine Präferenz"
 
@@ -414,19 +414,19 @@ msgstr "Single"
 msgid "couple"
 msgstr "Paar"
 
-#: courses/models/subscribe.py:254
+#: courses/models/subscribe.py:257
 msgid "leader"
 msgstr "führen"
 
-#: courses/models/subscribe.py:255
+#: courses/models/subscribe.py:258
 msgid "follower"
 msgstr "geführt werden"
 
-#: courses/models/subscribe.py:258
+#: courses/models/subscribe.py:261
 msgid "no preference, assigned as leader"
 msgstr "keine Präferenz, zum führen eingeteilt"
 
-#: courses/models/subscribe.py:259
+#: courses/models/subscribe.py:262
 msgid "no preference, assigned as follower"
 msgstr "keine Präferenz, zum geführt werden eingeteilt"
 
@@ -622,7 +622,7 @@ msgid "Info"
 msgstr "Infos"
 
 #: courses/templates/courses/course_subscribe_form.html:22
-#: courses/templates/courses/snippets/subscribe_form.html:110
+#: courses/templates/courses/snippets/subscribe_form.html:116
 #: templates/account/signup.html:8 templates/account/signup.html:24
 msgid "Sign Up"
 msgstr "Registrieren"
@@ -946,7 +946,7 @@ msgstr "Es gibt keine Plätze mehr für Personen, die führen wollen."
 msgid "There are no spots available for followers anymore."
 msgstr "Es gibt keine Plätze mehr für Personen, die geführt werden wollen."
 
-#: courses/templates/courses/snippets/subscribe_form.html:62
+#: courses/templates/courses/snippets/subscribe_form.html:63
 msgid ""
 "The leader is responsible for guiding the couple, the guided partner is "
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
@@ -955,39 +955,55 @@ msgstr ""
 "Im veralteten Sinn ist die Führung die Aufgabe des Herren. Mittlerweile ist "
 "aber auch die umgekehrte Variante gerne gesehen."
 
+#: courses/templates/courses/snippets/subscribe_form.html:66
+msgid ""
+"Please note, that we will assign partners based on lead / follow "
+"preferences, not based on gender."
+msgstr ""
+"Hinweis: Wir teilen Partner:innen basierend auf den hier angegeben "
+"Präferenzen zu, das Geschlecht wird nicht berücksichtigt."
+
 #: courses/templates/courses/snippets/subscribe_form.html:67
+msgid ""
+"If you indicate no preference, we will assign you a fixed role based on the "
+"number of leaders and followers signed up for this course."
+msgstr ""
+"Falls du keine Präferenz angibst, teilen wir dir eine fixe Rolle zu, "
+"basierend darauf wie viele Leute führen bzw. geführt werden wollen"
+
+#: courses/templates/courses/snippets/subscribe_form.html:73
 msgid "Email address of your partner"
 msgstr "Email Adresse deines Partners"
 
-#: courses/templates/courses/snippets/subscribe_form.html:76
+#: courses/templates/courses/snippets/subscribe_form.html:82
 msgid ""
 "Provide the email address your partner used to register on this website."
 msgstr ""
 "Gib die Email-Adresse an, mit der sich dein Partner / deine Partnerin auf "
 "dieser Website registriert hat."
 
-#: courses/templates/courses/snippets/subscribe_form.html:85
+#: courses/templates/courses/snippets/subscribe_form.html:91
 #: payment/templates/payment/finance/account_detail.html:45
 msgid "Comment"
 msgstr "Kommentar"
 
-#: courses/templates/courses/snippets/subscribe_form.html:87
+#: courses/templates/courses/snippets/subscribe_form.html:93
 msgid "Anything else you want to tell us?"
 msgstr "Würdest du uns gerne noch etwas mitteilen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:93
+#: courses/templates/courses/snippets/subscribe_form.html:99
 msgid "General terms and conditions"
 msgstr "Allgemeine Geschäftsbedingungen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:97
+#: courses/templates/courses/snippets/subscribe_form.html:103
 msgid "View the general terms and conditions"
 msgstr "Sieh dir unsere Allgemeine Geschäftsbedingungen an"
 
-#: courses/templates/courses/snippets/subscribe_form.html:102
+#: courses/templates/courses/snippets/subscribe_form.html:108
 msgid "I accept the general terms and conditions."
 msgstr "Ich akzeptiere die Allgemeine Geschäftsbedingungen."
 
-#: courses/templates/courses/snippets/subscribe_form.html:105
+#: courses/templates/courses/snippets/subscribe_form.html:111
 msgid "You must accept the general terms and conditions."
 msgstr "Du musst die Allgemeine Geschäftsbedingungen akzeptieren"
 
@@ -1365,19 +1381,19 @@ msgstr "Bevorstehende Kurse"
 msgid "Next courses"
 msgstr "Nächste Kurse"
 
-#: courses/views.py:331
+#: courses/views.py:332
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:332
+#: courses/views.py:333
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:333
+#: courses/views.py:334
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:334
+#: courses/views.py:335
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
