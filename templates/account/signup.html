@@ -11,19 +11,46 @@
         {% trans "Already have an account?" %} <a href="{{ login_url }}">{% trans "Login" %}</a>.
     </p>
 
-    <form class="form-horizontal" role="form" id="signup_form" method="post" action="{% url 'account_signup' %}">
+    <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
-        {% include "courses/snippets/signup_user_form.html" with form=form only %}
+
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+                {% include "courses/snippets/text_input.html" with field=form.first_name only %}
+            </div>
+            <div class="col">
+                {% include "courses/snippets/text_input.html" with field=form.last_name only %}
+            </div>
+        </div>
+
+        {% include "courses/snippets/gender_input.html" with field=form.gender_options custom_field=form.gender_custom_value only %}
+        {% include "courses/snippets/student_status_input.html" with form=form only %}
+        {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
+        {% include "courses/snippets/text_input.html" with field=form.body_height only %}
+
+        {% include "courses/snippets/text_input.html" with field=form.email only %}
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+                {% include "courses/snippets/text_input.html" with field=form.password1 type="password" only %}
+            </div>
+            <div class="col">
+                {% include "courses/snippets/text_input.html" with field=form.password2 type="password" only %}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            {% include "courses/snippets/boolean_input.html" with field=form.newsletter only %}
+            {% include "courses/snippets/boolean_input.html" with field=form.get_involved only %}
+        </div>
+
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success">
-                    {% trans "Sign Up" %}
-                </button>
-            </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success">
+                {% trans "Create Account" %}
+            </button>
         </div>
     </form>
 

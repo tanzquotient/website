@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from courses import models as models
 
 
-def update_user(user, user_data):
+def update_user(user: User, user_data: dict) -> User:
     if 'email' in user_data:
         user.email = user_data['email']
     if 'first_name' in user_data:
@@ -20,7 +20,7 @@ def update_user(user, user_data):
     profile = get_or_create_userprofile(user)
 
     # convenience method. if key is not given, assume same as attr
-    def set_if_given(attr, key=None):
+    def set_if_given(attr: str, key: str = None) -> None:
         if not key:
             key = attr
         if key in user_data:
@@ -47,7 +47,7 @@ def update_user(user, user_data):
     set_if_given('residence_permit')
     set_if_given('ahv_number')
 
-    if all((key in user_data) for key in ['street', 'plz', 'city']):
+    if all((user_data.get(key)) for key in ['street', 'plz', 'city']):
         if profile.address:
             profile.address.street = user_data['street']
             profile.address.plz = user_data['plz']

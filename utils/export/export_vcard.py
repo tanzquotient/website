@@ -2,7 +2,6 @@ from io import StringIO
 
 from django.http import HttpResponse
 
-from courses.models import Gender
 from . import export_zip, clean_filename
 
 
@@ -11,13 +10,13 @@ def write_vcard(data, file):
 
         card = "BEGIN:VCARD\n"
         card += "VERSION:3.0\n"
-        card += "EMAIL:{}\n".format(user.email)
-        card += "FN:{} {}\n".format(user.first_name, user.last_name)
-        card += "GENDER:{}\n".format('M' if user.profile.gender == Gender.MALE else 'F')
-        card += "N:{};{};;;\n".format(user.last_name, user.first_name)
+        card += f"EMAIL:{user.email}\n"
+        card += f"FN:{user.first_name} {user.last_name}\n"
+        card += f"GENDER:{user.profile.gender or ''}\n"
+        card += f"N:{user.last_name};{user.first_name};;;\n"
         if user.profile.phone_number:
             tel = user.profile.phone_number
-            if len(tel) >= 2 and tel[0:2] == "07": # Add country code for swiss numbers
+            if len(tel) >= 2 and tel[0:2] == "07":  # Add country code for swiss numbers
                 tel = "+41 " + tel[1:]
             card += "TEL:{}\n".format(tel)
         card += "END:VCARD\n"

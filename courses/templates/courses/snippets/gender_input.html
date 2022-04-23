@@ -1,0 +1,68 @@
+{% load i18n %}
+
+<label class="form-label mt-2">
+    {{ field.label }}{% if field.field.required %}*{% endif %}
+</label>
+
+<div class="input-group has-validation">
+    <div class="form-check form-check-inline align-self-center">
+        <input
+                class="form-check-input"
+                type="radio"
+                id="man"
+                name="{{ field.html_name }}"
+                {% if field.value == "man" %} checked {% endif %}
+                value="man">
+        <label class="form-check-label" for="man">{% trans "Man" %}</label>
+    </div>
+    <div class="form-check form-check-inline align-self-center">
+        <input
+                class="form-check-input"
+                type="radio"
+                id="woman"
+                name="{{ field.html_name }}"
+                {% if field.value == "woman" %} checked {% endif %}
+                value="woman">
+        <label class="form-check-label" for="woman">{% trans "Woman" %}</label>
+    </div>
+    <div class="form-check form-check-inline align-self-center">
+        <input
+                class="form-check-input"
+                type="radio"
+                id="non-binary"
+                name="{{ field.html_name }}"
+                {% if field.value == "non-binary" %} checked {% endif %}
+                value="non-binary">
+        <label class="form-check-label" for="non-binary">{% trans "Non-binary" %}</label>
+    </div>
+    <div class="form-check form-check-inline align-self-center">
+        <input
+                class="form-check-input"
+                type="radio"
+                id="not-specified"
+                name="{{ field.html_name }}"
+                {% if field.value == "not-specified" %} checked {% endif %}
+                value="not-specified">
+        <label class="form-check-label" for="not-specified">{% trans "Rather not say" %}</label>
+    </div>
+        <div class="form-check form-check-inline d-flex flex-row">
+            <input
+                        class="form-check-input mb-1 me-2 align-self-center"
+                        type="radio"
+                        id="let-me-specify"
+                        name="{{ field.html_name }}"
+                        {% if field.value == "custom" and custom_field.value %} checked {% endif %}
+                        value="custom">
+            <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="{{ custom_field.html_name }}"
+                    placeholder="{% trans "Let me specify" %}"
+                    value="{{ custom_field.value|default:"" }}"/>
+        </div>
+
+    {% if field.help_text %}
+        <div class="form-text">{{ field.help_text }}</div>
+    {% endif %}
+    {% include "courses/snippets/field_errors.html" %}
+</div>

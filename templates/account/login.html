@@ -30,7 +30,7 @@
 
             &nbsp; {% trans "or" %}
 
-            <a href="{{ signup_url }}">{% trans "create a new account" %}</a>
+            <a href="{{ signup_url }}?next={{ request.path }}">{% trans "create a new account" %}</a>
 
             <div class="mt-3">
                 <a class="button secondaryAction"

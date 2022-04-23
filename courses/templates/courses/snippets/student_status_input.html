@@ -1,0 +1,38 @@
+{% load i18n %}
+
+{% with form.student_status.value as is_student %}
+    <label class="form-label mt-2">
+        {{ form.student_status.label }}
+    </label>
+    <div>
+        <div class="nav btn-group d-inline-flex" role="group">
+            <input type="radio" class="btn-check" name="{{ form.student_status.html_name }}" id="student"
+                   value="true" autocomplete="off"  {% if is_student %} checked {% endif %}
+                   data-bs-target="#student-tab" data-bs-toggle="pill"/>
+            <label class="btn btn-sm btn-outline-secondary" for="student">{% trans "Yes" %}</label>
+
+            <input type="radio" class="btn-check" name="{{ form.student_status.html_name }}" id="no-student"
+                   value="false" autocomplete="off"  {% if not is_student %} checked {% endif %}
+                   data-bs-target="#no-student-tab" data-bs-toggle="pill"/>
+            <label class="btn btn-sm btn-outline-secondary" for="no-student">{% trans "No" %}</label>
+        </div>
+    </div>
+
+    <div class="form-text">
+        {{ form.student_status.help_text }}
+    </div>
+
+
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade {% if is_student %} show active {% endif %}"
+             id="student-tab"
+             role="tabpanel" aria-labelledby="student">
+            {% include "courses/snippets/choice_input.html" with field=form.university display_as_required='true' only %}
+            {% include "courses/snippets/text_input.html" with field=form.legi display_as_required='true' only %}
+        </div>
+        <div class="tab-pane fade {% if not is_student %} show active {% endif %}"
+             id="no-student-tab"
+             role="tabpanel" aria-labelledby="no-student">
+        </div>
+    </div>
+{% endwith %}

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 09:55+0200\n"
+"POT-Creation-Date: 2022-04-23 17:21+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -212,18 +212,6 @@ msgstr "Geführt werden"
 msgid "Not required"
 msgstr "Nicht benötigt"
 
-#: courses/forms/custom_signup_form.py:15
-msgid "Vorname"
-msgstr "Vorname"
-
-#: courses/forms/custom_signup_form.py:17
-msgid "Nachname"
-msgstr "Nachname"
-
-#: courses/forms/custom_signup_form.py:19
-msgid "Geschlecht"
-msgstr "Geschlecht"
-
 #: courses/forms/send_voucher_form.py:13
 msgid "Percentage of voucher"
 msgstr "Prozentuelle Ermässigung des Gutscheins"
@@ -277,11 +265,19 @@ msgstr ""
 "Die angegebene Person hat noch überfällige Zahlungen und kann deswegen für "
 "keine Kurse angemeldet werden."
 
+#: courses/forms/user_edit_from.py:14
+msgid "First name"
+msgstr "Vorname"
+
 #: courses/forms/user_edit_from.py:15
+msgid "Last name"
+msgstr "Nachname"
+
+#: courses/forms/user_edit_from.py:17
 msgid "Telephone number (Mobile)"
 msgstr "Telefonnummer (Mobil)"
 
-#: courses/forms/user_edit_from.py:16
+#: courses/forms/user_edit_from.py:18
 msgid ""
 "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
 "Teilen von Kursinhalten weitergegeben!"
@@ -289,20 +285,27 @@ msgstr ""
 "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
 "Teilen von Kursinhalten weitergegeben!"
 
-#: courses/forms/user_edit_from.py:19 courses/templates/user/profile.html:112
-msgid "Student"
-msgstr "Student"
+#: courses/forms/user_edit_from.py:20
+msgid "Are you a student?"
+msgstr "Studierst du?"
 
 #: courses/forms/user_edit_from.py:21
-#: courses/templates/courses/snippets/signup_user_form.html:34
+msgid "As a student you will profit from reduced course fees"
+msgstr "Falls ja, kannst du Kurse zu ermässigten Preisen besuchen."
+
+#: courses/forms/user_edit_from.py:22
+msgid "University"
+msgstr "Universität"
+
+#: courses/forms/user_edit_from.py:23
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: courses/forms/user_edit_from.py:23
+#: courses/forms/user_edit_from.py:25
 msgid "Height (cm)"
 msgstr "Größe"
 
-#: courses/forms/user_edit_from.py:24
+#: courses/forms/user_edit_from.py:26
 msgid ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
@@ -310,21 +313,21 @@ msgstr ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
 
-#: courses/forms/user_edit_from.py:27
+#: courses/forms/user_edit_from.py:29
 msgid "Student card number"
 msgstr "Legi-Nummer"
 
-#: courses/forms/user_edit_from.py:29
+#: courses/forms/user_edit_from.py:31
 msgid "Subscribe to newsletter"
 msgstr "Newsletter abonnieren"
 
-#: courses/forms/user_edit_from.py:31
+#: courses/forms/user_edit_from.py:33
 msgid "I'd like to help TQ from time to time (Events etc.)"
 msgstr ""
 "Ich würde gern Teil der TQ Familie werden oder ab und zu aushelfen (z.B. bei "
 "Veranstaltungen)"
 
-#: courses/forms/user_edit_from.py:33
+#: courses/forms/user_edit_from.py:34
 msgid "Street"
 msgstr "Strasse"
 
@@ -332,29 +335,29 @@ msgstr "Strasse"
 msgid "Postal code"
 msgstr "PLZ"
 
-#: courses/forms/user_edit_from.py:37
+#: courses/forms/user_edit_from.py:36
 msgid "City"
 msgstr "Ort"
 
-#: courses/forms/user_edit_from.py:39
+#: courses/forms/user_edit_from.py:38
 msgid "Choose Year"
 msgstr "Wähle Jahr"
 
-#: courses/forms/user_edit_from.py:39
+#: courses/forms/user_edit_from.py:38
 msgid "Choose Month"
 msgstr "Wähle Monat"
 
-#: courses/forms/user_edit_from.py:39
+#: courses/forms/user_edit_from.py:38
 msgid "Choose Day"
 msgstr "Wähle Tag"
 
-#: courses/forms/user_edit_from.py:44
+#: courses/forms/user_edit_from.py:43
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
-#: courses/forms/user_edit_from.py:60
-msgid "Students have to enter their student card number."
-msgstr "Studenten müssen Ihre Legi Nummer eingeben"
+#: courses/forms/user_edit_from.py:60 courses/forms/user_edit_from.py:64
+msgid "This field is required if you are a student."
+msgstr "Pflichtfeld für Studierende"
 
 #: courses/forms/voucher_generation_form.py:12
 msgid "How many voucher should be generated?"
@@ -367,20 +370,6 @@ msgstr "Rabatt in Prozent (0-100)."
 #: courses/forms/voucher_generation_form.py:14 courses/models/voucher.py:27
 msgid "Value of the voucher in CHF."
 msgstr "Wert des Gutscheins in CHF."
-
-#: courses/models/choices/gender.py:10
-#: courses/templates/courses/snippets/signup_user_form.html:39
-msgid "male"
-msgstr "männlich"
-
-#: courses/models/choices/gender.py:11
-#: courses/templates/courses/snippets/signup_user_form.html:43
-msgid "female"
-msgstr "weiblich"
-
-#: courses/models/choices/gender.py:12
-msgid "diverse"
-msgstr "divers"
 
 #: courses/models/choices/leadfollow.py:10
 msgid "lead"
@@ -580,15 +569,16 @@ msgid "Profile"
 msgstr "Profil"
 
 #: courses/templates/courses/auth/profile.html:8
-msgid "Profile of"
-msgstr "Profil von"
+#: courses/templates/user/profile.html:30
+msgid "Edit profile"
+msgstr "Profil bearbeiten"
 
-#: courses/templates/courses/auth/profile.html:11
+#: courses/templates/courses/auth/profile.html:10
 #: templates/account/change_password.html:9 templates/account/email.html:9
 msgid "Back to profile"
 msgstr "Zurück zum Profil"
 
-#: courses/templates/courses/auth/profile.html:37
+#: courses/templates/courses/auth/profile.html:36
 msgid "Update Profile"
 msgstr "Profil aktualisieren"
 
@@ -623,7 +613,7 @@ msgstr "Infos"
 
 #: courses/templates/courses/course_subscribe_form.html:22
 #: courses/templates/courses/snippets/subscribe_form.html:116
-#: templates/account/signup.html:8 templates/account/signup.html:24
+#: templates/account/signup.html:8
 msgid "Sign Up"
 msgstr "Registrieren"
 
@@ -696,7 +686,7 @@ msgstr ""
 "Falls du denkst, dass es sich hier um einen Fehler von uns handelt, "
 "kontaktiere uns unter:"
 
-#: courses/templates/courses/snippets/address_input.html:4
+#: courses/templates/courses/snippets/address_input.html:3
 #: courses/templates/user/profile.html:89
 msgid "Address"
 msgstr "Adresse"
@@ -758,6 +748,26 @@ msgstr "Zeit"
 #: courses/templates/courses/snippets/offering.html:4
 msgid "Preview"
 msgstr "Vorschau"
+
+#: courses/templates/courses/snippets/gender_input.html:16
+msgid "Man"
+msgstr "Mann"
+
+#: courses/templates/courses/snippets/gender_input.html:26
+msgid "Woman"
+msgstr "Frau"
+
+#: courses/templates/courses/snippets/gender_input.html:36
+msgid "Non-binary"
+msgstr "Nicht-binär"
+
+#: courses/templates/courses/snippets/gender_input.html:46
+msgid "Rather not say"
+msgstr "Keine Angabe"
+
+#: courses/templates/courses/snippets/gender_input.html:60
+msgid "Let me specify"
+msgstr "Lass mich tippen"
 
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
 msgid "Past courses"
@@ -854,31 +864,14 @@ msgid "with"
 msgstr "mit"
 
 #: courses/templates/courses/snippets/room_modal.html:33
-#: courses/templates/courses/snippets/signup_user_form.html:6
 #: courses/templates/courses/snippets/styles_modal.html:52
 #: courses/templates/courses/snippets/user_form.html:5
 #: courses/templates/courses/snippets/user_modal.html:60
 #: courses/templates/courses/snippets/user_profile_form.html:8
-#: templates/account/change_password.html:20
-#: templates/account/change_password.html:26
+#: templates/account/change_password.html:19
+#: templates/account/change_password.html:25
 msgid "Close"
 msgstr "Schliessen"
-
-#: courses/templates/courses/snippets/signup_user_form.html:7
-#: courses/templates/courses/snippets/user_form.html:6
-#: courses/templates/courses/snippets/user_profile_form.html:9
-msgid "Some inputs are invalid"
-msgstr "Einige Eingaben sind ungültig"
-
-#: courses/templates/courses/snippets/signup_user_form.html:12
-#: events/templates/events/snippets/event_list.html:10
-#: partners/models/partner.py:23
-#: payment/templates/payment/counter/details.html:20
-#: payment/templates/payment/courses/confirm.html:20
-#: payment/templates/payment/courses/course.html:81
-#: payment/templates/payment/finance/offering_detail.html:30
-msgid "Name"
-msgstr "Name"
 
 #: courses/templates/courses/snippets/song_list.html:3
 #: courses/templates/courses/snippets/styles_modal.html:46
@@ -886,7 +879,7 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: courses/templates/courses/snippets/song_list.html:7
-#: tq_website/settings.py:340
+#: tq_website/settings.py:339
 msgid "Title"
 msgstr "Titel"
 
@@ -901,6 +894,18 @@ msgstr "Länge"
 #: courses/templates/courses/snippets/song_list.html:10
 msgid "Tempo (TPM)"
 msgstr "Tempo (TPM)"
+
+#: courses/templates/courses/snippets/student_status_input.html:12
+#: courses/templates/user/profile.html:142
+#: courses/templates/user/profile.html:150
+msgid "Yes"
+msgstr "Ja"
+
+#: courses/templates/courses/snippets/student_status_input.html:17
+#: courses/templates/user/profile.html:144
+#: courses/templates/user/profile.html:152
+msgid "No"
+msgstr "Nein"
 
 #: courses/templates/courses/snippets/styles_modal.html:37
 msgid "External Info"
@@ -1068,6 +1073,11 @@ msgstr "Anmeldung geschlossen"
 msgid "Phone"
 msgstr "Telefon"
 
+#: courses/templates/courses/snippets/user_form.html:6
+#: courses/templates/courses/snippets/user_profile_form.html:9
+msgid "Some inputs are invalid"
+msgstr "Einige Eingaben sind ungültig"
+
 #: courses/templates/courses/snippets/user_modal.html:26
 #: courses/templates/user/profile.html:123
 msgid "Teacher"
@@ -1094,7 +1104,7 @@ msgstr "Über"
 msgid "No info available"
 msgstr "Keine Informationen verfügbar"
 
-#: courses/templates/courses/snippets/user_profile_form.html:38
+#: courses/templates/courses/snippets/user_profile_form.html:47
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Zahlungsdaten eingeben (Nur für Lehrer:innen und Helfer:innen nötig)"
 
@@ -1122,10 +1132,6 @@ msgstr "Mitteilungsfeld"
 #: courses/templates/user/profile.html:23
 msgid "Show my courses"
 msgstr "Meine Kurse anzeigen"
-
-#: courses/templates/user/profile.html:30
-msgid "Edit profile"
-msgstr "Profil bearbeiten"
 
 #: courses/templates/user/profile.html:37
 msgid "Manage your email addresses"
@@ -1175,6 +1181,10 @@ msgstr "Bank"
 msgid "Student status"
 msgstr "Studierendenstatus"
 
+#: courses/templates/user/profile.html:112
+msgid "Student"
+msgstr "Student"
+
 #: courses/templates/user/profile.html:115
 msgid "Legi"
 msgstr "Legi"
@@ -1190,16 +1200,6 @@ msgstr "Einstellungen"
 #: courses/templates/user/profile.html:140
 msgid "Newsletter"
 msgstr "Newsletter"
-
-#: courses/templates/user/profile.html:142
-#: courses/templates/user/profile.html:150
-msgid "Yes"
-msgstr "Ja"
-
-#: courses/templates/user/profile.html:144
-#: courses/templates/user/profile.html:152
-msgid "No"
-msgstr "Nein"
 
 #: courses/templates/user/profile.html:148
 msgid "Get involved"
@@ -1601,6 +1601,15 @@ msgstr "Organisiert von"
 msgid "Free of charge"
 msgstr "Kostenlos"
 
+#: events/templates/events/snippets/event_list.html:10
+#: partners/models/partner.py:23
+#: payment/templates/payment/counter/details.html:20
+#: payment/templates/payment/courses/confirm.html:20
+#: payment/templates/payment/courses/course.html:81
+#: payment/templates/payment/finance/offering_detail.html:30
+msgid "Name"
+msgstr "Name"
+
 #: events/templates/events/snippets/event_list.html:12
 msgid "Date & Time"
 msgstr "Datum & Uhrzeit"
@@ -1789,8 +1798,8 @@ msgstr "Zur Kursseite"
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:300
-#: tq_website/settings.py:315
+#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:299
+#: tq_website/settings.py:314
 msgid "English"
 msgstr "Englisch"
 
@@ -2190,15 +2199,15 @@ msgstr "Konto"
 msgid "Change password of"
 msgstr "Ändere das Passwort von"
 
-#: templates/account/change_password.html:21
+#: templates/account/change_password.html:20
 msgid "Password successfully changed"
 msgstr "Passwort erfolgreich geändert"
 
-#: templates/account/change_password.html:27
+#: templates/account/change_password.html:26
 msgid "Password not changed. Please try again"
 msgstr "Das Passwort wurde nicht geändert. Versuche es bitte nochmals"
 
-#: templates/account/change_password.html:39
+#: templates/account/change_password.html:38
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -2291,6 +2300,10 @@ msgstr "Du hast schon ein Konto?"
 #: templates/account/signup.html:11 templates/footer.html:84
 msgid "Login"
 msgstr "Anmelden"
+
+#: templates/account/signup.html:52
+msgid "Create Account"
+msgstr "Konto erstellen"
 
 #: templates/error_base.html:22
 msgid "Take Me Home"
@@ -2418,17 +2431,44 @@ msgstr "Vorstandsposten"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:299 tq_website/settings.py:307
+#: tq_website/settings.py:298 tq_website/settings.py:306
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:332
+#: tq_website/settings.py:331
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:336
+#: tq_website/settings.py:335
 msgid "Side content"
 msgstr "Seiteninhalt"
+
+#~ msgid "Edit Profile"
+#~ msgstr "Profil bearbeiten"
+
+#~ msgid "Vorname"
+#~ msgstr "Vorname"
+
+#~ msgid "Nachname"
+#~ msgstr "Nachname"
+
+#~ msgid "Geschlecht"
+#~ msgstr "Geschlecht"
+
+#~ msgid "Students have to enter their student card number."
+#~ msgstr "Studenten müssen Ihre Legi Nummer eingeben"
+
+#~ msgid "male"
+#~ msgstr "männlich"
+
+#~ msgid "female"
+#~ msgstr "weiblich"
+
+#~ msgid "diverse"
+#~ msgstr "divers"
+
+#~ msgid "Profile of"
+#~ msgstr "Profil von"
 
 #~ msgid "Download summary of all offerings here:"
 #~ msgstr "Lade eine Zusammenfassung aller Angebote hier herunter:"

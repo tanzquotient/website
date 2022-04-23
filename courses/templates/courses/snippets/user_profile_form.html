@@ -10,6 +10,17 @@
     </div>
 {% endif %}
 
+<div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+        {% include "courses/snippets/text_input.html" with field=form.first_name only %}
+    </div>
+    <div class="col">
+        {% include "courses/snippets/text_input.html" with field=form.last_name only %}
+    </div>
+</div>
+
+{% include "courses/snippets/gender_input.html" with field=form.gender_options custom_field=form.gender_custom_value only %}
+
 {% if is_teacher or is_board_member %}
     {% include "courses/snippets/image_input.html" with field=form.picture only %}
     {% include "courses/snippets/generic_input.html" with field=form.about_me only %}
@@ -17,11 +28,9 @@
 
 {% include "courses/snippets/address_input.html" with form=form only %}
 {% include "courses/snippets/text_input.html" with field=form.phone_number only %}
-{% include "courses/snippets/select.html" with field=form.student_status only %}
-{% include "courses/snippets/text_input.html" with field=form.legi only %}
+{% include "courses/snippets/student_status_input.html" with form=form only %}
 {% include "courses/snippets/text_input.html" with field=form.body_height only %}
 {% include "courses/snippets/generic_input.html" with field=form.birthdate only %}
-{% include "courses/snippets/select.html" with field=form.gender only %}
 
 {% if is_teacher %}
     {% include "courses/snippets/user_profile_form_payment.html" with form=form only %}

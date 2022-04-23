@@ -20,3 +20,10 @@ class StudentStatus:
         (OTHER, TEXT[OTHER]),
         (NO, TEXT[NO])
     )
+
+    UNIVERSITY_CHOICES = (
+        (ETH, TEXT[ETH]),
+        (UNI, TEXT[UNI]),
+        (PH, TEXT[PH]),
+        (OTHER, TEXT[OTHER]),
+    )

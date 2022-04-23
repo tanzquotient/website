@@ -5,15 +5,15 @@ from typing import Optional, Iterable
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
+from django.db.models import CASCADE
 from django.db.models import Model, IntegerField, BooleanField, ImageField, DateField, DecimalField, OneToOneField, \
     CharField, ForeignKey, PROTECT
-from django.db.models import CASCADE
 from django.dispatch import receiver
 from django_countries.fields import CountryField
 from djangocms_text_ckeditor.fields import HTMLField
 
 from courses import managers
-from . import Address, BankAccount, Gender, StudentStatus, Residence, Subscribe, CourseType, Course
+from . import Address, BankAccount, StudentStatus, Residence, Subscribe, CourseType, Course
 
 
 def upload_path(_, filename) -> str:
@@ -28,7 +28,7 @@ class UserProfile(Model):
     language = CharField(max_length=10, blank=False, default='en')
 
     legi = CharField(max_length=16, blank=True, null=True)
-    gender = CharField(max_length=1, choices=Gender.CHOICES, blank=False, null=True, default=None)
+    gender = CharField(max_length=64, blank=True, null=True)
     address = ForeignKey(Address, blank=True, null=True, on_delete=PROTECT)
     phone_number = CharField(max_length=255, blank=True, null=True)
     student_status = CharField(max_length=10, choices=StudentStatus.CHOICES, blank=False, null=False,

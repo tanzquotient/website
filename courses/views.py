@@ -427,8 +427,6 @@ class ProfileView(FormView):
         context = super(ProfileView, self).get_context_data(**kwargs)
 
         user = self.request.user
-        if user.profile.gender:
-            context['gender_icon'] = 'mars' if user.profile.gender == 'm' else 'venus'
         context['is_teacher'] = user.profile.is_teacher()
         context['is_board_member'] = user.profile.is_board_member()
         context['is_profile_complete'] = user.profile.is_complete()

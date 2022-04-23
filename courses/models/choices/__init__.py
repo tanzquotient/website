@@ -1,7 +1,6 @@
 from .weekday import Weekday
 from .payment_method import PaymentMethod
 from .student_status import StudentStatus
-from .gender import Gender
 from .residence import Residence
 from .subscribe_state import SubscribeState
 from .matching_state import MatchingState
