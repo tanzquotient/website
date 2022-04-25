@@ -22,7 +22,6 @@ urlpatterns = [
     path('auth/export/<int:offering_id>/excel', views.export_offering_summary_excel, name='export_offering_summary_excel'),
     path('auth/export/teacher/<int:offering_id>/', views.export_offering_teacher_payment_information, name='export_offering_salary'),
     path('auth/export/teacher/<int:offering_id>/excel', views.export_offering_teacher_payment_information_excel, name='export_offering_salary_excel'),
-    path('auth/courses/<int:course_id>/', views.course_overview, name='course_overview'),
     path('auth/offering/<int:offering_id>/', views.offering_overview, name='offering_overview'),
     path('admin/voucher_generate/', admin_views.voucher_generation_view, name='voucher_generation'),
     path('api/', include(courses.api.urls, namespace='courses_api')),  # nested namespace 'api'

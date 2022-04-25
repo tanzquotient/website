@@ -9,16 +9,26 @@
     <h2></h2>
 
     <div class="container">
-        <p>
+        <h2 class="mb-0">{{ offering.name }}</h2>
+        {% if offering.period %}
+            <div class="fs-5">{{ offering.period.date_as_string  }} </div>
+        {% endif %}
+
+        <p class="mt-2">
             {% trans "Download summary of this offering here:" %}
-            <a href="§">{% trans "Download Excel" %}</a>,
             <a href="{% url "courses:export_offering_summary" offering.pk %}">{% trans "Download Excel" %}</a>
         </p>
 
-        <h2>{{ offering.name }}
-            <small>{{ offering.offering.period|default:'' }}</small>
-        </h2>
-        <p>{% include "courses/auth/offering_place_chart.html" with chart=place_chart %}</p>
+        <div class="card">
+            <div class="card-header">
+                {% trans "Subscriptions by course" %}
+            </div>
+            <div class="card-body">
+                {% autoescape off %}
+                    {{ place_chart }}
+                {% endautoescape %}
+            </div>
+        </div>
 
         <p>{% include "courses/auth/offering_time_chart.html" with chart=time_chart %}</p>
     </div>

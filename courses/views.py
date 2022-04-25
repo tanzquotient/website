@@ -221,58 +221,6 @@ def duplicate_users(request: HttpRequest) -> HttpResponse:
         'user_aliases': user_aliases
     })
     return render(request, template_name, context)
-# helper function
-
-
-def offering_place_chart_dict(offering: Offering) -> dict:
-    labels = []
-    series_confirmed = []
-    series_matched = []
-    series_leaders_count = []
-    series_followers_count = []
-    series_no_preference_count = []
-    series_free = []
-    courses = offering.course_set.reverse().all()
-
-    for course in courses:
-        # NOTE: do not use the related manager with 'course.subscriptions',
-        # because does not have access to default manager methods
-        subscriptions = Subscribe.objects.filter(course=course)
-        labels.append(u'<a href="{}">{}</a>'.format(reverse('courses:course_overview', args=[course.id]),
-                                                    escape(course.name)))
-
-        total_count = subscriptions.active().count()
-        confirmed_count = subscriptions.accepted().count()
-        matched_count = subscriptions.new().matched().count()
-        leaders_count = subscriptions.new().single().leaders().count()
-        followers_count = subscriptions.new().single().followers().count()
-        no_preference_count = total_count - matched_count - confirmed_count - leaders_count - followers_count
-        maximum = course.max_subscribers
-        if maximum:
-            free_count = max(0, maximum - total_count)
-        else:
-            free_count = 0
-
-        series_confirmed.append(str(confirmed_count))
-        series_matched.append(str(matched_count))
-        series_leaders_count.append(str(leaders_count))
-        series_followers_count.append(str(followers_count))
-        series_no_preference_count.append(str(no_preference_count))
-
-        series_free.append(str(free_count))
-
-    return {
-        'labels': labels,
-        'series_confirmed': series_confirmed,
-        'series_matched': series_matched,
-        'series_leaders': series_leaders_count,
-        'series_followers': series_followers_count,
-        'series_no_preference': series_no_preference_count,
-        'series_free': series_free,
-        'height': 25 * len(labels) + 90,
-    }
-
-# helper function
 
 
 def offering_time_chart_dict(offering: Offering) -> dict:
@@ -338,52 +286,15 @@ def subscription_overview(request: HttpRequest) -> HttpResponse:
 
 
 @staff_member_required
-def course_overview(request: HttpRequest, course_id: int) -> HttpResponse:
-    template_name = "courses/auth/course_overview.html"
-    context = {}
-
-    course = Course.objects.get(id=course_id)
-    # NOTE: do not use the related manager with 'course.subscriptions',
-    # because does not have access to default manager methods
-    subscriptions = Subscribe.objects.filter(course=course)
-
-    total_count = subscriptions.active().count()
-    confirmed_count = subscriptions.accepted().count()
-    matched_count = subscriptions.new().matched().count()
-    leaders_count = subscriptions.new().single().leaders().count()
-    followers_count = subscriptions.new().single().followers().count()
-    no_preference_count = total_count - matched_count - confirmed_count - leaders_count - followers_count
-
-    maximum = course.max_subscribers
-    if maximum:
-        free_count = max(0, maximum - total_count)
-    else:
-        free_count = 0
-
-    context['course'] = course
-    context['place_chart'] = {
-        'label': course.name,
-        'confirmed': confirmed_count,
-        'matched': matched_count,
-        'leaders': leaders_count,
-        'followers': followers_count,
-        'no_preference': no_preference_count,
-        'free': free_count,
-        'total': total_count
-    }
-    return render(request, template_name, context)
-
-
-@staff_member_required
 def offering_overview(request: HttpRequest, offering_id: int) -> HttpResponse:
     template_name = "courses/auth/offering_overview.html"
     context = {}
 
-    o = Offering.objects.get(id=offering_id)
+    offering = Offering.objects.get(id=offering_id)
 
-    context['offering'] = o
-    context['place_chart'] = offering_place_chart_dict(o)
-    context['time_chart'] = offering_time_chart_dict(o)
+    context['offering'] = offering
+    context['place_chart'] = plot_figure(figures.courses_confirmed_matched_lead_follow_free(offering))
+    context['time_chart'] = offering_time_chart_dict(offering)
     return render(request, template_name, context)
 
 
