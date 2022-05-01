@@ -22,7 +22,7 @@ def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = Non
         for group in survey.questiongroup_set.all():
             questions += list(group.question_set.all())
 
-        header = ["User", "Course"] + [question.name for question in questions]
+        header = ["User", "Email", "Course"] + [question.name for question in questions]
         key_prefix = f"{survey.name} - " if multiple_surveys else ""
         key_all = f"{key_prefix}All"
         if key_all not in export_data:
@@ -48,7 +48,8 @@ def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = Non
             answers = instance.answers.order_by('-id')
             row = [
                 f"{instance.user.first_name} {instance.user.last_name}" if instance.user else "",
-                instance.course.name if instance.course else ""
+                f"{instance.user.email}" if instance.user else "",
+                instance.course.name if instance.course else "",
             ]
             for question in questions:
                 answers_for_question = answers.filter(question=question)
