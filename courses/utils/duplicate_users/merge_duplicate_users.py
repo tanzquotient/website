@@ -10,8 +10,8 @@ def merge_duplicate_users(to_merge) -> None:
     from courses.models import UserProfile
 
     for primary, aliases in to_merge.items():
-        user = User.objects.get(id=primary)
-        user_aliases = list(User.objects.filter(id__in=aliases))
+        user: User = User.objects.get(id=primary)
+        user_aliases: list[User] = list(User.objects.filter(id__in=aliases))
         user.date_joined = User.objects.filter(id__in=aliases).order_by("date_joined").first().date_joined
         user.save()
 
@@ -50,6 +50,10 @@ def merge_duplicate_users(to_merge) -> None:
             for subscription in alias.subscriptions_as_partner.all():
                 subscription.partner = user
                 subscription.save()
+
+            for event_registration in alias.event_registrations.all():
+                event_registration.user = user
+                event_registration.save()
 
             for survey_instance in alias.survey_instances.all():
                 survey_instance.user = user
