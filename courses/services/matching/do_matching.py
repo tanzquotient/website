@@ -77,7 +77,7 @@ def _match_for_course(subscriptions, course_id):
     Partitions the single subscribes into two lists.
     Afterwards, the lists are merged based on height
     """
-    to_match = list(subscriptions.filter(course__id=course_id).single().order_by('date'))
+    to_match = list(subscriptions.filter(course__id=course_id).to_match().order_by('date'))
 
     a, b = _partition_subscribes(to_match)
     assert len(a) == len(b)

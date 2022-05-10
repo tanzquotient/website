@@ -1,9 +1,10 @@
 from datetime import date
 
 from django.db import models
+from django.db.models import QuerySet
 from parler.managers import TranslatableManager
 
-from courses.models import SubscribeState, LeadFollow, MatchingState
+from courses.models import SubscribeState, LeadFollow, MatchingState, Subscribe
 
 
 class UserProfileManager(models.Manager):
@@ -81,44 +82,44 @@ class BankAccountManager(models.Manager):
 # construction to allow chaining of queryset methods (chaining manager methods is not possible)
 class SubscribeQuerySet(models.QuerySet):
 
-    def leaders(self):
+    def leaders(self) -> QuerySet[Subscribe]:
         return self.active().filter(lead_follow=LeadFollow.LEAD)
 
-    def followers(self):
+    def followers(self) -> QuerySet[Subscribe]:
         return self.active().filter(lead_follow=LeadFollow.FOLLOW)
 
-    def no_lead_follow_preference(self):
+    def no_lead_follow_preference(self) -> QuerySet[Subscribe]:
         return self.active().filter(lead_follow=LeadFollow.NO_PREFERENCE)
 
-    def single(self):
-        return self.active().filter(matching_state__in=MatchingState.TO_MATCH_STATES)
+    def single(self) -> QuerySet[Subscribe]:
+        return self.active().filter(matching_state__in=MatchingState.SINGLE_STATES)
 
-    def single_with_preference(self, lead_or_follow):
-        return self.active().filter(matching_state__in=MatchingState.TO_MATCH_STATES, lead_follow=lead_or_follow)
+    def single_with_preference(self, lead_or_follow: str) -> QuerySet[Subscribe]:
+        return self.active().filter(matching_state__in=MatchingState.SINGLE_STATES, lead_follow=lead_or_follow)
 
-    def matched(self):
+    def matched(self) -> QuerySet[Subscribe]:
         return self.active().filter(matching_state__in=MatchingState.MATCHED_STATES)
 
-    def accepted(self):
+    def accepted(self) -> QuerySet[Subscribe]:
         return self.filter(state__in=SubscribeState.ACCEPTED_STATES)
 
-    def active(self):
+    def active(self) -> QuerySet[Subscribe]:
         return self.exclude(state__in=SubscribeState.REJECTED_STATES)
 
-    def paid(self):
+    def paid(self) -> QuerySet[Subscribe]:
         return self.filter(state__in=SubscribeState.PAID_STATES)
 
-    def course_payment(self):
+    def course_payment(self) -> QuerySet[Subscribe]:
         from courses.models import PaymentMethod
         return self.filter(paymentmethod=PaymentMethod.COURSE)
 
-    def voucher_payment(self):
+    def voucher_payment(self) -> QuerySet[Subscribe]:
         from courses.models import PaymentMethod
         return self.filter(paymentmethod=PaymentMethod.VOUCHER)
 
-    def online_payment(self):
+    def online_payment(self) -> QuerySet[Subscribe]:
         from courses.models import PaymentMethod
         return self.filter(paymentmethod=PaymentMethod.ONLINE)
 
-    def new(self):
+    def new(self) -> QuerySet[Subscribe]:
         return self.filter(state=SubscribeState.NEW)
