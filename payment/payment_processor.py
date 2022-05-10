@@ -55,6 +55,8 @@ class PaymentProcessor:
             payment.type = Type.SUBSCRIPTION_PAYMENT
             payment.save()
 
+            remaining_amount = payment.amount
+
             # Try to create a subscription payment for each subscription_id
             for subscription_id in subscription_ids:
                 subscription_query = Subscribe.objects.filter(usi__iexact=subscription_id)
@@ -81,9 +83,13 @@ class PaymentProcessor:
                     payment.save()
                     continue
 
-                # Whether the paid amount is sufficient is checked during PaymentProcessor._check_balance(payment)
                 to_pay = matched_subscription.price_after_reductions()
-                SubscriptionPayment.objects.create(payment=payment, subscription=matched_subscription, amount=to_pay)
+
+                # Amount credited to subscription can be at most as much as the remaining amount.
+                # Whether the paid amount is sufficient is checked during PaymentProcessor._check_balance(payment)
+                amount = min(to_pay, remaining_amount)
+                remaining_amount -= amount
+                SubscriptionPayment.objects.create(payment=payment, subscription=matched_subscription, amount=amount)
                 log.info('Matched payment {0} to subscription {1}'.format(payment, subscription_query))
 
             # Check balance -> this sets state of subscription payment (MATCHED, REIMBURSE, MANUAL)
@@ -121,7 +127,8 @@ class PaymentProcessor:
 
         for payment in matched_payments:
             for s in payment.subscriptions.all():
-                s.mark_as_paid(PaymentMethod.ONLINE)
+                if s.open_amount().is_zero():
+                    s.mark_as_paid(PaymentMethod.ONLINE)
             payment.state = State.PROCESSED
             payment.save()
 
