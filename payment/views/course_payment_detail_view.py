@@ -30,7 +30,7 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         course = Course.objects.filter(id=kwargs['course']).first()
         for language in ['de', 'en']:
             key = f"description-{language}"
-            if key in request.POST and request.POST[key]:
+            if key in request.POST:
                 course.set_current_language(language)
                 course.description = request.POST[key]
 
