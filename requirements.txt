@@ -1,6 +1,6 @@
 # Django
 Django==3.2.13  # django-cms does not yet support django 4.0
-django-debug-toolbar==3.3.0
+django-debug-toolbar==3.4.0
 django-absolute==0.3
 django-analytical==3.1.0
 django-filter==21.1
@@ -21,7 +21,7 @@ djangocms-text-ckeditor==5.0.1
 
 # Rest framework
 djangorestframework==3.13.1
-django-parler-rest==2.1
+django-parler-rest==2.2
 
 # Tasks
 celery==5.2.6
@@ -34,7 +34,7 @@ django-redis==5.2.0
 openpyxl==3.0.9
 base36==0.1.1
 svglib==1.2.1
-PyPDF2==1.27.10
+PyPDF2==1.27.12
 reportlab==3.6.9
 pyyaml==6.0
 
@@ -46,20 +46,20 @@ psycopg2==2.9.3
 
 # Storage
 django-storages==1.12.3
-boto3==1.22.4
-minio==7.1.7
+boto3==1.22.11
+minio==7.1.8
 
 # Webserver
 gunicorn==20.1.0
 
 # Logging
-sentry_sdk==1.5.10
+sentry_sdk==1.5.12
 
 # Utils
-plotly==5.7.0               # For charts and graphs
+plotly==5.8.0               # For charts and graphs
 pytz==2022.1
-pylint==2.13.7              # Default linter
-shortuuid==1.0.8            # For generating short and unique ID's and codes
+pylint==2.13.8              # Default linter
+shortuuid==1.0.9            # For generating short and unique ID's and codes
 django-hijack==3.2.0        # Superuser can impersonate other users
 python-dotenv==0.20.0       # Used to load environment variables from .env file
 sphinx-automodapi==0.14.1
