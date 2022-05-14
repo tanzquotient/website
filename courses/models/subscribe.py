@@ -296,7 +296,6 @@ class Subscribe(Model):
 
     def save(self, *args, **kwargs) -> None:
         self.derive_matching_state()
-        super(Subscribe, self).save(*args, **kwargs)  # ensure id is set
         if not self.usi:
             self.usi = self.generate_usi()
         if not self.price_to_pay:

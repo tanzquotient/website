@@ -18,7 +18,7 @@ from courses.services.general import log
 def subscribe(course: Course, user: User, data: dict) -> Subscribe:
     """Enrolls a user (and optionally a partner) in a course"""
 
-    user_subscription = Subscribe.objects.get_or_create(user=user, course=course)
+    user_subscription, _ = Subscribe.objects.get_or_create(user=user, course=course)
 
     user_subscription.lead_follow = data.get('lead_follow', LeadFollow.NO_PREFERENCE)
     user_subscription.experience = data.get('experience', None)
@@ -28,7 +28,7 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
     if data['single_or_couple'] == SingleCouple.COUPLE:
         partner = User.objects.get(email=data['partner_email'])
 
-        partner_subscription = Subscribe.objects.get_or_create(user=partner, course=course)
+        partner_subscription, _ = Subscribe.objects.get_or_create(user=partner, course=course)
 
         partner_subscription.lead_follow = LeadFollow.partner(user_subscription.lead_follow)
         partner_subscription.experience = user_subscription.partner
