@@ -8,7 +8,7 @@
         </h2>
         <div id="collapse-question-{{ q.id }}" class="accordion-collapse collapse" aria-labelledby="heading-question-{{ q.id }}" data-bs-parent="#faq-accordion">
             <div class="accordion-body fs-6 py-4">
-                {{ q.answer_text }}
+                {{ q.answer_text|safe }}
             </div>
         </div>
     </div>

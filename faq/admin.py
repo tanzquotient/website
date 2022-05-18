@@ -17,4 +17,5 @@ class QuestionGroupAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(TranslatableAdmin):
+    list_display = ('question_text', 'display', 'question_group')
     search_fields = ['translations__question_text', 'translations__answer_text']

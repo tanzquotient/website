@@ -1,4 +1,5 @@
 from django.db import models
+from djangocms_text_ckeditor.fields import HTMLField
 
 from . import managers
 
@@ -9,14 +10,14 @@ from parler.models import TranslatableModel, TranslatedFields
 class QuestionGroup(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{}".format(self.name)
 
 
 class Question(TranslatableModel):
     translations = TranslatedFields(
         question_text=models.TextField(verbose_name='[TR] Question text', blank=True, null=True),
-        answer_text=models.TextField(verbose_name='[TR] Answer text', blank=True, null=True)
+        answer_text=HTMLField(verbose_name='[TR] Answer text', blank=True, null=True)
     )
 
     display = models.BooleanField(default=True)
@@ -30,5 +31,5 @@ class Question(TranslatableModel):
 
     objects = managers.QuestionManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.safe_translation_getter('question_text', any_language=True) or "-"
