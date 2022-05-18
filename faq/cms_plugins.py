@@ -20,7 +20,7 @@ class FaqPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'questions': instance.question_group.questions.displayed(),
+            'question_group': instance.question_group
         })
         return context
 

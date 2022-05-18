@@ -1,12 +1,12 @@
-<div class="accordion my-4" id="faq-accordion">
-    {% for q in questions %}
+<div class="accordion" id="faq-{{ question_group.id }}-accordion">
+    {% for q in question_group.questions.displayed %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading-question-{{ q.id }}">
             <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-question-{{ q.id }}" aria-expanded="false" aria-controls="collapse-question-{{ q.id }}">
                 <strong>{{ q.question_text }}</strong>
             </button>
         </h2>
-        <div id="collapse-question-{{ q.id }}" class="accordion-collapse collapse" aria-labelledby="heading-question-{{ q.id }}" data-bs-parent="#faq-accordion">
+        <div id="collapse-question-{{ q.id }}" class="accordion-collapse collapse" aria-labelledby="heading-question-{{ q.id }}" data-bs-parent="#faq-{{ question_group.id }}-accordion">
             <div class="accordion-body fs-6 py-4">
                 {{ q.answer_text|safe }}
             </div>
