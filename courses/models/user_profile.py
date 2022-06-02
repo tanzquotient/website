@@ -67,6 +67,9 @@ class UserProfile(Model):
     def is_teacher(self) -> bool:
         return self.user.teaching_courses.count() > 0 or self.user.teaching_lessons.count() > 0
 
+    def is_student(self) -> bool:
+        return self.student_status in StudentStatus.STUDENTS and self.legi
+
     # At least one course ends in the future
     def is_current_teacher(self) -> bool:
         courses = list(self.user.teaching_courses.all())

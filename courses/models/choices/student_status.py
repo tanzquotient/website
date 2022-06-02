@@ -27,3 +27,5 @@ class StudentStatus:
         (PH, TEXT[PH]),
         (OTHER, TEXT[OTHER]),
     )
+
+    STUDENTS = [ETH, UNI, PH, OTHER]

@@ -21,11 +21,18 @@ def export_subscriptions(course_ids, export_format):
         if export_format == 'vcard':
             data = [subscription.user for subscription in subscriptions]
         else:
-            data.append(['Vorname', 'Nachname', 'Lead/Follow', 'Partner', 'E-Mail', 'Mobile'])
+            data.append(['First name', 'Last name', 'Student status', 'Lead/Follow', 'Partner', 'E-Mail', 'Mobile'])
 
             for s in subscriptions:
-                data.append([s.user.first_name, s.user.last_name, s.get_assigned_role_str(), s.get_partner_name(),
-                             s.user.email, s.user.profile.phone_number])
+                data.append([
+                    s.user.first_name,
+                    s.user.last_name,
+                    'student' if s.user.profile.is_student() else 'not a student',
+                    s.get_assigned_role_str(),
+                    s.get_partner_name(),
+                    s.user.email,
+                    s.user.profile.phone_number,
+                ])
 
         export_data.append({'name': course_name, 'data': data})
 

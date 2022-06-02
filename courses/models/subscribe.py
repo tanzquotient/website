@@ -166,9 +166,9 @@ class Subscribe(Model):
             return False
 
     def _compute_price_to_pay(self) -> Decimal:
-        if self.user.profile.student_status == StudentStatus.NO:
-            return self.course.price_without_legi or Decimal(0)
-        return self.course.price_with_legi or Decimal(0)
+        if self.user.profile.is_student():
+            return self.course.price_with_legi or Decimal(0)
+        return self.course.price_without_legi or Decimal(0)
 
     def generate_price_to_pay(self) -> None:
         self.price_to_pay = self._compute_price_to_pay()
