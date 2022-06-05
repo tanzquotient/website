@@ -1,13 +1,17 @@
+from typing import Iterable, Optional
+
+from django.http import HttpResponse
+
 from courses import models as models
 from courses.services.general import log
 from utils import export
 
 
-def export_subscriptions(course_ids, export_format):
+def export_subscriptions(course_ids: Iterable[int], export_format: str) -> Optional[HttpResponse]:
 
     export_data = []
     for course_id in course_ids:
-        course_name = models.Course.objects.get(id=course_id).name
+        course = models.Course.objects.get(id=course_id)
         subscriptions = models.Subscribe.objects.accepted().filter(course_id=course_id).order_by('user__first_name')
 
         data = []
@@ -21,20 +25,16 @@ def export_subscriptions(course_ids, export_format):
         if export_format == 'vcard':
             data = [subscription.user for subscription in subscriptions]
         else:
-            data.append(['First name', 'Last name', 'Student status', 'Lead/Follow', 'Partner', 'E-Mail', 'Mobile'])
+            data.append(['First name', 'Last name', 'E-Mail', 'Mobile'] +
+                        (['Lead/Follow', 'Partner'] if course.type.couple_course else []) +
+                        ['Student status', 'Course fees'])
 
             for s in subscriptions:
-                data.append([
-                    s.user.first_name,
-                    s.user.last_name,
-                    'student' if s.user.profile.is_student() else 'not a student',
-                    s.get_assigned_role_str(),
-                    s.get_partner_name(),
-                    s.user.email,
-                    s.user.profile.phone_number,
-                ])
+                data.append([s.user.first_name, s.user.last_name, s.user.email, s.user.profile.phone_number] +
+                            ([s.get_assigned_role_str(), s.get_partner_name()] if course.type.couple_course else []) +
+                            ['student' if s.user.profile.is_student() else 'not a student', s.price_to_pay,])
 
-        export_data.append({'name': course_name, 'data': data})
+        export_data.append({'name': course.name, 'data': data})
 
     if len(export_data) == 0:
         return None

@@ -65,7 +65,7 @@
                                 {% if subscription.user.profile.phone_number %}
                                     <div>{{ subscription.user.profile.phone_number }}</div>
                                 {% endif %}
-                                <div>
+                                <div class="mt-1">
                                     {% trans "Student status" %}:
                                     {% if subscription.user.profile.is_student %}
                                         {% trans "student" %}
@@ -73,6 +73,9 @@
                                         {% trans "not a student" %}
                                     {% endif %}
                                 </div>
+                            <div>
+                                {% trans "Course fees" %}: {{ subscription.price_to_pay }} CHF
+                            </div>
                                 {% if course.type.couple_course %}
                                     <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
                                     <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
@@ -89,12 +92,12 @@
                             <th>{% trans "Name" %}</th>
                             <th>{% trans "E-Mail" %}</th>
                             <th>{% trans "Mobile" %}</th>
-                            <th>{% trans "Student status" %}</th>
                             {% if course.type.couple_course %}
                                 <th>{% trans "Lead/Follow" %}</th>
                                 <th>{% trans "Partner" %}</th>
                             {% endif %}
-
+                            <th>{% trans "Student status" %}</th>
+                            <th>{% trans "Course fees" %}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -103,17 +106,18 @@
                                 <td>{{ subscription.user.get_full_name }}</td>
                                 <td><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></td>
                                 <td>{{ subscription.user.profile.phone_number }}</td>
-                                <td>
+                                {% if course.type.couple_course %}
+                                    <td>{{ subscription.get_assigned_role_str }}</td>
+                                    <td>{{ subscription.get_partner_name }}</td>
+                                {% endif %}
+                               <td>
                                     {% if subscription.user.profile.is_student %}
                                         {% trans "student" %}
                                     {% else %}
                                         {% trans "not a student" %}
                                     {% endif %}
                                 </td>
-                                {% if course.type.couple_course %}
-                                    <td>{{ subscription.get_assigned_role_str }}</td>
-                                    <td>{{ subscription.get_partner_name }}</td>
-                                {% endif %}
+                                <td>{{ subscription.price_to_pay }} CHF</td>
                             </tr>
                         {% endfor %}
                         </tbody>
