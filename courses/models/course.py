@@ -335,12 +335,12 @@ class Course(TranslatableModel):
 
     def get_first_irregular_lesson(self) -> Optional[IrregularLesson]:
         if self.irregular_lessons.exists():
-            return self.irregular_lessons.all()[0]
+            return self.irregular_lessons.first()
         return None
 
     def get_last_irregular_lesson(self) -> Optional[IrregularLesson]:
         if self.irregular_lessons.exists():
-            return self.irregular_lessons.all()[0]
+            return self.irregular_lessons.last()
         return None
 
     @staticmethod
