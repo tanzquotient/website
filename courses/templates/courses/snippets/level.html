@@ -1,16 +1,14 @@
 {% load i18n %}
 <span>
-    {% if level %}
-        {% if level == 0 %}
-            {% trans "All levels" %}
-        {% elif level <= 2 %}
-            {% trans "Beginner" %}
-        {% elif level <= 4 %}
-            {% trans "Intermediate" %}
-        {% else %}
-           {% trans "Advanced" %}
-        {% endif %}
-    {% else %}
+    {% if level is None %}
         {% trans "Not specified" %}
+    {% elif level == 0 %}
+        {% trans "All levels" %}
+    {% elif level <= 2 %}
+        {% trans "Beginner" %}
+    {% elif level <= 4 %}
+        {% trans "Intermediate" %}
+    {% else %}
+        {% trans "Advanced" %}
     {% endif %}
 </span>

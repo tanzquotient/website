@@ -3,7 +3,7 @@
 
 
     <strong>{% trans "Level" %}</strong>
-    <p>{% include "courses/snippets/level.html" with level=course.type.get_level only %}</p>
+    <p>{% include "courses/snippets/level.html" with level=course.type.level only %}</p>
 
     {% if course.type.styles.all %}
         <strong>{% trans "Styles" %}</strong>
