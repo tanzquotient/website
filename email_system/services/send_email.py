@@ -34,7 +34,7 @@ def send_email(to: Union[str, Iterable[str]], reply_to: Optional[str] = None, te
         return mail.send(**email)
 
     except ValidationError as e:
-        log.error(f"Validation failed for {email}: {e.message}")
+        log.warning(f"Validation failed: {e.message}. Data: {email}")
     except EmailTemplate.DoesNotExist:
         log.error(f"Email Template missing with name: {email['template']}")
 
