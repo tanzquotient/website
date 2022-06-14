@@ -91,6 +91,9 @@ class SubscribeQuerySet(models.QuerySet):
     def no_lead_follow_preference(self) -> QuerySet:
         return self.active().filter(lead_follow=LeadFollow.NO_PREFERENCE)
 
+    def to_match(self) -> QuerySet:
+        return self.active().filter(matching_state__in=MatchingState.TO_MATCH_STATES)
+
     def single(self) -> QuerySet:
         return self.active().filter(matching_state__in=MatchingState.SINGLE_STATES)
 

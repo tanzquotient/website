@@ -2,15 +2,17 @@ import logging
 
 from django.contrib import messages
 from django.db import transaction
+from django.http import HttpRequest
 from django.utils.translation import gettext as _
 
 from courses import models as models
-from courses.models import LeadFollow
+from courses.managers import SubscribeQuerySet
+from courses.models import LeadFollow, Subscribe
 
 log = logging.getLogger('matching')
 
 
-def _get_lists_for_partition(subscribes):
+def _get_lists_for_partition(subscribes: list[Subscribe]) -> tuple[list[Subscribe], list[Subscribe], list[Subscribe]]:
     """
     Returns lists needed for partitioning.
         'a' is the larger set out of leaders and followers
@@ -30,7 +32,7 @@ def _get_lists_for_partition(subscribes):
     return a, b, no_preference
 
 
-def _partition_subscribes(subscribes):
+def _partition_subscribes(subscribes: list[Subscribe]) -> tuple[list[Subscribe], list[Subscribe]]:
     """
     Returns two lists a, b such that len(a) = len(b).
     Moreover, every entry in a can be matched with any entry in b according to the
@@ -72,17 +74,17 @@ def _partition_subscribes(subscribes):
 
 
 @transaction.atomic
-def _match_for_course(subscriptions, course_id):
+def _match_for_course(subscriptions: SubscribeQuerySet, course_id: int) -> int:
     """
     Partitions the single subscribes into two lists.
     Afterwards, the lists are merged based on height
     """
-    to_match = list(subscriptions.filter(course__id=course_id).to_match().order_by('date'))
+    to_match = list(subscriptions.to_match().filter(course__id=course_id).order_by('date'))
 
     a, b = _partition_subscribes(to_match)
     assert len(a) == len(b)
 
-    def sort_key(subscribe):
+    def sort_key(subscribe: Subscribe) -> int:
         default_value = 250  # people of unknown height should be the last in the list
         return subscribe.user.profile.body_height or default_value
 
@@ -107,7 +109,7 @@ def _match_for_course(subscriptions, course_id):
     return match_count
 
 
-def match_partners(subscriptions, request=None):
+def match_partners(subscriptions: SubscribeQuerySet, request: HttpRequest = None) -> None:
     courses = subscriptions.values_list('course', flat=True)
     match_count = 0
     for course_id in set(courses):
