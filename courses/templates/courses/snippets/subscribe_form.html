@@ -54,7 +54,7 @@
                             <label class="btn {% if course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="follow">{% trans "Follow" %}</label>
                         </div>
                         {% for error in form.lead_follow.errors %}
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback d-inline">
                                 {{ error }}
                             </div>
                         {% endfor %}
@@ -80,7 +80,7 @@
                 <div>
                     <label for="partner_email" class="form-label"><strong>{% trans "Email address of your partner" %}</strong></label>
                     <input type="email" class="form-control {% if form.partner_email.errors %} is-invalid {% endif %}"
-                           name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}{% endif %}"
+                           name="partner_email" id="partner_email" {% if form.partner_email.value %}value="{{ form.partner_email.value }}"{% endif %}
                            aria-describedby="emailHelp">
                     {% for error in form.partner_email.errors %}
                         <div class="invalid-feedback">
