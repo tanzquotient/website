@@ -14,7 +14,7 @@ class ZkbCsvParser:
     def parse_files_and_save_payments() -> list[Payment]:
 
         payments: list[Payment] = []
-        new_files = FinanceFile.objects.filter(type=FinanceFileType.ZKB_CSV).all()
+        new_files = FinanceFile.objects.filter(type=FinanceFileType.ZKB_CSV, processed=False).all()
         for file in new_files:
             payments += ZkbCsvParser.parse_file(file)
 
