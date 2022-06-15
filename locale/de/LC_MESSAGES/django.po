@@ -957,8 +957,8 @@ msgid ""
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
 "and ladies are following."
 msgstr ""
-"Im veralteten Sinn ist die Führung die Aufgabe des Herren. Mittlerweile ist "
-"aber auch die umgekehrte Variante gerne gesehen."
+"Im traditionellen Sinn ist die Führung die Aufgabe des Herren. Mittlerweile sind "
+"aber alle Variante gerne gesehen."
 
 #: courses/templates/courses/snippets/subscribe_form.html:66
 msgid ""

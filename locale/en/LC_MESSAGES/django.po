@@ -944,8 +944,8 @@ msgid ""
 "and ladies are following."
 msgstr ""
 "The leader is responsible for guiding the couple, the guided partner is "
-"referred to as the follower. In an old-fashioned setup gentlemen are leading "
-"and ladies are following."
+"referred to as the follower. In a traditional setup gentlemen are leading "
+"and ladies are following. Nowadays you are welcome to pick either role, regardless of gender."
 
 #: courses/templates/courses/snippets/subscribe_form.html:66
 msgid ""

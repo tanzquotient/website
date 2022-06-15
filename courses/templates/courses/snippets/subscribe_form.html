@@ -15,15 +15,19 @@
                     If either leader or follower spots are fully booked, couples can not sign up anymore,
                     as one of them would subscribe as the fully booked role.
                     {% endcomment %}
-                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %} disabled {% endif %} />
+                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %} disabled {% endif %} />
             <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
         </div>
         <div id="lead_follow_help" class="form-text">
-            {% if not course.has_free_places_for_leaders %}
-                <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
-            {% endif %}
-            {% if not course.has_free_places_for_followers %}
-                <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
+            {% if course.get_free_places_count < 2 %}
+                <div class="text-info">{% trans "At least two spots need to be available to sign up as a couple." %}</div>
+            {% else %}
+                {% if not course.has_free_places_for_leaders %}
+                    <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
+                {% endif %}
+                {% if not course.has_free_places_for_followers %}
+                    <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -41,7 +45,7 @@
                             <label class="btn {% if course.has_free_places_for_leaders %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="lead">{% trans "Lead" %}</label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference"
-                                    {% if form.lead_follow.value != 'l' and form.lead_follow.value != 'f' %} checked {% endif %}>
+                                    {% if form.lead_follow.value == 'n' %} checked {% endif %}>
                             <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow"
