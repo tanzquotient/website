@@ -53,6 +53,11 @@
                                     {% if not course.has_free_places_for_followers %} disabled {% endif %}>
                             <label class="btn {% if course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="follow">{% trans "Follow" %}</label>
                         </div>
+                        {% for error in form.lead_follow.errors %}
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
                 <div id="lead_follow_help" class="form-text">
