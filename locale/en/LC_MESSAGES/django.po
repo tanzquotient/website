@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 17:18+0200\n"
+"POT-Creation-Date: 2022-06-20 17:43+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -435,64 +435,70 @@ msgid "Currently there are:"
 msgstr "Currently there are:"
 
 #: courses/models/course.py:264
-msgid "{} couple"
-msgstr "{} couple"
+msgid "One couple"
+msgstr "One couple"
 
-#: courses/models/course.py:264
+#: courses/models/course.py:265
 msgid "{} couples"
 msgstr "{} couples"
 
 #: courses/models/course.py:267
-msgid "{} individual follower"
-msgstr "{} individual follower"
+msgid "One individual follower"
+msgstr "One individual follower"
 
-#: courses/models/course.py:267
+#: courses/models/course.py:268
 msgid "{} individual followers"
 msgstr "{} individual followers"
 
 #: courses/models/course.py:270
-msgid "{} individual leader"
-msgstr "{} individual leader"
+msgid "One individual leader"
+msgstr "One individual leader"
 
-#: courses/models/course.py:270
+#: courses/models/course.py:271
 msgid "{} individual leaders"
 msgstr "{} individual leaders"
 
 #: courses/models/course.py:273
-msgid "{} person with no lead or follow preference"
-msgstr "{} person with no lead or follow preference"
+msgid "One person with no lead or follow preference"
+msgstr "One person with no lead or follow preference"
 
 #: courses/models/course.py:274
 msgid "{} people with no lead or follow preference"
 msgstr "{} people with no lead or follow preference"
 
-#: courses/models/course.py:278
+#: courses/models/course.py:279
+msgid "We received one subscription so far."
+msgstr "We received one subscription so far."
+
+#: courses/models/course.py:280
 msgid "We received {} subscriptions so far."
 msgstr "We received {} subscriptions so far."
 
-#: courses/models/course.py:290
-msgid ""
-"With this {} couple is possible in total, but at least {} couples are needed."
-msgstr ""
-"With this {} couple is possible in total, but at least {} couples are needed."
-
 #: courses/models/course.py:292
 msgid ""
+"With this one couple is possible in total, but at least {} couples are "
+"needed."
+msgstr ""
+"With this one couple is possible in total, but at least {} couples are "
+"needed."
+
+#: courses/models/course.py:294
+msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
 msgstr ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
 
-#: courses/models/course.py:295
+#: courses/models/course.py:297
 msgid "At least {} couples are needed."
 msgstr "At least {} couples are needed."
 
-#: courses/models/course.py:299
+#: courses/models/course.py:301
 msgid "At least one more person is needed"
 msgstr "At least one more person is needed"
 
-#: courses/models/course.py:300
+#: courses/models/course.py:302
 msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
@@ -2543,6 +2549,9 @@ msgstr "Main content"
 #: tq_website/settings.py:335
 msgid "Side content"
 msgstr "Side content"
+
+#~ msgid "{} couple"
+#~ msgstr "{} couple"
 
 #~ msgid "Course Overview"
 #~ msgstr "Course Overview"

@@ -261,21 +261,23 @@ class Course(TranslatableModel):
             else:
                 texts.append(_('Currently there are:'))
             if matched_count:
-                line = _('{} couple') if matched_count // 2 == 1 else _('{} couples')
-                texts.append(line.format(matched_count // 2))
+                texts.append(_('One couple') if matched_count // 2 == 1 else
+                             _('{} couples').format(matched_count // 2))
             if follows_count:
-                line = _('{} individual follower') if follows_count == 1 else _('{} individual followers')
-                texts.append(line.format(follows_count))
+                texts.append(_('One individual follower') if follows_count == 1 else
+                             _('{} individual followers').format(follows_count))
             if leads_count:
-                line = _('{} individual leader') if leads_count == 1 else _('{} individual leaders')
-                texts.append(line.format(leads_count))
+                texts.append(_('One individual leader') if leads_count == 1 else
+                             _('{} individual leaders').format(leads_count))
             if no_preference_count:
-                line = _('{} person with no lead or follow preference') if no_preference_count == 1 \
-                    else _('{} people with no lead or follow preference')
-                texts.append(line.format(no_preference_count))
+                texts.append(_('One person with no lead or follow preference') if no_preference_count == 1 else
+                             _('{} people with no lead or follow preference').format(no_preference_count))
             return texts
 
-        return [_('We received {} subscriptions so far.').format(self.subscriptions.active().count())]
+        count = self.subscriptions.active().count()
+        if count == 1:
+            return [_('We received one subscription so far.')]
+        return [_('We received {} subscriptions so far.').format(count)]
 
     def not_enough_participants_info(self) -> Optional[str]:
         if self.has_enough_participants():
@@ -287,8 +289,8 @@ class Course(TranslatableModel):
             if leads_count + follows_count + no_preference_count > 0:
                 num_couples = self.number_of_possible_couples()
                 if num_couples == 1:
-                    return _('With this {} couple is possible in total, but at least {} couples are needed.')\
-                        .format(num_couples, self.min_number_of_couples())
+                    return _('With this one couple is possible in total, but at least {} couples are needed.')\
+                        .format(self.min_number_of_couples())
                 return _('With this {} couples are possible in total, but at least {} couples are needed.')\
                     .format(num_couples, self.min_number_of_couples())
 
