@@ -297,7 +297,7 @@ class Course(TranslatableModel):
         people_needed = self.min_subscribers - self.subscriptions.active().count()
         if people_needed == 1:
             return _('At least one more person is needed')
-        return _('At least {} more people are needed.').format()
+        return _('At least {} more people are needed.').format(people_needed)
 
     def has_style(self, style_name) -> bool:
         if style_name is None:
