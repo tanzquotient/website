@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<div>
+    {% if not course.has_free_places %}
+        <span class="badge rounded-pill bg-danger">{% trans "fully booked" %}</span>
+    {% else %}
+        <div>
+            {% if course.show_free_places_count %}
+                    <span class="badge rounded-pill bg-success">
+                        {{ course.get_free_places_count }} {% trans "free" %}
+                    </span>
+                    {% if course.type.couple_course %}
+                        {% if not course.has_free_places_for_leaders %}
+                            <span class="badge rounded-pill bg-warning">{% trans "Leaders: fully booked" %}</span>
+                        {% endif %}
+                        {% if not course.has_free_places_for_followers %}
+                            <span class="badge rounded-pill bg-warning">{% trans "Followers: fully booked" %}</span>
+                        {% endif %}
+                    {% endif %}
+            {% endif %}
+            {% if not course.has_enough_participants %}
+                <span class="badge rounded-pill bg-danger">{% trans "more participants needed" %}</span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if is_detail_page %}
+         <div class="my-3">
+            <div><strong>{% trans "Subscription status" %}</strong></div>
+            {% for info in course.participants_info %}
+                <div> {{ info }}</div>
+            {% endfor %}
+            {% if not course.has_enough_participants %}
+                    <div class="mt-2">{{ course.not_enough_participants_info }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

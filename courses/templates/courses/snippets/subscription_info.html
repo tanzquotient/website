@@ -1,65 +1,48 @@
 {% load i18n %}
-{% with count=course.get_free_places_count show_count=course.show_free_places_count %}
-    {% if course.is_open_class %} {# No subscription needed (thus no subscribe status shown) #}
-        <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
-    {% elif course.is_external %} {# People can not subscribe here. #}
-        {% if course.external_url and display_link %}
-            <a href="{{ course.external_url }}" target="_blank">
-                <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
-            </a>
-        {% else %}
+{% if course.is_open_class %} {# No subscription needed (thus no subscribe status shown) #}
+    <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
+{% elif course.is_external %} {# People can not subscribe here. #}
+    {% if course.external_url and display_link %}
+        <a href="{{ course.external_url }}" target="_blank">
             <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
-        {% endif %}
-
-    {% else %} {# Regular case: subscription in general possible #}
-        {% if course.is_subscription_allowed or user.is_staff %}
-            {% if is_detail_page and not course.is_subscription_allowed and user.is_staff %}
-                {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
-            {% endif %}
-            {% if not course.has_free_places %}
-                <span class="badge rounded-pill bg-danger">{% trans "fully booked" %}</span>
-
-            {% elif show_count %}
-                <span class="badge rounded-pill bg-success">{{ count }} {% trans "free" %}</span>
-
-                {% if course.type.couple_course %}
-                    {% if not course.has_free_places_for_leaders %}
-                        <span class="badge rounded-pill bg-warning">{% trans "Leaders: fully booked" %}</span>
-                    {% endif %}
-                    {% if not course.has_free_places_for_followers %}
-                        <span class="badge rounded-pill bg-warning">{% trans "Followers: fully booked" %}</span>
-                    {% endif %}
-                {% endif %}
-
-            {% endif %}
-
-            {% if user and user.id in course.subscribed_user_ids %}
-                {% if is_detail_page %}
-                    <div class="mt-2 alert alert-info" role="alert">
-                        <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
-                        <hr>
-                        <p>
-                            <a href="{% url "user_courses" %}">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                {% trans "Go to 'My Courses' to see the status and further information" %}
-                            </a>
-                        </p>
-                    </div>
-                {% else %}
-                    <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
-                {% endif %}
-
-            {% elif is_detail_page and course.has_free_places %}
-                <div class="mt-2 mb-3">
-                    <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success"
-                       role="button">{% trans "Subscribe now" %}</a>
-                </div>
-            {% endif %}
-
-        {% elif course.subscription_opens_soon %}
-            <em>{% trans "Registration opens soon" %}</em>
-        {% elif course.subscription_closed %}
-            <em>{% trans "Registration closed" %}</em>
-        {% endif %}
+        </a>
+    {% else %}
+        <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
     {% endif %}
-{% endwith %}
+
+{% else %} {# Regular case: subscription in general possible #}
+    {% if course.is_subscription_allowed or user.is_staff %}
+        {% if is_detail_page and not course.is_subscription_allowed and user.is_staff %}
+            {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
+        {% endif %}
+        {% if user and user.id in course.subscribed_user_ids %}
+            {% if is_detail_page %}
+                <div class="mt-2 alert alert-info" role="alert">
+                    <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
+                    <hr>
+                    <p>
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Go to 'My Courses' to see the status and further information" %}
+                        </a>
+                    </p>
+                </div>
+            {% else %}
+                <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
+            {% endif %}
+
+        {% elif is_detail_page and course.has_free_places %}
+            <div class="my-3">
+                <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success"
+                   role="button">{% trans "Subscribe now" %}</a>
+            </div>
+        {% endif %}
+
+        {% include "courses/snippets/participants_info.html" %}
+
+    {% elif course.subscription_opens_soon %}
+        <em>{% trans "Registration opens soon" %}</em>
+    {% elif course.subscription_closed %}
+        <em>{% trans "Registration closed" %}</em>
+    {% endif %}
+{% endif %}

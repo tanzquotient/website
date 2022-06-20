@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from django.utils.translation import gettext_lazy as _
+
 from datetime import date, timedelta
 from decimal import Decimal
 from numbers import Number
@@ -211,6 +213,91 @@ class Course(TranslatableModel):
 
     def get_confirmed_count(self) -> int:
         return self.subscriptions.accepted().count()
+
+    def get_matched_and_individual_counts(self) -> tuple[int, int, int, int]:
+        matched_count = self.subscriptions.active().matched().count()
+
+        leads_count = self.subscriptions.active().to_match().leaders().count()
+        follows_count = self.subscriptions.active().to_match().followers().count()
+        no_preference_count = self.subscriptions.active().to_match().no_lead_follow_preference().count()
+
+        return matched_count, leads_count, follows_count, no_preference_count
+
+    def number_of_possible_couples(self) -> int:
+        matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+
+        smaller_set_size = min(leads_count, follows_count)
+        larger_set_size = max(leads_count, follows_count)
+
+        diff = larger_set_size - smaller_set_size
+
+        if no_preference_count <= diff:
+            return matched_count // 2 + smaller_set_size + no_preference_count
+
+        remaining = no_preference_count - diff
+        return matched_count // 2 + larger_set_size + remaining // 2
+
+    def min_number_of_couples(self) -> int:
+        return (self.min_subscribers + 1) // 2  # round up
+
+    def has_enough_participants(self) -> bool:
+        if self.min_subscribers is None:
+            return True  # If there is no minimum number of subscribers, we always have enough participants
+
+        if self.type.couple_course:
+            return self.number_of_possible_couples() >= self.min_number_of_couples()
+
+        return self.subscriptions.active().count() >= self.min_subscribers
+
+    def participants_info(self) -> list[str]:
+        if self.subscriptions.active().count() == 0:
+            return [_("We did not receive any subscriptions yet.")]
+
+        if self.type.couple_course:
+            matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+            texts = []
+            if matched_count // 2 + leads_count + follows_count + no_preference_count == 1:
+                texts.append(_('Currently there is:'))
+            else:
+                texts.append(_('Currently there are:'))
+            if matched_count:
+                line = _('{} couple') if matched_count // 2 == 1 else _('{} couples')
+                texts.append(line.format(matched_count // 2))
+            if follows_count:
+                line = _('{} individual follower') if follows_count == 1 else _('{} individual followers')
+                texts.append(line.format(follows_count))
+            if leads_count:
+                line = _('{} individual leader') if leads_count == 1 else _('{} individual leaders')
+                texts.append(line.format(leads_count))
+            if no_preference_count:
+                line = _('{} person with no lead or follow preference') if no_preference_count == 1 \
+                    else _('{} people with no lead or follow preference')
+                texts.append(line.format(no_preference_count))
+            return texts
+
+        return [_('We received {} subscriptions so far.').format(self.subscriptions.active().count())]
+
+    def not_enough_participants_info(self) -> Optional[str]:
+        if self.has_enough_participants():
+            return None
+
+        if self.type.couple_course:
+            matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+
+            if leads_count + follows_count + no_preference_count > 0:
+                num_couples = self.number_of_possible_couples()
+                if num_couples == 1:
+                    return _('With this {} couple is possible in total, but at least {} couples are needed.')\
+                        .format(num_couples, self.min_number_of_couples())
+                return _('With this {} couples are possible in total, but at least {} couples are needed.')\
+                    .format(num_couples, self.min_number_of_couples())
+
+            return _('At least {} couples are needed.').format(self.min_number_of_couples())
+
+        people_needed = self.min_subscribers - self.subscriptions.active().count()
+        if people_needed == 1:
+            return _('At least one more person is needed')
+        return _('At least {} more people are needed.').format()
 
     def has_style(self, style_name) -> bool:
         if style_name is None:

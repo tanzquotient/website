@@ -31,7 +31,7 @@
                         <th>{% trans "Costs" %}</th>
                         {% if offering.is_partner_offering %}
                             <th>{% trans "External link" %}</th>
-                        {% elif not hide_subscribtion %}
+                        {% elif not hide_subscription_status %}
                             <th>{% trans "Status" %}</th>
                         {% endif %}
                     </tr>
@@ -65,7 +65,7 @@
                             {% else %}
                                 <td>{{ c.format_prices|default:"-" }}</td>
                             {% endif %}
-                            {% if not hide_subscribtion %}
+                            {% if not hide_subscription_status %}
                                 <td>
                                     {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
                                 </td>
@@ -94,7 +94,7 @@
                             <strong class="list-group-item-heading">
                                 {{ c.type.name }}
                             </strong>
-                            {% if not hide_subscribtion %}
+                            {% if not hide_subscription_status %}
                                 <div>
                                     {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
                                 </div>
