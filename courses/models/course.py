@@ -249,35 +249,40 @@ class Course(TranslatableModel):
 
         return self.subscriptions.active().count() >= self.min_subscribers
 
-    def participants_info(self) -> list[str]:
+    def participants_info_title(self) -> str:
         if self.subscriptions.active().count() == 0:
-            return [_("We did not receive any subscriptions yet.")]
+            return _("We did not receive any subscriptions yet.")
 
         if self.type.couple_course:
             matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
-            texts = []
             if matched_count // 2 + leads_count + follows_count + no_preference_count == 1:
-                texts.append(_('Currently there is:'))
-            else:
-                texts.append(_('Currently there are:'))
-            if matched_count:
-                texts.append(_('One couple') if matched_count // 2 == 1 else
-                             _('{} couples').format(matched_count // 2))
-            if follows_count:
-                texts.append(_('One individual follower') if follows_count == 1 else
-                             _('{} individual followers').format(follows_count))
-            if leads_count:
-                texts.append(_('One individual leader') if leads_count == 1 else
-                             _('{} individual leaders').format(leads_count))
-            if no_preference_count:
-                texts.append(_('One person with no lead or follow preference') if no_preference_count == 1 else
-                             _('{} people with no lead or follow preference').format(no_preference_count))
-            return texts
+                return _('Currently there is:')
+            return _('Currently there are:')
 
         count = self.subscriptions.active().count()
         if count == 1:
-            return [_('We received one subscription so far.')]
-        return [_('We received {} subscriptions so far.').format(count)]
+            return _('We received one subscription so far.')
+        return _('We received {} subscriptions so far.').format(count)
+
+    def participants_info_list(self) -> list[str]:
+        if not self.type.couple_course:
+            return []
+
+        matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+        texts = []
+        if matched_count:
+            texts.append(_('One couple') if matched_count // 2 == 1 else
+                         _('{} couples').format(matched_count // 2))
+        if follows_count:
+            texts.append(_('One individual follower') if follows_count == 1 else
+                         _('{} individual followers').format(follows_count))
+        if leads_count:
+            texts.append(_('One individual leader') if leads_count == 1 else
+                         _('{} individual leaders').format(leads_count))
+        if no_preference_count:
+            texts.append(_('One person with no lead or follow preference') if no_preference_count == 1 else
+                         _('{} people with no lead or follow preference').format(no_preference_count))
+        return texts
 
     def not_enough_participants_info(self) -> Optional[str]:
         if self.has_enough_participants():

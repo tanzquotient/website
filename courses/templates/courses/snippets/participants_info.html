@@ -27,9 +27,16 @@
     {% if is_detail_page %}
          <div class="my-3">
             <div><strong>{% trans "Subscription status" %}</strong></div>
-            {% for info in course.participants_info %}
-                <div> {{ info }}</div>
-            {% endfor %}
+            <div>{{ course.participants_info_title }}</div>
+             {% with course.participants_info_list as info_list %}
+                 {% if info_list %}
+                     <ul>
+                         {% for info in info_list %}
+                             <li> {{ info }}</li>
+                         {% endfor %}
+                     </ul>
+                 {% endif %}
+             {% endwith %}
             {% if not course.has_enough_participants %}
                     <div class="mt-2">{{ course.not_enough_participants_info }}</div>
             {% endif %}
