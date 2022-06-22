@@ -2,6 +2,7 @@ from typing import Optional
 
 from django.db.models import TimeField, BooleanField, DateField, DecimalField, ForeignKey, ImageField, CharField, \
     IntegerField, SET_NULL
+from django.template.defaultfilters import date as format_date
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from djangocms_text_ckeditor.fields import HTMLField
@@ -62,9 +63,9 @@ class Event(TranslatableModel):
         date_from = self.date
         date_to = self.date_to if self.date_to else self.date
 
-        date_from_formatted = date_from.strftime("%a, %d.%m.%Y")
+        date_from_formatted = format_date(date_from, 'D, d. N Y')
         time_from_formatted = self.time_from.strftime("%H:%M") if self.time_from else ""
-        date_to_formatted = date_to.strftime("%a, %d.%m.%Y")
+        date_to_formatted = format_date(date_to, 'D, d. N Y')
         time_to_formatted = self.time_to.strftime("%H:%M") if self.time_to else ""
 
         if date_from == date_to:

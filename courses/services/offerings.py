@@ -59,7 +59,7 @@ def get_sections(offering, course_filter=None):
             courses_on_weekday = [c for c in CourseManager.weekday(course_set, w) if course_filter(c)]
             if courses_on_weekday:
                 offering_sections.append({
-                    'section_title': Weekday.WEEKDAYS_TRANSLATIONS_DE[w],
+                    'section_title': Weekday.WEEKDAYS_TRANSLATIONS[w],
                     'courses': courses_on_weekday
                 })
 

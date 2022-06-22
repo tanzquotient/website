@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+
 class Weekday:
     MONDAY = 'mon'
     TUESDAY = 'tue'
@@ -10,13 +13,13 @@ class Weekday:
     WEEKEND = [SATURDAY, SUNDAY]
 
     CHOICES = (
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY, 'Wednesday'),
-        (THURSDAY, 'Thursday'),
-        (FRIDAY, 'Friday'),
-        (SATURDAY, 'Saturday'),
-        (SUNDAY, 'Sunday')
+        (MONDAY, _('Monday')),
+        (TUESDAY, _('Tuesday')),
+        (WEDNESDAY, _('Wednesday')),
+        (THURSDAY, _('Thursday')),
+        (FRIDAY, _('Friday')),
+        (SATURDAY, _('Saturday')),
+        (SUNDAY, _('Sunday'))
     )
 
     NUMBERS = {
@@ -30,12 +33,12 @@ class Weekday:
     }
     NUMBER_2_SLUG = {number: slug for slug, number in NUMBERS.items()}
 
-    WEEKDAYS_TRANSLATIONS_DE = {
-        MONDAY: 'Montag',
-        TUESDAY: 'Dienstag',
-        WEDNESDAY: 'Mittwoch',
-        THURSDAY: 'Donnerstag',
-        FRIDAY: 'Freitag',
-        SATURDAY: 'Samstag',
-        SUNDAY: 'Sonntag'
+    WEEKDAYS_TRANSLATIONS = {
+        MONDAY: _('Monday'),
+        TUESDAY: _('Tuesday'),
+        WEDNESDAY: _('Wednesday'),
+        THURSDAY: _('Thursday'),
+        FRIDAY: _('Friday'),
+        SATURDAY: _('Saturday'),
+        SUNDAY: _('Sunday')
     }
