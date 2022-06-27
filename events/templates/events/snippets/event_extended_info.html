@@ -2,6 +2,8 @@
 
 {% if event.image %}
     <img src="{{ event.image.url }}" class="w-100 mb-3 rounded" alt="{{ event.get_name }}">
+{% elif event.category and event.category.image %}
+    <img src="{{ event.category.image.url }}" class="w-100 mb-3 rounded" alt="{{ event.get_name }}">
 {% endif %}
 <div>
     <strong>{% trans "Date" %}</strong>

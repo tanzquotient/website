@@ -5,6 +5,8 @@
     <div class="card mb-4 banner-container">
         {% if event.image %}
             <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.get_name }}">
+        {% elif event.category and event.category.image %}
+            <img src="{{ event.category.image.url }}" class="card-img-top" alt="{{ event.get_name }}">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title">{{ event.get_name }}</h5>

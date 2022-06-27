@@ -84,14 +84,14 @@
 
                 </div>
             {% endif %}
-            {% if event.category and event.category.description %}
-                <div>
-                    {{ event.category.description|safe }}
-                </div>
-            {% endif %}
             {% if event.get_description %}
                 <div>
                     {{ event.get_description|safe }}
+                </div>
+            {% endif %}
+            {% if event.category and event.category.description %}
+                <div>
+                    {{ event.category.description|safe }}
                 </div>
             {% endif %}
         </div>
