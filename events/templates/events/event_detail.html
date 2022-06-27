@@ -84,11 +84,12 @@
 
                 </div>
             {% endif %}
-            {% if event.get_description %}
-
+            {% if event.category and event.category.description %}
                 <div>
-                    <strong>{% trans "Description" %}</strong>
+                    {{ event.category.description|safe }}
                 </div>
+            {% endif %}
+            {% if event.get_description %}
                 <div>
                     {{ event.get_description|safe }}
                 </div>

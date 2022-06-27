@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from events.models import Event, EventCategory
@@ -16,7 +17,7 @@ def detail(request, event_id):
     return render(request, template_name, context)
 
 
-def category_detail(request, category_id):
+def category_detail(request: HttpRequest, category_id: int) -> HttpResponse:
     template_name = "events/category_detail.html"
     category = get_object_or_404(EventCategory, pk=category_id)
     context = {
@@ -24,10 +25,10 @@ def category_detail(request, category_id):
         'use_cards': False,
         'title': category.name,
         'text': category.description,
+        'image': category.image,
         'show_when_no_events': True,
     }
     return render(request, template_name, context)
-
 
 
 @login_required
