@@ -27,7 +27,7 @@ django-parler-rest==2.2
 celery==5.2.6
 django-celery-email==3.0.0
 django-celery-beat==2.2.1
-django-celery-results==2.3.1
+django-celery-results==2.4.0
 django-redis==5.2.0
 
 # Files and encoding
