@@ -1,5 +1,5 @@
 # Django
-Django==3.2.14  # django-cms does not yet support django 4.0
+Django==3.2.15  # django-cms does not yet support django 4.0
 django-debug-toolbar==3.4.0
 django-absolute==0.3
 django-analytical==3.1.0
