@@ -13,6 +13,8 @@ docker-compose build
 # The problem is that "localhost" is not a valid value from the perspective
 # of the Django container accessing Minio, and "tq-data" is not a valid value
 # from the perspective of your browser accessing Minio.
+docker-compose up -d
+
 echo "Setting IPs for Minio..."
 ip=$(docker inspect tq-data | grep IPAddress | grep --extended-regexp --only-matching "([0-9]{1,3}\.){3}[0-9]{1,3}")
 sed -i "s/TQ_S3_MEDIA_HOST: .*/TQ_S3_MEDIA_HOST: $ip/" overrides.yml
@@ -31,3 +33,6 @@ echo "Finishing initialisation..."
 
 # Load test data
 ./scripts/loaddata.sh
+
+echo "Done initialising TQ website."
+echo "You can view the site at http://localhost:8000/"
