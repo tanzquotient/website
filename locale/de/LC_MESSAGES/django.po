@@ -2444,7 +2444,7 @@ msgid "Follow us"
 msgstr "Folge uns"
 
 #: templates/footer.html:40
-msgid "Please send Website Feedback to"
+msgid "Please send website feedback to"
 msgstr "Feedback zum Webauftritt bitte an"
 
 #: templates/footer.html:46
