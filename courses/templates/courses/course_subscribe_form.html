@@ -1,5 +1,6 @@
 {% extends "basis.html" %}
 
+{% load static %}
 {% load i18n %}
 
 {% block title %}
@@ -26,3 +27,7 @@
 
     </div>
 {% endblock main_content %}
+
+{% block scripts %}
+    <script src="{% static "subscribe_form.js" %}"></script>
+{% endblock %}

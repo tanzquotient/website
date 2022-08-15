@@ -146,7 +146,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
             or not course.has_free_places:
         return redirect('courses:course_detail', course_id=course_id)
 
-    # If user is has overdue payments -> block subscribing to new courses
+    # If user has overdue payments -> block subscribing to new courses
     if request.user.profile.subscriptions_with_overdue_payment():
         return render(request, "courses/overdue_payments.html", dict(
             email_address=settings.EMAIL_ADDRESS_FINANCES,
@@ -167,9 +167,15 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
         return render(request, "courses/course_subscribe_status.html", context=context)
 
     # Render sign up form
+
+    past_partners = []
+    for subs in request.user.subscriptions.all():
+        past_partners.append({'name': subs.partner.get_full_name(), 'email': subs.partner.email})
+
     context = {
         'course': course,
-        'form': form
+        'form': form,
+        'past_partners': past_partners,
     }
     return render(request, "courses/course_subscribe_form.html", context)
 
