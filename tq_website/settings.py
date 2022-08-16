@@ -149,6 +149,16 @@ ACCOUNT_USER_DISPLAY = lambda user: user.first_name if user.first_name else user
 ACCOUNT_SIGNUP_FORM_CLASS = 'courses.forms.CustomSignupForm'
 ACCOUNT_LOGOUT_ON_GET = True
 
+# Password validation (native django, not django-allauth)
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 12,
+        },
+    }
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
