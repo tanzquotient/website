@@ -22,7 +22,7 @@ sidecar:
   - name: redis
     template: redis
     values:
-      version: "6.0.8"
+      version: "7.0.4"
 
 resources:
   requests:
