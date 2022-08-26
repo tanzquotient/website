@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import filer.fields.image
 
 
 class Migration(migrations.Migration):
@@ -17,7 +16,6 @@ class Migration(migrations.Migration):
     dependencies = [
         ('cms', '0001_initial'),
         ('cms', '0016_auto_20160608_1535'),
-        ('filer', '0001_initial'),
     ]
 
     operations = [
@@ -37,7 +35,7 @@ class Migration(migrations.Migration):
             name='ThumbnailPluginModel',
             fields=[
                 ('cmsplugin_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='cms_plugins_thumbnailpluginmodel', serialize=False, to='cms.CMSPlugin')),
-                ('image', filer.fields.image.FilerImageField(blank=True, help_text='Image to show thumbnail for.', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL)),
+                ('image', models.ImageField(blank=True, help_text='Image to show thumbnail for.', null=True)),
                 ('crop', models.BooleanField(default=False, help_text='If this thumbnail should be cropped to fit given size.')),
                 ('url', models.URLField(blank=True, help_text='URL to display on image click.', max_length=500, null=True)),
             ],

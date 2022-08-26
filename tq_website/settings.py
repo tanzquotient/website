@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'photologue',  # Django gallery plugin
     'sortedm2m',  # required for photologue
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
-    'filer',
-    'easy_thumbnails',  # filer requires this here
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
