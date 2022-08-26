@@ -236,7 +236,6 @@ TEMPLATES = [
                     "django.template.context_processors.request",
                     'sekizai.context_processors.sekizai',
                     'cms.context_processors.cms_settings',
-                    'absolute.context_processors.absolute',
                 ]
         }
     },

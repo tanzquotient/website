@@ -1,7 +1,6 @@
 # Django
 Django==4.0.7  # django-celery-beat has Django < 4.1
 django-debug-toolbar==3.6.0
-django-absolute==0.3
 django-analytical==3.1.0
 django-filter==22.1
 django-guardian==2.4.0
