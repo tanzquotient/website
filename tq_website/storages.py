@@ -8,7 +8,7 @@ class TqStorage(S3Boto3Storage):
                  access_key, secret_key, querystring_auth=True) -> None:
         config = dict(
             use_ssl=use_ssl,
-            secure_urls=use_ssl,
+            url_protocol='https:' if use_ssl else 'http:',
             access_key=access_key,
             secret_key=secret_key,
             region_name=region,

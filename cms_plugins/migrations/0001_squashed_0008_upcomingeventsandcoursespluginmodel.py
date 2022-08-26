@@ -18,21 +18,9 @@ class Migration(migrations.Migration):
         ('cms', '0001_initial'),
         ('cms', '0016_auto_20160608_1535'),
         ('filer', '0001_initial'),
-        ('djangocms_link', '0001_initial'),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='ButtonPluginModel',
-            fields=[
-                ('link_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='djangocms_link.Link')),
-                ('emphasize', models.BooleanField(default=False, help_text='If this button should be visually emphasized.')),
-            ],
-            options={
-                'abstract': False,
-            },
-            bases=('djangocms_link.link',),
-        ),
         migrations.CreateModel(
             name='PageTitlePluginModel',
             fields=[

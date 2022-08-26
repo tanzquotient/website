@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
     'filer',
     'easy_thumbnails',  # filer requires this here
-    'djangocms_link',
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
