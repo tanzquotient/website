@@ -1,65 +1,63 @@
 # Django
-Django==3.2.15  # django-cms does not yet support django 4.0
-django-debug-toolbar==3.4.0
-django-absolute==0.3
+Django==4.0.7  # django-celery-beat has Django < 4.1
+django-debug-toolbar==3.6.0
 django-analytical==3.1.0
-django-filter==21.1
+django-filter==22.1
 django-guardian==2.4.0
 django-parler==2.3
-django-post-office==3.6.0
-django-reversion==5.0.0
+django-post-office==3.6.1
+django-reversion==5.0.2
 django-countries==7.3.2
 django-ical==1.8.3
-django-ckeditor==6.4.0
-django-allauth==0.50.0
+django-ckeditor==6.5.0
+django-allauth==0.51.0
 django-photologue==3.15.1
 
 # Django CMS
-django-cms==3.10.0
-djangocms-link==3.0.0
-djangocms-text-ckeditor==5.0.1
+django-cms==3.11.0
+djangocms-text-ckeditor==5.1.1
 
 # Rest framework
 djangorestframework==3.13.1
 django-parler-rest==2.2
 
 # Tasks
-celery==5.2.6
+celery==5.2.7
 django-celery-email==3.0.0
-django-celery-beat==2.2.1
-django-celery-results==2.3.1
+django-celery-beat==2.3.0
+django-celery-results==2.4.0
 django-redis==5.2.0
 
 # Files and encoding
-openpyxl==3.0.9
+openpyxl==3.0.10
 base36==0.1.1
-svglib==1.2.1
-PyPDF2==1.27.12
-reportlab==3.6.9
+svglib==1.4.1
+PyPDF2==2.10.3
+reportlab==3.6.11
 pyyaml==6.0
 
 # SSH
-paramiko==2.10.4
+paramiko==2.11.0
 
 # Database
-psycopg2==2.9.3
+psycopg2-binary==2.9.3
 
 # Storage
-django-storages==1.12.3
-boto3==1.22.11
-minio==7.1.8
+django-storages==1.13.1
+boto3==1.24.60
+minio==7.1.11
 
 # Webserver
 gunicorn==20.1.0
 
 # Logging
-sentry_sdk==1.5.12
+sentry_sdk==1.9.5
 
 # Utils
-plotly==5.8.0               # For charts and graphs
-pytz==2022.1
-pylint==2.13.8              # Default linter
+plotly==5.10.0               # For charts and graphs
+pytz==2022.2.1
+pylint==2.15.0              # Default linter
 shortuuid==1.0.9            # For generating short and unique ID's and codes
-django-hijack==3.2.0        # Superuser can impersonate other users
+django-hijack==3.2.1        # Superuser can impersonate other users
 python-dotenv==0.20.0       # Used to load environment variables from .env file
 sphinx-automodapi==0.14.1

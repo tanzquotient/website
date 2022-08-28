@@ -6,8 +6,6 @@ from cms.plugin_pool import plugin_pool
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from djangocms_link.cms_plugins import LinkPlugin
-from djangocms_link.models import Link
 from djangocms_text_ckeditor.fields import HTMLField
 
 from courses.models import IrregularLesson, OfferingType
@@ -85,17 +83,6 @@ class QuickLinksPlugin(CMSPluginBase):
             'instance': instance,
         })
         return context
-
-
-class ButtonPluginModel(Link):
-    emphasize = models.BooleanField(blank=False, null=False, default=False)
-    emphasize.help_text = "If this button should be visually emphasized."
-
-
-class ButtonPlugin(LinkPlugin):
-    name = _("Button")
-    model = ButtonPluginModel
-    render_template = "plugins/button.html"
 
 
 class RowPluginModel(CMSPlugin):
@@ -212,7 +199,6 @@ class CountdownPlugin(CMSPluginBase):
 plugin_pool.register_plugin(PageTitlePlugin)
 plugin_pool.register_plugin(AlertPlugin)
 plugin_pool.register_plugin(QuickLinksPlugin)
-plugin_pool.register_plugin(ButtonPlugin)
 plugin_pool.register_plugin(RowPlugin)
 plugin_pool.register_plugin(CountdownPlugin)
 plugin_pool.register_plugin(UpcomingEventsAndCoursesPlugin)

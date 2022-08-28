@@ -89,6 +89,14 @@
                     {% endfor %}
                     <div id="emailHelp" class="form-text">{% trans "Provide the email address your partner used to register on this website." %}</div>
                 </div>
+                <div class="pt-1">
+                    <div class="form-text">{% trans "Or select one of your past partners:" %}</div>
+                    {% for name, email in past_partners %}
+                        <a class="btn btn-sm btn-outline-success mb-1" onclick="setEmailAddress('{{ email }}')">
+                            {{ name }} ({{ email }})
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% else %}
