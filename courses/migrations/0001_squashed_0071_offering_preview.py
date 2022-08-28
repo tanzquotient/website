@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 import hashlib
 
-import base36
-
 import courses.models.voucher
 import datetime
 from django.conf import settings
@@ -38,10 +36,9 @@ def populate_status(apps, schema_editor):
 def populate_usi(apps, schema_editor):
     Subscribe = apps.get_model("courses", "Subscribe")
     for s in Subscribe.objects.all():
-        checksum = hashlib.md5()
-        checksum.update(str(s.id))
-        s.usi = (base36.dumps(s.id).zfill(4)[:4] + checksum.hexdigest()[:2]).lower()
-        s.save()
+        if not s.usi:
+            s.usi = s.generate_usi()
+            s.save()
 
 def migrate_untranslated_course(apps, schema_editor):
     MyModel = apps.get_model('courses', 'Course')

@@ -1,63 +1,61 @@
 # Django
-Django==4.0.7  # django-celery-beat has Django < 4.1
-django-debug-toolbar==3.6.0
-django-analytical==3.1.0
-django-filter==22.1
-django-guardian==2.4.0
-django-parler==2.3
-django-post-office==3.6.1
-django-reversion==5.0.2
-django-countries==7.3.2
-django-ical==1.8.3
-django-ckeditor==6.5.0
-django-allauth==0.51.0
-django-photologue==3.15.1
+Django==4.0.7                   # django-celery-beat has Django < 4.1
+
+# Django Extensions
+django-debug-toolbar==3.6.0     # For developement. Gives additional insights into e.g. database queries
+django-analytical==3.1.0        # For integration Google Analytics (or any other analutics framework)
+django-parler==2.3              # For simple translatable models
+django-post-office==3.6.1       # Send and manage emails asynchronously, database based email templates
+django-reversion==5.0.2         # Version control for model instances, e.g. used for subscriptions
+django-countries==7.3.2         # Country choices for use with forms and fields for models
+django-ical==1.8.3              # Simple library for creating iCal feeds
+django-ckeditor==6.5.0          # Django admin CKEditor integration
+django-allauth==0.51.0          # Authentication, registration, account management, 3rd party account authentication
+django-photologue==3.15.1       # Gallery application
 
 # Django CMS
-django-cms==3.11.0
-djangocms-text-ckeditor==5.1.1
+django-cms==3.11.0              # Open source content management system based on the Django
+djangocms-text-ckeditor==5.1.1  # Text plugin for django CMS using CKEditor 4
 
 # Rest framework
-djangorestframework==3.13.1
-django-parler-rest==2.2
+djangorestframework==3.13.1     # Toolkit for building Web APIs
+django-parler-rest==2.2         # Adding translation support to django-rest-framework
 
 # Tasks
-celery==5.2.7
-django-celery-email==3.0.0
-django-celery-beat==2.3.0
-django-celery-results==2.4.0
-django-redis==5.2.0
+celery==5.2.7                   # Task queue with focus on real-time processing, while also supporting task scheduling
+django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
+django-celery-beat==2.3.0       # Store periodic task schedules in the database
+django-celery-results==2.4.0    # Stores Celery task results
+django-redis==5.2.0             # Redis cache and session backend for Django
 
 # Files and encoding
-openpyxl==3.0.10
-base36==0.1.1
-svglib==1.4.1
-PyPDF2==2.10.3
-reportlab==3.6.11
-pyyaml==6.0
+openpyxl==3.0.10                # For Microsoft Excel Files
+svglib==1.4.1                   # Used for creating vouchers from SVG tremplate
+reportlab==3.6.11               # For generating PDFs and graphics
+pyyaml==6.0                     # Used for generating environment variable file
 
 # SSH
-paramiko==2.11.0
+paramiko==2.11.0                # Used to get finance files from PostFinance
 
 # Database
-psycopg2-binary==2.9.3
+psycopg2-binary==2.9.3          # Driver for PostgreSQL
 
 # Storage
-django-storages==1.13.1
-boto3==1.24.60
-minio==7.1.11
+django-storages==1.13.1         # Provide a variety of storage backends, used for storing objects on Minio
+boto3==1.24.61                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+minio==7.1.11                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
-gunicorn==20.1.0
+gunicorn==20.1.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==1.9.5
+sentry_sdk==1.9.5               # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==5.10.0               # For charts and graphs
-pytz==2022.2.1
-pylint==2.15.0              # Default linter
-shortuuid==1.0.9            # For generating short and unique ID's and codes
-django-hijack==3.2.1        # Superuser can impersonate other users
-python-dotenv==0.20.0       # Used to load environment variables from .env file
-sphinx-automodapi==0.14.1
+plotly==5.10.0                  # For generating charts and graphs
+pytz==2022.2.1                  # timezone calculations
+pylint==2.15.0                  # Default linter
+shortuuid==1.0.9                # For generating short and unique ID's and codes
+django-hijack==3.2.1            # Superuser can impersonate other users
+python-dotenv==0.20.0           # Used to load environment variables from .env file
+sphinx-automodapi==0.14.1       # For generating Sphinx API docs

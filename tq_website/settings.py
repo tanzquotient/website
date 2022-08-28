@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'django_celery_results',
     'djcelery_email',
     'post_office',
-    'guardian',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -95,7 +94,6 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
