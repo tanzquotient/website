@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-26 15:44+0200\n"
+"POT-Creation-Date: 2022-08-28 12:35+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -729,19 +729,19 @@ msgstr "Workshops"
 msgid "Course details"
 msgstr "Kursdetails"
 
-#: courses/templates/courses/course_subscribe_form.html:10
+#: courses/templates/courses/course_subscribe_form.html:11
 #: courses/templates/courses/course_subscribe_status.html:10
 msgid "Course subscription"
 msgstr "Kursanmeldung"
 
-#: courses/templates/courses/course_subscribe_form.html:18
+#: courses/templates/courses/course_subscribe_form.html:19
 #: courses/templates/courses/course_subscribe_status.html:18
 #: payment/templates/payment/subscription/index.html:46
 msgid "Info"
 msgstr "Infos"
 
-#: courses/templates/courses/course_subscribe_form.html:22
-#: courses/templates/courses/snippets/subscribe_form.html:125
+#: courses/templates/courses/course_subscribe_form.html:23
+#: courses/templates/courses/snippets/subscribe_form.html:133
 #: templates/account/signup.html:8
 msgid "Sign Up"
 msgstr "Registrieren"
@@ -1032,7 +1032,7 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: courses/templates/courses/snippets/song_list.html:7
-#: tq_website/settings.py:338
+#: tq_website/settings.py:346
 msgid "Title"
 msgstr "Titel"
 
@@ -1140,28 +1140,32 @@ msgstr ""
 "Gib die Email-Adresse an, mit der sich dein Partner / deine Partnerin auf "
 "dieser Website registriert hat."
 
-#: courses/templates/courses/snippets/subscribe_form.html:100
+#: courses/templates/courses/snippets/subscribe_form.html:94
+msgid "Or select one of your past partners:"
+msgstr "Oder wähle von deinen vergangenen Partner:innen aus:"
+
+#: courses/templates/courses/snippets/subscribe_form.html:108
 #: payment/templates/payment/finance/account_detail.html:45
 msgid "Comment"
 msgstr "Kommentar"
 
-#: courses/templates/courses/snippets/subscribe_form.html:102
+#: courses/templates/courses/snippets/subscribe_form.html:110
 msgid "Anything else you want to tell us?"
 msgstr "Würdest du uns gerne noch etwas mitteilen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:108
+#: courses/templates/courses/snippets/subscribe_form.html:116
 msgid "General terms and conditions"
 msgstr "Allgemeine Geschäftsbedingungen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:112
+#: courses/templates/courses/snippets/subscribe_form.html:120
 msgid "View the general terms and conditions"
 msgstr "Sieh dir unsere Allgemeine Geschäftsbedingungen an"
 
-#: courses/templates/courses/snippets/subscribe_form.html:117
+#: courses/templates/courses/snippets/subscribe_form.html:125
 msgid "I accept the general terms and conditions."
 msgstr "Ich akzeptiere die Allgemeine Geschäftsbedingungen."
 
-#: courses/templates/courses/snippets/subscribe_form.html:120
+#: courses/templates/courses/snippets/subscribe_form.html:128
 msgid "You must accept the general terms and conditions."
 msgstr "Du musst die Allgemeine Geschäftsbedingungen akzeptieren"
 
@@ -1515,19 +1519,19 @@ msgstr "Bevorstehende Kurse"
 msgid "Next courses"
 msgstr "Nächste Kurse"
 
-#: courses/views.py:280
+#: courses/views.py:285
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:281
+#: courses/views.py:286
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:282
+#: courses/views.py:287
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:283
+#: courses/views.py:288
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
@@ -1932,8 +1936,8 @@ msgstr "Zur Kursseite"
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:298
-#: tq_website/settings.py:313
+#: payment/templates/payment/courses/course.html:27 tq_website/settings.py:306
+#: tq_website/settings.py:321
 msgid "English"
 msgstr "Englisch"
 
@@ -2580,15 +2584,15 @@ msgstr "Vorstandsposten"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:297 tq_website/settings.py:305
+#: tq_website/settings.py:305 tq_website/settings.py:313
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:330
+#: tq_website/settings.py:338
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:334
+#: tq_website/settings.py:342
 msgid "Side content"
 msgstr "Seiteninhalt"
 
