@@ -168,9 +168,8 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
 
     # Render sign up form
 
-    past_partners = []
-    for subs in request.user.subscriptions.all():
-        past_partners.append({'name': subs.partner.get_full_name(), 'email': subs.partner.email})
+    past_partners = sorted(list({(subscribe.partner.get_full_name(), subscribe.partner.email)
+                                for subscribe in request.user.subscriptions.all() if subscribe.partner}))
 
     context = {
         'course': course,
