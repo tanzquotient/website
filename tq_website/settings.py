@@ -38,9 +38,6 @@ INSTALLED_APPS = [
     'photologue',  # Django gallery plugin
     'sortedm2m',  # required for photologue
     'djangocms_text_ckeditor',  # note this needs to be above the 'cms' entry
-    'filer',
-    'easy_thumbnails',  # filer requires this here
-    'djangocms_link',
     'cms',  # django CMS itself
     'menus',  # helper for model independent hierarchical website navigation
     'sekizai',  # for javascript and css management
@@ -106,6 +103,7 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1  # Needed for DjangoCMS
 DEPLOYMENT_DOMAIN = environ["TQ_DEPLOYMENT_DOMAIN"]
 ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(',')
+CSRF_TRUSTED_ORIGINS = [f'https://{domain}' for domain in ALLOWED_HOSTS]
 INTERNAL_IPS = ['127.0.0.1', '::1']  # loopback
 USE_X_FORWARDED_HOST = True  # This should be set to true since we use NGINX as a proxy
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # In order for django CMS to function, X_FRAME_OPTIONS needs to be set to SAMEORIGIN
@@ -249,7 +247,6 @@ TEMPLATES = [
                     "django.template.context_processors.request",
                     'sekizai.context_processors.sekizai',
                     'cms.context_processors.cms_settings',
-                    'absolute.context_processors.absolute',
                 ]
         }
     },

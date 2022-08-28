@@ -6,7 +6,6 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import djangocms_text_ckeditor.fields
-import filer.fields.image
 import parler.fields
 
 
@@ -61,7 +60,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('filer', '0001_initial'),
         ('cms', '0001_initial'),
         ('courses', '0001_initial'),
     ]
@@ -142,7 +140,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='image',
-            field=filer.fields.image.FilerImageField(blank=True, help_text='Advertising image for this event.', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL),
+            field=models.ImageField(blank=True, help_text='Advertising image for this event.', null=True),
         ),
         migrations.AddField(
             model_name='event',
