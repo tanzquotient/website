@@ -68,14 +68,20 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 context['survey_url'] = survey_instance.create_full_url()
                 context['survey_expiration'] = survey_instance.url_expire_date
 
-            subject: str = email_subject or email_template.subject
-            html_message: str = email_content or email_template.html_content
+            subject: str = email_subject
+            message: Optional[str] = None
+            html_message: Optional[str] = email_content
+
+            if email_template:
+                subject = subject or email_template.subject
+                message = message or email_template.content
+                html_message = html_message or email_template.html_content
 
             emails.append(dict(
                 to=recipient.email,
                 reply_to=settings.EMAIL_ADDRESS_COURSES,
                 subject=subject,
-                message=email_template.content,
+                message=message,
                 html_message=html_message,
                 context=context,
             ))
