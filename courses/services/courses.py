@@ -91,6 +91,7 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
 
 
 def send_vouchers(data, recipients):
+    amount = data['amount']
     percentage = data['percentage']
     purpose = data['purpose']
     expires_flag = data['expires_flag']
@@ -99,7 +100,7 @@ def send_vouchers(data, recipients):
     emails = []
 
     for recipient in recipients:
-        voucher = Voucher(purpose=purpose, percentage=percentage, expires=expires if expires_flag else None)
+        voucher = Voucher(purpose=purpose, percentage=percentage, amount=amount, expires=expires if expires_flag else None)
         voucher.save()
         generate_voucher_pdfs(vouchers=[voucher])
 
