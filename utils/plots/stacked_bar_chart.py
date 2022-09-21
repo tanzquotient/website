@@ -5,13 +5,14 @@ from . import DataSeries
 
 
 def stacked_bar_chart(labels: list[str], data: list[DataSeries]) -> Figure:
-    sum_by_label = {label: sum([data_series.values[idx] for data_series in data]) for idx, label in enumerate(labels)}
+    sum_by_label = {label: sum([data_series.values[idx] or 0 for data_series in data])
+                    for idx, label in enumerate(labels)}
     return Figure(
         data=[
             Bar(
                 x=[value if value else None for value in data_series.values],
                 y=labels,
-                text=[f"{value * 100 / sum_by_label[label]:.1f} %" if value else None
+                text=[f"{value * 100 / sum_by_label[label]:.1f} %" if value and sum_by_label[label] != 0 else None
                       for label, value in zip(labels, data_series.values)],
                 orientation='h',
                 name=data_series.name,
