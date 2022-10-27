@@ -18,7 +18,7 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
-        'course': subscription.course.type.name,
+        'course': subscription.course.type.title,
         'course_info': create_course_info(subscription.course),
     }
 
@@ -49,7 +49,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
     return {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
-        'course': subscription.course.type.name,
+        'course': subscription.course.type.title,
         'course_info': create_course_info(subscription.course),
         'usi': payment_processor.USI_PREFIX + subscription.usi,
         'account_IBAN': conf['IBAN'],
@@ -87,7 +87,7 @@ def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
-        'course': subscription.course.type.name,
+        'course': subscription.course.type.title,
     }
 
     template = 'online_payment_successful'
@@ -130,7 +130,7 @@ def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
     context = {
         'first_name': subscription.user.first_name,
         'last_name': subscription.user.last_name,
-        'course': subscription.course.type.name,
+        'course': subscription.course.type.title,
     }
 
     template = 'rejection_{}'.format(reason)
@@ -158,7 +158,7 @@ def send_teacher_welcome(teach: Teach) -> Optional[Email]:
     context = {
         'first_name': teacher.first_name,
         'last_name': teacher.last_name,
-        'course': course.type.name,
+        'course': course.type.title,
         'course_internal_name': course.name,
         'course_info': create_course_info(course),
         'room_url': course_url,
@@ -203,7 +203,7 @@ def create_user_info(user: User) -> str:
 
 
 def create_course_info(course: Course) -> str:
-    s = '{}\n{}'.format(course.type.name, course.format_lessons())
+    s = '{}\n{}'.format(course.type.title, course.format_lessons())
     if course.room:
         s += ', {}\n'.format(course.room)
     else:

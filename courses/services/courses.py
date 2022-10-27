@@ -53,7 +53,7 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
             context = {
                 'first_name': recipient.first_name,
                 'last_name': recipient.last_name,
-                'course': course.type.name,
+                'course': course.type.title,
                 'offering': course.offering.name,
             }
 

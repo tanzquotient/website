@@ -15,7 +15,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            {% if course.offering %}{{ course.offering.name }}, {% endif %}{{ course.type.name }}
+                            {% if course.offering %}{{ course.offering.name }}, {% endif %}{{ course.type.title }}
                         </div>
                         {% for survey in course.surveys %}
                             {% if survey.teachers_allowed %}

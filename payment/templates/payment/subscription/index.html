@@ -53,7 +53,7 @@
                 <td>
                     <div class="row gy-1 gx-0 align-items-center">
                         <div class="col-auto">
-                            {% trans "Course" %}:  <a href="{% url "courses:course_detail" subscription.course_id %}">{{ subscription.course.type.name }}</a>,&nbsp;
+                            {% trans "Course" %}:  <a href="{% url "courses:course_detail" subscription.course_id %}">{{ subscription.course.type.title }}</a>,&nbsp;
                         </div>
                         <div class="col-auto">
                             {% trans "Participant" %}: {{ subscription.user.get_full_name }}

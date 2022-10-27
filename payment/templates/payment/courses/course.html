@@ -9,7 +9,7 @@
 {% block main_content %}
     {% with course.payment_totals as payment_totals %}
         <div class="container">
-            <h2 class="mb-0">{{ course.type.name }}</h2>
+            <h2 class="mb-0">{{ course.type.title }}</h2>
             {% if course.offering %}
                 <div class="fs-5">{{ course.offering.name }} </div>
             {% endif %}

@@ -1,6 +1,7 @@
 # Register your models here.
 from django.contrib.admin.views.main import ChangeList
 from parler.admin import TranslatableAdmin
+from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
@@ -117,9 +118,12 @@ class CourseAdmin(TranslatableAdmin):
         'format_teachers',
         'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
     list_filter = ('offering', 'subscription_type', 'display', 'active')
-    search_fields = ['name', 'type__name', ]
+    search_fields = ['name', 'type__translations__title', ]
     inlines = (RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
                PredecessorCoursesInline, SubscribeInlineForCourse)
+    widgets = {
+        'type': SortedSelect
+    }
 
     model = Course
 
@@ -151,13 +155,18 @@ class CourseSuccession(admin.ModelAdmin):
 
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
-    list_display = ('name', 'format_styles', 'level', 'couple_course',)
+    list_display = ('title', 'format_styles', 'level', 'couple_course',)
     list_filter = ('level', 'couple_course')
-    search_fields = ['name', ]
+    search_fields = ['translations__title', 'translations__subtitle']
+    ordering = ['translations__title']
+
+    fieldsets = [
+        ('Information', {'fields': ['title', 'subtitle',  'description']}),
+        ('Details', {'fields': ['level', 'styles']}),
+        ('Options', {'fields': ['couple_course']})
+    ]
 
     model = CourseType
-
-    raw_id_fields = ('styles',)
 
 
 class SubscribeChangeList(ChangeList):

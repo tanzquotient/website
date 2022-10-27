@@ -40,9 +40,16 @@
                     {% for c in d.courses %}
                         <tr>
                             <td>
-                                <a href="{% url 'courses:course_detail' c.id %}">
-                                    {{ c.type.name }}
-                                </a>
+                                <div>
+                                    <a href="{% url 'courses:course_detail' c.id %}">
+                                        {{ c.type.title }}
+                                    </a>
+                                </div>
+                                {% if c.type.subtitle %}
+                                    <div>
+                                        <em>{{ c.type.subtitle }}</em>
+                                    </div>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if offering.is_partner_offering %}
@@ -91,27 +98,39 @@
                 <div class="list-group list-group-flush">
                     {% for c in d.courses %}
                         <a href="{% url 'courses:course_detail' c.id %}" class="list-group-item list-group-item-action">
+                            <div class="mb-1">
                             <strong class="list-group-item-heading">
-                                {{ c.type.name }}
+                                {{ c.type.title }}
                             </strong>
-                            {% if not hide_subscription_status %}
+                            {% if c.type.subtitle %}
                                 <div>
+                                    <em>
+                                        {{ c.type.subtitle }}
+                                    </em>
+                                </div>
+                            {% endif %}
+                            </div>
+                            {% if not hide_subscription_status %}
+                                <div class="mb-1">
                                     {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
                                 </div>
                             {% endif %}
-                            <div>
+                            <div class="mb-1">
                                 {% include "courses/snippets/lessons.html" with course=c  display_link=False only %}
                             </div>
                             {% if offering.is_partner_offering %}
                                 {% if c.partner %}
-                                    <div>{{ c.partner.name }}</div>
+                                    <div class="mb-1">{{ c.partner.name }}</div>
                                 {% endif %}
                             {% else %}
-                                {% if c.room %}
-                                    <div>{{ c.room }}</div>
-                                {% else %}
-                                    <div>{% trans "Raum noch unbekannt" %}</div>
-                                {% endif %}
+                                <div class="mb-1">
+                                    {% trans "Location" %}:
+                                    {% if c.room %}
+                                        {{ c.room }}
+                                    {% else %}
+                                        {% trans "currently unkown" %}
+                                    {% endif %}
+                                </div>
                             {% endif %}
                             {% if c.format_prices %}
                                 <div>{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</div>

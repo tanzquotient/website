@@ -5,7 +5,11 @@
     </div>
 
     <div class="mb-4 mt-2">
-        <strong>{{ course.type.name }}</strong>
+        <strong>{{ course.type.title }}</strong>
+        {% if course.type.subtitle %}
+            <br/>
+            <em>{{ course.type.subtitle }}</em>
+        {% endif %}
         <br/>
         {% include "courses/snippets/lessons.html" with course=course display_link=False disable_modals=True only %}
         <br/>

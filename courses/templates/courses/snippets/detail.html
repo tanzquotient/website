@@ -1,10 +1,17 @@
 {% load i18n %}
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 mb-4">
-        <h4>
-            {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
-            {{ course.type.name }}
-        </h4>
+        <div class="mb-3">
+            <h4 class="mb-0">
+                {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
+                {{ course.type.title }}
+            </h4>
+            {% if course.type.subtitle %}
+                <div class="mt-1">
+                    <em>{{ course.type.subtitle }}</em>
+                </div>
+            {% endif %}
+        </div>
         {% include "courses/snippets/subscription_info.html" with course=course long=True display_link=True is_detail_page=True user=user only %}
         {% include "courses/snippets/course_info.html" %}
     </div>

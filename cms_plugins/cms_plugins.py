@@ -156,7 +156,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     'format_duration': irregular_lesson.format_duration(),
                     'date': irregular_lesson.date,
                     'time_from': irregular_lesson.time_from,
-                    'name': irregular_lesson.course.type.name,
+                    'name': irregular_lesson.course.type.title,
                     'room': irregular_lesson.course.room,
                     'special': False,
                     'format_prices': irregular_lesson.course.format_prices(),
