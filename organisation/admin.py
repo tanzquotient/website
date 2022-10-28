@@ -1,4 +1,5 @@
 from django.contrib import admin
+from parler.admin import TranslatableAdmin
 
 from organisation.models import Function
 
@@ -8,7 +9,7 @@ class UserInline(admin.TabularInline):
     extra = 0
 
 @admin.register(Function)
-class FunctionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'active', 'format_users',)
+class FunctionAdmin(TranslatableAdmin):
+    list_display = ('name', 'email', 'names',)
     inlines = (UserInline,)
     exclude = ('users',)

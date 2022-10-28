@@ -14,10 +14,8 @@ class ManagingCommitteePlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-
-        functions = Function.objects.active()
         users = set()
-        for function in functions:
+        for function in Function.objects.all():
             for user in function.users.all():
                 users.add(user)
 

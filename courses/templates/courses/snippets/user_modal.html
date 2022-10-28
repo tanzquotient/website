@@ -31,15 +31,17 @@
                                     <p>{% trans "Courses taught for TQ" %}: {{ user.profile.teacher_courses_count }}</p>
                                 {% endif %}
                                 {% if user.profile.is_board_member %}
-                                    <h4>{% trans "Board member" %}</h4>
-                                    <p>
+                                    <h4 class="mb-2">{% trans "Board member" %}</h4>
                                         {% for function in user.functions.all %}
-                                            {{ function.name }}
-                                            {% if not forloop.last %}
-                                                &amp;
-                                            {% endif %}
+                                            <div class="mb-2">
+                                                <div>
+                                                    <strong>{{ function.name }}</strong>
+                                                </div>
+                                                <div>
+                                                    {% trans "Contact" %}: <a href="mailto:{{ function.email }}">{{ function.email }}</a>
+                                                </div>
+                                            </div>
                                         {% endfor %}
-                                    </p>
                                 {% endif %}
                             {% endif %}
                         </div>
