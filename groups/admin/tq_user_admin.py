@@ -12,7 +12,7 @@ class TQUserAdmin(HijackUserAdminMixin, UserAdmin):
     list_display = ('id',) + UserAdmin.list_display + ('is_active', )
     inlines = list(UserAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
     list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
-    actions = [make_inactive] + UserAdmin.actions
+    actions = [make_inactive] + list(UserAdmin.actions)
 
     def get_hijack_user(self, instance) -> User:
         return instance

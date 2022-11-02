@@ -25,7 +25,7 @@ class GroupForm(ModelForm):
         }
 
 class TQGroupAdmin(GroupAdmin):
-    actions = GroupAdmin.actions + [update_groups]
+    actions = list(GroupAdmin.actions) + [update_groups]
     form = GroupForm
 
     def save_model(self, request, obj, form, change):
