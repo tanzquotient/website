@@ -91,6 +91,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-3">
+                    <label class="form-label"><strong>{% trans "Student status" %}</strong></label>
+                    {% include "courses/snippets/student_status_alert.html" %}
+                </div>
             </div>
             <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-4" id="couple-tab" role="tabpanel" aria-labelledby="couple">
                 <div>
@@ -113,7 +117,15 @@
                         </a>
                     {% endfor %}
                 </div>
+                <div class="mt-3">
+                    <label class="form-label"><strong>{% trans "Student status" %}</strong></label>
+                    {% include "courses/snippets/student_status_alert.html" %}
+                    <div class="alert alert-warning mt-2" role="alert">
+                        {% trans "Please tell your partner to check their student status in their profile, to make sure they can benefit from the reduced course fee." %}
+                    </div>
+                </div>
             </div>
+
         </div>
     {% else %}
         <input type="hidden" id="single_or_couple" name="single_or_couple" value="s">

@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% if user.profile.is_student %}
+    <div class="alert alert-success m-0" role="alert">
+        <div>
+            <strong>{% trans "According to your profile, you are currently a student." %}</strong>
+        </div>
+        <div class="mt-2">
+            {% trans "If the information is outdated, please update it in your profile." %}
+        </div>
+        <a class="btn btn-sm btn-success mt-2" href="{% url 'edit_profile' %}" target="_blank" role="button">
+            <i class="fa-solid fa-pencil"></i> {% trans "Edit profile" %}
+        </a>
+    </div>
+{% else %}
+    <div class="alert alert-danger m-0" role="alert">
+        <div>
+            <strong>{% trans "According to your profile, you are currently not a student." %}</strong>
+        </div>
+        <div>
+            {% trans "This means, you are not eligible for the student discount and have to pay the full amount." %}
+        </div>
+        <div class="mt-2">
+            {% trans "Should you be a student, please update your profile before subscribing to the course." %}
+        </div>
+        <a class="btn btn-sm btn-danger mt-2" href="{% url 'edit_profile' %}" target="_blank" role="button">
+            <i class="fa-solid fa-pencil"></i> {% trans "Edit profile" %}
+        </a>
+    </div>
+{% endif %}
