@@ -18,16 +18,31 @@
                     {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %} disabled {% endif %} />
             <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
         </div>
-        <div id="lead_follow_help" class="form-text">
+        <div class="form-text">
             {% if course.get_free_places_count < 2 %}
-                <div class="text-info">{% trans "At least two spots need to be available to sign up as a couple." %}</div>
-            {% else %}
-                {% if not course.has_free_places_for_leaders %}
-                    <div class="text-info">{% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}</div>
-                {% endif %}
-                {% if not course.has_free_places_for_followers %}
-                    <div class="text-info">{% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}</div>
-                {% endif %}
+                <div class="alert alert-info my-2 p-2" role="alert">
+                    <i class="fa-solid fa-circle-info"></i> {% trans "At least two spots need to be available to sign up as a couple." %}
+                </div>
+            {% endif %}
+            {% if not course.has_free_places_for_leaders %}
+                <div class="alert alert-warning my-2 p-2 d-flex align-items-center" role="alert">
+                    <div class="me-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        {% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if not course.has_free_places_for_followers %}
+               <div class="alert alert-warning my-2 p-2 d-flex align-items-center" role="alert">
+                    <div class="me-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        {% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}
+                    </div>
+               </div>
             {% endif %}
         </div>
 
@@ -45,9 +60,10 @@
                             <label class="btn {% if course.has_free_places_for_leaders %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="lead">{% trans "Lead" %}</label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference"
-                                    {% if form.lead_follow.value == 'n' %} checked {% endif %}>
+                                    {% if form.lead_follow.value == 'n' %} checked {% endif %}
                                     {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %} disabled {% endif %}>
-                            <label class="btn btn-outline-success" for="no_preference">{% trans "No preference" %}</label>
+                            <label class="btn {% if course.has_free_places_for_leaders and course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}"
+                                   for="no_preference">{% trans "No preference" %}</label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow"
                                     {% if form.lead_follow.value == 'f' %} checked {% endif %}
@@ -62,18 +78,17 @@
                     </div>
                 </div>
                 <div id="lead_follow_help" class="form-text">
-                    {% if not course.has_free_places_for_leaders %}
-                        <div class="text-warning">{% trans "There are no spots available for leaders anymore." %}</div>
-                    {% endif %}
-                    {% if not course.has_free_places_for_followers %}
-                        <div class="text-warning">{% trans "There are no spots available for followers anymore." %}</div>
-                    {% endif %}
                     <div>
                         {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
                     </div>
-                    <div>
-                        {% trans "Please note, that we will assign partners based on lead / follow preferences, not based on gender." %}
-                        {% trans "If you indicate no preference, we will assign you a fixed role based on the number of leaders and followers signed up for this course." %}
+                    <div class="alert alert-info my-2 p-2 d-flex align-items-center" role="alert">
+                        <div class="me-2">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div>
+                            {% trans "Please note, that we will assign partners based on lead / follow preferences, not based on gender." %}
+                            {% trans "If you indicate no preference, we will assign you a fixed role based on the number of leaders and followers signed up for this course." %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +122,7 @@
     <div class="mt-3">
         <label class="form-label" for="comment"><strong>{% trans "Comment" %}</strong></label>
         <textarea class="form-control" rows="4"
-                  placeholder='{% trans "Anything else you want to tell us?" %}'
+                  placeholder='{% trans "Anything you want us to know?" %}'
                   name="comment" id="comment">{% if form.comment.value %}{{ form.comment.value }}{% endif %}</textarea>
     </div>
 

@@ -109,6 +109,15 @@ def reject_subscription(subscription: Subscribe, reason: str = None, send_email:
     """sends a rejection mail if subscription is rejected (by some other method)
     and no rejection mail was sent before"""
     subscription.state = models.SubscribeState.REJECTED
+    if subscription.partner is not None:
+        partner_subscription = subscription.get_partner_subscription()
+        partner_subscription.partner = None
+        partner_subscription.matching_state = MatchingState.TO_REMATCH
+        partner_subscription.save()
+
+        subscription.partner = None
+        subscription.matching_state = MatchingState.TO_REMATCH
+
     subscription.save()
     if not reason:
         reason = detect_rejection_reason(subscription)
