@@ -225,7 +225,7 @@ class SubscribeAdmin(VersionAdmin):
 class ConfirmationAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
+    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title', 'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
     model = Confirmation
@@ -237,7 +237,7 @@ class ConfirmationAdmin(admin.ModelAdmin):
 class RejectionAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date', 'reason')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
+    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title', 'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
     model = Rejection
@@ -249,7 +249,7 @@ class RejectionAdmin(admin.ModelAdmin):
 class TeacherWelcomeAdmin(admin.ModelAdmin):
     list_display = ('teach', 'date')
     search_fields = ['teach__teacher__first_name', 'teach__teacher__last_name', 'teach__course__name',
-                     'teach__course__type__name']
+                     'teach__course__type__translations__title']
 
     model = TeacherWelcome
 
@@ -269,7 +269,7 @@ class TeachAdmin(admin.ModelAdmin):
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter,)
     list_display_link = ('id',)
     search_fields = ['teacher__email', 'teacher__first_name', 'teacher__last_name', 'course__name',
-                     'course__type__name', 'hourly_wage']
+                     'course__type__translations__title', 'hourly_wage']
 
 
 @admin.register(Style)

@@ -55,8 +55,8 @@ class CoursePayment(admin.ModelAdmin):
 class PaymentReminderAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__name', 'subscription__user__email',
-                     'subscription__user__first_name', 'subscription__user__last_name']
+    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title',
+                     'subscription__user__email', 'subscription__user__first_name', 'subscription__user__last_name']
 
     model = PaymentReminder
 
