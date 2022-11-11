@@ -11,7 +11,7 @@
         <ul>
             {% for offering in offerings %}
                 <li>
-                    <a href="{% url "payment:offering_finance_overview_subscribers" offering.id %}">{{ offering.name }}</a>
+                    <a href="{% url "payment:offering_courses" offering.id %}">{{ offering.name }}</a>
                     {% if offering.period %}
                         ({{ offering.period }})
                     {% endif %}
