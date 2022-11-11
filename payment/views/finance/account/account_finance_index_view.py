@@ -7,7 +7,7 @@ from payment.models import Payment
 
 
 class AccountFinanceIndexView(PermissionRequiredMixin, FormView):
-    template_name = 'payment/finance/account_index.html'
+    template_name = 'finance/account/index.html'
     permission_required = 'payment.payment.change'
     form_class = AccountFinanceIndexForm
 

@@ -1,0 +1,19 @@
+{% extends "finance/offering/basis.html" %}
+{% load i18n %}
+{% load tq_tags %}
+{% load finance_teacher_tags %}
+
+{% block lead_title %}
+    {% trans "Finance" %}
+{% endblock %}
+
+{% block finance_content %}
+    <div class="m-3">
+        <div>
+            {% trans "Download summary of teacher payment information here:" %}
+        </div>
+        {% download_button url="payment:offering_teachers_export" offering=offering.id %}
+    </div>
+    {% teachers_table offering %}
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "finance/offering/basis.html" %}
+{% load i18n l10n humanize %}
+
+{% block lead_title %}
+    {% trans "Finance" %}
+{% endblock %}
+
+{% block finance_content %}
+    {% with offering.payment_totals as offering_payment_totals %}
+        <table class="table table-striped mb-0">
+            <thead>
+            <tr>
+                <th>{% trans "Course" %}</th>
+                <th class="text-end">{% trans "Total" %}</th>
+                <th class="text-end">{% trans "Unpaid" %}</th>
+                <th class="text-end">{% trans "Paid" %}</th>
+                {% if offering_payment_totals.paid_course %}
+                    <th class="text-end">{% trans "Cash" %}</th>
+                {% endif %}
+                {% if offering_payment_totals.paid_voucher %}
+                    <th class="text-end">{% trans "Voucher" %}</th>
+                {% endif %}
+                {% if offering_payment_totals.paid_online %}
+                    <th class="text-end">{% trans "Online" %}</th>
+                {% endif %}
+                {% if offering_payment_totals.paid_counter %}
+                    <th class="text-end">{% trans "Counter" %}</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for course in offering.course_set.all %}
+                {% with course.payment_totals as payment_totals %}
+                    <tr>
+                        <td>{{ course.name }}</td>
+                        <td class="text-end">{{ payment_totals.to_pay|intcomma|localize }}</td>
+                        <td class="text-end">{{ payment_totals.unpaid|intcomma|localize }}</td>
+                        <td class="text-end">{{ payment_totals.paid|intcomma|localize }}</td>
+                        {% if offering_payment_totals.paid_course %}
+                            <td class="text-end">{{ payment_totals.paid_course|intcomma|localize }}</td>
+                        {% endif %}
+                        {% if offering_payment_totals.paid_voucher %}
+                            <td class="text-end">{{ payment_totals.paid_voucher|intcomma|localize }}</td>
+                        {% endif %}
+                        {% if offering_payment_totals.paid_online %}
+                            <td class="text-end">{{ payment_totals.paid_online|intcomma|localize }}</td>
+                        {% endif %}
+                        {% if offering_payment_totals.paid_counter %}
+                            <td class="text-end">{{ payment_totals.paid_counter|intcomma|localize }}</td>
+                        {% endif %}
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>{% trans "Total" %}</td>
+                <td class="text-end">{{ offering_payment_totals.to_pay|intcomma|localize }}</td>
+                <td class="text-end">{{ offering_payment_totals.unpaid|intcomma|localize }}</td>
+                <td class="text-end">{{ offering_payment_totals.paid|intcomma|localize }}</td>
+                {% if offering_payment_totals.paid_course %}
+                    <td class="text-end">{{ offering_payment_totals.paid_course|intcomma|localize }}</td>
+                {% endif %}
+                {% if offering_payment_totals.paid_voucher %}
+                    <td class="text-end">{{ offering_payment_totals.paid_voucher|intcomma|localize }}</td>
+                {% endif %}
+                {% if offering_payment_totals.paid_online %}
+                    <td class="text-end">{{ offering_payment_totals.paid_online|intcomma|localize }}</td>
+                {% endif %}
+                {% if offering_payment_totals.paid_counter %}
+                    <td class="text-end">{{ offering_payment_totals.paid_counter|intcomma|localize }}</td>
+                {% endif %}
+            </tr>
+            </tfoot>
+        </table>
+    {% endwith %}
+{% endblock %}

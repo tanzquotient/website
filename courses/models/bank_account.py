@@ -17,8 +17,10 @@ class BankAccount(models.Model):
 
     objects = managers.BankAccountManager()
 
-    def __str__(self):
-        return "{} ({})".format(self.iban, self.bank_info_str())
+    def __str__(self) -> str:
+        info = self.bank_info_str()
+        info_str = f" ({info})" if info else ""
+        return f"{self.iban}{info_str}"
 
-    def bank_info_str(self):
-        return "{}, {} {}, {}".format(self.bank_name, self.bank_zip_code, self.bank_city, self.bank_country.name)
+    def bank_info_str(self) -> str:
+        return f"{self.bank_name}, {self.bank_zip_code} {self.bank_city}, {self.bank_country}" if self.bank_name else ""

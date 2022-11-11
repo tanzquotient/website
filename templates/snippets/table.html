@@ -1,0 +1,22 @@
+{% if rows %}
+    <table class="table table-hover table-striped m-0 align-middle">
+        {% if header %}
+            <thead>
+            <tr>
+                {% for value in header %}
+                    <td>{{ value|linebreaksbr }}</td>
+                {% endfor %}
+            </tr>
+            </thead>
+        {% endif %}
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                {% for value in row %}
+                    <td>{{ value|linebreaksbr }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

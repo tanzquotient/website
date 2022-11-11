@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load tq_tags %}
+
+<ul class="nav nav-tabs mb-3" role="tablist">
+    <li class="nav-item ms-3" role="presentation">
+        <button class="nav-link active text-tanzquotient" id="table-courses-tab" data-bs-toggle="pill" data-bs-target="#table-courses"
+                type="button" role="tab" aria-controls="table-courses" aria-selected="true">
+            {% trans "Courses" %}
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link text-tanzquotient" id="table-personal-data-tab" data-bs-toggle="pill"
+                data-bs-target="#table-personal-data" type="button" role="tab" aria-controls="table-personal-data"
+                aria-selected="false">
+            {% trans "Personal details" %}
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="table-courses" role="tabpanel" aria-labelledby="table-courses-tab"
+         tabindex="0">
+        {% table courses %}
+    </div>
+    <div class="tab-pane fade" id="table-personal-data" role="tabpanel" aria-labelledby="table-personal-data-tab"
+         tabindex="0">
+        {% table personal_data %}
+    </div>
+</div>

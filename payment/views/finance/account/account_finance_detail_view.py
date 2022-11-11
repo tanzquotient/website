@@ -15,7 +15,7 @@ log = logging.getLogger('tq')
 
 
 class AccountFinanceDetailView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):
-    template_name = 'payment/finance/account_detail.html'
+    template_name = 'finance/account/detail.html'
     permission_required = 'payment.payment.change'
     form_class = forms.Form
 

@@ -1,0 +1,21 @@
+{% extends "basis.html" %}
+{% load i18n %}
+
+{% block lead %}
+
+{% endblock %}
+
+{% block main_content %}
+    <div class="container-fluid mt-4">
+        <h2 class="mb-0">{{ offering.name }}</h2>
+        {% if offering.period %}
+            <div class="fs-5">{{ offering.period.date_as_string }} </div>
+        {% endif %}
+
+        {% include "finance/offering/common/tabs.html" %}
+        <div class="tab-content border table-responsive border-top-0 border-bottom-0">
+            {% block finance_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock main_content %}

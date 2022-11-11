@@ -5,7 +5,7 @@ from courses.models import Offering
 
 
 class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
-    template_name = 'payment/finance/index.html'
+    template_name = 'finance/offering/index.html'
     permission_required = 'payment.payment.change'
 
     def get_context_data(self, **kwargs):

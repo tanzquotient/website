@@ -17,10 +17,14 @@ urlpatterns = [
     path('auth/courses/<int:course>/export/', CoursePaymentExportExcel.as_view(), name='coursepayment_export'),
     path('auth/courses/<int:course>/<usi:usi>/', CoursePaymentConfirm.as_view(), name='coursepayment_confirm'),
     path('auth/courses/<int:course>/<usi:usi>/paid/', CoursePaymentConfirm.as_view(), name='coursepayment_paid'),
-    path('auth/finance/<int:offering>/detail/', OfferingFinanceDetailView.as_view(), name='offering_finance_detail_view'),
-    path('auth/finance/<int:offering>/subscribers/', OfferingFinanceOverviewSubscribers.as_view(), name='offering_finance_overview_subscribers'),
-    path('auth/finance/<int:offering>/teachers/', OfferingFinanceOverviewTeachers.as_view(), name='offering_finance_overview_teachers'),
-    path('auth/finance/', OfferingFinanceIndexView.as_view(), name='offering_finance_index_view'),
+
+    # Finances for offerings
+    path('finance/', OfferingFinanceIndexView.as_view(), name='offering_finance_index_view'),
+    path('finance/<int:offering>/detail/', OfferingFinanceUnpaidView.as_view(), name='offering_unpaid'),
+    path('finance/<int:offering>/courses/', OfferingFinanceCourses.as_view(), name='offering_courses'),
+    path('finance/<int:offering>/teachers/', OfferingFinanceTeachers.as_view(), name='offering_teachers'),
+    path('finance/<int:offering>/teachers/export/', offering_finance_teachers_export, name='offering_teachers_export'),
+    # List of transactions
     path('auth/finance/account/index/', AccountFinanceIndexView.as_view(), name='account_finance_index_view'),
     path('auth/finance/account/detail/', AccountFinanceDetailView.as_view(), name='account_finance_detail_view'),
 ]

@@ -76,57 +76,10 @@ def export_summary(export_format='csv', offerings=models.Offering.objects.all())
     return export(export_format, title=filename, data=export_data)
 
 
-def export_teacher_payment_information(export_format='csv', offerings=models.Offering.objects.all()):
-    """Exports a summary of the given ``offerings`` concerning payment of teachers.
-
-    Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
-
-    :param export_format: export format
-    :param offerings: offerings to include in summary
-    :return: response or ``None`` if format not supported
-    """
-    offering_ids = [o.pk for o in offerings]
-    teachs = models.Teach.objects.filter(course__offering__in=offering_ids)
-    teachers = {teach.teacher for teach in teachs.all()}
-    teachers = sorted(teachers, key=lambda t: t.last_name)
-
-    filename = 'TQ-Salary-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
-
-    export_data = []
-
-    header = ['User ID', 'First Name', 'Family Name', 'Gender', 'E-mail', 'Phone']
-    header += ['Street', 'PLZ', 'City', 'Country']
-    header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'IBAN', 'Bank']
-    for o in offerings:
-        header += ['Wage for ' + o.name]
-
-    export_data.append(header)
-
-    for user in teachers:
-        row = [user.id, user.first_name, user.last_name, user.profile.gender, user.email,
-               user.profile.phone_number]
-        if user.profile.address:
-            row += [user.profile.address.street, user.profile.address.plz, user.profile.address.city,
-                    str(user.profile.address.country)]
-        else:
-            row += ["-"] * 4
-
-        row += [user.profile.birthdate, str(user.profile.nationality), user.profile.residence_permit, user.profile.ahv_number]
-
-        if user.profile.bank_account:
-            row += [user.profile.bank_account.iban, user.profile.bank_account.bank_info_str()]
-        else:
-            row += ["-"] * 2
-
-        # wages for each offering separately
-        for o in offerings:
-            offering_teacher_teachs = teachs.filter(course__offering=o, teacher=user).all()
-            log.debug(list(offering_teacher_teachs))
-            wage = 0
-            for teach in offering_teacher_teachs:
-                wage += teach.get_wage()
-            row.append(wage)
-
-        export_data.append(row)
-
-    return export(export_format, title=filename, data=export_data)
+def export_teacher_payment_information(export_format: str = 'csv', offerings=models.Offering.objects.all()):
+    from payment import services
+    export_name, personal_data, courses = services.offering_finance_teachers(offerings)
+    return export(export_format, title=export_name, multiple=True, data=[
+        dict(data=courses, name='Courses'),
+        dict(data=personal_data, name='Personal Data')
+    ])

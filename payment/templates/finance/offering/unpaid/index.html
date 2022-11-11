@@ -1,0 +1,40 @@
+{% extends "finance/offering/basis.html" %}
+{% load i18n %}
+
+{% block finance_content %}
+    <table class="table table-striped align-middle mb-0">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "E-Mail" %}</th>
+            <th>{% trans "Open Amount" %}</th>
+            <th>{% trans "Course" %}</th>
+            <th>{% trans "Last reminded" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for subscription in subscriptions %}
+            {% if not subscription.payed %}
+                <tr>
+                    <td>{{ subscription.user.get_full_name }}</td>
+                    <td>{{ subscription.get_user_email }}</td>
+                    <td>{{ subscription.open_amount }} CHF</td>
+                    <td>{{ subscription.course.name }}</td>
+                    <td>{{ subscription.get_last_payment_reminder|default:'' }}</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="subscription" value="{{ subscription.id }}">
+                            <button type="submit"
+                                    class="btn btn-warning btn-sm">
+                                {% trans "Send Reminder" %}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -398,15 +398,3 @@ def export_offering_summary(request: HttpRequest, offering_id: int) -> HttpRespo
 def export_offering_summary_excel(request: HttpRequest, offering_id: int) -> HttpResponse:
     from courses import services
     return services.export_summary('xlsx', [Offering.objects.filter(pk=offering_id).first()])
-
-
-@staff_member_required
-def export_offering_teacher_payment_information(request: HttpRequest, offering_id: int) -> HttpResponse:
-    from courses import services
-    return services.export_teacher_payment_information('csv', [Offering.objects.filter(pk=offering_id).first()])
-
-
-@staff_member_required
-def export_offering_teacher_payment_information_excel(request: HttpRequest, offering_id: int) -> HttpResponse:
-    from courses import services
-    return services.export_teacher_payment_information('xlsx', [Offering.objects.filter(pk=offering_id).first()])

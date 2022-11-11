@@ -3,7 +3,7 @@ from django.http import HttpRequest
 
 from courses.emailcenter import *
 from courses.models import SubscribeState, Subscribe
-from .models import PaymentReminder
+from ..models import PaymentReminder
 from django.contrib import messages
 from django.utils.translation import gettext as _
 import datetime

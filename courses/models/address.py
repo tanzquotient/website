@@ -15,5 +15,6 @@ class Address(models.Model):
     def equals(self, a):
         return self.street == a.street and self.plz == a.plz and self.city == a.city
 
-    def __str__(self):
-        return "{}, {} {}, {}".format(self.street, self.plz, self.city, self.country)
+    def __str__(self) -> str:
+        return f"{self.street}, {self.plz} {self.city}{f', {self.country}' if self.country != 'CH' else ''}"
+
