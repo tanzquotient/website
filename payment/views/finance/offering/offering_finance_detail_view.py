@@ -11,7 +11,7 @@ from payment.services import remind_of_payment
 
 class OfferingFinanceUnpaidView(PermissionRequiredMixin, TemplateView, ProcessFormView, FormMixin):
     template_name = 'finance/offering/unpaid/index.html'
-    permission_required = 'payment.payment.change'
+    permission_required = 'payment.change_payment'
     form_class = forms.Form
 
     def get_context_data(self, **kwargs: dict) -> dict:

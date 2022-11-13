@@ -1,5 +1,6 @@
+from collections import defaultdict
 from datetime import date
-from typing import Iterable
+from typing import Iterable, Collection
 
 from django.db.models import Q, Prefetch, QuerySet
 from django.http import Http404
@@ -29,22 +30,16 @@ def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
     return queryset.select_related('period').order_by('-period__date_from')
 
 
-def get_historic_offerings(offering_type=None):
+def get_offerings_by_year(offering_types: Collection[OfferingType], only_public: bool = True):
+    offerings_dict = defaultdict(lambda: defaultdict(list))
+    for offering in Offering.objects.filter(type__in=offering_types).all():
+        if only_public and not offering.is_public():
+            continue
+        offerings_dict[offering.get_start_year()][offering.type].append(offering)
 
-    queryset = Offering.objects.all()
-    if offering_type:
-        queryset = Offering.objects.filter(type=offering_type)
-
-    offerings = [o for o in queryset if o.is_over() and o.has_date_from()]
-    offerings_dict = {}
-
-    for offering in offerings:
-        year = offering.get_start_year()
-        if year not in offerings_dict:
-            offerings_dict[year] = []
-        offerings_dict[year].append(offering)
-
-    return sorted([(k, v) for k, v in offerings_dict.items()], key=lambda t: t[0], reverse=True)
+    return sorted([
+        (year, offerings_by_type) for year, offerings_by_type in offerings_dict.items()
+    ], key=lambda t: t[0] or 3000, reverse=True)
 
 
 def get_sections(offering, course_filter=None):

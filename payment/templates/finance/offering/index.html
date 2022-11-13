@@ -1,5 +1,6 @@
 {% extends "basis.html" %}
 {% load i18n %}
+{% load courses_tags %}
 
 {% block lead_title %}
     {% trans "Finance" %}
@@ -8,16 +9,6 @@
 {% block main_content %}
     <div class="container">
         <h2>{% trans "Offerings" %}</h2>
-        <ul>
-            {% for offering in offerings %}
-                <li>
-                    <a href="{% url "payment:offering_courses" offering.id %}">{{ offering.name }}</a>
-                    {% if offering.period %}
-                        ({{ offering.period }})
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-
+        {% offerings_list "payment:offering_courses" False %}
     </div>
 {% endblock main_content %}

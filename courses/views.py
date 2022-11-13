@@ -101,12 +101,7 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
 
 def archive(request: HttpRequest) -> HttpResponse:
     template_name = "courses/archive.html"
-    context = {
-        'historic_offerings': {
-            "regular": services.get_historic_offerings(offering_type=OfferingType.REGULAR),
-            "irregular": services.get_historic_offerings(offering_type=OfferingType.IRREGULAR),
-        },
-    }
+    context = dict()
     return render(request, template_name, context)
 
 

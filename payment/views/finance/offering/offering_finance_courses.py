@@ -7,7 +7,7 @@ from courses.models import Offering
 
 class OfferingFinanceCourses(PermissionRequiredMixin, TemplateView):
     template_name = 'finance/offering/courses/index.html'
-    permission_required = 'payment.payment.change'
+    permission_required = 'payment.change_payment'
 
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)

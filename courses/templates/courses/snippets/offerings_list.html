@@ -1,0 +1,46 @@
+{% load basic_tags %}
+{% load i18n %}
+
+<div class="row g-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+    {% for year, offerings_by_type in offerings %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if year %}
+                            {{ year }}
+                        {% else %}
+                            {% trans "No fixed year" %}
+                        {% endif %}
+                    </h5>
+                    {% for offering_type in offering_types %}
+                        {% with offerings=offerings_by_type|get_item:offering_type %}
+                            {% if offerings %}
+                                <h6 class="card-subtitle mt-2 mb-1">
+                                    {% if offering_type == 'reg' %}
+                                        {% trans "Regular offerings" %}
+                                    {% elif offering_type == 'irr' %}
+                                        {% trans "Workshops" %}
+                                    {% elif offering_type == 'p' %}
+                                        {% trans "Partner offerings" %}
+                                    {% else %}
+                                        {% trans "Other offerings" %}
+                                    {% endif %}
+                                </h6>
+                                <ul>
+                                    {% for offering in offerings %}
+                                        <li>
+                                            <a href="{% url detail_url offering.id %}">{{ offering.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+

@@ -64,12 +64,18 @@ def _courses(offerings: Sequence[Offering]) -> list:
         if multiple_offerings:
             course_data.append(course.offering or "")
 
+        note = "\u00A0"  # non-breaking space (so line is aligned for html table)
+        if course.teaching.count() > 2:
+            note = _('Course with more than two teachers, please check who taught how many lessons.')
+        if not has_participants:
+            note = _('No participants')
+
         course_data += [
             course.name,
             f"{teaching.hourly_wage} CHF",
             f"{hours}",
             f"{total:.2f} CHF",
-            _('No participants') if not has_participants else "\u00A0",
+            note,
         ]
 
         if teacher != last_teacher:
