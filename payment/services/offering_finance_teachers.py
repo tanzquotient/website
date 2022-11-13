@@ -28,7 +28,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
     courses = []
 
     header = [
-        _('Last Name'),
+        _('Last name'),
         _('First name'),
         _('Courses'),
         _('Hourly Wages'),
@@ -97,7 +97,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
 
 def _personal_details(offerings: Sequence[Offering]) -> list:
     personal_details = []
-    header = [_('Last Name'), _('First name'), _('E-mail'), _('Phone'), _('Address')]
+    header = [_('Last name'), _('First name'), _('E-mail'), _('Phone'), _('Address')]
     header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'IBAN', 'Bank']
 
     personal_details.append(header)
