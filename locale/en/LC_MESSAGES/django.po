@@ -897,7 +897,7 @@ msgstr "Exceptions"
 
 #: courses/templates/courses/snippets/lessons.html:30
 msgid "Cancellations"
-msgstr "Cancellations"
+msgstr "No lesson(s) on"
 
 #: courses/templates/courses/snippets/lessons.html:40
 msgid "Irregular lessons"
