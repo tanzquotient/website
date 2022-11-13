@@ -7,6 +7,8 @@ from courses import views
 
 app_name = 'courses'
 urlpatterns = [
+
+    # Public pages
     path('', views.course_list, name='home'),
     path('list/', views.course_list, name='list'),
     path('list/<subscription_type>/<style_name>/', views.course_list, name='list_style'),
@@ -15,6 +17,8 @@ urlpatterns = [
     path('<int:course_id>/detail/', views.course_detail, name='course_detail'),
     path('<int:course_id>/subscribe/', views.subscribe_form, name='subscribe'),
     path('offering/<int:offering_id>/', views.offering_by_id, name='offering_by_id'),
+
+    # Restricted pages
     path('auth/', views.subscription_overview, name='subscription_overview'),
     path('auth/export/', views.export_summary, name='export_summary'),
     path('auth/export/excel', views.export_summary_excel, name='export_summary_excel'),

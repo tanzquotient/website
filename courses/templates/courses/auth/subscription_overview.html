@@ -1,17 +1,51 @@
 {% extends "basis.html" %}
 
+{% load basic_tags %}
 {% load i18n %}
 
-{% block lead_title %}
-    {% trans "Subscription Overview" %}
-{% endblock %}
+{% block lead %} {% endblock %}
 
 {% block main_content %}
-    <div class="container">
-        <h2>{% trans "Regular offerings" %}</h2>
-        {% include "courses/auth/offering_subscription_charts.html" with charts=reg %}
+    <div class="container-fluid">
+        <h1 class="mt-3">{% trans "Subscription Overview" %}</h1>
 
-        <h2>{% trans "Workshops" %}</h2>
-        {% include "courses/auth/offering_subscription_charts.html" with charts=irr %}
+        <ul class="nav nav-tabs mt-3">
+            {% for key, title in figure_types %}
+                <li class="nav-item">
+                    <a class="nav-link {% if key == figure_type %} active {% endif %} text-tanzquotient"
+                       aria-current="page" href="{% url "courses:subscription_overview" %}?figure_type={{ key }}">
+                        {{ title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="p-3 tab-content border border-top-0">
+            <div class="row g-3 row-cols-1 row-cols-lg-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            {% trans "Regular offerings" %}
+                        </div>
+                        <div class="card-body p-2">
+                            {% autoescape off %}
+                                {{ plots|get_item:'reg' }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            {% trans "Workshops" %}
+                        </div>
+                        <div class="card-body p-2">
+                            {% autoescape off %}
+                                {{ plots|get_item:'irr' }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock main_content %}
