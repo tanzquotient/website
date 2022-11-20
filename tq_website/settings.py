@@ -66,7 +66,6 @@ INSTALLED_APPS = [
     'events',
     'payment',
     'cms_plugins',
-    'analytical',
     'rest_framework',
     'groups.apps.GroupsConfig',
     'email_system.apps.EmailSystemConfig',

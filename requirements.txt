@@ -3,10 +3,9 @@ Django==4.0.8
 
 # Django Extensions
 django-debug-toolbar==3.7.0     # For developement. Gives additional insights into e.g. database queries
-django-analytical==3.1.0        # For integration Google Analytics (or any other analutics framework)
 django-parler==2.3              # For simple translatable models
 django-post-office==3.6.3       # Send and manage emails asynchronously, database based email templates
-django-reversion==5.0.3         # Version control for model instances, e.g. used for subscriptions
+django-reversion==5.0.4         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.4.2         # Country choices for use with forms and fields for models
 django-ical==1.8.3              # Simple library for creating iCal feeds
 django-ckeditor==6.5.1          # Django admin CKEditor integration
@@ -42,20 +41,20 @@ psycopg2-binary==2.9.5          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.13.1         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.26.7                   # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.26.13                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.1.12                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==20.1.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==1.10.1              # Used for logging exceptions to Sentry.io
+sentry_sdk==1.11.0              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==5.11.0                  # For generating charts and graphs
 pytz==2022.6                    # timezone calculations
-pylint==2.15.5                  # Default linter
-shortuuid==1.0.10               # For generating short and unique ID's and codes
-django-hijack==3.2.1            # Superuser can impersonate other users
+pylint==2.15.6                  # Default linter
+shortuuid==1.0.11               # For generating short and unique ID's and codes
+django-hijack==3.2.4            # Superuser can impersonate other users
 python-dotenv==0.21.0           # Used to load environment variables from .env file
 sphinx-automodapi==0.14.1       # For generating Sphinx API docs
