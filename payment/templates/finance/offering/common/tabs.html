@@ -4,13 +4,13 @@
         <a class="nav-link {% if active == 'courses' %} active {% else %} text-tanzquotient {% endif %}"
            aria-current="page"
            href="{% url 'payment:offering_courses' offering.id %}">
-            {% trans "Subscription Totals" %}
+            {% trans "Courses" %}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if active == 'unpaid' %} active {% else %} text-tanzquotient {% endif %}"
            href="{% url "payment:offering_unpaid" offering.id %}">
-            {% trans "Unpaid Subscriptions" %}</a>
+            {% trans "Unpaid subscriptions" %}</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if active == 'teachers' %} active {% else %} text-tanzquotient {% endif %}"

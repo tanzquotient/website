@@ -36,9 +36,9 @@
                         </div>
 
                         {% if not subscription.payed %}
-                            <button type="submit" class="btn btn-success">{% trans "Mark as Paid" %}</button>
+                            <button type="submit" class="btn btn-success">{% trans "Mark as paid" %}</button>
                         {% else %}
-                            <button disabled=true class="btn btn-success">{% trans "Already Paid" %}</button>
+                            <button disabled=true class="btn btn-success">{% trans "Already paid" %}</button>
                         {% endif %}
                         <div class="form-group">
                             <a href="{% url 'payment:subscription_payment' subscription.usi %}">Pay with voucher

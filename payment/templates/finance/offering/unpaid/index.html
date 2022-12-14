@@ -2,18 +2,20 @@
 {% load i18n l10n humanize %}
 
 {% block finance_content %}
-    <table class="table table-striped align-middle mb-0 text-nowrap">
-        <thead>
-        <tr>
-            <th>{% trans "Person" %}</th>
-            <th>{% trans "Course" %}</th>
-            <th>{% trans "Open Amount" %}</th>
-            <th colspan="2">{% trans "Actions" %}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for subscription in subscriptions %}
-            {% if not subscription.payed %}
+    {% if not subscriptions %}
+        <div class="alert alert-success m-3">{% trans "No unpaid supscriptions." %}</div>
+    {% else %}
+        <table class="table table-striped align-middle mb-0 text-nowrap">
+            <thead>
+            <tr>
+                <th>{% trans "Person" %}</th>
+                <th>{% trans "Course" %}</th>
+                <th>{% trans "Open Amount" %}</th>
+                <th colspan="2">{% trans "Actions" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subscription in subscriptions %}
                 <tr>
                     <td>
                         <div>{{ subscription.user.get_full_name }}</div>
@@ -51,9 +53,9 @@
                             <div class="small">
                                 {% trans "Board member" %}
                             </div>
-                        {% elif subscription.user.profile.is_teacher %}
+                        {% elif subscription.user.profile.is_current_teacher %}
                             <div class="small">
-                                {% trans "Teacher" %}
+                                {% trans "Currently a teacher" %}
                             </div>
                         {% endif %}
                     </td>
@@ -72,63 +74,63 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% endif %}
 
-            <!-- Confirm mark as paid -->
-            <div class="modal fade" id="modal-{{ subscription.id }}" tabindex="-1"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">{% trans "Confirm" %}</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-wrap">
-                            {% trans "Are you sure you want to mark the following subscription as paid?" %}
-                            <div class="alert alert-info my-2">
-                                {{ subscription }}
+                <!-- Confirm mark as paid -->
+                <div class="modal fade" id="modal-{{ subscription.id }}" tabindex="-1"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">{% trans "Confirm" %}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">{% trans "Cancel" %}
-                            </button>
-                            <form method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="mark_as_paid" value="{{ subscription.id }}">
-                                <button type="submit"
-                                        class="btn btn-danger">
-                                    <i class="fa-solid fa-circle-exclamation"></i>
-                                    {% trans "Manually mark as paid" %}
+                            <div class="modal-body text-wrap">
+                                {% trans "Are you sure you want to mark the following subscription as paid?" %}
+                                <div class="alert alert-info my-2">
+                                    {{ subscription }}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{% trans "Cancel" %}
                                 </button>
-                            </form>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="mark_as_paid" value="{{ subscription.id }}">
+                                    <button type="submit"
+                                            class="btn btn-danger">
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        {% trans "Manually mark as paid" %}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-        </tbody>
-        <tfoot class="fw-bold">
-        <tr>
-            <td>
-                {{ count }} {% trans "Unpaid subscriptions" %} ({{ users_count }} {% trans "People" %})
-            </td>
-            <td>{{ courses_count }} {% trans "Courses" %}</td>
-            <td>{{ open_total|intcomma|localize }} CHF</td>
-            <td></td>
-            <td>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="remind" value="all">
-                    <button type="submit"
-                            class="btn btn-warning">
-                        <i class="fa-regular fa-paper-plane"></i>
-                        {% trans "Remind everyone" %}
-                    </button>
-                </form>
-            </td>
-        </tr>
-        </tfoot>
-    </table>
+            {% endfor %}
+            </tbody>
+            <tfoot class="fw-bold">
+            <tr>
+                <td>
+                    {{ count }} {% trans "Unpaid subscriptions" %} ({{ users_count }} {% trans "Persons" %})
+                </td>
+                <td>{{ courses_count }} {% trans "Courses" %}</td>
+                <td>{{ open_total|intcomma|localize }} CHF</td>
+                <td></td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="remind" value="all">
+                        <button type="submit"
+                                class="btn btn-warning">
+                            <i class="fa-regular fa-paper-plane"></i>
+                            {% trans "Remind everyone" %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    {% endif %}
 {% endblock %}

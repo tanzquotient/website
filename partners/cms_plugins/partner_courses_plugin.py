@@ -8,7 +8,7 @@ from courses.models import Offering, OfferingType
 
 
 class PartnerOfferingsPlugin(CMSPluginBase):
-    name = _("Partner Offerings")
+    name = _("Partner offerings")
     model = CMSPlugin
     render_template = "partners/partner_offerings_plugin.html"
     text_enabled = False

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections import defaultdict
+from functools import cached_property
+
 from django.utils.translation import gettext_lazy as _
 
 from datetime import date, timedelta
@@ -95,37 +98,17 @@ class Course(TranslatableModel):
 
     def payment_totals(self) -> dict[str, Number]:
         """calculate different statistics in one method (performance optimization)"""
-        totals = {
-            'to_pay': 0,
-            'paid': 0,
-            'unpaid': 0,
-            'paid_count': 0,
-            'not_paid_count': 0,
-            'paid_course': 0,
-            'paid_voucher': 0,
-            'paid_online': 0,
-            'paid_counter': 0,
-        }
-        accepted = self.subscriptions.accepted()
+        totals = defaultdict(Decimal)
+        accepted = self.subscriptions.accepted().prefetch_related('price_reductions', 'subscription_payments')
+
         for subscription in accepted.all():
-            amount = subscription.get_price_to_pay() or 0
-            totals['to_pay'] += amount
+            totals['to_pay'] += subscription.get_price_to_pay()
+            totals['paid'] += subscription.sum_of_payments()
+            totals['reductions'] += subscription.sum_of_reductions()
+            totals['to_pay_after_reductions'] += subscription.price_after_reductions()
+            totals['open_amount'] += subscription.open_amount()
 
-        paid = accepted.paid()
-        totals['paid_count'] = paid.count()
-        totals['not_paid_count'] = accepted.count() - paid.count()
-        for subscription in paid.all():
-            amount = subscription.sum_of_payments() or 0
-            totals['paid'] += amount
-            totals['paid_voucher'] += subscription.sum_of_reductions()
-            if subscription.paymentmethod == PaymentMethod.ONLINE:
-                totals['paid_online'] += amount
-            if subscription.paymentmethod == PaymentMethod.COURSE:
-                totals['paid_course'] += amount
-            if subscription.paymentmethod == PaymentMethod.COUNTER:
-                totals['paid_counter'] += amount
-
-        totals['unpaid'] = totals['to_pay'] - totals['paid'] - totals['paid_voucher']
+        totals['difference'] = totals['to_pay_after_reductions'] - totals['paid']
 
         return totals
 
@@ -294,9 +277,9 @@ class Course(TranslatableModel):
             if leads_count + follows_count + no_preference_count > 0:
                 num_couples = self.number_of_possible_couples()
                 if num_couples == 1:
-                    return _('With this one couple is possible in total, but at least {} couples are needed.')\
+                    return _('With this one couple is possible in total, but at least {} couples are needed.') \
                         .format(self.min_number_of_couples())
-                return _('With this {} couples are possible in total, but at least {} couples are needed.')\
+                return _('With this {} couples are possible in total, but at least {} couples are needed.') \
                     .format(num_couples, self.min_number_of_couples())
 
             return _('At least {} couples are needed.').format(self.min_number_of_couples())

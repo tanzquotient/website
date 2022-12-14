@@ -174,13 +174,12 @@ class Subscribe(Model):
         self.price_to_pay = self._compute_price_to_pay()
 
     def get_price_to_pay(self) -> Decimal:
-        if not self.price_to_pay:
+        if self.price_to_pay is None:
             self.generate_price_to_pay()
             self.save()
         return Decimal(self.price_to_pay)
 
     def price_after_reductions(self) -> Decimal:
-        self.generate_price_to_pay()
         return self.get_price_to_pay() - self.sum_of_reductions()
 
     def sum_of_reductions(self) -> Decimal:
@@ -202,6 +201,9 @@ class Subscribe(Model):
         return Decimal(sum_of_payments)
 
     def open_amount(self) -> Decimal:
+        if self.state in SubscribeState.PAID_STATES:
+            return Decimal(0)
+
         open_amount = self.price_after_reductions() - self.sum_of_payments()
 
         # Open amount is non-negative
