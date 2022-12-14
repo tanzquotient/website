@@ -1,4 +1,4 @@
-from .offering_finance_detail_view import OfferingFinanceUnpaidView
+from .offering_finance_unpaid_view import OfferingFinanceUnpaidView
 from .offering_finance_index_view import OfferingFinanceIndexView
 from .offering_finance_courses import OfferingFinanceCourses
 from .offering_finance_teachers import OfferingFinanceTeachers

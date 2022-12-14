@@ -78,11 +78,6 @@ def unconfirm_subscriptions(modeladmin, request, queryset):
     services.subscriptions.unconfirm_subscriptions(queryset, request)
 
 
-@admin.action(description="Send payment reminder to the selected subscriptions (which are in TO_PAY state)")
-def payment_reminder(modeladmin, request, queryset):
-    remind_of_payments(queryset, request)
-
-
 @admin.action(description="Reject selected subscriptions")
 def reject_subscriptions(self, request, queryset):
     form = None
@@ -139,10 +134,6 @@ def welcome_teachers(modeladmin, request, queryset):
 
 def welcome_teachers_reset_flag(modeladmin, request, queryset):
     services.teachers.welcome_teachers_reset_flag(queryset, request)
-
-@admin.action(description="Set selected subscriptions as paid")
-def set_subscriptions_as_paid(modeladmin, request, queryset):
-    queryset.filter(state=SubscribeState.CONFIRMED).update(state=SubscribeState.COMPLETED)
 
 
 @admin.action(description="Export confirmed subscriptions of selected courses as CSV")
@@ -231,20 +222,6 @@ def send_course_email(modeladmin, request, queryset) -> HttpResponse:
         form = SendCourseEmailForm(initial={'_selected_action': map(str, queryset.values_list('id', flat=True))})
 
     return render(request, 'courses/auth/action_send_course_email.html', {'courses': queryset, 'evaluate_form': form})
-
-
-@admin.action(description="Undo voucher payment")
-def undo_voucher_payment(modeladmin, request, queryset: QuerySet[Subscribe]):
-    for subscription in queryset:
-        if subscription.state in [SubscribeState.PAID,
-                                  SubscribeState.COMPLETED] and subscription.paymentmethod == PaymentMethod.VOUCHER:
-            subscription.state = SubscribeState.CONFIRMED
-            for voucher in Voucher.objects.filter(subscription=subscription).all():
-                voucher.subscription = None
-                voucher.used = False
-                voucher.save()
-                subscription.price_reductions.filter(used_voucher=voucher).delete()
-        subscription.save()
 
 
 @admin.action(description="raise price to pay to fit amount")

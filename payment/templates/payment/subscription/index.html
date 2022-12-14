@@ -1,12 +1,13 @@
 {% extends "basis.html" %}
 {% load i18n %}
 
-{% block lead_title %}
-    {% trans "Payment Status" %}
+{% block lead %}
+
 {% endblock %}
 
 {% block main_content %}
     <div class="container">
+        <h1 class="my-3">{% trans "Payment Status" %}</h1>
         {% if voucher_applied %}
             <div class="alert alert-success">
                 <h4 class="alert-heading">{% trans "Voucher applied" %}</h4>
@@ -17,7 +18,8 @@
                     <hr>
                     <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div class="align-self-center">{% trans "The voucher used was valued more than the remaining amount for this course. Download the voucher for the remainder by clicking the following button." %}</div>
-                        <a role="button" href="{{ voucher_for_remainder.pdf_file.url }}" class="btn btn-light"><i class="fas fa-download"></i> {% trans "Download" %}</a>
+                        <a role="button" href="{{ voucher_for_remainder.pdf_file.url }}" class="btn btn-light"><i
+                                class="fas fa-download"></i> {% trans "Download" %}</a>
                     </div>
                 {% endif %}
             </div>
@@ -39,78 +41,84 @@
                 </p>
             </div>
         {% endif %}
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">{% trans "Item" %}</th>
-                <th scope="col">{% trans "Info" %}</th>
-                <th scope="col"  class="text-end">{% trans "Value" %}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{% trans "Dance course" %}</td>
-                <td>
-                    <div class="row gy-1 gx-0 align-items-center">
-                        <div class="col-auto">
-                            {% trans "Course" %}:  <a href="{% url "courses:course_detail" subscription.course_id %}">{{ subscription.course.type.title }}</a>,&nbsp;
-                        </div>
-                        <div class="col-auto">
-                            {% trans "Participant" %}: {{ subscription.user.get_full_name }}
-                        </div>
-                    </div>
-                </td>
-                <td class="text-end">{{ subscription.get_price_to_pay }}&nbsp;CHF</td>
-            </tr>
-            {% for price_reduction in subscription.price_reductions.all|dictsort:"created_at" %}
+        <div class="rounded-3 overflow-hidden">
+            <table class="table table-striped">
+                <thead class="table-dark">
                 <tr>
-                    <td>{% trans "Voucher" %}</td>
-                    <td>{% trans "Code" %}: {{ price_reduction.used_voucher.key }}, {% trans "Value" %}: {{ price_reduction.used_voucher.value_string }}</td>
-                    <td  class="text-end">-&nbsp;{{ price_reduction.amount }}&nbsp;CHF</td>
+                    <th scope="col">{% trans "Item" %}</th>
+                    <th scope="col">{% trans "Info" %}</th>
+                    <th scope="col" class="text-end">{% trans "Value" %}</th>
                 </tr>
-            {% endfor %}
-            {% for subscription_payment in subscription.subscription_payments.all %}
+                </thead>
+                <tbody>
                 <tr>
-                    <td>{% trans "Payment" %}</td>
-                    <td>{% trans "Date" %}: {{ subscription_payment.payment.date}}</td>
-                    <td  class="text-end">-&nbsp;{{ subscription_payment.amount }}&nbsp;CHF</td>
-                </tr>
-            {% endfor %}
-            {% if not subscription.paid and subscription.open_amount > 0 %}
-                <tr>
-                    <td></td>
+                    <td>{% trans "Dance course" %}</td>
                     <td>
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="row gy-2 gx-3">
-                                <div class="col-auto">
-                                    <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}" type="text" maxlength="6" minlength="6" required name="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="default input example">
-                                    {% for error in voucher_form.voucher_code.errors %}
-                                        <div class="invalid-feedback">
-                                            {{ error }}
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-sm btn-success">
-                                        {% trans "Redeem Voucher" %}
-                                    </button>
-                                </div>
+                        <div class="row gy-1 gx-0 align-items-center">
+                            <div class="col-auto">
+                                {% trans "Course" %}: <a
+                                    href="{% url "courses:course_detail" subscription.course_id %}">{{ subscription.course.type.title }}</a>,&nbsp;
                             </div>
-                        </form>
+                            <div class="col-auto">
+                                {% trans "Participant" %}: {{ subscription.user.get_full_name }}
+                            </div>
+                        </div>
                     </td>
-                    <td>
-                    </td>
+                    <td class="text-end">{{ subscription.get_price_to_pay }}&nbsp;CHF</td>
                 </tr>
-            {% endif %}
-            </tbody>
-            <tfoot>
-            <tr>
-                <th>{% trans "Open Amount" %}</th>
-                <th></th>
-                <th  class="text-end">{{ subscription.open_amount }}&nbsp;CHF</th>
-            </tr>
-            </tfoot>
-        </table>
+                {% for price_reduction in subscription.price_reductions.all|dictsort:"created_at" %}
+                    <tr>
+                        <td>{% trans "Voucher" %}</td>
+                        <td>{% trans "Code" %}: {{ price_reduction.used_voucher.key }}, {% trans "Value" %}: {{ price_reduction.used_voucher.value_string }}</td>
+                        <td class="text-end">-&nbsp;{{ price_reduction.amount }}&nbsp;CHF</td>
+                    </tr>
+                {% endfor %}
+                {% for subscription_payment in subscription.subscription_payments.all %}
+                    <tr>
+                        <td>{% trans "Payment" %}</td>
+                        <td>{% trans "Date" %}: {{ subscription_payment.payment.date }}</td>
+                        <td class="text-end">-&nbsp;{{ subscription_payment.amount }}&nbsp;CHF</td>
+                    </tr>
+                {% endfor %}
+                {% if not subscription.paid and subscription.open_amount > 0 %}
+                    <tr>
+                        <td></td>
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="row gy-2 gx-3">
+                                    <div class="col-auto">
+                                        <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}"
+                                               type="text" maxlength="6" minlength="6" required name="voucher_code"
+                                               placeholder="{% trans "Voucher code" %}"
+                                               aria-label="default input example">
+                                        {% for error in voucher_form.voucher_code.errors %}
+                                            <div class="invalid-feedback">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            {% trans "Redeem Voucher" %}
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>{% trans "Open Amount" %}</th>
+                    <th></th>
+                    <th class="text-end">{{ subscription.open_amount }}&nbsp;CHF</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 {% endblock main_content %}

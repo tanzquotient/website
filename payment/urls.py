@@ -20,7 +20,7 @@ urlpatterns = [
 
     # Finances for offerings
     path('finance/', OfferingFinanceIndexView.as_view(), name='offering_finance_index_view'),
-    path('finance/<int:offering>/detail/', OfferingFinanceUnpaidView.as_view(), name='offering_unpaid'),
+    path('finance/<int:offering>/unpaid/', OfferingFinanceUnpaidView.as_view(), name='offering_unpaid'),
     path('finance/<int:offering>/courses/', OfferingFinanceCourses.as_view(), name='offering_courses'),
     path('finance/<int:offering>/teachers/', OfferingFinanceTeachers.as_view(), name='offering_teachers'),
     path('finance/<int:offering>/teachers/export/', offering_finance_teachers_export, name='offering_teachers_export'),

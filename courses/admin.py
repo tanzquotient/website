@@ -209,9 +209,8 @@ class SubscribeAdmin(VersionAdmin):
     model = Subscribe
 
     actions = [match_partners, unmatch_partners, breakup_couple, confirm_subscriptions, unconfirm_subscriptions,
-               confirm_subscriptions_allow_singles,
-               reject_subscriptions, unreject_subscriptions, correct_matching_state_to_couple,
-               set_subscriptions_as_paid, undo_voucher_payment, payment_reminder, emaillist, send_vouchers_for_subscriptions]
+               confirm_subscriptions_allow_singles, reject_subscriptions, unreject_subscriptions,
+               correct_matching_state_to_couple, emaillist, send_vouchers_for_subscriptions]
 
     raw_id_fields = ('user', 'partner')
 
