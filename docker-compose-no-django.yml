@@ -31,7 +31,7 @@ services:
     container_name: tq-data
     image: minio/minio
     volumes:
-      - s3-data-volume:/data
+      - data-volume:/data
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -43,5 +43,5 @@ services:
 
 volumes:
   postgres-volume: # Let Docker generate a place for this, doesn't matter for development
-  s3-data-volume:
+  data-volume:
 
