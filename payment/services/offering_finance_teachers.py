@@ -28,15 +28,15 @@ def _courses(offerings: Sequence[Offering]) -> list:
     courses = []
 
     header = [
-        _('Last name'),
         _('First name'),
+        _('Last name'),
         _('Courses'),
         _('Hourly Wages'),
         _('Hours'),
         _('Course Totals'),
         _('Note'),
-        _('Teacher Total'),
     ]
+
     multiple_offerings = len(offerings) > 1
     if multiple_offerings:
         header += ['Offering']
@@ -48,29 +48,28 @@ def _courses(offerings: Sequence[Offering]) -> list:
         .order_by('teacher__first_name', 'teacher__last_name', 'course__offering_id', 'course__name') \
         .all()
 
-    last_teacher = None
-    row = []
-    teacher_total = 0
     for idx, teaching in enumerate(teachings):
         teacher = teaching.teacher
         course = teaching.course
 
-        course_data = []
+        row = [
+            teacher.first_name or "",
+            teacher.last_name or "",
+        ]
+        if multiple_offerings:
+            row.append(course.offering or "")
 
         has_participants = course.get_confirmed_count() > 0
         hours = Decimal(course.get_total_time()['total']) if has_participants else 0
         total = teaching.hourly_wage * hours
 
-        if multiple_offerings:
-            course_data.append(course.offering or "")
-
-        note = "\u00A0"  # non-breaking space (so line is aligned for html table)
+        note = ''
         if course.teaching.count() > 2:
             note = _('Course with more than two teachers, please check who taught how many lessons.')
         if not has_participants:
             note = _('No participants')
 
-        course_data += [
+        row += [
             course.name,
             f"{teaching.hourly_wage} CHF",
             f"{hours}",
@@ -78,25 +77,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
             note,
         ]
 
-        if teacher != last_teacher:
-            teacher_total = total
-
-            row = [
-                teacher.first_name or "",
-                teacher.last_name or "",
-            ] + course_data + [
-                f"{teacher_total:.2f} CHF"
-            ]
-
-            courses.append(row)
-
-        else:
-            teacher_total += total
-            row[-1] = f"{teacher_total:.2f} CHF"
-            for idx, value in enumerate(course_data):
-                row[idx + 2] = f"{row[idx + 2]}\n{value}"
-
-        last_teacher = teacher
+        courses.append(row)
 
     return courses
 
