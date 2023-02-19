@@ -33,6 +33,7 @@ def create_initial_from_user(user: User, initial: dict = None) -> dict:
     data['nationality'] = user.profile.nationality
     data['residence_permit'] = user.profile.residence_permit
     data['ahv_number'] = user.profile.ahv_number
+    data['zemis_number'] = user.profile.zemis_number
     if user.profile.bank_account:
         data['iban'] = user.profile.bank_account.iban
         data['bank_name'] = user.profile.bank_account.bank_name

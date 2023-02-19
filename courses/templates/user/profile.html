@@ -49,7 +49,7 @@
     </div>
     <div class="row">
         <div class="col-12 col-sm-4">
-            {% if user.profile.body_height or user.profile.birthdate or user.profile.nationality or user.profile.residence_permit or user.profile.ahv_number %}
+            {% if user.profile.body_height or user.profile.birthdate or user.profile.nationality or user.profile.residence_permit or user.profile.ahv_number or user.profile.zemis_number %}
 
                 <p>
                     <strong> {% trans "Personal details" %}</strong>
@@ -62,7 +62,7 @@
                         {% trans "Body height" %}: {{ user.profile.body_height }}cm
                     {% endif %}
                     <br/>
-                    {% if user.is_teacher %}
+                    {% if user.profile.is_teacher %}
                         {% if  user.profile.nationality %}
                             {% trans "Nationality" %}: {{ user.profile.get_nationality }}
                         {% endif %}
@@ -73,6 +73,10 @@
                         <br/>
                         {% if  user.profile.ahv_number %}
                             {% trans "AHV number" %}: {{ user.profile.ahv_number }}
+                        {% endif %}
+                        <br/>
+                        {% if  user.profile.zemis_number %}
+                            {% trans "Zemis number" %}: {{ user.profile.zemis_number }}
                         {% endif %}
                     {% endif %}
                 </p>

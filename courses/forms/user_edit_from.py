@@ -44,6 +44,7 @@ class UserEditForm(forms.Form):
     nationality = LazyTypedChoiceField(choices=countries, required=False)
     residence_permit = forms.ChoiceField(choices=Residence.CHOICES, required=False)
     ahv_number = forms.CharField(max_length=255, required=False)
+    zemis_number = forms.CharField(max_length=255, required=False)
     iban = forms.CharField(max_length=255, required=False)
     bank_name = forms.CharField(max_length=255, required=False)
     bank_zip_code = forms.CharField(max_length=255, required=False)

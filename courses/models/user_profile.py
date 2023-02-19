@@ -46,6 +46,8 @@ class UserProfile(Model):
     nationality = CountryField(blank=True, null=True)
     residence_permit = CharField(max_length=30, choices=Residence.CHOICES, blank=True, null=True)
     ahv_number = CharField(max_length=255, blank=True, null=True)
+    zemis_number = CharField(max_length=255, blank=True, null=True,
+                             help_text='Every registered foreigner in switzerland gets a ZEMIS number.')
     bank_account = OneToOneField(BankAccount, related_name='user_profile', blank=True, null=True, on_delete=CASCADE)
     default_hourly_wage = DecimalField(default=Decimal(30), decimal_places=2, max_digits=6)
     default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
@@ -163,6 +165,10 @@ class UserProfile(Model):
                 missing.append('residence permit')
             if not self.ahv_number:
                 missing.append('AHV number')
+            # Every registered foreigner in switzerland gets a ZEMIS number, thus applicable for everyone except swiss
+            # and non-registered people (e.g. short term stay withoutt need for visa)
+            if not self.zemis_number and self.residence_permit not in ['SWISS', '<NO>']:
+                missing.append('ZEMIS number')
             if not self.bank_account:
                 missing.append('bank account')
 

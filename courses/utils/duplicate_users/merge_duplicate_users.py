@@ -28,6 +28,7 @@ def merge_duplicate_users(to_merge) -> None:
         profile.nationality = _get_value_from_most_recent_alias_profile(aliases, profile, "nationality")
         profile.residence_permit = _get_value_from_most_recent_alias_profile(aliases, profile, "residence_permit")
         profile.ahv_number = _get_value_from_most_recent_alias_profile(aliases, profile, "ahv_number")
+        profile.zemis_number = _get_value_from_most_recent_alias_profile(aliases, profile, "zemis_number")
         profile.default_hourly_wage = _get_value_from_most_recent_alias_profile(aliases, profile, "default_hourly_wage")
         profile.save()
 

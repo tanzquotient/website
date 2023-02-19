@@ -44,7 +44,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
 
     teachings = Teach.objects \
         .filter(course__offering__in=offerings) \
-        .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)\
+        .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL) \
         .order_by('teacher__first_name', 'teacher__last_name', 'course__offering_id', 'course__name') \
         .all()
 
@@ -85,7 +85,8 @@ def _courses(offerings: Sequence[Offering]) -> list:
 def _personal_details(offerings: Sequence[Offering]) -> list:
     personal_details = []
     header = [_('Last name'), _('First name'), _('E-mail'), _('Phone'), _('Address')]
-    header += ['Birthdate', 'Nationality', 'Residence Permit', 'AHV Number', 'IBAN', 'Bank']
+    header += [_('Birthdate'), _('Nationality'), _('Residence Permit'), _('AHV Number'), _('Zemis Number'), _('IBAN'),
+               _('Bank')]
 
     personal_details.append(header)
 
@@ -93,7 +94,7 @@ def _personal_details(offerings: Sequence[Offering]) -> list:
         .filter(teaching_courses__course__offering__in=offerings) \
         .exclude(teaching_courses__course__subscription_type=CourseSubscriptionType.EXTERNAL) \
         .order_by('first_name', 'last_name') \
-        .distinct()\
+        .distinct() \
         .all()
 
     for teacher in teachers:
@@ -107,7 +108,8 @@ def _personal_details(offerings: Sequence[Offering]) -> list:
             teacher.profile.birthdate,
             str(teacher.profile.nationality),
             teacher.profile.residence_permit,
-            teacher.profile.ahv_number
+            teacher.profile.ahv_number,
+            teacher.profile.zemis_number
         ]
 
         if teacher.profile.bank_account:

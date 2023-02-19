@@ -49,6 +49,7 @@ def update_user(user: User, user_data: dict) -> User:
     set_if_given('nationality')
     set_if_given('residence_permit')
     set_if_given('ahv_number')
+    set_if_given('zemis_number')
 
     if all((user_data.get(key)) for key in ['street', 'plz', 'city']):
         if profile.address:

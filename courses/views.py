@@ -1,6 +1,5 @@
 import logging
 from datetime import date
-from typing import Type
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -8,19 +7,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Prefetch
-from django.forms import Form
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 
-from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
+from courses.forms import UserEditForm, create_initial_from_user
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
-from utils import export
 from utils.plots import plot_figure
 from utils.tables.table_view_or_export import table_view_or_export
 from . import services, figures
@@ -336,11 +332,6 @@ class ProfileView(FormView):
     form_class = UserEditForm
 
     success_url = reverse_lazy('edit_profile')
-
-    def get_form_class(self) -> Type[Form]:
-        if self.request.user.profile.is_teacher():
-            return TeacherEditForm
-        return super().get_form_class()
 
     def get_initial(self) -> dict:
         initial = create_initial_from_user(self.request.user)
