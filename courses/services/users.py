@@ -38,8 +38,11 @@ def update_user(user: User, user_data: dict) -> User:
         profile.picture = None
     else:
         name = user_data['picture'].name
-        user_data['picture'].name = "{}.{}".format(uuid.uuid4(), name.split(".")[-1])
+        if not profile.picture.name == name:  # if picture name changed
+            # generate new uuid for picture
+            user_data['picture'].name = "{}.{}".format(uuid.uuid4(), name.split(".")[-1])
         set_if_given('picture')
+
     set_if_given('about_me')
 
     set_if_given('birthdate')
