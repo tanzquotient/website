@@ -1,0 +1,16 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+{% load tq_tags %}
+
+{% block lead %} {% endblock %}
+
+{% block main_content %}
+    <div class="container-fluid">
+        <h1 class="my-3">{{ title }}</h1>
+        <div class="my-3">
+            {% download_button url=url_key %}
+        </div>
+        {% table data %}
+    </div>
+{% endblock main_content %}

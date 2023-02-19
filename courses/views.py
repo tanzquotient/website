@@ -20,11 +20,14 @@ from django.views.generic.edit import FormView
 from courses.forms import UserEditForm, create_initial_from_user, TeacherEditForm
 from courses.utils import merge_duplicate_users, find_duplicate_users
 from tq_website import settings
+from utils import export
 from utils.plots import plot_figure
+from utils.tables.table_view_or_export import table_view_or_export
 from . import services, figures
 from .forms.subscribe_form import SubscribeForm
 from .models import Course, Style, Offering, OfferingType, Subscribe, IrregularLesson, \
     RegularLessonException
+from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
 
 log = logging.getLogger('tq')
@@ -137,7 +140,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
 
     # If user already signed up or sign up not possible: redirect to course detail
     if course.subscriptions.filter(user=request.user).exists() \
-            or (not course.is_subscription_allowed() and not request.user.is_staff)  \
+            or (not course.is_subscription_allowed() and not request.user.is_staff) \
             or not course.has_free_places:
         return redirect('courses:course_detail', course_id=course_id)
 
@@ -164,7 +167,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
     # Render sign up form
 
     past_partners = sorted(list({(subscribe.partner.get_full_name(), subscribe.partner.email)
-                                for subscribe in request.user.subscriptions.all() if subscribe.partner}))
+                                 for subscribe in request.user.subscriptions.all() if subscribe.partner}))
 
     context = {
         'course': course,
@@ -270,6 +273,12 @@ def offering_time_chart_dict(offering: Offering) -> dict:
         'trace_total': trace_total,
         'trace_total': trace_total,
     }
+
+
+@staff_member_required
+def teachers_overview(request: HttpRequest) -> HttpResponse:
+    return table_view_or_export(request, _('Teachers Overview'), 'courses:teachers_overview',
+                                get_teachers_overview_data())
 
 
 @staff_member_required

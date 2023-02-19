@@ -19,7 +19,8 @@ urlpatterns = [
     path('offering/<int:offering_id>/', views.offering_by_id, name='offering_by_id'),
 
     # Restricted pages
-    path('auth/', views.subscription_overview, name='subscription_overview'),
+    path('auth/teachers', views.teachers_overview, name='teachers_overview'),
+    path('auth/subscriptions', views.subscription_overview, name='subscription_overview'),
     path('auth/export/', views.export_summary, name='export_summary'),
     path('auth/export/excel', views.export_summary_excel, name='export_summary_excel'),
     path('auth/export/<int:offering_id>/', views.export_offering_summary, name='export_offering_summary'),

@@ -3,12 +3,10 @@ from typing import Iterable, Optional
 from django.http import HttpResponse
 
 from courses import models as models
-from courses.services.general import log
 from utils import export
 
 
 def export_subscriptions(course_ids: Iterable[int], export_format: str) -> Optional[HttpResponse]:
-
     export_data = []
     for course_id in course_ids:
         course = models.Course.objects.get(id=course_id)
@@ -32,7 +30,7 @@ def export_subscriptions(course_ids: Iterable[int], export_format: str) -> Optio
             for s in subscriptions:
                 data.append([s.user.first_name, s.user.last_name, s.user.email, s.user.profile.phone_number] +
                             ([s.get_assigned_role_str(), s.get_partner_name()] if course.type.couple_course else []) +
-                            ['student' if s.user.profile.is_student() else 'not a student', s.price_to_pay,])
+                            ['student' if s.user.profile.is_student() else 'not a student', s.price_to_pay, ])
 
         export_data.append({'name': course.name, 'data': data})
 

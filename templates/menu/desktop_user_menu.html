@@ -6,7 +6,10 @@
         <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
     </a>
     <a class="dropdown-item" href="{% url 'courses:subscription_overview' %}">
-        <span class="fa fa-bar-chart fa-lg"></span> {% trans "Statistics" %}
+        <span class="fa fa-bar-chart fa-lg"></span> {% trans "Course statistics" %}
+    </a>
+        <a class="dropdown-item" href="{% url 'courses:teachers_overview' %}">
+        <i class="fa-solid fa-chalkboard-user"></i> {% trans "Teachers overview" %}
     </a>
     <a class="dropdown-item" href="{% url 'survey:overview' %}">
         <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
