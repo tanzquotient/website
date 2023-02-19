@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load courses_tags %}
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 mb-4">
         <div class="mb-3">
@@ -16,6 +17,11 @@
         {% include "courses/snippets/course_info.html" %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-8">
-        {% include "courses/snippets/course_description.html" %}
+        <div>
+            {% include "courses/snippets/course_description.html" %}
+        </div>
+        <div>
+            {% course_reviews course %}
+        </div>
     </div>
 </div>

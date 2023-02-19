@@ -31,7 +31,7 @@ class QuestionInline(TranslatableStackedInline):
     model = Question
     extra = 0
     readonly_fields = ['choices']
-    fields = ['name', 'type', 'text', 'note', 'position',  'choices', 'scale']
+    fields = ['name', 'type', 'text', 'note', 'position',  'choices', 'scale', 'public_review', 'display']
     formfield_overrides = {
         TextField: {'widget': Textarea({'rows': '2', 'style': 'width: 100% !important;'})},
     }

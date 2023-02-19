@@ -29,8 +29,6 @@
                     </li>
                 </ul>
             </div>
-        {% endif %}
-        {% if free_form_answers|length > 5 %}
             <div class="collapse collapse-{{ question.id }}" id="collapse-{{ question.id }}-extended">
                 <ul class="list-group list-group-flush">
                     {% for free_form_answer in free_form_answers|slice:'5:' %}

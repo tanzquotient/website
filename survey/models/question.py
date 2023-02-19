@@ -13,6 +13,7 @@ class Question(TranslatableModel):
     type = CharField(max_length=3, choices=QuestionType.CHOICES, default=QuestionType.FREE_FORM)
     scale = ForeignKey('Scale', blank=True, null=True, on_delete=PROTECT,
                        help_text='Only needed for question type "scale"')
+    public_review = BooleanField(default=False, help_text="If true, answers to this question may be displayed publicly")
     display = BooleanField(default=True, help_text="Defines if this question is displayed in survey; "
                                                    "set this to false instead of deleting")
     position = PositiveSmallIntegerField("Position", default=0)
