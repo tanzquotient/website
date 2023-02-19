@@ -156,7 +156,7 @@ class CourseSuccession(admin.ModelAdmin):
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
     list_display = ('title', 'format_styles', 'level', 'couple_course',)
-    list_filter = ('level', 'couple_course')
+    list_filter = ('level', CourseTypeStyleFilter, 'couple_course')
     search_fields = ['translations__title', 'translations__subtitle']
     ordering = ['translations__title']
 
@@ -167,6 +167,9 @@ class CourseTypeAdmin(TranslatableAdmin):
     ]
 
     model = CourseType
+
+    def get_queryset(self, request) -> QuerySet:
+        return super().get_queryset(request).translated('en')
 
 
 class SubscribeChangeList(ChangeList):

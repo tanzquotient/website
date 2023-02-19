@@ -1,6 +1,5 @@
-# Register your models here.
-
 from django.contrib.admin.filters import SimpleListFilter
+from django.utils.translation import gettext_lazy as _
 
 from courses.admin_actions import *
 
@@ -123,6 +122,23 @@ class ConfirmationCourseListFilter(SubscribeCourseListFilter):
     @staticmethod
     def filter_by_course(queryset, course_id):
         return queryset.filter(subscription__course__id=course_id)
+
+
+class CourseTypeStyleFilter(SimpleListFilter):
+    title = _('Style')
+
+    parameter_name = 'parent'
+
+    def lookups(self, request, model_admin):
+        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        else:
+            style = Style.objects.get(name=self.value())
+            children = [s.id for s in Style.objects.all() if s == style or s.is_child_of(style)]
+            return queryset.filter(styles__in=children).distinct()
 
 
 class StyleParentFilter(SimpleListFilter):
