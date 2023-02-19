@@ -113,7 +113,10 @@ class Course(TranslatableModel):
         return totals
 
     def format_teachers(self) -> str:
-        return ', '.join(map(auth.get_user_model().get_full_name, self.get_teachers()))
+        names = list(map(auth.get_user_model().get_full_name, self.get_teachers()))
+        if len(names) == 1:
+            return names[0]
+        return ' & '.join([', '.join(names[:-1]), names[-1]])
 
     def get_teachers(self) -> list[User]:
         return [t.teacher for t in self.teaching.all()]

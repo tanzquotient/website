@@ -32,7 +32,11 @@ def course_reviews(course: Course) -> dict:
 
     text_answers = answers.filter(question__type=QuestionType.FREE_FORM).order_by('-survey_instance__last_update')
 
-    text_reviews = [dict(text=answer.value, date=answer.survey_instance.last_update) for answer in text_answers]
+    text_reviews = [dict(
+        text=answer.value,
+        date=answer.survey_instance.last_update,
+        course=answer.survey_instance.course
+    ) for answer in text_answers]
     show_reviews = len(text_reviews) > 0
 
     return dict(show_reviews=show_reviews, text_reviews=text_reviews)
