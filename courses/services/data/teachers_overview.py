@@ -11,6 +11,10 @@ def get_teachers_overview_data() -> list[list]:
     for teaching in Teach.objects.order_by('teacher__first_name', 'teacher__last_name').prefetch_related(
             'teacher', 'course__irregular_lessons', 'course__regular_lessons', 'course__offering__period',
             'course__period').all():
+
+        if teaching.course.is_external():
+            continue
+
         first_lesson_date = teaching.course.get_first_lesson_date()
         year = str(first_lesson_date.year) if first_lesson_date else _('unknown year')
         grouped_teachings[teaching.teacher_id][year].append(teaching)
