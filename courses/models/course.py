@@ -45,13 +45,10 @@ class Course(TranslatableModel):
 
     # Optional - apply to all course types
     room = models.ForeignKey('Room', related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
-    offering = models.ForeignKey('Offering', blank=True, null=True, on_delete=models.PROTECT)
-    offering.help_text = "Not required! Useful for regular courses or summer workshops. " \
-                         "Do not use for irrgeular courses (e.g. ASVZ open classes)"
+    offering = models.ForeignKey('Offering', on_delete=models.PROTECT)
     period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
     period.help_text = "You can set a custom period for this course here. " \
-                       "If this is left empty, the period from the offering is taken. " \
-                       "Must be set if no offering associated but has regular lessons."
+                       "If this is left empty, the period from the offering is taken. "
 
     # Translated fields
     translations = TranslatedFields(
@@ -150,12 +147,7 @@ class Course(TranslatableModel):
         return self.period is not None
 
     def get_period(self) -> Optional[Period]:
-        if self.period is None:
-            if self.offering:
-                return self.offering.period
-        else:
-            return self.period
-        return None
+        return self.period or self.offering.period
 
     def show_free_places_count(self) -> bool:
         return self.max_subscribers is not None
@@ -310,11 +302,8 @@ class Course(TranslatableModel):
 
         return False
 
-    def is_displayed(self, preview: bool = False) -> bool:
-        if self.offering is None:
-            return self.display
-        else:
-            return preview or (self.offering.display and self.display)  # both must be true to be displayed
+    def is_displayed(self) -> bool:
+        return self.offering.display and self.display  # both must be true to be displayed
 
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
@@ -338,9 +327,6 @@ class Course(TranslatableModel):
     def is_subscription_allowed(self) -> bool:
         if not self.is_regular():
             return False
-
-        if self.offering is None:
-            return self.active
 
         return self.offering.active and self.active  # both must be true to allow subscription
 

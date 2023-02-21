@@ -65,26 +65,6 @@ def course_list(request, subscription_type="all", style_name="all", force_previe
                 'sections': offering_sections,
             })
 
-    # Courses without offering -> create fake offering
-    courses_without_offering = list(filter(matches_filter, services.get_upcoming_courses_without_offering()))
-    if courses_without_offering:
-        courses_without_offering.sort(key=lambda c: c.get_first_lesson_date() or date.min)
-
-        c_offerings.insert(0, {
-            'offering': {
-                'name': _("Upcoming courses"),
-                'type': OfferingType.IRREGULAR,
-                'display': True,
-                'active': True,
-            },
-            'sections': [
-                {
-                    'section_title': _("Next courses"),
-                    'courses': courses_without_offering
-                }
-            ]
-        })
-
     context = {
         'offerings': c_offerings,
         'filter': {

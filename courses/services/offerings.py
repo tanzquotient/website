@@ -92,21 +92,6 @@ def get_sections(offering, course_filter=None):
     return offering_sections
 
 
-def get_upcoming_courses_without_offering() -> Iterable[Course]:
-    courses = Course.objects.filter(display=True, offering__isnull=True).prefetch_related(
-        'type',
-        'period__cancellations',
-        'regular_lessons',
-        'room__address',
-        'room__translations',
-        'subscriptions',
-        Prefetch('irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
-        Prefetch('regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
-    )
-
-    return [course for course in courses if not course.is_over()]
-
-
 def get_current_active_offering():
     return models.Offering.objects.filter(active=True).order_by('period__date_from').first()
 

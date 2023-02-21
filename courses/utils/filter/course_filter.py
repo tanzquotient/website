@@ -26,7 +26,10 @@ def _course_filter_type(course: Course, subscription_type: str) -> bool:
 def course_filter(course: Course, preview_mode: bool, subscription_type: str, style_name: str,
                   filter_styles: Iterable[Style]) -> bool:
 
-    if not course.is_displayed(preview_mode):
+    if preview_mode:
+        return True
+
+    if not course.is_displayed():
         return False
 
     if course.is_over():
