@@ -17,7 +17,7 @@ class RegularLesson(models.Model):
 
     def get_total_time(self) -> Optional[timedelta]:
         period = self.course.get_period()
-        if not period or not period.date_from or not period.date_to:
+        if not period:
             return None  # time cannot be calculated because period is unknown
 
         cancellations = self.course.get_cancellation_dates()

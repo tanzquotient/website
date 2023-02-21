@@ -29,10 +29,10 @@ class Offering(models.Model):
         return self.preview
 
     def is_over(self) -> bool:
-        if self.active or self.preview or self.display or not self.has_date_from():
-            return False
+        if not self.period:
+            return False  # If there is no period, there is no end date -> not over
 
-        return self.period.date_from < date.today()
+        return self.period.date_to < date.today()
 
     def has_date_from(self) -> bool:
         return self.get_start_year() is not None
@@ -41,10 +41,7 @@ class Offering(models.Model):
         return self.type == OfferingType.PARTNER
 
     def get_start_year(self) -> Optional[int]:
-        try:
-            return self.period.date_from.year
-        except:
-            return None
+        return self.period.date_from.year if self.period else None
 
     def get_teacher_ids(self) -> set[int]:
         return {teaching.teacher_id for course in self.course_set.all() for teaching in course.teaching.all()}

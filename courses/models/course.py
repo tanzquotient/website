@@ -316,7 +316,7 @@ class Course(TranslatableModel):
 
     def subscription_opens_soon(self) -> bool:
         period = self.get_period()
-        if period is None or period.date_from is None:
+        if period is None:
             return False
 
         return self.subscription_closed() and period.date_from > date.today()
@@ -334,7 +334,7 @@ class Course(TranslatableModel):
         last_date = self.get_last_lesson_date()
         if last_date:
             return last_date < date.today()
-        if self.get_period() and self.get_period().date_to is not None:
+        if self.get_period():
             return self.get_period().date_to < date.today()
         return False
 
@@ -421,14 +421,14 @@ class Course(TranslatableModel):
     def get_first_regular_lesson_date(self) -> Optional[date]:
         lesson = self.get_first_regular_lesson()
         period = self.get_period()
-        if lesson and period and period.date_from:
+        if lesson and period:
             return Course.next_weekday(period.date_from, lesson.get_weekday_number())
         else:
             return None
 
     def get_last_regular_lesson_date(self) -> Optional[date]:
         period = self.get_period()
-        if self.regular_lessons.exists() and period and period.date_to:
+        if self.regular_lessons.exists() and period:
             course_weekdays = [Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()]
 
             # Find last course day before date_to
