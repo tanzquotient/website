@@ -31,11 +31,8 @@ log = logging.getLogger('tq')
 
 # Create your views here.
 
-def course_list(request, subscription_type="all", style_name="all", force_preview=False) -> HttpResponse:
+def course_list(request, subscription_type="all", style_name="all", show_preview=False) -> HttpResponse:
     template_name = "courses/list.html"
-
-    # unpublished courses should be shown with a preview marker
-    show_preview = (request and request.user.is_staff) or force_preview
 
     filter_styles = Style.objects.filter(filter_enabled=True)
 
@@ -86,7 +83,7 @@ def archive(request: HttpRequest) -> HttpResponse:
 
 @staff_member_required
 def course_list_preview(request) -> HttpResponse:
-    return course_list(request, force_preview=True)
+    return course_list(request, show_preview=True)
 
 
 def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:

@@ -25,9 +25,6 @@ class Offering(models.Model):
     def is_public(self) -> bool:
         return self.display or self.is_over()
 
-    def is_preview(self) -> bool:
-        return self.preview
-
     def is_over(self) -> bool:
         if not self.period:
             return False  # If there is no period, there is no end date -> not over
