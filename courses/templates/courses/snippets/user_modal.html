@@ -28,7 +28,7 @@
                                     {% if  user.profile.teaching_since %}
                                         <p>{% trans "Teaching for TQ since" %}: {{ user.profile.teaching_since.year }}</p>
                                     {% endif %}
-                                    <p>{% trans "Courses taught for TQ" %}: {{ user.profile.teacher_courses_count }}</p>
+                                    <p>{% trans "Courses taught for TQ" %}: {{ user.profile.courses_taught_count }}</p>
                                 {% endif %}
                                 {% if user.profile.is_board_member %}
                                     <h4 class="mb-2">{% trans "Board member" %}</h4>

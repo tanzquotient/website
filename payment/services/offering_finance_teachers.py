@@ -59,22 +59,24 @@ def _courses(offerings: Sequence[Offering]) -> list:
         if multiple_offerings:
             row.append(course.offering or "")
 
-        has_participants = course.get_confirmed_count() > 0
-        hours = Decimal(course.get_total_time()['total']) if has_participants else 0
+        hours = Decimal(course.get_total_time()['total']) if course.cancelled else 0
         total = teaching.hourly_wage * hours
 
-        note = ''
-        if course.teaching.count() > 2:
-            note = _('Course with more than two teachers, please check who taught how many lessons.')
-        if not has_participants:
-            note = _('No participants')
+        notes = []
+        if course.cancelled:
+            notes.append(_('Course cancelled'))
+        else:
+            if course.teaching.count() > 2:
+                notes.append(_('Course with more than two teachers, please check who taught how many lessons.'))
+            if course.get_confirmed_count() == 0:
+                notes.append(_('No participants'))
 
         row += [
             course.name,
             f"{teaching.hourly_wage} CHF",
             f"{hours}",
             f"{total:.2f} CHF",
-            note,
+            "; ".join(notes),
         ]
 
         courses.append(row)

@@ -12,7 +12,7 @@ def get_teachers_overview_data() -> list[list]:
             'teacher', 'course__irregular_lessons', 'course__regular_lessons', 'course__offering__period',
             'course__period').all():
 
-        if teaching.course.is_external():
+        if teaching.course.is_external() or teaching.course.cancelled:
             continue
 
         first_lesson_date = teaching.course.get_first_lesson_date()

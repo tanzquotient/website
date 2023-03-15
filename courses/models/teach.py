@@ -21,7 +21,9 @@ class Teach(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         if self.hourly_wage is None:
-            self.hourly_wage = self.teacher.profile.default_hourly_wage
+            fixed_wage = self.teacher.profile.fixed_hourly_wage
+            default_wage = 35 if self.teacher.profile.courses_taught_count() >= 25 else 30
+            self.hourly_wage = fixed_wage or default_wage
         super(Teach, self).save(*args, **kwargs)
 
     def __str__(self) -> str:

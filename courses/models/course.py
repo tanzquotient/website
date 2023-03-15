@@ -37,6 +37,7 @@ class Course(TranslatableModel):
     active = models.BooleanField(default=True)
     active.help_text = "Defines if clients can subscribe to this course " \
                        "(if checked, course is active if offering is active)."
+    cancelled = models.BooleanField(default=False, help_text="Indicates if this course is cancelled")
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
 

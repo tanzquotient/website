@@ -13,7 +13,7 @@ from django_countries.fields import CountryField
 from djangocms_text_ckeditor.fields import HTMLField
 
 from courses import managers
-from . import Address, BankAccount, StudentStatus, Residence, Subscribe, CourseType, Course
+from . import Address, BankAccount, StudentStatus, Residence, Subscribe, CourseType, Course, Teach
 
 
 def upload_path(_, filename) -> str:
@@ -49,8 +49,8 @@ class UserProfile(Model):
     zemis_number = CharField(max_length=255, blank=True, null=True,
                              help_text='Every registered foreigner in switzerland gets a ZEMIS number.')
     bank_account = OneToOneField(BankAccount, related_name='user_profile', blank=True, null=True, on_delete=CASCADE)
-    default_hourly_wage = DecimalField(default=Decimal(30), decimal_places=2, max_digits=6)
-    default_hourly_wage.help_text = "The default hourly wage, which serves as a preset value for taught courses. "
+    fixed_hourly_wage = DecimalField(decimal_places=2, max_digits=6, blank=True, null=True,
+                                     help_text="Only set this value if there is a special agreement.")
 
     objects = managers.UserProfileManager()
 
@@ -88,7 +88,7 @@ class UserProfile(Model):
             return None
 
         earliest_course = None
-        for teaching in self.user.teaching_courses.all():
+        for teaching in self.courses_taught():
             course_start = teaching.course.get_first_lesson_date()
             if not course_start:
                 continue
@@ -98,11 +98,12 @@ class UserProfile(Model):
         if earliest_course:
             return earliest_course.get_first_lesson_date()
 
-    def teacher_courses_count(self) -> int:
-        if not self.is_teacher():
-            return 0
+    def courses_taught_count(self) -> int:
+        return len(self.courses_taught())
 
-        return self.user.teaching_courses.count()
+    def courses_taught(self) -> set[Teach]:
+        return {teaching for teaching in self.user.teaching_courses.all() if
+                not teaching.course.is_external() and not teaching.course.cancelled}
 
     def is_board_member(self) -> bool:
         return self.user.functions.count() > 0
