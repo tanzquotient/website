@@ -21,6 +21,8 @@ class Offering(models.Model):
     active.help_text = 'Defines if clients can subscribe to courses in this offering.'
     preview = models.BooleanField(default=False)
     preview.help_text = 'Defines if the offering should be displayed as preview'
+    opens_soon = models.BooleanField(default=False,
+                                     help_text='If set to true, the sign up page says "opens soon" instead of "closed"')
 
     def is_public(self) -> bool:
         return self.display or self.is_over()

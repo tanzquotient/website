@@ -17,7 +17,7 @@ class CourseInline(admin.TabularInline):
 
 @admin.register(Offering)
 class OfferingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'period', 'display', 'active')
+    list_display = ('name', 'period', 'display', 'active', 'preview', 'opens_soon')
     inlines = (CourseInline,)
 
     actions = [display, undisplay, activate, deactivate, offering_emaillist,

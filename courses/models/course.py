@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from functools import cached_property
-
-from django.utils.translation import gettext_lazy as _
-
 from datetime import date, timedelta
 from decimal import Decimal
 from numbers import Number
@@ -15,11 +11,12 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet
+from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import PaymentMethod, Weekday, CourseSubscriptionType, LeadFollow, Subscribe, Period, \
+from courses.models import Weekday, CourseSubscriptionType, LeadFollow, Subscribe, Period, \
     RegularLesson, IrregularLesson, RegularLessonException
 from partners.models import Partner
 from survey.models import Survey
@@ -313,13 +310,6 @@ class Course(TranslatableModel):
 
     def is_regular(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.REGULAR
-
-    def subscription_opens_soon(self) -> bool:
-        period = self.get_period()
-        if period is None:
-            return False
-
-        return self.subscription_closed() and period.date_from > date.today()
 
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()
