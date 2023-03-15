@@ -79,7 +79,7 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
 
             emails.append(dict(
                 to=recipient.email,
-                reply_to=settings.EMAIL_ADDRESS_COURSES,
+                reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
                 subject=subject,
                 message=message,
                 html_message=html_message,

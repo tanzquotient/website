@@ -8,7 +8,8 @@ from django.urls import reverse
 import courses.services.matching.change_matching
 import courses.services.matching.do_matching
 from courses.models import *
-from payment.services import remind_of_payments
+from email_system.services import send_email
+from tq_website import settings
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
 from .forms import SendVoucherForm
@@ -42,6 +43,13 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
         c.active = False
         c.display = False
         c.save()
+        for teacher in c.get_teachers():
+            send_email(
+                to=teacher.email,
+                reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                template='teacher_course_cancelled',
+                context=dict(first_name=teacher.first_name, last_name=teacher.last_name, course=c.type.title)
+            )
 
 
 @admin.action(description="Create copy of courses in another offering")

@@ -555,7 +555,7 @@ DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 EMAIL_ADDRESS_CONTACT = 'kontakt@tanzquotient.org'
 EMAIL_ADDRESS_EVENTS = 'events@tanzquotient.org'
 EMAIL_ADDRESS_FINANCES = 'finanzen@tanzquotient.org'
-EMAIL_ADDRESS_COURSES = 'kurse@tanzquotient.org'
+EMAIL_ADDRESS_DANCE_ADMIN = 'tanzen@tanzquotient.org'
 EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS = 'anmeldungen@tanzquotient.org'
 EMAIL_ADDRESS_COURSE_IT = 'informatik@tanzquotient.org'
 

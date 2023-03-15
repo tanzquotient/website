@@ -173,7 +173,7 @@ def send_teacher_welcome(teach: Teach) -> Optional[Email]:
 
     return send_email(
         to=teacher.email,
-        reply_to=settings.EMAIL_ADDRESS_COURSES,
+        reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
         template=template,
         context=context
     )
