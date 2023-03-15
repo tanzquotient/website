@@ -12,6 +12,7 @@ from email_system.services import send_email
 from tq_website import settings
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
+from .emailcenter import create_course_info
 from .forms import SendVoucherForm
 
 
@@ -48,7 +49,8 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
                 to=teacher.email,
                 reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
                 template='teacher_course_cancelled',
-                context=dict(first_name=teacher.first_name, last_name=teacher.last_name, course=c.type.title)
+                context=dict(first_name=teacher.first_name, last_name=teacher.last_name, course=c.type.title,
+                             course_info=create_course_info(c))
             )
 
 

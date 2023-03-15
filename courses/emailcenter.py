@@ -4,6 +4,7 @@ from typing import Optional
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from post_office.models import Email
 
 import courses.models
@@ -203,15 +204,15 @@ def create_user_info(user: User) -> str:
 
 
 def create_course_info(course: Course) -> str:
-    s = '{}\n{}'.format(course.type.title, course.format_lessons())
+    s = f'{course.type.title}\n{course.format_lessons()}'
     if course.room:
-        s += ', {}\n'.format(course.room)
+        s += f', {course.room}\n'
     else:
         s += '\n'
-    if course.get_period() and course.offering and course.offering.type == courses.models.OfferingType.REGULAR:
-        s += '{}\n'.format(course.get_period())
+    if course.get_period():
+        s += f'{course.get_period()}\n'
     if course.format_cancellations():
-        s += 'Ausfälle: {}\n'.format(course.format_cancellations())
+        s += f'{_("Cancellations")}: {course.format_cancellations()}\n'
     if course.format_prices():
-        s += 'Kosten: {}\n'.format(course.format_prices())
+        s += f'{_("Costs")}: {course.format_prices()}\n'
     return s.strip('\n')
