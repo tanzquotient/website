@@ -39,6 +39,8 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
     for c in queryset.all():
         services.subscriptions.reject_subscriptions(c.subscriptions.accepted(), RejectionReason.COURSE_CANCELLED)
         c.cancelled = True
+        c.active = False
+        c.display = False
         c.save()
 
 
