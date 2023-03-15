@@ -100,7 +100,7 @@ class SongAdmin(admin.ModelAdmin):
 
 @admin.register(LessonDetails)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['get_course', 'get_lesson', 'room',]
+    list_display = ['get_course', 'get_lesson', 'room', ]
     inlines = (TeachingLessonInline,)
 
 
@@ -116,7 +116,7 @@ class CourseAdmin(TranslatableAdmin):
         'name', 'type', 'subscription_type', 'offering', 'period', 'format_lessons', 'format_cancellations',
         'room', 'format_prices',
         'format_teachers',
-        'display', 'active', 'get_teachers_welcomed', 'format_preceeding_courses')
+        'display', 'active', 'cancelled', 'get_teachers_welcomed', 'format_preceeding_courses')
     list_filter = ('offering', 'subscription_type', 'display', 'active')
     search_fields = ['name', 'type__translations__title', ]
     inlines = (RegularLessonInline, IrregularLessonInline, TeachInlineForCourse,
@@ -129,7 +129,8 @@ class CourseAdmin(TranslatableAdmin):
 
     fieldsets = [
         ('What?', {
-            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description', 'external_url', 'partner']}),
+            'fields': ['name', 'type', 'subscription_type', 'min_subscribers', 'max_subscribers', 'description',
+                       'external_url', 'partner']}),
         ('When?', {
             'fields': ['offering', 'period']}),
         ('Where?', {
@@ -137,10 +138,10 @@ class CourseAdmin(TranslatableAdmin):
         ('Billing', {
             'fields': ['price_with_legi', 'price_without_legi', 'price_special']}),
         ('Admin', {
-            'fields': ['display', 'active', 'evaluated']}),
+            'fields': ['display', 'active', 'cancelled', 'evaluated']}),
     ]
 
-    actions = [display, undisplay, activate, deactivate, welcome_teachers, welcome_teachers_reset_flag, copy_courses,
+    actions = [display, undisplay, activate, deactivate, cancel, welcome_teachers, welcome_teachers_reset_flag, copy_courses,
                export_confirmed_subscriptions_csv,
                export_confirmed_subscriptions_csv_google,
                export_confirmed_subscriptions_vcard,
@@ -161,7 +162,7 @@ class CourseTypeAdmin(TranslatableAdmin):
     ordering = ['translations__title']
 
     fieldsets = [
-        ('Information', {'fields': ['title', 'subtitle',  'description']}),
+        ('Information', {'fields': ['title', 'subtitle', 'description']}),
         ('Details', {'fields': ['level', 'styles']}),
         ('Options', {'fields': ['couple_course']})
     ]
@@ -203,7 +204,8 @@ class SubscribeAdmin(VersionAdmin):
     list_display = (
         'id', 'state', 'get_offering', 'course', 'matching_state', 'user', 'partner', 'lead_follow',
         'get_user_gender', 'get_user_body_height', 'get_user_email', 'get_user_student_status',
-        'experience', 'comment', 'price_to_pay', 'open_amount', 'get_payment_state', 'get_calculated_experience', 'date')
+        'experience', 'comment', 'price_to_pay', 'open_amount', 'get_payment_state', 'get_calculated_experience',
+        'date')
     list_display_links = ('id',)
     list_filter = (SubscribeOfferingListFilter, SubscribeCourseListFilter, 'date', 'state')
     search_fields = ['user__email', 'user__first_name', 'user__last_name', 'usi']
@@ -227,7 +229,8 @@ class SubscribeAdmin(VersionAdmin):
 class ConfirmationAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title', 'subscription__user__email',
+    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title',
+                     'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
     model = Confirmation
@@ -239,7 +242,8 @@ class ConfirmationAdmin(admin.ModelAdmin):
 class RejectionAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'date', 'reason')
     list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title', 'subscription__user__email',
+    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title',
+                     'subscription__user__email',
                      'subscription__user__first_name', 'subscription__user__last_name']
 
     model = Rejection

@@ -76,7 +76,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
             f"{teaching.hourly_wage} CHF",
             f"{hours}",
             f"{total:.2f} CHF",
-            "; ".join(notes),
+            "; ".join(map(str, notes)),
         ]
 
         courses.append(row)

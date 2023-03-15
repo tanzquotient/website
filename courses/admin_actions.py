@@ -19,7 +19,7 @@ def display(modeladmin, request, queryset):
     queryset.update(display=True)
 
 
-@admin.action(description= "Set undisplayed")
+@admin.action(description="Set undisplayed")
 def undisplay(modeladmin, request, queryset):
     queryset.update(display=False)
 
@@ -34,6 +34,14 @@ def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
 
 
+@admin.action(description="Cancel course. This rejects all participants.")
+def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
+    for c in queryset.all():
+        services.subscriptions.reject_subscriptions(c.subscriptions.accepted(), RejectionReason.COURSE_CANCELLED)
+        c.cancelled = True
+        c.save()
+
+
 @admin.action(description="Create copy of courses in another offering")
 def copy_courses(modeladmin, request, queryset):
     form = None
@@ -45,7 +53,8 @@ def copy_courses(modeladmin, request, queryset):
             offering = form.cleaned_data['offering']
 
             for c in queryset:
-                services.courses.copy_course(c, to=offering, set_preceeding_course=form.cleaned_data['set_preceeding_course'])
+                services.courses.copy_course(c, to=offering,
+                                             set_preceeding_course=form.cleaned_data['set_preceeding_course'])
 
             return HttpResponseRedirect(request.get_full_path())
 
@@ -123,7 +132,8 @@ def breakup_couple(modeladmin, request, queryset):
     courses.services.matching.change_matching.breakup_couple(queryset, request)
 
 
-@admin.action(description="Correct matching_state to COUPLE (both partners must be matched together, can already be confirmed)")
+@admin.action(
+    description="Correct matching_state to COUPLE (both partners must be matched together, can already be confirmed)")
 def correct_matching_state_to_couple(modeladmin, request, queryset):
     courses.services.matching.change_matching.correct_matching_state_to_couple(queryset, request)
 
@@ -277,7 +287,6 @@ def offering_emaillist(modeladmin, request, queryset):
 
 def make_inactive(modeladmin, request, queryset):
     for user in queryset:
-
         user.is_active = False
         user.save()
     messages.add_message(request, messages.SUCCESS, 'Deactivated {} profiles'.format(queryset.count()))
