@@ -59,7 +59,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
         if multiple_offerings:
             row.append(course.offering or "")
 
-        hours = Decimal(course.get_total_time()['total']) if course.cancelled else 0
+        hours = Decimal(course.get_total_time()['total']) if not course.cancelled else 0
         total = teaching.hourly_wage * hours
 
         notes = []
