@@ -9,7 +9,7 @@ django-reversion==5.0.4         # Version control for model instances, e.g. used
 django-countries==7.5.1         # Country choices for use with forms and fields for models
 django-ical==1.8.3              # Simple library for creating iCal feeds
 django-ckeditor==6.5.1          # Django admin CKEditor integration
-django-allauth==0.52.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==0.53.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.15.1       # Gallery application
 
 # Django CMS
@@ -23,38 +23,38 @@ django-parler-rest==2.2         # Adding translation support to django-rest-fram
 # Tasks
 celery==5.2.7                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
-django-celery-beat==2.4.0       # Store periodic task schedules in the database
-django-celery-results==2.4.0    # Stores Celery task results
+django-celery-beat==2.5.0       # Store periodic task schedules in the database
+django-celery-results==2.5.0    # Stores Celery task results
 django-redis==5.2.0             # Redis cache and session backend for Django
 
 # Files and encoding
-openpyxl==3.1.1                 # For Microsoft Excel Files
+openpyxl==3.1.2                 # For Microsoft Excel Files
 svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
 reportlab==3.6.12               # For generating PDFs and graphics
 pyyaml==6.0                     # Used for generating environment variable file
 
 # SSH
-paramiko==3.0.0                 # Used to get finance files from PostFinance
+paramiko==3.1.0                 # Used to get finance files from PostFinance
 
 # Database
 psycopg2-binary==2.9.5          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.13.2         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.26.74                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.26.94                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.1.13                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==20.1.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==1.15.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==1.17.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==5.13.0                  # For generating charts and graphs
+plotly==5.13.1                  # For generating charts and graphs
 pytz==2022.7.1                  # timezone calculations
-pylint==2.16.2                  # Default linter
+pylint==2.17.0                  # Default linter
 shortuuid==1.0.11               # For generating short and unique ID's and codes
-django-hijack==3.2.6            # Superuser can impersonate other users
-python-dotenv==0.21.1           # Used to load environment variables from .env file
-sphinx-automodapi==0.14.1       # For generating Sphinx API docs
+django-hijack==3.3.0            # Superuser can impersonate other users
+python-dotenv==1.0.0            # Used to load environment variables from .env file
+sphinx-automodapi==0.15.0       # For generating Sphinx API docs
