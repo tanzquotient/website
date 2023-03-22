@@ -35,7 +35,7 @@
                 <div class="row row-cols-1 row-cols-lg-2 g-4">
                     {% for question in group.question_set.all %}
                         <div class="col">
-                            {% survey_question question selected_offering selected_course %}
+                            {% survey_question question selected_offering selected_course user %}
                         </div>
                     {% endfor %}
                 </div>

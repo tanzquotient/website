@@ -1,0 +1,92 @@
+{% load i18n %}
+
+<div class="d-flex">
+    <div class="flex-grow-1">
+        {{ answer.value }}
+    </div>
+    <div class="ms-2 text-end">
+        {% if answer.hidden %}
+            <button type="button" class="btn btn-sm btn-outline-dark text-nowrap" data-bs-toggle="modal"
+                    data-bs-target="#confirm-unhide-{{ answer.id }}">
+                {% trans "Un-hide" %}
+            </button>
+            {% if user.is_staff %}
+                <div class="small mt-1">
+                    <span class="text-nowrap">{% trans "Hidden by" %}:</span>
+                    <span class="text-nowrap"><a href="mailto:{{ answer.hidden_by.email }}">{{ answer.hidden_by.first_name }} {{ answer.hidden_by.last_name }}</a></span>
+                </div>
+            {% endif %}
+        {% else %}
+            <button type="button" class="btn btn-sm btn-outline-danger text-nowrap" data-bs-toggle="modal"
+                    data-bs-target="#confirm-hide-{{ answer.id }}">
+                {% trans "Hide" %}
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- Confirm hide -->
+<div class="modal fade"
+     id="confirm-hide-{{ answer.id }}"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="confirm-hideLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirm-hideLabel">{% trans "Hide answer" %}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="fw-bold">
+                    {% trans "Do you really want to exclude the following answer?" %}
+                </div>
+                <div class="alert alert-secondary my-3">
+                    {{ answer.value }}
+                </div>
+                <div>
+                    {% trans "If you hide this answer, it will not show up in the public review section." %}
+                    {% trans "However, this will not delete the answer. E.g. board members will still be able to see the review." %}
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-danger">{% trans "Confirm Hiding" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm un-hide -->
+<div class="modal fade"
+     id="confirm-unhide-{{ answer.id }}"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="confirm-hideLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirm-hideLabel">{% trans "Un-hide answer" %}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="fw-bold">
+                    {% trans "Do you really want to make the following answer visible again?" %}
+                </div>
+                <div class="alert alert-secondary my-3">
+                    {{ answer.value }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-danger">{% trans "Confirm" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
