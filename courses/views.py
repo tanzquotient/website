@@ -7,22 +7,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Prefetch
-from django.http import Http404, HttpResponse, HttpRequest
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
+from icalendar import Calendar, Event, vDatetime, vText,vCalAddress
 
 from courses.forms import UserEditForm, create_initial_from_user
-from courses.utils import merge_duplicate_users, find_duplicate_users
+from courses.utils import find_duplicate_users, merge_duplicate_users
 from tq_website import settings
 from utils.plots import plot_figure
 from utils.tables.table_view_or_export import table_view_or_export
-from . import services, figures
+
+from . import figures, services
 from .forms.subscribe_form import SubscribeForm
-from .models import Course, Style, Offering, OfferingType, Subscribe, IrregularLesson, \
-    RegularLessonException
+from .models import (Course, IrregularLesson, Offering, OfferingType,
+                     RegularLessonException, Style, Subscribe)
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
 
@@ -46,9 +48,12 @@ def course_list(request, subscription_type="all", style_name="all", show_preview
         'course_set__regular_lessons',
         'course_set__room__address',
         'course_set__room__translations',
-        Prefetch('course_set__irregular_lessons', queryset=IrregularLesson.objects.order_by('date', 'time_from')),
-        Prefetch('course_set__regular_lessons__exceptions', queryset=RegularLessonException.objects.order_by('date')),
-        Prefetch('course_set__subscriptions', queryset=Subscribe.objects.active(), to_attr='active_subscriptions'),
+        Prefetch('course_set__irregular_lessons',
+                 queryset=IrregularLesson.objects.order_by('date', 'time_from')),
+        Prefetch('course_set__regular_lessons__exceptions',
+                 queryset=RegularLessonException.objects.order_by('date')),
+        Prefetch('course_set__subscriptions', queryset=Subscribe.objects.active(
+        ), to_attr='active_subscriptions'),
         'course_set__subscriptions',
     )
 
@@ -107,6 +112,36 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     return render(request, "courses/course_detail.html", context)
 
 
+def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
+    course = get_object_or_404(Course.objects, id=course_id)
+    cal = Calendar()
+    cal.add('version', '2.0')
+    cal.add('prodid', "-//Tanzquotient calendar {}//mxm.dk//".format(course_id))
+    lessons = course.get_lessons()
+    teachers = course.get_teachers()
+    for lesson in lessons:
+        event = Event()
+        event['dtstart'] = vDatetime(lesson.time_from)
+        event['dtend'] = vDatetime(lesson.time_to)
+        event.add('summary', vText(course.name))
+        event.add('description', vText(course.format_description()))
+        event.add('location', vText(course.room))
+        # add teachers as attendees..
+        # Could also add the first one as origanizer if needed
+        # Could possibly also add students, though careful with privacy
+        for teacher in teachers:
+            if teacher.email is not None:
+                # TODO: decide whether exposing the E-Mail is ok, or if we should hide 
+                # this ical behind login
+                attendee = vCalAddress("MAILTO:{}".format(teacher.email))
+                attendee.params['cn'] = vText(teacher.first_name + " "  + teacher.last_name)
+                attendee.params['ROLE'] = vText('Teacher')
+                event.add('attendee', attendee, encode=0)
+        cal.add_component(event)
+
+    return HttpResponse(cal.to_ical(), content_type='text/calendar')
+
+
 @login_required
 def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
     course = get_object_or_404(Course.objects, id=course_id)
@@ -130,7 +165,8 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
 
     # Sign up user for course if form is valid
     if form.is_valid():
-        subscription = services.subscribe(course, request.user, form.cleaned_data)
+        subscription = services.subscribe(
+            course, request.user, form.cleaned_data)
         context = {
             'course': course,
             'subscription': subscription,
@@ -257,10 +293,14 @@ def teachers_overview(request: HttpRequest) -> HttpResponse:
 @staff_member_required
 def subscription_overview(request: HttpRequest) -> HttpResponse:
     figure_types = dict(
-        status=dict(title=_('By subscription status'), plot=figures.offering_state_status),
-        affiliation=dict(title=_('By affiliation'), plot=figures.offering_by_student_status),
-        matching=dict(title=_('By matching states'), plot=figures.offering_matching_status),
-        lead_follow=dict(title=_('By lead and follow'), plot=figures.offering_lead_follow_couple),
+        status=dict(title=_('By subscription status'),
+                    plot=figures.offering_state_status),
+        affiliation=dict(title=_('By affiliation'),
+                         plot=figures.offering_by_student_status),
+        matching=dict(title=_('By matching states'),
+                      plot=figures.offering_matching_status),
+        lead_follow=dict(title=_('By lead and follow'),
+                         plot=figures.offering_lead_follow_couple),
     )
     figure_type: str = request.GET['figure_type'] if 'figure_type' in request.GET else 'status'
     return render(request, "courses/auth/subscription_overview.html", dict(
@@ -279,7 +319,8 @@ def offering_overview(request: HttpRequest, offering_id: int) -> HttpResponse:
     offering = Offering.objects.get(id=offering_id)
 
     context['offering'] = offering
-    context['place_chart'] = plot_figure(figures.courses_confirmed_matched_lead_follow_free(offering))
+    context['place_chart'] = plot_figure(
+        figures.courses_confirmed_matched_lead_follow_free(offering))
     context['time_chart'] = offering_time_chart_dict(offering)
     return render(request, template_name, context)
 

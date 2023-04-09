@@ -15,6 +15,7 @@ urlpatterns = [
     path('preview/', views.course_list_preview, name='list_preview'),
     path('archive/', views.archive, name='archive'),
     path('<int:course_id>/detail/', views.course_detail, name='course_detail'),
+    path('<int:course_id>/ical/', views.course_ical, name='course_ical'),
     path('<int:course_id>/subscribe/', views.subscribe_form, name='subscribe'),
     path('offering/<int:offering_id>/', views.offering_by_id, name='offering_by_id'),
 
