@@ -1,15 +1,30 @@
+import reversion
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 
 from courses.models import Offering, Course
-from ..models import Survey
+from ..models import Survey, Answer
 
 
 @login_required
 def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     get_object_or_404(Survey, id=survey_id)
+
+    answer_id = request.POST.get('answer', None)
+    if answer_id:
+        hide = 'hide_answer' in request.POST
+        comment = request.POST.get('comment', None)
+        answer = get_object_or_404(Answer, id=answer_id)
+        if answer.hide_from_public_reviews != hide:
+            with reversion.create_revision():
+                answer.hide_from_public_reviews = hide
+                answer.save()
+
+                reversion.set_user(request.user)
+                fallback_comment = "Answer was hidden." if hide else "Answer was made visible again."
+                reversion.set_comment(comment or fallback_comment)
 
     selected_course = None
     if 'course_id' in request.GET and request.GET['course_id']:

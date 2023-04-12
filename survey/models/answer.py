@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import reversion
 from django.db.models import Model, TextField, ForeignKey, BooleanField, CASCADE, PROTECT
 
 
+@reversion.register()
 class Answer(Model):
     survey_instance = ForeignKey('SurveyInstance', related_name='answers', blank=False, null=True, on_delete=CASCADE)
     question = ForeignKey('Question', related_name='answers', blank=False, null=True, on_delete=PROTECT)

@@ -1,0 +1,49 @@
+{% extends "basis.html" %}
+
+{% load static i18n %}
+{% load survey_tags %}
+
+{% block lead %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <h1 class="mt-4">{% trans "Hidden Answers" %}</h1>
+
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for object, revisions in grouped_by_version %}
+                    <li class="list-group-item">
+                        <div>
+                            <div class="small">
+                                <span class="fw-bold">{{ object.survey_instance.last_update|date:'d. N Y, H:i' }}</span>
+                                {% if object.survey_instance.course %}
+                                    {% spaceless %}
+                                        {% if object.survey_instance.course.format_teachers %}
+                                            <span>{% trans "Teachers" %}:&nbsp;{{ object.survey_instance.course.format_teachers }}</span>
+                                        {% endif %}
+                                        {% if object.survey_instance.course.format_teachers and object.survey_instance.course.room %}
+                                            <span>,&nbsp;</span>
+                                        {% endif %}
+                                        {% if object.survey_instance.course.room.name %}
+                                            <span>{% trans "Room" %}:&nbsp;{{ object.survey_instance.course.room.name }}</span>
+                                        {% endif %}
+                                    {% endspaceless %}
+                                {% endif %}
+                            </div>
+                            <div>{{ object.value }}</div>
+
+                            <div class="small mt-2">
+                                <div class="fw-bold">{% trans "History" %}</div>
+                                {% for revision in revisions %}
+                                    <div>{{ revision.date_created|date:'d. N Y, H:i' }}
+                                        - {{ revision.user.first_name }} {{ revision.user.last_name }}: {{ revision.comment }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock main_content %}

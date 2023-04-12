@@ -3,6 +3,7 @@ from django.forms import Textarea
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from parler.admin import TranslatableAdmin, TranslatableTabularInline, TranslatableStackedInline
+from reversion.admin import VersionAdmin
 
 from courses.filters import SubscribeOfferingListFilter, SubscribeCourseListFilter
 from survey.models import *
@@ -31,7 +32,7 @@ class QuestionInline(TranslatableStackedInline):
     model = Question
     extra = 0
     readonly_fields = ['choices']
-    fields = ['name', 'type', 'text', 'note', 'position',  'choices', 'scale', 'public_review', 'display']
+    fields = ['name', 'type', 'text', 'note', 'position', 'choices', 'scale', 'public_review', 'display']
     formfield_overrides = {
         TextField: {'widget': Textarea({'rows': '2', 'style': 'width: 100% !important;'})},
     }
@@ -43,7 +44,7 @@ class QuestionInline(TranslatableStackedInline):
         <div><strong><a href="{url}" target="_blank">&#x1F589; Edit Choices</a></strong></div>
         <div><strong>Currently:</strong> {", ".join([c.value for c in instance.choice_set.all()]) or "---"}</div>
         <div class="help">Only need for single/multiple choice questions</div>
-        '''if instance.pk else '''
+        ''' if instance.pk else '''
         Please save before editing choices.
         <div class="help">Only need for single/multiple choice questions</div>
         ''')
@@ -84,7 +85,7 @@ class QuestionAdmin(TranslatableAdmin):
         'fields': ['name', 'question_group', 'type', 'scale', 'display', 'position', 'text', 'note'],
         'classes': ['collapse']
     })]
-    list_filter = ('question_group__survey', )
+    list_filter = ('question_group__survey',)
 
 
 @admin.register(QuestionGroup)
@@ -124,7 +125,7 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
 
 
 @admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
+class AnswerAdmin(VersionAdmin):
     list_display = ('id', 'survey_instance', 'question', 'value')
     model = Answer
     raw_id_fields = ('question', 'survey_instance')

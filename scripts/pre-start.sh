@@ -17,6 +17,9 @@
 # Apply the database migrations
 python3 manage.py migrate
 
+# Whenever we register a model with django-reversion this command needs to be run
+python3 manage.py createinitialrevisions
+
 # Django CMS stuff
 python3 -Wa manage.py cms check
 python3 manage.py cms fix-tree
