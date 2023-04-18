@@ -18,15 +18,18 @@ RE_USI_STRICT = re.compile(r'[USILusil]{3}[\- _]*(?P<usi>[a-zA-Z0-9]{6})')
 class PaymentProcessor:
 
     @staticmethod
-    def process_payments(queryset=Payment.objects) -> None:
+    def process_payments(queryset=None) -> None:
         """
         This method performs the following steps:
         - Detect irrelevant payments
         - Matches payments
+        - Mark subscriptions as paid
         - Finalizes payments
         """
-        PaymentProcessor._detect_irrelevant_payments()
+        queryset = queryset or Payment.objects
+        PaymentProcessor._detect_irrelevant_payments(queryset)
         PaymentProcessor.match_payments(queryset)
+        PaymentProcessor.mark_subscriptions_as_paid(queryset)
         PaymentProcessor.finalize_payments(queryset)
 
     @staticmethod
@@ -121,14 +124,18 @@ class PaymentProcessor:
         return subscription_ids
 
     @staticmethod
+    def mark_subscriptions_as_paid(queryset=Payment.objects) -> None:
+        for payment in queryset.all():
+            for s in payment.subscriptions.all():
+                if s.open_amount().is_zero():
+                    s.mark_as_paid(PaymentMethod.ONLINE)
+
+    @staticmethod
     def finalize_payments(queryset=Payment.objects) -> None:
         """Mark matched payments as PROCESSED and sets ONLINE as payment method"""
         matched_payments = queryset.filter(state=State.MATCHED).all()
 
         for payment in matched_payments:
-            for s in payment.subscriptions.all():
-                if s.open_amount().is_zero():
-                    s.mark_as_paid(PaymentMethod.ONLINE)
             payment.state = State.PROCESSED
             payment.save()
 
@@ -136,7 +143,14 @@ class PaymentProcessor:
     def check_balance(payments: QuerySet) -> None:
         """For each payment, sets state to MATCHED or MANUEL, depending on the payment agreeing with the open amount."""
         for payment in payments.filter(state__in=[State.NEW, State.MANUAL]).all():
+            PaymentProcessor._set_type(payment)
             PaymentProcessor._check_balance(payment)
+
+    @staticmethod
+    def _set_type(payment: Payment) -> None:
+        if payment.subscription_payments.exists():
+            payment.type = Type.SUBSCRIPTION_PAYMENT
+            payment.save()
 
     @staticmethod
     def _check_balance(payment: Payment) -> bool:
