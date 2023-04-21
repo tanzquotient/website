@@ -1,19 +1,19 @@
 # Django
-Django==4.1.7
+Django==4.2
 
 # Django Extensions
-django-debug-toolbar==3.8.1     # For developement. Gives additional insights into e.g. database queries
+django-debug-toolbar==4.0.0     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
 django-post-office==3.6.3       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.0.4         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.5.1         # Country choices for use with forms and fields for models
-django-ical==1.8.3              # Simple library for creating iCal feeds
+django-ical==1.9.0              # Simple library for creating iCal feeds
 django-ckeditor==6.5.1          # Django admin CKEditor integration
-django-allauth==0.53.1          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==0.54.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.15.1       # Gallery application
 
 # Django CMS
-django-cms==3.11.1              # Open source content management system based on the Django
+django-cms==3.11.2              # Open source content management system based on the Django
 djangocms-text-ckeditor==5.1.2  # Text plugin for django CMS using CKEditor 4
 
 # Rest framework
@@ -37,23 +37,23 @@ pyyaml==6.0                     # Used for generating environment variable file
 paramiko==3.1.0                 # Used to get finance files from PostFinance
 
 # Database
-psycopg2-binary==2.9.5          # Driver for PostgreSQL
+psycopg[binary]==3.1.8          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.13.2         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.26.94                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
-minio==7.1.13                   # Perform bucket and object operations, used for initializing Minio
+boto3==1.26.117                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+minio==7.1.14                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==20.1.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==1.17.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==1.20.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==5.13.1                  # For generating charts and graphs
-pytz==2022.7.1                  # timezone calculations
-pylint==2.17.0                  # Default linter
+plotly==5.14.1                  # For generating charts and graphs
+pytz==2023.3                    # timezone calculations
+pylint==2.17.2                  # Default linter
 shortuuid==1.0.11               # For generating short and unique ID's and codes
 django-hijack==3.3.0            # Superuser can impersonate other users
 python-dotenv==1.0.0            # Used to load environment variables from .env file

@@ -33,6 +33,7 @@ def changed_answers(request: HttpRequest) -> HttpResponse:
     for version in Version.objects.get_for_model(Answer).all():
         grouped_by_version[version.object].append((version.revision, version.field_dict))
 
-    changed_answers = sorted(grouped_by_version.items(), key=lambda t: t[0].survey_instance.last_update, reverse=True)
+    changed_answers = sorted([(key, values) for key, values in grouped_by_version.items() if len(values) > 1],
+                             key=lambda t: t[0].survey_instance.last_update, reverse=True)
 
     return render(request, "survey/changed_answers.html", context=dict(changed_answers=changed_answers))
