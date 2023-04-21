@@ -16,8 +16,8 @@
 
         {% if user.is_staff %}
             <div class="my-4">
-                <a href="{% url "survey:hidden_answers" %}" class="btn btn-sm btn-outline-dark"><i
-                        class="fa-solid fa-eye"></i> {% trans "Show hidden answers" %}</a>
+                <a href="{% url "survey:changed_answers" %}" class="btn btn-sm btn-outline-dark"><i
+                        class="fa-solid fa-eye"></i> {% trans "Show changed answers" %}</a>
             </div>
             {% include "survey/components/filter.html" %}
         {% endif %}

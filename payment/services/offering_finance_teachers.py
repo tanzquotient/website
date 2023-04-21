@@ -87,7 +87,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
 def _personal_details(offerings: Sequence[Offering]) -> list:
     personal_details = []
     header = [_('Last name'), _('First name'), _('E-mail'), _('Phone'), _('Address')]
-    header += [_('Birthdate'), _('Nationality'), _('Residence Permit'), _('AHV Number'), _('Zemis Number'), _('IBAN'),
+    header += [_('Birth date'), _('Nationality'), _('Residence permit'), _('AHV number'), _('Zemis number'), _('IBAN'),
                _('Bank')]
 
     personal_details.append(header)

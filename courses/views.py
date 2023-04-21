@@ -250,7 +250,7 @@ def offering_time_chart_dict(offering: Offering) -> dict:
 
 @staff_member_required
 def teachers_overview(request: HttpRequest) -> HttpResponse:
-    return table_view_or_export(request, _('Teachers Overview'), 'courses:teachers_overview',
+    return table_view_or_export(request, _('Teachers overview'), 'courses:teachers_overview',
                                 get_teachers_overview_data())
 
 

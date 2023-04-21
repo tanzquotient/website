@@ -8,11 +8,12 @@
 
 {% block main_content %}
     <div class="container">
-        <h1 class="mt-4">{% trans "Hidden Answers" %}</h1>
+        <h1 class="mt-4">{% trans "Changed Answers" %}</h1>
+        <p>{% trans "The following answers were changed at least once after being submitted." %}</p>
 
         <div class="card">
             <ul class="list-group list-group-flush">
-                {% for object, revisions in grouped_by_version %}
+                {% for object, revisions in changed_answers %}
                     <li class="list-group-item">
                         <div>
                             <div class="small">
@@ -30,14 +31,22 @@
                                         {% endif %}
                                     {% endspaceless %}
                                 {% endif %}
+                                {% free_form_answer answer=object user=user %}
                             </div>
-                            <div>{{ object.value }}</div>
 
                             <div class="small mt-2">
-                                <div class="fw-bold">{% trans "History" %}</div>
-                                {% for revision in revisions %}
-                                    <div>{{ revision.date_created|date:'d. N Y, H:i' }}
-                                        - {{ revision.user.first_name }} {{ revision.user.last_name }}: {{ revision.comment }}</div>
+                                <div class="fw-bold">{% trans "Changes" %}</div>
+                                {% for revision, data in revisions %}
+                                    <div>
+                                        {{ revision.date_created|date:'d. N Y, H:i' }}
+                                        - {{ revision.user.first_name }} {{ revision.user.last_name }}:
+                                        {% if data.hide_from_public_reviews %}
+                                            <span>{% trans "Answer was hidden" %}.</span>
+                                        {% else %}
+                                            <span>{% trans "Answer made visible" %}.</span>
+                                        {% endif %}
+                                        {% trans "Comment" %}: {{ revision.comment }}
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>

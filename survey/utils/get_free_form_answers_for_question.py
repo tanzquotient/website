@@ -13,14 +13,19 @@ def _free_form_single_choice(question: Question, answer_set: Iterable[Answer]) -
 
 
 def _free_form_multiple_choice(question: Question, answer_set: Iterable[Answer]) -> list[Answer]:
+    choices = {choice.value for choice in question.choice_set.all()}
     answers = []
     for answer in answer_set:
         for value in answer.value.split(';'):
-            if value:
-                answers.append(answer)
+            if value and value not in choices:
+                answers.append(Answer(
+                    pk=answer.pk,
+                    value=value,
+                    question=answer.question,
+                    hide_from_public_reviews=answer.hide_from_public_reviews,
+                    survey_instance=answer.survey_instance))
 
-    choices = {choice.value for choice in question.choice_set.all()}
-    return [answer for answer in answers if answer.value not in choices]
+    return answers
 
 
 def get_free_form_answers_for_question(question: Question, selected_offering: Offering, selected_course: Course) \
@@ -40,10 +45,5 @@ def get_free_form_answers_for_question(question: Question, selected_offering: Of
         values = _free_form_multiple_choice(question, answer_set)
     elif question.type == QuestionType.FREE_FORM:
         values = [answer for answer in answer_set if answer.value]
-
-    counts = Counter(values)
-    value_count_tuples = [(value, count) for value, count in counts.items()]
-    value_count_tuples.sort(key=lambda value_count: value_count[1], reverse=True)
-    result = [f"{count}x: {value}" if count > 1 else value for value, count in value_count_tuples]
 
     return values

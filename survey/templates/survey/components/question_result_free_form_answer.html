@@ -5,7 +5,9 @@
 {% else %}
     <div class="d-flex">
         <div class="flex-grow-1">
-            {{ answer.value }}
+            <div>
+                {{ answer.value }}
+            </div>
             {% if answer.hide_from_public_reviews %}
                 <div class="alert alert-warning p-2 m-0 mt-2 small">{% trans "This answer is hidden from the reviews and only visible for internal use." %}<br/>
                     <a href="#" class="alert-link text-nowrap" data-bs-toggle="modal"
