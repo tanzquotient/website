@@ -7,5 +7,5 @@ class CourseSubscriptionType:
     CHOICES = (
         (REGULAR, 'Regular (internal, with subscription)'),
         (OPEN_CLASS, 'Open class (no subscription needed)'),
-        (EXTERNAL, 'External (offered by partner of TQ)'),
+        (EXTERNAL, 'External (offered by partner of Tanzquotient)'),
     )

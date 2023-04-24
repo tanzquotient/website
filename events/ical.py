@@ -11,7 +11,7 @@ from .models import Event
 
 class EventFeed(ICalFeed):
     # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
-    product_id = '-//TQ Website calendar v1.1'
+    product_id = '-//Tanzquotient Website calendar v1.1'
 
     def items(self):
         return Event.objects.filter(cancelled=False).all()

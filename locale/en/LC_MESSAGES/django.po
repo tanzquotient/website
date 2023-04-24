@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 17:40+0200\n"
+"POT-Creation-Date: 2023-04-24 18:26+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -344,8 +344,8 @@ msgid "Subscribe to newsletter"
 msgstr "Subscribe to newsletter"
 
 #: courses/forms/user_edit_from.py:33
-msgid "I'd like to help TQ from time to time (Events etc.)"
-msgstr "I'd like to help TQ from time to time (Events etc.)"
+msgid "I'd like to help Tanzquotient from time to time (Events etc.)"
+msgstr "I'd like to help Tanzquotient from time to time (Events etc.)"
 
 #: courses/forms/user_edit_from.py:34
 msgid "Street"
@@ -833,6 +833,17 @@ msgstr "Address"
 msgid "Bank Account"
 msgstr "Bank account"
 
+#: courses/templates/courses/snippets/course_comment.html:14
+#: courses/templates/courses/snippets/course_info.html:14
+#: payment/templates/finance/offering/common/tabs.html:18
+#: survey/templates/survey/components/survey_course_hint.html:16
+msgid "Teachers"
+msgstr "Teachers"
+
+#: courses/templates/courses/snippets/course_comment.html:20
+msgid "Room"
+msgstr "Room"
+
 #: courses/templates/courses/snippets/course_description.html:5
 #: courses/templates/courses/snippets/styles_modal.html:33
 #: email_system/models/tq_email_address.py:11 partners/models/partner.py:24
@@ -853,14 +864,6 @@ msgstr "Other"
 #: courses/templates/courses/snippets/course_info.html:5
 msgid "Level"
 msgstr "Level"
-
-#: courses/templates/courses/snippets/course_info.html:14
-#: courses/templates/courses/snippets/text_review.html:9
-#: payment/templates/finance/offering/common/tabs.html:18
-#: survey/templates/survey/changed_answers.html:24
-#: survey/templates/survey/components/survey_course_hint.html:16
-msgid "Teachers"
-msgstr "Teachers"
 
 #: courses/templates/courses/snippets/course_info.html:23
 msgid "Raum"
@@ -1100,14 +1103,14 @@ msgstr ""
 "the course."
 
 #: courses/templates/courses/snippets/student_status_input.html:12
-#: courses/templates/user/profile.html:146
-#: courses/templates/user/profile.html:154
+#: courses/templates/user/profile.html:151
+#: courses/templates/user/profile.html:159
 msgid "Yes"
 msgstr "Yes"
 
 #: courses/templates/courses/snippets/student_status_input.html:17
-#: courses/templates/user/profile.html:148
-#: courses/templates/user/profile.html:156
+#: courses/templates/user/profile.html:153
+#: courses/templates/user/profile.html:161
 msgid "No"
 msgstr "No"
 
@@ -1206,7 +1209,7 @@ msgstr ""
 
 #: courses/templates/courses/snippets/subscribe_form.html:136
 #: payment/templates/finance/account/detail.html:45
-#: survey/templates/survey/changed_answers.html:48
+#: survey/templates/survey/changed_answers.html:32
 msgid "Comment"
 msgstr "Comment"
 
@@ -1269,11 +1272,6 @@ msgstr "Registration opens soon"
 msgid "Registration closed"
 msgstr "Registration closed"
 
-#: courses/templates/courses/snippets/text_review.html:15
-#: survey/templates/survey/changed_answers.html:30
-msgid "Room"
-msgstr "Room"
-
 #: courses/templates/courses/snippets/user_contact.html:5
 #: payment/services/offering_finance_teachers.py:89
 msgid "Phone"
@@ -1285,20 +1283,22 @@ msgid "Some inputs are invalid"
 msgstr "Some inputs are invalid"
 
 #: courses/templates/courses/snippets/user_modal.html:26
-#: courses/templates/user/profile.html:127
+#: courses/templates/user/profile.html:124
 msgid "Teacher"
 msgstr "Teacher"
 
 #: courses/templates/courses/snippets/user_modal.html:29
-msgid "Teaching for TQ since"
-msgstr "Teaching for TQ since"
+#: courses/templates/user/profile.html:127
+msgid "Teaching for Tanzquotient since"
+msgstr "Teaching for Tanzquotient since"
 
 #: courses/templates/courses/snippets/user_modal.html:31
-msgid "Courses taught for TQ"
-msgstr "Courses taught for TQ"
+#: courses/templates/user/profile.html:130
+msgid "Courses taught for Tanzquotient"
+msgstr "Courses taught for Tanzquotient"
 
 #: courses/templates/courses/snippets/user_modal.html:34
-#: courses/templates/user/profile.html:131
+#: courses/templates/user/profile.html:137
 #: payment/templates/finance/offering/unpaid/index.html:54
 msgid "Board member"
 msgstr "Board member"
@@ -1405,23 +1405,23 @@ msgstr "Student"
 msgid "Legi"
 msgstr "Legi"
 
-#: courses/templates/user/profile.html:124
+#: courses/templates/user/profile.html:135
 msgid "Functions"
 msgstr "Functions"
 
-#: courses/templates/user/profile.html:142
+#: courses/templates/user/profile.html:147
 msgid "Preferences"
 msgstr "Preferences"
 
-#: courses/templates/user/profile.html:144
+#: courses/templates/user/profile.html:149
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: courses/templates/user/profile.html:152
+#: courses/templates/user/profile.html:157
 msgid "Get involved"
 msgstr "Get involved"
 
-#: courses/templates/user/profile.html:164
+#: courses/templates/user/profile.html:169
 msgid "About me"
 msgstr "About me"
 
@@ -2133,7 +2133,7 @@ msgid "Last reminded"
 msgstr "Last reminded"
 
 #: payment/templates/finance/offering/unpaid/index.html:84
-#: survey/templates/survey/components/question_result_free_form_answer.html:95
+#: survey/templates/survey/components/question_result_free_form_answer.html:98
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -2142,7 +2142,7 @@ msgid "Are you sure you want to mark the following subscription as paid?"
 msgstr "Are you sure you want to mark the following subscription as paid?"
 
 #: payment/templates/finance/offering/unpaid/index.html:96
-#: survey/templates/survey/components/question_result_free_form_answer.html:94
+#: survey/templates/survey/components/question_result_free_form_answer.html:97
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -2393,17 +2393,18 @@ msgstr "Changed Answers"
 
 #: survey/templates/survey/changed_answers.html:12
 msgid "The following answers were changed at least once after being submitted."
-msgstr "The following answers were changed at least once after being submitted."
+msgstr ""
+"The following answers were changed at least once after being submitted."
 
-#: survey/templates/survey/changed_answers.html:38
+#: survey/templates/survey/changed_answers.html:22
 msgid "Changes"
 msgstr "Changes"
 
-#: survey/templates/survey/changed_answers.html:44
+#: survey/templates/survey/changed_answers.html:28
 msgid "Answer was hidden"
 msgstr "Answer was hidden"
 
-#: survey/templates/survey/changed_answers.html:46
+#: survey/templates/survey/changed_answers.html:30
 msgid "Answer made visible"
 msgstr "Answer made visible"
 
@@ -2423,40 +2424,40 @@ msgstr "Show all answers"
 msgid "Collapse answers"
 msgstr "Collapse answers"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:12
+#: survey/templates/survey/components/question_result_free_form_answer.html:15
 msgid ""
 "This answer is hidden from the reviews and only visible for internal use."
 msgstr ""
 "This answer is hidden from the reviews and only visible for internal use."
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:15
-#: survey/templates/survey/components/question_result_free_form_answer.html:55
+#: survey/templates/survey/components/question_result_free_form_answer.html:18
+#: survey/templates/survey/components/question_result_free_form_answer.html:58
 msgid "Show answer again"
 msgstr "Show answer again"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:24
+#: survey/templates/survey/components/question_result_free_form_answer.html:27
 msgid "Hide"
 msgstr "Hide"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:53
+#: survey/templates/survey/components/question_result_free_form_answer.html:56
 msgid "Hide answer"
 msgstr "Hide answer"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:63
+#: survey/templates/survey/components/question_result_free_form_answer.html:66
 msgid "Do you really want to exclude the following answer?"
 msgstr "Do you really want to exclude the following answer?"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:65
+#: survey/templates/survey/components/question_result_free_form_answer.html:68
 msgid "Do you really want to make the following answer visible again?"
 msgstr "Do you really want to make the following answer visible again?"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:74
+#: survey/templates/survey/components/question_result_free_form_answer.html:77
 msgid ""
 "If you hide this answer, it will not show up in the public review section."
 msgstr ""
 "If you hide this answer, it will not show up in the public review section."
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:75
+#: survey/templates/survey/components/question_result_free_form_answer.html:78
 msgid ""
 "However, this will not delete the answer. E.g. board members will still be "
 "able to see the review."
@@ -2464,14 +2465,13 @@ msgstr ""
 "However, this will not delete the answer. E.g. board members will still be "
 "able to see the review."
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:82
+#: survey/templates/survey/components/question_result_free_form_answer.html:85
 msgid "Justification"
 msgstr "Justification"
 
-#: survey/templates/survey/components/question_result_free_form_answer.html:87
+#: survey/templates/survey/components/question_result_free_form_answer.html:90
 msgid "Please provide a justification for this change."
-msgstr ""
-"Please provide a justification for this change."
+msgstr "Please provide a justification for this change."
 
 #: survey/templates/survey/components/survey_card.html:6
 msgid "Used for:"
@@ -2799,7 +2799,6 @@ msgstr "Main content"
 msgid "Side content"
 msgstr "Side content"
 
-
 #~ msgid "Upcoming courses"
 #~ msgstr "Upcoming courses"
 
@@ -2964,10 +2963,10 @@ msgstr "Side content"
 
 #~ msgid ""
 #~ "The course payment for the following course has failed. Please contact "
-#~ "the TQ. "
+#~ "the Tanzquotient. "
 #~ msgstr ""
 #~ "The course payment for the following course has failed. Please contact "
-#~ "the TQ. "
+#~ "the Tanzquotient. "
 
 #~ msgid "Successfully Paid"
 #~ msgstr "Successfully Paid"
@@ -2991,8 +2990,8 @@ msgstr "Side content"
 #~ msgid "Supported by"
 #~ msgstr "Supported by"
 
-#~ msgid "TQ is a commission of VSETH and VSUZH"
-#~ msgstr "TQ is a commission of VSETH and VSUZH"
+#~ msgid "Tanzquotient is a commission of VSETH and VSUZH"
+#~ msgstr "Tanzquotient is a commission of VSETH and VSUZH"
 
 #~ msgid "Questions"
 #~ msgstr "Questions"

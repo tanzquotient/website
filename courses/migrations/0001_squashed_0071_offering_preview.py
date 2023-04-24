@@ -1124,7 +1124,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='subscription_type',
-            field=models.CharField(choices=[('regular', 'Regular (internal, with subscription)'), ('open_class', 'Open class (no subscription needed)'), ('external', 'External (offered by partner of TQ)')], default='regular', max_length=20),
+            field=models.CharField(choices=[('regular', 'Regular (internal, with subscription)'), ('open_class', 'Open class (no subscription needed)'), ('external', 'External (offered by partner of Tanzquotient)')], default='regular', max_length=20),
         ),
         migrations.RunPython(
             code=migrate_open_class,

@@ -30,7 +30,7 @@ class UserEditForm(forms.Form):
     newsletter = forms.BooleanField(required=False, initial=True)
     newsletter.label = _('Subscribe to newsletter')
     get_involved = forms.BooleanField(required=False)
-    get_involved.label = _('I\'d like to help TQ from time to time (Events etc.)')
+    get_involved.label = _('I\'d like to help Tanzquotient from time to time (Events etc.)')
     street = forms.CharField(max_length=255, required=False, label=_('Street'))
     plz = forms.IntegerField(required=False, label=_('Postal code'))
     city = forms.CharField(max_length=255, required=False, label=_('City'))

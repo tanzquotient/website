@@ -50,7 +50,7 @@ def export_summary(export_format='csv', offerings=models.Offering.objects.all())
     offering_ids = [o.pk for o in offerings]
     subscriptions = models.Subscribe.objects.accepted().filter(course__offering__in=offering_ids)
 
-    filename = 'TQ-Room Usage-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
+    filename = 'Tanzquotient-Room Usage-{}'.format(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")
     export_data = []
 
     rooms = models.Room.objects.all()

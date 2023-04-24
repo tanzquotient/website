@@ -119,23 +119,28 @@
                     {% trans "Legi" %}: {{ user.profile.legi }}
                 {% endif %}
             </p>
-            {% if user.profile.is_teacher or user.profile.is_board_member %}
+            {% if user.profile.is_teacher %}
+                <p>
+                    <strong> {% trans "Teacher" %}</strong>
+                    <br/>
+                    {% if  user.profile.teaching_since %}
+                        {% trans "Teaching for Tanzquotient since" %}: {{ user.profile.teaching_since.year }}
+                        <br/>
+                    {% endif %}
+                    {% trans "Courses taught for Tanzquotient" %}: {{ user.profile.courses_taught_count }}
+                </p>
+            {% endif %}
+            {% if  user.profile.is_board_member %}
                 <p>
                     <strong> {% trans "Functions" %}</strong>
-                    {% if user.profile.is_teacher %}
-                        <br/>
-                        {% trans "Teacher" %}
-                    {% endif %}
-                    {% if user.profile.is_board_member %}
-                        <br/>
-                        {% trans "Board member" %}:
-                        {% for function in user.functions.all %}
-                            {{ function.name }}
-                            {% if not forloop.last %}
-                                &amp;
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                    <br/>
+                    {% trans "Board member" %}:
+                    {% for function in user.functions.all %}
+                        {{ function.name }}
+                        {% if not forloop.last %}
+                            &amp;
+                        {% endif %}
+                    {% endfor %}
                 </p>
             {% endif %}
             <p>
