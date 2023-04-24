@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div>
+    {% if date or course %}
+        <div class="small mb-1">
+            {% if date %}
+                <span class="fw-bold">{{ date|date:'d. N Y, H:i' }}</span>
+            {% endif %}
+            {% if course %}
+                {% spaceless %}
+                    {% if show_course_type %}
+                        <span>{{ course.type.title }} {% if course.format_teachers %} ({{ course.format_teachers }}){% endif %}</span>
+                    {% elif course.format_teachers %}
+                        <span>{% trans "Teachers" %}:&nbsp;{{ course.format_teachers }}</span>
+                    {% endif %}
+                    {% if course.format_teachers and course.room %}
+                        <span>,&nbsp;</span>
+                    {% endif %}
+                    {% if course.room.name %}
+                        <span>{% trans "Room" %}:&nbsp;{{ course.room.name }}</span>
+                    {% endif %}
+                {% endspaceless %}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if text %}
+        <div>{{ text }}</div>
+    {% endif %}
+</div>

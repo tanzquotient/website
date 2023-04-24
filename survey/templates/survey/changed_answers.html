@@ -16,23 +16,7 @@
                 {% for object, revisions in changed_answers %}
                     <li class="list-group-item">
                         <div>
-                            <div class="small">
-                                <span class="fw-bold">{{ object.survey_instance.last_update|date:'d. N Y, H:i' }}</span>
-                                {% if object.survey_instance.course %}
-                                    {% spaceless %}
-                                        {% if object.survey_instance.course.format_teachers %}
-                                            <span>{% trans "Teachers" %}:&nbsp;{{ object.survey_instance.course.format_teachers }}</span>
-                                        {% endif %}
-                                        {% if object.survey_instance.course.format_teachers and object.survey_instance.course.room %}
-                                            <span>,&nbsp;</span>
-                                        {% endif %}
-                                        {% if object.survey_instance.course.room.name %}
-                                            <span>{% trans "Room" %}:&nbsp;{{ object.survey_instance.course.room.name }}</span>
-                                        {% endif %}
-                                    {% endspaceless %}
-                                {% endif %}
-                                {% free_form_answer answer=object user=user %}
-                            </div>
+                            {% free_form_answer answer=object user=user %}
 
                             <div class="small mt-2">
                                 <div class="fw-bold">{% trans "Changes" %}</div>

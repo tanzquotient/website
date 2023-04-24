@@ -46,4 +46,4 @@ def get_free_form_answers_for_question(question: Question, selected_offering: Of
     elif question.type == QuestionType.FREE_FORM:
         values = [answer for answer in answer_set if answer.value]
 
-    return values
+    return sorted(values, key=lambda answer: answer.survey_instance.last_update, reverse=True)

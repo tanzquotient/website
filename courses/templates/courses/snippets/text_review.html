@@ -1,21 +1,5 @@
 {% load i18n %}
 
 <div class="mb-3">
-    <div class="small mb-1">
-        <span class="fw-bold">{{ review.date|date:'d. N Y, H:i' }}</span>
-        {% if review.course %}
-            {% spaceless %}
-                {% if review.course.format_teachers %}
-                    <span>{% trans "Teachers" %}:&nbsp;{{ review.course.format_teachers }}</span>
-                {% endif %}
-                {% if review.course.format_teachers and review.course.room %}
-                    <span>,&nbsp;</span>
-                {% endif %}
-                {% if review.course.room.name %}
-                    <span>{% trans "Room" %}:&nbsp;{{ review.course.room.name }}</span>
-                {% endif %}
-            {% endspaceless %}
-        {% endif %}
-    </div>
-    <div>{{ review.text }}</div>
+    {% include "courses/snippets/course_comment.html" with course=review.course date=review.date text=review.text %}
 </div>
