@@ -18,7 +18,8 @@ RUN apt install -y python3 python3-pip python3-setuptools
 # - git to clone code from Github
 # - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
 # - gettext to generate translations
-RUN apt install -y --no-install-recommends git libpq-dev gettext
+# - pkg-config is needed for building reportlab
+RUN apt install -y --no-install-recommends git libpq-dev gettext pkg-config
 
 RUN mkdir -p /app
 
