@@ -379,6 +379,10 @@ msgstr "Hint: you can also enter HTML code"
 msgid "This field is required if you are a student."
 msgstr "This field is required if you are a student."
 
+#: utils/iban_validator.py:27
+msgid "The IBAN is invalid."
+msgstr "The IBAN is invalid."
+
 #: courses/forms/voucher_form.py:13 courses/models/voucher.py:28
 msgid "Reduction in percent (0-100)."
 msgstr "Reduction in percent (0-100)."

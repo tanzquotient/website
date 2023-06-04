@@ -6,8 +6,8 @@ from django_countries.fields import LazyTypedChoiceField
 from django.utils.translation import gettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
 
-
 from courses.models import StudentStatus, Residence
+from utils.iban_validator import validate_iban
 
 
 class UserEditForm(forms.Form):
@@ -67,7 +67,7 @@ class UserEditForm(forms.Form):
     residence_permit = forms.ChoiceField(choices=Residence.CHOICES, required=False)
     ahv_number = forms.CharField(max_length=255, required=False)
     zemis_number = forms.CharField(max_length=255, required=False)
-    iban = forms.CharField(max_length=255, required=False)
+    iban = forms.CharField(max_length=255, required=False, validators=[validate_iban])
     bank_name = forms.CharField(max_length=255, required=False)
     bank_zip_code = forms.CharField(max_length=255, required=False)
     bank_city = forms.CharField(max_length=255, required=False)
