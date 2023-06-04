@@ -73,6 +73,11 @@ urlpatterns = [
         name="offering_teachers",
     ),
     path(
+        "finance/<int:offering_id>/revenue/",
+        offering_finance_revenue,
+        name="offering_revenue",
+    ),
+    path(
         "finance/<int:offering>/teachers/export/",
         offering_finance_teachers_export,
         name="offering_teachers_export",
