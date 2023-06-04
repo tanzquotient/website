@@ -1,3 +1,4 @@
 COMPOSE_FILE: docker-compose.yml
 TQ_DEBUG: True
+TQ_S3_ENABLED: False
 TQ_ENVIRONMENT: dev
