@@ -9,7 +9,9 @@ from courses.models import Style
 
 class MusicPluginModel(CMSPlugin):
     styles = models.ManyToManyField(Style, blank=True)
-    styles.help_text ="Styles to be displayed in this plugin. Leave empty to show all styles."
+    styles.help_text = (
+        "Styles to be displayed in this plugin. Leave empty to show all styles."
+    )
 
     def copy_relations(self, old_instance):
         self.styles.set(old_instance.styles.all())
@@ -23,9 +25,13 @@ class MusicPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'styles': instance.styles.all() if instance.styles.count() else Style.objects.all()
-        })
+        context.update(
+            {
+                "styles": instance.styles.all()
+                if instance.styles.count()
+                else Style.objects.all()
+            }
+        )
         return context
 
 

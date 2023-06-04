@@ -21,9 +21,11 @@ class ManagingCommitteePlugin(CMSPluginBase):
 
         users = sorted(users, key=lambda u: u.get_full_name())
 
-        context.update({
-            'users': users,
-        })
+        context.update(
+            {
+                "users": users,
+            }
+        )
         return context
 
 

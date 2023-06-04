@@ -5,11 +5,10 @@ from django.contrib.auth.models import Group
 from courses.models import UserProfile
 from ..definitions import GroupDefinitions
 
-log = logging.getLogger('update_groups')
+log = logging.getLogger("update_groups")
 
 
 def update_groups(queryset=None):
-
     log.info("Updating groups")
 
     # All groups
@@ -35,4 +34,7 @@ def update_groups(queryset=None):
             if group_definition.matches(user):
                 group.user_set.add(user)
 
-        log.info("Updating group finished. Number of users in group " + str(group.user_set.count()))
+        log.info(
+            "Updating group finished. Number of users in group "
+            + str(group.user_set.count())
+        )

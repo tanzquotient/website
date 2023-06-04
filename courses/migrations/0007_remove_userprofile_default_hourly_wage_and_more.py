@@ -8,8 +8,13 @@ from courses.models import CourseSubscriptionType, SubscribeState
 
 def set_cancelled(apps, _) -> None:
     for course in apps.get_model("courses", "Course").objects.all():
-        if course.subscription_type == CourseSubscriptionType.REGULAR and course.subscriptions.filter(
-                state__in=SubscribeState.ACCEPTED_STATES).count() == 0:
+        if (
+            course.subscription_type == CourseSubscriptionType.REGULAR
+            and course.subscriptions.filter(
+                state__in=SubscribeState.ACCEPTED_STATES
+            ).count()
+            == 0
+        ):
             course.cancelled = True
             course.save()
 
@@ -23,26 +28,32 @@ def set_fixed_wage(apps, _) -> None:
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('courses', '0006_offering_opens_soon'),
+        ("courses", "0006_offering_opens_soon"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='cancelled',
-            field=models.BooleanField(default=False, help_text='Indicates if this course is cancelled'),
+            model_name="course",
+            name="cancelled",
+            field=models.BooleanField(
+                default=False, help_text="Indicates if this course is cancelled"
+            ),
         ),
         migrations.RunPython(code=set_cancelled),
         migrations.AddField(
-            model_name='userprofile',
-            name='fixed_hourly_wage',
-            field=models.DecimalField(blank=True, decimal_places=2,
-                                      help_text='Only set this value if there is a special agreement.', max_digits=6,
-                                      null=True),
+            model_name="userprofile",
+            name="fixed_hourly_wage",
+            field=models.DecimalField(
+                blank=True,
+                decimal_places=2,
+                help_text="Only set this value if there is a special agreement.",
+                max_digits=6,
+                null=True,
+            ),
         ),
         migrations.RunPython(code=set_fixed_wage),
         migrations.RemoveField(
-            model_name='userprofile',
-            name='default_hourly_wage',
+            model_name="userprofile",
+            name="default_hourly_wage",
         ),
     ]

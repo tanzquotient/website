@@ -4,20 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('survey', '0002_squashed'),
+        ("survey", "0002_squashed"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='answer',
-            name='hide_from_public_reviews',
-            field=models.BooleanField(default=False, help_text='If true, this answer will not be shown publicly.'),
+            model_name="answer",
+            name="hide_from_public_reviews",
+            field=models.BooleanField(
+                default=False,
+                help_text="If true, this answer will not be shown publicly.",
+            ),
         ),
         migrations.AddField(
-            model_name='question',
-            name='public_review',
-            field=models.BooleanField(default=False, help_text='If true, answers to this question may be displayed publicly'),
+            model_name="question",
+            name="public_review",
+            field=models.BooleanField(
+                default=False,
+                help_text="If true, answers to this question may be displayed publicly",
+            ),
         ),
     ]

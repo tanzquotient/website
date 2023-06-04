@@ -11,7 +11,9 @@ class EventsPluginModel(CMSPlugin):
     include_specials = models.BooleanField(blank=False, default=True)
     include_regular = models.BooleanField(blank=False, default=True)
     show_when_no_events = models.BooleanField(blank=False, default=False)
-    style = models.IntegerField(blank=False, choices=((0, _('List')), (1, _('Cards'))), default=0)
+    style = models.IntegerField(
+        blank=False, choices=((0, _("List")), (1, _("Cards"))), default=0
+    )
 
 
 class EventsPlugin(CMSPluginBase):
@@ -23,10 +25,14 @@ class EventsPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         specials = [instance.include_specials, not instance.include_regular]
-        context.update({
-            'events': Event.displayed_events.future().filter(special__in=specials).all(),
-            'use_cards': instance.style == 1,
-            'title': instance.title,
-            'show_when_no_events': instance.show_when_no_events,
-        })
+        context.update(
+            {
+                "events": Event.displayed_events.future()
+                .filter(special__in=specials)
+                .all(),
+                "use_cards": instance.style == 1,
+                "title": instance.title,
+                "show_when_no_events": instance.show_when_no_events,
+            }
+        )
         return context

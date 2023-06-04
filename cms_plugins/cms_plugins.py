@@ -14,7 +14,9 @@ from events.models import Event
 
 class PageTitlePluginModel(CMSPlugin):
     title = models.CharField(max_length=30, blank=True, null=True)
-    title.help_text = "The title to be displayed. Leave empty to display the page's title."
+    title.help_text = (
+        "The title to be displayed. Leave empty to display the page's title."
+    )
     subtitle = models.CharField(max_length=50, blank=True, null=True)
     subtitle.help_text = "The subtitle to be displayed."
 
@@ -27,22 +29,20 @@ class PageTitlePlugin(CMSPluginBase):
     allow_children = True
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance
-        })
+        context.update({"instance": instance})
         return context
 
 
 class AlertPluginModel(CMSPlugin):
     TYPES = (
-        ('primary', 'Primary'),
-        ('secondary', 'Secondary'),
-        ('success', 'Success'),
-        ('danger', 'Danger'),
-        ('warning', 'Warning'),
-        ('info', 'Info'),
-        ('light', 'Light'),
-        ('dark', 'Dark'),
+        ("primary", "Primary"),
+        ("secondary", "Secondary"),
+        ("success", "Success"),
+        ("danger", "Danger"),
+        ("warning", "Warning"),
+        ("info", "Info"),
+        ("light", "Light"),
+        ("dark", "Dark"),
     )
 
     title = models.CharField(max_length=100, blank=True, null=True)
@@ -58,11 +58,13 @@ class AlertPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'title': instance.title,
-            'content': instance.content,
-            'type': instance.type,
-        })
+        context.update(
+            {
+                "title": instance.title,
+                "content": instance.content,
+                "type": instance.type,
+            }
+        )
         return context
 
 
@@ -79,9 +81,11 @@ class QuickLinksPlugin(CMSPluginBase):
     allow_children = True
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance,
-        })
+        context.update(
+            {
+                "instance": instance,
+            }
+        )
         return context
 
 
@@ -98,18 +102,20 @@ class RowPlugin(CMSPluginBase):
     allow_children = True
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance
-        })
+        context.update({"instance": instance})
         return context
 
 
 class UpcomingEventsAndCoursesPluginModel(CMSPlugin):
     delta_days = models.IntegerField(blank=True, null=True)
-    delta_days.help_text = "Events and courses within the time delta (in days) from now on are shown." \
-                           "Leave empty to make no restrictions."
+    delta_days.help_text = (
+        "Events and courses within the time delta (in days) from now on are shown."
+        "Leave empty to make no restrictions."
+    )
     max_displayed = models.IntegerField(blank=True, null=True)
-    max_displayed.help_text = "Maximum number of items to be displayed. Leave empty to make no restrictions."
+    max_displayed.help_text = (
+        "Maximum number of items to be displayed. Leave empty to make no restrictions."
+    )
 
 
 class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
@@ -122,54 +128,71 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         items = []
 
-        events = Event.displayed_events \
-            .future(delta_days=instance.delta_days, limit=instance.max_displayed) \
-            .prefetch_related('room') \
+        events = (
+            Event.displayed_events.future(
+                delta_days=instance.delta_days, limit=instance.max_displayed
+            )
+            .prefetch_related("room")
             .all()
+        )
 
-        irregular_lessons = IrregularLesson.objects \
-            .exclude(course__offering__type=OfferingType.PARTNER) \
-            .filter(date__gte=datetime.today()) \
-            .order_by('date') \
-            .prefetch_related('course', 'course__type', 'course__room') \
+        irregular_lessons = (
+            IrregularLesson.objects.exclude(course__offering__type=OfferingType.PARTNER)
+            .filter(date__gte=datetime.today())
+            .order_by("date")
+            .prefetch_related("course", "course__type", "course__room")
             .all()
+        )
 
         for event in events:
-            items.append({
-                'format_duration': event.format_duration(),
-                'date': event.date,
-                'time_from': event.time_from,
-                'name': event.get_name(),
-                'special': event.special,
-                'format_prices': event.format_prices(),
-                'room': event.room,
-                'cancelled': event.cancelled,
-                'event': event,
-                'detail_url': reverse('events:detail', kwargs={'event_id': event.id}),
-            })
+            items.append(
+                {
+                    "format_duration": event.format_duration(),
+                    "date": event.date,
+                    "time_from": event.time_from,
+                    "name": event.get_name(),
+                    "special": event.special,
+                    "format_prices": event.format_prices(),
+                    "room": event.room,
+                    "cancelled": event.cancelled,
+                    "event": event,
+                    "detail_url": reverse(
+                        "events:detail", kwargs={"event_id": event.id}
+                    ),
+                }
+            )
 
         for irregular_lesson in irregular_lessons:
             if not irregular_lesson.course.is_displayed():
                 continue
             if len(irregular_lesson.course.get_lessons()) == 1:
-                items.append({
-                    'format_duration': irregular_lesson.format_duration(),
-                    'date': irregular_lesson.date,
-                    'time_from': irregular_lesson.time_from,
-                    'name': irregular_lesson.course.type.title,
-                    'room': irregular_lesson.course.room,
-                    'special': False,
-                    'format_prices': irregular_lesson.course.format_prices(),
-                    'course': irregular_lesson.course,
-                    'detail_url': reverse('courses:course_detail', kwargs={'course_id': irregular_lesson.course.id}),
-                })
+                items.append(
+                    {
+                        "format_duration": irregular_lesson.format_duration(),
+                        "date": irregular_lesson.date,
+                        "time_from": irregular_lesson.time_from,
+                        "name": irregular_lesson.course.type.title,
+                        "room": irregular_lesson.course.room,
+                        "special": False,
+                        "format_prices": irregular_lesson.course.format_prices(),
+                        "course": irregular_lesson.course,
+                        "detail_url": reverse(
+                            "courses:course_detail",
+                            kwargs={"course_id": irregular_lesson.course.id},
+                        ),
+                    }
+                )
 
-        items.sort(key=lambda item: datetime.combine(item["date"], item["time_from"] or time()))
-        items = items[0:instance.max_displayed]
+        items.sort(
+            key=lambda item: datetime.combine(item["date"], item["time_from"] or time())
+        )
+        items = items[0 : instance.max_displayed]
 
-        context.update({
-            'items': items,
-        })
+        context.update(
+            {
+                "items": items,
+            }
+        )
         return context
 
 
@@ -190,9 +213,7 @@ class CountdownPlugin(CMSPluginBase):
     text_enabled = True
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance
-        })
+        context.update({"instance": instance})
         return context
 
 

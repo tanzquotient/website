@@ -9,12 +9,19 @@ from django.utils.translation import gettext as _
 
 from courses import models as models
 from courses.managers import CourseManager
-from courses.models import Offering, OfferingType, IrregularLesson, RegularLessonException, Weekday, Course
+from courses.models import (
+    Offering,
+    OfferingType,
+    IrregularLesson,
+    RegularLessonException,
+    Weekday,
+    Course,
+)
 from courses.services.general import log
 
 
 def get_all_offerings():
-    return Offering.objects.order_by('period__date_from', '-active')
+    return Offering.objects.order_by("period__date_from", "-active")
 
 
 def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
@@ -27,19 +34,26 @@ def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
     else:
         queryset = queryset.filter(display=True)
 
-    return queryset.select_related('period').order_by('-period__date_from')
+    return queryset.select_related("period").order_by("-period__date_from")
 
 
-def get_offerings_by_year(offering_types: Collection[OfferingType], only_public: bool = True):
+def get_offerings_by_year(
+    offering_types: Collection[OfferingType], only_public: bool = True
+):
     offerings_dict = defaultdict(lambda: defaultdict(list))
     for offering in Offering.objects.filter(type__in=offering_types).all():
         if only_public and not offering.is_public():
             continue
         offerings_dict[offering.get_start_year()][offering.type].append(offering)
 
-    return sorted([
-        (year, offerings_by_type) for year, offerings_by_type in offerings_dict.items()
-    ], key=lambda t: t[0] or 3000, reverse=True)
+    return sorted(
+        [
+            (year, offerings_by_type)
+            for year, offerings_by_type in offerings_dict.items()
+        ],
+        key=lambda t: t[0] or 3000,
+        reverse=True,
+    )
 
 
 def get_sections(offering, course_filter=None):
@@ -50,26 +64,37 @@ def get_sections(offering, course_filter=None):
         course_filter = lambda c: True
 
     if offering.type == OfferingType.REGULAR:
-        for (w, w_name) in Weekday.CHOICES:
-            courses_on_weekday = [c for c in CourseManager.weekday(course_set, w) if course_filter(c)]
+        for w, w_name in Weekday.CHOICES:
+            courses_on_weekday = [
+                c for c in CourseManager.weekday(course_set, w) if course_filter(c)
+            ]
             if courses_on_weekday:
-                offering_sections.append({
-                    'section_title': Weekday.WEEKDAYS_TRANSLATIONS[w],
-                    'courses': courses_on_weekday
-                })
+                offering_sections.append(
+                    {
+                        "section_title": Weekday.WEEKDAYS_TRANSLATIONS[w],
+                        "courses": courses_on_weekday,
+                    }
+                )
 
-        courses_without_weekday = [c for c in CourseManager.weekday(course_set, None) if course_filter(c)]
+        courses_without_weekday = [
+            c for c in CourseManager.weekday(course_set, None) if course_filter(c)
+        ]
         if courses_without_weekday:
-            offering_sections.append({'section_title': _("Irregular weekday"), 'courses': courses_without_weekday})
+            offering_sections.append(
+                {
+                    "section_title": _("Irregular weekday"),
+                    "courses": courses_without_weekday,
+                }
+            )
 
     elif offering.type in [OfferingType.IRREGULAR, OfferingType.PARTNER]:
         courses_by_month = CourseManager.by_month(course_set)
-        for (d, courses) in courses_by_month:
+        for d, courses in courses_by_month:
             if d is None:
                 section_title = _("Unknown month")
             elif 1 < d.month <= 12:
                 # use the django formatter for date objects
-                section_title = dateformat.format(d, 'F Y')
+                section_title = dateformat.format(d, "F Y")
             else:
                 section_title = ""
             # filter out undisplayed courses if not staff user
@@ -83,7 +108,12 @@ def get_sections(offering, course_filter=None):
 
             if courses:
                 offering_sections.append(
-                    {'section_title': section_title, 'courses': courses, 'hide_period_column': not deviating_period})
+                    {
+                        "section_title": section_title,
+                        "courses": courses,
+                        "hide_period_column": not deviating_period,
+                    }
+                )
     else:
         message = "unsupported offering type"
         log.error(message)
@@ -93,12 +123,19 @@ def get_sections(offering, course_filter=None):
 
 
 def get_current_active_offering():
-    return models.Offering.objects.filter(active=True).order_by('period__date_from').first()
+    return (
+        models.Offering.objects.filter(active=True)
+        .order_by("period__date_from")
+        .first()
+    )
 
 
 def get_subsequent_offering():
-    res = models.Offering.objects.filter(period__date_from__gte=date.today()).order_by(
-        'period__date_from').all()
+    res = (
+        models.Offering.objects.filter(period__date_from__gte=date.today())
+        .order_by("period__date_from")
+        .all()
+    )
     if len(res) > 0:
         return res[0]
     else:

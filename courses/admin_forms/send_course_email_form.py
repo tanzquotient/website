@@ -14,20 +14,22 @@ class SendCourseEmailForm(forms.Form):
         label=_("Email template"),
         help_text=_("Can be left empty if Subject and Content are specified."),
         queryset=EmailTemplate.objects.all(),
-        required=False
+        required=False,
     )
     email_subject = forms.CharField(
         label=_("Subject"),
         help_text=_("If left empty, uses subject of template."),
-        required=False
+        required=False,
     )
     email_content = forms.CharField(
         label=_("Content"),
-        help_text=_("Compose your own text. Email template will not be used.") + " " +
-                  _("You can use the following placeholders:") + " " +
-                  "first_name, last_name, course, offering, survey_url, survey_expiration",
+        help_text=_("Compose your own text. Email template will not be used.")
+        + " "
+        + _("You can use the following placeholders:")
+        + " "
+        + "first_name, last_name, course, offering, survey_url, survey_expiration",
         required=False,
-        widget=CKEditorWidget
+        widget=CKEditorWidget,
     )
 
     send_to_participants = forms.BooleanField(
@@ -52,7 +54,7 @@ class SendCourseEmailForm(forms.Form):
     survey_url_expire_date = forms.DateTimeField(
         label=_("Optional: Expiration date for survey"),
         help_text=_("Surveys will not expire if left empty."),
-        required=False
+        required=False,
     )
 
     def clean(self):
@@ -64,13 +66,15 @@ class SendCourseEmailForm(forms.Form):
         if not email_template:
             if not email_subject:
                 raise forms.ValidationError(
-                    _("Subject not specified. Please specify either a template or enter the subject directly!"),
-                    "No subject"
+                    _(
+                        "Subject not specified. Please specify either a template or enter the subject directly!"
+                    ),
+                    "No subject",
                 )
             if not email_content:
                 raise forms.ValidationError(
-                    _("Content not specified. Please specify either a template or enter the content directly!"),
-                    "No content"
+                    _(
+                        "Content not specified. Please specify either a template or enter the content directly!"
+                    ),
+                    "No content",
                 )
-
-

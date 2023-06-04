@@ -2,7 +2,6 @@ import shortuuid
 
 
 class CodeGenerator:
-
     # Avoid similar looking characters:
     # 0 O
     # 1 I l
@@ -17,5 +16,7 @@ class CodeGenerator:
 
     @staticmethod
     def short_uuid_without_ambiguous_characters(length: int = 6) -> str:
-        instance = shortuuid.ShortUUID(alphabet=CodeGenerator.non_ambiguous_alphabet_for_humans)
+        instance = shortuuid.ShortUUID(
+            alphabet=CodeGenerator.non_ambiguous_alphabet_for_humans
+        )
         return instance.random(length=length)

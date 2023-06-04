@@ -9,12 +9,19 @@ from utils import TranslationUtils
 
 class Survey(TranslatableModel):
     name = CharField(max_length=255, blank=False)
-    teachers_allowed = BooleanField(default=False, help_text=_("If set to true, teachers will be able to view the "
-                                                               "answers for their courses."))
+    teachers_allowed = BooleanField(
+        default=False,
+        help_text=_(
+            "If set to true, teachers will be able to view the "
+            "answers for their courses."
+        ),
+    )
 
     translations = TranslatedFields(
-        title=CharField(verbose_name='[TR] Title', max_length=64, blank=True, null=True),
-        intro_text=TextField(verbose_name='[TR] Intro text', blank=True, null=True),
+        title=CharField(
+            verbose_name="[TR] Title", max_length=64, blank=True, null=True
+        ),
+        intro_text=TextField(verbose_name="[TR] Intro text", blank=True, null=True),
     )
 
     def copy(self) -> Survey:

@@ -8,12 +8,14 @@ class TqEmailAddress(TranslatableModel):
 
     # Translated fields
     translations = TranslatedFields(
-        description=CharField(verbose_name=_('Description'), max_length=200, blank=True, null=True),
+        description=CharField(
+            verbose_name=_("Description"), max_length=200, blank=True, null=True
+        ),
     )
 
     def __str__(self):
         return self.email_address
 
     class Meta:
-        verbose_name = _('Email Address')
-        verbose_name_plural = _('Email Addresses')
+        verbose_name = _("Email Address")
+        verbose_name_plural = _("Email Addresses")

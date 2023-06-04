@@ -3,7 +3,9 @@ from typing import Iterable
 from courses.models import CourseSubscriptionType, Course, Style
 
 
-def _course_filter_style(course: Course, style_name: str, filter_styles: Iterable[Style]) -> bool:
+def _course_filter_style(
+    course: Course, style_name: str, filter_styles: Iterable[Style]
+) -> bool:
     if not style_name:
         return True
 
@@ -20,12 +22,19 @@ def _course_filter_style(course: Course, style_name: str, filter_styles: Iterabl
 
 
 def _course_filter_type(course: Course, subscription_type: str) -> bool:
-    return subscription_type == 'all' or subscription_type.lower() == course.subscription_type
+    return (
+        subscription_type == "all"
+        or subscription_type.lower() == course.subscription_type
+    )
 
 
-def course_filter(course: Course, show_preview: bool, subscription_type: str, style_name: str,
-                  filter_styles: Iterable[Style]) -> bool:
-
+def course_filter(
+    course: Course,
+    show_preview: bool,
+    subscription_type: str,
+    style_name: str,
+    filter_styles: Iterable[Style],
+) -> bool:
     if course.is_over():
         return False
 
@@ -35,4 +44,6 @@ def course_filter(course: Course, show_preview: bool, subscription_type: str, st
     if not course.is_displayed():
         return False
 
-    return _course_filter_style(course, style_name, filter_styles) and _course_filter_type(course, subscription_type)
+    return _course_filter_style(
+        course, style_name, filter_styles
+    ) and _course_filter_type(course, subscription_type)

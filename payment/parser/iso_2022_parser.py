@@ -10,12 +10,14 @@ from django.db import DatabaseError
 from payment.models import FinanceFile, Payment
 from payment.models.choices import CreditDebit, State, FinanceFileType
 
-log = logging.getLogger('payment')
+log = logging.getLogger("payment")
 
 
 class ISO2022Parser:
     @staticmethod
-    def parse_files_and_save_payments(reparse: bool = False, dry_run: bool = False) -> int:
+    def parse_files_and_save_payments(
+        reparse: bool = False, dry_run: bool = False
+    ) -> int:
         count = 0
         for file in ISO2022Parser.find_fds_files(include_processed=reparse):
             payments = ISO2022Parser.parse_file(file)
@@ -36,42 +38,48 @@ class ISO2022Parser:
 
     @staticmethod
     def parse_user_string(string: str) -> dict:
-        data = {'account_nr': "",
-                'name': "",
-                'street': "",
-                'plz': "",
-                'city': "",
-                'note': string}
+        data = {
+            "account_nr": "",
+            "name": "",
+            "street": "",
+            "plz": "",
+            "city": "",
+            "note": string,
+        }
 
         postfinance_regex = re.compile(
-            r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:(?P<note>.*)")
+            r"GIRO AUS KONTO (?P<account_nr>[\-0-9]*)\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))\sMITTEILUNGEN:(?P<note>.*)"
+        )
         postfinance_matches = postfinance_regex.search(string)
         if postfinance_matches:
-            data['account_nr'] = postfinance_matches.group('account_nr')
-            data['name'] = postfinance_matches.group('name')
-            data['street'] = postfinance_matches.group('street')
-            data['plz'] = postfinance_matches.group('plz')
-            data['city'] = postfinance_matches.group('city')
-            data['note'] = postfinance_matches.group('note')
+            data["account_nr"] = postfinance_matches.group("account_nr")
+            data["name"] = postfinance_matches.group("name")
+            data["street"] = postfinance_matches.group("street")
+            data["plz"] = postfinance_matches.group("plz")
+            data["city"] = postfinance_matches.group("city")
+            data["note"] = postfinance_matches.group("note")
 
-        absender_matches = re.compile(r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))").search(string)
+        absender_matches = re.compile(
+            r"ABSENDER:\s((?P<name>.*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))"
+        ).search(string)
         if absender_matches:
-            data['name'] = absender_matches.group('name')
-            data['plz'] = absender_matches.group('plz')
-            data['city'] = absender_matches.group('city')
+            data["name"] = absender_matches.group("name")
+            data["plz"] = absender_matches.group("plz")
+            data["city"] = absender_matches.group("city")
 
         auftraggeber_regex = re.compile(
-            r"AUFTRAGGEBER:\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))")
+            r"AUFTRAGGEBER:\s((?P<name>.*)\s(?P<street>[\S+]*\s[0-9]*)\s(?P<plz>[0-9]{4})\s(?P<city>[\S+]*))"
+        )
         auftraggeber_matches = auftraggeber_regex.search(string)
         if auftraggeber_matches:
-            data['name'] = auftraggeber_matches.group('name')
-            data['street'] = auftraggeber_matches.group('street')
-            data['plz'] = auftraggeber_matches.group('plz')
-            data['city'] = auftraggeber_matches.group('city')
+            data["name"] = auftraggeber_matches.group("name")
+            data["street"] = auftraggeber_matches.group("street")
+            data["plz"] = auftraggeber_matches.group("plz")
+            data["city"] = auftraggeber_matches.group("city")
 
         mitteilungen_matches = re.compile(r"MITTEILUNGEN:(?P<note>.*)").search(string)
         if mitteilungen_matches:
-            data['note'] = mitteilungen_matches.group('note')
+            data["note"] = mitteilungen_matches.group("note")
 
         return data
 
@@ -86,7 +94,7 @@ class ISO2022Parser:
         root = tree.getroot()
         payments = []
 
-        ns = {'pf': 'urn:iso:std:iso:20022:tech:xsd:camt.053.001.04'}
+        ns = {"pf": "urn:iso:std:iso:20022:tech:xsd:camt.053.001.04"}
 
         def find_or_empty(transaction, name):
             e = transaction.find(".//pf:{}".format(name), ns)
@@ -94,46 +102,57 @@ class ISO2022Parser:
 
         for transaction in root.findall(".//pf:Ntry", ns):
             # check if transaction id is valid transaction exists already -> skip
-            transaction_id = find_or_empty(transaction, 'AcctSvcrRef')
+            transaction_id = find_or_empty(transaction, "AcctSvcrRef")
             only_zero_regex = re.compile(r"^0*$")
             if only_zero_regex.match(transaction_id):
-                log.warning("A transaction of file {} has an invalid transaction ID: {}".format(filename, transaction_id))
+                log.warning(
+                    "A transaction of file {} has an invalid transaction ID: {}".format(
+                        filename, transaction_id
+                    )
+                )
                 continue
             log.info("processing transaction {}".format(transaction_id))
-            payments_count = Payment.objects.filter(transaction_id=transaction_id).count()
+            payments_count = Payment.objects.filter(
+                transaction_id=transaction_id
+            ).count()
             if payments_count > 0:
                 log.warning(
-                    "transaction {} in file {} already exists in database".format(transaction_id, filename))
+                    "transaction {} in file {} already exists in database".format(
+                        transaction_id, filename
+                    )
+                )
                 continue
 
             payment = Payment()
 
             # for IBAN transactions
-            payment.bic = find_or_empty(transaction, 'BICFI')
-            payment.iban = find_or_empty(transaction, 'DbtrAcct')
+            payment.bic = find_or_empty(transaction, "BICFI")
+            payment.iban = find_or_empty(transaction, "DbtrAcct")
 
             # unique reference number by postfinance
             payment.transaction_id = transaction_id
-            payment.amount = Decimal(find_or_empty(transaction, 'Amt') or 0)
-            payment.currency_code = transaction.find('.//pf:Amt', ns).get('Ccy')
+            payment.amount = Decimal(find_or_empty(transaction, "Amt") or 0)
+            payment.currency_code = transaction.find(".//pf:Amt", ns).get("Ccy")
 
             # Credit or Debit
-            credit_debit = find_or_empty(transaction, 'CdtDbtInd')
-            if credit_debit == 'CRDT':
+            credit_debit = find_or_empty(transaction, "CdtDbtInd")
+            if credit_debit == "CRDT":
                 payment.credit_debit = CreditDebit.CREDIT
-            elif credit_debit == 'DBIT':
+            elif credit_debit == "DBIT":
                 payment.credit_debit = CreditDebit.DEBIT
             else:
                 payment.credit_debit = CreditDebit.UNKNOWN
 
             # remittance user string
-            payment.remittance_user_string = find_or_empty(transaction, 'AddtlNtryInf')
+            payment.remittance_user_string = find_or_empty(transaction, "AddtlNtryInf")
 
             user_data = ISO2022Parser.parse_user_string(payment.remittance_user_string)
             if user_data is not None:
-                payment.name = user_data['name']
-                payment.address = "{}, {} {}".format(user_data['street'], user_data['plz'], user_data['city'])
-                payment.remittance_user_string = user_data['note']
+                payment.name = user_data["name"]
+                payment.address = "{}, {} {}".format(
+                    user_data["street"], user_data["plz"], user_data["city"]
+                )
+                payment.remittance_user_string = user_data["note"]
 
             payment.state = State.NEW
             # postal_address = debitor.find(".//pf:PstlAdr",ns)
@@ -144,7 +163,7 @@ class ISO2022Parser:
             payment.filename = filename
             payment.file = db_file
             payments.append(payment)
-            log.info('Detected payment: {}'.format(payment))
+            log.info("Detected payment: {}".format(payment))
 
         return payments
 

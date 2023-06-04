@@ -5,7 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class FeaturedEventPluginModel(CMSPlugin):
-    event = models.ForeignKey(to='Event', on_delete=models.PROTECT, related_name='featured_plugins', blank=False)
+    event = models.ForeignKey(
+        to="Event",
+        on_delete=models.PROTECT,
+        related_name="featured_plugins",
+        blank=False,
+    )
 
 
 class FeaturedEventPlugin(CMSPluginBase):
@@ -16,7 +21,9 @@ class FeaturedEventPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'event': instance.event,
-        })
+        context.update(
+            {
+                "event": instance.event,
+            }
+        )
         return context

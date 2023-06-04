@@ -5,7 +5,9 @@ class TeacherCanReadUpdateSubscriptionPermission(permissions.IsAuthenticated):
     """Allow only teachers to read and update existing instances (no creation/deletion is allowed)"""
 
     def has_object_permission(self, request, view, obj=None):
-        if not super(TeacherCanReadUpdateSubscriptionPermission, self).has_object_permission(request, view, obj):
+        if not super(
+            TeacherCanReadUpdateSubscriptionPermission, self
+        ).has_object_permission(request, view, obj):
             return False
         if obj is None:
             # Either a list or a create, so no author
@@ -20,7 +22,9 @@ class TeacherCanReadUpdateCoursePermission(permissions.IsAuthenticated):
 
     def has_object_permission(self, request, view, obj=None):
         print("check")
-        if not super(TeacherCanReadUpdateCoursePermission, self).has_object_permission(request, view, obj):
+        if not super(TeacherCanReadUpdateCoursePermission, self).has_object_permission(
+            request, view, obj
+        ):
             return False
         if obj is None:
             # Either a list or a create, so no author

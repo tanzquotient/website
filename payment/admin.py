@@ -8,56 +8,104 @@ class SubscriptionPaymentInline(admin.TabularInline):
     model = SubscriptionPayment
     extra = 0
 
-    raw_id_fields = ['subscription']
+    raw_id_fields = ["subscription"]
 
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'state', 'type', 'credit_debit', 'name', 'date', 'amount',
-                    'amount_to_reimburse',
-                    'currency_code', 'remittance_user_string', 'subscription_payments_amount_sum', 'list_subscriptions']
-    list_filter = ['state', 'type', 'credit_debit']
-    search_fields = ['id', 'name', 'address', 'transaction_id', 'iban', 'bic', 'amount',
-                     'currency_code', 'remittance_user_string', 'filename']
+    list_display = [
+        "id",
+        "state",
+        "type",
+        "credit_debit",
+        "name",
+        "date",
+        "amount",
+        "amount_to_reimburse",
+        "currency_code",
+        "remittance_user_string",
+        "subscription_payments_amount_sum",
+        "list_subscriptions",
+    ]
+    list_filter = ["state", "type", "credit_debit"]
+    search_fields = [
+        "id",
+        "name",
+        "address",
+        "transaction_id",
+        "iban",
+        "bic",
+        "amount",
+        "currency_code",
+        "remittance_user_string",
+        "filename",
+    ]
 
     inlines = [SubscriptionPaymentInline]
-    actions = [process_payments, check_balance, mark_payment_as_irrelevant, mark_payment_as_course_payment,
-               mark_archive]
-    readonly_fields = ('credit_debit', 'name', 'date', 'address', 'transaction_id', 'amount', 'amount_to_reimburse',
-                       'currency_code', 'remittance_user_string', 'filename', 'file', 'iban', 'bic')
+    actions = [
+        process_payments,
+        check_balance,
+        mark_payment_as_irrelevant,
+        mark_payment_as_course_payment,
+        mark_archive,
+    ]
+    readonly_fields = (
+        "credit_debit",
+        "name",
+        "date",
+        "address",
+        "transaction_id",
+        "amount",
+        "amount_to_reimburse",
+        "currency_code",
+        "remittance_user_string",
+        "filename",
+        "file",
+        "iban",
+        "bic",
+    )
 
 
 @admin.register(FinanceFile)
 class FinanceFileAdmin(admin.ModelAdmin):
-    list_display = ['name', 'processed', 'created_at']
-    list_filter = ['processed']
-    search_fields = ['name']
-    readonly_fields = ['created_at']
+    list_display = ["name", "processed", "created_at"]
+    list_filter = ["processed"]
+    search_fields = ["name"]
+    readonly_fields = ["created_at"]
 
 
 @admin.register(SubscriptionPayment)
 class SubscriptionPaymentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'payment', 'subscription', 'amount']
-    raw_id_fields = ['payment', 'subscription']
+    list_display = ["id", "payment", "subscription", "amount"]
+    raw_id_fields = ["payment", "subscription"]
     list_filter = [SubscriptionPaymentFilter]
-    search_fields = ['id', 'amount']
+    search_fields = ["id", "amount"]
     actions = [raise_price_to_pay]
 
 
 @admin.register(CoursePayment)
 class CoursePayment(admin.ModelAdmin):
-    list_display = ['id', 'payment', 'course', 'amount']
-    raw_id_fields = ['payment', 'course']
-    search_fields = ['payment__name', 'course__name']
+    list_display = ["id", "payment", "course", "amount"]
+    raw_id_fields = ["payment", "course"]
+    search_fields = ["payment__name", "course__name"]
 
 
 @admin.register(PaymentReminder)
 class PaymentReminderAdmin(admin.ModelAdmin):
-    list_display = ('subscription', 'date')
-    list_filter = (ConfirmationOfferingListFilter, ConfirmationCourseListFilter, 'date',)
-    search_fields = ['subscription__course__name', 'subscription__course__type__translations__title',
-                     'subscription__user__email', 'subscription__user__first_name', 'subscription__user__last_name']
+    list_display = ("subscription", "date")
+    list_filter = (
+        ConfirmationOfferingListFilter,
+        ConfirmationCourseListFilter,
+        "date",
+    )
+    search_fields = [
+        "subscription__course__name",
+        "subscription__course__type__translations__title",
+        "subscription__user__email",
+        "subscription__user__first_name",
+        "subscription__user__last_name",
+    ]
 
     model = PaymentReminder
 
-    raw_id_fields = ('subscription', 'mail')
+    raw_id_fields = ("subscription", "mail")

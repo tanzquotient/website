@@ -8,11 +8,15 @@ from ..models import Survey
 
 @staff_member_required
 def overview(request: HttpRequest) -> HttpResponse:
-    surveys = Survey.objects.prefetch_related(
-        'translations',
-        'survey_instances__course',
-        'survey_instances__course__offering'
-    ).order_by('-id').all()
+    surveys = (
+        Survey.objects.prefetch_related(
+            "translations",
+            "survey_instances__course",
+            "survey_instances__course__offering",
+        )
+        .order_by("-id")
+        .all()
+    )
     context = dict(
         surveys=surveys,
     )

@@ -12,17 +12,27 @@ class Offering(models.Model):
     """An offering is a list of courses to be offered in the given period"""
 
     name = models.CharField(max_length=30, unique=True, blank=False)
-    period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
-    type = models.CharField(max_length=3, choices=OfferingType.CHOICES, default=OfferingType.REGULAR)
-    type.help_text = 'The type of the offering influences how the offering is displayed.'
+    period = models.ForeignKey(
+        "Period", blank=True, null=True, on_delete=models.PROTECT
+    )
+    type = models.CharField(
+        max_length=3, choices=OfferingType.CHOICES, default=OfferingType.REGULAR
+    )
+    type.help_text = (
+        "The type of the offering influences how the offering is displayed."
+    )
     display = models.BooleanField(default=False)
-    display.help_text = 'Defines if the courses in this offering should be displayed on the Website.'
+    display.help_text = (
+        "Defines if the courses in this offering should be displayed on the Website."
+    )
     active = models.BooleanField(default=False)
-    active.help_text = 'Defines if clients can subscribe to courses in this offering.'
+    active.help_text = "Defines if clients can subscribe to courses in this offering."
     preview = models.BooleanField(default=False)
-    preview.help_text = 'Defines if the offering should be displayed as preview'
-    opens_soon = models.BooleanField(default=False,
-                                     help_text='If set to true, the sign up page says "opens soon" instead of "closed"')
+    preview.help_text = "Defines if the offering should be displayed as preview"
+    opens_soon = models.BooleanField(
+        default=False,
+        help_text='If set to true, the sign up page says "opens soon" instead of "closed"',
+    )
 
     def is_public(self) -> bool:
         return self.display or self.is_over()
@@ -43,7 +53,11 @@ class Offering(models.Model):
         return self.period.date_from.year if self.period else None
 
     def get_teacher_ids(self) -> set[int]:
-        return {teaching.teacher_id for course in self.course_set.all() for teaching in course.teaching.all()}
+        return {
+            teaching.teacher_id
+            for course in self.course_set.all()
+            for teaching in course.teaching.all()
+        }
 
     def payment_totals(self) -> dict[str, Decimal]:
         totals = defaultdict(Decimal)
@@ -53,7 +67,7 @@ class Offering(models.Model):
         return totals
 
     def __str__(self) -> str:
-        return '{}'.format(self.name)
+        return "{}".format(self.name)
 
     class Meta:
-        ordering = ['-period__date_from', 'name']
+        ordering = ["-period__date_from", "name"]

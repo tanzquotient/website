@@ -8,22 +8,35 @@ from courses.models import Teach
 
 def get_teachers_overview_data() -> list[list]:
     grouped_teachings = defaultdict(lambda: defaultdict(list))
-    for teaching in Teach.objects.order_by('teacher__first_name', 'teacher__last_name').prefetch_related(
-            'teacher', 'course__irregular_lessons', 'course__regular_lessons', 'course__offering__period',
-            'course__period').all():
-
+    for teaching in (
+        Teach.objects.order_by("teacher__first_name", "teacher__last_name")
+        .prefetch_related(
+            "teacher",
+            "course__irregular_lessons",
+            "course__regular_lessons",
+            "course__offering__period",
+            "course__period",
+        )
+        .all()
+    ):
         if teaching.course.is_external() or teaching.course.cancelled:
             continue
 
         first_lesson_date = teaching.course.get_first_lesson_date()
-        year = str(first_lesson_date.year) if first_lesson_date else _('unknown year')
+        year = str(first_lesson_date.year) if first_lesson_date else _("unknown year")
         grouped_teachings[teaching.teacher_id][year].append(teaching)
 
     rows = []
 
-    years = sorted({year for group in grouped_teachings.values() for year in group.keys()})
+    years = sorted(
+        {year for group in grouped_teachings.values() for year in group.keys()}
+    )
 
-    header = [_('First name'), _('Last name')] + years + [_('Total years'), _('Total courses')]
+    header = (
+        [_("First name"), _("Last name")]
+        + years
+        + [_("Total years"), _("Total courses")]
+    )
     rows.append(header)
 
     for grouped_by_year in grouped_teachings.values():
@@ -32,7 +45,7 @@ def get_teachers_overview_data() -> list[list]:
 
         for year in years:
             if year not in grouped_by_year:
-                row.append('-')
+                row.append("-")
             else:
                 row.append(len(grouped_by_year[year]))
 

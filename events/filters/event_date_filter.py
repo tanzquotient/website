@@ -7,10 +7,10 @@ from django.utils.translation import gettext_lazy as _
 class EventDateFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
-    title = _('Date')
+    title = _("Date")
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'date'
+    parameter_name = "date"
 
     def lookups(self, request, model_admin):
         """
@@ -21,8 +21,8 @@ class EventDateFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         return (
-            ('upcoming', _('Upcoming')),
-            ('this_year', _('This year')),
+            ("upcoming", _("Upcoming")),
+            ("this_year", _("This year")),
         )
 
     def queryset(self, request, queryset):
@@ -31,7 +31,9 @@ class EventDateFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
         """
-        if self.value() == 'upcoming':
+        if self.value() == "upcoming":
             return queryset.filter(date__gte=datetime.today())
-        if self.value() == 'this_year':
-            return queryset.filter(date__gte=date(year=datetime.today().year, day=1, month=1))
+        if self.value() == "this_year":
+            return queryset.filter(
+                date__gte=date(year=datetime.today().year, day=1, month=1)
+            )

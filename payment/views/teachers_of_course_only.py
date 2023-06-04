@@ -16,9 +16,9 @@ class TeacherOfCourseOnly(View):
         allowed = False
 
         user = self.request.user
-        course_id = kwargs['course']
+        course_id = kwargs["course"]
 
-        if user.is_superuser or user.has_perm('courses.change_subscribe'):
+        if user.is_superuser or user.has_perm("courses.change_subscribe"):
             allowed = True
         if user.teaching_courses.filter(course__id=course_id).exists():
             allowed = True

@@ -7,124 +7,315 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('payment', '0001_initial'), ('payment', '0002_auto_20160511_2211'), ('payment', '0003_auto_20160701_1328'), ('payment', '0004_auto_20160701_1349'), ('payment', '0005_auto_20160704_1158'), ('payment', '0006_coursepayment'), ('payment', '0007_paymentreminder'), ('payment', '0008_auto_20170227_1000'), ('payment', '0009_auto_20170227_1123'), ('payment', '0010_auto_20170511_1554'), ('payment', '0011_auto_20170511_1556'), ('payment', '0012_auto_20170606_1522'), ('payment', '0013_auto_20170614_0757'), ('payment', '0014_auto_20171022_0915'), ('payment', '0015_auto_20180507_1705'), ('payment', '0016_auto_20190425_1717')]
+    replaces = [
+        ("payment", "0001_initial"),
+        ("payment", "0002_auto_20160511_2211"),
+        ("payment", "0003_auto_20160701_1328"),
+        ("payment", "0004_auto_20160701_1349"),
+        ("payment", "0005_auto_20160704_1158"),
+        ("payment", "0006_coursepayment"),
+        ("payment", "0007_paymentreminder"),
+        ("payment", "0008_auto_20170227_1000"),
+        ("payment", "0009_auto_20170227_1123"),
+        ("payment", "0010_auto_20170511_1554"),
+        ("payment", "0011_auto_20170511_1556"),
+        ("payment", "0012_auto_20170606_1522"),
+        ("payment", "0013_auto_20170614_0757"),
+        ("payment", "0014_auto_20171022_0915"),
+        ("payment", "0015_auto_20180507_1705"),
+        ("payment", "0016_auto_20190425_1717"),
+    ]
 
     initial = True
 
     dependencies = [
-        ('courses', '0032_auto_20160603_1123'),
-        ('courses', '0041_subscribe_price_to_pay'),
-        ('courses', '0038_auto_20160906_1116'),
-        ('courses', '0031_course_evaluated'),
+        ("courses", "0032_auto_20160603_1123"),
+        ("courses", "0041_subscribe_price_to_pay"),
+        ("courses", "0038_auto_20160906_1116"),
+        ("courses", "0031_course_evaluated"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200)),
-                ('date', models.DateTimeField()),
-                ('address', models.TextField(blank=True, null=True)),
-                ('iban', models.CharField(blank=True, max_length=34, null=True)),
-                ('bic', models.CharField(blank=True, max_length=11, null=True)),
-                ('amount', models.FloatField()),
-                ('currency_code', models.CharField(max_length=3)),
-                ('remittance_user_string', models.CharField(max_length=300)),
-                ('state', models.CharField(choices=[(b'new', 'new'), (b'manual', 'manual'), (b'processed', 'processed')], default=b'new', max_length=50)),
-                ('filename', models.CharField(max_length=300)),
-                ('transaction_id', models.CharField(max_length=100)),
-                ('amount_to_reimburse', models.FloatField(blank=True, default=0)),
-                ('type', models.CharField(choices=[(b'subscription_payment', 'subscription payment'), (b'subscription_payment_to_reimburse', 'subscription payment (to reimburse)'), (b'course_payment_transfer', 'course payment transfer'), (b'irrelevant', 'irrelevant'), (b'unknown', 'unknown')], default=b'unknown', help_text=b'The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.', max_length=50, verbose_name=b'type (detected)')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
+                ("date", models.DateTimeField()),
+                ("address", models.TextField(blank=True, null=True)),
+                ("iban", models.CharField(blank=True, max_length=34, null=True)),
+                ("bic", models.CharField(blank=True, max_length=11, null=True)),
+                ("amount", models.FloatField()),
+                ("currency_code", models.CharField(max_length=3)),
+                ("remittance_user_string", models.CharField(max_length=300)),
+                (
+                    "state",
+                    models.CharField(
+                        choices=[
+                            (b"new", "new"),
+                            (b"manual", "manual"),
+                            (b"processed", "processed"),
+                        ],
+                        default=b"new",
+                        max_length=50,
+                    ),
+                ),
+                ("filename", models.CharField(max_length=300)),
+                ("transaction_id", models.CharField(max_length=100)),
+                ("amount_to_reimburse", models.FloatField(blank=True, default=0)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            (b"subscription_payment", "subscription payment"),
+                            (
+                                b"subscription_payment_to_reimburse",
+                                "subscription payment (to reimburse)",
+                            ),
+                            (b"course_payment_transfer", "course payment transfer"),
+                            (b"irrelevant", "irrelevant"),
+                            (b"unknown", "unknown"),
+                        ],
+                        default=b"unknown",
+                        help_text=b"The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.",
+                        max_length=50,
+                        verbose_name=b"type (detected)",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SubscriptionPayment',
+            name="SubscriptionPayment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.FloatField()),
-                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='subscription_payments', to='payment.Payment')),
-                ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='subscription_payments', to='courses.Subscribe')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("amount", models.FloatField()),
+                (
+                    "payment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="subscription_payments",
+                        to="payment.Payment",
+                    ),
+                ),
+                (
+                    "subscription",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="subscription_payments",
+                        to="courses.Subscribe",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='payment',
-            name='subscriptions',
-            field=models.ManyToManyField(blank=True, through='payment.SubscriptionPayment', to='courses.Subscribe'),
+            model_name="payment",
+            name="subscriptions",
+            field=models.ManyToManyField(
+                blank=True,
+                through="payment.SubscriptionPayment",
+                to="courses.Subscribe",
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='name',
+            model_name="payment",
+            name="name",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('manual', 'manual'), ('processed', 'processed')], default='new', max_length=50),
+            model_name="payment",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("manual", "manual"),
+                    ("processed", "processed"),
+                ],
+                default="new",
+                max_length=50,
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='type',
-            field=models.CharField(choices=[('subscription_payment', 'subscription payment'), ('subscription_payment_to_reimburse', 'subscription payment (to reimburse)'), ('course_payment_transfer', 'course payment transfer'), ('irrelevant', 'irrelevant'), ('unknown', 'unknown')], default='unknown', help_text='The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.', max_length=50, verbose_name='type (detected)'),
+            model_name="payment",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("subscription_payment", "subscription payment"),
+                    (
+                        "subscription_payment_to_reimburse",
+                        "subscription payment (to reimburse)",
+                    ),
+                    ("course_payment_transfer", "course payment transfer"),
+                    ("irrelevant", "irrelevant"),
+                    ("unknown", "unknown"),
+                ],
+                default="unknown",
+                help_text="The type is auto-detected when the state is NEW, otherwise the detector will not touch this field anymore.",
+                max_length=50,
+                verbose_name="type (detected)",
+            ),
         ),
         migrations.CreateModel(
-            name='CoursePayment',
+            name="CoursePayment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.FloatField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='course_payments', to='courses.Course')),
-                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='course_payments', to='payment.Payment')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("amount", models.FloatField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="course_payments",
+                        to="courses.Course",
+                    ),
+                ),
+                (
+                    "payment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="course_payments",
+                        to="payment.Payment",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PaymentReminder',
+            name="PaymentReminder",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text='The date when the reminder mail was sent to the subscriber.')),
-                ('mail', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='post_office.Email')),
-                ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payment_reminders', to='courses.Subscribe')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        auto_now_add=True,
+                        help_text="The date when the reminder mail was sent to the subscriber.",
+                    ),
+                ),
+                (
+                    "mail",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="post_office.Email",
+                    ),
+                ),
+                (
+                    "subscription",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payment_reminders",
+                        to="courses.Subscribe",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-date'],
+                "ordering": ["-date"],
             },
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('manual', 'manual'), ('fixed', 'fixed'), ('processed', 'processed')], default='new', max_length=50),
+            model_name="payment",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("manual", "manual"),
+                    ("fixed", "fixed"),
+                    ("processed", "processed"),
+                ],
+                default="new",
+                max_length=50,
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('manual', 'manual'), ('matched', 'matched'), ('processed', 'processed')], default='new', max_length=50),
+            model_name="payment",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("manual", "manual"),
+                    ("matched", "matched"),
+                    ("processed", "processed"),
+                ],
+                default="new",
+                max_length=50,
+            ),
         ),
         migrations.AddField(
-            model_name='payment',
-            name='comment',
+            model_name="payment",
+            name="comment",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='payment',
-            name='credit_debit',
-            field=models.CharField(choices=[('unknown', 'unknown'), ('credit', 'credit (incoming money)'), ('debit', 'debit (outgoing money)')], default='unknown', help_text='If this transaction is a credit or a debit.', max_length=50, verbose_name='credit/debit'),
+            model_name="payment",
+            name="credit_debit",
+            field=models.CharField(
+                choices=[
+                    ("unknown", "unknown"),
+                    ("credit", "credit (incoming money)"),
+                    ("debit", "debit (outgoing money)"),
+                ],
+                default="unknown",
+                help_text="If this transaction is a credit or a debit.",
+                max_length=50,
+                verbose_name="credit/debit",
+            ),
         ),
         migrations.AlterModelOptions(
-            name='payment',
-            options={'ordering': ['date']},
+            name="payment",
+            options={"ordering": ["date"]},
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='remittance_user_string',
+            model_name="payment",
+            name="remittance_user_string",
             field=models.CharField(max_length=600),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('manual', 'manual'), ('matched', 'matched'), ('processed', 'processed'), ('archive', 'archive')], default='new', max_length=50),
+            model_name="payment",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("manual", "manual"),
+                    ("matched", "matched"),
+                    ("processed", "processed"),
+                    ("archive", "archive"),
+                ],
+                default="new",
+                max_length=50,
+            ),
         ),
         migrations.AlterModelOptions(
-            name='payment',
-            options={'ordering': ['-date']},
+            name="payment",
+            options={"ordering": ["-date"]},
         ),
     ]

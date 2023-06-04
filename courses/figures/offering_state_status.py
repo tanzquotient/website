@@ -10,22 +10,28 @@ def offering_state_status(offering_type: str) -> Figure:
     offerings = list(Offering.objects.filter(type=offering_type).reverse().all())
 
     colors = {
-        SubscribeState.NEW: '#936fac',
-        SubscribeState.CONFIRMED: '#f29222',
-        SubscribeState.COMPLETED: '#0cb2af',
-        SubscribeState.PAID: '#a1c65d',
-        SubscribeState.REJECTED: '#e95e50',
-        SubscribeState.TO_REIMBURSE: '#fac723',
+        SubscribeState.NEW: "#936fac",
+        SubscribeState.CONFIRMED: "#f29222",
+        SubscribeState.COMPLETED: "#0cb2af",
+        SubscribeState.PAID: "#a1c65d",
+        SubscribeState.REJECTED: "#e95e50",
+        SubscribeState.TO_REIMBURSE: "#fac723",
     }
 
     return stacked_bar_chart(
         labels=[
-            f'<a href="{reverse("courses:offering_overview", args=[o.id])}">{escape(o.name)}</a>' for o in offerings
+            f'<a href="{reverse("courses:offering_overview", args=[o.id])}">{escape(o.name)}</a>'
+            for o in offerings
         ],
         data=[
             DataSeries(
                 name=label,
-                values=[Subscribe.objects.filter(state=key, course__offering=o).count() for o in offerings],
-                color=colors.get(key)
-            ) for key, label in SubscribeState.CHOICES
-        ])
+                values=[
+                    Subscribe.objects.filter(state=key, course__offering=o).count()
+                    for o in offerings
+                ],
+                color=colors.get(key),
+            )
+            for key, label in SubscribeState.CHOICES
+        ],
+    )

@@ -16,14 +16,16 @@ class EventCategory(TranslatableModel):
     )
 
     def get_events(self):
-        return Event.displayed_events.future().filter(category=self, cancelled=False).all()
+        return (
+            Event.displayed_events.future().filter(category=self, cancelled=False).all()
+        )
 
     def get_next_events(self):
         limit = 3
-        return self.get_events().order_by('date', 'time_from')[:limit]
+        return self.get_events().order_by("date", "time_from")[:limit]
 
     def get_name(self):
-        return TranslationUtils.get_text_with_language_fallback(self, 'name')
+        return TranslationUtils.get_text_with_language_fallback(self, "name")
 
     def __str__(self):
         return self.get_name()

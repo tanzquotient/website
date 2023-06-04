@@ -11,124 +11,281 @@ import parler.models
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('email_system', '0001_initial'), ('email_system', '0002_auto_20200415_1300'), ('email_system', '0003_auto_20200415_1411'), ('email_system', '0004_auto_20200422_1941'), ('email_system', '0005_auto_20200425_1508'), ('email_system', '0006_auto_20200427_1901')]
+    replaces = [
+        ("email_system", "0001_initial"),
+        ("email_system", "0002_auto_20200415_1300"),
+        ("email_system", "0003_auto_20200415_1411"),
+        ("email_system", "0004_auto_20200422_1941"),
+        ("email_system", "0005_auto_20200425_1508"),
+        ("email_system", "0006_auto_20200427_1901"),
+    ]
 
     initial = True
 
     dependencies = [
-        ('auth', '0011_update_proxy_permissions'),
+        ("auth", "0011_update_proxy_permissions"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('post_office', '0008_attachment_headers'),
+        ("post_office", "0008_attachment_headers"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GroupEmail',
+            name="GroupEmail",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sent_at', models.DateTimeField(blank=True, null=True)),
-                ('target_group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tq_emails', to='auth.group', verbose_name='Target group')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("sent_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "target_group",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="tq_emails",
+                        to="auth.group",
+                        verbose_name="Target group",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
-                'verbose_name': 'Group Email',
+                "abstract": False,
+                "verbose_name": "Group Email",
             },
             bases=(parler.models.TranslatableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='GroupEmailTranslation',
+            name="GroupEmailTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('subject', models.CharField(blank=True, max_length=100, null=True, verbose_name='Subject')),
-                ('message', djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Content of the email', null=True, verbose_name='Message')),
-                ('master', parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='email_system.groupemail')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "subject",
+                    models.CharField(
+                        blank=True, max_length=100, null=True, verbose_name="Subject"
+                    ),
+                ),
+                (
+                    "message",
+                    djangocms_text_ckeditor.fields.HTMLField(
+                        blank=True,
+                        help_text="Content of the email",
+                        null=True,
+                        verbose_name="Message",
+                    ),
+                ),
+                (
+                    "master",
+                    parler.fields.TranslationsForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="email_system.groupemail",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Email Translation',
-                'db_table': 'email_system_tqemail_translation',
-                'db_tablespace': '',
-                'managed': True,
-                'default_permissions': (),
-                'unique_together': {('language_code', 'master')},
+                "verbose_name": "Email Translation",
+                "db_table": "email_system_tqemail_translation",
+                "db_tablespace": "",
+                "managed": True,
+                "default_permissions": (),
+                "unique_together": {("language_code", "master")},
             },
             bases=(parler.models.TranslatedFieldsModelMixin, models.Model),
         ),
         migrations.AlterModelTable(
-            name='groupemailtranslation',
-            table='email_system_groupemail_translation',
+            name="groupemailtranslation",
+            table="email_system_groupemail_translation",
         ),
         migrations.CreateModel(
-            name='GeneratedIndividualEmail',
+            name="GeneratedIndividualEmail",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='generated_group_emails', to='post_office.email')),
-                ('source', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='generated_emails', to='email_system.groupemail')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "email",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="generated_group_emails",
+                        to="post_office.email",
+                    ),
+                ),
+                (
+                    "source",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="generated_emails",
+                        to="email_system.groupemail",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Generated individual Email',
+                "verbose_name": "Generated individual Email",
             },
         ),
         migrations.CreateModel(
-            name='TqEmailAddress',
+            name="TqEmailAddress",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email_address', models.EmailField(max_length=254)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email_address", models.EmailField(max_length=254)),
             ],
             options={
-                'abstract': False,
-                'verbose_name': 'Email Address',
-                'verbose_name_plural': 'Email Addresses',
+                "abstract": False,
+                "verbose_name": "Email Address",
+                "verbose_name_plural": "Email Addresses",
             },
             bases=(parler.models.TranslatableModelMixin, models.Model),
         ),
         migrations.AlterModelOptions(
-            name='groupemailtranslation',
-            options={'default_permissions': (), 'managed': True, 'verbose_name': 'Group Email Translation'},
+            name="groupemailtranslation",
+            options={
+                "default_permissions": (),
+                "managed": True,
+                "verbose_name": "Group Email Translation",
+            },
         ),
         migrations.CreateModel(
-            name='UnsubscribeCode',
+            name="UnsubscribeCode",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(default=email_system.models.unsubscribe_code._generate_code, max_length=36)),
-                ('generated_at', models.DateTimeField(default=datetime.datetime.now)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='unsubscribe_codes', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "code",
+                    models.CharField(
+                        default=email_system.models.unsubscribe_code._generate_code,
+                        max_length=36,
+                    ),
+                ),
+                ("generated_at", models.DateTimeField(default=datetime.datetime.now)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="unsubscribe_codes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='groupemail',
-            name='reply_to',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='group_email_reply_tos', to='email_system.tqemailaddress', verbose_name='Reply-To address'),
+            model_name="groupemail",
+            name="reply_to",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="group_email_reply_tos",
+                to="email_system.tqemailaddress",
+                verbose_name="Reply-To address",
+            ),
         ),
         migrations.CreateModel(
-            name='TqEmailAddressTranslation',
+            name="TqEmailAddressTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('description', models.CharField(blank=True, max_length=200, null=True, verbose_name='Description')),
-                ('master', parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='email_system.tqemailaddress')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "description",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Description",
+                    ),
+                ),
+                (
+                    "master",
+                    parler.fields.TranslationsForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="email_system.tqemailaddress",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Email Address Translation',
-                'db_table': 'email_system_tqemailaddress_translation',
-                'db_tablespace': '',
-                'managed': True,
-                'default_permissions': (),
-                'unique_together': {('language_code', 'master')},
+                "verbose_name": "Email Address Translation",
+                "db_table": "email_system_tqemailaddress_translation",
+                "db_tablespace": "",
+                "managed": True,
+                "default_permissions": (),
+                "unique_together": {("language_code", "master")},
             },
             bases=(parler.models.TranslatedFieldsModelMixin, models.Model),
         ),
         migrations.AlterField(
-            model_name='groupemailtranslation',
-            name='message',
-            field=djangocms_text_ckeditor.fields.HTMLField(default='', help_text='Content of the email', verbose_name='Message'),
+            model_name="groupemailtranslation",
+            name="message",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                default="", help_text="Content of the email", verbose_name="Message"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='groupemailtranslation',
-            name='subject',
-            field=models.CharField(default='<empty>', max_length=100, verbose_name='Subject'),
+            model_name="groupemailtranslation",
+            name="subject",
+            field=models.CharField(
+                default="<empty>", max_length=100, verbose_name="Subject"
+            ),
             preserve_default=False,
         ),
     ]

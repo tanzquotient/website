@@ -6,9 +6,13 @@ from parler.models import TranslatableModel, TranslatedFields
 
 class Style(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    parent_style = models.ForeignKey(to="Style", null=True, blank=True, related_name='children', on_delete=SET_NULL)
+    parent_style = models.ForeignKey(
+        to="Style", null=True, blank=True, related_name="children", on_delete=SET_NULL
+    )
     filter_enabled = models.BooleanField(default=False, null=False, blank=False)
-    filter_enabled.help_text = 'If set to true, users can filter courses list based on this style'
+    filter_enabled.help_text = (
+        "If set to true, users can filter courses list based on this style"
+    )
     url_info = models.URLField(max_length=500, blank=True, null=True)
     url_info.help_text = "A url to an information page (e.g. Wikipedia)."
     url_video = models.URLField(max_length=500, blank=True, null=True)
@@ -17,9 +21,8 @@ class Style(TranslatableModel):
     url_playlist.help_text = "A url to a playlist (e.g on online-Spotify, Youtube)."
 
     translations = TranslatedFields(
-        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True)
+        description=HTMLField(verbose_name="[TR] Description", blank=True, null=True)
     )
-
 
     def has_external_urls(self):
         return self.url_info or self.url_video or self.url_playlist
@@ -28,7 +31,7 @@ class Style(TranslatableModel):
         return "{}".format(self.name)
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
 
     def is_child_of(self, style):
         current_style = self

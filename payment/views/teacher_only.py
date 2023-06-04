@@ -12,8 +12,11 @@ class TeacherOnly(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         # check permissions not expressed by auth.perm
-        if not self.request.user.is_staff and not self.request.user.profile.is_teacher() and not self.request.user.has_perm(
-                'courses.change_subscribe'):
+        if (
+            not self.request.user.is_staff
+            and not self.request.user.profile.is_teacher()
+            and not self.request.user.has_perm("courses.change_subscribe")
+        ):
             raise PermissionDenied
 
         return super(TeacherOnly, self).dispatch(*args, **kwargs)

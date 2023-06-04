@@ -14,13 +14,13 @@ def copy_event(modeladmin, request, queryset) -> None:
         event.save()
         old_event = Event.objects.get(id=old_id)
 
-        event.set_current_language('de')
-        old_event.set_current_language('de')
+        event.set_current_language("de")
+        old_event.set_current_language("de")
         event.name = old_event.name
         event.description = old_event.description
 
-        event.set_current_language('en')
-        old_event.set_current_language('en')
+        event.set_current_language("en")
+        old_event.set_current_language("en")
         event.name = old_event.name
         event.description = old_event.description
 
@@ -34,7 +34,7 @@ def export_registrations_csv(modeladmin, request, queryset):
     event_ids = []
     for c in queryset:
         event_ids.append(c.id)
-    return services.export_registrations(event_ids, 'csv')
+    return services.export_registrations(event_ids, "csv")
 
 
 export_registrations_csv.short_description = "Export registrations (CSV)"
@@ -44,7 +44,7 @@ def export_registrations_excel(modeladmin, request, queryset):
     event_ids = []
     for c in queryset:
         event_ids.append(c.id)
-    return services.export_registrations(event_ids, 'xlsx')
+    return services.export_registrations(event_ids, "xlsx")
 
 
 export_registrations_excel.short_description = "Export registrations (Excel)"

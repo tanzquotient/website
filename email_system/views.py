@@ -7,4 +7,4 @@ from email_system import services
 def unsubscribe(request, context, user_id, code):
     success = services.unsubscribe(context, user_id, code)
     context = dict(success=success)
-    return render(request, 'email_system/unsubscribe.html', context)
+    return render(request, "email_system/unsubscribe.html", context)

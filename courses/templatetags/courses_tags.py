@@ -13,7 +13,7 @@ def trans_weekday(key: str) -> str:
     return Weekday.WEEKDAYS_TRANSLATIONS[key]
 
 
-@register.inclusion_tag(filename='courses/snippets/offerings_list.html')
+@register.inclusion_tag(filename="courses/snippets/offerings_list.html")
 def offerings_list(detail_url: str, only_public: bool = True) -> dict:
     offering_types = [OfferingType.REGULAR, OfferingType.IRREGULAR]
     return dict(
@@ -23,20 +23,30 @@ def offerings_list(detail_url: str, only_public: bool = True) -> dict:
     )
 
 
-@register.inclusion_tag(filename='courses/snippets/course_reviews.html')
+@register.inclusion_tag(filename="courses/snippets/course_reviews.html")
 def course_reviews(course: Course) -> dict:
-    answers = Answer.objects.filter(hide_from_public_reviews=False,
-                                    question__public_review=True,
-                                    survey_instance__course__type=course.type).prefetch_related(
-        'survey_instance', 'question').distinct()
+    answers = (
+        Answer.objects.filter(
+            hide_from_public_reviews=False,
+            question__public_review=True,
+            survey_instance__course__type=course.type,
+        )
+        .prefetch_related("survey_instance", "question")
+        .distinct()
+    )
 
-    text_answers = answers.filter(question__type=QuestionType.FREE_FORM).order_by('-survey_instance__last_update')
+    text_answers = answers.filter(question__type=QuestionType.FREE_FORM).order_by(
+        "-survey_instance__last_update"
+    )
 
-    text_reviews = [dict(
-        text=answer.value,
-        date=answer.survey_instance.last_update,
-        course=answer.survey_instance.course
-    ) for answer in text_answers]
+    text_reviews = [
+        dict(
+            text=answer.value,
+            date=answer.survey_instance.last_update,
+            course=answer.survey_instance.course,
+        )
+        for answer in text_answers
+    ]
     show_reviews = len(text_reviews) > 0
 
     return dict(show_reviews=show_reviews, text_reviews=text_reviews)

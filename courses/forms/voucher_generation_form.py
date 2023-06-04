@@ -5,4 +5,6 @@ from . import VoucherForm
 
 
 class VoucherGenerationForm(VoucherForm):
-    number_of_vouchers = forms.IntegerField(label=_("How many voucher should be generated?"), initial=20)
+    number_of_vouchers = forms.IntegerField(
+        label=_("How many voucher should be generated?"), initial=20
+    )

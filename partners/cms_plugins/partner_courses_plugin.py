@@ -17,16 +17,17 @@ class PartnerOfferingsPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         offerings = [
             {
-                'offering': offering,
-                'sections': services.get_sections(offering, course_filter=lambda c: c.is_displayed())
+                "offering": offering,
+                "sections": services.get_sections(
+                    offering, course_filter=lambda c: c.is_displayed()
+                ),
             }
-            for offering in Offering.objects.filter(type=OfferingType.PARTNER, display=True)
+            for offering in Offering.objects.filter(
+                type=OfferingType.PARTNER, display=True
+            )
         ]
-        offerings = list(filter(lambda o: len(o['sections']) > 0, offerings))
-        context.update({
-            'offerings': offerings,
-            'hide_title': len(offerings) <= 1
-        })
+        offerings = list(filter(lambda o: len(o["sections"]) > 0, offerings))
+        context.update({"offerings": offerings, "hide_title": len(offerings) <= 1})
         return context
 
 

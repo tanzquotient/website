@@ -11,18 +11,23 @@ import os
 import yaml
 
 # Location to store output file in
-VARIABLES_FILE = 'variables.yml'
-OVERRIDE_FILE = 'overrides.yml'
-DEV_OVERRIDES = 'configurations/dev-overrides.yml'
+VARIABLES_FILE = "variables.yml"
+OVERRIDE_FILE = "overrides.yml"
+DEV_OVERRIDES = "configurations/dev-overrides.yml"
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Generate the environment overrides')
-    parser.add_argument('-f', '--force', action='store_true', help='Overrides file, if it already exists')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Generate the environment overrides")
+    parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        help="Overrides file, if it already exists",
+    )
     args = parser.parse_args()
 
     if os.path.exists(OVERRIDE_FILE) and not args.force:
-        raise SystemExit('{} already exists - skipping'.format(OVERRIDE_FILE))
+        raise SystemExit("{} already exists - skipping".format(OVERRIDE_FILE))
 
     # Load variables
     with open(VARIABLES_FILE) as var_file:
@@ -37,11 +42,11 @@ if __name__ == '__main__':
     for key in variables.keys():
         default = 1
         default_value = variables[key][default]
-        if default_value == 'overrideme':
+        if default_value == "overrideme":
             overrides[key] = overrides.get(key, default_value)
 
     # Write overrides.yml file
-    with open(OVERRIDE_FILE, 'w') as override_file:
+    with open(OVERRIDE_FILE, "w") as override_file:
         for key, value in overrides.items():
             line = "{}: {}\n".format(key, value)
             override_file.write(line)

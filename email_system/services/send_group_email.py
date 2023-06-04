@@ -12,7 +12,7 @@ def _get_language(user) -> str:
     try:
         return user.profile.language
     except UserProfile.DoesNotExist:
-        return 'en'
+        return "en"
 
 
 def send_group_email(group_email: GroupEmail) -> None:
@@ -27,35 +27,42 @@ def send_group_email(group_email: GroupEmail) -> None:
     emails = []
 
     for user in group_email.target_group.user_set.all():
-
         # Get context for email
         context = {
-            'first_name': user.first_name,
-            'last_name': user.last_name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
         }
 
         group_email.set_current_language(_get_language(user))
-        subject = TranslationUtils.get_text_with_language_fallback(group_email, 'subject')
-        html_message = TranslationUtils.get_text_with_language_fallback(group_email, 'message')
+        subject = TranslationUtils.get_text_with_language_fallback(
+            group_email, "subject"
+        )
+        html_message = TranslationUtils.get_text_with_language_fallback(
+            group_email, "message"
+        )
 
         headers = {}
         if group_email.reply_to is not None:
-            headers['Reply-to'] = group_email.reply_to.email_address
+            headers["Reply-to"] = group_email.reply_to.email_address
 
         if unsubscribe_context is not None:
             unsubscribe_code, _ = UnsubscribeCode.objects.get_or_create(user=user)
             unsubscribe_url = unsubscribe_code.get_unsubscribe_url(unsubscribe_context)
-            headers['List-unsubscribe'] = '<{}>'.format(unsubscribe_url)
-            html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(unsubscribe_url)
+            headers["List-unsubscribe"] = "<{}>".format(unsubscribe_url)
+            html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(
+                unsubscribe_url
+            )
 
         # Add email
-        emails.append(dict(
-            to=user.email,
-            subject=subject,
-            headers=headers,
-            html_message=html_message,
-            context=context,
-        ))
+        emails.append(
+            dict(
+                to=user.email,
+                subject=subject,
+                headers=headers,
+                html_message=html_message,
+                context=context,
+            )
+        )
 
     sent_emails = send_all_emails(emails)
     for email in sent_emails:

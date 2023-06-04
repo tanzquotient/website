@@ -17,11 +17,18 @@ class PartnersPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         language = get_language()
         if language is None:
-            language = 'en'
-        partners = Partner.objects.filter(active=True).translated(language).order_by('translations__name').all()
-        context.update({
-            'partners': partners,
-        })
+            language = "en"
+        partners = (
+            Partner.objects.filter(active=True)
+            .translated(language)
+            .order_by("translations__name")
+            .all()
+        )
+        context.update(
+            {
+                "partners": partners,
+            }
+        )
         return context
 
 

@@ -8,9 +8,7 @@ class SurveyDetail(generics.RetrieveAPIView):
     model = Survey
     serializer_class = SurveySerializer
     queryset = Survey.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
+    permission_classes = [permissions.AllowAny]
 
 
 class SurveyAnswer(ReadOnlyModelViewSet):

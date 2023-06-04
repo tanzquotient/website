@@ -1,18 +1,19 @@
 class SubscribeState:
-    NEW = 'new'
-    CONFIRMED = 'confirmed'
-    PAID = 'payed'
-    COMPLETED = 'completed'
-    REJECTED = 'rejected'
-    TO_REIMBURSE = 'to_reimburse'
+    NEW = "new"
+    CONFIRMED = "confirmed"
+    PAID = "payed"
+    COMPLETED = "completed"
+    REJECTED = "rejected"
+    TO_REIMBURSE = "to_reimburse"
 
     CHOICES = (
-        (NEW, 'new'),
-        (CONFIRMED, 'confirmed (to pay)'),
-        (PAID, 'paid'),
-        (COMPLETED, 'completed'),
-        (REJECTED, 'rejected'),
-        (TO_REIMBURSE, 'to reimburse'))
+        (NEW, "new"),
+        (CONFIRMED, "confirmed (to pay)"),
+        (PAID, "paid"),
+        (COMPLETED, "completed"),
+        (REJECTED, "rejected"),
+        (TO_REIMBURSE, "to reimburse"),
+    )
 
     ACCEPTED_STATES = [CONFIRMED, PAID, COMPLETED]
     REJECTED_STATES = [REJECTED, TO_REIMBURSE]

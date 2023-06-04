@@ -7,10 +7,10 @@ from courses.admin_actions import *
 class SubscribeOfferingListFilter(SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
-    title = 'Offering'
+    title = "Offering"
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'offering'
+    parameter_name = "offering"
 
     def lookups(self, request, model_admin):
         """
@@ -24,7 +24,7 @@ class SubscribeOfferingListFilter(SimpleListFilter):
 
         current = services.get_current_active_offering()
         if current is not None:
-            filters += (('current', 'Current ({})'.format(current.name)),)
+            filters += (("current", "Current ({})".format(current.name)),)
 
         for o in Offering.objects.all():
             filters += ((o.id, o.name),)
@@ -41,7 +41,7 @@ class SubscribeOfferingListFilter(SimpleListFilter):
 
         if self.value() is None:
             return queryset
-        elif self.value() == 'current':
+        elif self.value() == "current":
             return self.filter_by_offering(queryset, current.id)
         else:
             return self.filter_by_offering(queryset, self.value())
@@ -61,10 +61,10 @@ class SubscribeOfferingListFilter(SimpleListFilter):
 class SubscribeCourseListFilter(SimpleListFilter):
     # Human-readable title which will be displayed in the
     # right admin sidebar just above the filter options.
-    title = 'Course'
+    title = "Course"
 
     # Parameter for the filter that will be used in the URL query.
-    parameter_name = 'course'
+    parameter_name = "course"
 
     def lookups(self, request, model_admin):
         """
@@ -78,10 +78,10 @@ class SubscribeCourseListFilter(SimpleListFilter):
         current = services.get_current_active_offering()
 
         filters = ()
-        o=None
-        if request.GET is not None and 'offering' in request.GET:
-            o = request.GET['offering']
-            if o == 'current':
+        o = None
+        if request.GET is not None and "offering" in request.GET:
+            o = request.GET["offering"]
+            if o == "current":
                 o = current.id
         for c in Course.objects.filter(offering=o).all():
             filters += ((c.id, c.name),)
@@ -125,9 +125,9 @@ class ConfirmationCourseListFilter(SubscribeCourseListFilter):
 
 
 class CourseTypeStyleFilter(SimpleListFilter):
-    title = _('Style')
+    title = _("Style")
 
-    parameter_name = 'parent'
+    parameter_name = "parent"
 
     def lookups(self, request, model_admin):
         return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
@@ -137,14 +137,16 @@ class CourseTypeStyleFilter(SimpleListFilter):
             return queryset
         else:
             style = Style.objects.get(name=self.value())
-            children = [s.id for s in Style.objects.all() if s == style or s.is_child_of(style)]
+            children = [
+                s.id for s in Style.objects.all() if s == style or s.is_child_of(style)
+            ]
             return queryset.filter(styles__in=children).distinct()
 
 
 class StyleParentFilter(SimpleListFilter):
-    title = 'parent style'
+    title = "parent style"
 
-    parameter_name = 'parent'
+    parameter_name = "parent"
 
     def lookups(self, request, model_admin):
         return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
@@ -157,9 +159,9 @@ class StyleParentFilter(SimpleListFilter):
 
 
 class StyleChildrenOfFilter(SimpleListFilter):
-    title = 'children of'
+    title = "children of"
 
-    parameter_name = 'children_of'
+    parameter_name = "children_of"
 
     def lookups(self, request, model_admin):
         return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]

@@ -6,4 +6,4 @@ def plot_figure(figure: Figure) -> str:
     config = dict(
         displayModeBar=False,
     )
-    return plot(figure, output_type='div', include_plotlyjs=False, config=config)
+    return plot(figure, output_type="div", include_plotlyjs=False, config=config)

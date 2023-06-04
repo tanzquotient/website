@@ -10,11 +10,18 @@ from ..utils import validate_amount_and_percentage, validate_amount, validate_pe
 
 
 class VoucherForm(forms.Form):
-    percentage = forms.IntegerField(label=_('Reduction in percent (0-100).'), required=False)
-    amount = forms.IntegerField(label=_('Value of the voucher in CHF.'), required=False)
+    percentage = forms.IntegerField(
+        label=_("Reduction in percent (0-100)."), required=False
+    )
+    amount = forms.IntegerField(label=_("Value of the voucher in CHF."), required=False)
     purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
-    expires_flag = forms.BooleanField(label=_("Set expire date?"), initial=False, required=False)
-    expires = forms.DateField(widget=SelectDateWidget, initial=datetime.date.today() + datetime.timedelta(days=365))
+    expires_flag = forms.BooleanField(
+        label=_("Set expire date?"), initial=False, required=False
+    )
+    expires = forms.DateField(
+        widget=SelectDateWidget,
+        initial=datetime.date.today() + datetime.timedelta(days=365),
+    )
 
     def clean(self) -> dict:
         cleaned_data = super().clean()

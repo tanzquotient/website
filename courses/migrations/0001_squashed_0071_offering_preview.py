@@ -21,6 +21,7 @@ import parler.fields
 # courses.migrations.0036_auto_20160902_1135
 # courses.migrations.0061_auto_20190525_1348
 
+
 def populate_status(apps, schema_editor):
     Subscribe = apps.get_model("courses", "Subscribe")
     for s in Subscribe.objects.all():
@@ -33,6 +34,7 @@ def populate_status(apps, schema_editor):
                 s.status = "confirmed"
         s.save()
 
+
 def populate_usi(apps, schema_editor):
     Subscribe = apps.get_model("courses", "Subscribe")
     for s in Subscribe.objects.all():
@@ -40,468 +42,1128 @@ def populate_usi(apps, schema_editor):
             s.usi = s.generate_usi()
             s.save()
 
+
 def migrate_untranslated_course(apps, schema_editor):
-    MyModel = apps.get_model('courses', 'Course')
-    MyModelTranslation = apps.get_model('courses', 'CourseTranslation')
+    MyModel = apps.get_model("courses", "Course")
+    MyModelTranslation = apps.get_model("courses", "CourseTranslation")
 
     for object in MyModel.objects.all():
         MyModelTranslation.objects.create(
             master_id=object.pk,
-            language_code='de',
+            language_code="de",
             description=object.special,
         )
 
+
 def migrate_untranslated_style(apps, schema_editor):
-    MyModel = apps.get_model('courses', 'Style')
-    MyModelTranslation = apps.get_model('courses', 'StyleTranslation')
+    MyModel = apps.get_model("courses", "Style")
+    MyModelTranslation = apps.get_model("courses", "StyleTranslation")
 
     for object in MyModel.objects.all():
         MyModelTranslation.objects.create(
             master_id=object.pk,
-            language_code='de',
+            language_code="de",
             description=object.description,
         )
+
 
 def migrate_untranslated_room(apps, schema_editor):
-    MyModel = apps.get_model('courses', 'Room')
-    MyModelTranslation = apps.get_model('courses', 'RoomTranslation')
+    MyModel = apps.get_model("courses", "Room")
+    MyModelTranslation = apps.get_model("courses", "RoomTranslation")
 
     for object in MyModel.objects.all():
         MyModelTranslation.objects.create(
             master_id=object.pk,
-            language_code='de',
+            language_code="de",
             description=object.description,
         )
+
 
 def migrate_untranslated_coursetype(apps, schema_editor):
-    MyModel = apps.get_model('courses', 'CourseType')
-    MyModelTranslation = apps.get_model('courses', 'CourseTypeTranslation')
+    MyModel = apps.get_model("courses", "CourseType")
+    MyModelTranslation = apps.get_model("courses", "CourseTypeTranslation")
 
     for object in MyModel.objects.all():
         MyModelTranslation.objects.create(
             master_id=object.pk,
-            language_code='de',
+            language_code="de",
             description=object.description,
         )
 
-def migrate_open_class(apps, _):
-    course_model = apps.get_model('courses', 'Course')
 
-    course_model.objects.filter(open_class=True).update(subscription_type='open_class')
+def migrate_open_class(apps, _):
+    course_model = apps.get_model("courses", "Course")
+
+    course_model.objects.filter(open_class=True).update(subscription_type="open_class")
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('courses', '0001_initial'), ('courses', '0002_auto_20150211_0920'), ('courses', '0003_auto_20150211_0923'), ('courses', '0004_auto_20150212_1504'), ('courses', '0005_auto_20150304_1742'), ('courses', '0006_userprofile_body_height'), ('courses', '0007_auto_20150319_1303'), ('courses', '0008_musicpluginmodel'), ('courses', '0009_auto_20150326_1702'), ('courses', '0010_auto_20150416_1639'), ('courses', '0011_auto_20150522_1409'), ('courses', '0012_auto_20150525_1844'), ('courses', '0013_auto_20150616_1102'), ('courses', '0014_userprofile_get_involved'), ('courses', '0015_auto_20150806_1803'), ('courses', '0016_subscribe_matching_state'), ('courses', '0017_fix_subscribe_matching_state'), ('courses', '0018_auto_20150920_1901'), ('courses', '0019_auto_20151013_1222'), ('courses', '0020_style_url_playlist'), ('courses', '0021_auto_20160220_1828'), ('courses', '0022_auto_20160401_2320'), ('courses', '0023_auto_20160403_1754'), ('courses', '0024_subscribe_paymentmethod'), ('courses', '0025_auto_20160405_1015'), ('courses', '0026_auto_20160405_1337'), ('courses', '0027_voucher_pdf_file'), ('courses', '0028_auto_20160415_1600'), ('courses', '0029_auto_20160417_1659'), ('courses', '0030_auto_20160417_1743'), ('courses', '0031_course_evaluated'), ('courses', '0032_auto_20160603_1123'), ('courses', '0033_auto_20160704_1158'), ('courses', '0034_auto_20160828_2324'), ('courses', '0035_remove_mugshot'), ('courses', '0036_auto_20160902_1135'), ('courses', '0037_auto_20160905_1307'), ('courses', '0038_auto_20160906_1116'), ('courses', '0039_voucher_subscription'), ('courses', '0040_auto_20161120_2139'), ('courses', '0041_subscribe_price_to_pay'), ('courses', '0042_auto_20170413_0935'), ('courses', '0043_auto_20170415_1059'), ('courses', '0044_auto_20170415_1106'), ('courses', '0045_auto_20170415_1116'), ('courses', '0046_bankaccount_bank_country'), ('courses', '0047_auto_20170415_1207'), ('courses', '0048_auto_20170614_0757'), ('courses', '0049_auto_20170614_0929'), ('courses', '0050_auto_20171103_1423'), ('courses', '0051_auto_20171104_1110'), ('courses', '0052_auto_20180507_1705'), ('courses', '0053_voucher_percentage'), ('courses', '0054_auto_20180820_2006'), ('courses', '0055_auto_20190425_1717'), ('courses', '0056_remove_userena'), ('courses', '0057_unique_email'), ('courses', '0058_userprofile_picture'), ('courses', '0059_auto_20190523_2245'), ('courses', '0060_auto_20190524_1856'), ('courses', '0061_auto_20190525_1348'), ('courses', '0062_auto_20190606_1802'), ('courses', '0063_auto_20190707_1622'), ('courses', '0064_auto_20190707_1923'), ('courses', '0065_auto_20190707_1946'), ('courses', '0066_course_external_url'), ('courses', '0067_auto_20190712_2220'), ('courses', '0068_regularlessonexception'), ('courses', '0069_remove_teachlesson_welcomed'), ('courses', '0070_auto_20190904_1552'), ('courses', '0071_offering_preview')]
+    replaces = [
+        ("courses", "0001_initial"),
+        ("courses", "0002_auto_20150211_0920"),
+        ("courses", "0003_auto_20150211_0923"),
+        ("courses", "0004_auto_20150212_1504"),
+        ("courses", "0005_auto_20150304_1742"),
+        ("courses", "0006_userprofile_body_height"),
+        ("courses", "0007_auto_20150319_1303"),
+        ("courses", "0008_musicpluginmodel"),
+        ("courses", "0009_auto_20150326_1702"),
+        ("courses", "0010_auto_20150416_1639"),
+        ("courses", "0011_auto_20150522_1409"),
+        ("courses", "0012_auto_20150525_1844"),
+        ("courses", "0013_auto_20150616_1102"),
+        ("courses", "0014_userprofile_get_involved"),
+        ("courses", "0015_auto_20150806_1803"),
+        ("courses", "0016_subscribe_matching_state"),
+        ("courses", "0017_fix_subscribe_matching_state"),
+        ("courses", "0018_auto_20150920_1901"),
+        ("courses", "0019_auto_20151013_1222"),
+        ("courses", "0020_style_url_playlist"),
+        ("courses", "0021_auto_20160220_1828"),
+        ("courses", "0022_auto_20160401_2320"),
+        ("courses", "0023_auto_20160403_1754"),
+        ("courses", "0024_subscribe_paymentmethod"),
+        ("courses", "0025_auto_20160405_1015"),
+        ("courses", "0026_auto_20160405_1337"),
+        ("courses", "0027_voucher_pdf_file"),
+        ("courses", "0028_auto_20160415_1600"),
+        ("courses", "0029_auto_20160417_1659"),
+        ("courses", "0030_auto_20160417_1743"),
+        ("courses", "0031_course_evaluated"),
+        ("courses", "0032_auto_20160603_1123"),
+        ("courses", "0033_auto_20160704_1158"),
+        ("courses", "0034_auto_20160828_2324"),
+        ("courses", "0035_remove_mugshot"),
+        ("courses", "0036_auto_20160902_1135"),
+        ("courses", "0037_auto_20160905_1307"),
+        ("courses", "0038_auto_20160906_1116"),
+        ("courses", "0039_voucher_subscription"),
+        ("courses", "0040_auto_20161120_2139"),
+        ("courses", "0041_subscribe_price_to_pay"),
+        ("courses", "0042_auto_20170413_0935"),
+        ("courses", "0043_auto_20170415_1059"),
+        ("courses", "0044_auto_20170415_1106"),
+        ("courses", "0045_auto_20170415_1116"),
+        ("courses", "0046_bankaccount_bank_country"),
+        ("courses", "0047_auto_20170415_1207"),
+        ("courses", "0048_auto_20170614_0757"),
+        ("courses", "0049_auto_20170614_0929"),
+        ("courses", "0050_auto_20171103_1423"),
+        ("courses", "0051_auto_20171104_1110"),
+        ("courses", "0052_auto_20180507_1705"),
+        ("courses", "0053_voucher_percentage"),
+        ("courses", "0054_auto_20180820_2006"),
+        ("courses", "0055_auto_20190425_1717"),
+        ("courses", "0056_remove_userena"),
+        ("courses", "0057_unique_email"),
+        ("courses", "0058_userprofile_picture"),
+        ("courses", "0059_auto_20190523_2245"),
+        ("courses", "0060_auto_20190524_1856"),
+        ("courses", "0061_auto_20190525_1348"),
+        ("courses", "0062_auto_20190606_1802"),
+        ("courses", "0063_auto_20190707_1622"),
+        ("courses", "0064_auto_20190707_1923"),
+        ("courses", "0065_auto_20190707_1946"),
+        ("courses", "0066_course_external_url"),
+        ("courses", "0067_auto_20190712_2220"),
+        ("courses", "0068_regularlessonexception"),
+        ("courses", "0069_remove_teachlesson_welcomed"),
+        ("courses", "0070_auto_20190904_1552"),
+        ("courses", "0071_offering_preview"),
+    ]
 
     initial = True
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('post_office', '0001_initial'),
-        ('cms', '0001_initial'),
-        ('auth', '0001_initial'),
+        ("post_office", "0001_initial"),
+        ("cms", "0001_initial"),
+        ("auth", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Address',
+            name="Address",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('street', models.CharField(max_length=255)),
-                ('plz', models.IntegerField()),
-                ('city', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("street", models.CharField(max_length=255)),
+                ("plz", models.IntegerField()),
+                ("city", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='Course',
+            name="Course",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='This name is just for reference and is not displayed anywhere on the website.', max_length=255)),
-                ('min_subscribers', models.IntegerField(default=6)),
-                ('max_subscribers', models.IntegerField(blank=True, null=True)),
-                ('price_with_legi', models.FloatField(blank=True, default=35, null=True)),
-                ('price_without_legi', models.FloatField(blank=True, default=70, null=True)),
-                ('comment', models.TextField(blank=True, null=True)),
-                ('position', models.PositiveSmallIntegerField(default=0, verbose_name='Position')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="This name is just for reference and is not displayed anywhere on the website.",
+                        max_length=255,
+                    ),
+                ),
+                ("min_subscribers", models.IntegerField(default=6)),
+                ("max_subscribers", models.IntegerField(blank=True, null=True)),
+                (
+                    "price_with_legi",
+                    models.FloatField(blank=True, default=35, null=True),
+                ),
+                (
+                    "price_without_legi",
+                    models.FloatField(blank=True, default=70, null=True),
+                ),
+                ("comment", models.TextField(blank=True, null=True)),
+                (
+                    "position",
+                    models.PositiveSmallIntegerField(
+                        default=0, verbose_name="Position"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['position'],
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name='RegularLessonCancellation',
+            name="RegularLessonCancellation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(null=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cancellations', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField(null=True)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="cancellations",
+                        to="courses.Course",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
         migrations.CreateModel(
-            name='RegularLesson',
+            name="RegularLesson",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('weekday', models.CharField(choices=[(b'mon', 'Monday'), (b'tue', 'Tuesday'), (b'wed', 'Wednesday'), (b'thu', 'Thursday'), (b'fri', 'Friday'), (b'sat', 'Saturday'), (b'sun', 'Sunday')], default=None, max_length=3)),
-                ('time_from', models.TimeField()),
-                ('time_to', models.TimeField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='regular_lessons', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "weekday",
+                    models.CharField(
+                        choices=[
+                            (b"mon", "Monday"),
+                            (b"tue", "Tuesday"),
+                            (b"wed", "Wednesday"),
+                            (b"thu", "Thursday"),
+                            (b"fri", "Friday"),
+                            (b"sat", "Saturday"),
+                            (b"sun", "Sunday"),
+                        ],
+                        default=None,
+                        max_length=3,
+                    ),
+                ),
+                ("time_from", models.TimeField()),
+                ("time_to", models.TimeField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="regular_lessons",
+                        to="courses.Course",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CourseType',
+            name="CourseType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, unique=True)),
-                ('level', models.IntegerField(blank=True, default=None, null=True)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('special', models.TextField(blank=True, null=True)),
-                ('couple_course', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, unique=True)),
+                ("level", models.IntegerField(blank=True, default=None, null=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("special", models.TextField(blank=True, null=True)),
+                ("couple_course", models.BooleanField(default=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Offering',
+            name="Offering",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, unique=True)),
-                ('display', models.BooleanField(default=False, help_text='Defines if the courses in this offering should be displayed on the Website.')),
-                ('active', models.BooleanField(default=False, help_text='Defines if clients can subscribe to courses in this offering.')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, unique=True)),
+                (
+                    "display",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Defines if the courses in this offering should be displayed on the Website.",
+                    ),
+                ),
+                (
+                    "active",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Defines if clients can subscribe to courses in this offering.",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Period',
+            name="Period",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_from', models.DateField()),
-                ('date_to', models.DateField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date_from", models.DateField()),
+                ("date_to", models.DateField()),
             ],
         ),
         migrations.CreateModel(
-            name='PeriodCancellation',
+            name="PeriodCancellation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(null=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cancellations', to='courses.Period')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField(null=True)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="cancellations",
+                        to="courses.Period",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Room',
+            name="Room",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, unique=True)),
-                ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('url', models.URLField(blank=True, help_text='The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)', max_length=500, null=True)),
-                ('contact_info', models.TextField(blank=True, null=True)),
-                ('address', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='courses.Address')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, unique=True)),
+                (
+                    "description",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                (
+                    "url",
+                    models.URLField(
+                        blank=True,
+                        help_text="The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
+                ("contact_info", models.TextField(blank=True, null=True)),
+                (
+                    "address",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="courses.Address",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Song',
+            name="Song",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('artist', models.CharField(blank=True, max_length=255, null=True)),
-                ('length', models.TimeField(blank=True, null=True)),
-                ('speed', models.IntegerField(blank=True, help_text='The speed of the song in TPM', null=True)),
-                ('url_video', models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("artist", models.CharField(blank=True, max_length=255, null=True)),
+                ("length", models.TimeField(blank=True, null=True)),
+                (
+                    "speed",
+                    models.IntegerField(
+                        blank=True, help_text="The speed of the song in TPM", null=True
+                    ),
+                ),
+                (
+                    "url_video",
+                    models.URLField(
+                        blank=True,
+                        help_text="A url to a demo video (e.g Youtube).",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['speed', 'length'],
+                "ordering": ["speed", "length"],
             },
         ),
         migrations.CreateModel(
-            name='Style',
+            name="Style",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, unique=True)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('url_info', models.URLField(blank=True, help_text='A url to an information page (e.g. Wikipedia).', max_length=500, null=True)),
-                ('url_video', models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "url_info",
+                    models.URLField(
+                        blank=True,
+                        help_text="A url to an information page (e.g. Wikipedia).",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
+                (
+                    "url_video",
+                    models.URLField(
+                        blank=True,
+                        help_text="A url to a demo video (e.g Youtube).",
+                        max_length=500,
+                        null=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Subscribe',
+            name="Subscribe",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text='The date when the subscription was made.')),
-                ('experience', models.TextField(blank=True, null=True)),
-                ('comment', models.TextField(blank=True, help_text='A optional comment made by the user during subscription.', null=True)),
-                ('confirmed', models.BooleanField(default=False, help_text='When this is checked, a confirmation email is send (once) to the user while saving this form.')),
-                ('payed', models.BooleanField(default=False)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        auto_now_add=True,
+                        help_text="The date when the subscription was made.",
+                    ),
+                ),
+                ("experience", models.TextField(blank=True, null=True)),
+                (
+                    "comment",
+                    models.TextField(
+                        blank=True,
+                        help_text="A optional comment made by the user during subscription.",
+                        null=True,
+                    ),
+                ),
+                (
+                    "confirmed",
+                    models.BooleanField(
+                        default=False,
+                        help_text="When this is checked, a confirmation email is send (once) to the user while saving this form.",
+                    ),
+                ),
+                ("payed", models.BooleanField(default=False)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="subscriptions",
+                        to="courses.Course",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Teach',
+            name="Teach",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teaching', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="teaching",
+                        to="courses.Course",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('user', models.OneToOneField(help_text='The user which is matched to this user profile.', on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('legi', models.CharField(blank=True, max_length=16, null=True)),
-                ('gender', models.CharField(choices=[(b'm', 'Men'), (b'w', 'Woman')], default=None, max_length=1, null=True)),
-                ('phone_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('student_status', models.CharField(choices=[(b'eth', 'ETH'), (b'uni', 'Uni'), (b'ph', 'PH'), (b'other', 'Other'), (b'no', 'Not a student')], default='no', max_length=10)),
-                ('newsletter', models.BooleanField(default=True)),
-                ('about_me', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('address', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='courses.Address')),
-                ('body_height', models.IntegerField(blank=True, help_text=b"The user's body height in cm.", null=True)),
-                ('language', models.CharField(choices=[(b'de', b'Deutsch'), (b'en', b'English')], default='de', help_text='Default language.', max_length=5, verbose_name='language')),
-                ('privacy', models.CharField(choices=[(b'open', 'Open'), (b'registered', 'Registered'), (b'closed', 'Closed')], default='registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
-                ('get_involved', models.BooleanField(default=False, help_text='If this user is interested to get involved with our organisation.')),
+                (
+                    "user",
+                    models.OneToOneField(
+                        help_text="The user which is matched to this user profile.",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        related_name="profile",
+                        serialize=False,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                ("legi", models.CharField(blank=True, max_length=16, null=True)),
+                (
+                    "gender",
+                    models.CharField(
+                        choices=[(b"m", "Men"), (b"w", "Woman")],
+                        default=None,
+                        max_length=1,
+                        null=True,
+                    ),
+                ),
+                (
+                    "phone_number",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "student_status",
+                    models.CharField(
+                        choices=[
+                            (b"eth", "ETH"),
+                            (b"uni", "Uni"),
+                            (b"ph", "PH"),
+                            (b"other", "Other"),
+                            (b"no", "Not a student"),
+                        ],
+                        default="no",
+                        max_length=10,
+                    ),
+                ),
+                ("newsletter", models.BooleanField(default=True)),
+                (
+                    "about_me",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                (
+                    "address",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="courses.Address",
+                    ),
+                ),
+                (
+                    "body_height",
+                    models.IntegerField(
+                        blank=True,
+                        help_text=b"The user's body height in cm.",
+                        null=True,
+                    ),
+                ),
+                (
+                    "language",
+                    models.CharField(
+                        choices=[(b"de", b"Deutsch"), (b"en", b"English")],
+                        default="de",
+                        help_text="Default language.",
+                        max_length=5,
+                        verbose_name="language",
+                    ),
+                ),
+                (
+                    "privacy",
+                    models.CharField(
+                        choices=[
+                            (b"open", "Open"),
+                            (b"registered", "Registered"),
+                            (b"closed", "Closed"),
+                        ],
+                        default="registered",
+                        help_text="Designates who can view your profile.",
+                        max_length=15,
+                        verbose_name="privacy",
+                    ),
+                ),
+                (
+                    "get_involved",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If this user is interested to get involved with our organisation.",
+                    ),
+                ),
             ],
             options={
-                'permissions': (('view_profile', 'Can view profile'),),
+                "permissions": (("view_profile", "Can view profile"),),
             },
         ),
         migrations.AddField(
-            model_name='teach',
-            name='teacher',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teaching', to=settings.AUTH_USER_MODEL),
+            model_name="teach",
+            name="teacher",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="teaching",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='partner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions_as_partner', to=settings.AUTH_USER_MODEL),
+            model_name="subscribe",
+            name="partner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="subscriptions_as_partner",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to=settings.AUTH_USER_MODEL),
+            model_name="subscribe",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="subscriptions",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='song',
-            name='style',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='songs', to='courses.Style'),
+            model_name="song",
+            name="style",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="songs",
+                to="courses.Style",
+            ),
         ),
         migrations.AddField(
-            model_name='offering',
-            name='period',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Period'),
+            model_name="offering",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="courses.Period",
+            ),
         ),
         migrations.AddField(
-            model_name='coursetype',
-            name='styles',
-            field=models.ManyToManyField(blank=True, null=True, related_name='course_types', to='courses.Style'),
+            model_name="coursetype",
+            name="styles",
+            field=models.ManyToManyField(
+                blank=True, null=True, related_name="course_types", to="courses.Style"
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='offering',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Offering'),
+            model_name="course",
+            name="offering",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="courses.Offering",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='period',
-            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Period'),
+            model_name="course",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="courses.Period",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='room',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='courses', to='courses.Room'),
+            model_name="course",
+            name="room",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="courses",
+                to="courses.Room",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='subscribers',
-            field=models.ManyToManyField(related_name='courses', through='courses.Subscribe', to=settings.AUTH_USER_MODEL),
+            model_name="course",
+            name="subscribers",
+            field=models.ManyToManyField(
+                related_name="courses",
+                through="courses.Subscribe",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='teachers',
-            field=models.ManyToManyField(related_name='teaching_courses', through='courses.Teach', to=settings.AUTH_USER_MODEL),
+            model_name="course",
+            name="teachers",
+            field=models.ManyToManyField(
+                related_name="teaching_courses",
+                through="courses.Teach",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='type',
-            field=models.ForeignKey(help_text='The name of the course type is displayed on the website as the course title .', on_delete=django.db.models.deletion.CASCADE, related_name='courses', to='courses.CourseType'),
+            model_name="course",
+            name="type",
+            field=models.ForeignKey(
+                help_text="The name of the course type is displayed on the website as the course title .",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="courses",
+                to="courses.CourseType",
+            ),
         ),
         migrations.RemoveField(
-            model_name='coursetype',
-            name='special',
+            model_name="coursetype",
+            name="special",
         ),
         migrations.AddField(
-            model_name='course',
-            name='active',
-            field=models.BooleanField(default=True, help_text='Defines if clients can subscribe to this course (if unchecked, course is active if offering is active).'),
+            model_name="course",
+            name="active",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if clients can subscribe to this course (if unchecked, course is active if offering is active).",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='special',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Any special properties of this course.', null=True),
+            model_name="course",
+            name="special",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True,
+                help_text="Any special properties of this course.",
+                null=True,
+            ),
         ),
         migrations.CreateModel(
-            name='Confirmation',
+            name="Confirmation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text='The date when the participation confirmation mail was sent to the subscriber.')),
-                ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='confirmations', to='courses.Subscribe')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        auto_now_add=True,
+                        help_text="The date when the participation confirmation mail was sent to the subscriber.",
+                    ),
+                ),
+                (
+                    "subscription",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="confirmations",
+                        to="courses.Subscribe",
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='confirmed',
-            field=models.BooleanField(default=False, help_text='When this is checked, a participation confirmation email is send (once) to the user while saving this form.'),
+            model_name="subscribe",
+            name="confirmed",
+            field=models.BooleanField(
+                default=False,
+                help_text="When this is checked, a participation confirmation email is send (once) to the user while saving this form.",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='date',
-            field=models.DateTimeField(auto_now_add=True, help_text='The date/time when the subscription was made.'),
+            model_name="subscribe",
+            name="date",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                help_text="The date/time when the subscription was made.",
+            ),
         ),
         migrations.CreateModel(
-            name='MusicPluginModel',
+            name="MusicPluginModel",
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
-                ('styles', models.ManyToManyField(blank=True, help_text='Styles to be displayed in this plugin. Leave empty to show all styles.', null=True, to='courses.Style')),
+                (
+                    "cmsplugin_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="cms.CMSPlugin",
+                    ),
+                ),
+                (
+                    "styles",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Styles to be displayed in this plugin. Leave empty to show all styles.",
+                        null=True,
+                        to="courses.Style",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('cms.cmsplugin',),
+            bases=("cms.cmsplugin",),
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='comment',
+            model_name="course",
+            name="comment",
         ),
         migrations.AddField(
-            model_name='course',
-            name='open_class',
-            field=models.BooleanField(default=False, help_text='Open classes do not require a subscription or subscription is done via a different channel.'),
+            model_name="course",
+            name="open_class",
+            field=models.BooleanField(
+                default=False,
+                help_text="Open classes do not require a subscription or subscription is done via a different channel.",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='price_special',
-            field=models.CharField(blank=True, help_text='Set this only if you want a different price schema.', max_length=255, null=True),
+            model_name="course",
+            name="price_special",
+            field=models.CharField(
+                blank=True,
+                help_text="Set this only if you want a different price schema.",
+                max_length=255,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetype',
-            name='description',
+            model_name="coursetype",
+            name="description",
             field=djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='period',
-            name='date_from',
-            field=models.DateField(blank=True, help_text='The start date of this period. Can be left empty.', null=True),
+            model_name="period",
+            name="date_from",
+            field=models.DateField(
+                blank=True,
+                help_text="The start date of this period. Can be left empty.",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='period',
-            name='date_to',
-            field=models.DateField(blank=True, help_text="The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'.", null=True),
+            model_name="period",
+            name="date_to",
+            field=models.DateField(
+                blank=True,
+                help_text="The end date of this period. Can be left empty. If both are left empty, this period is displayed as 'on request'.",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='style',
-            name='description',
+            model_name="style",
+            name="description",
             field=djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
         ),
         migrations.CreateModel(
-            name='IrregularLesson',
+            name="IrregularLesson",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('time_from', models.TimeField()),
-                ('time_to', models.TimeField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='irregular_lessons', to='courses.Course')),
-                ('room', models.ForeignKey(blank=True, help_text='The room for this lesson. If left empty, the course room is assumed.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='irregular_lessons', to='courses.Room')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                ("time_from", models.TimeField()),
+                ("time_to", models.TimeField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="irregular_lessons",
+                        to="courses.Course",
+                    ),
+                ),
+                (
+                    "room",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="The room for this lesson. If left empty, the course room is assumed.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="irregular_lessons",
+                        to="courses.Room",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date', 'time_from'],
+                "ordering": ["date", "time_from"],
             },
         ),
         migrations.AddField(
-            model_name='offering',
-            name='type',
-            field=models.CharField(choices=[(b'reg', 'Regular (weekly)'), (b'irr', 'Irregular (Workshops)')], default='reg', help_text='The type of the offering influences how the offering is displayed.', max_length=3),
+            model_name="offering",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    (b"reg", "Regular (weekly)"),
+                    (b"irr", "Irregular (Workshops)"),
+                ],
+                default="reg",
+                help_text="The type of the offering influences how the offering is displayed.",
+                max_length=3,
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='display',
-            field=models.BooleanField(default=True, help_text='Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).'),
+            model_name="course",
+            name="display",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='active',
-            field=models.BooleanField(default=True, help_text='Defines if clients can subscribe to this course (if checked, course is active if offering is active).'),
+            model_name="course",
+            name="active",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if clients can subscribe to this course (if checked, course is active if offering is active).",
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='matching_state',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default='unknown', max_length=30),
+            model_name="subscribe",
+            name="matching_state",
+            field=models.CharField(
+                choices=[
+                    (b"unknown", "Unknown"),
+                    (b"couple", "Couple"),
+                    (b"to_match", "To match"),
+                    (b"matched", "Matched"),
+                    (b"not_required", "Not required"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.RunSQL(
             sql="UPDATE courses_subscribe SET matching_state='couple' WHERE date >= DATE('2015-08-07') AND matching_state='unknown';",
         ),
         migrations.CreateModel(
-            name='Rejection',
+            name="Rejection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text='The date when the rejection mail was sent to the subscriber.')),
-                ('reason', models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found')], default='unknown', max_length=30)),
-                ('subscription', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rejections', to='courses.Subscribe')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        auto_now_add=True,
+                        help_text="The date when the rejection mail was sent to the subscriber.",
+                    ),
+                ),
+                (
+                    "reason",
+                    models.CharField(
+                        choices=[
+                            (b"unknown", "Unknown"),
+                            (b"overbooked", "Overbooked"),
+                            (b"no_partner", "No partner found"),
+                        ],
+                        default="unknown",
+                        max_length=30,
+                    ),
+                ),
+                (
+                    "subscription",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="rejections",
+                        to="courses.Subscribe",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='rejected',
-            field=models.BooleanField(default=False, help_text='When this is checked, a rejection email is send (once) to the user while saving this form.'),
+            model_name="subscribe",
+            name="rejected",
+            field=models.BooleanField(
+                default=False,
+                help_text="When this is checked, a rejection email is send (once) to the user while saving this form.",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetype',
-            name='styles',
-            field=models.ManyToManyField(blank=True, related_name='course_types', to='courses.Style'),
+            model_name="coursetype",
+            name="styles",
+            field=models.ManyToManyField(
+                blank=True, related_name="course_types", to="courses.Style"
+            ),
         ),
         migrations.AlterField(
-            model_name='musicpluginmodel',
-            name='styles',
-            field=models.ManyToManyField(blank=True, help_text='Styles to be displayed in this plugin. Leave empty to show all styles.', to='courses.Style'),
+            model_name="musicpluginmodel",
+            name="styles",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Styles to be displayed in this plugin. Leave empty to show all styles.",
+                to="courses.Style",
+            ),
         ),
         migrations.AddField(
-            model_name='style',
-            name='url_playlist',
-            field=models.URLField(blank=True, help_text='A url to a playlist (e.g on online-Spotify, Youtube).', max_length=500, null=True),
+            model_name="style",
+            name="url_playlist",
+            field=models.URLField(
+                blank=True,
+                help_text="A url to a playlist (e.g on online-Spotify, Youtube).",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterModelOptions(
-            name='course',
-            options={'ordering': ['position', 'type__name', 'name']},
+            name="course",
+            options={"ordering": ["position", "type__name", "name"]},
         ),
         migrations.CreateModel(
-            name='Voucher',
+            name="Voucher",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(max_length=8, unique=True)),
-                ('issued', models.DateField(auto_now_add=True)),
-                ('expires', models.DateField(blank=True, null=True)),
-                ('used', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("key", models.CharField(max_length=8, unique=True)),
+                ("issued", models.DateField(auto_now_add=True)),
+                ("expires", models.DateField(blank=True, null=True)),
+                ("used", models.BooleanField(default=False)),
             ],
             options={
-                'ordering': ['issued', 'expires'],
+                "ordering": ["issued", "expires"],
             },
         ),
         migrations.CreateModel(
-            name='VoucherPurpose',
+            name="VoucherPurpose",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('description', models.TextField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
             ],
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='status',
-            field=models.CharField(choices=[(b'new', 'new'), (b'confirmed', 'confirmed (to pay)'), (b'payed', 'payed'), (b'completed', 'completed'), (b'rejected', 'rejected'), (b'to_reimburse', 'to reimburse')], default='new', max_length=30),
+            model_name="subscribe",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    (b"new", "new"),
+                    (b"confirmed", "confirmed (to pay)"),
+                    (b"payed", "payed"),
+                    (b"completed", "completed"),
+                    (b"rejected", "rejected"),
+                    (b"to_reimburse", "to reimburse"),
+                ],
+                default="new",
+                max_length=30,
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='usi',
-            field=models.CharField(blank=True, default='------', help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6),
+            model_name="subscribe",
+            name="usi",
+            field=models.CharField(
+                blank=True,
+                default="------",
+                help_text="Unique subscription identifier: 4 characters identifier, 2 characters checksum",
+                max_length=6,
+            ),
         ),
         migrations.AddField(
-            model_name='voucher',
-            name='purpose',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vouchers', to='courses.VoucherPurpose'),
+            model_name="voucher",
+            name="purpose",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="vouchers",
+                to="courses.VoucherPurpose",
+            ),
         ),
         migrations.RunPython(
             code=populate_status,
@@ -510,324 +1172,665 @@ class Migration(migrations.Migration):
             code=populate_usi,
         ),
         migrations.RemoveField(
-            model_name='subscribe',
-            name='confirmed',
+            model_name="subscribe",
+            name="confirmed",
         ),
         migrations.RemoveField(
-            model_name='subscribe',
-            name='payed',
+            model_name="subscribe",
+            name="payed",
         ),
         migrations.RemoveField(
-            model_name='subscribe',
-            name='rejected',
+            model_name="subscribe",
+            name="rejected",
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='usi',
-            field=models.CharField(blank=True, default='------', help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6, unique=True),
+            model_name="subscribe",
+            name="usi",
+            field=models.CharField(
+                blank=True,
+                default="------",
+                help_text="Unique subscription identifier: 4 characters identifier, 2 characters checksum",
+                max_length=6,
+                unique=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='voucher',
-            name='key',
-            field=models.CharField(default=courses.models.voucher.generate_key, max_length=8, unique=True),
+            model_name="voucher",
+            name="key",
+            field=models.CharField(
+                default=courses.models.voucher.generate_key, max_length=8, unique=True
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='paymentmethod',
-            field=models.CharField(blank=True, choices=[('counter', 'counter'), ('course', 'course'), ('online', 'online'), ('voucher', 'voucher')], max_length=30, null=True),
+            model_name="subscribe",
+            name="paymentmethod",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("counter", "counter"),
+                    ("course", "course"),
+                    ("online", "online"),
+                    ("voucher", "voucher"),
+                ],
+                max_length=30,
+                null=True,
+            ),
         ),
         migrations.AlterModelOptions(
-            name='userprofile',
-            options={'permissions': (('access_counterpayment', 'Can access counter payment'),)},
+            name="userprofile",
+            options={
+                "permissions": (
+                    ("access_counterpayment", "Can access counter payment"),
+                )
+            },
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='matching_state',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'couple', 'Couple'), (b'to_match', 'To match'), (b'to_rematch', 'To rematch'), (b'matched', 'Matched'), (b'not_required', 'Not required')], default='unknown', max_length=30),
+            model_name="subscribe",
+            name="matching_state",
+            field=models.CharField(
+                choices=[
+                    (b"unknown", "Unknown"),
+                    (b"couple", "Couple"),
+                    (b"to_match", "To match"),
+                    (b"to_rematch", "To rematch"),
+                    (b"matched", "Matched"),
+                    (b"not_required", "Not required"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AddField(
-            model_name='voucher',
-            name='pdf_file',
-            field=models.FileField(blank=True, null=True, upload_to='/voucher/'),
+            model_name="voucher",
+            name="pdf_file",
+            field=models.FileField(blank=True, null=True, upload_to="/voucher/"),
         ),
         migrations.RenameField(
-            model_name='subscribe',
-            old_name='status',
-            new_name='state',
+            model_name="subscribe",
+            old_name="status",
+            new_name="state",
         ),
         migrations.AddField(
-            model_name='rejection',
-            name='mail_sent',
-            field=models.BooleanField(default=True, help_text='If this rejection was communicated to user by email.'),
+            model_name="rejection",
+            name="mail_sent",
+            field=models.BooleanField(
+                default=True,
+                help_text="If this rejection was communicated to user by email.",
+            ),
         ),
         migrations.AlterField(
-            model_name='rejection',
-            name='reason',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned')], default='unknown', max_length=30),
+            model_name="rejection",
+            name="reason",
+            field=models.CharField(
+                choices=[
+                    (b"unknown", "Unknown"),
+                    (b"overbooked", "Overbooked"),
+                    (b"no_partner", "No partner found"),
+                    (b"user_cancelled", "User cancelled the subscription"),
+                    (b"illegitimate", "Users subscription is illegitimate"),
+                    (b"banned", "User is banned"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='rejection',
-            name='reason',
-            field=models.CharField(choices=[(b'unknown', 'Unknown'), (b'overbooked', 'Overbooked'), (b'no_partner', 'No partner found'), (b'user_cancelled', 'User cancelled the subscription'), (b'illegitimate', 'Users subscription is illegitimate'), (b'banned', 'User is banned'), (b'course_cancelled', 'Course was cancelled')], default='unknown', max_length=30),
+            model_name="rejection",
+            name="reason",
+            field=models.CharField(
+                choices=[
+                    (b"unknown", "Unknown"),
+                    (b"overbooked", "Overbooked"),
+                    (b"no_partner", "No partner found"),
+                    (b"user_cancelled", "User cancelled the subscription"),
+                    (b"illegitimate", "Users subscription is illegitimate"),
+                    (b"banned", "User is banned"),
+                    (b"course_cancelled", "Course was cancelled"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='evaluated',
-            field=models.BooleanField(default=False, help_text='If this course was evaluated by a survey or another way.'),
+            model_name="course",
+            name="evaluated",
+            field=models.BooleanField(
+                default=False,
+                help_text="If this course was evaluated by a survey or another way.",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetype',
-            name='name',
+            model_name="coursetype",
+            name="name",
             field=models.CharField(max_length=255, unique=True),
         ),
         migrations.AlterField(
-            model_name='confirmation',
-            name='date',
-            field=models.DateField(auto_now_add=True, help_text='The date when the participation confirmation mail was sent to the subscriber.'),
+            model_name="confirmation",
+            name="date",
+            field=models.DateField(
+                auto_now_add=True,
+                help_text="The date when the participation confirmation mail was sent to the subscriber.",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='active',
-            field=models.BooleanField(default=True, help_text='Defines if clients can subscribe to this course (if checked, course is active if offering is active).'),
+            model_name="course",
+            name="active",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if clients can subscribe to this course (if checked, course is active if offering is active).",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='display',
-            field=models.BooleanField(default=True, help_text='Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).'),
+            model_name="course",
+            name="display",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if this course should be displayed on the Website (if checked, course is displayed if offering is displayed).",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='name',
-            field=models.CharField(help_text='This name is just for reference and is not displayed anywhere on the website.', max_length=255),
+            model_name="course",
+            name="name",
+            field=models.CharField(
+                help_text="This name is just for reference and is not displayed anywhere on the website.",
+                max_length=255,
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='open_class',
-            field=models.BooleanField(default=False, help_text='Open classes do not require a subscription or subscription is done via a different channel.'),
+            model_name="course",
+            name="open_class",
+            field=models.BooleanField(
+                default=False,
+                help_text="Open classes do not require a subscription or subscription is done via a different channel.",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='period',
-            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='courses.Period'),
+            model_name="course",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="courses.Period",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='position',
-            field=models.PositiveSmallIntegerField(default=0, verbose_name='Position'),
+            model_name="course",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0, verbose_name="Position"),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='special',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Any special properties of this course.', null=True),
+            model_name="course",
+            name="special",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True,
+                help_text="Any special properties of this course.",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='type',
-            field=models.ForeignKey(help_text='The name of the course type is displayed on the website as the course title .', on_delete=django.db.models.deletion.CASCADE, related_name='courses', to='courses.CourseType'),
+            model_name="course",
+            name="type",
+            field=models.ForeignKey(
+                help_text="The name of the course type is displayed on the website as the course title .",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="courses",
+                to="courses.CourseType",
+            ),
         ),
         migrations.AlterField(
-            model_name='irregularlesson',
-            name='room',
-            field=models.ForeignKey(blank=True, help_text='The room for this lesson. If left empty, the course room is assumed.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='irregular_lessons', to='courses.Room'),
+            model_name="irregularlesson",
+            name="room",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="The room for this lesson. If left empty, the course room is assumed.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="irregular_lessons",
+                to="courses.Room",
+            ),
         ),
         migrations.AlterField(
-            model_name='offering',
-            name='active',
-            field=models.BooleanField(default=False, help_text='Defines if clients can subscribe to courses in this offering.'),
+            model_name="offering",
+            name="active",
+            field=models.BooleanField(
+                default=False,
+                help_text="Defines if clients can subscribe to courses in this offering.",
+            ),
         ),
         migrations.AlterField(
-            model_name='offering',
-            name='display',
-            field=models.BooleanField(default=False, help_text='Defines if the courses in this offering should be displayed on the Website.'),
+            model_name="offering",
+            name="display",
+            field=models.BooleanField(
+                default=False,
+                help_text="Defines if the courses in this offering should be displayed on the Website.",
+            ),
         ),
         migrations.AlterField(
-            model_name='offering',
-            name='type',
-            field=models.CharField(choices=[('reg', 'Regular (weekly)'), ('irr', 'Irregular (Workshops)')], default='reg', help_text='The type of the offering influences how the offering is displayed.', max_length=3),
+            model_name="offering",
+            name="type",
+            field=models.CharField(
+                choices=[("reg", "Regular (weekly)"), ("irr", "Irregular (Workshops)")],
+                default="reg",
+                help_text="The type of the offering influences how the offering is displayed.",
+                max_length=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='regularlesson',
-            name='weekday',
-            field=models.CharField(choices=[('mon', 'Monday'), ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'), ('fri', 'Friday'), ('sat', 'Saturday'), ('sun', 'Sunday')], default=None, max_length=3),
+            model_name="regularlesson",
+            name="weekday",
+            field=models.CharField(
+                choices=[
+                    ("mon", "Monday"),
+                    ("tue", "Tuesday"),
+                    ("wed", "Wednesday"),
+                    ("thu", "Thursday"),
+                    ("fri", "Friday"),
+                    ("sat", "Saturday"),
+                    ("sun", "Sunday"),
+                ],
+                default=None,
+                max_length=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='rejection',
-            name='date',
-            field=models.DateField(auto_now_add=True, help_text='The date when the rejection mail was sent to the subscriber.'),
+            model_name="rejection",
+            name="date",
+            field=models.DateField(
+                auto_now_add=True,
+                help_text="The date when the rejection mail was sent to the subscriber.",
+            ),
         ),
         migrations.AlterField(
-            model_name='rejection',
-            name='reason',
-            field=models.CharField(choices=[('unknown', 'Unknown'), ('overbooked', 'Overbooked'), ('no_partner', 'No partner found'), ('user_cancelled', 'User cancelled the subscription'), ('illegitimate', 'Users subscription is illegitimate'), ('banned', 'User is banned'), ('course_cancelled', 'Course was cancelled')], default='unknown', max_length=30),
+            model_name="rejection",
+            name="reason",
+            field=models.CharField(
+                choices=[
+                    ("unknown", "Unknown"),
+                    ("overbooked", "Overbooked"),
+                    ("no_partner", "No partner found"),
+                    ("user_cancelled", "User cancelled the subscription"),
+                    ("illegitimate", "Users subscription is illegitimate"),
+                    ("banned", "User is banned"),
+                    ("course_cancelled", "Course was cancelled"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='room',
-            name='url',
-            field=models.URLField(blank=True, help_text='The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)', max_length=500, null=True),
+            model_name="room",
+            name="url",
+            field=models.URLField(
+                blank=True,
+                help_text="The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='song',
-            name='speed',
-            field=models.IntegerField(blank=True, help_text='The speed of the song in TPM', null=True),
+            model_name="song",
+            name="speed",
+            field=models.IntegerField(
+                blank=True, help_text="The speed of the song in TPM", null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='song',
-            name='url_video',
-            field=models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True),
+            model_name="song",
+            name="url_video",
+            field=models.URLField(
+                blank=True,
+                help_text="A url to a demo video (e.g Youtube).",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='style',
-            name='url_info',
-            field=models.URLField(blank=True, help_text='A url to an information page (e.g. Wikipedia).', max_length=500, null=True),
+            model_name="style",
+            name="url_info",
+            field=models.URLField(
+                blank=True,
+                help_text="A url to an information page (e.g. Wikipedia).",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='style',
-            name='url_playlist',
-            field=models.URLField(blank=True, help_text='A url to a playlist (e.g on online-Spotify, Youtube).', max_length=500, null=True),
+            model_name="style",
+            name="url_playlist",
+            field=models.URLField(
+                blank=True,
+                help_text="A url to a playlist (e.g on online-Spotify, Youtube).",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='style',
-            name='url_video',
-            field=models.URLField(blank=True, help_text='A url to a demo video (e.g Youtube).', max_length=500, null=True),
+            model_name="style",
+            name="url_video",
+            field=models.URLField(
+                blank=True,
+                help_text="A url to a demo video (e.g Youtube).",
+                max_length=500,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='comment',
-            field=models.TextField(blank=True, help_text='A optional comment made by the user during subscription.', null=True),
+            model_name="subscribe",
+            name="comment",
+            field=models.TextField(
+                blank=True,
+                help_text="A optional comment made by the user during subscription.",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='date',
-            field=models.DateTimeField(auto_now_add=True, help_text='The date/time when the subscription was made.'),
+            model_name="subscribe",
+            name="date",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                help_text="The date/time when the subscription was made.",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='matching_state',
-            field=models.CharField(choices=[('unknown', 'Unknown'), ('couple', 'Couple'), ('to_match', 'To match'), ('to_rematch', 'To rematch'), ('matched', 'Matched'), ('not_required', 'Not required')], default='unknown', max_length=30),
+            model_name="subscribe",
+            name="matching_state",
+            field=models.CharField(
+                choices=[
+                    ("unknown", "Unknown"),
+                    ("couple", "Couple"),
+                    ("to_match", "To match"),
+                    ("to_rematch", "To rematch"),
+                    ("matched", "Matched"),
+                    ("not_required", "Not required"),
+                ],
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('confirmed', 'confirmed (to pay)'), ('payed', 'payed'), ('completed', 'completed'), ('rejected', 'rejected'), ('to_reimburse', 'to reimburse')], default='new', max_length=30),
+            model_name="subscribe",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("confirmed", "confirmed (to pay)"),
+                    ("payed", "payed"),
+                    ("completed", "completed"),
+                    ("rejected", "rejected"),
+                    ("to_reimburse", "to reimburse"),
+                ],
+                default="new",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='usi',
-            field=models.CharField(blank=True, default='------', help_text='Unique subscription identifier: 4 characters identifier, 2 characters checksum', max_length=6, unique=True),
+            model_name="subscribe",
+            name="usi",
+            field=models.CharField(
+                blank=True,
+                default="------",
+                help_text="Unique subscription identifier: 4 characters identifier, 2 characters checksum",
+                max_length=6,
+                unique=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='body_height',
-            field=models.IntegerField(blank=True, help_text="The user's body height in cm.", null=True),
+            model_name="userprofile",
+            name="body_height",
+            field=models.IntegerField(
+                blank=True, help_text="The user's body height in cm.", null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='gender',
-            field=models.CharField(choices=[('m', 'Men'), ('w', 'Woman')], default=None, max_length=1, null=True),
+            model_name="userprofile",
+            name="gender",
+            field=models.CharField(
+                choices=[("m", "Men"), ("w", "Woman")],
+                default=None,
+                max_length=1,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='get_involved',
-            field=models.BooleanField(default=False, help_text='If this user is interested to get involved with our organisation.'),
+            model_name="userprofile",
+            name="get_involved",
+            field=models.BooleanField(
+                default=False,
+                help_text="If this user is interested to get involved with our organisation.",
+            ),
         ),
         migrations.RemoveField(
-            model_name='userprofile',
-            name='language',
+            model_name="userprofile",
+            name="language",
         ),
         migrations.RemoveField(
-            model_name='userprofile',
-            name='privacy',
+            model_name="userprofile",
+            name="privacy",
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='student_status',
-            field=models.CharField(choices=[('eth', 'ETH'), ('uni', 'Uni'), ('ph', 'PH'), ('other', 'Other'), ('no', 'Not a student')], default='no', max_length=10),
+            model_name="userprofile",
+            name="student_status",
+            field=models.CharField(
+                choices=[
+                    ("eth", "ETH"),
+                    ("uni", "Uni"),
+                    ("ph", "PH"),
+                    ("other", "Other"),
+                    ("no", "Not a student"),
+                ],
+                default="no",
+                max_length=10,
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='user',
-            field=models.OneToOneField(help_text='The user which is matched to this user profile.', on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to=settings.AUTH_USER_MODEL),
+            model_name="userprofile",
+            name="user",
+            field=models.OneToOneField(
+                help_text="The user which is matched to this user profile.",
+                on_delete=django.db.models.deletion.CASCADE,
+                primary_key=True,
+                related_name="profile",
+                serialize=False,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.CreateModel(
-            name='CourseTranslation',
+            name="CourseTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Description specific for this course. (Gets displayed combined with the description of the course style)', null=True)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "description",
+                    djangocms_text_ckeditor.fields.HTMLField(
+                        blank=True,
+                        help_text="Description specific for this course. (Gets displayed combined with the description of the course style)",
+                        null=True,
+                    ),
+                ),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="courses.Course",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'course Translation',
-                'default_permissions': (),
-                'db_tablespace': '',
-                'managed': True,
-                'db_table': 'courses_course_translation',
+                "verbose_name": "course Translation",
+                "default_permissions": (),
+                "db_tablespace": "",
+                "managed": True,
+                "db_table": "courses_course_translation",
             },
         ),
         migrations.CreateModel(
-            name='CourseTypeTranslation',
+            name="CourseTypeTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='This text is added to the description of each course instance.', null=True)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.CourseType')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "description",
+                    djangocms_text_ckeditor.fields.HTMLField(
+                        blank=True,
+                        help_text="This text is added to the description of each course instance.",
+                        null=True,
+                    ),
+                ),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="courses.CourseType",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'course type Translation',
-                'default_permissions': (),
-                'db_tablespace': '',
-                'managed': True,
-                'db_table': 'courses_coursetype_translation',
+                "verbose_name": "course type Translation",
+                "default_permissions": (),
+                "db_tablespace": "",
+                "managed": True,
+                "db_table": "courses_coursetype_translation",
             },
         ),
         migrations.CreateModel(
-            name='RoomTranslation',
+            name="RoomTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('teacher_info', models.TextField(blank=True, help_text='Information for the teachers only (e.g. how to prepare the room for courses)', null=True)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Room')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "description",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                (
+                    "teacher_info",
+                    models.TextField(
+                        blank=True,
+                        help_text="Information for the teachers only (e.g. how to prepare the room for courses)",
+                        null=True,
+                    ),
+                ),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="courses.Room",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'room Translation',
-                'default_permissions': (),
-                'db_tablespace': '',
-                'managed': True,
-                'db_table': 'courses_room_translation',
+                "verbose_name": "room Translation",
+                "default_permissions": (),
+                "db_tablespace": "",
+                "managed": True,
+                "db_table": "courses_room_translation",
             },
         ),
         migrations.CreateModel(
-            name='StyleTranslation',
+            name="StyleTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('description', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Style')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "description",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="courses.Style",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'style Translation',
-                'default_permissions': (),
-                'db_tablespace': '',
-                'managed': True,
-                'db_table': 'courses_style_translation',
+                "verbose_name": "style Translation",
+                "default_permissions": (),
+                "db_tablespace": "",
+                "managed": True,
+                "db_table": "courses_style_translation",
             },
         ),
         migrations.AlterUniqueTogether(
-            name='styletranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="styletranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='roomtranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="roomtranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='coursetypetranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="coursetypetranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='coursetranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="coursetranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.RunPython(
             code=migrate_untranslated_style,
@@ -842,431 +1845,874 @@ class Migration(migrations.Migration):
             code=migrate_untranslated_course,
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='special',
+            model_name="course",
+            name="special",
         ),
         migrations.RemoveField(
-            model_name='coursetype',
-            name='description',
+            model_name="coursetype",
+            name="description",
         ),
         migrations.RemoveField(
-            model_name='room',
-            name='description',
+            model_name="room",
+            name="description",
         ),
         migrations.RemoveField(
-            model_name='style',
-            name='description',
+            model_name="style",
+            name="description",
         ),
         migrations.CreateModel(
-            name='CurrentCourse',
-            fields=[
-            ],
+            name="CurrentCourse",
+            fields=[],
             options={
-                'proxy': True,
+                "proxy": True,
             },
-            bases=('courses.course',),
+            bases=("courses.course",),
         ),
         migrations.CreateModel(
-            name='PlannedCourse',
-            fields=[
-            ],
+            name="PlannedCourse",
+            fields=[],
             options={
-                'proxy': True,
+                "proxy": True,
             },
-            bases=('courses.course',),
+            bases=("courses.course",),
         ),
         migrations.RemoveField(
-            model_name='roomtranslation',
-            name='teacher_info',
+            model_name="roomtranslation",
+            name="teacher_info",
         ),
         migrations.AddField(
-            model_name='roomtranslation',
-            name='instructions',
-            field=models.TextField(blank=True, help_text='Instructions to prepare the room (for teachers/staff only)', null=True, verbose_name='[TR] Instructions'),
+            model_name="roomtranslation",
+            name="instructions",
+            field=models.TextField(
+                blank=True,
+                help_text="Instructions to prepare the room (for teachers/staff only)",
+                null=True,
+                verbose_name="[TR] Instructions",
+            ),
         ),
         migrations.AlterField(
-            model_name='musicpluginmodel',
-            name='cmsplugin_ptr',
-            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='courses_musicpluginmodel', serialize=False, to='cms.CMSPlugin'),
+            model_name="musicpluginmodel",
+            name="cmsplugin_ptr",
+            field=models.OneToOneField(
+                auto_created=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                parent_link=True,
+                primary_key=True,
+                related_name="courses_musicpluginmodel",
+                serialize=False,
+                to="cms.CMSPlugin",
+            ),
         ),
         migrations.CreateModel(
-            name='TeacherWelcome',
+            name="TeacherWelcome",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True, help_text='The date when the welcome mail was sent to the teacher.')),
-                ('mail', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='post_office.Email')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        auto_now_add=True,
+                        help_text="The date when the welcome mail was sent to the teacher.",
+                    ),
+                ),
+                (
+                    "mail",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="post_office.Email",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='confirmation',
-            name='mail',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='post_office.Email'),
+            model_name="confirmation",
+            name="mail",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="post_office.Email",
+            ),
         ),
         migrations.AddField(
-            model_name='rejection',
-            name='mail',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='post_office.Email'),
+            model_name="rejection",
+            name="mail",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="post_office.Email",
+            ),
         ),
         migrations.AddField(
-            model_name='teach',
-            name='welcomed',
+            model_name="teach",
+            name="welcomed",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='teacherwelcome',
-            name='teach',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teacher_welcomes', to='courses.Teach'),
+            model_name="teacherwelcome",
+            name="teach",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="teacher_welcomes",
+                to="courses.Teach",
+            ),
         ),
         migrations.AddField(
-            model_name='voucher',
-            name='subscription',
-            field=models.ForeignKey(blank=True, help_text='subscription that was paid with this voucher', null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Subscribe'),
+            model_name="voucher",
+            name="subscription",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="subscription that was paid with this voucher",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Subscribe",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='matching_state',
-            field=models.CharField(choices=[('unknown', 'Unknown'), ('couple', 'Couple'), ('to_match', 'To match'), ('to_rematch', 'To rematch'), ('matched', 'Matched'), ('not_required', 'Not required')], db_index=True, default='unknown', max_length=30),
+            model_name="subscribe",
+            name="matching_state",
+            field=models.CharField(
+                choices=[
+                    ("unknown", "Unknown"),
+                    ("couple", "Couple"),
+                    ("to_match", "To match"),
+                    ("to_rematch", "To rematch"),
+                    ("matched", "Matched"),
+                    ("not_required", "Not required"),
+                ],
+                db_index=True,
+                default="unknown",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='state',
-            field=models.CharField(choices=[('new', 'new'), ('confirmed', 'confirmed (to pay)'), ('payed', 'payed'), ('completed', 'completed'), ('rejected', 'rejected'), ('to_reimburse', 'to reimburse')], db_index=True, default='new', max_length=30),
+            model_name="subscribe",
+            name="state",
+            field=models.CharField(
+                choices=[
+                    ("new", "new"),
+                    ("confirmed", "confirmed (to pay)"),
+                    ("payed", "payed"),
+                    ("completed", "completed"),
+                    ("rejected", "rejected"),
+                    ("to_reimburse", "to reimburse"),
+                ],
+                db_index=True,
+                default="new",
+                max_length=30,
+            ),
         ),
         migrations.AddField(
-            model_name='subscribe',
-            name='price_to_pay',
+            model_name="subscribe",
+            name="price_to_pay",
             field=models.FloatField(blank=True, default=None, null=True),
         ),
         migrations.CreateModel(
-            name='CourseSuccession',
+            name="CourseSuccession",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('predecessor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='successing_courses_through', to='courses.Course')),
-                ('successor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='preceding_courses_through', to='courses.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "predecessor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="successing_courses_through",
+                        to="courses.Course",
+                    ),
+                ),
+                (
+                    "successor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="preceding_courses_through",
+                        to="courses.Course",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='course',
-            name='preceding_courses',
-            field=models.ManyToManyField(help_text='The course(s) that are immediate predecessors of this course.', related_name='succeeding_courses', through='courses.CourseSuccession', to='courses.Course'),
+            model_name="course",
+            name="preceding_courses",
+            field=models.ManyToManyField(
+                help_text="The course(s) that are immediate predecessors of this course.",
+                related_name="succeeding_courses",
+                through="courses.CourseSuccession",
+                to="courses.Course",
+            ),
         ),
         migrations.CreateModel(
-            name='BankAccount',
+            name="BankAccount",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('iban', models.CharField(help_text='IBAN in the standardized format.', max_length=255)),
-                ('bank_name', models.CharField(blank=True, help_text='Name of the bank.', max_length=255, null=True)),
-                ('bank_zip_code', models.CharField(blank=True, help_text='Zipcode of the bank.', max_length=255, null=True)),
-                ('bank_city', models.CharField(blank=True, help_text='City of the bank.', max_length=255, null=True)),
-                ('bank_country', django_countries.fields.CountryField(blank=True, default='CH', max_length=2, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "iban",
+                    models.CharField(
+                        help_text="IBAN in the standardized format.", max_length=255
+                    ),
+                ),
+                (
+                    "bank_name",
+                    models.CharField(
+                        blank=True,
+                        help_text="Name of the bank.",
+                        max_length=255,
+                        null=True,
+                    ),
+                ),
+                (
+                    "bank_zip_code",
+                    models.CharField(
+                        blank=True,
+                        help_text="Zipcode of the bank.",
+                        max_length=255,
+                        null=True,
+                    ),
+                ),
+                (
+                    "bank_city",
+                    models.CharField(
+                        blank=True,
+                        help_text="City of the bank.",
+                        max_length=255,
+                        null=True,
+                    ),
+                ),
+                (
+                    "bank_country",
+                    django_countries.fields.CountryField(
+                        blank=True, default="CH", max_length=2, null=True
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='address',
-            name='country',
-            field=django_countries.fields.CountryField(default='CH', max_length=2),
+            model_name="address",
+            name="country",
+            field=django_countries.fields.CountryField(default="CH", max_length=2),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='ahv_number',
+            model_name="userprofile",
+            name="ahv_number",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='birthdate',
+            model_name="userprofile",
+            name="birthdate",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='nationality',
-            field=django_countries.fields.CountryField(blank=True, max_length=2, null=True),
+            model_name="userprofile",
+            name="nationality",
+            field=django_countries.fields.CountryField(
+                blank=True, max_length=2, null=True
+            ),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='residence_permit',
-            field=models.CharField(blank=True, choices=[('SWISS', 'Swiss citizen'), ('B', 'B EU/EFTA permit (Resident foreign nationals)'), ('C', 'C EU/EFTA permit (Settled foreign nationals)'), ('Ci', 'Ci EU/EFTA permit (Resident foreign nationals with gainful employment)'), ('L', 'L EU/EFTA permit (Short-term residents)'), ('G', 'G EU/EFTA permit (Cross-border commuters)'), ('F', 'Permit F (provisionally admitted foreigners)'), ('N', 'Permit N (permit for asylum-seekers)'), ('S', 'Permit S (people in need of protection)'), ('<NO>', 'Short-term stay without VISA')], max_length=30, null=True),
+            model_name="userprofile",
+            name="residence_permit",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("SWISS", "Swiss citizen"),
+                    ("B", "B EU/EFTA permit (Resident foreign nationals)"),
+                    ("C", "C EU/EFTA permit (Settled foreign nationals)"),
+                    (
+                        "Ci",
+                        "Ci EU/EFTA permit (Resident foreign nationals with gainful employment)",
+                    ),
+                    ("L", "L EU/EFTA permit (Short-term residents)"),
+                    ("G", "G EU/EFTA permit (Cross-border commuters)"),
+                    ("F", "Permit F (provisionally admitted foreigners)"),
+                    ("N", "Permit N (permit for asylum-seekers)"),
+                    ("S", "Permit S (people in need of protection)"),
+                    ("<NO>", "Short-term stay without VISA"),
+                ],
+                max_length=30,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='bank_account',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.BankAccount'),
+            model_name="userprofile",
+            name="bank_account",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.BankAccount",
+            ),
         ),
         migrations.RenameField(
-            model_name='periodcancellation',
-            old_name='course',
-            new_name='period',
+            model_name="periodcancellation",
+            old_name="course",
+            new_name="period",
         ),
         migrations.AlterField(
-            model_name='course',
-            name='offering',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Offering'),
+            model_name="course",
+            name="offering",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Offering",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='period',
-            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken.', null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Period'),
+            model_name="course",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Period",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='room',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='courses', to='courses.Room'),
+            model_name="course",
+            name="room",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="courses",
+                to="courses.Room",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='type',
-            field=models.ForeignKey(help_text='The name of the course type is displayed on the website as the course title .', on_delete=django.db.models.deletion.PROTECT, related_name='courses', to='courses.CourseType'),
+            model_name="course",
+            name="type",
+            field=models.ForeignKey(
+                help_text="The name of the course type is displayed on the website as the course title .",
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="courses",
+                to="courses.CourseType",
+            ),
         ),
         migrations.AlterField(
-            model_name='irregularlesson',
-            name='room',
-            field=models.ForeignKey(blank=True, help_text='The room for this lesson. If left empty, the course room is assumed.', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='irregular_lessons', to='courses.Room'),
+            model_name="irregularlesson",
+            name="room",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="The room for this lesson. If left empty, the course room is assumed.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="irregular_lessons",
+                to="courses.Room",
+            ),
         ),
         migrations.AlterField(
-            model_name='offering',
-            name='period',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Period'),
+            model_name="offering",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Period",
+            ),
         ),
         migrations.AlterField(
-            model_name='room',
-            name='address',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Address'),
+            model_name="room",
+            name="address",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Address",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='course',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='subscriptions', to='courses.Course'),
+            model_name="subscribe",
+            name="course",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="subscriptions",
+                to="courses.Course",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='partner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='subscriptions_as_partner', to=settings.AUTH_USER_MODEL),
+            model_name="subscribe",
+            name="partner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="subscriptions_as_partner",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='subscribe',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='subscriptions', to=settings.AUTH_USER_MODEL),
+            model_name="subscribe",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="subscriptions",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='address',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Address'),
+            model_name="userprofile",
+            name="address",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Address",
+            ),
         ),
         migrations.AlterField(
-            model_name='voucher',
-            name='purpose',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='vouchers', to='courses.VoucherPurpose'),
+            model_name="voucher",
+            name="purpose",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="vouchers",
+                to="courses.VoucherPurpose",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetranslation',
-            name='description',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='Description specific for this course. (Gets displayed combined with the description of the course style)', null=True, verbose_name='[TR] Description'),
+            model_name="coursetranslation",
+            name="description",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True,
+                help_text="Description specific for this course. (Gets displayed combined with the description of the course style)",
+                null=True,
+                verbose_name="[TR] Description",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetypetranslation',
-            name='description',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, help_text='This text is added to the description of each course instance.', null=True, verbose_name='[TR] Description'),
+            model_name="coursetypetranslation",
+            name="description",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True,
+                help_text="This text is added to the description of each course instance.",
+                null=True,
+                verbose_name="[TR] Description",
+            ),
         ),
         migrations.AlterField(
-            model_name='roomtranslation',
-            name='description',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True, verbose_name='[TR] Description'),
+            model_name="roomtranslation",
+            name="description",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True, null=True, verbose_name="[TR] Description"
+            ),
         ),
         migrations.AlterField(
-            model_name='styletranslation',
-            name='description',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True, verbose_name='[TR] Description'),
+            model_name="styletranslation",
+            name="description",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True, null=True, verbose_name="[TR] Description"
+            ),
         ),
         migrations.AddField(
-            model_name='teach',
-            name='hourly_wage',
-            field=models.FloatField(blank=True, help_text='Hourly wage, leave empty to copy default wage from teacher profile.', null=True),
+            model_name="teach",
+            name="hourly_wage",
+            field=models.FloatField(
+                blank=True,
+                help_text="Hourly wage, leave empty to copy default wage from teacher profile.",
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='default_hourly_wage',
-            field=models.FloatField(default=30.0, help_text='The default hourly wage, which serves as a preset value for taught courses. '),
+            model_name="userprofile",
+            name="default_hourly_wage",
+            field=models.FloatField(
+                default=30.0,
+                help_text="The default hourly wage, which serves as a preset value for taught courses. ",
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='gender',
-            field=models.CharField(choices=[('m', 'Man'), ('w', 'Woman')], default=None, max_length=1, null=True),
+            model_name="userprofile",
+            name="gender",
+            field=models.CharField(
+                choices=[("m", "Man"), ("w", "Woman")],
+                default=None,
+                max_length=1,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='voucher',
-            name='percentage',
+            model_name="voucher",
+            name="percentage",
             field=models.IntegerField(default=100),
         ),
         migrations.AlterField(
-            model_name='voucher',
-            name='pdf_file',
-            field=models.FileField(blank=True, null=True, upload_to='voucher/'),
+            model_name="voucher",
+            name="pdf_file",
+            field=models.FileField(blank=True, null=True, upload_to="voucher/"),
         ),
         migrations.AlterModelOptions(
-            name='voucher',
-            options={'ordering': ['-issued', '-expires']},
+            name="voucher",
+            options={"ordering": ["-issued", "-expires"]},
         ),
         migrations.RunSQL(
-            sql='DROP TABLE IF EXISTS userena_userenasignup',
+            sql="DROP TABLE IF EXISTS userena_userenasignup",
         ),
         migrations.RunSQL(
-            sql='create unique index auth_user_email_uindex on auth_user (email);',
+            sql="create unique index auth_user_email_uindex on auth_user (email);",
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='picture',
-            field=models.ImageField(blank=True, null=True, upload_to=''),
+            model_name="userprofile",
+            name="picture",
+            field=models.ImageField(blank=True, null=True, upload_to=""),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='bank_account',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='courses.BankAccount'),
+            model_name="userprofile",
+            name="bank_account",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="courses.BankAccount",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='subscription_type',
-            field=models.CharField(choices=[('regular', 'Regular (internal, with subscription)'), ('open_class', 'Open class (no subscription needed)'), ('external', 'External (offered by partner of Tanzquotient)')], default='regular', max_length=20),
+            model_name="course",
+            name="subscription_type",
+            field=models.CharField(
+                choices=[
+                    ("regular", "Regular (internal, with subscription)"),
+                    ("open_class", "Open class (no subscription needed)"),
+                    ("external", "External (offered by partner of Tanzquotient)"),
+                ],
+                default="regular",
+                max_length=20,
+            ),
         ),
         migrations.RunPython(
             code=migrate_open_class,
         ),
         migrations.AlterField(
-            model_name='course',
-            name='min_subscribers',
+            model_name="course",
+            name="min_subscribers",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='open_class',
+            model_name="course",
+            name="open_class",
         ),
         migrations.AlterField(
-            model_name='course',
-            name='offering',
-            field=models.ForeignKey(blank=True, help_text='Not required! Useful for regular courses or summer workshops. Do not use for irrgeular courses (e.g. ASVZ open classes)', null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Offering'),
+            model_name="course",
+            name="offering",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Not required! Useful for regular courses or summer workshops. Do not use for irrgeular courses (e.g. ASVZ open classes)",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Offering",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='period',
-            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken. Must be set if no offering associated but has regular lessons.', null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.Period'),
+            model_name="course",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken. Must be set if no offering associated but has regular lessons.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.Period",
+            ),
         ),
         migrations.AddField(
-            model_name='style',
-            name='filter_enabled',
-            field=models.BooleanField(default=False, help_text='If set to true, users can filter courses list based on this style'),
+            model_name="style",
+            name="filter_enabled",
+            field=models.BooleanField(
+                default=False,
+                help_text="If set to true, users can filter courses list based on this style",
+            ),
         ),
         migrations.AddField(
-            model_name='style',
-            name='parent_style',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='courses.Style'),
+            model_name="style",
+            name="parent_style",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="children",
+                to="courses.Style",
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='student_status',
-            field=models.CharField(choices=[('eth', 'ETH'), ('uni', 'UZH'), ('ph', 'PH'), ('other', 'Other'), ('no', 'Not a student')], default='no', max_length=10),
+            model_name="userprofile",
+            name="student_status",
+            field=models.CharField(
+                choices=[
+                    ("eth", "ETH"),
+                    ("uni", "UZH"),
+                    ("ph", "PH"),
+                    ("other", "Other"),
+                    ("no", "Not a student"),
+                ],
+                default="no",
+                max_length=10,
+            ),
         ),
         migrations.AlterModelOptions(
-            name='style',
-            options={'ordering': ['name']},
+            name="style",
+            options={"ordering": ["name"]},
         ),
         migrations.AddField(
-            model_name='course',
-            name='external_url',
+            model_name="course",
+            name="external_url",
             field=models.URLField(blank=True, max_length=500, null=True),
         ),
         migrations.CreateModel(
-            name='LessonDetails',
+            name="LessonDetails",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('room', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='lessons', to='courses.Room')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "room",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="lessons",
+                        to="courses.Room",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TeachLesson',
+            name="TeachLesson",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('hourly_wage', models.FloatField(blank=True, help_text='Hourly wage, leave empty to copy default wage from teacher profile.', null=True)),
-                ('lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teaching', to='courses.LessonDetails')),
-                ('teacher', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teaching_lessons', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "hourly_wage",
+                    models.FloatField(
+                        blank=True,
+                        help_text="Hourly wage, leave empty to copy default wage from teacher profile.",
+                        null=True,
+                    ),
+                ),
+                (
+                    "lesson",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="teaching",
+                        to="courses.LessonDetails",
+                    ),
+                ),
+                (
+                    "teacher",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="teaching_lessons",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.RemoveField(
-            model_name='regularlessoncancellation',
-            name='course',
+            model_name="regularlessoncancellation",
+            name="course",
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='teachers',
+            model_name="course",
+            name="teachers",
         ),
         migrations.RemoveField(
-            model_name='irregularlesson',
-            name='room',
+            model_name="irregularlesson",
+            name="room",
         ),
         migrations.AddField(
-            model_name='period',
-            name='name',
-            field=models.CharField(blank=True, help_text='Recommended. Makes identifying the period easier', max_length=50, null=True),
+            model_name="period",
+            name="name",
+            field=models.CharField(
+                blank=True,
+                help_text="Recommended. Makes identifying the period easier",
+                max_length=50,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='periodcancellation',
-            name='name',
-            field=models.CharField(blank=True, help_text='Recommended. Makes identifying the cancellation easier. E.g. Monday after Easter', max_length=50, null=True),
+            model_name="periodcancellation",
+            name="name",
+            field=models.CharField(
+                blank=True,
+                help_text="Recommended. Makes identifying the cancellation easier. E.g. Monday after Easter",
+                max_length=50,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='periodcancellation',
-            name='date',
-            field=models.DateField(default=datetime.datetime(2019, 7, 12, 22, 20, 24, 27789)),
+            model_name="periodcancellation",
+            name="date",
+            field=models.DateField(
+                default=datetime.datetime(2019, 7, 12, 22, 20, 24, 27789)
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='teach',
-            name='teacher',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teaching_courses', to=settings.AUTH_USER_MODEL),
+            model_name="teach",
+            name="teacher",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="teaching_courses",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.DeleteModel(
-            name='RegularLessonCancellation',
+            name="RegularLessonCancellation",
         ),
         migrations.AddField(
-            model_name='irregularlesson',
-            name='lesson_details',
-            field=models.OneToOneField(blank=True, help_text='Only needed, if details are different from course. E.g. different room, different teachers,...', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='irregular_lesson', to='courses.LessonDetails'),
+            model_name="irregularlesson",
+            name="lesson_details",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Only needed, if details are different from course. E.g. different room, different teachers,...",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="irregular_lesson",
+                to="courses.LessonDetails",
+            ),
         ),
         migrations.CreateModel(
-            name='RegularLessonException',
+            name="RegularLessonException",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(help_text='Date of the exception', null=True)),
-                ('is_cancellation', models.BooleanField(default=False, help_text='Cancellation of the regular lesson on the given date. No other fields need to be specified.')),
-                ('time_from', models.TimeField(blank=True, help_text='Only set, if different', null=True)),
-                ('time_to', models.TimeField(blank=True, help_text='Only set, if different', null=True)),
-                ('lesson_details', models.OneToOneField(blank=True, help_text='Only needed, if details are different from course. E.g. different room, different teachers,...', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='regular_lesson_exception', to='courses.LessonDetails')),
-                ('regular_lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='exceptions', to='courses.RegularLesson')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(help_text="Date of the exception", null=True),
+                ),
+                (
+                    "is_cancellation",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Cancellation of the regular lesson on the given date. No other fields need to be specified.",
+                    ),
+                ),
+                (
+                    "time_from",
+                    models.TimeField(
+                        blank=True, help_text="Only set, if different", null=True
+                    ),
+                ),
+                (
+                    "time_to",
+                    models.TimeField(
+                        blank=True, help_text="Only set, if different", null=True
+                    ),
+                ),
+                (
+                    "lesson_details",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Only needed, if details are different from course. E.g. different room, different teachers,...",
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="regular_lesson_exception",
+                        to="courses.LessonDetails",
+                    ),
+                ),
+                (
+                    "regular_lesson",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="exceptions",
+                        to="courses.RegularLesson",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
         migrations.AlterField(
-            model_name='coursetranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Course'),
+            model_name="coursetranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="courses.Course",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursetypetranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.CourseType'),
+            model_name="coursetypetranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="courses.CourseType",
+            ),
         ),
         migrations.AlterField(
-            model_name='roomtranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Room'),
+            model_name="roomtranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="courses.Room",
+            ),
         ),
         migrations.AlterField(
-            model_name='styletranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='courses.Style'),
+            model_name="styletranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="courses.Style",
+            ),
         ),
         migrations.AddField(
-            model_name='offering',
-            name='preview',
-            field=models.BooleanField(default=False, help_text='Defines if the offering should be displayed as preview'),
+            model_name="offering",
+            name="preview",
+            field=models.BooleanField(
+                default=False,
+                help_text="Defines if the offering should be displayed as preview",
+            ),
         ),
     ]

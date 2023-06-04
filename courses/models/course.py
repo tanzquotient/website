@@ -16,8 +16,17 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from courses import managers
-from courses.models import Weekday, CourseSubscriptionType, LeadFollow, Subscribe, Period, \
-    RegularLesson, IrregularLesson, RegularLessonException, Offering
+from courses.models import (
+    Weekday,
+    CourseSubscriptionType,
+    LeadFollow,
+    Subscribe,
+    Period,
+    RegularLesson,
+    IrregularLesson,
+    RegularLessonException,
+    Offering,
+)
 from partners.models import Partner
 from survey.models import Survey
 
@@ -25,34 +34,64 @@ from survey.models import Survey
 class Course(TranslatableModel):
     # Mandatory fields
     name = models.CharField(max_length=255, blank=False)
-    name.help_text = "This name is just for reference and is not displayed anywhere on the website."
-    type = models.ForeignKey('CourseType', related_name='courses', blank=False, null=False, on_delete=models.PROTECT)
-    type.help_text = "The name of the course type is displayed on the website as the course title ."
-    subscription_type = models.CharField(max_length=20, blank=False, null=False,
-                                         choices=CourseSubscriptionType.CHOICES,
-                                         default=CourseSubscriptionType.REGULAR)
+    name.help_text = (
+        "This name is just for reference and is not displayed anywhere on the website."
+    )
+    type = models.ForeignKey(
+        "CourseType",
+        related_name="courses",
+        blank=False,
+        null=False,
+        on_delete=models.PROTECT,
+    )
+    type.help_text = (
+        "The name of the course type is displayed on the website as the course title ."
+    )
+    subscription_type = models.CharField(
+        max_length=20,
+        blank=False,
+        null=False,
+        choices=CourseSubscriptionType.CHOICES,
+        default=CourseSubscriptionType.REGULAR,
+    )
     display = models.BooleanField(default=True)
-    display.help_text = "Defines if this course should be displayed on the Website " \
-                        "(if checked, course is displayed if offering is displayed)."
+    display.help_text = (
+        "Defines if this course should be displayed on the Website "
+        "(if checked, course is displayed if offering is displayed)."
+    )
     active = models.BooleanField(default=True)
-    active.help_text = "Defines if clients can subscribe to this course " \
-                       "(if checked, course is active if offering is active)."
-    cancelled = models.BooleanField(default=False, help_text="Indicates if this course is cancelled")
+    active.help_text = (
+        "Defines if clients can subscribe to this course "
+        "(if checked, course is active if offering is active)."
+    )
+    cancelled = models.BooleanField(
+        default=False, help_text="Indicates if this course is cancelled"
+    )
     evaluated = models.BooleanField(default=False)
     evaluated.help_text = "If this course was evaluated by a survey or another way."
 
     # Optional - apply to all course types
-    room = models.ForeignKey('Room', related_name='courses', blank=True, null=True, on_delete=models.PROTECT)
-    offering = models.ForeignKey('Offering', on_delete=models.PROTECT)
-    period = models.ForeignKey('Period', blank=True, null=True, on_delete=models.PROTECT)
-    period.help_text = "You can set a custom period for this course here. " \
-                       "If this is left empty, the period from the offering is taken. "
+    room = models.ForeignKey(
+        "Room", related_name="courses", blank=True, null=True, on_delete=models.PROTECT
+    )
+    offering = models.ForeignKey("Offering", on_delete=models.PROTECT)
+    period = models.ForeignKey(
+        "Period", blank=True, null=True, on_delete=models.PROTECT
+    )
+    period.help_text = (
+        "You can set a custom period for this course here. "
+        "If this is left empty, the period from the offering is taken. "
+    )
 
     # Translated fields
     translations = TranslatedFields(
-        description=HTMLField(verbose_name='[TR] Description', blank=True, null=True,
-                              help_text="Description specific for this course. "
-                                        "(Gets displayed combined with the description of the course style)")
+        description=HTMLField(
+            verbose_name="[TR] Description",
+            blank=True,
+            null=True,
+            help_text="Description specific for this course. "
+            "(Gets displayed combined with the description of the course style)",
+        )
     )
 
     # For regular courses only
@@ -61,24 +100,40 @@ class Course(TranslatableModel):
 
     # For external courses only
     external_url = models.URLField(max_length=500, blank=True, null=True)
-    partner = models.ForeignKey(to=Partner, on_delete=models.SET_NULL, related_name='courses', blank=True, null=True)
+    partner = models.ForeignKey(
+        to=Partner,
+        on_delete=models.SET_NULL,
+        related_name="courses",
+        blank=True,
+        null=True,
+    )
 
     # Pricing
-    price_with_legi = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(35))
-    price_without_legi = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(70))
+    price_with_legi = models.DecimalField(
+        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(35)
+    )
+    price_without_legi = models.DecimalField(
+        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(70)
+    )
     price_special = models.CharField(max_length=255, blank=True, null=True)
     price_special.help_text = "Set this only if you want a different price schema."
 
     # Relations
-    subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                         through='Subscribe',
-                                         related_name='courses',
-                                         through_fields=('course', 'user'))
-    preceding_courses = models.ManyToManyField('Course',
-                                               related_name='succeeding_courses',
-                                               through='CourseSuccession',
-                                               through_fields=('successor', 'predecessor'))
-    preceding_courses.help_text = "The course(s) that are immediate predecessors of this course."
+    subscribers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="Subscribe",
+        related_name="courses",
+        through_fields=("course", "user"),
+    )
+    preceding_courses = models.ManyToManyField(
+        "Course",
+        related_name="succeeding_courses",
+        through="CourseSuccession",
+        through_fields=("successor", "predecessor"),
+    )
+    preceding_courses.help_text = (
+        "The course(s) that are immediate predecessors of this course."
+    )
 
     objects = managers.CourseManager()
 
@@ -89,37 +144,45 @@ class Course(TranslatableModel):
         return {subscription.user for subscription in self.subscriptions.accepted()}
 
     def subscribed_user_ids(self) -> set[int]:
-        return {subscription.user_id for subscription in self.subscriptions.all() if subscription.is_active()}
+        return {
+            subscription.user_id
+            for subscription in self.subscriptions.all()
+            if subscription.is_active()
+        }
 
     def payment_totals(self) -> dict[str, Number]:
         """calculate different statistics in one method (performance optimization)"""
         totals = defaultdict(Decimal)
-        accepted = self.subscriptions.accepted().prefetch_related('price_reductions', 'subscription_payments')
+        accepted = self.subscriptions.accepted().prefetch_related(
+            "price_reductions", "subscription_payments"
+        )
 
         for subscription in accepted.all():
-            totals['to_pay'] += subscription.get_price_to_pay()
-            totals['paid'] += subscription.sum_of_payments()
-            totals['reductions'] += subscription.sum_of_reductions()
-            totals['to_pay_after_reductions'] += subscription.price_after_reductions()
-            totals['open_amount'] += subscription.open_amount()
+            totals["to_pay"] += subscription.get_price_to_pay()
+            totals["paid"] += subscription.sum_of_payments()
+            totals["reductions"] += subscription.sum_of_reductions()
+            totals["to_pay_after_reductions"] += subscription.price_after_reductions()
+            totals["open_amount"] += subscription.open_amount()
 
-        totals['difference'] = totals['to_pay_after_reductions'] - totals['paid']
+        totals["difference"] = totals["to_pay_after_reductions"] - totals["paid"]
 
         return totals
 
     def format_teachers(self) -> str:
         names = list(map(auth.get_user_model().get_full_name, self.get_teachers()))
         if not names:
-            return ''
+            return ""
         if len(names) == 1:
             return names[0]
-        return ' & '.join([', '.join(names[:-1]), names[-1]])
+        return " & ".join([", ".join(names[:-1]), names[-1]])
 
     def get_teachers(self) -> list[User]:
         return [t.teacher for t in self.teaching.all()]
 
     def surveys(self) -> set[Survey]:
-        return {survey_instance.survey for survey_instance in self.survey_instances.all()}
+        return {
+            survey_instance.survey for survey_instance in self.survey_instances.all()
+        }
 
     format_teachers.short_description = "Teachers"
 
@@ -128,15 +191,19 @@ class Course(TranslatableModel):
 
     def format_prices(self) -> str:
         from courses.services import format_prices
-        return format_prices(self.price_with_legi, self.price_without_legi, self.price_special)
+
+        return format_prices(
+            self.price_with_legi, self.price_without_legi, self.price_special
+        )
 
     format_prices.short_description = "Prices"
 
     def format_description(self) -> str:
         from courses.services import model_attribute_language_fallback
+
         desc = ""
-        desc += model_attribute_language_fallback(self, 'description') or ""
-        desc += model_attribute_language_fallback(self.type, 'description') or ""
+        desc += model_attribute_language_fallback(self, "description") or ""
+        desc += model_attribute_language_fallback(self.type, "description") or ""
         return desc
 
     format_description.short_description = "Description"
@@ -169,20 +236,29 @@ class Course(TranslatableModel):
 
         matched_count = len({s for s in self.subscriptions.all() if s.is_matched()})
         total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = \
-            len({s for s in self.subscriptions.all() if s.is_single_with_preference(lead_or_follow)})
+        current_count_for_preference = len(
+            {
+                s
+                for s in self.subscriptions.all()
+                if s.is_single_with_preference(lead_or_follow)
+            }
+        )
         free_for_preference = total_for_preference - current_count_for_preference
 
         return free_for_preference >= 1
 
     def get_free_places_count(self) -> Optional[int]:
-
         # No maximum => free places is not defined
         if self.max_subscribers is None:
             return None
 
-        active_subscriptions_count = \
-            len({subscription for subscription in self.subscriptions.all() if subscription.is_active()})
+        active_subscriptions_count = len(
+            {
+                subscription
+                for subscription in self.subscriptions.all()
+                if subscription.is_active()
+            }
+        )
 
         total_count = self.max_subscribers - active_subscriptions_count
         total_count = int(max(total_count, 0))
@@ -197,12 +273,19 @@ class Course(TranslatableModel):
 
         leads_count = self.subscriptions.active().to_match().leaders().count()
         follows_count = self.subscriptions.active().to_match().followers().count()
-        no_preference_count = self.subscriptions.active().to_match().no_lead_follow_preference().count()
+        no_preference_count = (
+            self.subscriptions.active().to_match().no_lead_follow_preference().count()
+        )
 
         return matched_count, leads_count, follows_count, no_preference_count
 
     def number_of_possible_couples(self) -> int:
-        matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+        (
+            matched_count,
+            leads_count,
+            follows_count,
+            no_preference_count,
+        ) = self.get_matched_and_individual_counts()
 
         smaller_set_size = min(leads_count, follows_count)
         larger_set_size = max(leads_count, follows_count)
@@ -232,34 +315,61 @@ class Course(TranslatableModel):
             return _("We did not receive any subscriptions yet.")
 
         if self.type.couple_course:
-            matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
-            if matched_count // 2 + leads_count + follows_count + no_preference_count == 1:
-                return _('Currently there is:')
-            return _('Currently there are:')
+            (
+                matched_count,
+                leads_count,
+                follows_count,
+                no_preference_count,
+            ) = self.get_matched_and_individual_counts()
+            if (
+                matched_count // 2 + leads_count + follows_count + no_preference_count
+                == 1
+            ):
+                return _("Currently there is:")
+            return _("Currently there are:")
 
         count = self.subscriptions.active().count()
         if count == 1:
-            return _('We received one subscription so far.')
-        return _('We received {} subscriptions so far.').format(count)
+            return _("We received one subscription so far.")
+        return _("We received {} subscriptions so far.").format(count)
 
     def participants_info_list(self) -> list[str]:
         if not self.type.couple_course:
             return []
 
-        matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+        (
+            matched_count,
+            leads_count,
+            follows_count,
+            no_preference_count,
+        ) = self.get_matched_and_individual_counts()
         texts = []
         if matched_count:
-            texts.append(_('One couple') if matched_count // 2 == 1 else
-                         _('{} couples').format(matched_count // 2))
+            texts.append(
+                _("One couple")
+                if matched_count // 2 == 1
+                else _("{} couples").format(matched_count // 2)
+            )
         if follows_count:
-            texts.append(_('One individual follower') if follows_count == 1 else
-                         _('{} individual followers').format(follows_count))
+            texts.append(
+                _("One individual follower")
+                if follows_count == 1
+                else _("{} individual followers").format(follows_count)
+            )
         if leads_count:
-            texts.append(_('One individual leader') if leads_count == 1 else
-                         _('{} individual leaders').format(leads_count))
+            texts.append(
+                _("One individual leader")
+                if leads_count == 1
+                else _("{} individual leaders").format(leads_count)
+            )
         if no_preference_count:
-            texts.append(_('One person with no lead or follow preference') if no_preference_count == 1 else
-                         _('{} people with no lead or follow preference').format(no_preference_count))
+            texts.append(
+                _("One person with no lead or follow preference")
+                if no_preference_count == 1
+                else _("{} people with no lead or follow preference").format(
+                    no_preference_count
+                )
+            )
         return texts
 
     def not_enough_participants_info(self) -> Optional[str]:
@@ -267,22 +377,31 @@ class Course(TranslatableModel):
             return None
 
         if self.type.couple_course:
-            matched_count, leads_count, follows_count, no_preference_count = self.get_matched_and_individual_counts()
+            (
+                matched_count,
+                leads_count,
+                follows_count,
+                no_preference_count,
+            ) = self.get_matched_and_individual_counts()
 
             if leads_count + follows_count + no_preference_count > 0:
                 num_couples = self.number_of_possible_couples()
                 if num_couples == 1:
-                    return _('With this one couple is possible in total, but at least {} couples are needed.') \
-                        .format(self.min_number_of_couples())
-                return _('With this {} couples are possible in total, but at least {} couples are needed.') \
-                    .format(num_couples, self.min_number_of_couples())
+                    return _(
+                        "With this one couple is possible in total, but at least {} couples are needed."
+                    ).format(self.min_number_of_couples())
+                return _(
+                    "With this {} couples are possible in total, but at least {} couples are needed."
+                ).format(num_couples, self.min_number_of_couples())
 
-            return _('At least {} couples are needed.').format(self.min_number_of_couples())
+            return _("At least {} couples are needed.").format(
+                self.min_number_of_couples()
+            )
 
         people_needed = self.min_subscribers - self.subscriptions.active().count()
         if people_needed == 1:
-            return _('At least one more person is needed')
-        return _('At least {} more people are needed.').format(people_needed)
+            return _("At least one more person is needed")
+        return _("At least {} more people are needed.").format(people_needed)
 
     def has_style(self, style_name) -> bool:
         if style_name is None:
@@ -301,7 +420,9 @@ class Course(TranslatableModel):
         return False
 
     def is_displayed(self) -> bool:
-        return self.offering.display and self.display  # both must be true to be displayed
+        return (
+            self.offering.display and self.display
+        )  # both must be true to be displayed
 
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
@@ -319,7 +440,9 @@ class Course(TranslatableModel):
         if not self.is_regular():
             return False
 
-        return self.offering.active and self.active  # both must be true to allow subscription
+        return (
+            self.offering.active and self.active
+        )  # both must be true to allow subscription
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date()
@@ -338,17 +461,23 @@ class Course(TranslatableModel):
     def get_all_regular_lesson_exceptions(self) -> list[RegularLessonException]:
         exceptions = []
         for regular_lesson in self.regular_lessons.all():
-            exceptions += [e for e in regular_lesson.exceptions.all() if e.is_applicable()]
+            exceptions += [
+                e for e in regular_lesson.exceptions.all() if e.is_applicable()
+            ]
         return exceptions
 
-    def get_not_cancelled_regular_lesson_exceptions(self) -> list[RegularLessonException]:
-        return [e for e in self.get_all_regular_lesson_exceptions() if not e.is_cancellation]
+    def get_not_cancelled_regular_lesson_exceptions(
+        self,
+    ) -> list[RegularLessonException]:
+        return [
+            e for e in self.get_all_regular_lesson_exceptions() if not e.is_cancellation
+        ]
 
     def get_lessons_as_strings(self) -> Iterable[str]:
         return map(str, self.get_lessons())
 
     def format_lessons(self) -> str:
-        return ' & '.join(self.get_lessons_as_strings())
+        return " & ".join(self.get_lessons_as_strings())
 
     format_lessons.short_description = "Lessons"
 
@@ -359,7 +488,9 @@ class Course(TranslatableModel):
                 return False
 
             period = self.get_period()
-            return period is None or period.date_from <= cancelled_date <= period.date_to
+            return (
+                period is None or period.date_from <= cancelled_date <= period.date_to
+            )
 
         return [d for d in self.get_cancellation_dates() if is_applicable(d)]
 
@@ -376,13 +507,13 @@ class Course(TranslatableModel):
         return sorted(dates)
 
     def format_cancellations(self) -> str:
-        dates = [d.strftime('%d.%m.%Y') for d in self.get_cancellation_dates()]
-        return ' / '.join(dates)
+        dates = [d.strftime("%d.%m.%Y") for d in self.get_cancellation_dates()]
+        return " / ".join(dates)
 
     format_cancellations.short_description = "Cancellations"
 
     def format_preceeding_courses(self) -> str:
-        return ' / '.join(map(str, self.preceding_courses.all()))
+        return " / ".join(map(str, self.preceding_courses.all()))
 
     format_preceeding_courses.short_description = "Predecessors"
 
@@ -420,7 +551,9 @@ class Course(TranslatableModel):
     def get_last_regular_lesson_date(self) -> Optional[date]:
         period = self.get_period()
         if self.regular_lessons.exists() and period:
-            course_weekdays = [Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()]
+            course_weekdays = [
+                Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()
+            ]
 
             # Find last course day before date_to
             for day_delta in range(7):
@@ -463,7 +596,9 @@ class Course(TranslatableModel):
     def get_common_irregular_weekday(self) -> Optional[str]:
         """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
         if self.irregular_lessons.exists():
-            weekdays = [lesson.date.weekday() for lesson in self.irregular_lessons.all()]
+            weekdays = [
+                lesson.date.weekday() for lesson in self.irregular_lessons.all()
+            ]
             weekdays_unique = list(set(weekdays))
             if len(weekdays_unique) == 1:
                 return Weekday.NUMBER_2_SLUG[weekdays_unique[0]]
@@ -475,23 +610,27 @@ class Course(TranslatableModel):
     def get_teachers_welcomed(self) -> bool:
         return self.teaching.filter(welcomed=True).count() > 0
 
-    get_teachers_welcomed.short_description = 'Teachers welcomed'
+    get_teachers_welcomed.short_description = "Teachers welcomed"
     get_teachers_welcomed.boolean = True
 
     def get_total_time(self) -> dict[str, Optional[float]]:
         totals = {
-            'total': None,
-            'regular': None,
-            'irregular': None,
+            "total": None,
+            "regular": None,
+            "irregular": None,
         }
-        regular_times = [lesson.get_total_time() for lesson in list(self.regular_lessons.all())]
-        irregular_times = [lesson.get_total_time() for lesson in list(self.irregular_lessons.all())]
+        regular_times = [
+            lesson.get_total_time() for lesson in list(self.regular_lessons.all())
+        ]
+        irregular_times = [
+            lesson.get_total_time() for lesson in list(self.irregular_lessons.all())
+        ]
         if all(t is not None for t in regular_times):
-            totals['regular'] = sum(t.seconds / 3600 for t in regular_times)
+            totals["regular"] = sum(t.seconds / 3600 for t in regular_times)
         if all(t is not None for t in irregular_times):
-            totals['irregular'] = sum(t.seconds / 3600 for t in irregular_times)
+            totals["irregular"] = sum(t.seconds / 3600 for t in irregular_times)
         try:
-            totals['total'] = totals['regular'] + totals['irregular']
+            totals["total"] = totals["regular"] + totals["irregular"]
         except TypeError:
             pass
         return totals
@@ -524,10 +663,10 @@ class Course(TranslatableModel):
         return self
 
     # position field for ordering columns (grappelli feature)
-    position = models.PositiveSmallIntegerField('Position', default=0)
+    position = models.PositiveSmallIntegerField("Position", default=0)
 
     class Meta:
-        ordering = ['position', 'name']
+        ordering = ["position", "name"]
 
     def __str__(self) -> str:
         try:

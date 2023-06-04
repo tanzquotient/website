@@ -12,45 +12,36 @@ class OfferingList(generics.ListAPIView):
     model = Offering
     serializer_class = OfferingSerializer
     queryset = Offering.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class OfferingDetail(generics.RetrieveAPIView):
     model = Offering
     serializer_class = OfferingSerializer
     queryset = Offering.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class UserDetail(generics.RetrieveAPIView):
     model = auth.get_user_model()
     serializer_class = UserSerializer
     queryset = auth.get_user_model().objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class CoursePaymentDetail(generics.RetrieveAPIView):
     model = Course
     serializer_class = CoursePaymentSerializer
     queryset = Course.objects.all()
-    permission_classes = [
-        TeacherCanReadUpdateCoursePermission
-    ]
+    permission_classes = [TeacherCanReadUpdateCoursePermission]
 
 
 class SubscriptionPayment(APIView):
     """
     Change if a subscription is paid/not paid
     """
-    permission_classes = [
-        TeacherCanReadUpdateSubscriptionPermission
-    ]
+
+    permission_classes = [TeacherCanReadUpdateSubscriptionPermission]
 
     def get_object(self, pk):
         try:
@@ -78,35 +69,27 @@ class CourseTypeDetail(generics.RetrieveAPIView):
     model = CourseType
     serializer_class = CourseTypeSerializer
     queryset = CourseType.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class StyleDetail(generics.RetrieveAPIView):
     model = Style
     serializer_class = StyleSerializer
     queryset = Style.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class StyleList(generics.ListAPIView):
     model = Style
     serializer_class = StyleSerializer
     queryset = Style.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class FilteredEmailList(generics.ListAPIView):
     model = auth.get_user_model()
     serializer_class = UserSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         """
@@ -116,10 +99,14 @@ class FilteredEmailList(generics.ListAPIView):
         queryset = auth.get_user_model().objects.all()
 
         # get URL arguments
-        newsletter = self.request.query_params.get('newsletter', None)
-        style_id = self.request.query_params.get('style', None)
-        if newsletter is not None and (newsletter.lower() == "true" or newsletter.lower() == "false"):
-            queryset = queryset.filter(subscriptions__user__profile__newsletter=newsletter.lower() == "true")
+        newsletter = self.request.query_params.get("newsletter", None)
+        style_id = self.request.query_params.get("style", None)
+        if newsletter is not None and (
+            newsletter.lower() == "true" or newsletter.lower() == "false"
+        ):
+            queryset = queryset.filter(
+                subscriptions__user__profile__newsletter=newsletter.lower() == "true"
+            )
         if style_id is not None:
             queryset = queryset.filter(subscriptions__course__type__styles=style_id)
         return queryset.distinct()

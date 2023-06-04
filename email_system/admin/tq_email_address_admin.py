@@ -8,6 +8,5 @@ from email_system.models import TqEmailAddress
 class TqEmailAddressAdmin(TranslatableAdmin):
     model = TqEmailAddress
 
-    list_display = ['email_address', 'description']
-    search_fields = ['email_address', 'description']
-
+    list_display = ["email_address", "description"]
+    search_fields = ["email_address", "description"]

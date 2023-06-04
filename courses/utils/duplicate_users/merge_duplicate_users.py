@@ -3,7 +3,7 @@ from typing import Optional, Any
 
 from django.contrib.auth.models import User
 
-log = logging.getLogger('merge_duplicate_users')
+log = logging.getLogger("merge_duplicate_users")
 
 
 def merge_duplicate_users(to_merge) -> None:
@@ -12,27 +12,58 @@ def merge_duplicate_users(to_merge) -> None:
     for primary, aliases in to_merge.items():
         user: User = User.objects.get(id=primary)
         user_aliases: list[User] = list(User.objects.filter(id__in=aliases))
-        user.date_joined = User.objects.filter(id__in=aliases).order_by("date_joined").first().date_joined
+        user.date_joined = (
+            User.objects.filter(id__in=aliases)
+            .order_by("date_joined")
+            .first()
+            .date_joined
+        )
         user.save()
 
         log.info("Merging {}".format(user))
 
         profile = user.profile
-        profile.legi = _get_value_from_most_recent_alias_profile(aliases, profile, "legi")
-        profile.address = _get_value_from_most_recent_alias_profile(aliases, profile, "address")
-        profile.phone_number = _get_value_from_most_recent_alias_profile(aliases, profile, "phone_number")
-        profile.student_status = _get_value_from_most_recent_alias_profile(aliases, profile, "student_status")
-        profile.body_height = _get_value_from_most_recent_alias_profile(aliases, profile, "body_height")
-        profile.about_me = _get_value_from_most_recent_alias_profile(aliases, profile, "about_me")
-        profile.birthdate = _get_value_from_most_recent_alias_profile(aliases, profile, "birthdate")
-        profile.nationality = _get_value_from_most_recent_alias_profile(aliases, profile, "nationality")
-        profile.residence_permit = _get_value_from_most_recent_alias_profile(aliases, profile, "residence_permit")
-        profile.ahv_number = _get_value_from_most_recent_alias_profile(aliases, profile, "ahv_number")
-        profile.zemis_number = _get_value_from_most_recent_alias_profile(aliases, profile, "zemis_number")
-        profile.fixed_hourly_wage = _get_value_from_most_recent_alias_profile(aliases, profile, "fixed_hourly_wage")
+        profile.legi = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "legi"
+        )
+        profile.address = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "address"
+        )
+        profile.phone_number = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "phone_number"
+        )
+        profile.student_status = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "student_status"
+        )
+        profile.body_height = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "body_height"
+        )
+        profile.about_me = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "about_me"
+        )
+        profile.birthdate = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "birthdate"
+        )
+        profile.nationality = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "nationality"
+        )
+        profile.residence_permit = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "residence_permit"
+        )
+        profile.ahv_number = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "ahv_number"
+        )
+        profile.zemis_number = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "zemis_number"
+        )
+        profile.fixed_hourly_wage = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "fixed_hourly_wage"
+        )
         profile.save()
 
-        bank_account = _get_value_from_most_recent_alias_profile(aliases, profile, "bank_account")
+        bank_account = _get_value_from_most_recent_alias_profile(
+            aliases, profile, "bank_account"
+        )
         if bank_account:
             bank_account.user_profile = profile
             bank_account.save()
@@ -76,7 +107,9 @@ def merge_duplicate_users(to_merge) -> None:
             alias.delete()
 
 
-def _get_value_from_most_recent_alias_profile(alias_ids, profile, field) -> Optional[Any]:
+def _get_value_from_most_recent_alias_profile(
+    alias_ids, profile, field
+) -> Optional[Any]:
     from courses.models import UserProfile
 
     value = getattr(profile, field)

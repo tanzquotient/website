@@ -9,7 +9,6 @@ def find_duplicate_users():
     duplicates = dict()
     done = set()
     for user in User.objects.all():
-
         if user.id not in done:
             duplicates_of_user = _find_duplicates_of(user)
             if len(duplicates_of_user) > 1:
@@ -28,12 +27,19 @@ def _find_duplicates_of(user):
     if user.email is not None and user.email != "":
         candidates.update(set(User.objects.filter(email=user.email)))
 
-    candidates.update(set(User.objects.filter(first_name=user.first_name, last_name=user.last_name)))
+    candidates.update(
+        set(User.objects.filter(first_name=user.first_name, last_name=user.last_name))
+    )
     # Some user accidentally switch first and last name
-    candidates.update(set(User.objects.filter(first_name=user.last_name, last_name=user.first_name)))
+    candidates.update(
+        set(User.objects.filter(first_name=user.last_name, last_name=user.first_name))
+    )
 
     candidates = list(candidates)
-    candidates.sort(key=lambda u: u.last_login or datetime.min.replace(tzinfo=pytz.UTC), reverse=True)
+    candidates.sort(
+        key=lambda u: u.last_login or datetime.min.replace(tzinfo=pytz.UTC),
+        reverse=True,
+    )
 
     # candidates intentionally also includes the passed user
     return [u.id for u in candidates]

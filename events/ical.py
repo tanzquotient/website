@@ -11,7 +11,7 @@ from .models import Event
 
 class EventFeed(ICalFeed):
     # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
-    product_id = '-//Tanzquotient Website calendar v1.1'
+    product_id = "-//Tanzquotient Website calendar v1.1"
 
     def items(self):
         return Event.objects.filter(cancelled=False).all()
@@ -22,7 +22,9 @@ class EventFeed(ICalFeed):
     def item_description(self, item):
         description = item.name
         description += os.linesep
-        description += item.safe_translation_getter("description", any_language=True) or ""
+        description += (
+            item.safe_translation_getter("description", any_language=True) or ""
+        )
 
         price_string = item.format_prices()
         if price_string:
@@ -41,8 +43,7 @@ class EventFeed(ICalFeed):
             # no start time is available
             return date
         start = datetime.datetime.combine(date, item.time_from)
-        return start - timezone('Europe/Zurich').utcoffset(start)
-
+        return start - timezone("Europe/Zurich").utcoffset(start)
 
     def item_end_datetime(self, item):
         date = item.date
@@ -52,17 +53,17 @@ class EventFeed(ICalFeed):
             # no end time is available
             return date
         end = datetime.datetime.combine(date, item.time_to)
-        return end - timezone('Europe/Zurich').utcoffset(end)
+        return end - timezone("Europe/Zurich").utcoffset(end)
 
     def item_location(self, item):
         return item.room
 
     def item_link(self, item):
-        return reverse('courses:home')
+        return reverse("courses:home")
 
     # must be unique in order to display all events correctly in most calendar programs
     def item_guid(self, item):
-        domain = 'tanzquotient'
-        namespace = 'event'
-        guid = '{0}_{1}_{2}'.format(domain, namespace, item.id)
+        domain = "tanzquotient"
+        namespace = "event"
+        guid = "{0}_{1}_{2}".format(domain, namespace, item.id)
         return guid

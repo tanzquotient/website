@@ -15,11 +15,11 @@ def bar_chart(values: list[Any], labels: list[str]) -> Figure:
                 x=values,
                 y=labels,
                 text=percent,
-                orientation='h',
+                orientation="h",
             )
         ],
         layout=Layout(
-            height=len(values)*30,
+            height=len(values) * 30,
             margin=dict(
                 l=0,
                 r=0,
@@ -27,9 +27,9 @@ def bar_chart(values: list[Any], labels: list[str]) -> Figure:
                 b=0,
                 pad=10,
             ),
-            hovermode='y',
+            hovermode="y",
             dragmode=False,
             xaxis=dict(fixedrange=True),
             yaxis=dict(fixedrange=True),
-        )
+        ),
     )
