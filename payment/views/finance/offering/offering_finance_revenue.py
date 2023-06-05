@@ -9,11 +9,19 @@ from utils import export
 
 
 def get_data(offering: Offering):
-    header = ['Course', 'Wages', 'Fully booked legi revenue', 'Total revenue after reductions', 'Actually paid',
-              'Profit', 'Actual profit']
+    header = ['Course',
+              'Profit Margin',
+              'Wages',
+              'Fully booked legi Profit',
+              'Profit',
+              'Actual Profit',
+              'Total Revenue after Reductions',
+              'Actually paid',
+              'Percent not paid'
+              ]
     rows = [header]
     rows_total = [0] * len(header)
-    rows_total[0] = 'Total'
+    rows_total[0] = 'TOTAL'
 
     for course in offering.course_set.all():
         hours = Decimal(course.get_total_time()['total']) if not (course.cancelled #or course.get_confirmed_count == 0
@@ -28,12 +36,41 @@ def get_data(offering: Offering):
         except:
             max_revenue = 0
 
-        row = [course.name, wages, max_revenue, totals['to_pay_after_reductions'], totals['paid'],
-               totals['to_pay_after_reductions'] - wages, totals['paid'] - wages]
+        profit = totals['to_pay_after_reductions'] - wages
+        actual_profit = totals['paid'] - wages
+
+        # Calculate profit margin
+        if totals['to_pay_after_reductions'] != 0:
+            profit_margin = (profit / totals['to_pay_after_reductions']) * 100
+        else:
+            profit_margin = 0
+
+        try:
+            percent_not_paid = 100*(1-(totals['paid']/totals['to_pay_after_reductions']))
+        except:
+            percent_not_paid = 0
+
+        row = [course.name,
+               profit_margin,
+               wages,
+               max_revenue-wages,
+               profit,
+               actual_profit,
+               totals['to_pay_after_reductions'],
+               totals['paid'],
+               percent_not_paid
+               ]
 
         rows_total[1:] = [total + value for total, value in zip(rows_total[1:], row[1:])]
+
+        row = [row[0]] + [f"{row[1]:.0f} %"] + [f"{value:.0f}" for value in row[2:-1]] + [f"{row[-1]:.0f} %"]
+
         rows.append(row)
 
+    total_profit = 100*rows_total[4]/rows_total[6]
+    total_percent_not_paid = 100*(1-(rows_total[7]/rows_total[6]))
+
+    rows_total = [rows_total[0]] + [f"{total_profit:.0f} %"] + [f"{value:.0f}" for value in rows_total[2:-1]] + [f"{total_percent_not_paid:.0f} %"]
     rows.append(rows_total)
     return rows
 
