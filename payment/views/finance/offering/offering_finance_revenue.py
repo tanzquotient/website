@@ -9,13 +9,24 @@ from utils import export
 
 
 def get_data(offering:Offering):
-    rows = [['Course','Wages']]
+    rows = [['Course','Wages','Max legi revenue', 'total revenue after reductions', 'actually paid',
+             'profit','actual profit']]
     for course in offering.course_set.all():
         hours = Decimal(course.get_total_time()['total']) if not course.cancelled else 0
-        total = 0
+
+        wages = 0
         for teaching in course.teaching.all():
-            total += teaching.hourly_wage * hours
-        rows.append([course.name, total])
+            wages += teaching.hourly_wage * hours
+
+        totals = course.payment_totals()
+        try:
+            max_revenue = course.price_with_legi * course.max_subscribers
+        except:
+            max_revenue = 0
+
+        rows.append([course.name, wages, max_revenue,
+                     totals['to_pay_after_reductions'], totals['paid'],totals['to_pay_after_reductions']-wages,
+                     totals['paid']-wages])
     return rows
 
 
