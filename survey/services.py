@@ -44,7 +44,8 @@ def export_surveys(
                 instance.save()
                 continue
 
-            key = f"{key_prefix}{instance.course.name}"
+            course_name = instance.course.name if instance.course else ""
+            key = f"{key_prefix}{course_name}"
             if key not in export_data:
                 export_data[key] = [header]
 
@@ -55,7 +56,7 @@ def export_surveys(
                 if instance.user
                 else "",
                 f"{instance.user.email}" if instance.user else "",
-                instance.course.name if instance.course else "",
+                course_name,
             ]
             for question in questions:
                 answers_for_question = answers.filter(question=question)
