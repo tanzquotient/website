@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import Offering
+from courses.models import Offering, CourseSubscriptionType
 from utils import export
 
 
@@ -24,7 +24,9 @@ def get_data(offering: Offering):
     rows_total = [0] * len(header)
     rows_total[0] = "TOTAL"
 
-    for course in offering.course_set.all():
+    for course in offering.course_set.exclude(
+        subscription_type=CourseSubscriptionType.EXTERNAL
+    ).all():
         hours = (
             Decimal(course.get_total_time()["total"])
             if not (
