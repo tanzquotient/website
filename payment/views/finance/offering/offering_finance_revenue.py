@@ -37,26 +37,20 @@ def get_data(offering: Offering):
         wages = sum(teaching.hourly_wage * hours for teaching in course.teaching.all())
 
         totals = course.payment_totals()
+        paid = totals["paid"]
+        to_pay_after_reductions = totals["to_pay_after_reductions"]
 
-        try:
-            max_revenue = course.price_with_legi * course.max_subscribers
-        except:
-            max_revenue = 0
+        max_revenue = (course.price_with_legi or 0) * (course.max_subscribers or 0)
 
-        profit = totals["to_pay_after_reductions"] - wages
-        actual_profit = totals["paid"] - wages
+        profit = to_pay_after_reductions - wages
+        actual_profit = paid - wages
 
         # Calculate profit margin
-        if totals["to_pay_after_reductions"] != 0:
-            profit_margin = (profit / totals["to_pay_after_reductions"]) * 100
+        if to_pay_after_reductions != 0:
+            profit_margin = (profit / to_pay_after_reductions) * 100
+            percent_not_paid = (1 - (paid / to_pay_after_reductions)) * 100
         else:
             profit_margin = 0
-
-        try:
-            percent_not_paid = 100 * (
-                1 - (totals["paid"] / totals["to_pay_after_reductions"])
-            )
-        except:
             percent_not_paid = 0
 
         row = [
@@ -66,8 +60,8 @@ def get_data(offering: Offering):
             max_revenue - wages,
             profit,
             actual_profit,
-            totals["to_pay_after_reductions"],
-            totals["paid"],
+            to_pay_after_reductions,
+            paid,
             percent_not_paid,
         ]
 
