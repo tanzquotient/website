@@ -73,8 +73,8 @@ def get_data(offering: Offering):
 
         rows.append(row)
 
-    total_profit = 100 * rows_total[4] / rows_total[6]
-    total_percent_not_paid = 100 * (1 - (rows_total[7] / rows_total[6]))
+    total_profit = (100 * rows_total[4] / rows_total[6]) if rows_total[6] > 0 else 0
+    total_percent_not_paid = (100 * (1 - (rows_total[7] / rows_total[6]))) if rows_total[6] > 0 else 0
 
     rows_total = (
             [rows_total[0]]

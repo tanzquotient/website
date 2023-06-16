@@ -43,7 +43,7 @@ class ZkbCsvParser:
             payment.comment = row["Buchungstext"]
 
             # Parse name and address from details
-            details: str = row["Details"]
+            details: str = row["Details"] or ""
             parts = details.split(",")
             payment.name = parts[0] if len(parts) > 0 else ""
             payment.address = ",".join(parts[1:]) if len(parts) > 1 else ""
