@@ -12,9 +12,7 @@ class Offering(models.Model):
     """An offering is a list of courses to be offered in the given period"""
 
     name = models.CharField(max_length=30, unique=True, blank=False)
-    period = models.ForeignKey(
-        "Period", blank=True, null=True, on_delete=models.PROTECT
-    )
+    period = models.ForeignKey("Period", on_delete=models.PROTECT)
     type = models.CharField(
         max_length=3,
         choices=OfferingType.CHOICES,
@@ -86,4 +84,4 @@ class Offering(models.Model):
         return "{}".format(self.name)
 
     class Meta:
-        ordering = ["-period__date_from", "name"]
+        ordering = ["-period__date_to", "name"]
