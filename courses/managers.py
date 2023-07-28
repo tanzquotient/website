@@ -42,31 +42,25 @@ class CourseManager(TranslatableManager):
             else date(day=1, month=1, year=9999),
         )
         current_date = date(year=1, month=1, day=1)
-        unknown_list = []
         month_list = []
         for c in sorted_courses:
-            first_date = c.get_first_lesson_date()
-            if first_date is None and c.get_period() is not None:
-                first_date = c.get_period().date_from
+            first_date = c.get_first_lesson_date() or c.get_period().date_from
 
-            if first_date:
-                if (
-                    current_date.year != first_date.year
-                    or current_date.month != first_date.month
-                ):
-                    if month_list:
-                        result.append((current_date, month_list))
-                    # go to next month
-                    current_date = first_date
-                    month_list = []
-                # just append to current month list
-                month_list.append(c)
-            else:
-                unknown_list.append(c)
+            if (
+                current_date.year != first_date.year
+                or current_date.month != first_date.month
+            ):
+                if month_list:
+                    result.append((current_date, month_list))
+                # go to next month
+                current_date = first_date
+                month_list = []
+            # just append to current month list
+            month_list.append(c)
+
         if month_list:
             result.append((current_date, month_list))
-        if unknown_list:
-            result.append((None, unknown_list))
+
         return result
 
 

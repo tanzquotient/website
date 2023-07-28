@@ -220,8 +220,7 @@ def create_course_info(course: Course) -> str:
         s += f", {course.room}\n"
     else:
         s += "\n"
-    if course.get_period():
-        s += f"{course.get_period()}\n"
+    s += f"{course.get_period()}\n"
     if course.format_cancellations():
         s += f'{_("Cancellations")}: {course.format_cancellations()}\n'
     if course.format_prices():

@@ -43,7 +43,7 @@ class RegularLessonException(models.Model):
             return False
 
         period = self.regular_lesson.course.get_period()
-        return period is None or period.date_from <= self.date <= period.date_to
+        return period.date_from <= self.date <= period.date_to
 
     class Meta:
         ordering = ["date"]

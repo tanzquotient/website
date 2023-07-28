@@ -7,9 +7,7 @@
             <span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
         {{ offering.name }}
     </h2>
-    {% if offering.period %}
-        <p>{{ offering.period.date_as_string }}</p>
-    {% endif %}
+    <p>{{ offering.period.date_as_string }}</p>
 {% endif %}
 
 
@@ -41,7 +39,8 @@
                         {% include "courses/snippets/offering_list_course_table.html" with limit_per_section=d.courses|length %}
                         <div class="p-2">
                             <a data-bs-toggle="collapse"
-                               href=".collapse-{{ offering.id }}-{{ forloop.counter }}" role="button"
+                               href=".collapse-{{ offering.id }}-{{ forloop.counter }}"
+                               role="button"
                                aria-expanded="false"
                                aria-controls="collapse-{{ offering.id }}-{{ forloop.counter }}">
                                 {% trans "Show less" %}

@@ -211,7 +211,7 @@ class Course(TranslatableModel):
     def is_custom_period(self) -> bool:
         return self.period is not None
 
-    def get_period(self) -> Optional[Period]:
+    def get_period(self) -> Period:
         return self.period or self.offering.period
 
     def show_free_places_count(self) -> bool:
@@ -445,12 +445,8 @@ class Course(TranslatableModel):
         )  # both must be true to allow subscription
 
     def is_over(self) -> bool:
-        last_date = self.get_last_lesson_date()
-        if last_date:
-            return last_date < date.today()
-        if self.get_period():
-            return self.get_period().date_to < date.today()
-        return False
+        last_date = self.get_last_lesson_date() or self.get_period().date_to
+        return last_date < date.today()
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         lessons = []
@@ -488,9 +484,7 @@ class Course(TranslatableModel):
                 return False
 
             period = self.get_period()
-            return (
-                period is None or period.date_from <= cancelled_date <= period.date_to
-            )
+            return period.date_from <= cancelled_date <= period.date_to
 
         return [d for d in self.get_cancellation_dates() if is_applicable(d)]
 
@@ -501,9 +495,7 @@ class Course(TranslatableModel):
                 if exception.is_cancellation:
                     dates.append(exception.date)
 
-        period = self.get_period()
-        if period:
-            dates += [c.date for c in period.cancellations.all()]
+        dates += [c.date for c in self.get_period().cancellations.all()]
         return sorted(dates)
 
     def format_cancellations(self) -> str:
@@ -542,22 +534,22 @@ class Course(TranslatableModel):
 
     def get_first_regular_lesson_date(self) -> Optional[date]:
         lesson = self.get_first_regular_lesson()
-        period = self.get_period()
-        if lesson and period:
-            return Course.next_weekday(period.date_from, lesson.get_weekday_number())
+        if lesson:
+            return Course.next_weekday(
+                self.get_period().date_from, lesson.get_weekday_number()
+            )
         else:
             return None
 
     def get_last_regular_lesson_date(self) -> Optional[date]:
-        period = self.get_period()
-        if self.regular_lessons.exists() and period:
+        if self.regular_lessons.exists():
             course_weekdays = [
                 Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()
             ]
 
             # Find last course day before date_to
             for day_delta in range(7):
-                day = period.date_to - timedelta(days=day_delta)
+                day = self.get_period().date_to - timedelta(days=day_delta)
                 if day.weekday() in course_weekdays:
                     return day
 
