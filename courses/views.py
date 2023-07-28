@@ -1,5 +1,4 @@
 import logging
-from datetime import date
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -115,7 +114,11 @@ def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
     offering = get_object_or_404(Offering.objects, id=offering_id)
     if not offering.is_public():
         raise Http404()
-    context = {"offering": offering, "sections": services.get_sections(offering)}
+    context = {
+        "offering": offering,
+        "sections": services.get_sections(offering),
+        "limit_per_section": offering.course_set.count(),
+    }
     return render(request, template_name, context)
 
 
@@ -286,7 +289,6 @@ def offering_time_chart_dict(offering: Offering) -> dict:
 
     return {
         "traces": traces,
-        "trace_total": trace_total,
         "trace_total": trace_total,
     }
 

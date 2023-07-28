@@ -9,21 +9,9 @@ from courses.filters import *
 from payment.utils.generate_voucher_pdf import admin_action_generate_pdf
 
 
-class CourseInline(admin.TabularInline):
-    model = Course
-    fields = (
-        "name",
-        "type",
-        "period",
-        "position",
-    )
-    extra = 0
-
-
 @admin.register(Offering)
 class OfferingAdmin(admin.ModelAdmin):
     list_display = ("name", "period", "display", "active", "preview", "opens_soon")
-    inlines = (CourseInline,)
 
     actions = [
         display,

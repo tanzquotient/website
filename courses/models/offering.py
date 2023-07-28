@@ -16,22 +16,38 @@ class Offering(models.Model):
         "Period", blank=True, null=True, on_delete=models.PROTECT
     )
     type = models.CharField(
-        max_length=3, choices=OfferingType.CHOICES, default=OfferingType.REGULAR
+        max_length=3,
+        choices=OfferingType.CHOICES,
+        default=OfferingType.REGULAR,
+        help_text="The type of the offering influences how the offering is displayed.",
     )
-    type.help_text = (
-        "The type of the offering influences how the offering is displayed."
+    display = models.BooleanField(
+        default=False,
+        help_text="Defines if this offering should be displayed on the Website.",
     )
-    display = models.BooleanField(default=False)
-    display.help_text = (
-        "Defines if the courses in this offering should be displayed on the Website."
+    active = models.BooleanField(
+        default=False,
+        help_text="Defines if clients can subscribe to courses in this offering.",
     )
-    active = models.BooleanField(default=False)
-    active.help_text = "Defines if clients can subscribe to courses in this offering."
-    preview = models.BooleanField(default=False)
-    preview.help_text = "Defines if the offering should be displayed as preview"
+    preview = models.BooleanField(
+        default=False,
+        help_text="Defines if the offering should be displayed as preview",
+    )
     opens_soon = models.BooleanField(
         default=False,
-        help_text='If set to true, the sign up page says "opens soon" instead of "closed"',
+        help_text="If set to true, the sign up page says "
+        '"opens soon" instead of "closed"',
+    )
+    group_into_sections = models.BooleanField(
+        default=True,
+        help_text="If true, a separate section for each month / day of week is "
+        "displayed on the course page.",
+    )
+    limit_courses_per_section = models.SmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="If set, only that many courses are shown for each section of the "
+        "course list. The remaining courses will be shown when expanding the section.",
     )
 
     def is_public(self) -> bool:

@@ -1,7 +1,10 @@
 {% load i18n %}
+{% load tq_tags %}
+
 {% if not hide_title %}
     <h2>
-        {% if offering.preview %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
+        {% if offering.preview %}
+            <span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
         {{ offering.name }}
     </h2>
     {% if offering.period %}
@@ -13,77 +16,43 @@
 <div class="d-none d-sm-block">
     {% for d in sections %}
         <div class="card card-default mb-4">
-            <div class="card-header">
-                {{ d.section_title }}
-            </div>
+            {% if d.section_title %}
+                <div class="card-header">
+                    {{ d.section_title }}
+                </div>
+            {% endif %}
+            {% if d.courses %}
+                <div class="collapse show collapse-{{ offering.id }}-{{ forloop.counter }}">
+                    {% include "courses/snippets/offering_list_course_table.html" %}
+                </div>
+                {% if limit_per_section < d.courses|length %}
+                    <div class="collapse show collapse-{{ offering.id }}-{{ forloop.counter }}">
+                        <div class="p-2">
+                            <a data-bs-toggle="collapse"
+                               href=".collapse-{{ offering.id }}-{{ forloop.counter }}"
+                               role="button"
+                               aria-expanded="false"
+                               aria-controls="collapse-{{ offering.id }}-{{ forloop.counter }}">
+                                {% trans "Show more" %}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="collapse collapse-{{ offering.id }}-{{ forloop.counter }}">
+                        {% include "courses/snippets/offering_list_course_table.html" with limit_per_section=d.courses|length %}
+                        <div class="p-2">
+                            <a data-bs-toggle="collapse"
+                               href=".collapse-{{ offering.id }}-{{ forloop.counter }}" role="button"
+                               aria-expanded="false"
+                               aria-controls="collapse-{{ offering.id }}-{{ forloop.counter }}">
+                                {% trans "Show less" %}
+                            </a>
+                        </div>
 
-            <table class="table table-striped mb-0">
-                {% if d.courses %}
-                    <thead>
-                    <tr>
-                        <th>{% trans "Course" %}</th>
-                        {% if offering.is_partner_offering %}
-                            <th>{% trans "Partner" %}</th>
-                        {% else %}
-                            <th>{% trans "Location" %}</th>
-                        {% endif %}
-                        <th>{% trans "Time" %}</th>
-                        <th>{% trans "Costs" %}</th>
-                        {% if offering.is_partner_offering %}
-                            <th>{% trans "External link" %}</th>
-                        {% elif not hide_subscription_status %}
-                            <th>{% trans "Status" %}</th>
-                        {% endif %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for c in d.courses %}
-                        <tr>
-                            <td>
-                                <div>
-                                    <a href="{% url 'courses:course_detail' c.id %}">
-                                        {{ c.type.title }}
-                                    </a>
-                                </div>
-                                {% if c.type.subtitle %}
-                                    <div>
-                                        <em>{{ c.type.subtitle }}</em>
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if offering.is_partner_offering %}
-                                    {% if c.partner %}
-                                        <a href="{{ c.partner.url }}" target="_blank">{{ c.partner.name }}</a>
-                                    {% else %}
-                                        {% trans "Not specified" %}
-                                    {% endif %}
-                                {% else %}
-                                    {% if c.room %}
-                                        {% include "courses/snippets/room_modal.html" with display_link=True room=c.room only %}
-                                    {% else %}
-                                        {% trans "Currently unknown" %}
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>{% include "courses/snippets/lessons.html" with course=c display_link=False only %}</td>
-                            {% if not c.format_prices and offering.is_partner_offering %}
-                                <td>{% trans "Unknown" %}</td>
-                            {% else %}
-                                <td>{{ c.format_prices|default:"-" }}</td>
-                            {% endif %}
-                            {% if not hide_subscription_status %}
-                                <td>
-                                    {% include "courses/snippets/subscription_info.html" with course=c display_link=True user=user only %}
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <div class="alert alert-info">{% trans "No courses available" %}</div>
+                    </div>
                 {% endif %}
-                </tbody>
-            </table>
+            {% else %}
+                <div class="alert alert-info">{% trans "No courses available" %}</div>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
@@ -91,52 +60,14 @@
 <div class="d-block d-sm-none">
     {% for d in sections %}
         <div class="card card-default mb-4">
-            <div class="card-header">
-                {{ d.section_title }}
-            </div>
+            {% if d.section_title %}
+                <div class="card-header">
+                    {{ d.section_title }}
+                </div>
+            {% endif %}
             {% if d.courses %}
                 <div class="list-group list-group-flush">
-                    {% for c in d.courses %}
-                        <a href="{% url 'courses:course_detail' c.id %}" class="list-group-item list-group-item-action">
-                            <div class="mb-1">
-                            <strong class="list-group-item-heading">
-                                {{ c.type.title }}
-                            </strong>
-                            {% if c.type.subtitle %}
-                                <div>
-                                    <em>
-                                        {{ c.type.subtitle }}
-                                    </em>
-                                </div>
-                            {% endif %}
-                            </div>
-                            {% if not hide_subscription_status %}
-                                <div class="mb-1">
-                                    {% include "courses/snippets/subscription_info.html" with course=c user=user display_link=False only %}
-                                </div>
-                            {% endif %}
-                            <div class="mb-1">
-                                {% include "courses/snippets/lessons.html" with course=c  display_link=False only %}
-                            </div>
-                            {% if offering.is_partner_offering %}
-                                {% if c.partner %}
-                                    <div class="mb-1">{{ c.partner.name }}</div>
-                                {% endif %}
-                            {% else %}
-                                <div class="mb-1">
-                                    {% trans "Location" %}:
-                                    {% if c.room %}
-                                        {{ c.room }}
-                                    {% else %}
-                                        {% trans "Currently unknown" %}
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                            {% if c.format_prices %}
-                                <div>{% trans "Costs" %}: {{ c.format_prices|default:"-" }}</div>
-                            {% endif %}
-                        </a>
-                    {% endfor %}
+                    {% collapsible_list items=d.courses limit=limit_per_section item_template="courses/snippets/offering_list_course_entry_div.html" %}
                 </div>
             {% else %}
                 <div class="alert alert-info">{% trans "No courses available" %}</div>

@@ -1,8 +1,8 @@
 from collections import defaultdict
 from datetime import date
-from typing import Iterable, Collection
+from typing import Collection
 
-from django.db.models import Q, Prefetch, QuerySet
+from django.db.models import Q, QuerySet
 from django.http import Http404
 from django.utils import dateformat
 from django.utils.translation import gettext as _
@@ -12,10 +12,7 @@ from courses.managers import CourseManager
 from courses.models import (
     Offering,
     OfferingType,
-    IrregularLesson,
-    RegularLessonException,
     Weekday,
-    Course,
 )
 from courses.services.general import log
 
@@ -63,7 +60,14 @@ def get_sections(offering, course_filter=None):
     if not course_filter:
         course_filter = lambda c: True
 
-    if offering.type == OfferingType.REGULAR:
+    if not offering.group_into_sections:
+        default_date = date(year=9999, month=1, day=1)
+        courses = sorted(
+            [c for c in course_set.all() if course_filter(c)],
+            key=lambda c: c.get_first_lesson_date() or default_date,
+        )
+        offering_sections.append(dict(courses=courses))
+    elif offering.type == OfferingType.REGULAR:
         for w, w_name in Weekday.CHOICES:
             courses_on_weekday = [
                 c for c in CourseManager.weekday(course_set, w) if course_filter(c)

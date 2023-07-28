@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% if has_items %}
+    {% for item in always_visible_items %}
+        {% include item_template %}
+    {% endfor %}
+    {% if can_expand %}
+        <div class="collapse show {{ id }}" id="{{ id }}_show_more">
+            <div class="list-group-item">
+                <a data-bs-toggle="collapse" href=".{{ id }}"
+                   aria-expanded="false"
+                   aria-controls="{{ id }}">
+                    {% trans "Show more" %}
+                </a>
+            </div>
+        </div>
+        <div class="collapse {{ id }}" id="{{ id }}_additional_items">
+            {% for item in collapsible_items %}
+                {% include item_template %}
+            {% endfor %}
+            <div class="list-group-item">
+                <a class="p-3" data-bs-toggle="collapse" href=".{{ id }}"
+                   aria-expanded="false"
+                   aria-controls="{{ id }}">
+                    {% trans "Show less" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

@@ -47,13 +47,25 @@ def get_teachers_overview_data() -> list[list]:
             if year not in grouped_by_year:
                 row.append("-")
             else:
-                row.append(len(grouped_by_year[year]))
+                row.append(sum_of_course_hours(grouped_by_year[year]))
 
         # Number of years the teacher has been teaching (counting unknown year as one year)
         row.append(len(grouped_by_year.values()))
 
-        row.append(sum([len(t) for t in grouped_by_year.values()]))
+        row.append(
+            sum_of_course_hours(
+                [
+                    teaching
+                    for teachings in grouped_by_year.values()
+                    for teaching in teachings
+                ]
+            )
+        )
 
         rows.append(row)
 
     return rows
+
+
+def sum_of_course_hours(teachings):
+    return sum([teaching.course.get_total_time()["total"] for teaching in teachings])

@@ -1,3 +1,6 @@
+import uuid
+
+import shortuuid
 from django import template
 from django.urls import reverse
 
@@ -15,3 +18,16 @@ def table(data: list):
         return dict()
 
     return dict(header=data[0], rows=data[1:])
+
+
+@register.inclusion_tag(filename="snippets/collapsible_list.html")
+def collapsible_list(items: list, limit: int, item_template: str):
+    limit = limit or len(items)
+    return dict(
+        id=f"collapse_{shortuuid.uuid()}",
+        has_items=(len(items) > 0),
+        can_expand=(len(items) > limit),
+        always_visible_items=items[:limit],
+        collapsible_items=items[limit:],
+        item_template=item_template,
+    )
