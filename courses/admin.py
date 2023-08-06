@@ -30,12 +30,7 @@ class TeachInlineForCourse(admin.TabularInline):
     fk_name = "course"
 
     raw_id_fields = ("teacher",)
-
-
-class TeachingLessonInline(admin.TabularInline):
-    model = TeachLesson
-    extra = 0
-    fk_name = "lesson"
+    readonly_fields = ["hourly_wage"]
 
 
 class SubscribeInlineForCourse(admin.TabularInline):
@@ -114,7 +109,6 @@ class MemberAdmin(admin.ModelAdmin):
         "get_lesson",
         "room",
     ]
-    inlines = (TeachingLessonInline,)
 
 
 @admin.register(RegularLesson)
@@ -382,7 +376,7 @@ class PeriodAdmin(admin.ModelAdmin):
 @admin.register(Teach)
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ("teacher",)
-    list_display = ("id", "teacher", "course", "welcomed")
+    list_display = ("id", "teacher", "course", "hourly_wage", "welcomed")
     list_filter = (
         SubscribeOfferingListFilter,
         SubscribeCourseListFilter,

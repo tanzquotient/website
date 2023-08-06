@@ -1,4 +1,6 @@
 from collections import defaultdict
+from decimal import Decimal
+from typing import Iterable
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
@@ -14,12 +16,19 @@ def get_teachers_overview_data() -> list[list]:
             "teacher",
             "course__irregular_lessons",
             "course__regular_lessons",
+            "course__regular_lessons__exceptions",
             "course__offering__period",
+            "course__offering__period__cancellations",
             "course__period",
+            "course__period__cancellations",
         )
         .all()
     ):
-        if teaching.course.is_external() or teaching.course.cancelled:
+        if (
+            teaching.course.is_external()
+            or teaching.course.cancelled
+            or not teaching.course.get_lessons()
+        ):
             continue
 
         first_lesson_date = teaching.course.get_first_lesson_date()
@@ -33,23 +42,18 @@ def get_teachers_overview_data() -> list[list]:
     )
 
     header = (
-        [_("First name"), _("Last name")]
-        + years
-        + [_("Total years"), _("Total courses")]
+        [_("First name"), _("Last name")] + years + [_("Total years"), _("Total hours")]
     )
-    rows.append(header)
 
     for grouped_by_year in grouped_teachings.values():
         teacher: User = list(grouped_by_year.values())[0][0].teacher
         row = [teacher.first_name, teacher.last_name]
 
         for year in years:
-            if year not in grouped_by_year:
-                row.append("-")
-            else:
-                row.append(sum_of_course_hours(grouped_by_year[year]))
+            row.append(sum_of_course_hours(grouped_by_year.get(year, [])) or "-")
 
-        # Number of years the teacher has been teaching (counting unknown year as one year)
+        # Number of years the teacher has been teaching
+        # (counting unknown year as one year)
         row.append(len(grouped_by_year.values()))
 
         row.append(
@@ -64,8 +68,14 @@ def get_teachers_overview_data() -> list[list]:
 
         rows.append(row)
 
-    return rows
+    # Sort by last column (total hours) descending
+    sorted_rows = sorted(rows, key=lambda r: r[-1], reverse=True)
+
+    return [header] + sorted_rows
 
 
-def sum_of_course_hours(teachings):
-    return sum([teaching.course.get_total_time()["total"] for teaching in teachings])
+def sum_of_course_hours(teachings: Iterable[Teach]) -> Decimal:
+    return sum(
+        [teaching.course.get_total_hours() for teaching in teachings],
+        Decimal(0),
+    )

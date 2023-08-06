@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import Optional
 
 from django.db import models
 
@@ -17,7 +16,7 @@ class RegularLesson(models.Model):
     def get_weekday_number(self) -> int:
         return Weekday.NUMBERS[self.weekday]
 
-    def get_total_time(self) -> Optional[timedelta]:
+    def get_total_time(self) -> timedelta:
         period = self.course.get_period()
         cancellations = self.course.get_cancellation_dates()
 

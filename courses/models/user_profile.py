@@ -112,22 +112,14 @@ class UserProfile(Model):
 
     # convenience method for model user are added here
     def is_teacher(self) -> bool:
-        return (
-            self.user.teaching_courses.count() > 0
-            or self.user.teaching_lessons.count() > 0
-        )
+        return self.user.teaching_courses.count() > 0
 
     def is_student(self) -> bool:
         return self.student_status in StudentStatus.STUDENTS and self.legi
 
     # At least one course ends in the future
     def is_current_teacher(self) -> bool:
-        courses = list(self.user.teaching_courses.all())
-        courses += [
-            teaching.lesson.get_course()
-            for teaching in self.user.teaching_lessons.all()
-        ]
-        for teaching in courses:
+        for teaching in self.user.teaching_courses.all():
             last_date = teaching.course.get_last_lesson_date()
             if last_date is not None and last_date >= date.today():
                 return True
@@ -154,6 +146,12 @@ class UserProfile(Model):
 
     def courses_taught_count(self) -> int:
         return len(self.courses_taught())
+
+    def total_hours_taught(self) -> Decimal:
+        return sum(
+            [teaching.course.get_total_hours() for teaching in self.courses_taught()],
+            Decimal(0),
+        )
 
     def courses_taught(self) -> set[Teach]:
         return {
@@ -199,9 +197,6 @@ class UserProfile(Model):
     def get_current_teaching_courses(self) -> Iterable[Course]:
         courses = [
             t.course for t in self.user.teaching_courses.all() if not t.course.is_over()
-        ]
-        courses += [
-            t.course for t in self.user.teaching_lessons.all() if not t.course.is_over()
         ]
         courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
         return courses

@@ -95,10 +95,6 @@ def merge_duplicate_users(to_merge) -> None:
                 teaching.teacher = user
                 teaching.save()
 
-            for teaching in alias.teaching_lessons.all():
-                teaching.teacher = user
-                teaching.save()
-
             for function in alias.functions.all():
                 function.users.remove(alias)
                 function.users.add(user)

@@ -449,10 +449,7 @@ class Course(TranslatableModel):
         return last_date < date.today()
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
-        lessons = []
-        lessons.extend(self.regular_lessons.all())
-        lessons.extend(self.irregular_lessons.all())
-        return lessons
+        return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
 
     def get_all_regular_lesson_exceptions(self) -> list[RegularLessonException]:
         exceptions = []
@@ -605,27 +602,16 @@ class Course(TranslatableModel):
     get_teachers_welcomed.short_description = "Teachers welcomed"
     get_teachers_welcomed.boolean = True
 
-    def get_total_time(self) -> dict[str, Optional[float]]:
-        totals = {
-            "total": None,
-            "regular": None,
-            "irregular": None,
-        }
-        regular_times = [
-            lesson.get_total_time() for lesson in list(self.regular_lessons.all())
-        ]
-        irregular_times = [
-            lesson.get_total_time() for lesson in list(self.irregular_lessons.all())
-        ]
-        if all(t is not None for t in regular_times):
-            totals["regular"] = sum(t.seconds / 3600 for t in regular_times)
-        if all(t is not None for t in irregular_times):
-            totals["irregular"] = sum(t.seconds / 3600 for t in irregular_times)
-        try:
-            totals["total"] = totals["regular"] + totals["irregular"]
-        except TypeError:
-            pass
-        return totals
+    def get_total_time(self) -> timedelta:
+        return sum(
+            [lesson.get_total_time() for lesson in self.get_lessons()], timedelta()
+        )
+
+    def get_total_hours(self) -> Decimal:
+        hour = timedelta(hours=1)
+        return Decimal(
+            f"{self.get_total_time().total_seconds() / hour.total_seconds():.2f}"
+        )
 
     # create and stores identical copy of this course
     def copy(self) -> Course:
@@ -650,6 +636,7 @@ class Course(TranslatableModel):
             teach.pk = None
             teach.welcomed = False
             teach.course = self
+            teach.hourly_wage = None
             teach.save()
 
         return self

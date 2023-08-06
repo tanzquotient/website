@@ -17,10 +17,9 @@ class LessonDetails(models.Model):
         except IrregularLesson.DoesNotExist:
             return self.regular_lesson_exception.regular_lesson
 
-    def __str__(self):
+    def __str__(self) -> str:
         strings = []
         if self.room:
             strings.append(str(self.room))
-        strings += [t.teacher.get_full_name() for t in self.teaching.all()]
 
         return ", ".join(strings)

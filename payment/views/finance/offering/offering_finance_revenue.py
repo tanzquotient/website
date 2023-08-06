@@ -25,9 +25,9 @@ def get_data(offering: Offering):
     rows_total[0] = "TOTAL"
 
     for course in offering.course_set.exclude(
-            subscription_type=CourseSubscriptionType.EXTERNAL
+        subscription_type=CourseSubscriptionType.EXTERNAL
     ).all():
-        hours = Decimal(course.get_total_time()["total"]) if not course.cancelled else 0
+        hours = course.get_total_hours() if not course.cancelled else 0
 
         wages = sum(teaching.hourly_wage * hours for teaching in course.teaching.all())
 
@@ -65,22 +65,24 @@ def get_data(offering: Offering):
         ]
 
         row = (
-                [row[0]]
-                + [f"{row[1]:.0f} %"]
-                + [f"{value:.0f}" for value in row[2:-1]]
-                + [f"{row[-1]:.0f} %"]
+            [row[0]]
+            + [f"{row[1]:.0f} %"]
+            + [f"{value:.0f}" for value in row[2:-1]]
+            + [f"{row[-1]:.0f} %"]
         )
 
         rows.append(row)
 
     total_profit = (100 * rows_total[4] / rows_total[6]) if rows_total[6] > 0 else 0
-    total_percent_not_paid = (100 * (1 - (rows_total[7] / rows_total[6]))) if rows_total[6] > 0 else 0
+    total_percent_not_paid = (
+        (100 * (1 - (rows_total[7] / rows_total[6]))) if rows_total[6] > 0 else 0
+    )
 
     rows_total = (
-            [rows_total[0]]
-            + [f"{total_profit:.0f} %"]
-            + [f"{value:.0f}" for value in rows_total[2:-1]]
-            + [f"{total_percent_not_paid:.0f} %"]
+        [rows_total[0]]
+        + [f"{total_profit:.0f} %"]
+        + [f"{value:.0f}" for value in rows_total[2:-1]]
+        + [f"{total_percent_not_paid:.0f} %"]
     )
     rows.append(rows_total)
     return rows
