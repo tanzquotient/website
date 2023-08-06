@@ -1,8 +1,15 @@
 {% load i18n %}
 
-{% with desc=course.format_description|safe %}
-    {% if desc %}
-        <h4>{% trans "Description" %}</h4>
-        <p>{{ desc }}</p>
+{% if course.description or course.type.description %}
+    <h4>{% trans "Description" %}</h4>
+    {% if course.description %}
+        <div>
+            {{ course.description|safe }}
+        </div>
     {% endif %}
-{% endwith %}
+    {% if course.type.description %}
+        <div>
+            {{ course.type.description|safe }}
+        </div>
+    {% endif %}
+{% endif %}

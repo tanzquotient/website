@@ -198,16 +198,6 @@ class Course(TranslatableModel):
 
     format_prices.short_description = "Prices"
 
-    def format_description(self) -> str:
-        from courses.services import model_attribute_language_fallback
-
-        desc = ""
-        desc += model_attribute_language_fallback(self, "description") or ""
-        desc += model_attribute_language_fallback(self.type, "description") or ""
-        return desc
-
-    format_description.short_description = "Description"
-
     def is_custom_period(self) -> bool:
         return self.period is not None
 
