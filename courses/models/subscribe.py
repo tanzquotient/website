@@ -4,12 +4,10 @@ import datetime
 from decimal import Decimal
 from typing import Optional
 
-from django.contrib import admin
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import (
-    Q,
     Model,
     ForeignKey,
     PROTECT,
@@ -29,7 +27,6 @@ from . import (
     PaymentMethod,
     LeadFollow,
     Offering,
-    StudentStatus,
     PriceReduction,
 )
 
@@ -153,30 +150,6 @@ class Subscribe(Model):
 
     get_user_student_status.short_description = "Student"
 
-    def get_calculated_experience(self) -> str:
-        """returns similar courses that the user did before in the system"""
-        from ..services.general import calculate_relevant_experience
-
-        preceding_courses_done = []
-        for predecessor in self.course.preceding_courses.all():
-            preceding_courses_done += [
-                s.course
-                for s in predecessor.subscriptions.accepted()
-                .filter(user=self.user)
-                .all()
-            ]
-        relevant_courses_done = [
-            c
-            for c in calculate_relevant_experience(self.user, self.course)
-            if c not in preceding_courses_done
-        ]
-
-        preceding_courses_str = ", ".join(map(str, preceding_courses_done))
-        relevant_courses_str = ", ".join(map(str, relevant_courses_done))
-        return "{} / ...{}".format(preceding_courses_str, relevant_courses_str)
-
-    get_calculated_experience.short_description = "Calculated experience"
-
     """"
     ----------------------------------------------------------------
     Payment
@@ -195,29 +168,7 @@ class Subscribe(Model):
         if self.paid() or self.state not in SubscribeState.TO_PAY_STATES:
             return False
 
-        return self.course.is_over() and (
-            self.course.offering is None or self.course.offering.is_over()
-        )
-
-    @admin.action(description="Paid?")
-    def get_payment_state(self) -> str:
-        """searches for courses that the user did before in the system"""
-        c = (
-            self.user.subscriptions.filter(
-                state=SubscribeState.CONFIRMED, course__offering__active=False
-            )
-            .filter(~Q(course=self.course))
-            .count()
-        )
-        if self.paid():
-            r = "Yes"
-        else:
-            r = "No"
-
-        if c > 0:
-            # this user didn't pay for other courses
-            r += ", owes {} more".format(c)
-        return r
+        return self.course.is_over() and self.course.offering.is_over()
 
     def mark_as_paid(self, payment_method, user=None) -> bool:
         if self.state == SubscribeState.CONFIRMED:

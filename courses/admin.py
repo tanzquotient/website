@@ -1,5 +1,6 @@
 # Register your models here.
 from django.contrib.admin.views.main import ChangeList
+from django.http import HttpRequest
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -265,7 +266,6 @@ class SubscribeAdmin(VersionAdmin):
         "get_user_body_height",
         "get_user_email",
         "get_user_student_status",
-        "experience",
         "comment",
         "price_to_pay",
         "open_amount",
@@ -276,9 +276,9 @@ class SubscribeAdmin(VersionAdmin):
     list_display_links = ("id",)
     list_filter = (
         SubscribeOfferingListFilter,
-        SubscribeCourseListFilter,
         "date",
         "state",
+        SubscribeCourseListFilter,
     )
     search_fields = ["user__email", "user__first_name", "user__last_name", "usi"]
     readonly_fields = (
@@ -287,6 +287,27 @@ class SubscribeAdmin(VersionAdmin):
     )
 
     model = Subscribe
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Subscribe]:
+        return Subscribe.objects.prefetch_related(
+            "partner",
+            "user__profile",
+            "user__subscriptions",
+            "user__subscriptions__course",
+            "user__subscriptions__course__offering",
+            "user__subscriptions__course__type",
+            "user__subscriptions__course__type__translations",
+            "user__subscriptions__course__type__styles",
+            "price_reductions",
+            "subscription_payments",
+            "course",
+            "course__period",
+            "course__offering",
+            "course__offering__period",
+            "course__succeeding_courses",
+            "course__preceding_courses__subscriptions",
+            "course__type__styles",
+        )
 
     actions = [
         match_partners,
@@ -308,6 +329,42 @@ class SubscribeAdmin(VersionAdmin):
 
     def get_changelist(self, request):
         return SubscribeChangeList
+
+    @staticmethod
+    @admin.action(description="Calculated experience")
+    def get_calculated_experience(subscription: Subscribe) -> str:
+        from courses.services import calculate_relevant_experience
+
+        relevant_courses = list(calculate_relevant_experience(subscription))
+        limit = 3
+        result = ", ".join(map(lambda c: str(c.type), relevant_courses[:limit]))
+
+        if len(relevant_courses) > limit:
+            result += f", plus {len(relevant_courses) - limit} more"
+
+        return result
+
+    @staticmethod
+    @admin.action(description="Paid?")
+    def get_payment_state(subscription: Subscribe) -> str:
+        """searches for courses that the user did before in the system"""
+        c = len(
+            [
+                other_subscription
+                for other_subscription in subscription.user.subscriptions.all()
+                if other_subscription.course != subscription.course
+                and other_subscription.state in SubscribeState.TO_PAY_STATES
+            ]
+        )
+        if subscription.paid():
+            r = "Yes"
+        else:
+            r = "No"
+
+        if c > 0:
+            # this user didn't pay for other courses
+            r += ", owes {} more".format(c)
+        return r
 
 
 @admin.register(Confirmation)

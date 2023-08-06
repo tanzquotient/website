@@ -20,31 +20,14 @@ class SubscribeOfferingListFilter(SimpleListFilter):
         human-readable name for the option that will appear
         in the right sidebar.
         """
-        filters = ()
 
-        current = services.get_current_active_offering()
-        if current is not None:
-            filters += (("current", "Current ({})".format(current.name)),)
-
-        for o in Offering.objects.all():
-            filters += ((o.id, o.name),)
-
-        return filters
+        return [(o.id, o.name) for o in Offering.objects.filter(active=True)]
 
     def queryset(self, request, queryset):
-        """
-        Returns the filtered queryset based on the value
-        provided in the query string and retrievable via
-        `self.value()`.
-        """
-        current = services.get_current_active_offering()
-
         if self.value() is None:
             return queryset
-        elif self.value() == "current":
-            return self.filter_by_offering(queryset, current.id)
-        else:
-            return self.filter_by_offering(queryset, self.value())
+
+        return self.filter_by_offering(queryset, self.value())
 
     @staticmethod
     def filter_by_offering(queryset, offering_id):
@@ -75,18 +58,11 @@ class SubscribeCourseListFilter(SimpleListFilter):
         in the right sidebar.
         """
 
-        current = services.get_current_active_offering()
+        queryset = Course.objects.filter(active=True, offering__active=True)
+        if "offering" in (request.GET or set()):
+            queryset = queryset.filter(offering=request.GET["offering"])
 
-        filters = ()
-        o = None
-        if request.GET is not None and "offering" in request.GET:
-            o = request.GET["offering"]
-            if o == "current":
-                o = current.id
-        for c in Course.objects.filter(offering=o).all():
-            filters += ((c.id, c.name),)
-
-        return filters
+        return [(c.id, c.name) for c in queryset.all()]
 
     def queryset(self, request, queryset):
         """

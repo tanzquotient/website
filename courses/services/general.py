@@ -1,31 +1,43 @@
 import logging
 import re
 from numbers import Number
+from typing import Iterable
 
 from django.utils.translation import gettext as _
 
-from courses import models as models
-from courses.models import Course
+from courses.models import Subscribe, SubscribeState, OfferingType, Course
 from utils import TranslationUtils
 
 log = logging.getLogger("tq")
 
 
-def calculate_relevant_experience(user, course) -> list[Course]:
-    """finds a list of courses the "user" did already and that are somehow relevant for "course\" """
-    relevant_exp = [style.id for style in course.type.styles.all()]
-    relevant_subscribes = (
-        models.Subscribe.objects.filter(
-            user=user,
-            state__in=models.SubscribeState.ACCEPTED_STATES,
-            course__type__styles__id__in=relevant_exp,
+def calculate_relevant_experience(self: Subscribe) -> Iterable[Course]:
+    """returns similar courses that the user did before in the system"""
+
+    relevant_exp = [style.id for style in self.course.type.styles.all()]
+
+    relevant_courses = [
+        subscription.course
+        for subscription in self.user.subscriptions.all()
+        if subscription.state in SubscribeState.ACCEPTED_STATES
+        and any(
+            [
+                style.id in relevant_exp
+                for style in subscription.course.type.styles.all()
+            ]
         )
-        .exclude(course=course)
-        .order_by("course__type__level")
-        .distinct()
-        .all()
+    ]
+
+    return dict.fromkeys(
+        sorted(
+            relevant_courses,
+            key=lambda course: (
+                10 if course.offering.type == OfferingType.REGULAR else 1
+            )
+            * (course.type.level or 0),
+            reverse=True,
+        )
     )
-    return [s.course for s in relevant_subscribes]
 
 
 def format_prices(

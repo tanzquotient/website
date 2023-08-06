@@ -648,7 +648,4 @@ class Course(TranslatableModel):
         ordering = ["position", "name"]
 
     def __str__(self) -> str:
-        try:
-            return "{} ({})".format(self.name, self.offering)
-        except Offering.DoesNotExist:
-            return self.name
+        return f"{self.name} ({self.offering})"
