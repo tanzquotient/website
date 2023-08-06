@@ -1,3 +1,4 @@
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django_countries.fields import CountryField
 
@@ -5,7 +6,7 @@ from courses import managers
 
 
 class BankAccount(models.Model):
-    iban = models.CharField(max_length=255)
+    iban = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
     iban.help_text = "IBAN in the standardized format."
     bank_name = models.CharField(max_length=255, blank=True, null=True)
     bank_name.help_text = "Name of the bank."

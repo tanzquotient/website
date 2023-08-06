@@ -479,6 +479,24 @@ class VoucherPurposeAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
 
 
+@admin.register(BankAccount)
+class BankAccountAdmin(admin.ModelAdmin):
+    search_fields = [
+        "iban",
+        "user_profile__user__first_name",
+        "user_profile__user__last_name",
+    ]
+    list_display = ["user", "iban", "bank_name"]
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[BankAccount]:
+        return BankAccount.objects.prefetch_related("user_profile__user")
+
+    @staticmethod
+    def user(account: BankAccount) -> str:
+        return account.user_profile.user.get_full_name()
+
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
+    readonly_fields = ["address", "bank_account"]
