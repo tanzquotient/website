@@ -1,8 +1,9 @@
 from django import template
+from django.db.models import QuerySet
 
+from courses.models import Weekday, OfferingType, Course
 from courses.services import get_offerings_by_year
-from courses.models import *
-from survey.models import Question, Answer
+from survey.models import Answer
 from survey.models.types import QuestionType
 
 register = template.Library()
@@ -25,21 +26,34 @@ def offerings_list(detail_url: str, only_public: bool = True) -> dict:
 
 @register.inclusion_tag(filename="courses/snippets/course_reviews.html")
 def course_reviews(course: Course) -> dict:
-    answers = (
-        Answer.objects.filter(
+    course_answers = Answer.objects.filter(
+        survey_instance__course__type=course.type,
+    )
+
+    course_teachers = course.get_teachers()
+    teachers_answers = Answer.objects.exclude(
+        survey_instance__course__type=course.type,
+    ).filter(survey_instance__course__teaching__teacher__in=course_teachers)
+    return dict(
+        course=course,
+        course_reviews=course_reviews_for_queryset(course_answers),
+        teachers_reviews=course_reviews_for_queryset(teachers_answers),
+    )
+
+
+def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
+    text_answers = (
+        answers.filter(
+            question__type=QuestionType.FREE_FORM,
             hide_from_public_reviews=False,
             question__public_review=True,
-            survey_instance__course__type=course.type,
         )
         .prefetch_related("survey_instance", "question")
+        .order_by("-survey_instance__last_update")
         .distinct()
     )
 
-    text_answers = answers.filter(question__type=QuestionType.FREE_FORM).order_by(
-        "-survey_instance__last_update"
-    )
-
-    text_reviews = [
+    return [
         dict(
             text=answer.value,
             date=answer.survey_instance.last_update,
@@ -47,6 +61,3 @@ def course_reviews(course: Course) -> dict:
         )
         for answer in text_answers
     ]
-    show_reviews = len(text_reviews) > 0
-
-    return dict(show_reviews=show_reviews, text_reviews=text_reviews)

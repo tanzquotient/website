@@ -1,30 +1,9 @@
 {% load i18n %}
 {% load courses_tags %}
 
-{% if show_reviews %}
 
-
-    <h4>{% trans "Reviews" %}</h4>
-    <div>
-        <div>
-            {% for review in text_reviews|slice:':5' %}
-                {% include 'courses/snippets/text_review.html' %}
-            {% endfor %}
-        </div>
-        {% if text_reviews|length > 5 %}
-            <div class="collapse show collapse-reviews" id="collapse-reviews-toggle">
-                <a data-bs-toggle="collapse" href=".collapse-reviews" aria-expanded="false"
-                   aria-controls="collapse-reviews-extended collapse-reviews-toggle">
-                    {% trans "Show more" %}
-                </a>
-            </div>
-            <div class="collapse collapse-reviews" id="collapse-reviews-extended">
-                <div>
-                    {% for review in text_reviews|slice:'5:' %}
-                        {% include 'courses/snippets/text_review.html' %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-    </div>
-{% endif %}
+<h4 class="my-3">{% trans "Reviews" %}</h4>
+<h5>{% trans "Reviews for " %}{{ course.type }}</h5>
+{% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' %}
+<h5>{% trans "Reviews the teachers got for other courses" %}</h5>
+{% include "courses/snippets/course_reviews_section.html" with text_reviews=teachers_reviews type='teachers' show_course_type=True %}

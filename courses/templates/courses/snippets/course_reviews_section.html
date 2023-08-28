@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load courses_tags %}
+
+
+{% if not text_reviews %}
+    <div class="alert alert-secondary p-2">{% trans "No reviews yet." %}</div>
+{% else %}
+    <div>
+        <div>
+            {% for review in text_reviews|slice:':3' %}
+                {% include 'courses/snippets/text_review.html' %}
+            {% endfor %}
+        </div>
+        {% if text_reviews|length > 3 %}
+            <div class="collapse show collapse-reviews-{{ type }} mb-3"
+                 id="collapse-reviews-{{ type }}-toggle">
+                <a data-bs-toggle="collapse" href=".collapse-reviews-{{ type }}"
+                   aria-expanded="false"
+                   aria-controls="collapse-reviews-{{ type }}-extended collapse-reviews-{{ type }}-toggle">
+                    {% trans "Show more" %}
+                </a>
+            </div>
+            <div class="collapse collapse-reviews-{{ type }}"
+                 id="collapse-reviews-{{ type }}-extended">
+                <div>
+                    {% for review in text_reviews|slice:'3:' %}
+                        {% include 'courses/snippets/text_review.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

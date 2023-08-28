@@ -9,7 +9,7 @@
             {% if course %}
                 {% spaceless %}
                     {% if show_course_type %}
-                        <span>{{ course.type.title }} {% if course.format_teachers %} ({{ course.format_teachers }}){% endif %}</span>
+                        <span>{{ course.type.title }} {% if course.format_teachers %} {% trans "with" %} {{ course.format_teachers }}{% endif %}</span>
                     {% elif course.format_teachers %}
                         <span>{% trans "Teachers" %}:&nbsp;{{ course.format_teachers }}</span>
                     {% endif %}
