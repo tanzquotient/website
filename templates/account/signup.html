@@ -43,6 +43,10 @@
             {% include "courses/snippets/boolean_input.html" with field=form.get_involved only %}
         </div>
 
+        <div class="mt-3">
+            {% trans "By creating an account you accept the "%} <a href="https://account.vseth.ethz.ch/legal/privacy">{% trans "VSETH Privacy Policy" %}</a>.
+        </div>
+
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
