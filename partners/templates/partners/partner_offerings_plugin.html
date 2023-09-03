@@ -2,7 +2,7 @@
 
 {% for tuple in offerings %}
     <p>
-        {% include "courses/snippets/offering.html" with offering=tuple.offering sections=tuple.sections hide_title=hide_title limit_per_section=tuple.offering.limit_courses_per_section %}</p>
+        {% include "courses/snippets/offering_components/offering.html" with offering=tuple.offering sections=tuple.sections hide_title=hide_title limit_per_section=tuple.offering.limit_courses_per_section %}</p>
 {% empty %}
     <div class="alert alert-info">
         <p><strong>{% trans "Currently no courses listed." %}</strong></p>

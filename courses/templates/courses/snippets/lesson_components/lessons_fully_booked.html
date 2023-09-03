@@ -1,0 +1,21 @@
+{% load courses_tags %}
+{% load i18n %}
+
+{% with regular=course.regular_lessons.all irregular=course.irregular_lessons.all %}
+
+    {% if regular %}
+        {% for lesson in regular %}
+            {{ lesson.weekday|trans_weekday }}, {{ lesson.time_from|date:'H:i' }} - {{ lesson.time_to|date:'H:i' }}
+        {% endfor %}
+    {% endif %}
+
+
+    {% if not regular and not irregular %}
+        {% if course.get_period %}
+            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to is_custom=course.is_custom_period only %}
+        {% else %}
+            {% trans "Time unknown" %}
+        {% endif %}
+    {% endif %}
+
+{% endwith %}

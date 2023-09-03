@@ -4,11 +4,13 @@
     <thead>
     <tr>
         <th>{% trans "Course" %}</th>
-        {% if offering.is_partner_offering %}
-            <th>{% trans "Partner" %}</th>
-        {% else %}
-            <th>{% trans "Location" %}</th>
-        {% endif %}
+        <th>
+            {% if offering.is_partner_offering %}
+                {% trans "Partner" %}
+            {% else %}
+                {% trans "Location" %}
+            {% endif %}
+        </th>
         <th>{% trans "Time" %}</th>
         <th>{% trans "Costs" %}</th>
         {% if offering.is_partner_offering %}
@@ -20,7 +22,11 @@
     </thead>
     <tbody>
     {% for item in d.courses|slice:limit_per_section %}
-        {% include "courses/snippets/offering_list_course_entry_row.html" %}
+        {% if item.has_free_places %}
+            {% include "courses/snippets/offering_components/offering_list_course_entry_row.html" %}
+        {% else %}
+            {% include "courses/snippets/offering_components/offering_list_course_entry_row_fully_booked.html" %}
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>

@@ -21,7 +21,7 @@
             {% endif %}
             {% if d.courses %}
                 <div class="collapse show collapse-{{ offering.id }}-{{ forloop.counter }}">
-                    {% include "courses/snippets/offering_list_course_table.html" %}
+                    {% include "courses/snippets/offering_components/offering_list_course_table.html" %}
                 </div>
                 {% if limit_per_section < d.courses|length %}
                     <div class="collapse show collapse-{{ offering.id }}-{{ forloop.counter }}">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="collapse collapse-{{ offering.id }}-{{ forloop.counter }}">
-                        {% include "courses/snippets/offering_list_course_table.html" with limit_per_section=d.courses|length %}
+                        {% include "courses/snippets/offering_components/offering_list_course_table.html" with limit_per_section=d.courses|length %}
                         <div class="p-2">
                             <a data-bs-toggle="collapse"
                                href=".collapse-{{ offering.id }}-{{ forloop.counter }}"
@@ -66,7 +66,7 @@
             {% endif %}
             {% if d.courses %}
                 <div class="list-group list-group-flush">
-                    {% collapsible_list items=d.courses limit=limit_per_section item_template="courses/snippets/offering_list_course_entry_div.html" %}
+                    {% collapsible_list items=d.courses limit=limit_per_section item_template="courses/snippets/offering_components/offering_list_course_entry_div.html" %}
                 </div>
             {% else %}
                 <div class="alert alert-info">{% trans "No courses available" %}</div>

@@ -1,0 +1,5 @@
+{% if item.has_free_places %}
+    {% include 'courses/snippets/offering_components/offering_list_course_entry_div_default.html' %}
+{% else %}
+    {% include 'courses/snippets/offering_components/offering_list_course_entry_div_fully_booked.html' %}
+{% endif %}

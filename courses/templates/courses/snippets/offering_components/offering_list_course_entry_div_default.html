@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<a href="{% url 'courses:course_detail' item.id %}"
+   class="list-group-item list-group-item-action">
+
+    <div style="display: grid; grid-template-columns: 1fr auto;">
+        <div class="mb-0">
+            <strong class="list-group-item-heading"> {{ item.type.title }} </strong>
+        </div>
+
+        {% if not hide_subscription_status %}
+            <div class="mb-0">
+                {% include "courses/snippets/subscription_info.html" with course=item user=user display_link=False only %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if item.type.subtitle %}
+        <div>
+            <em> {{ item.type.subtitle }} </em>
+        </div>
+    {% endif %}
+
+    <div class="mb-0">
+        {% include "courses/snippets/lesson_components/lessons_mobile.html" with course=item display_link=False only %}
+    </div>
+
+    {% if offering.is_partner_offering and item.partner %}
+        <div class="mb-0">{{ item.partner.name }}</div>
+    {% else %}
+        <div class="mb-0">
+            {{ item.room | default:_("Currently unknown") }}
+        </div>
+    {% endif %}
+
+    <div>{% trans "Costs" %}: {{ item.format_prices | default:"-" }}</div>
+</a>

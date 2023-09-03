@@ -30,7 +30,7 @@
         {% endif %}
     </td>
     <td>
-        {% include "courses/snippets/lessons.html" with course=item display_link=False only %}</td>
+        {% include "courses/snippets/lesson_components/lessons.html" with course=item display_link=False only %}</td>
     {% if not item.format_prices and offering.is_partner_offering %}
         <td>{% trans "Unknown" %}</td>
     {% else %}

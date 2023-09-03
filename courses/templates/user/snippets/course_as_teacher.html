@@ -7,7 +7,7 @@
         <p>
             <strong>{% trans "Time" %}</strong>
             <br/>
-            {% include "courses/snippets/lessons.html" with course=course only %}
+            {% include "courses/snippets/lesson_components/lessons.html" with course=course only %}
         </p>
         {% if course.room %}
             <p>

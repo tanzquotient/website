@@ -1,0 +1,37 @@
+{% load courses_tags %}
+{% load i18n %}
+
+<a href="{% url 'courses:course_detail' item.id %}"
+   class="list-group-item list-group-item-action">
+    <div class="d-flex">
+        <div class="mb-0 flex-grow-1">
+            <strong class="list-group-item-heading"> {{ item.type.title }} </strong>
+        </div>
+
+        <div class="mb-0">
+            {% if not hide_subscription_status %}
+                {% include "courses/snippets/subscription_info.html" with course=item user=user display_link=False only %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% with regular=item.regular_lessons.all irregular=item.irregular_lessons.all %}
+        {% if regular %}
+            {% for lesson in regular %}
+                {{ lesson.weekday|trans_weekday }}, {{ lesson.time_from|date:'H:i' }} -
+                {{ lesson.time_to|date:'H:i' }},
+                {{ item.room | default:_("Currently unknown") }}
+            {% endfor %}
+        {% endif %}
+
+
+        {% if not regular and not irregular %}
+            {% include "courses/snippets/period.html" with from=item.get_period.date_from to=item.get_period.date_to is_custom=item.is_custom_period only %}
+        {% endif %}
+    {% endwith %}
+
+
+    {% if offering.is_partner_offering and item.partner %}
+        <div class="mb-0">{{ item.partner.name }}</div>
+    {% endif %}
+</a>
