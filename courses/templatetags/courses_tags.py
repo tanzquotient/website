@@ -48,13 +48,7 @@ def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
             hide_from_public_reviews=False,
             question__public_review=True,
         )
-        .prefetch_related(
-            "survey_instance",
-            "question",
-            "survey_instance__course__room",
-            "survey_instance__course__type",
-            "survey_instance__course__teaching__teacher",
-        )
+        .prefetch_related("survey_instance", "question")
         .order_by("-survey_instance__last_update")
         .distinct()
     )

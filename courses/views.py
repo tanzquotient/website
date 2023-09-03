@@ -123,30 +123,9 @@ def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
 
 
 def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
-    try:
-        course = (
-            Course.objects.select_related("type", "offering")
-            .prefetch_related(
-                "subscriptions",
-                "type__styles__songs",
-                "type__styles__translations",
-                "regular_lessons__exceptions",
-                "irregular_lessons",
-                "teaching__teacher__functions",
-                "teaching__teacher__profile",
-                "teaching__teacher__teaching_courses__course__irregular_lessons",
-                "teaching__teacher__teaching_courses__course__regular_lessons",
-                "teaching__teacher__teaching_courses__course__period",
-                "teaching__teacher__teaching_courses__course__offering__period",
-            )
-            .get(id=course_id)
-        )
-    except Course.DoesNotExist:
-        raise Http404()
-
     context = {
         "menu": "courses",
-        "course": course,
+        "course": get_object_or_404(Course.objects, id=course_id),
         "user": request.user,
     }
     return render(request, "courses/course_detail.html", context)
