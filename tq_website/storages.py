@@ -42,7 +42,7 @@ class MediaStorage(TqStorage):
             custom_domain=settings.S3_MEDIA_CUSTOM_DOMAIN,
             access_key=settings.S3_MEDIA_ACCESS_KEY,
             secret_key=settings.S3_MEDIA_SECRET_KEY,
-            querystring_auth=False,
+            querystring_auth=True,
         )
 
 
