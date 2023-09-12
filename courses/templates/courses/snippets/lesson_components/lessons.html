@@ -20,7 +20,7 @@
             {% endif %}
         {% endfor %}
         <br/>
-        {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date only %}
+        {% include "courses/snippets/period.html" with from=course.get_first_lesson_date to=course.get_last_lesson_date only %}
 
         {% if course.get_not_cancelled_regular_lesson_exceptions %}
             <br/>

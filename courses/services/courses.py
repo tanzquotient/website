@@ -15,22 +15,14 @@ from survey.models import SurveyInstance, Survey
 from tq_website import settings
 
 
-def copy_course(course, to=None, set_preceeding_course=False):
+def copy_course(course, to=None):
     old_course_pk = course.pk
     if to is None:
         to = get_subsequent_offering()
     if to is not None:
         course_copy = course.copy()
         course_copy.offering = to
-        course_copy.active = False
         course_copy.save()
-
-        if set_preceeding_course:
-            cs = models.CourseSuccession(
-                predecessor=models.Course.objects.get(pk=old_course_pk),
-                successor=course,
-            )
-            cs.save()
 
 
 def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:

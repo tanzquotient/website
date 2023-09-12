@@ -22,18 +22,15 @@ class Offering(models.Model):
         default=False,
         help_text="Defines if this offering should be displayed on the Website.",
     )
-    active = models.BooleanField(
-        default=False,
-        help_text="Defines if clients can subscribe to courses in this offering.",
-    )
     preview = models.BooleanField(
         default=False,
         help_text="Defines if the offering should be displayed as preview",
     )
-    opens_soon = models.BooleanField(
-        default=False,
-        help_text="If set to true, the sign up page says "
-        '"opens soon" instead of "closed"',
+    registration_period = models.ForeignKey(
+        "RegistrationPeriod",
+        related_name="offerings",
+        blank=False,
+        on_delete=models.PROTECT,
     )
     group_into_sections = models.BooleanField(
         default=True,
@@ -57,9 +54,6 @@ class Offering(models.Model):
 
     def is_over(self) -> bool:
         return self.period.date_to < date.today()
-
-    def has_date_from(self) -> bool:
-        return self.get_start_year() is not None
 
     def is_partner_offering(self) -> bool:
         return self.type == OfferingType.PARTNER

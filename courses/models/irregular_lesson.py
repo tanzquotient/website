@@ -1,7 +1,11 @@
-import datetime
+from datetime import datetime, timedelta
+from typing import Iterable
 
 from django.db import models
 from django.db.models import CASCADE
+from pytz import timezone
+
+from courses.models import LessonOccurrence
 
 
 class IrregularLesson(models.Model):
@@ -27,10 +31,17 @@ class IrregularLesson(models.Model):
     class Meta:
         ordering = ["date", "time_from"]
 
-    def get_total_time(self) -> datetime.timedelta:
-        return datetime.datetime.combine(
-            self.date, self.time_to
-        ) - datetime.datetime.combine(self.date, self.time_from)
+    def get_occurrence(self) -> LessonOccurrence:
+        return LessonOccurrence(
+            datetime.combine(self.date, self.time_from, timezone("Europe/Zurich")),
+            datetime.combine(self.date, self.time_to, timezone("Europe/Zurich")),
+        )
+
+    def get_occurrences(self) -> Iterable[LessonOccurrence]:
+        return [self.get_occurrence()]
+
+    def get_total_time(self) -> timedelta:
+        return self.get_occurrence().duration
 
     def format_duration(self) -> str:
         return (

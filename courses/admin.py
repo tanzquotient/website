@@ -12,15 +12,29 @@ from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
 
 
+@admin.register(RegistrationPeriod)
+class RegistrationPeriodAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "start",
+        "deadline",
+        "preregistration",
+    )
+
+
 @admin.register(Offering)
 class OfferingAdmin(admin.ModelAdmin):
-    list_display = ("name", "period", "display", "active", "preview", "opens_soon")
+    list_display = (
+        "name",
+        "period",
+        "display",
+        "preview",
+        "registration_period",
+    )
 
     actions = [
         display,
         undisplay,
-        activate,
-        deactivate,
         offering_emaillist,
         export_teacher_payment_information_csv,
         export_teacher_payment_information_excel,
@@ -83,12 +97,6 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
 
 
-class PredecessorCoursesInline(admin.TabularInline):
-    model = CourseSuccession
-    fk_name = "successor"
-    extra = 0
-
-
 class SongInline(admin.TabularInline):
     search_fields = [
         "title",
@@ -139,7 +147,7 @@ class CourseAdmin(TranslatableAdmin):
         "format_teachers",
         "get_teachers_welcomed",
     )
-    list_filter = ("offering", "subscription_type", "display", "active")
+    list_filter = ("offering", "subscription_type", "display")
     search_fields = [
         "name",
         "type__translations__title",
@@ -148,7 +156,6 @@ class CourseAdmin(TranslatableAdmin):
         RegularLessonInline,
         IrregularLessonInline,
         TeachInlineForCourse,
-        PredecessorCoursesInline,
         SubscribeInlineForCourse,
     )
     widgets = {"type": SortedSelect}
@@ -172,7 +179,7 @@ class CourseAdmin(TranslatableAdmin):
                 ]
             },
         ),
-        ("When?", {"fields": ["offering", "period"]}),
+        ("When?", {"fields": ["offering", "period", "registration_period"]}),
         ("Where?", {"fields": ["room"]}),
         (
             "Billing",
@@ -187,8 +194,6 @@ class CourseAdmin(TranslatableAdmin):
     actions = [
         display,
         undisplay,
-        activate,
-        deactivate,
         cancel,
         welcome_teachers,
         welcome_teachers_reset_flag,
@@ -216,27 +221,17 @@ class CourseAdmin(TranslatableAdmin):
         return course.cancelled
 
 
-@admin.register(CourseSuccession)
-class CourseSuccession(admin.ModelAdmin):
-    list_display = ["predecessor", "successor"]
-    model = CourseSuccession
-
-
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
-    list_display = (
-        "title",
-        "format_styles",
-        "level",
-        "couple_course",
-    )
+    list_display = ("title", "format_styles", "level", "couple_course", "successor")
     list_filter = ("level", CourseTypeStyleFilter, "couple_course")
     search_fields = ["translations__title", "translations__subtitle"]
     ordering = ["translations__title"]
+    filter_horizontal = ["styles"]
 
     fieldsets = [
         ("Information", {"fields": ["title", "subtitle", "description"]}),
-        ("Details", {"fields": ["level", "styles"]}),
+        ("Details", {"fields": ["level", "styles", "successor"]}),
         ("Options", {"fields": ["couple_course"]}),
     ]
 
@@ -338,7 +333,6 @@ class SubscribeAdmin(VersionAdmin):
             "course__offering",
             "course__offering__period",
             "course__succeeding_courses",
-            "course__preceding_courses__subscriptions",
             "course__type__styles",
         )
 

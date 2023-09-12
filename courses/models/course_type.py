@@ -6,6 +6,13 @@ from parler.models import TranslatableModel, TranslatedFields
 class CourseType(TranslatableModel):
     styles = models.ManyToManyField("Style", related_name="course_types", blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
+    successor = models.OneToOneField(
+        "CourseType",
+        related_name="predecessor",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     couple_course = models.BooleanField(default=True)
 
     translations = TranslatedFields(

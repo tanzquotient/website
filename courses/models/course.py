@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from decimal import Decimal
 from numbers import Number
 from typing import Optional, Union, Iterable
@@ -14,6 +14,7 @@ from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+from pytz import timezone
 
 from courses import managers
 from courses.models import (
@@ -25,9 +26,12 @@ from courses.models import (
     RegularLesson,
     IrregularLesson,
     RegularLessonException,
+    RegistrationPeriod,
+    LessonOccurrence,
 )
 from partners.models import Partner
 from survey.models import Survey
+from utils.helpers import optional_min, optional_max
 
 
 class Course(TranslatableModel):
@@ -59,10 +63,14 @@ class Course(TranslatableModel):
         "Defines if this course should be displayed on the Website "
         "(if checked, course is displayed if offering is displayed)."
     )
-    active = models.BooleanField(default=True)
-    active.help_text = (
-        "Defines if clients can subscribe to this course "
-        "(if checked, course is active if offering is active)."
+    registration_period = models.ForeignKey(
+        "RegistrationPeriod",
+        related_name="courses",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        help_text="Only set a value here if the registration period is different to "
+        "the general registration period defined in the offering.",
     )
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
@@ -126,15 +134,6 @@ class Course(TranslatableModel):
         through="Subscribe",
         related_name="courses",
         through_fields=("course", "user"),
-    )
-    preceding_courses = models.ManyToManyField(
-        "Course",
-        related_name="succeeding_courses",
-        through="CourseSuccession",
-        through_fields=("successor", "predecessor"),
-    )
-    preceding_courses.help_text = (
-        "The course(s) that are immediate predecessors of this course."
     )
 
     objects = managers.CourseManager()
@@ -202,6 +201,9 @@ class Course(TranslatableModel):
 
     def get_period(self) -> Period:
         return self.period or self.offering.period
+
+    def get_registration_period(self) -> RegistrationPeriod:
+        return self.registration_period or self.offering.registration_period
 
     def show_free_places_count(self) -> bool:
         return self.max_subscribers is not None
@@ -308,7 +310,9 @@ class Course(TranslatableModel):
 
     def has_enough_participants(self) -> bool:
         if self.min_subscribers is None:
-            return True  # If there is no minimum number of subscribers, we always have enough participants
+            # If there is no minimum number of subscribers, we always have enough
+            # participants
+            return True
 
         if self.type.couple_course:
             return self.number_of_possible_couples() >= self.min_number_of_couples()
@@ -393,10 +397,12 @@ class Course(TranslatableModel):
                 num_couples = self.number_of_possible_couples()
                 if num_couples == 1:
                     return _(
-                        "With this one couple is possible in total, but at least {} couples are needed."
+                        "With this one couple is possible in total, but at least "
+                        "{} couples are needed."
                     ).format(self.min_number_of_couples())
                 return _(
-                    "With this {} couples are possible in total, but at least {} couples are needed."
+                    "With this {} couples are possible in total, but at least "
+                    "{} couples are needed."
                 ).format(num_couples, self.min_number_of_couples())
 
             return _("At least {} couples are needed.").format(
@@ -446,11 +452,26 @@ class Course(TranslatableModel):
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()
 
+    def subscription_opens_soon(self) -> bool:
+        return (
+            self.is_regular()
+            and datetime.now(tz=timezone("Europe/Zurich"))
+            <= self.get_registration_period().start
+        )
+
     def is_subscription_allowed(self) -> bool:
         if not self.is_regular():
             return False
 
-        return self.is_active()
+        registration_period = self.get_registration_period()
+        registration_start = registration_period.start
+        registration_end = self.get_first_lesson_start() + registration_period.deadline
+
+        return (
+            registration_start
+            <= datetime.now(tz=timezone("Europe/Zurich"))
+            <= registration_end
+        )
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
@@ -458,6 +479,13 @@ class Course(TranslatableModel):
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
+
+    def get_lesson_occurrences(self) -> Iterable[LessonOccurrence]:
+        return [
+            occurrence
+            for lesson in self.get_lessons()
+            for occurrence in lesson.get_occurrences()
+        ]
 
     def get_all_regular_lesson_exceptions(self) -> list[RegularLessonException]:
         exceptions = []
@@ -507,86 +535,27 @@ class Course(TranslatableModel):
 
     format_cancellations.short_description = "Cancellations"
 
-    def format_preceeding_courses(self) -> str:
-        return " / ".join(map(str, self.preceding_courses.all()))
-
-    format_preceeding_courses.short_description = "Predecessors"
-
     def get_first_regular_lesson(self) -> Optional[RegularLesson]:
         if self.regular_lessons.exists():
             return self.regular_lessons.all()[0]
         else:
             return None
 
-    def get_first_irregular_lesson(self) -> Optional[IrregularLesson]:
-        if self.irregular_lessons.exists():
-            return self.irregular_lessons.first()
-        return None
-
-    def get_last_irregular_lesson(self) -> Optional[IrregularLesson]:
-        if self.irregular_lessons.exists():
-            return self.irregular_lessons.last()
-        return None
-
-    @staticmethod
-    def next_weekday(d: date, weekday: int) -> date:
-        days_ahead = weekday - d.weekday()
-        if days_ahead < 0:  # Target day already happened
-            days_ahead += 7
-        return d + timedelta(days_ahead)
-
-    def get_first_regular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_first_regular_lesson()
-        if lesson:
-            return Course.next_weekday(
-                self.get_period().date_from, lesson.get_weekday_number()
-            )
-        else:
-            return None
-
-    def get_last_regular_lesson_date(self) -> Optional[date]:
-        if self.regular_lessons.exists():
-            course_weekdays = [
-                Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()
-            ]
-
-            # Find last course day before date_to
-            for day_delta in range(7):
-                day = self.get_period().date_to - timedelta(days=day_delta)
-                if day.weekday() in course_weekdays:
-                    return day
-
-        return None
-
-    def get_first_irregular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_first_irregular_lesson()
-        return lesson.date if lesson else None
-
-    def get_last_irregular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_last_irregular_lesson()
-        return lesson.date if lesson else None
+    def get_first_lesson_start(self) -> Optional[datetime]:
+        first = optional_min(self.get_lesson_occurrences())
+        return first.start if first else None
 
     def get_first_lesson_date(self) -> Optional[date]:
-        d1 = self.get_first_irregular_lesson_date()
-        d2 = self.get_first_regular_lesson_date()
-        if d1 is None and d2 is None:
-            return None
-        if d1 is None:
-            return d2
-        if d2 is None:
-            return d1
+        start = self.get_first_lesson_start()
+        return start.date() if start else None
 
-        return d1 if d1 < d2 else d2
+    def get_last_lesson_end(self) -> Optional[datetime]:
+        last = optional_max(self.get_lesson_occurrences())
+        return last.end if last else None
 
     def get_last_lesson_date(self) -> Optional[date]:
-        d1 = self.get_last_irregular_lesson_date()
-        d2 = self.get_last_regular_lesson_date()
-        if d1 is None:
-            return d2
-        if d2 is None:
-            return d1
-
-        return d1 if d1 > d2 else d2
+        end = self.get_last_lesson_end()
+        return end.date() if end else None
 
     def get_common_irregular_weekday(self) -> Optional[str]:
         """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""

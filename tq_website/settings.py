@@ -92,6 +92,7 @@ MIDDLEWARE = [
     "cms.middleware.language.LanguageCookieMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "hijack.middleware.HijackUserMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = (

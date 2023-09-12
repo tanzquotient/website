@@ -26,16 +26,6 @@ def undisplay(modeladmin, request, queryset):
     queryset.update(display=False)
 
 
-@admin.action(description="Activate")
-def activate(modeladmin, request, queryset):
-    queryset.update(active=True)
-
-
-@admin.action(description="Deactivate")
-def deactivate(modeladmin, request, queryset):
-    queryset.update(active=False)
-
-
 @admin.action(description="Cancel course. This rejects all participants.")
 def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
     for c in queryset.all():
@@ -43,7 +33,6 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
             c.subscriptions.accepted(), RejectionReason.COURSE_CANCELLED
         )
         c.cancelled = True
-        c.active = False
         c.display = False
         c.save()
         for teacher in c.get_teachers():
@@ -74,7 +63,6 @@ def copy_courses(modeladmin, request, queryset):
                 services.courses.copy_course(
                     c,
                     to=offering,
-                    set_preceeding_course=form.cleaned_data["set_preceeding_course"],
                 )
 
             return HttpResponseRedirect(request.get_full_path())
@@ -84,7 +72,6 @@ def copy_courses(modeladmin, request, queryset):
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True)),
                 "offering": services.get_subsequent_offering(),
-                "set_preceeding_course": True,
             }
         )
 

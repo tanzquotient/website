@@ -1,5 +1,7 @@
 from .choices import *
+from .lesson_occurrence import *
 from .teach import Teach
+from .registration_period import RegistrationPeriod
 from .offering import Offering
 from .address import Address
 from .bank_account import BankAccount
@@ -15,7 +17,6 @@ from .irregular_lesson import IrregularLesson
 from .course_type import CourseType
 from .course import Course
 from .period_cancellation import PeriodCancellation
-from .course_succession import CourseSuccession
 from .confirmation import Confirmation
 from .rejection import Rejection
 from .teacher_welcome import TeacherWelcome

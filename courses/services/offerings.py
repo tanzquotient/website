@@ -19,7 +19,7 @@ from courses.services.general import log
 
 
 def get_all_offerings():
-    return Offering.objects.order_by("period__date_from", "-active")
+    return Offering.objects.order_by("period__date_from")
 
 
 def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
@@ -142,14 +142,6 @@ def get_sections(offering, course_filter=None):
         raise Http404(message)
 
     return offering_sections
-
-
-def get_current_active_offering():
-    return (
-        models.Offering.objects.filter(active=True)
-        .order_by("period__date_from")
-        .first()
-    )
 
 
 def get_subsequent_offering():
