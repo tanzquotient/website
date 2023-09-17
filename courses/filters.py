@@ -2,6 +2,7 @@ from django.contrib.admin.filters import SimpleListFilter
 from django.utils.translation import gettext_lazy as _
 
 from courses.admin_actions import *
+from reversion.models import Version
 
 
 class SubscribeOfferingListFilter(SimpleListFilter):
@@ -58,10 +59,9 @@ class SubscribeCourseListFilter(SimpleListFilter):
         in the right sidebar.
         """
 
-        queryset = Course.objects.filter(active=True, offering__active=True)
+        queryset = Course.objects.filter(active=True)
         if "offering" in (request.GET or set()):
             queryset = queryset.filter(offering=request.GET["offering"])
-
         return [(c.id, c.name) for c in queryset.all()]
 
     def queryset(self, request, queryset):
@@ -86,6 +86,63 @@ class SubscribeCourseListFilter(SimpleListFilter):
         :return the filtered queryset
         """
         return queryset.filter(course__id=course_id)
+    
+class VoucherCourseListFilter(SimpleListFilter):
+    title = "Course"
+    parameter_name = "course"
+
+    def lookups(self, request, model_admin):
+        if "offering" in (request.GET or set()):
+            return [(c.id, c.name) for c in Course.objects.filter(offering=request.GET["offering"]).all()]
+        
+        return []
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(subscription__course=self.value())
+        
+        return queryset
+    
+class VoucherOfferingListFilter(SimpleListFilter):
+    title = "Offering"
+    parameter_name = "offering"
+
+    def lookups(self, request, model_admin):
+        return [(o.id, o.name) for o in Offering.objects.all()[:15]]
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(subscription__course__offering=self.value())
+        return queryset
+
+class VoucherYearUsedListFilter(SimpleListFilter):
+    title = "Year"
+    parameter_name = "year_used"
+
+    def lookups(self, request, model_admin):
+        years = [reduction.created_at.year for reduction in PriceReduction.objects.filter(used_voucher__isnull=False).all()]
+        return [(year, year) for year in set(years)]
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(price_reductions__created_at__year = self.value())
+        return queryset
+    
+
+# Class to filter vouchers by issuer -- not working yet
+# class VoucherIssuerListFilter(SimpleListFilter):
+#     title = "Issuer"
+#     parameter_name = "issuer"
+    
+#     def lookups(self, request, model_admin):
+#         users = {version.revision.user for version in Version.objects.get_for_model(Voucher).all() if version.revision.user}
+
+#         return [(user.id, user.get_full_name()) for user in sorted(users, key=lambda u: u.get_full_name())]
+
+#     def queryset(self, request, queryset):
+#         if self.value() is not None:
+#             return [voucher for voucher in queryset.all() if Version.objects.get_for_object(voucher).order_by("revision__date_created").first().revision.user == self.value()]
+#         return queryset
 
 
 class ConfirmationOfferingListFilter(SubscribeOfferingListFilter):
