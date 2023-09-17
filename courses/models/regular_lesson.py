@@ -40,9 +40,7 @@ class RegularLesson(models.Model):
         return amount_lessons * time_per_lesson
 
     def __str__(self) -> str:
-        return "{}, {}, {}-{}".format(
-            self.course,
-            Weekday.WEEKDAYS_TRANSLATIONS[self.weekday],
-            self.time_from.strftime("%H:%M"),
-            self.time_to.strftime("%H:%M"),
+        return (
+            f"{Weekday.WEEKDAYS_TRANSLATIONS[self.weekday]}, "
+            f'{self.time_from.strftime("%H:%M")} - {self.time_to.strftime("%H:%M")}'
         )

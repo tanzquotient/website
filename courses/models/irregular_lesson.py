@@ -33,7 +33,10 @@ class IrregularLesson(models.Model):
         ) - datetime.datetime.combine(self.date, self.time_from)
 
     def format_duration(self) -> str:
-        return f'{self.date}, {self.time_from.strftime("%H:%M")}-{self.time_to.strftime("%H:%M")}'
+        return (
+            f"{self.date}, "
+            f'{self.time_from.strftime("%H:%M")} - {self.time_to.strftime("%H:%M")}'
+        )
 
     def __str__(self) -> str:
-        return f"{self.course}, {self.format_duration()}"
+        return self.format_duration()

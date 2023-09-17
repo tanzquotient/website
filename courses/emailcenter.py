@@ -215,11 +215,9 @@ def create_user_info(user: User) -> str:
 
 
 def create_course_info(course: Course) -> str:
-    s = f"{course.type.title}\n{course.format_lessons()}"
+    s = f"{course.type.title}\n{course.format_lessons()}\n"
     if course.room:
-        s += f", {course.room}\n"
-    else:
-        s += "\n"
+        s += f"{course.room}\n"
     s += f"{course.get_period()}\n"
     if course.format_cancellations():
         s += f'{_("Cancellations")}: {course.format_cancellations()}\n'
