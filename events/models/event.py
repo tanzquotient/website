@@ -107,9 +107,9 @@ class Event(TranslatableModel):
         date_from = self.date
         date_to = self.date_to if self.date_to else self.date
 
-        date_from_formatted = format_date(date_from, "D, d. N Y")
+        date_from_formatted = format_date(date_from, "D, d. N")
         time_from_formatted = self.time_from.strftime("%H:%M") if self.time_from else ""
-        date_to_formatted = format_date(date_to, "D, d. N Y")
+        date_to_formatted = format_date(date_to, "D, d. N")
         time_to_formatted = self.time_to.strftime("%H:%M") if self.time_to else ""
 
         if date_from == date_to:
