@@ -52,8 +52,8 @@ class EventAdmin(TranslatableAdmin):
 
 @admin.register(EventCategory)
 class EventCategoryAdmin(TranslatableAdmin):
-    list_display = ("name", "description")
-    fields = ("name", "teaser", "description", "is_featured", "image")
+    list_display = ("name", "position", "description")
+    fields = ("name", "position", "teaser", "description", "is_featured", "image")
     model = EventCategory
 
 
