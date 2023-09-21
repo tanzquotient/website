@@ -12,7 +12,7 @@
 
     {% if not regular and not irregular %}
         {% if course.get_period %}
-            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to is_custom=course.is_custom_period only %}
+            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to only %}
         {% else %}
             {% trans "Time unknown" %}
         {% endif %}

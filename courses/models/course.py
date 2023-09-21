@@ -198,9 +198,6 @@ class Course(TranslatableModel):
 
     format_prices.short_description = "Prices"
 
-    def is_custom_period(self) -> bool:
-        return self.period is not None
-
     def get_period(self) -> Period:
         return self.period or self.offering.period
 

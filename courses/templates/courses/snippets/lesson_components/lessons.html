@@ -20,7 +20,7 @@
             {% endif %}
         {% endfor %}
         <br/>
-        {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date is_custom=course.is_custom_period only %}
+        {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date only %}
 
         {% if course.get_not_cancelled_regular_lesson_exceptions %}
             <br/>
@@ -57,7 +57,7 @@
 
     {% if not regular and not irregular %}
         {% if course.get_period %}
-            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to is_custom=course.is_custom_period only %}
+            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to only %}
         {% else %}
             {% trans "Time unknown" %}
         {% endif %}

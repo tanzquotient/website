@@ -7,11 +7,9 @@
                 {{ item.type.title }}
             </a>
         </div>
-        {% if item.type.subtitle %}
-            <div>
-                <em>{{ item.type.subtitle }}</em>
-            </div>
-        {% endif %}
+    </td>
+    <td>
+        {% include "courses/snippets/lesson_components/lessons_compact.html" with course=item display_link=False only %}
     </td>
     <td>
         {% if offering.is_partner_offering %}
@@ -23,19 +21,12 @@
             {% endif %}
         {% else %}
             {% if item.room %}
-                {% include "courses/snippets/room_modal.html" with display_link=True room=item.room only %}
+                {% include "courses/snippets/room_modal.html" with display_link=False room=item.room only %}
             {% else %}
                 {% trans "Currently unknown" %}
             {% endif %}
         {% endif %}
     </td>
-    <td>
-        {% include "courses/snippets/lesson_components/lessons.html" with course=item display_link=False only %}</td>
-    {% if not item.format_prices and offering.is_partner_offering %}
-        <td>{% trans "Unknown" %}</td>
-    {% else %}
-        <td>{{ item.format_prices|default:"-" }}</td>
-    {% endif %}
     {% if not hide_subscription_status %}
         <td>
             {% include "courses/snippets/subscription_info.html" with course=item display_link=True user=user only %}

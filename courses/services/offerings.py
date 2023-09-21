@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import date
+from datetime import date, time
 from typing import Collection
 
 from django.db.models import Q, QuerySet
@@ -13,6 +13,7 @@ from courses.models import (
     Offering,
     OfferingType,
     Weekday,
+    Course,
 )
 from courses.services.general import log
 
@@ -53,6 +54,24 @@ def get_offerings_by_year(
     )
 
 
+def course_sort_key(course: Course) -> tuple:
+    default_date = date(year=9999, month=1, day=1)
+    default_time = time(hour=23, minute=59, second=59)
+    first_date = course.get_first_lesson_date() or default_date
+    first_regular = course.get_first_regular_lesson()
+    first_irregular = course.get_first_irregular_lesson()
+    first_time = (
+        first_regular.time_from
+        if first_regular
+        else (first_irregular.time_from if first_irregular else default_time)
+    )
+
+    if course.offering.type != OfferingType.REGULAR:
+        return first_date, first_time
+
+    return course.type.title, first_time
+
+
 def get_sections(offering, course_filter=None):
     offering_sections = []
     course_set = offering.course_set
@@ -61,10 +80,9 @@ def get_sections(offering, course_filter=None):
         course_filter = lambda c: True
 
     if not offering.group_into_sections:
-        default_date = date(year=9999, month=1, day=1)
         courses = sorted(
             [c for c in course_set.all() if course_filter(c)],
-            key=lambda c: c.get_first_lesson_date() or default_date,
+            key=course_sort_key,
         )
         offering_sections.append(dict(courses=courses))
     elif offering.type == OfferingType.REGULAR:
@@ -76,7 +94,7 @@ def get_sections(offering, course_filter=None):
                 offering_sections.append(
                     {
                         "section_title": Weekday.WEEKDAYS_TRANSLATIONS[w],
-                        "courses": courses_on_weekday,
+                        "courses": sorted(courses_on_weekday, key=course_sort_key),
                     }
                 )
 
@@ -87,7 +105,7 @@ def get_sections(offering, course_filter=None):
             offering_sections.append(
                 {
                     "section_title": _("Irregular weekday"),
-                    "courses": courses_without_weekday,
+                    "courses": sorted(courses_without_weekday, key=course_sort_key),
                 }
             )
 
@@ -114,7 +132,7 @@ def get_sections(offering, course_filter=None):
                 offering_sections.append(
                     {
                         "section_title": section_title,
-                        "courses": courses,
+                        "courses": sorted(courses, key=course_sort_key),
                         "hide_period_column": not deviating_period,
                     }
                 )

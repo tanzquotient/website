@@ -9,36 +9,15 @@
     {% endif %}
 
     {% if regular %}
-
         <div>
-
             {% for lesson in regular %}
                 <div>
                     {{ lesson.weekday|trans_weekday }}, {{ lesson.time_from|date:'H:i' }}
                     - {{ lesson.time_to|date:'H:i' }},
-                    {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date is_custom=course.is_custom_period only %}
+                    {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date only %}
                 </div>
             {% endfor %}
         </div>
-
-        {% if course.get_not_cancelled_regular_lesson_exceptions %}
-            <div>
-                <u>{% trans "Exceptions" %}:</u> <br/>
-                {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link disable_modals=disable_modals exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
-
-                {% if course.get_regular_lesson_cancellation_dates %}
-                {% endif %}
-            </div>
-        {% endif %}
-
-        {% if course.get_regular_lesson_cancellation_dates %}
-            <div>
-                <u>{% trans "Cancellations" %}:</u>
-                <br/>
-                {% include "courses/snippets/course_cancellation.html" with cancellation_dates=course.get_regular_lesson_cancellation_dates only %}
-            </div>
-        {% endif %}
-
     {% endif %}
 
 
@@ -60,7 +39,7 @@
 
     {% if not regular and not irregular %}
         {% if course.get_period %}
-            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to is_custom=course.is_custom_period only %}
+            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to only %}
         {% else %}
             {% trans "Time unknown" %}
         {% endif %}
