@@ -110,7 +110,7 @@ def course_list_preview(request) -> HttpResponse:
 
 
 def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
-    template_name = "courses/offering_components/offering.html"
+    template_name = "courses/snippets/offering_components/offering.html"
     offering = get_object_or_404(Offering.objects, id=offering_id)
     if not offering.is_public():
         raise Http404()
