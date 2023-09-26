@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Iterable, Any, Optional
 
+import reversion
 from django.contrib.auth.models import User
 from post_office.models import EmailTemplate
 
@@ -94,7 +95,7 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
     send_all_emails(emails)
 
 
-def send_vouchers(data, recipients):
+def send_vouchers(data, recipients, user):
     amount = data["amount"]
     percentage = data["percentage"]
     purpose = data["purpose"]
@@ -104,13 +105,16 @@ def send_vouchers(data, recipients):
     emails = []
 
     for recipient in recipients:
-        voucher = Voucher(
-            purpose=purpose,
-            percentage=percentage,
-            amount=amount,
-            expires=expires if expires_flag else None,
-        )
-        voucher.save()
+        with reversion.create_revision():
+            voucher = Voucher.objects.create(
+                purpose=purpose,
+                percentage=percentage,
+                amount=amount,
+                expires=expires if expires_flag else None,
+            )
+            reversion.set_user(user)
+            reversion.set_comment(f"Sent voucher email to {recipient}")
+
         generate_voucher_pdfs(vouchers=[voucher])
 
         email_context = {

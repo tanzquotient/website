@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
-from typing import Optional, Tuple, Any
+from typing import Optional
 
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -124,9 +124,15 @@ class Voucher(Model):
         if open_amount_before < reduction_amount:  # reduction more than open amount
             remainder = reduction_amount - open_amount_before
             reduction_amount = open_amount_before
-            voucher_for_remainder = Voucher.objects.create(
-                amount=remainder, purpose=self.purpose, expires=self.expires
-            )
+            with transaction.atomic(), reversion.create_revision():
+                voucher_for_remainder = Voucher.objects.create(
+                    amount=remainder, purpose=self.purpose, expires=self.expires
+                )
+                reversion.set_user(user or subscription.user)
+                reversion.set_comment(
+                    f"Voucher for remaining amount created by applying voucher "
+                    f"{self.key} for {subscription}"
+                )
 
         if reduction_amount > 0:
             subscription.apply_price_reduction(reduction_amount, self, user)

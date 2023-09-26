@@ -1,3 +1,4 @@
+import reversion
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -23,12 +24,19 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
             expires = form.cleaned_data["expires"]
 
             for _ in range(0, number_of_vouchers):
-                Voucher.objects.create(
-                    purpose=purpose,
-                    amount=amount,
-                    percentage=percentage,
-                    expires=expires if expires_flag else None,
-                )
+                with reversion.create_revision():
+                    Voucher.objects.create(
+                        purpose=purpose,
+                        amount=amount,
+                        percentage=percentage,
+                        expires=expires if expires_flag else None,
+                    )
+                    if request.user:
+                        reversion.set_user(request.user)
+                        reversion.set_comment(
+                            f"{request.user.get_full_name()} created "
+                            f"{number_of_vouchers} vouchers"
+                        )
 
             return HttpResponseRedirect(reverse("admin:courses_voucher_changelist"))
 
