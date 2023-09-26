@@ -1,11 +1,11 @@
 # Register your models here.
 from typing import Optional
+
 from django.contrib.admin.views.main import ChangeList
 from django.http import HttpRequest
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
-from reversion.models import Version
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
@@ -282,7 +282,17 @@ class SubscribeAdmin(VersionAdmin):
         "state",
         SubscribeCourseListFilter,
     )
-    search_fields = ["user__username", "user__email", "user__first_name", "user__last_name", "partner__username", "partner__email", "partner__first_name", "partner__last_name", "usi"]
+    search_fields = [
+        "user__username",
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "partner__username",
+        "partner__email",
+        "partner__first_name",
+        "partner__last_name",
+        "usi",
+    ]
     readonly_fields = (
         "state",
         "usi",
@@ -471,8 +481,28 @@ class AddressAdmin(admin.ModelAdmin):
 @admin.register(Voucher)
 class VoucherAdmin(VersionAdmin):
     form = VoucherAdminForm
-    list_display = ("key", "purpose", "percentage", "amount", "redeemed_amount", "issued", "issuer", "used_timestamp", "offering", "course", "redeemer", "pdf_file", "expires")
-    list_filter = ("used", "purpose", VoucherOfferingListFilter, VoucherCourseListFilter, VoucherYearUsedListFilter)
+    list_display = (
+        "key",
+        "purpose",
+        "percentage",
+        "amount",
+        "redeemed_amount",
+        "issued",
+        "issuer",
+        "used_timestamp",
+        "offering",
+        "course",
+        "redeemer",
+        "pdf_file",
+        "expires",
+    )
+    list_filter = (
+        "used",
+        "purpose",
+        VoucherOfferingListFilter,
+        VoucherCourseListFilter,
+        VoucherYearUsedListFilter,
+    )
     search_fields = [
         "subscription__user__first_name",
         "subscription__user__last_name",
@@ -481,29 +511,50 @@ class VoucherAdmin(VersionAdmin):
     ]
     actions = [mark_voucher_as_used, admin_action_generate_pdf]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
+
     def percentage(self, voucher: Voucher) -> Optional[str]:
         if voucher.percentage:
             return voucher.percentage
+
     def amount(self, voucher: Voucher) -> Optional[str]:
         if voucher.amount:
             return voucher.amount
+
     def redeemed_amount(self, voucher: Voucher) -> Optional[str]:
-        tot_amount = sum([reduction.amount for reduction in voucher.price_reductions.all()])
+        tot_amount = sum(
+            [reduction.amount for reduction in voucher.price_reductions.all()]
+        )
         if tot_amount != 0:
             return tot_amount
-    def issuer(self, voucher: Voucher) -> Optional[str]:
-        issuer=Version.objects.get_for_object(voucher).order_by("revision__date_created").first().revision.user
+
+    @staticmethod
+    def issuer(voucher: Voucher) -> Optional[str]:
+        first_version = (
+            Version.objects.get_for_object(voucher)
+            .order_by("revision__date_created")
+            .first()
+        )
+
+        if not first_version:
+            return None
+
+        issuer = first_version.revision.user
+
         if issuer:
             return issuer.get_full_name()
+
     def used_timestamp(self, voucher: Voucher) -> Optional[str]:
         if voucher.price_reductions.exists():
             return voucher.price_reductions.first().created_at
+
     def offering(self, voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.course.offering.name
+
     def course(self, voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.course.type.title
+
     def redeemer(self, voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.user.get_full_name()
