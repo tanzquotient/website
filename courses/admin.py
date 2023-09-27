@@ -9,7 +9,6 @@ from reversion.admin import VersionAdmin
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
-from payment.utils.generate_voucher_pdf import admin_action_generate_pdf
 
 
 @admin.register(Offering)
@@ -509,7 +508,7 @@ class VoucherAdmin(VersionAdmin):
         "subscription__user__username",
         "subscription__user__email",
     ]
-    actions = [mark_voucher_as_used, admin_action_generate_pdf]
+    actions = [mark_voucher_as_used]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
 
     def percentage(self, voucher: Voucher) -> Optional[str]:

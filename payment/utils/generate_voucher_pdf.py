@@ -58,8 +58,3 @@ def generate_voucher_pdfs(vouchers: Iterable[Voucher]) -> None:
     for voucher in vouchers:
         generated_file = generate_voucher_pdf(voucher, template_content)
         voucher.pdf_file.save(generated_file.name, generated_file)
-
-
-@admin.action(description="Generate Voucher PDF")
-def admin_action_generate_pdf(modeladmin, request, queryset) -> None:
-    return generate_voucher_pdfs(vouchers=queryset)
