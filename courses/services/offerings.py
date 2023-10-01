@@ -32,7 +32,7 @@ def get_offerings_to_display(preview: bool = False) -> QuerySet[Offering]:
     else:
         queryset = queryset.filter(display=True)
 
-    return queryset.select_related("period").order_by("oder", "-period__date_from")
+    return queryset.select_related("period").order_by("order", "-period__date_from")
 
 
 def get_offerings_by_year(
