@@ -1,7 +1,6 @@
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
-from typing import Optional
 
 from django.db import models
 
@@ -41,11 +40,16 @@ class Offering(models.Model):
         help_text="If true, a separate section for each month / day of week is "
         "displayed on the course page.",
     )
-    limit_courses_per_section = models.SmallIntegerField(
+    limit_courses_per_section = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
         help_text="If set, only that many courses are shown for each section of the "
         "course list. The remaining courses will be shown when expanding the section.",
+    )
+    order = models.PositiveSmallIntegerField(
+        default=10,
+        help_text="Defines how offerings are ordered on the course page. The lower "
+        "the number, the further on top.",
     )
 
     def is_public(self) -> bool:
