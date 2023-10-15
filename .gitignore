@@ -67,6 +67,9 @@ celerybeat.*
 .idea/
 *.iml
 
+# VS Code
+.vscode/
+
 node_modules/
 
 fds_data/
