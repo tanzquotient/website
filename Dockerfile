@@ -3,7 +3,7 @@
 #
 # Dockerfile for the tq-website
 
-FROM eu.gcr.io/vseth-public/base:foxtrott
+FROM eu.gcr.io/vseth-public/base:echo
 
 # Copy cinit file
 COPY cinit.yml /etc/cinit.d/tq-website.yml
@@ -32,8 +32,8 @@ COPY . .
 RUN chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py && chmod +x scripts/post-start.sh
 
 # Install requirements
-RUN python3 -m pip install --upgrade pip --break-system-packages
-RUN python3 -m pip install -r requirements.txt --break-system-packages
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install -r requirements.txt
 
 # Make sure log directory and files exist
 RUN mkdir -p logs && \
