@@ -615,13 +615,6 @@ DATABASES = {
 
 GOOGLE_ANALYTICS_PROPERTY_ID = environ["TQ_GOOGLE_ANALYTICS_PROPERTY_ID"]
 
-# Postfinance Backend
-FDS_HOST = "fdsbc.post.ch"
-FDS_USER = environ["TQ_FDS_USER"]
-FDS_PRIVATE_KEY = environ["TQ_FDS_PRIVATE_KEY"]
-FDS_DATA_PATH = "fds_data"
-FDS_PORT = 22
-
 # Main Bank Account
 PAYMENT_ACCOUNT = {
     "default": {

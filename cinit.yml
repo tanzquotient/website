@@ -1,5 +1,5 @@
 programs:
-# RTFM: https://gitlab.com/veenj/cinit/-/blob/master/doc/README.md#arguments
+  # RTFM: https://gitlab.com/veenj/cinit/-/blob/master/doc/README.md#arguments
   - name: map-envvars
     path: /app/scripts/generate_env.py
     workdir: /app
@@ -55,9 +55,6 @@ programs:
       - SIP_SMTP_TQ_MAIL_FROM_MAIL:
       # Analytics
       - SIP_TQ_GOOGLE_ANALYTICS_PROPERTY_ID:
-      # Postfinance FDS
-      - SIP_TQ_FDS_USER:
-      - SIP_TQ_FDS_PRIVATE_KEY:
       # Account details
       - SIP_TQ_PAYMENT_ACCOUNT_IBAN:
       - SIP_TQ_PAYMENT_ACCOUNT_SWIFT:
@@ -114,4 +111,3 @@ programs:
       - "worker"
       - "--loglevel=info"
     # env: TODO
-
