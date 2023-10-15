@@ -10,7 +10,7 @@ class FinanceFile(Model):
     type = CharField(
         max_length=32,
         choices=FinanceFileType.CHOICES,
-        default=FinanceFileType.POSTFINANCE_XML,
+        default=FinanceFileType.ZKB_CSV,
     )
     processed = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
