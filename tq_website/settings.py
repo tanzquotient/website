@@ -90,6 +90,7 @@ MIDDLEWARE = [
     "cms.middleware.page.CurrentPageMiddleware",
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "hijack.middleware.HijackUserMiddleware",
 ]
 
