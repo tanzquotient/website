@@ -1,10 +1,12 @@
-from locust import HttpUser, task, constant
+from locust import HttpUser, task, constant, between
+from random import randrange
 
 
 class WebsiteUser(HttpUser):
     host = "https://tanzquotient.org"
 
-    # wait_time = constant(1)
+    # simulate realistic user navigation behaviour
+    wait_time = between(0.5, 5)
 
     # ----- Main pages -----
 
@@ -44,7 +46,5 @@ class WebsiteUser(HttpUser):
 
     @task(weight=3)
     def course_details(self):
-        for id in range(100_650, 100_700):
-            self.client.get(
-                "/en/courses/%s/detail/" % id, name="/en/courses/[id]/detail/"
-            )
+        id = randrange(100_650, 100_700)
+        self.client.get("/en/courses/%s/detail/" % id, name="/en/courses/[id]/detail/")
