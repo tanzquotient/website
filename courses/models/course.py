@@ -25,7 +25,6 @@ from courses.models import (
     RegularLesson,
     IrregularLesson,
     RegularLessonException,
-    Offering,
 )
 from partners.models import Partner
 from survey.models import Survey
@@ -221,25 +220,15 @@ class Course(TranslatableModel):
         if free_places == 0:
             return False
 
-        matched_count = len({s for s in self.subscriptions.all() if s.is_matched()})
+        matched_count = self.matched_subscriptions_count()
         total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = len(
-            {
-                s
-                for s in self.subscriptions.all()
-                if s.is_single_with_preference(lead_or_follow)
-            }
-        )
+        current_count_for_preference = self.single_subscriptions_with_preference_count(lead_or_follow)
         free_for_preference = total_for_preference - current_count_for_preference
 
         return free_for_preference >= 1
 
-    def get_free_places_count(self) -> Optional[int]:
-        # No maximum => free places is not defined
-        if self.max_subscribers is None:
-            return None
-
-        active_subscriptions_count = len(
+    def active_subscriptions_count(self) -> int:
+        return len(
             {
                 subscription
                 for subscription in self.subscriptions.all()
@@ -247,7 +236,30 @@ class Course(TranslatableModel):
             }
         )
 
-        total_count = self.max_subscribers - active_subscriptions_count
+    def matched_subscriptions_count(self) -> int:
+        return len(
+            {
+                subscription
+                for subscription in self.subscriptions.all()
+                if subscription.is_matched()
+            }
+        )
+
+    def single_subscriptions_with_preference_count(self, lead_or_follow) -> int:
+        return len(
+            {
+                s
+                for s in self.subscriptions.all()
+                if s.is_single_with_preference(lead_or_follow)
+            }
+        )
+
+    def get_free_places_count(self) -> Optional[int]:
+        # No maximum => free places is not defined
+        if self.max_subscribers is None:
+            return None
+
+        total_count = self.max_subscribers - self.active_subscriptions_count()
         total_count = int(max(total_count, 0))
 
         return total_count
@@ -256,13 +268,10 @@ class Course(TranslatableModel):
         return self.subscriptions.accepted().count()
 
     def get_matched_and_individual_counts(self) -> tuple[int, int, int, int]:
-        matched_count = self.subscriptions.active().matched().count()
-
-        leads_count = self.subscriptions.active().to_match().leaders().count()
-        follows_count = self.subscriptions.active().to_match().followers().count()
-        no_preference_count = (
-            self.subscriptions.active().to_match().no_lead_follow_preference().count()
-        )
+        matched_count = self.matched_subscriptions_count()
+        leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
+        follows_count = self.single_subscriptions_with_preference_count(LeadFollow.FOLLOW)
+        no_preference_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
 
         return matched_count, leads_count, follows_count, no_preference_count
 
@@ -295,10 +304,10 @@ class Course(TranslatableModel):
         if self.type.couple_course:
             return self.number_of_possible_couples() >= self.min_number_of_couples()
 
-        return self.subscriptions.active().count() >= self.min_subscribers
+        return self.active_subscriptions_count() >= self.min_subscribers
 
     def participants_info_title(self) -> str:
-        if self.subscriptions.active().count() == 0:
+        if self.active_subscriptions_count() == 0:
             return _("We did not receive any subscriptions yet.")
 
         if self.type.couple_course:
@@ -315,7 +324,7 @@ class Course(TranslatableModel):
                 return _("Currently there is:")
             return _("Currently there are:")
 
-        count = self.subscriptions.active().count()
+        count = self.active_subscriptions_count()
         if count == 1:
             return _("We received one subscription so far.")
         return _("We received {} subscriptions so far.").format(count)
@@ -385,7 +394,7 @@ class Course(TranslatableModel):
                 self.min_number_of_couples()
             )
 
-        people_needed = self.min_subscribers - self.subscriptions.active().count()
+        people_needed = self.min_subscribers - self.active_subscriptions_count()
         if people_needed == 1:
             return _("At least one more person is needed")
         return _("At least {} more people are needed.").format(people_needed)
