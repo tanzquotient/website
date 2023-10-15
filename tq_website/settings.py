@@ -12,10 +12,10 @@ import os
 from os import environ
 
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.celery import CeleryIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
 from django.core.files.storage import Storage, FileSystemStorage
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 # Load environment if not present
 if "TQ_DEBUG" not in environ.keys():
@@ -607,6 +607,8 @@ DATABASES = {
         "NAME": environ["TQ_DB_NAME"],
         "USER": environ["TQ_DB_USER"],
         "PASSWORD": environ["TQ_DB_PASSWORD"],
+        "CONN_MAX_AGE": 15 * 60,  # 15 minutes
+        "CONN_HEALTH_CHECKS": True,
     }
 }
 
