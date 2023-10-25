@@ -271,7 +271,7 @@ class Course(TranslatableModel):
         matched_count = self.matched_subscriptions_count()
         leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
         follows_count = self.single_subscriptions_with_preference_count(LeadFollow.FOLLOW)
-        no_preference_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
+        no_preference_count = self.single_subscriptions_with_preference_count(LeadFollow.NO_PREFERENCE)
 
         return matched_count, leads_count, follows_count, no_preference_count
 
