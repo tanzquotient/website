@@ -1,23 +1,24 @@
 import logging
 import re
+from collections import Counter
 from numbers import Number
 from typing import Iterable
 
 from django.utils.translation import gettext as _
 
-from courses.models import Subscribe, SubscribeState, OfferingType, Course
+from courses.models import Subscribe, SubscribeState, CourseType
 from utils import TranslationUtils
 
 log = logging.getLogger("tq")
 
 
-def calculate_relevant_experience(self: Subscribe) -> Iterable[Course]:
+def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType, int]]:
     """returns similar courses that the user did before in the system"""
 
     relevant_exp = [style.id for style in self.course.type.styles.all()]
 
-    relevant_courses = [
-        subscription.course
+    relevant_courses = Counter([
+        subscription.course.type
         for subscription in self.user.subscriptions.all()
         if subscription.state in SubscribeState.ACCEPTED_STATES
         and any(
@@ -26,18 +27,13 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[Course]:
                 for style in subscription.course.type.styles.all()
             ]
         )
-    ]
+    ])
 
-    return dict.fromkeys(
-        sorted(
-            relevant_courses,
-            key=lambda course: (
-                10 if course.offering.type == OfferingType.REGULAR else 1
-            )
-            * (course.type.level or 0),
+    return sorted(
+            relevant_courses.items(),
+            key=lambda item: (item[0].level or 0, item[1]),
             reverse=True,
         )
-    )
 
 
 def format_prices(

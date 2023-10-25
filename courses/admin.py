@@ -346,9 +346,13 @@ class SubscribeAdmin(VersionAdmin):
     def get_calculated_experience(subscription: Subscribe) -> str:
         from courses.services import calculate_relevant_experience
 
+        def format_experience_item(item: tuple[CourseType, int]) -> str:
+            type, count = item
+            return str(type) + (f" ({count}x)" if count > 1 else "")
+
         relevant_courses = list(calculate_relevant_experience(subscription))
         limit = 3
-        result = ", ".join(map(lambda c: str(c.type), relevant_courses[:limit]))
+        result = ", ".join(map(format_experience_item, relevant_courses[:limit]))
 
         if len(relevant_courses) > limit:
             result += f", plus {len(relevant_courses) - limit} more"
