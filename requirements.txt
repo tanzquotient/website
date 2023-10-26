@@ -4,13 +4,13 @@ Django==4.2.6
 # Django Extensions
 django-debug-toolbar==4.2.0     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
-django-post-office==3.7.1       # Send and manage emails asynchronously, database based email templates
+django-post-office==3.8.0       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.0.6         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.5.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-ckeditor==6.7.0          # Django admin CKEditor integration
 django-allauth==0.57.0          # Authentication, registration, account management, 3rd party account authentication
-django-photologue==3.16         # Gallery application
+django-photologue==3.17         # Gallery application
 
 # Django CMS
 django-cms==3.11.4              # Open source content management system based on the Django
@@ -30,7 +30,7 @@ django-redis==5.4.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.2                 # For Microsoft Excel Files
 svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
-reportlab==4.0.4                # For generating PDFs and graphics
+reportlab==4.0.6                # For generating PDFs and graphics
 pyyaml==6.0.1                   # Used for generating environment variable file
 
 # SSH
@@ -41,7 +41,7 @@ psycopg[binary]==3.1.12         # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.2         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.28.63                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.28.71                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.1.17                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
@@ -51,10 +51,10 @@ gunicorn==21.2.0                # Used to serve django for production
 sentry_sdk==1.32.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==5.17.0                  # For generating charts and graphs
+plotly==5.18.0                  # For generating charts and graphs
 pytz==2023.3.post1              # timezone calculations
-pylint==3.0.1                   # Default linter
+pylint==3.0.2                   # Default linter
 shortuuid==1.0.11               # For generating short and unique ID's and codes
-django-hijack==3.4.1            # Superuser can impersonate other users
+django-hijack==3.4.2            # Superuser can impersonate other users
 python-dotenv==1.0.0            # Used to load environment variables from .env file
 sphinx-automodapi==0.16.0       # For generating Sphinx API docs
