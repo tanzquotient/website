@@ -32,10 +32,12 @@ Useful resources:
 All configuration lives in an environment file: `.env`.
 The following elaborate scheme of scripts is used to generate it.
 
-The file `variables.yml` is the single source of truth by defining **all** environment variables needed for this project
+The file `variables.yml` is the single source of truth by defining **all** environment
+variables needed for this project
 to run.
 The file is checked into the git repository.
-**Do not modify** `variables.yml` unless you want to define new env variables or remove outdated ones.
+**Do not modify** `variables.yml` unless you want to define new env variables or remove
+outdated ones.
 
 The file `overrides.yml` contains custom values for your setup.
 A basic version will be generated when initializing the project.
@@ -61,6 +63,27 @@ Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the envir
 * Without arguments it will create a `.env` file for Docker Compose and Django to use.
 * `--sip` will read the variables provided by [SIP][sip] and create a `.env` file
 * To use a different overrides file specify `--overrides`
+
+### Restore Database dump
+
+Make sure you have `pg_restore` installed. The easiest way for installing is getting
+`postgresql-client`,
+
+Get a database dump from the IT board member of Tanzquotient or use one of the dumps
+on the Google Drive in the IT folder.
+
+Restore the database:
+
+```shell
+pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
+```
+
+Rename the database to the local name:
+
+```postgresql
+DROP DATABASE tq_website;
+ALTER DATABASE tq_prod_website_tq_website RENAME TO tq_website;
+```
 
 ## Documentation
 
