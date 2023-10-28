@@ -621,6 +621,8 @@ PAYMENT_ACCOUNT = {
         "IBAN": environ["TQ_PAYMENT_ACCOUNT_IBAN"],
         "SWIFT": environ["TQ_PAYMENT_ACCOUNT_SWIFT"],
         "post_number": environ["TQ_PAYMENT_ACCOUNT_POST_NUMBER"],
+        "postal_code_and_city": environ["TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY"],
+        "recipient_name": environ["TQ_PAYMENT_ACCOUNT_RECIPIENT"],
         "recipient": ", ".join(
             [
                 environ["TQ_PAYMENT_ACCOUNT_RECIPIENT"],
