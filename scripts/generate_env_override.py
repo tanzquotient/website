@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Script to generate a fresh overrides.yml.
 #
 # The generated overrides contains variables from two sources:
