@@ -32,6 +32,7 @@ from survey.models import Survey
 
 class Course(TranslatableModel):
     # Mandatory fields
+    offering = models.ForeignKey("Offering", on_delete=models.PROTECT)
     name = models.CharField(max_length=255, blank=False)
     name.help_text = (
         "This name is just for reference and is not displayed anywhere on the website."
@@ -73,7 +74,6 @@ class Course(TranslatableModel):
     room = models.ForeignKey(
         "Room", related_name="courses", blank=True, null=True, on_delete=models.PROTECT
     )
-    offering = models.ForeignKey("Offering", on_delete=models.PROTECT)
     period = models.ForeignKey(
         "Period", blank=True, null=True, on_delete=models.PROTECT
     )
@@ -222,7 +222,9 @@ class Course(TranslatableModel):
 
         matched_count = self.matched_subscriptions_count()
         total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = self.single_subscriptions_with_preference_count(lead_or_follow)
+        current_count_for_preference = self.single_subscriptions_with_preference_count(
+            lead_or_follow
+        )
         free_for_preference = total_for_preference - current_count_for_preference
 
         return free_for_preference >= 1
@@ -270,8 +272,12 @@ class Course(TranslatableModel):
     def get_matched_and_individual_counts(self) -> tuple[int, int, int, int]:
         matched_count = self.matched_subscriptions_count()
         leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
-        follows_count = self.single_subscriptions_with_preference_count(LeadFollow.FOLLOW)
-        no_preference_count = self.single_subscriptions_with_preference_count(LeadFollow.NO_PREFERENCE)
+        follows_count = self.single_subscriptions_with_preference_count(
+            LeadFollow.FOLLOW
+        )
+        no_preference_count = self.single_subscriptions_with_preference_count(
+            LeadFollow.NO_PREFERENCE
+        )
 
         return matched_count, leads_count, follows_count, no_preference_count
 
@@ -637,11 +643,8 @@ class Course(TranslatableModel):
 
         return self
 
-    # position field for ordering columns (grappelli feature)
-    position = models.PositiveSmallIntegerField("Position", default=0)
-
     class Meta:
-        ordering = ["position", "name"]
+        ordering = ["offering", "name"]
 
     def __str__(self) -> str:
         return f"{self.name} ({self.offering})"

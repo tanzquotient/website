@@ -1,8 +1,8 @@
 from django.contrib.admin.filters import SimpleListFilter
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from courses.admin_actions import *
-from reversion.models import Version
 
 
 class SubscribeOfferingListFilter(SimpleListFilter):
@@ -43,34 +43,22 @@ class SubscribeOfferingListFilter(SimpleListFilter):
 
 
 class SubscribeCourseListFilter(SimpleListFilter):
-    # Human-readable title which will be displayed in the
-    # right admin sidebar just above the filter options.
     title = "Course"
 
-    # Parameter for the filter that will be used in the URL query.
     parameter_name = "course"
 
-    def lookups(self, request, model_admin):
-        """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
-        """
+    def lookups(self, request: HttpRequest, model_admin) -> list[tuple[int, str]]:
+        offering_id = (request.GET or dict()).get("offering")
+        if not offering_id:
+            return []
 
-        queryset = Course.objects.filter(active=True)
-        if "offering" in (request.GET or set()):
-            queryset = queryset.filter(offering=request.GET["offering"])
-        return [(c.id, c.name) for c in queryset.all()]
+        return [
+            (c.id, c.name) for c in Course.objects.filter(offering=offering_id).all()
+        ]
 
-    def queryset(self, request, queryset):
-        """
-        Returns the filtered queryset based on the value
-        provided in the query string and retrievable via
-        `self.value()`.
-        """
-
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Subscribe]
+    ) -> QuerySet[Subscribe]:
         if self.value() is not None:
             return self.filter_by_course(queryset, self.value())
         else:
@@ -86,23 +74,28 @@ class SubscribeCourseListFilter(SimpleListFilter):
         :return the filtered queryset
         """
         return queryset.filter(course__id=course_id)
-    
+
+
 class VoucherCourseListFilter(SimpleListFilter):
     title = "Course"
     parameter_name = "course"
 
     def lookups(self, request, model_admin):
         if "offering" in (request.GET or set()):
-            return [(c.id, c.name) for c in Course.objects.filter(offering=request.GET["offering"]).all()]
-        
+            return [
+                (c.id, c.name)
+                for c in Course.objects.filter(offering=request.GET["offering"]).all()
+            ]
+
         return []
 
     def queryset(self, request, queryset):
         if self.value() is not None:
             return queryset.filter(subscription__course=self.value())
-        
+
         return queryset
-    
+
+
 class VoucherOfferingListFilter(SimpleListFilter):
     title = "Offering"
     parameter_name = "offering"
@@ -115,25 +108,31 @@ class VoucherOfferingListFilter(SimpleListFilter):
             return queryset.filter(subscription__course__offering=self.value())
         return queryset
 
+
 class VoucherYearUsedListFilter(SimpleListFilter):
     title = "Year"
     parameter_name = "year_used"
 
     def lookups(self, request, model_admin):
-        years = [reduction.created_at.year for reduction in PriceReduction.objects.filter(used_voucher__isnull=False).all()]
+        years = [
+            reduction.created_at.year
+            for reduction in PriceReduction.objects.filter(
+                used_voucher__isnull=False
+            ).all()
+        ]
         return [(year, year) for year in set(years)]
 
     def queryset(self, request, queryset):
         if self.value() is not None:
-            return queryset.filter(price_reductions__created_at__year = self.value())
+            return queryset.filter(price_reductions__created_at__year=self.value())
         return queryset
-    
+
 
 # Class to filter vouchers by issuer -- not working yet
 # class VoucherIssuerListFilter(SimpleListFilter):
 #     title = "Issuer"
 #     parameter_name = "issuer"
-    
+
 #     def lookups(self, request, model_admin):
 #         users = {version.revision.user for version in Version.objects.get_for_model(Voucher).all() if version.revision.user}
 
