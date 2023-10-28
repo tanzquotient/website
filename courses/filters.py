@@ -6,40 +6,17 @@ from courses.admin_actions import *
 
 
 class SubscribeOfferingListFilter(SimpleListFilter):
-    # Human-readable title which will be displayed in the
-    # right admin sidebar just above the filter options.
     title = "Offering"
-
-    # Parameter for the filter that will be used in the URL query.
     parameter_name = "offering"
 
     def lookups(self, request, model_admin):
-        """
-        Returns a list of tuples. The first element in each
-        tuple is the coded value for the option that will
-        appear in the URL query. The second element is the
-        human-readable name for the option that will appear
-        in the right sidebar.
-        """
-
-        return [(o.id, o.name) for o in Offering.objects.filter(active=True)]
+        return [(o.id, o.name) for o in Offering.objects.all()[:15]]
 
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset
 
-        return self.filter_by_offering(queryset, self.value())
-
-    @staticmethod
-    def filter_by_offering(queryset, offering_id):
-        """
-        This is a helper method that can be overridden in subclasses to make
-        this filter usable for other models.
-        :param queryset: the queryset to be filtered
-        :param offering_id: the id of the offering to keep in queryset
-        :return the filtered queryset
-        """
-        return queryset.filter(course__offering__id=offering_id)
+        return queryset.filter(course__offering__id=self.value())
 
 
 class SubscribeCourseListFilter(SimpleListFilter):
