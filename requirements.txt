@@ -9,7 +9,7 @@ django-reversion==5.0.6         # Version control for model instances, e.g. used
 django-countries==7.5.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-ckeditor==6.7.0          # Django admin CKEditor integration
-django-allauth==0.57.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==0.58.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
@@ -41,7 +41,7 @@ psycopg[binary]==3.1.12         # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.2         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.28.71                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.28.73                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.1.17                   # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
