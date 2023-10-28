@@ -1,4 +1,5 @@
 {% extends "basis.html" %}
+{% load qrbill_tags %}
 {% load i18n %}
 
 {% block lead %}
@@ -39,6 +40,9 @@
                 <p class="mb-0">
                     {% include "payment/account/info.html" %}
                 </p>
+                <div>
+                    {% qrbill_for_subscription subscription %}
+                </div>
             </div>
         {% endif %}
         <div class="rounded-3 overflow-hidden">
