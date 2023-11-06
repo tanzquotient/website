@@ -2,7 +2,6 @@
 from typing import Optional
 
 from django.contrib.admin.views.main import ChangeList
-from django.http import HttpRequest
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -124,6 +123,9 @@ class CourseAdmin(TranslatableAdmin):
     list_display = (
         "name",
         "type",
+        "is_displayed",
+        "is_active",
+        "is_evaluated",
         "subscription_type",
         "offering",
         "period",
@@ -132,8 +134,6 @@ class CourseAdmin(TranslatableAdmin):
         "room",
         "format_prices",
         "format_teachers",
-        "display",
-        "active",
         "cancelled",
         "get_teachers_welcomed",
         "format_preceeding_courses",
@@ -176,7 +176,7 @@ class CourseAdmin(TranslatableAdmin):
             "Billing",
             {"fields": ["price_with_legi", "price_without_legi", "price_special"]},
         ),
-        ("Admin", {"fields": ["display", "active", "cancelled", "evaluated"]}),
+        ("Admin", {"fields": ["display", "active", "cancelled"]}),
     ]
 
     actions = [

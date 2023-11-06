@@ -67,8 +67,6 @@ class Course(TranslatableModel):
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
     )
-    evaluated = models.BooleanField(default=False)
-    evaluated.help_text = "If this course was evaluated by a survey or another way."
 
     # Optional - apply to all course types
     room = models.ForeignKey(
@@ -426,6 +424,18 @@ class Course(TranslatableModel):
             self.offering.display and self.display
         )  # both must be true to be displayed
 
+    is_displayed.boolean = True  # Needs to be set for admin interface to show icons
+
+    def is_active(self) -> bool:
+        return self.offering.active and self.active
+
+    is_active.boolean = True  # Needs to be set for admin interface to show icons
+
+    def is_evaluated(self) -> bool:
+        return self.survey_instances.exists()
+
+    is_evaluated.boolean = True
+
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
 
@@ -442,9 +452,7 @@ class Course(TranslatableModel):
         if not self.is_regular():
             return False
 
-        return (
-            self.offering.active and self.active
-        )  # both must be true to allow subscription
+        return self.is_active()
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
