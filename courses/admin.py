@@ -164,6 +164,7 @@ class CourseAdmin(TranslatableAdmin):
                     "subscription_type",
                     "min_subscribers",
                     "max_subscribers",
+                    "experience_mandatory",
                     "description",
                     "external_url",
                     "partner",
@@ -176,7 +177,10 @@ class CourseAdmin(TranslatableAdmin):
             "Billing",
             {"fields": ["price_with_legi", "price_without_legi", "price_special"]},
         ),
-        ("Admin", {"fields": ["display", "active", "cancelled"]}),
+        (
+            "Admin",
+            {"fields": ["display", "active", "cancelled"]},
+        ),
     ]
 
     actions = [
@@ -267,11 +271,12 @@ class SubscribeAdmin(VersionAdmin):
         "get_user_body_height",
         "get_user_email",
         "get_user_student_status",
+        "experience",
+        "get_calculated_experience",
         "comment",
         "price_to_pay",
         "open_amount",
         "get_payment_state",
-        "get_calculated_experience",
         "date",
     )
     list_display_links = ("id",)

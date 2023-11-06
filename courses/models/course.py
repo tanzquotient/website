@@ -67,6 +67,11 @@ class Course(TranslatableModel):
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
     )
+    experience_mandatory = models.BooleanField(
+        default=False,
+        help_text="If enabled, people registering for this course need to state their "
+        "experience.",
+    )
 
     # Optional - apply to all course types
     room = models.ForeignKey(

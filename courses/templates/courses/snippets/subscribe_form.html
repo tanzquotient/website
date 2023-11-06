@@ -131,6 +131,23 @@
         <input type="hidden" id="single_or_couple" name="single_or_couple" value="s">
     {% endif %}
 
+    {% if course.experience_mandatory %}
+        <div class="mt-3">
+            <label class="form-label" for="experience">
+                <strong>{% trans "Experience" %}</strong>
+            </label>
+            <textarea class="form-control {% if form.experience.errors %} is-invalid {% endif %}"
+                      rows="4" required="required"
+                      placeholder='{% trans "Briefly describe your dancing experience" %}'
+                      name="experience" id="experience">{% if form.experience.value %}{{ form.experience.value }}{% endif %}</textarea>
+            {% for error in form.experience.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="mt-3">
         <label class="form-label" for="comment"><strong>{% trans "Comment" %}</strong></label>
         <textarea class="form-control" rows="4"

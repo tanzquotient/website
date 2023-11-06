@@ -11,6 +11,7 @@ class SubscribeForm(forms.Form):
     lead_follow = forms.ChoiceField(choices=LeadFollow.CHOICES, required=False)
     partner_email = forms.EmailField(required=False)
     comment = forms.CharField(required=False)
+    experience = forms.CharField(required=False)
     general_terms = forms.BooleanField()
 
     def __init__(self, user: User, course: Course, data: dict = None) -> None:
@@ -22,6 +23,17 @@ class SubscribeForm(forms.Form):
         cleaned_data = super().clean()
         single_or_couple = cleaned_data.get("single_or_couple")
         partner_email = cleaned_data.get("partner_email")
+
+        # Mandatory experience?
+        experience = cleaned_data.get("experience")
+        if self.course.experience_mandatory:
+            if experience is None or experience.strip() == "":
+                error = ValidationError(
+                    message=_("This field is required."),
+                    code="experience preference empty",
+                )
+                self.add_error("experience", error)
+                return cleaned_data
 
         # Special validation for couple courses
         if self.course.type.couple_course:
