@@ -7,7 +7,7 @@ from numbers import Number
 from typing import Optional, Union, Iterable
 
 from django.conf import settings
-from django.contrib import auth
+from django.contrib import auth, admin
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet
@@ -424,22 +424,15 @@ class Course(TranslatableModel):
 
         return False
 
+    @admin.display(description="D", boolean=True)
     def is_displayed(self) -> bool:
         return (
             self.offering.display and self.display
         )  # both must be true to be displayed
 
-    is_displayed.boolean = True  # Needs to be set for admin interface to show icons
-
+    @admin.display(description="A", boolean=True)
     def is_active(self) -> bool:
         return self.offering.active and self.active
-
-    is_active.boolean = True  # Needs to be set for admin interface to show icons
-
-    def is_evaluated(self) -> bool:
-        return self.survey_instances.exists()
-
-    is_evaluated.boolean = True
 
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
@@ -486,8 +479,6 @@ class Course(TranslatableModel):
 
     def format_lessons(self) -> str:
         return " & ".join(self.get_lessons_as_strings())
-
-    format_lessons.short_description = "Lessons"
 
     def get_regular_lesson_cancellation_dates(self) -> list[date]:
         def is_applicable(cancelled_date) -> bool:

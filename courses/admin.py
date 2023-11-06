@@ -2,6 +2,7 @@
 from typing import Optional
 
 from django.contrib.admin.views.main import ChangeList
+from django.utils.html import format_html
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -124,20 +125,19 @@ class CourseAdmin(TranslatableAdmin):
     list_display = (
         "name",
         "type",
+        "format_lessons_for_admin",
+        "room",
         "is_displayed",
         "is_active",
+        "is_cancelled",
         "is_evaluated",
         "subscription_type",
         "offering",
-        "period",
-        "format_lessons",
+        "get_period",
         "format_cancellations",
-        "room",
         "format_prices",
         "format_teachers",
-        "cancelled",
         "get_teachers_welcomed",
-        "format_preceeding_courses",
     )
     list_filter = ("offering", "subscription_type", "display", "active")
     search_fields = [
@@ -199,6 +199,21 @@ class CourseAdmin(TranslatableAdmin):
         export_confirmed_subscriptions_xlsx,
         send_course_email,
     ]
+
+    @staticmethod
+    @admin.display(description="Lessons")
+    def format_lessons_for_admin(course: Course) -> str:
+        return format_html("<br/>".join(course.get_lessons_as_strings()))
+
+    @staticmethod
+    @admin.display(description="E", boolean=True)
+    def is_evaluated(course: Course) -> bool:
+        return course.survey_instances.exists()
+
+    @staticmethod
+    @admin.display(description="C", boolean=True)
+    def is_cancelled(course: Course) -> bool:
+        return course.cancelled
 
 
 @admin.register(CourseSuccession)
