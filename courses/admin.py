@@ -5,6 +5,7 @@ from django.contrib.admin.views.main import ChangeList
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
+from reversion.models import Version
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
