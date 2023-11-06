@@ -1,7 +1,7 @@
 programs:
   # RTFM: https://gitlab.com/veenj/cinit/-/blob/master/doc/README.md#arguments
   - name: map-envvars
-    path: /app/scripts/generate_env.py
+    path: /app/scripts/generate_env.sh
     workdir: /app
     user: app-user
     args:
