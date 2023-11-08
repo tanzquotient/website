@@ -123,6 +123,9 @@ def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email
 
 def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
+    context["open_amount"] = subscription.open_amount()
+    context["reductions"] = subscription.sum_of_reductions()
+    context["paid_amount"] = subscription.sum_of_payments()
 
     template = "payment_reminder"
 
