@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from django.db import models
 from django.db.models import SET_NULL
 from djangocms_text_ckeditor.fields import HTMLField
@@ -24,16 +26,20 @@ class Style(TranslatableModel):
         description=HTMLField(verbose_name="[TR] Description", blank=True, null=True)
     )
 
-    def has_external_urls(self):
-        return self.url_info or self.url_video or self.url_playlist
+    def has_external_urls(self) -> bool:
+        return (
+            self.url_info is not None
+            or self.url_video is not None
+            or self.url_playlist is not None
+        )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{}".format(self.name)
 
     class Meta:
         ordering = ["name"]
 
-    def is_child_of(self, style):
+    def is_child_of(self, style: "Style") -> bool:
         current_style = self
         while current_style is not None:
             current_style = current_style.parent_style
@@ -41,3 +47,18 @@ class Style(TranslatableModel):
                 return True
 
         return False
+
+    def descendants(self) -> Iterable["Style"]:
+        yield self
+        for child in self.children.all():
+            for descendant in child.descendants():
+                yield descendant
+
+    def ancestors(self) -> Iterable["Style"]:
+        yield self
+        if self.parent_style:
+            for ancestor in self.parent_style.ancestors():
+                yield ancestor
+
+    def related(self) -> Iterable["Style"]:
+        return set(self.descendants()).union(set(self.ancestors()))

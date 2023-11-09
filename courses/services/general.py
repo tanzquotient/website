@@ -17,23 +17,26 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType,
 
     relevant_exp = [style.id for style in self.course.type.styles.all()]
 
-    relevant_courses = Counter([
-        subscription.course.type
-        for subscription in self.user.subscriptions.all()
-        if subscription.state in SubscribeState.ACCEPTED_STATES
-        and any(
-            [
-                style.id in relevant_exp
-                for style in subscription.course.type.styles.all()
-            ]
-        )
-    ])
+    relevant_courses = Counter(
+        [
+            subscription.course.type
+            for subscription in self.user.subscriptions.all()
+            if subscription.state in SubscribeState.ACCEPTED_STATES
+            and any(
+                [
+                    related_style.id in relevant_exp
+                    for style in subscription.course.type.styles.all()
+                    for related_style in style.related()
+                ]
+            )
+        ]
+    )
 
     return sorted(
-            relevant_courses.items(),
-            key=lambda item: (item[0].level or 0, item[1]),
-            reverse=True,
-        )
+        relevant_courses.items(),
+        key=lambda item: (item[0].level or 0, item[1]),
+        reverse=True,
+    )
 
 
 def format_prices(
