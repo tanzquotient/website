@@ -1,5 +1,6 @@
 class RejectionReason:
     UNKNOWN = "unknown"
+    REQUIREMENTS_NOT_MET = "requirements_not_met"
     OVERBOOKED = "overbooked"
     NO_PARTNER = "no_partner"
     USER_CANCELLED = "user_cancelled"
@@ -9,6 +10,7 @@ class RejectionReason:
 
     CHOICES = (
         (UNKNOWN, "Unknown"),
+        (REQUIREMENTS_NOT_MET, "User and/or partner does not meet requirements"),
         (OVERBOOKED, "Overbooked"),
         (NO_PARTNER, "No partner found"),
         (USER_CANCELLED, "User cancelled the subscription"),

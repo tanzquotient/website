@@ -294,6 +294,7 @@ class SubscribeAdmin(VersionAdmin):
         "open_amount",
         "get_payment_state",
         "date",
+        "get_additional_info",
     )
     list_display_links = ("id",)
     list_filter = (
@@ -401,6 +402,15 @@ class SubscribeAdmin(VersionAdmin):
             # this user didn't pay for other courses
             r += ", owes {} more".format(c)
         return r
+
+    @staticmethod
+    @admin.action(description="Additional Info")
+    def get_additional_info(subscription: Subscribe) -> Optional[str]:
+        if subscription.rejections.exists():
+            reason = ", ".join([r.reason for r in subscription.rejections.all()])
+            return f"Rejected: {reason}"
+
+        return None
 
 
 @admin.register(Confirmation)

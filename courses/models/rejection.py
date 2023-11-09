@@ -1,6 +1,7 @@
 from django.db import models
-from . import RejectionReason
 from post_office.models import Email
+
+from . import RejectionReason
 
 
 class Rejection(models.Model):
@@ -20,5 +21,5 @@ class Rejection(models.Model):
     mail_sent.help_text = "If this rejection was communicated to user by email."
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "({}) rejected at {}".format(self.subscription, self.date)

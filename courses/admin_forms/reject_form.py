@@ -10,5 +10,5 @@ class RejectForm(forms.Form):
         label=_("Select Reason"), choices=RejectionReason.CHOICES
     )
     send_email = forms.BooleanField(
-        label=_("Inform subscriber about cancellation"), required=False
+        label=_("Inform subscriber about cancellation"), initial=True
     )
