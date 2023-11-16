@@ -115,7 +115,18 @@ class SubscribeForm(forms.Form):
                     self.add_error("partner_email", error)
                     return cleaned_data
 
-                partner = User.objects.get(email__iexact=partner_email)
+                partner = User.objects.get(email=partner_email)
+                if partner is None and User.objects.filter(email__iexact=partner_email).count() > 1:
+                    error = ValidationError(
+                        message=_(
+                            "Please check the upper/lower casing of this email address."
+                        ),
+                        code="multiple users for partner email",
+                    )
+                    self.add_error("partner_email", error)
+                    return cleaned_data
+                else:
+                    partner = User.objects.get(email__iexact=partner_email)
 
                 if self.user == partner:
                     error = ValidationError(
