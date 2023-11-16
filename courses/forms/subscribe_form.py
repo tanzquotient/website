@@ -125,7 +125,7 @@ class SubscribeForm(forms.Form):
                     )
                     self.add_error("partner_email", error)
                     return cleaned_data
-                else:
+                elif partner is None:
                     partner = User.objects.get(email__iexact=partner_email)
 
                 if self.user == partner:
