@@ -105,7 +105,7 @@ class SubscribeForm(forms.Form):
                     self.add_error("partner_email", error)
                     return cleaned_data
 
-                if not User.objects.filter(email=partner_email).exists():
+                if not User.objects.filter(email__iexact=partner_email).exists(): # iexact: case insensitive
                     error = ValidationError(
                         message=_(
                             "No user found with this email address. Please make sure your partner has an account"
