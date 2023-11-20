@@ -115,7 +115,7 @@ class SubscribeForm(forms.Form):
                     self.add_error("partner_email", error)
                     return cleaned_data
 
-                partner = User.objects.get(email=partner_email)
+                partner = User.objects.filter(email=partner_email).first()
                 if partner is None and User.objects.filter(email__iexact=partner_email).count() > 1:
                     error = ValidationError(
                         message=_(
