@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
-from icalendar import Calendar, Event, vDatetime, vText,vCalAddress
+from icalendar import Calendar, Event, vCalAddress, vDatetime, vText
 
 from courses.forms import UserEditForm, create_initial_from_user
 from courses.utils import find_duplicate_users, merge_duplicate_users
@@ -22,15 +22,8 @@ from utils.tables.table_view_or_export import table_view_or_export
 
 from . import figures, services
 from .forms.subscribe_form import SubscribeForm
-from .models import (
-    Course,
-    Style,
-    Offering,
-    OfferingType,
-    Subscribe,
-    IrregularLesson,
-    RegularLessonException,
-)
+from .models import (Course, IrregularLesson, Offering, OfferingType,
+                     RegularLessonException, Style, Subscribe)
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
 
@@ -168,16 +161,16 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
         event.add('summary', vText(course.name))
         event.add('description', vText(course.format_description()))
         event.add('location', vText(course.room))
-        # add teachers as attendees..
-        # Could also add the first one as origanizer if needed
-        # Could possibly also add students, though careful with privacy
-        for teacher in teachers:
-            if teacher.email is not None:
-                # exposing the E-Mail is not ok, maybe don't want to 
-                attendee = vCalAddress("MAILTO:{}".format("kontakt@tanzquotient.org"))#teacher.email))
-                attendee.params['cn'] = vText(teacher.first_name + " "  + teacher.last_name)
-                attendee.params['ROLE'] = vText('Teacher')
-                event.add('attendee', attendee, encode=0)
+        # Attendees:
+        # Could possibly add teachers, students, etc.
+        # However, exposing the E-Mail is not ok, and attendees don't exist without,
+        # so we don't add any attendees. If we did, the code would look like this:
+        # for teacher in teachers:
+        #     if teacher.email is not None:
+        #         attendee = vCalAddress("MAILTO:{}".format(teacher.email))
+        #         attendee.params['cn'] = vText(teacher.first_name + " "  + teacher.last_name)
+        #         attendee.params['ROLE'] = vText('Teacher')
+        #         event.add('attendee', attendee, encode=0)
         cal.add_component(event)
 
     return HttpResponse(cal.to_ical(), content_type='text/calendar')
