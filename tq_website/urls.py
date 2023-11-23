@@ -49,6 +49,7 @@ urlpatterns += i18n_patterns(
     path("accounts/", include("allauth.urls")),
     path("password/", courses_views.change_password, name="change_password"),
     path("profile/courses", courses_views.user_courses, name="user_courses"),
+    path("profile/<int:user_id>/courses.ical", courses_views.user_courses_ical, name="user_courses_ical"),
     path("profile/edit", courses_views.ProfileView.as_view(), name="edit_profile"),
     path("profile/", courses_views.user_profile, name="profile"),
     path("survey/", include(survey.urls, namespace="survey")),

@@ -1,10 +1,14 @@
+import hashlib
 import logging
+import os
+from typing import Union
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -15,6 +19,7 @@ from django.views.generic.edit import FormView
 from icalendar import Calendar, Event, vCalAddress, vDatetime, vText
 
 from courses.forms import UserEditForm, create_initial_from_user
+from courses.models.regular_lesson import RegularLesson
 from courses.utils import find_duplicate_users, merge_duplicate_users
 from tq_website import settings
 from utils.plots import plot_figure
@@ -147,6 +152,17 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     return render(request, "courses/course_detail.html", context)
 
 
+def _lesson_to_ical_event(course: Course, lesson: list[Union[RegularLesson, IrregularLesson]]):
+    event = Event()
+    event['dtstart'] = vDatetime(lesson.time_from)
+    event['dtend'] = vDatetime(lesson.time_to)
+    event.add('summary', vText(course.name))
+    event.add('description', vText(course.format_description()))
+    event.add('location', vText(course.room))
+
+    return event
+
+
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
     course = get_object_or_404(Course.objects, id=course_id)
     cal = Calendar()
@@ -155,12 +171,7 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
     lessons = course.get_lessons()
     teachers = course.get_teachers()
     for lesson in lessons:
-        event = Event()
-        event['dtstart'] = vDatetime(lesson.time_from)
-        event['dtend'] = vDatetime(lesson.time_to)
-        event.add('summary', vText(course.name))
-        event.add('description', vText(course.format_description()))
-        event.add('location', vText(course.room))
+        event = _lesson_to_ical_event(course, lesson)
         # Attendees:
         # Could possibly add teachers, students, etc.
         # However, exposing the E-Mail is not ok, and attendees don't exist without,
@@ -404,9 +415,37 @@ def user_courses(request: HttpRequest) -> HttpResponse:
     template_name = "user/user_courses.html"
     context = {
         "user": request.user,
+        "token": _user_specific_token(request.user),
         "payment_account": settings.PAYMENT_ACCOUNT["default"],
     }
     return render(request, template_name, context)
+
+
+def _user_specific_token(user: User) -> str:
+    # without needing to extend the user, we can use its joined date (& time!),
+    # salt it with the secret key, and we should have an acceptable (-> hardly guessable) hash
+    str_to_hash = "{}-{}-{}".format(user.date_joined,
+                                    os.environ.get("SECRET_KEY"), user.username)
+    return hashlib.sha256(str_to_hash.encode()).hexdigest()
+
+
+def user_courses_ical(request: HttpRequest, user_id: int, security_token: str) -> HttpResponse:
+    user = get_object_or_404(User, pk=user_id)
+
+    security_token = request.GET.get('token', '')
+    if (security_token != _user_specific_token(user)):
+        raise PermissionDenied()
+
+    cal = Calendar()
+    cal.add('version', '2.0')
+    cal.add('prodid', "-//Tanzquotient user calendar {}//mxm.dk//".format(user_id))
+    subscriptions = user.profile.get_subscriptions()
+    for course in subscriptions:
+        lessons = course.get_lessons()
+        for lesson in lessons:
+            cal.add_component(_lesson_to_ical_event(course, lesson))
+
+    return HttpResponse(cal.to_ical(), content_type='text/calendar')
 
 
 @login_required
