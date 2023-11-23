@@ -6,28 +6,45 @@ import djangocms_text_ckeditor.fields
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('faq', '0002_auto_20200215_1336'), ('faq', '0003_alter_questiontranslation_answer_text'), ('faq', '0004_alter_faqpluginmodel_cmsplugin_ptr')]
+    replaces = [
+        ("faq", "0002_auto_20200215_1336"),
+        ("faq", "0003_alter_questiontranslation_answer_text"),
+        ("faq", "0004_alter_faqpluginmodel_cmsplugin_ptr"),
+    ]
 
     dependencies = [
-        ('cms', '0022_auto_20180620_1551'),
-        ('faq', '0001_squashed_0008_auto_20190904_1552'),
+        ("cms", "0022_auto_20180620_1551"),
+        ("faq", "0001_squashed_0008_auto_20190904_1552"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='faqpluginmodel',
-            name='question_group',
-            field=models.ForeignKey(help_text='Question group with questions to be displayed in this plugin.', on_delete=django.db.models.deletion.PROTECT, to='faq.questiongroup'),
+            model_name="faqpluginmodel",
+            name="question_group",
+            field=models.ForeignKey(
+                help_text="Question group with questions to be displayed in this plugin.",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="faq.questiongroup",
+            ),
         ),
         migrations.AlterField(
-            model_name='questiontranslation',
-            name='answer_text',
-            field=djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True, verbose_name='[TR] Answer text'),
+            model_name="questiontranslation",
+            name="answer_text",
+            field=djangocms_text_ckeditor.fields.HTMLField(
+                blank=True, null=True, verbose_name="[TR] Answer text"
+            ),
         ),
         migrations.AlterField(
-            model_name='faqpluginmodel',
-            name='cmsplugin_ptr',
-            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='%(app_label)s_%(class)s', serialize=False, to='cms.cmsplugin'),
+            model_name="faqpluginmodel",
+            name="cmsplugin_ptr",
+            field=models.OneToOneField(
+                auto_created=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                parent_link=True,
+                primary_key=True,
+                related_name="%(app_label)s_%(class)s",
+                serialize=False,
+                to="cms.cmsplugin",
+            ),
         ),
     ]

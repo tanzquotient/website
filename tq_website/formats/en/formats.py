@@ -1,1 +1,1 @@
-DATE_FORMAT = 'l, N j, Y'
+DATE_FORMAT = "l, N j, Y"

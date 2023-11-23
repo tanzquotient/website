@@ -7,7 +7,6 @@ from . import export_zip, clean_filename
 
 def write_vcard(data, file):
     for user in data:
-
         card = "BEGIN:VCARD\n"
         card += "VERSION:3.0\n"
         card += f"EMAIL:{user.email}\n"
@@ -25,18 +24,19 @@ def write_vcard(data, file):
 
 
 def export_vcard(title, data, multiple=False):
-
     if multiple:
         files = dict()
         for count, item in enumerate(data):
             file = StringIO()
-            write_vcard(item['data'], file)
-            files["{}_{}.vcf".format(count + 1, item['name'])] = file.getvalue()
+            write_vcard(item["data"], file)
+            files["{}_{}.vcf".format(count + 1, item["name"])] = file.getvalue()
 
         return export_zip(title, files)
 
     else:
-        response = HttpResponse(content_type='text/vcard')
-        response['Content-Disposition'] = 'attachment; filename="{}.vcf"'.format(clean_filename(title))
+        response = HttpResponse(content_type="text/vcard")
+        response["Content-Disposition"] = 'attachment; filename="{}.vcf"'.format(
+            clean_filename(title)
+        )
         write_vcard(data, response)
         return response

@@ -15,12 +15,18 @@
         {% endif %}
 
         {% if user.is_staff %}
+            <div class="my-4">
+                <a href="{% url "survey:changed_answers" %}" class="btn btn-sm btn-outline-dark"><i
+                        class="fa-solid fa-eye"></i> {% trans "Show changed answers" %}</a>
+            </div>
             {% include "survey/components/filter.html" %}
         {% endif %}
 
         <div class="alert alert-info" role="alert">
             <div class="d-flex justify-content-between">
-                <div class="align-self-center"><strong>{{ answers_count }} {% trans "answers" %}</strong>  ({{ survey_instances.count }} {% trans "survey invitations sent" %})</div>
+                <div class="align-self-center"><strong>{{ answers_count }} {% trans "answers" %}</strong>
+                    ({{ survey_instances.count }} {% trans "survey invitations sent" %})
+                </div>
                 {% if user.is_staff %}
                     {% include "survey/components/download.html" %}
                 {% endif %}
@@ -35,7 +41,7 @@
                 <div class="row row-cols-1 row-cols-lg-2 g-4">
                     {% for question in group.question_set.all %}
                         <div class="col">
-                            {% survey_question question selected_offering selected_course %}
+                            {% survey_question question selected_offering selected_course user %}
                         </div>
                     {% endfor %}
                 </div>

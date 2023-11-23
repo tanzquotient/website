@@ -7,12 +7,14 @@ from utils import TranslationUtils
 
 
 class Choice(TranslatableModel):
-    question = models.ForeignKey('Question', blank=False, null=True, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        "Question", blank=False, null=True, on_delete=models.CASCADE
+    )
     position = models.PositiveSmallIntegerField("Position", default=0)
     value = models.CharField(max_length=32)
 
     translations = TranslatedFields(
-        label=models.CharField(verbose_name='[TR] Label', max_length=255)
+        label=models.CharField(verbose_name="[TR] Label", max_length=255)
     )
 
     def get_question_name(self) -> str:
@@ -32,4 +34,4 @@ class Choice(TranslatableModel):
         return self.value
 
     class Meta:
-        ordering = ['position']
+        ordering = ["position"]

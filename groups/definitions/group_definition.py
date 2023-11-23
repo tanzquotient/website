@@ -1,5 +1,4 @@
 class GroupDefinition:
-
     def __init__(self, name: str, predicate=None) -> None:
         self.name: str = name
         self.predicate = predicate

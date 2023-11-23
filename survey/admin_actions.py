@@ -16,7 +16,9 @@ def let_url_expire_now(modeladmin, request, queryset) -> None:
     queryset.update(url_expire_date=timezone.now())
 
 
-@admin.action(description="Make a copy of selected surveys (survey instances are not copied)")
+@admin.action(
+    description="Make a copy of selected surveys (survey instances are not copied)"
+)
 def copy_survey(modeladmin, request, queryset) -> None:
     for s in queryset:
         s.copy()

@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0002_squashed'),
+        ("courses", "0002_squashed"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userprofile',
-            name='zemis_number',
-            field=models.CharField(blank=True, help_text='Every registered foreigner in switzerland gets a ZEMIS number.', max_length=255, null=True),
+            model_name="userprofile",
+            name="zemis_number",
+            field=models.CharField(
+                blank=True,
+                help_text="Every registered foreigner in switzerland gets a ZEMIS number.",
+                max_length=255,
+                null=True,
+            ),
         ),
     ]

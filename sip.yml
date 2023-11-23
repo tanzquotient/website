@@ -29,8 +29,8 @@ resources:
     memory: 1.5G
     cpu: 1
   limits:
-     memory: 3G
-     cpu: 2
+    memory: 3G
+    cpu: 2
 
 # When editing those, you MUST update the deployment(s) with sipctl as well!
 env:
@@ -42,14 +42,6 @@ env:
     secret:
       key: tq-google-analytics-property-id
       create: provided
-  - name: SIP_TQ_FDS_USER
-    secret:
-      key: tq-fds-user
-      create: provided
-  - name: SIP_TQ_FDS_PRIVATE_KEY
-    secret:
-      key: tq-fds-private-key
-      value: provided
   - name: SIP_TQ_PAYMENT_ACCOUNT_IBAN
     secret:
       key: tq-payment-account-iban
@@ -118,4 +110,3 @@ env:
     secret:
       key: tq-mail-from-mail
       value: provided
-

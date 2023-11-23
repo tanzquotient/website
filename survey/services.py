@@ -8,16 +8,18 @@ from utils import export
 from survey.models import Survey, SurveyInstance
 
 
-def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = None, course: Optional[Course] = None,
-                   export_format: str = None) -> HttpResponse:
-
+def export_surveys(
+    surveys: Iterable[Survey],
+    offering: Optional[Offering] = None,
+    course: Optional[Course] = None,
+    export_format: str = None,
+) -> HttpResponse:
     export_data = {}
     export_format = export_format or "excel"
 
     multiple_surveys = len(list(surveys)) > 1
 
     for survey in surveys:
-
         questions = []
         for group in survey.questiongroup_set.all():
             questions += list(group.question_set.all())
@@ -34,22 +36,27 @@ def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = Non
         if course:
             survey_instances = survey_instances.filter(course=course)
 
-        for instance in survey_instances.prefetch_related('answers', 'answers__question').all():
+        for instance in survey_instances.prefetch_related(
+            "answers", "answers__question"
+        ).all():
             if not instance.has_answers():
                 instance.is_completed = False
                 instance.save()
                 continue
 
-            key = f"{key_prefix}{instance.course.name}"
+            course_name = instance.course.name if instance.course else ""
+            key = f"{key_prefix}{course_name}"
             if key not in export_data:
                 export_data[key] = [header]
 
             # only take the newest answer if multiple submissions
-            answers = instance.answers.order_by('-id')
+            answers = instance.answers.order_by("-id")
             row = [
-                f"{instance.user.first_name} {instance.user.last_name}" if instance.user else "",
+                f"{instance.user.first_name} {instance.user.last_name}"
+                if instance.user
+                else "",
                 f"{instance.user.email}" if instance.user else "",
-                instance.course.name if instance.course else "",
+                course_name,
             ]
             for question in questions:
                 answers_for_question = answers.filter(question=question)
@@ -68,10 +75,12 @@ def export_surveys(surveys: Iterable[Survey], offering: Optional[Offering] = Non
         multiple = True
         data = [dict(name=k, data=v) for k, v in export_data.items()]
 
-    return export(export_format=export_format,
-                  title="Survey results",
-                  data=data,
-                  multiple=multiple)
+    return export(
+        export_format=export_format,
+        title="Survey results",
+        data=data,
+        multiple=multiple,
+    )
 
 
 def get_or_create_survey_instance(survey: Survey, user: User) -> SurveyInstance:

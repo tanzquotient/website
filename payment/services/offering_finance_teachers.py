@@ -28,25 +28,31 @@ def _courses(offerings: Sequence[Offering]) -> list:
     courses = []
 
     header = [
-        _('First name'),
-        _('Last name'),
-        _('Courses'),
-        _('Hourly Wages'),
-        _('Hours'),
-        _('Course Totals'),
-        _('Note'),
+        _("First name"),
+        _("Last name"),
+        _("Courses"),
+        _("Hourly Wages"),
+        _("Hours"),
+        _("Course Totals"),
+        _("Note"),
     ]
 
     multiple_offerings = len(offerings) > 1
     if multiple_offerings:
-        header += ['Offering']
+        header += ["Offering"]
     courses.append(header)
 
-    teachings = Teach.objects \
-        .filter(course__offering__in=offerings) \
-        .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL) \
-        .order_by('teacher__first_name', 'teacher__last_name', 'course__offering_id', 'course__name') \
+    teachings = (
+        Teach.objects.filter(course__offering__in=offerings)
+        .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+        .order_by(
+            "teacher__first_name",
+            "teacher__last_name",
+            "course__offering_id",
+            "course__name",
+        )
         .all()
+    )
 
     for idx, teaching in enumerate(teachings):
         teacher = teaching.teacher
@@ -59,17 +65,21 @@ def _courses(offerings: Sequence[Offering]) -> list:
         if multiple_offerings:
             row.append(course.offering or "")
 
-        hours = Decimal(course.get_total_time()['total']) if not course.cancelled else 0
+        hours = course.get_total_hours() if not course.cancelled else 0
         total = teaching.hourly_wage * hours
 
         notes = []
         if course.cancelled:
-            notes.append(_('Course cancelled'))
+            notes.append(_("Course cancelled"))
         else:
             if course.teaching.count() > 2:
-                notes.append(_('Course with more than two teachers, please check who taught how many lessons.'))
+                notes.append(
+                    _(
+                        "Course with more than two teachers, please check who taught how many lessons."
+                    )
+                )
             if course.get_confirmed_count() == 0:
-                notes.append(_('No participants'))
+                notes.append(_("No participants"))
 
         row += [
             course.name,
@@ -86,21 +96,30 @@ def _courses(offerings: Sequence[Offering]) -> list:
 
 def _personal_details(offerings: Sequence[Offering]) -> list:
     personal_details = []
-    header = [_('Last name'), _('First name'), _('E-mail'), _('Phone'), _('Address')]
-    header += [_('Birthdate'), _('Nationality'), _('Residence Permit'), _('AHV Number'), _('Zemis Number'), _('IBAN'),
-               _('Bank')]
+    header = [_("Last name"), _("First name"), _("E-mail"), _("Phone"), _("Address")]
+    header += [
+        _("Birth date"),
+        _("Nationality"),
+        _("Residence permit"),
+        _("AHV number"),
+        _("Zemis number"),
+        _("IBAN"),
+        _("Bank"),
+    ]
 
     personal_details.append(header)
 
-    teachers = User.objects \
-        .filter(teaching_courses__course__offering__in=offerings) \
-        .exclude(teaching_courses__course__subscription_type=CourseSubscriptionType.EXTERNAL) \
-        .order_by('first_name', 'last_name') \
-        .distinct() \
+    teachers = (
+        User.objects.filter(teaching_courses__course__offering__in=offerings)
+        .exclude(
+            teaching_courses__course__subscription_type=CourseSubscriptionType.EXTERNAL
+        )
+        .order_by("first_name", "last_name")
+        .distinct()
         .all()
+    )
 
     for teacher in teachers:
-
         row = [
             teacher.first_name or "",
             teacher.last_name or "",
@@ -111,11 +130,14 @@ def _personal_details(offerings: Sequence[Offering]) -> list:
             str(teacher.profile.nationality),
             teacher.profile.residence_permit,
             teacher.profile.ahv_number,
-            teacher.profile.zemis_number
+            teacher.profile.zemis_number,
         ]
 
         if teacher.profile.bank_account:
-            row += [teacher.profile.bank_account.iban, teacher.profile.bank_account.bank_info_str()]
+            row += [
+                teacher.profile.bank_account.iban,
+                teacher.profile.bank_account.bank_info_str(),
+            ]
         else:
             row += [""] * 2
 

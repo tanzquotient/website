@@ -11,11 +11,11 @@ class QuestionInline(TranslatableTabularInline, admin.TabularInline):
 
 @admin.register(QuestionGroup)
 class QuestionGroupAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ("name",)
     inlines = (QuestionInline,)
 
 
 @admin.register(Question)
 class QuestionAdmin(TranslatableAdmin):
-    list_display = ('question_text', 'display', 'question_group')
-    search_fields = ['translations__question_text', 'translations__answer_text']
+    list_display = ("question_text", "display", "question_group")
+    search_fields = ["translations__question_text", "translations__answer_text"]

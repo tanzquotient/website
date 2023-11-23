@@ -3,7 +3,9 @@ from post_office.models import Email
 
 
 class TeacherWelcome(models.Model):
-    teach = models.ForeignKey('courses.Teach', related_name='teacher_welcomes', on_delete=models.CASCADE)
+    teach = models.ForeignKey(
+        "courses.Teach", related_name="teacher_welcomes", on_delete=models.CASCADE
+    )
     date = models.DateField(blank=False, null=False, auto_now_add=True)
     date.help_text = "The date when the welcome mail was sent to the teacher."
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)

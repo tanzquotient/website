@@ -5,7 +5,7 @@ from post_office.models import Email
 
 from . import send_email
 
-log = logging.getLogger('tq')
+log = logging.getLogger("tq")
 
 
 def send_all_emails(emails: Iterable[dict]) -> list[Email]:

@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0005_alter_period_date_from_alter_period_date_to'),
+        ("courses", "0005_alter_period_date_from_alter_period_date_to"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='offering',
-            name='opens_soon',
-            field=models.BooleanField(default=False, help_text='If set to true, the sign up page says "opens soon" instead of "closed"'),
+            model_name="offering",
+            name="opens_soon",
+            field=models.BooleanField(
+                default=False,
+                help_text='If set to true, the sign up page says "opens soon" instead of "closed"',
+            ),
         ),
     ]

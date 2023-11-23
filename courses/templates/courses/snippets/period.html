@@ -1,5 +1,1 @@
-{% if is_custom %}
-    <em>{{ from|date:"d. N Y" }} - {{ to|date:"d. N Y" }} (!)</em>
-{% else %}
-    {{ from|date:"d. N Y" }} - {{ to|date:"d. N Y" }}
-{% endif %}
+{{ from|date:"d. N" }} - {{ to|date:"d. N" }}

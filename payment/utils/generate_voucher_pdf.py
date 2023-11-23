@@ -15,13 +15,15 @@ from courses.models import Voucher
 
 
 def _get_voucher_template() -> str:
-    template_file = os.path.join(settings.BASE_DIR, 'payment', 'Voucher.svg')
-    with open(template_file, encoding='utf-8') as file:
+    template_file = os.path.join(settings.BASE_DIR, "payment", "Voucher.svg")
+    with open(template_file, encoding="utf-8") as file:
         template_content = file.read()
         return template_content
 
 
-def generate_voucher_pdf(voucher: Voucher, template_content: Optional[str] = None) -> ContentFile:
+def generate_voucher_pdf(
+    voucher: Voucher, template_content: Optional[str] = None
+) -> ContentFile:
     filename = "Voucher-" + voucher.key + ".pdf"
 
     issued = voucher.issued.strftime("%d.%m.%Y")
@@ -30,23 +32,24 @@ def generate_voucher_pdf(voucher: Voucher, template_content: Optional[str] = Non
     if template_content is None:
         template_content = _get_voucher_template()
 
-    content = template_content \
-        .replace('{{ issued }}', issued) \
-        .replace("{{ expires }}", expires) \
-        .replace("{{ code }}", voucher.key) \
+    content = (
+        template_content.replace("{{ issued }}", issued)
+        .replace("{{ expires }}", expires)
+        .replace("{{ code }}", voucher.key)
         .replace("{{ value }}", voucher.value_string())
+    )
     tmpdir = gettempdir()
-    temp_path = os.path.join(tmpdir, 'voucher.svg')
+    temp_path = os.path.join(tmpdir, "voucher.svg")
     with open(temp_path, mode="wb") as temp_file:
-        temp_file.write(content.encode('utf-8'))
+        temp_file.write(content.encode("utf-8"))
 
     drawing = svg2rlg(temp_path)
     path = os.path.join(tmpdir, filename)
     renderPDF.drawToFile(drawing, path)
-    with open(path, "r", encoding='latin-1') as file:
+    with open(path, "r", encoding="latin-1") as file:
         content = file.read()
 
-    return ContentFile(content.encode('utf-8'), name=filename)
+    return ContentFile(content.encode("utf-8"), name=filename)
 
 
 def generate_voucher_pdfs(vouchers: Iterable[Voucher]) -> None:
@@ -55,8 +58,3 @@ def generate_voucher_pdfs(vouchers: Iterable[Voucher]) -> None:
     for voucher in vouchers:
         generated_file = generate_voucher_pdf(voucher, template_content)
         voucher.pdf_file.save(generated_file.name, generated_file)
-
-
-@admin.action(description="Generate Voucher PDF")
-def admin_action_generate_pdf(modeladmin, request, queryset) -> None:
-    return generate_voucher_pdfs(vouchers=queryset)

@@ -6,11 +6,11 @@ from courses.models import Offering
 
 
 class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
-    template_name = 'finance/offering/teachers/index.html'
-    permission_required = 'payment.change_payment'
+    template_name = "finance/offering/teachers/index.html"
+    permission_required = "payment.change_payment"
 
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)
-        context['active'] = "teachers"
-        context['offering'] = get_object_or_404(Offering, id=kwargs['offering'])
+        context["active"] = "teachers"
+        context["offering"] = get_object_or_404(Offering, id=kwargs["offering"])
         return context

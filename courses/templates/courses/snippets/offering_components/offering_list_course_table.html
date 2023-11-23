@@ -1,0 +1,27 @@
+{% load i18n %}
+
+<table class="table table-striped mb-0">
+    <thead>
+    <tr>
+        <th>{% trans "Course" %}</th>
+        <th>{% trans "Time" %}</th>
+        <th>
+            {% if offering.is_partner_offering %}
+                {% trans "Partner" %}
+            {% else %}
+                {% trans "Location" %}
+            {% endif %}
+        </th>
+        {% if offering.is_partner_offering %}
+            <th>{% trans "External link" %}</th>
+        {% elif not hide_subscription_status %}
+            <th>{% trans "Status" %}</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in d.courses|slice:limit_per_section %}
+        {% include "courses/snippets/offering_components/offering_list_course_entry_row.html" %}
+    {% endfor %}
+    </tbody>
+</table>

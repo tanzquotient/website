@@ -1,38 +1,38 @@
-#!/bin/bash
+#!/usr/bin/bash
+
+# Install python requirements
+pip install -r requirements.txt
 
 # Generate environment
-./scripts/generate_env_override.py
-./scripts/generate_env.py
-
-# Build docker container
-echo "Building container images..."
-docker-compose build
+python scripts/generate_env_override.py
+python scripts/generate_env.py
 
 # Workaround for local minio development
 #
 # The problem is that "localhost" is not a valid value from the perspective
 # of the Django container accessing Minio, and "tq-data" is not a valid value
 # from the perspective of your browser accessing Minio.
-docker-compose up -d
+docker compose up -d
 
 echo "Setting IPs for Minio..."
 ip=$(docker inspect tq-data | grep IPAddress | grep --extended-regexp --only-matching "([0-9]{1,3}\.){3}[0-9]{1,3}")
+echo "Using IP: $ip"
 sed -i "s/TQ_S3_MEDIA_HOST: .*/TQ_S3_MEDIA_HOST: $ip/" overrides.yml
 sed -i "s/TQ_S3_STATIC_HOST: .*/TQ_S3_STATIC_HOST: $ip/" overrides.yml
 sed -i "s/TQ_S3_FINANCE_HOST: .*/TQ_S3_FINANCE_HOST: $ip/" overrides.yml
-./scripts/generate_env.py # regenerate env to include the new overrides
+python scripts/generate_env.py # regenerate env to include the new overrides
 
 echo "Finishing initialisation..."
+mkdir logs
 
 # Initialize minio
-./scripts/initialize_minio.sh
+python scripts/initialize_minio.py
 
 # Initialize django
-./scripts/collectstatic.sh
-./scripts/migrate.sh
+python manage.py collectstatic --noinput -v 3
+python manage.py migrate
 
 # Load test data
-./scripts/loaddata.sh
+python manage.py loaddata fixtures/*
 
 echo "Done initialising TQ website."
-echo "You can view the site at http://localhost:8000/"

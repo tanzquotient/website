@@ -8,7 +8,7 @@ class Address(models.Model):
     street = models.CharField(max_length=255)
     plz = models.IntegerField()
     city = models.CharField(max_length=255)
-    country = CountryField(default='CH')
+    country = CountryField(default="CH")
 
     objects = managers.AddressManager()
 
@@ -17,4 +17,3 @@ class Address(models.Model):
 
     def __str__(self) -> str:
         return f"{self.street}, {self.plz} {self.city}{f', {self.country}' if self.country != 'CH' else ''}"
-

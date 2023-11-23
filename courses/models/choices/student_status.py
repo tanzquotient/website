@@ -1,16 +1,16 @@
 class StudentStatus:
-    ETH = 'eth'
-    UNI = 'uni'
-    PH = 'ph'
-    OTHER = 'other'
-    NO = 'no'
+    ETH = "eth"
+    UNI = "uni"
+    PH = "ph"
+    OTHER = "other"
+    NO = "no"
 
     TEXT = {
-        ETH: 'ETH',
-        UNI: 'UZH',
-        PH: 'PH',
-        OTHER: 'Other',
-        NO: 'Not a student',
+        ETH: "ETH",
+        UNI: "UZH",
+        PH: "PH",
+        OTHER: "Other",
+        NO: "Not a student",
     }
 
     CHOICES = (
@@ -18,7 +18,7 @@ class StudentStatus:
         (UNI, TEXT[UNI]),
         (PH, TEXT[PH]),
         (OTHER, TEXT[OTHER]),
-        (NO, TEXT[NO])
+        (NO, TEXT[NO]),
     )
 
     UNIVERSITY_CHOICES = (

@@ -9,10 +9,12 @@ from courses import models as models
 from courses.managers import SubscribeQuerySet
 from courses.models import LeadFollow, Subscribe
 
-log = logging.getLogger('matching')
+log = logging.getLogger("matching")
 
 
-def _get_lists_for_partition(subscribes: list[Subscribe]) -> tuple[list[Subscribe], list[Subscribe], list[Subscribe]]:
+def _get_lists_for_partition(
+    subscribes: list[Subscribe],
+) -> tuple[list[Subscribe], list[Subscribe], list[Subscribe]]:
     """
     Returns lists needed for partitioning.
         'a' is the larger set out of leaders and followers
@@ -32,7 +34,9 @@ def _get_lists_for_partition(subscribes: list[Subscribe]) -> tuple[list[Subscrib
     return a, b, no_preference
 
 
-def _partition_subscribes(subscribes: list[Subscribe]) -> tuple[list[Subscribe], list[Subscribe]]:
+def _partition_subscribes(
+    subscribes: list[Subscribe],
+) -> tuple[list[Subscribe], list[Subscribe]]:
     """
     Returns two lists a, b such that len(a) = len(b).
     Moreover, every entry in a can be matched with any entry in b according to the
@@ -44,27 +48,43 @@ def _partition_subscribes(subscribes: list[Subscribe]) -> tuple[list[Subscribe],
     log.info("got {} subscribes".format(len(subscribes)))
 
     a, b, no_preference = _get_lists_for_partition(subscribes)
-    log.info("sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(len(a), len(b), len(no_preference)))
+    log.info(
+        "sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(
+            len(a), len(b), len(no_preference)
+        )
+    )
 
     if len(a) >= len(b) + len(no_preference):
         num_pairs = len(b) + len(no_preference)
         a = a[0:num_pairs]
         b += no_preference
-        log.info("added all with no preference to smaller set. Limiting larger set to {} subscribes".format(num_pairs))
+        log.info(
+            "added all with no preference to smaller set. Limiting larger set to {} subscribes".format(
+                num_pairs
+            )
+        )
 
     else:  # diff := len(a) - len(b) < len(no_preference)
-
         # If odd number: remove last subscribe
         if len(subscribes) % 2 == 1:
-            log.info("odd number of subscriptions, dropping '{}'".format(subscribes[-1]))
+            log.info(
+                "odd number of subscriptions, dropping '{}'".format(subscribes[-1])
+            )
             subscribes = subscribes[0:-1]
             a, b, no_preference = _get_lists_for_partition(subscribes)
-            log.info("new sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(len(a), len(b), len(no_preference)))
+            log.info(
+                "new sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(
+                    len(a), len(b), len(no_preference)
+                )
+            )
 
         diff = len(a) - len(b)
         assign_to_a_count = (len(no_preference) - diff) // 2
-        log.info("assigning {} subscribe(s) with no preference to a. The remaining {} will be assigned to b"
-                 .format(assign_to_a_count, len(no_preference) - assign_to_a_count))
+        log.info(
+            "assigning {} subscribe(s) with no preference to a. The remaining {} will be assigned to b".format(
+                assign_to_a_count, len(no_preference) - assign_to_a_count
+            )
+        )
 
         a += no_preference[0:assign_to_a_count]
         b += no_preference[assign_to_a_count:]
@@ -79,7 +99,9 @@ def _match_for_course(subscriptions: SubscribeQuerySet, course_id: int) -> int:
     Partitions the single subscribes into two lists.
     Afterwards, the lists are merged based on height
     """
-    to_match = list(subscriptions.to_match().filter(course__id=course_id).order_by('date'))
+    to_match = list(
+        subscriptions.to_match().filter(course__id=course_id).order_by("date")
+    )
 
     a, b = _partition_subscribes(to_match)
     assert len(a) == len(b)
@@ -91,9 +113,10 @@ def _match_for_course(subscriptions: SubscribeQuerySet, course_id: int) -> int:
     a.sort(key=sort_key)
     b.sort(key=sort_key)
 
-    for (subscribe_a, subscribe_b) in zip(a, b):
-
-        assert LeadFollow.is_compatible(subscribe_a.lead_follow, subscribe_b.lead_follow)
+    for subscribe_a, subscribe_b in zip(a, b):
+        assert LeadFollow.is_compatible(
+            subscribe_a.lead_follow, subscribe_b.lead_follow
+        )
         log.info("going to match '{}' with '{}'".format(subscribe_a, subscribe_b))
 
         subscribe_a.partner = subscribe_b.user
@@ -109,12 +132,18 @@ def _match_for_course(subscriptions: SubscribeQuerySet, course_id: int) -> int:
     return match_count
 
 
-def match_partners(subscriptions: SubscribeQuerySet, request: HttpRequest = None) -> None:
-    courses = subscriptions.values_list('course', flat=True)
+def match_partners(
+    subscriptions: SubscribeQuerySet, request: HttpRequest = None
+) -> None:
+    courses = subscriptions.values_list("course", flat=True)
     match_count = 0
     for course_id in set(courses):
         log.info("matching for course id {}".format(course_id))
         match_count += _match_for_course(subscriptions, course_id)
 
-    log.info('{} couples matched successfully'.format(match_count))
-    messages.add_message(request, messages.SUCCESS, _('{} couples matched successfully').format(match_count))
+    log.info("{} couples matched successfully".format(match_count))
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        _("{} couples matched successfully").format(match_count),
+    )

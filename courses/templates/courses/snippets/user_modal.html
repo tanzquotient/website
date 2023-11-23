@@ -1,6 +1,7 @@
 <!-- Modal -->
 {% load i18n %}
-<div class="modal fade" id="user_modal-{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="Profile"
+<div class="modal fade" id="user_modal-{{ user.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="Profile"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,7 +9,8 @@
                 <h5 class="modal-title"
                     id="modal_label_profile-{{ user.id }}">{{ user.get_full_name }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
@@ -16,7 +18,8 @@
                 {% if user.profile %}
                     <div class="d-flex flex-sm-row flex-column">
                         {% if user.profile.picture %}
-                            <img class="avatar me-4" src="{{ user.profile.picture.url }}"
+                            <img class="avatar me-4"
+                                 src="{{ user.profile.picture.url }}"
                                  alt="{{ user.get_full_name }}">
                         {% endif %}
                         <div>
@@ -25,23 +28,26 @@
                                     <h4>
                                         {% trans "Teacher" %}
                                     </h4>
-                                    {% if  user.profile.teaching_since %}
-                                        <p>{% trans "Teaching for TQ since" %}: {{ user.profile.teaching_since.year }}</p>
-                                    {% endif %}
-                                    <p>{% trans "Courses taught for TQ" %}: {{ user.profile.courses_taught_count }}</p>
+                                    {% with user.profile.teaching_since as teaching_since %}
+                                        {% if teaching_since %}
+                                            <p>{% trans "Teaching for Tanzquotient since" %}: {{ teaching_since.year }}</p>
+                                        {% endif %}
+                                    {% endwith %}
+                                    <p>{% trans "Courses taught for Tanzquotient" %}: {{ user.profile.courses_taught_count }}</p>
                                 {% endif %}
                                 {% if user.profile.is_board_member %}
                                     <h4 class="mb-2">{% trans "Board member" %}</h4>
-                                        {% for function in user.functions.all %}
-                                            <div class="mb-2">
-                                                <div>
-                                                    <strong>{{ function.name }}</strong>
-                                                </div>
-                                                <div>
-                                                    {% trans "Contact" %}: <a href="mailto:{{ function.email }}">{{ function.email }}</a>
-                                                </div>
+                                    {% for function in user.functions.all %}
+                                        <div class="mb-2">
+                                            <div>
+                                                <strong>{{ function.name }}</strong>
                                             </div>
-                                        {% endfor %}
+                                            <div>
+                                                {% trans "Contact" %}: <a
+                                                    href="mailto:{{ function.email }}">{{ function.email }}</a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -59,7 +65,8 @@
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
     </div>

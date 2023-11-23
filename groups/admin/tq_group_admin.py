@@ -10,19 +10,19 @@ from .admin_actions import update_groups
 
 class GroupForm(ModelForm):
     users = ModelMultipleChoiceField(
-        label='Users',
+        label="Users",
         queryset=User.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple(
-            "users", is_stacked=False))
+        widget=FilteredSelectMultiple("users", is_stacked=False),
+    )
 
     class Meta:
         model = Group
         exclude = ()  # since Django 1.8 this is needed
         widgets = {
-            'permissions': FilteredSelectMultiple(
-                "permissions", is_stacked=False),
+            "permissions": FilteredSelectMultiple("permissions", is_stacked=False),
         }
+
 
 class TQGroupAdmin(GroupAdmin):
     actions = list(GroupAdmin.actions) + [update_groups]
@@ -32,18 +32,19 @@ class TQGroupAdmin(GroupAdmin):
         # save first to obtain id
         super(GroupAdmin, self).save_model(request, obj, form, change)
         obj.user_set.clear()
-        for user in form.cleaned_data['users']:
+        for user in form.cleaned_data["users"]:
             obj.user_set.add(user)
 
     def get_form(self, request, obj=None, **kwargs):
         if obj:
-            self.form.base_fields['users'].initial = [o.pk for o in obj.user_set.all()]
+            self.form.base_fields["users"].initial = [o.pk for o in obj.user_set.all()]
         else:
-            self.form.base_fields['users'].initial = []
+            self.form.base_fields["users"].initial = []
         return GroupForm
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
+
 
 # Re-register GroupAdmin
 try:

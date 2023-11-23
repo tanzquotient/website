@@ -43,7 +43,7 @@ def _plot_for_single_choice(question: Question, answer_set: Iterable[Answer]) ->
 def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) -> str:
     answers = []
     for answer in answer_set:
-        for value in answer.value.split(';'):
+        for value in answer.value.split(";"):
             if value:
                 answers.append(value)
 
@@ -52,19 +52,29 @@ def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) 
     return plot_figure(bar_chart(values, labels))
 
 
-def get_plot_for_question(question: Question, selected_offering: Offering, selected_course: Course) -> Optional[str]:
+def get_plot_for_question(
+    question: Question, selected_offering: Offering, selected_course: Course
+) -> Optional[str]:
     answer_set = question.answers
     if selected_offering:
-        answer_set = answer_set.filter(survey_instance__course__offering=selected_offering)
+        answer_set = answer_set.filter(
+            survey_instance__course__offering=selected_offering
+        )
     if selected_course:
         answer_set = answer_set.filter(survey_instance__course=selected_course)
     answer_set = answer_set.all()
 
     if question.type == QuestionType.SCALE:
         return _plot_for_scale(question, answer_set)
-    if question.type in [QuestionType.SINGLE_CHOICE, QuestionType.SINGLE_CHOICE_WITH_FREE_FORM]:
+    if question.type in [
+        QuestionType.SINGLE_CHOICE,
+        QuestionType.SINGLE_CHOICE_WITH_FREE_FORM,
+    ]:
         return _plot_for_single_choice(question, answer_set)
-    if question.type in [QuestionType.MULTIPLE_CHOICE, QuestionType.MULTIPLE_CHOICE_WITH_FREE_FORM]:
+    if question.type in [
+        QuestionType.MULTIPLE_CHOICE,
+        QuestionType.MULTIPLE_CHOICE_WITH_FREE_FORM,
+    ]:
         return _plot_for_multiple_choice(question, answer_set)
 
     return None

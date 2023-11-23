@@ -1,0 +1,107 @@
+{% load i18n %}
+
+<div>
+    {% if not answer.question.public_review %}
+        <div>
+            {% include "courses/snippets/course_comment.html" with course=answer.survey_instance.course date=answer.survey_instance.last_update text=answer.value show_course_type=True %}
+        </div>
+    {% else %}
+        <div class="d-flex">
+            <div class="flex-grow-1">
+                <div>
+                    {% include "courses/snippets/course_comment.html" with course=answer.survey_instance.course date=answer.survey_instance.last_update text=answer.value show_course_type=True %}
+                </div>
+                {% if answer.hide_from_public_reviews %}
+                    <div class="alert alert-warning p-2 m-0 mt-2 small">{% trans "This answer is hidden from the reviews and only visible for internal use." %}<br/>
+                        <a href="#" class="alert-link text-nowrap" data-bs-toggle="modal"
+                           data-bs-target="#confirm-hide-{{ answer.id }}">
+                            {% trans "Show answer again" %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="ms-2 text-end">
+                {% if not answer.hide_from_public_reviews %}
+                    <button type="button" class="btn btn-sm btn-outline-danger text-nowrap" data-bs-toggle="modal"
+                            data-bs-target="#confirm-hide-{{ answer.id }}">
+                        {% trans "Hide" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <!-- Confirm (ub)-hide -->
+        <form method="post">
+            {% csrf_token %}
+            <input hidden="hidden" name="answer" value="{{ answer.id }}"/>
+            {% if not answer.hide_from_public_reviews %}
+                <input hidden="hidden" name="hide_answer" value="true"/>
+            {% else %}
+                <input hidden="hidden" name="show_answer" value="true"/>
+            {% endif %}
+
+            <div class="modal fade"
+                 id="confirm-hide-{{ answer.id }}"
+                 data-bs-backdrop="static"
+                 data-bs-keyboard="false"
+                 tabindex="-1"
+                 aria-labelledby="confirm-hideLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="confirm-hideLabel">
+                                {% if not answer.hide_from_public_reviews %}
+                                    {% trans "Hide answer" %}
+                                {% else %}
+                                    {% trans "Show answer again" %}
+                                {% endif %}
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="fw-bold">
+                                {% if not answer.hide_from_public_reviews %}
+                                    {% trans "Do you really want to exclude the following answer?" %}
+                                {% else %}
+                                    {% trans "Do you really want to make the following answer visible again?" %}
+                                {% endif %}
+                            </div>
+                            <div class="alert alert-secondary my-3">
+                                {{ answer.value }}
+                            </div>
+
+                            {% if not answer.hide_from_public_reviews %}
+                                <div>
+                                    {% trans "If you hide this answer, it will not show up in the public review section." %}
+                                    {% trans "However, this will not delete the answer. E.g. board members will still be able to see the review." %}
+                                </div>
+                            {% endif %}
+
+
+                            <div class="mt-3">
+                                <label for="confirm-hide-{{ answer.id }}-comment"
+                                       class="form-label">{% trans "Justification" %}</label>
+                                <input type="text" required name="comment" class="form-control"
+                                       id="confirm-hide-{{ answer.id }}-comment"
+                                       aria-describedby="confirm-hide-{{ answer.id }}-comment-help">
+                                <div id="confirm-hide-{{ answer.id }}-comment-help"
+                                     class="form-text">{% trans "Please provide a justification for this change." %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                            <button type="submit" class="btn btn-danger">{% trans "Confirm" %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    {% endif %}
+</div>
+

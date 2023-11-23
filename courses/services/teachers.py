@@ -30,8 +30,11 @@ def welcome_teachers(courses, request):
             total += 1
             if welcome_teacher(teach):
                 count += 1
-    messages.add_message(request, messages.SUCCESS,
-                         _(u'{} of {} welcomed successfully').format(count, total))
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        _("{} of {} welcomed successfully").format(count, total),
+    )
 
 
 def welcome_teachers_reset_flag(courses, request):
@@ -44,5 +47,8 @@ def welcome_teachers_reset_flag(courses, request):
                 teach.welcomed = False
                 teach.save()
             total += 1
-    messages.add_message(request, messages.SUCCESS,
-                         _(u'{} of {} teachers reset successfully').format(count, total))
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        _("{} of {} teachers reset successfully").format(count, total),
+    )

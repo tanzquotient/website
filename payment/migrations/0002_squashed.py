@@ -6,52 +6,89 @@ import tq_website.storages
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('payment', '0002_auto_20200331_1936'), ('payment', '0003_auto_20200413_1829'), ('payment', '0004_auto_20200425_1508'), ('payment', '0005_auto_20200425_1551'), ('payment', '0006_auto_20220402_1306'), ('payment', '0007_auto_20220402_1326'), ('payment', '0008_auto_20220403_2158')]
+    replaces = [
+        ("payment", "0002_auto_20200331_1936"),
+        ("payment", "0003_auto_20200413_1829"),
+        ("payment", "0004_auto_20200425_1508"),
+        ("payment", "0005_auto_20200425_1551"),
+        ("payment", "0006_auto_20220402_1306"),
+        ("payment", "0007_auto_20220402_1326"),
+        ("payment", "0008_auto_20220403_2158"),
+    ]
 
     dependencies = [
-        ('payment', '0001_squashed_0016_auto_20190425_1717'),
+        ("payment", "0001_squashed_0016_auto_20190425_1717"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FinanceFile',
+            name="FinanceFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True)),
-                ('file', models.FileField(storage=tq_website.storages.FinanceStorage(), upload_to='')),
-                ('processed', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('type', models.CharField(choices=[('postfinance_xml', 'Postfinance XML'), ('zkb_csv', 'ZKB CSV')], default='postfinance_xml', max_length=32)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, unique=True)),
+                (
+                    "file",
+                    models.FileField(
+                        storage=tq_website.storages.FinanceStorage(), upload_to=""
+                    ),
+                ),
+                ("processed", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("postfinance_xml", "Postfinance XML"),
+                            ("zkb_csv", "ZKB CSV"),
+                        ],
+                        default="postfinance_xml",
+                        max_length=32,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
+                "ordering": ["-created_at"],
             },
         ),
         migrations.AddField(
-            model_name='payment',
-            name='file',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
-                                    related_name='payments', to='payment.financefile'),
+            model_name="payment",
+            name="file",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="payments",
+                to="payment.financefile",
+            ),
         ),
         migrations.AlterField(
-            model_name='coursepayment',
-            name='amount',
+            model_name="coursepayment",
+            name="amount",
             field=models.DecimalField(decimal_places=2, max_digits=6),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='amount',
+            model_name="payment",
+            name="amount",
             field=models.DecimalField(decimal_places=2, max_digits=9),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='amount_to_reimburse',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=9),
+            model_name="payment",
+            name="amount_to_reimburse",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=9
+            ),
         ),
         migrations.AlterField(
-            model_name='subscriptionpayment',
-            name='amount',
+            model_name="subscriptionpayment",
+            name="amount",
             field=models.DecimalField(decimal_places=2, max_digits=6),
         ),
     ]

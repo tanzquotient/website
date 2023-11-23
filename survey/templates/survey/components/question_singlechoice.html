@@ -1,7 +1,7 @@
 {% for choice in question.choice_set.all %}
     <div class="form-check">
         <input class="form-check-input" type="radio"
-               id="q{{ question.id }}-c{{ choice.id }}" name="{{ question.id }}" value="{{ choice.value }}">
+               id="q{{ question.id }}-c{{ choice.id }}" name="{{ question.id }}-{{ choice.id }}" value="{{ choice.value }}">
         <label class="form-check-label" for="q{{ question.id }}-c{{ choice.id }}">{{ choice.label }}</label>
     </div>
 {% endfor %}

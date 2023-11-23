@@ -1,1 +1,0 @@
-echo "set \$maintenance 0;" > maintenance.conf && docker-compose restart nginx

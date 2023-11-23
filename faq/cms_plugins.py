@@ -8,7 +8,9 @@ from faq.models import QuestionGroup
 
 class FaqPluginModel(CMSPlugin):
     question_group = models.ForeignKey(QuestionGroup, on_delete=models.PROTECT)
-    question_group.help_text ="Question group with questions to be displayed in this plugin."
+    question_group.help_text = (
+        "Question group with questions to be displayed in this plugin."
+    )
 
 
 class FaqPlugin(CMSPluginBase):
@@ -19,9 +21,7 @@ class FaqPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'question_group': instance.question_group
-        })
+        context.update({"question_group": instance.question_group})
         return context
 
 

@@ -8,5 +8,5 @@ from partners.models.partner import Partner
 class PartnerAdmin(TranslatableAdmin):
     model = Partner
 
-    list_display = ['name', 'url']
-    search_fields = ['name']
+    list_display = ["name", "url"]
+    search_fields = ["name"]

@@ -10,7 +10,6 @@ from .room import Room
 from .period import Period
 from .regular_lesson import RegularLesson
 from .lesson_details import LessonDetails
-from .teach_lesson import TeachLesson
 from .regular_lesson_exception import RegularLessonException
 from .irregular_lesson import IrregularLesson
 from .course_type import CourseType

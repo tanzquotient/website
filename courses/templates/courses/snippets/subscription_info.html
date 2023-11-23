@@ -1,5 +1,6 @@
 {% load i18n %}
-{% if course.is_open_class %} {# No subscription needed (thus no subscribe status shown) #}
+{% if course.is_open_class %}
+    {# No subscription needed (thus no subscribe status shown) #}
     <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
 {% elif course.is_external %} {# People can not subscribe here. #}
     {% if course.external_url and display_link %}
@@ -11,7 +12,7 @@
     {% endif %}
 
 {% else %} {# Regular case: subscription in general possible #}
-    {% if course.is_subscription_allowed or user.is_staff %}
+    {% if course.is_subscription_allowed or user.is_staff and is_detail_page %}
         {% if is_detail_page and not course.is_subscription_allowed and user.is_staff %}
             {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
         {% endif %}
@@ -33,7 +34,8 @@
 
         {% elif is_detail_page and course.has_free_places %}
             <div class="my-3">
-                <a href="{% url 'courses:subscribe' course_id=course.id %}" class="btn btn-success"
+                <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                   class="btn btn-success"
                    role="button">{% trans "Subscribe now" %}</a>
             </div>
         {% endif %}

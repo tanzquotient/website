@@ -13,15 +13,15 @@ from ..services import export_surveys
 def download(request: HttpRequest, survey_id: int) -> HttpResponse:
     survey = get_object_or_404(Survey, id=survey_id)
     offering = None
-    if 'offering_id' in request.GET and request.GET['offering_id']:
-        offering = get_object_or_404(Offering, id=request.GET['offering_id'])
+    if "offering_id" in request.GET and request.GET["offering_id"]:
+        offering = get_object_or_404(Offering, id=request.GET["offering_id"])
 
     course = None
-    if 'course_id' in request.GET and request.GET['course_id']:
-        course = get_object_or_404(Course, id=request.GET['course_id'])
+    if "course_id" in request.GET and request.GET["course_id"]:
+        course = get_object_or_404(Course, id=request.GET["course_id"])
 
     export_format = None
-    if 'format' in request.GET and request.GET['format']:
-        export_format = request.GET['format']
+    if "format" in request.GET and request.GET["format"]:
+        export_format = request.GET["format"]
 
     return export_surveys([survey], offering, course, export_format)

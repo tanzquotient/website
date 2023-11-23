@@ -8,6 +8,11 @@ class CoursePayment(models.Model):
     """
     A Course Payment is a matched intermediate object.
     """
-    payment = models.ForeignKey(Payment, related_name='course_payments', on_delete=models.PROTECT)
-    course = models.ForeignKey(Course, related_name='course_payments', on_delete=models.PROTECT)
+
+    payment = models.ForeignKey(
+        Payment, related_name="course_payments", on_delete=models.PROTECT
+    )
+    course = models.ForeignKey(
+        Course, related_name="course_payments", on_delete=models.PROTECT
+    )
     amount = models.DecimalField(decimal_places=2, max_digits=6)

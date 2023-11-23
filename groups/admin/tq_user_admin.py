@@ -9,9 +9,12 @@ from courses.admin_actions import make_inactive
 
 
 class TQUserAdmin(HijackUserAdminMixin, UserAdmin):
-    list_display = ('id',) + UserAdmin.list_display + ('is_active', )
+    list_display = ("id",) + UserAdmin.list_display + ("is_active",)
     inlines = list(UserAdmin.inlines) + [UserProfileInline, SubscribeInlineForUser]
-    list_filter = UserAdmin.list_filter + ('profile__newsletter', 'profile__get_involved')
+    list_filter = UserAdmin.list_filter + (
+        "profile__newsletter",
+        "profile__get_involved",
+    )
     actions = [make_inactive] + list(UserAdmin.actions)
 
     def get_hijack_user(self, instance) -> User:
@@ -25,18 +28,18 @@ class TQUserAdmin(HijackUserAdminMixin, UserAdmin):
         # Prevent non-superusers from editing other permissions
         if not is_superuser:
             disabled_fields |= {
-                'username',
-                'is_superuser',
-                'user_permissions',
+                "username",
+                "is_superuser",
+                "user_permissions",
             }
 
         # Prevent non-superusers from editing their own permissions
         if not is_superuser and obj is not None and obj == request.user:
             disabled_fields |= {
-                'is_staff',
-                'is_superuser',
-                'groups',
-                'user_permissions',
+                "is_staff",
+                "is_superuser",
+                "groups",
+                "user_permissions",
             }
 
         for f in disabled_fields:

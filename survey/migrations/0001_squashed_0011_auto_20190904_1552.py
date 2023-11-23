@@ -10,382 +10,743 @@ import parler.models
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('survey', '0001_initial'), ('survey', '0002_auto_20160321_1610'), ('survey', '0003_auto_20160503_1052'), ('survey', '0004_auto_20160504_0949'), ('survey', '0005_auto_20160524_1205'), ('survey', '0006_auto_20160704_1158'), ('survey', '0007_auto_20161129_1315'), ('survey', '0008_auto_20161129_1319'), ('survey', '0009_auto_20170614_0757'), ('survey', '0010_auto_20170614_0929'), ('survey', '0011_auto_20190904_1552')]
+    replaces = [
+        ("survey", "0001_initial"),
+        ("survey", "0002_auto_20160321_1610"),
+        ("survey", "0003_auto_20160503_1052"),
+        ("survey", "0004_auto_20160504_0949"),
+        ("survey", "0005_auto_20160524_1205"),
+        ("survey", "0006_auto_20160704_1158"),
+        ("survey", "0007_auto_20161129_1315"),
+        ("survey", "0008_auto_20161129_1319"),
+        ("survey", "0009_auto_20170614_0757"),
+        ("survey", "0010_auto_20170614_0929"),
+        ("survey", "0011_auto_20190904_1552"),
+    ]
 
     initial = True
 
     dependencies = [
-        ('courses', '0031_course_evaluated'),
-        ('courses', '0021_auto_20160220_1828'),
+        ("courses", "0031_course_evaluated"),
+        ("courses", "0021_auto_20160220_1828"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Answer',
+            name="Answer",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField(blank=True, null=True)),
-                ('value', models.IntegerField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField(blank=True, null=True)),
+                ("value", models.IntegerField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Choice',
+            name="Choice",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('position', models.PositiveSmallIntegerField(default=0, verbose_name=b'Position')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "position",
+                    models.PositiveSmallIntegerField(
+                        default=0, verbose_name=b"Position"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['position'],
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name='ChoiceTranslation',
+            name="ChoiceTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=255)),
-                ('language_code', models.CharField(db_index=True, max_length=15)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Choice')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("label", models.CharField(max_length=255)),
+                ("language_code", models.CharField(db_index=True, max_length=15)),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="survey.Choice",
+                    ),
+                ),
             ],
             options={
-                'managed': True,
-                'abstract': False,
-                'db_table': 'survey_choice_translation',
-                'db_tablespace': '',
-                'default_permissions': (),
+                "managed": True,
+                "abstract": False,
+                "db_table": "survey_choice_translation",
+                "db_tablespace": "",
+                "default_permissions": (),
             },
         ),
         migrations.CreateModel(
-            name='Question',
+            name="Question",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('type', models.CharField(choices=[(b'c', 'single choice'), (b'm', 'multiple choice'), (b's', 'scale'), (b'f', 'free form')], default=b'c', max_length=3)),
-                ('display', models.BooleanField(default=True, help_text=b'Defines if this question is displayed in survey; set this to false instead of deleting')),
-                ('position', models.PositiveSmallIntegerField(default=0, verbose_name=b'Position')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            (b"c", "single choice"),
+                            (b"m", "multiple choice"),
+                            (b"s", "scale"),
+                            (b"f", "free form"),
+                        ],
+                        default=b"c",
+                        max_length=3,
+                    ),
+                ),
+                (
+                    "display",
+                    models.BooleanField(
+                        default=True,
+                        help_text=b"Defines if this question is displayed in survey; set this to false instead of deleting",
+                    ),
+                ),
+                (
+                    "position",
+                    models.PositiveSmallIntegerField(
+                        default=0, verbose_name=b"Position"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['position'],
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name='QuestionGroup',
+            name="QuestionGroup",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('position', models.PositiveSmallIntegerField(default=0, verbose_name=b'Position')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                (
+                    "position",
+                    models.PositiveSmallIntegerField(
+                        default=0, verbose_name=b"Position"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['position'],
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name='QuestionGroupTranslation',
+            name="QuestionGroupTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('intro_text', models.TextField(blank=True, null=True)),
-                ('language_code', models.CharField(db_index=True, max_length=15)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.QuestionGroup')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("intro_text", models.TextField(blank=True, null=True)),
+                ("language_code", models.CharField(db_index=True, max_length=15)),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="survey.QuestionGroup",
+                    ),
+                ),
             ],
             options={
-                'managed': True,
-                'abstract': False,
-                'db_table': 'survey_questiongroup_translation',
-                'db_tablespace': '',
-                'default_permissions': (),
+                "managed": True,
+                "abstract": False,
+                "db_table": "survey_questiongroup_translation",
+                "db_tablespace": "",
+                "default_permissions": (),
             },
         ),
         migrations.CreateModel(
-            name='QuestionTranslation',
+            name="QuestionTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField(blank=True, null=True)),
-                ('note', models.TextField(blank=True, null=True)),
-                ('language_code', models.CharField(db_index=True, max_length=15)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Question')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField(blank=True, null=True)),
+                ("note", models.TextField(blank=True, null=True)),
+                ("language_code", models.CharField(db_index=True, max_length=15)),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="survey.Question",
+                    ),
+                ),
             ],
             options={
-                'managed': True,
-                'abstract': False,
-                'db_table': 'survey_question_translation',
-                'db_tablespace': '',
-                'default_permissions': (),
+                "managed": True,
+                "abstract": False,
+                "db_table": "survey_question_translation",
+                "db_tablespace": "",
+                "default_permissions": (),
             },
         ),
         migrations.CreateModel(
-            name='Survey',
+            name="Survey",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='SurveyTranslation',
+            name="SurveyTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('intro_text', models.TextField(blank=True, null=True)),
-                ('language_code', models.CharField(db_index=True, max_length=15)),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Survey')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("intro_text", models.TextField(blank=True, null=True)),
+                ("language_code", models.CharField(db_index=True, max_length=15)),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="survey.Survey",
+                    ),
+                ),
             ],
             options={
-                'managed': True,
-                'abstract': False,
-                'db_table': 'survey_survey_translation',
-                'db_tablespace': '',
-                'default_permissions': (),
+                "managed": True,
+                "abstract": False,
+                "db_table": "survey_survey_translation",
+                "db_tablespace": "",
+                "default_permissions": (),
             },
         ),
         migrations.AddField(
-            model_name='questiongroup',
-            name='survey',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='survey.Survey'),
+            model_name="questiongroup",
+            name="survey",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="survey.Survey",
+            ),
         ),
         migrations.AddField(
-            model_name='question',
-            name='question_group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='survey.QuestionGroup'),
+            model_name="question",
+            name="question_group",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="survey.QuestionGroup",
+            ),
         ),
         migrations.AddField(
-            model_name='choice',
-            name='question',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='survey.Question'),
+            model_name="choice",
+            name="question",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="survey.Question",
+            ),
         ),
         migrations.AddField(
-            model_name='answer',
-            name='choice',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='survey.Choice'),
+            model_name="answer",
+            name="choice",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="survey.Choice",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='surveytranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="surveytranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='questiontranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="questiontranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='questiongrouptranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="questiongrouptranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.AlterUniqueTogether(
-            name='choicetranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="choicetranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.CreateModel(
-            name='SurveyInstance',
+            name="SurveyInstance",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('url_expire_date', models.DateTimeField(blank=True, null=True)),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='survey_instances', to='survey.Survey')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='survey_instances', to=settings.AUTH_USER_MODEL)),
-                ('course', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='survey_instances', to='courses.Course')),
-                ('invitation_sent', models.BooleanField(default=False)),
-                ('last_update', models.DateTimeField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                ("url_expire_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="survey_instances",
+                        to="survey.Survey",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="survey_instances",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "course",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="survey_instances",
+                        to="courses.Course",
+                    ),
+                ),
+                ("invitation_sent", models.BooleanField(default=False)),
+                ("last_update", models.DateTimeField(blank=True, null=True)),
             ],
         ),
         migrations.AddField(
-            model_name='answer',
-            name='question',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='answers', to='survey.Question'),
+            model_name="answer",
+            name="question",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="answers",
+                to="survey.Question",
+            ),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='type',
-            field=models.CharField(choices=[(b'c', 'single choice'), (b'cf', 'single choice with free form'), (b'm', 'multiple choice'), (b'mf', 'multiple choice with free form'), (b's', 'scale'), (b'f', 'free form')], default=b'c', max_length=3),
+            model_name="question",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    (b"c", "single choice"),
+                    (b"cf", "single choice with free form"),
+                    (b"m", "multiple choice"),
+                    (b"mf", "multiple choice with free form"),
+                    (b"s", "scale"),
+                    (b"f", "free form"),
+                ],
+                default=b"c",
+                max_length=3,
+            ),
         ),
         migrations.AddField(
-            model_name='answer',
-            name='survey_instance',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='answers', to='survey.SurveyInstance'),
+            model_name="answer",
+            name="survey_instance",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="answers",
+                to="survey.SurveyInstance",
+            ),
         ),
         migrations.CreateModel(
-            name='ScaleTemplate',
+            name="ScaleTemplate",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
             bases=(parler.models.TranslatableModelMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='ScaleTemplateTranslation',
+            name="ScaleTemplateTranslation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
-                ('low', models.CharField(max_length=30, verbose_name='[TR] Text for lower')),
-                ('mid', models.CharField(blank=True, max_length=30, null=True, verbose_name='[TR] Text for mid-level')),
-                ('up', models.CharField(max_length=30, verbose_name='[TR] Text for upper')),
-                ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.ScaleTemplate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language_code",
+                    models.CharField(
+                        db_index=True, max_length=15, verbose_name="Language"
+                    ),
+                ),
+                (
+                    "low",
+                    models.CharField(max_length=30, verbose_name="[TR] Text for lower"),
+                ),
+                (
+                    "mid",
+                    models.CharField(
+                        blank=True,
+                        max_length=30,
+                        null=True,
+                        verbose_name="[TR] Text for mid-level",
+                    ),
+                ),
+                (
+                    "up",
+                    models.CharField(max_length=30, verbose_name="[TR] Text for upper"),
+                ),
+                (
+                    "master",
+                    models.ForeignKey(
+                        editable=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="translations",
+                        to="survey.ScaleTemplate",
+                    ),
+                ),
             ],
             options={
-                'managed': True,
-                'db_table': 'survey_scaletemplate_translation',
-                'db_tablespace': '',
-                'default_permissions': (),
-                'verbose_name': 'scale template Translation',
+                "managed": True,
+                "db_table": "survey_scaletemplate_translation",
+                "db_tablespace": "",
+                "default_permissions": (),
+                "verbose_name": "scale template Translation",
             },
         ),
         migrations.AlterModelOptions(
-            name='choicetranslation',
-            options={'default_permissions': (), 'managed': True, 'verbose_name': 'choice Translation'},
+            name="choicetranslation",
+            options={
+                "default_permissions": (),
+                "managed": True,
+                "verbose_name": "choice Translation",
+            },
         ),
         migrations.AlterModelOptions(
-            name='questiongrouptranslation',
-            options={'default_permissions': (), 'managed': True, 'verbose_name': 'question group Translation'},
+            name="questiongrouptranslation",
+            options={
+                "default_permissions": (),
+                "managed": True,
+                "verbose_name": "question group Translation",
+            },
         ),
         migrations.AlterModelOptions(
-            name='questiontranslation',
-            options={'default_permissions': (), 'managed': True, 'verbose_name': 'question Translation'},
+            name="questiontranslation",
+            options={
+                "default_permissions": (),
+                "managed": True,
+                "verbose_name": "question Translation",
+            },
         ),
         migrations.AlterModelOptions(
-            name='surveytranslation',
-            options={'default_permissions': (), 'managed': True, 'verbose_name': 'survey Translation'},
+            name="surveytranslation",
+            options={
+                "default_permissions": (),
+                "managed": True,
+                "verbose_name": "survey Translation",
+            },
         ),
         migrations.AlterField(
-            model_name='choicetranslation',
-            name='language_code',
-            field=models.CharField(db_index=True, max_length=15, verbose_name='Language'),
+            model_name="choicetranslation",
+            name="language_code",
+            field=models.CharField(
+                db_index=True, max_length=15, verbose_name="Language"
+            ),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='type',
-            field=models.CharField(choices=[(b'c', 'single choice'), (b'cf', 'single choice with free form'), (b'm', 'multiple choice'), (b'mf', 'multiple choice with free form'), (b's', 'scale'), (b'f', 'free form')], default=b'f', max_length=3),
+            model_name="question",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    (b"c", "single choice"),
+                    (b"cf", "single choice with free form"),
+                    (b"m", "multiple choice"),
+                    (b"mf", "multiple choice with free form"),
+                    (b"s", "scale"),
+                    (b"f", "free form"),
+                ],
+                default=b"f",
+                max_length=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='questiongrouptranslation',
-            name='language_code',
-            field=models.CharField(db_index=True, max_length=15, verbose_name='Language'),
+            model_name="questiongrouptranslation",
+            name="language_code",
+            field=models.CharField(
+                db_index=True, max_length=15, verbose_name="Language"
+            ),
         ),
         migrations.AlterField(
-            model_name='questiontranslation',
-            name='language_code',
-            field=models.CharField(db_index=True, max_length=15, verbose_name='Language'),
+            model_name="questiontranslation",
+            name="language_code",
+            field=models.CharField(
+                db_index=True, max_length=15, verbose_name="Language"
+            ),
         ),
         migrations.AlterField(
-            model_name='surveytranslation',
-            name='language_code',
-            field=models.CharField(db_index=True, max_length=15, verbose_name='Language'),
+            model_name="surveytranslation",
+            name="language_code",
+            field=models.CharField(
+                db_index=True, max_length=15, verbose_name="Language"
+            ),
         ),
         migrations.AddField(
-            model_name='question',
-            name='scale_template',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='survey.ScaleTemplate'),
+            model_name="question",
+            name="scale_template",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="survey.ScaleTemplate",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='scaletemplatetranslation',
-            unique_together=set([('language_code', 'master')]),
+            name="scaletemplatetranslation",
+            unique_together=set([("language_code", "master")]),
         ),
         migrations.RemoveField(
-            model_name='answer',
-            name='value',
+            model_name="answer",
+            name="value",
         ),
         migrations.AlterField(
-            model_name='choice',
-            name='position',
-            field=models.PositiveSmallIntegerField(default=0, verbose_name='Position'),
+            model_name="choice",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0, verbose_name="Position"),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='display',
-            field=models.BooleanField(default=True, help_text='Defines if this question is displayed in survey; set this to false instead of deleting'),
+            model_name="question",
+            name="display",
+            field=models.BooleanField(
+                default=True,
+                help_text="Defines if this question is displayed in survey; set this to false instead of deleting",
+            ),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='position',
-            field=models.PositiveSmallIntegerField(default=0, verbose_name='Position'),
+            model_name="question",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0, verbose_name="Position"),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='type',
-            field=models.CharField(choices=[('c', 'single choice'), ('cf', 'single choice with free form'), ('m', 'multiple choice'), ('mf', 'multiple choice with free form'), ('s', 'scale'), ('f', 'free form')], default='f', max_length=3),
+            model_name="question",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("c", "single choice"),
+                    ("cf", "single choice with free form"),
+                    ("m", "multiple choice"),
+                    ("mf", "multiple choice with free form"),
+                    ("s", "scale"),
+                    ("f", "free form"),
+                ],
+                default="f",
+                max_length=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='questiongroup',
-            name='position',
-            field=models.PositiveSmallIntegerField(default=0, verbose_name='Position'),
+            model_name="questiongroup",
+            name="position",
+            field=models.PositiveSmallIntegerField(default=0, verbose_name="Position"),
         ),
         migrations.AlterField(
-            model_name='questiongroup',
-            name='name',
+            model_name="questiongroup",
+            name="name",
             field=models.CharField(max_length=255),
         ),
         migrations.AlterUniqueTogether(
-            name='questiongroup',
-            unique_together=set([('name', 'survey')]),
+            name="questiongroup",
+            unique_together=set([("name", "survey")]),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='name',
+            model_name="question",
+            name="name",
             field=models.CharField(max_length=255),
         ),
         migrations.AlterUniqueTogether(
-            name='question',
-            unique_together=set([('name', 'question_group')]),
+            name="question",
+            unique_together=set([("name", "question_group")]),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='question_group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='survey.QuestionGroup'),
+            model_name="question",
+            name="question_group",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="survey.QuestionGroup",
+            ),
         ),
         migrations.AlterField(
-            model_name='questiongroup',
-            name='survey',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='survey.Survey'),
+            model_name="questiongroup",
+            name="survey",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="survey.Survey",
+            ),
         ),
         migrations.AlterField(
-            model_name='choicetranslation',
-            name='label',
-            field=models.CharField(max_length=255, verbose_name='[TR] Label'),
+            model_name="choicetranslation",
+            name="label",
+            field=models.CharField(max_length=255, verbose_name="[TR] Label"),
         ),
         migrations.AlterField(
-            model_name='questiongrouptranslation',
-            name='intro_text',
-            field=models.TextField(blank=True, null=True, verbose_name='[TR] Intro text'),
+            model_name="questiongrouptranslation",
+            name="intro_text",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="[TR] Intro text"
+            ),
         ),
         migrations.AlterField(
-            model_name='questiontranslation',
-            name='note',
-            field=models.TextField(blank=True, null=True, verbose_name='[TR] Note'),
+            model_name="questiontranslation",
+            name="note",
+            field=models.TextField(blank=True, null=True, verbose_name="[TR] Note"),
         ),
         migrations.AlterField(
-            model_name='questiontranslation',
-            name='text',
-            field=models.TextField(blank=True, null=True, verbose_name='[TR] Text'),
+            model_name="questiontranslation",
+            name="text",
+            field=models.TextField(blank=True, null=True, verbose_name="[TR] Text"),
         ),
         migrations.AlterField(
-            model_name='surveytranslation',
-            name='intro_text',
-            field=models.TextField(blank=True, null=True, verbose_name='[TR] Intro text'),
+            model_name="surveytranslation",
+            name="intro_text",
+            field=models.TextField(
+                blank=True, null=True, verbose_name="[TR] Intro text"
+            ),
         ),
         migrations.AlterField(
-            model_name='choicetranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Choice'),
+            model_name="choicetranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="survey.Choice",
+            ),
         ),
         migrations.AlterField(
-            model_name='questiongrouptranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.QuestionGroup'),
+            model_name="questiongrouptranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="survey.QuestionGroup",
+            ),
         ),
         migrations.AlterField(
-            model_name='questiontranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Question'),
+            model_name="questiontranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="survey.Question",
+            ),
         ),
         migrations.AlterField(
-            model_name='scaletemplatetranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.ScaleTemplate'),
+            model_name="scaletemplatetranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="survey.ScaleTemplate",
+            ),
         ),
         migrations.AlterField(
-            model_name='surveytranslation',
-            name='master',
-            field=parler.fields.TranslationsForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='survey.Survey'),
+            model_name="surveytranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="survey.Survey",
+            ),
         ),
     ]

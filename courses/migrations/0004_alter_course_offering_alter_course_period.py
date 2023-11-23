@@ -5,20 +5,27 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0003_userprofile_zemis_number'),
+        ("courses", "0003_userprofile_zemis_number"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='course',
-            name='offering',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='courses.offering'),
+            model_name="course",
+            name="offering",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT, to="courses.offering"
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='period',
-            field=models.ForeignKey(blank=True, help_text='You can set a custom period for this course here. If this is left empty, the period from the offering is taken. ', null=True, on_delete=django.db.models.deletion.PROTECT, to='courses.period'),
+            model_name="course",
+            name="period",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="You can set a custom period for this course here. If this is left empty, the period from the offering is taken. ",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="courses.period",
+            ),
         ),
     ]

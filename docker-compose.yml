@@ -1,18 +1,12 @@
-version: '2'
+version: '3.8'
 
 # This Compose file can be used in a development environment.
-#
-# Useful commands:
-#
-# Run this: docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.yml up -d --build
-# Restore DB dump: docker exec -i tq_website_db_1 mysql -u root -p"ROOTPASSWORD" tq_website < dump.sql
-# Connect to Postgres: docker exec -it tq-postgres psql -U root -d tq_website
 
 services:
 
   # Database (Postgres)
   postgres:
-    image: postgres:12
+    image: postgres:14
     container_name: tq-postgres
     environment:
       POSTGRES_USER: ${TQ_DB_USER}
@@ -25,29 +19,6 @@ services:
     expose:
       - "5432"
     restart: unless-stopped
-
-  # Django (serving with debug webserver)
-  django:
-    container_name: tq-django
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: tq_website_django # give this built image a name to use it below
-    env_file:
-      - .env
-    user: root
-    volumes:
-      - .:/app/:Z
-    command: python3 -Wd manage.py runserver 0.0.0.0:8000
-    ports:
-      - "${TQ_DJANGO_PORT}:8000"
-    links:
-      - postgres
-      - minio
-    restart: unless-stopped
-    depends_on:
-      - postgres
-      - minio
 
   # S3 storage
   minio:

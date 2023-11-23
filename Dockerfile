@@ -3,7 +3,7 @@
 #
 # Dockerfile for the tq-website
 
-FROM eu.gcr.io/vseth-public/base:echo
+FROM eu.gcr.io/vseth-public/base:foxtrott
 
 # Copy cinit file
 COPY cinit.yml /etc/cinit.d/tq-website.yml
@@ -18,7 +18,8 @@ RUN apt install -y python3 python3-pip python3-setuptools
 # - git to clone code from Github
 # - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
 # - gettext to generate translations
-RUN apt install -y --no-install-recommends git libpq-dev gettext
+# - pkg-config & libcairo2-dev are needed for building reportlab
+RUN apt install -y --no-install-recommends git libpq-dev gettext pkg-config libcairo2-dev
 
 RUN mkdir -p /app
 
@@ -28,11 +29,11 @@ WORKDIR /app
 COPY . .
 
 # Ensure the scripts are executable
-RUN chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py && chmod +x scripts/post-start.sh
+RUN chmod +x scripts/generate_env_sip.sh && chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py && chmod +x scripts/post-start.sh
 
 # Install requirements
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pip install --upgrade pip --break-system-packages
+RUN python3 -m pip install -r requirements.txt --break-system-packages
 
 # Make sure log directory and files exist
 RUN mkdir -p logs && \

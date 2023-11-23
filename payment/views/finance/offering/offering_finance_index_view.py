@@ -5,5 +5,5 @@ from courses.models import Offering
 
 
 class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
-    template_name = 'finance/offering/index.html'
-    permission_required = 'payment.change_payment'
+    template_name = "finance/offering/index.html"
+    permission_required = "payment.change_payment"

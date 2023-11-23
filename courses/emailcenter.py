@@ -12,52 +12,57 @@ from courses.models import Subscribe, Teach, Course
 from email_system.services import send_email
 from tq_website import settings as my_settings
 
-log = logging.getLogger('tq')
+log = logging.getLogger("tq")
 
 
 def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = {
-        'first_name': subscription.user.first_name,
-        'last_name': subscription.user.last_name,
-        'course': subscription.course.type.title,
-        'course_info': create_course_info(subscription.course),
+        "first_name": subscription.user.first_name,
+        "last_name": subscription.user.last_name,
+        "course": subscription.course.type.title,
+        "course_info": create_course_info(subscription.course),
     }
 
     if subscription.partner is not None:
-        template = 'subscription_confirmation_with_partner'
-        context.update({
-            'partner_first_name': subscription.partner.first_name,
-            'partner_last_name': subscription.partner.last_name,
-        })
+        template = "subscription_confirmation_with_partner"
+        context.update(
+            {
+                "partner_first_name": subscription.partner.first_name,
+                "partner_last_name": subscription.partner.last_name,
+            }
+        )
     elif subscription.course.type.couple_course:
-        template = 'subscription_confirmation_without_partner'
+        template = "subscription_confirmation_without_partner"
     else:
-        template = 'subscription_confirmation_without_partner_nocouple'
+        template = "subscription_confirmation_without_partner_nocouple"
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
         template=template,
-        context=context
+        context=context,
     )
 
 
 def _build_subscription_context(subscription: Subscribe) -> dict:
     from payment import payment_processor
-    conf = my_settings.PAYMENT_ACCOUNT['default']
+
+    conf = my_settings.PAYMENT_ACCOUNT["default"]
     current_site = settings.DEPLOYMENT_DOMAIN
-    voucher_url = current_site + reverse('payment:subscription_payment', kwargs={'usi': subscription.usi})
+    voucher_url = current_site + reverse(
+        "payment:subscription_payment", kwargs={"usi": subscription.usi}
+    )
     return {
-        'first_name': subscription.user.first_name,
-        'last_name': subscription.user.last_name,
-        'course': subscription.course.type.title,
-        'course_info': create_course_info(subscription.course),
-        'usi': payment_processor.USI_PREFIX + subscription.usi,
-        'account_IBAN': conf['IBAN'],
-        'account_SWIFT': conf['SWIFT'],
-        'account_recipient': conf['recipient'],
-        'account_post_number': conf['post_number'] or '-',
-        'voucher_url': voucher_url
+        "first_name": subscription.user.first_name,
+        "last_name": subscription.user.last_name,
+        "course": subscription.course.type.title,
+        "course_info": create_course_info(subscription.course),
+        "usi": payment_processor.USI_PREFIX + subscription.usi,
+        "account_IBAN": conf["IBAN"],
+        "account_SWIFT": conf["SWIFT"],
+        "account_recipient": conf["recipient"],
+        "account_post_number": conf["post_number"] or "-",
+        "voucher_url": voucher_url,
     }
 
 
@@ -65,82 +70,87 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
 
     if subscription.partner is not None:
-        template = 'participation_confirmation_with_partner'
-        context.update({
-            'partner_first_name': subscription.partner.first_name,
-            'partner_last_name': subscription.partner.last_name,
-            'partner_info': create_user_info(subscription.partner),
-        })
+        template = "participation_confirmation_with_partner"
+        context.update(
+            {
+                "partner_first_name": subscription.partner.first_name,
+                "partner_last_name": subscription.partner.last_name,
+                "partner_info": create_user_info(subscription.partner),
+            }
+        )
     elif subscription.course.type.couple_course:
-        template = 'participation_confirmation_without_partner'
+        template = "participation_confirmation_without_partner"
     else:
-        template = 'participation_confirmation_without_partner_nocouple'
+        template = "participation_confirmation_without_partner_nocouple"
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
         template=template,
-        context=context
+        context=context,
     )
 
 
 def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
     context = {
-        'first_name': subscription.user.first_name,
-        'last_name': subscription.user.last_name,
-        'course': subscription.course.type.title,
+        "first_name": subscription.user.first_name,
+        "last_name": subscription.user.last_name,
+        "course": subscription.course.type.title,
     }
 
-    template = 'online_payment_successful'
+    template = "online_payment_successful"
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_FINANCES,
         template=template,
-        context=context
+        context=context,
     )
 
 
 def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
 
-    template = 'sorry_incorrect_payment_reminder'
+    template = "sorry_incorrect_payment_reminder"
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_FINANCES,
         template=template,
-        context=context
+        context=context,
     )
 
 
 def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
     context = _build_subscription_context(subscription)
+    context["open_amount"] = subscription.open_amount()
+    context["reductions"] = subscription.sum_of_reductions()
+    context["paid_amount"] = subscription.sum_of_payments()
 
-    template = 'payment_reminder'
+    template = "payment_reminder"
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_FINANCES,
         template=template,
-        context=context
+        context=context,
     )
 
 
 def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
     context = {
-        'first_name': subscription.user.first_name,
-        'last_name': subscription.user.last_name,
-        'course': subscription.course.type.title,
+        "first_name": subscription.user.first_name,
+        "last_name": subscription.user.last_name,
+        "course": subscription.course.type.title,
     }
 
-    template = 'rejection_{}'.format(reason)
+    template = "rejection_{}".format(reason)
 
     return send_email(
         to=subscription.user.email,
         reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
         template=template,
-        context=context
+        context=context,
     )
 
 
@@ -151,32 +161,36 @@ def send_teacher_welcome(teach: Teach) -> Optional[Email]:
     course = teach.course
 
     current_site = settings.DEPLOYMENT_DOMAIN
-    course_url = current_site + reverse('courses:course_detail', kwargs={'course_id': course.id})
-    coursepayment_url = current_site + reverse('payment:coursepayment_detail', kwargs={'course': course.id})
-    login_url = current_site + reverse('account_login')
-    profile_url = current_site + reverse('edit_profile')
+    course_url = current_site + reverse(
+        "courses:course_detail", kwargs={"course_id": course.id}
+    )
+    coursepayment_url = current_site + reverse(
+        "payment:coursepayment_detail", kwargs={"course": course.id}
+    )
+    login_url = current_site + reverse("account_login")
+    profile_url = current_site + reverse("edit_profile")
 
     context = {
-        'first_name': teacher.first_name,
-        'last_name': teacher.last_name,
-        'course': course.type.title,
-        'course_internal_name': course.name,
-        'course_info': create_course_info(course),
-        'room_url': course_url,
-        'room_info': course.room.description,
-        'room_instructions': course.room.instructions,
-        'coursepayment_url': coursepayment_url,
-        'login_url': login_url,
-        'profile_url': profile_url,
+        "first_name": teacher.first_name,
+        "last_name": teacher.last_name,
+        "course": course.type.title,
+        "course_internal_name": course.name,
+        "course_info": create_course_info(course),
+        "room_url": course_url,
+        "room_info": course.room.description if course.room else "",
+        "room_instructions": course.room.instructions if course.room else "",
+        "coursepayment_url": coursepayment_url,
+        "login_url": login_url,
+        "profile_url": profile_url,
     }
 
-    template = 'teacher_welcome'
+    template = "teacher_welcome"
 
     return send_email(
         to=teacher.email,
         reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
         template=template,
-        context=context
+        context=context,
     )
 
 
@@ -195,24 +209,21 @@ def detect_rejection_reason(subscription: Subscribe) -> str:
 
 
 def create_user_info(user: User) -> str:
-    s = '{}\n'.format(user.get_full_name())
+    s = "{}\n".format(user.get_full_name())
     if user.email:
         s += user.email + "\n"
     if user.profile.phone_number:
         s += user.profile.phone_number + "\n"
-    return s.strip('\n')
+    return s.strip("\n")
 
 
 def create_course_info(course: Course) -> str:
-    s = f'{course.type.title}\n{course.format_lessons()}'
+    s = f"{course.type.title}\n{course.format_lessons()}\n"
     if course.room:
-        s += f', {course.room}\n'
-    else:
-        s += '\n'
-    if course.get_period():
-        s += f'{course.get_period()}\n'
+        s += f"{course.room}\n"
+    s += f"{course.get_period()}\n"
     if course.format_cancellations():
         s += f'{_("Cancellations")}: {course.format_cancellations()}\n'
     if course.format_prices():
         s += f'{_("Costs")}: {course.format_prices()}\n'
-    return s.strip('\n')
+    return s.strip("\n")

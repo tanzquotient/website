@@ -17,7 +17,9 @@ class FeaturedEventCategoriesPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'categories': EventCategory.objects.filter(is_featured=True),
-        })
+        context.update(
+            {
+                "categories": EventCategory.objects.filter(is_featured=True),
+            }
+        )
         return context

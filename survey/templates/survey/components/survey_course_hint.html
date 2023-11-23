@@ -11,7 +11,7 @@
             <em>{{ course.type.subtitle }}</em>
         {% endif %}
         <br/>
-        {% include "courses/snippets/lessons.html" with course=course display_link=False disable_modals=True only %}
+        {% include "courses/snippets/lesson_components/lessons.html" with course=course display_link=False disable_modals=True only %}
         <br/>
         {% trans "Teachers" %}:
         {% include "courses/snippets/course_teachers.html" with display_link=True disable_modals=True teachings=course.teaching.all only %}

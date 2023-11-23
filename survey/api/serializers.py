@@ -7,7 +7,7 @@ from survey.models import *
 class ChoiceSerializer(TranslatableModelSerializer):
     class Meta:
         model = Choice
-        fields = ('id', 'label')
+        fields = ("id", "label")
 
 
 class QuestionSerializer(TranslatableModelSerializer):
@@ -15,7 +15,7 @@ class QuestionSerializer(TranslatableModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'name', 'text', 'note', 'type', 'choice_set')
+        fields = ("id", "name", "text", "note", "type", "choice_set")
 
 
 class QuestionGroupSerializer(TranslatableModelSerializer):
@@ -23,7 +23,7 @@ class QuestionGroupSerializer(TranslatableModelSerializer):
 
     class Meta:
         model = QuestionGroup
-        fields = ('id', 'name', 'intro_text', 'question_set')
+        fields = ("id", "name", "intro_text", "question_set")
 
 
 class SurveySerializer(TranslatableModelSerializer):
@@ -31,10 +31,10 @@ class SurveySerializer(TranslatableModelSerializer):
 
     class Meta:
         model = Survey
-        fields = ('id', 'intro_text', 'questiongroup_set', 'language_code')
+        fields = ("id", "intro_text", "questiongroup_set", "language_code")
 
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ('id', 'value')
+        fields = ("id", "value")

@@ -10,4 +10,3 @@ class PhotosApphook(CMSApp):
 
     def get_urls(self, page=None, language=None, **kwargs):
         return ["photologue.urls"]
-

@@ -2,7 +2,7 @@
 
 <div>
     {% if not course.has_free_places %}
-        <span class="badge rounded-pill bg-danger">{% trans "fully booked" %}</span>
+        <em>{% trans "Fully booked" %}</em>
     {% else %}
         <div>
             {% if course.show_free_places_count %}

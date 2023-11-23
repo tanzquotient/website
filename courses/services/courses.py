@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Iterable, Any, Optional
 
+import reversion
 from django.contrib.auth.models import User
 from post_office.models import EmailTemplate
 
@@ -25,18 +26,21 @@ def copy_course(course, to=None, set_preceeding_course=False):
         course_copy.save()
 
         if set_preceeding_course:
-            cs = models.CourseSuccession(predecessor=models.Course.objects.get(pk=old_course_pk), successor=course)
+            cs = models.CourseSuccession(
+                predecessor=models.Course.objects.get(pk=old_course_pk),
+                successor=course,
+            )
             cs.save()
 
 
 def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
-    email_template: Optional[EmailTemplate] = data['email_template']
-    email_subject: Optional[str] = data['email_subject']
-    email_content: Optional[str] = data['email_content']
-    send_to_participants: bool = data['send_to_participants']
-    send_to_teachers: bool = data['send_to_teachers']
-    survey: Optional[Survey] = data['survey']
-    survey_url_expire_date: Optional[datetime] = data['survey_url_expire_date']
+    email_template: Optional[EmailTemplate] = data["email_template"]
+    email_subject: Optional[str] = data["email_subject"]
+    email_content: Optional[str] = data["email_content"]
+    send_to_participants: bool = data["send_to_participants"]
+    send_to_teachers: bool = data["send_to_teachers"]
+    survey: Optional[Survey] = data["survey"]
+    survey_url_expire_date: Optional[datetime] = data["survey_url_expire_date"]
 
     emails = []
 
@@ -48,13 +52,12 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
             recipients += course.get_teachers()
 
         for recipient in recipients:
-
             # Get context for email
             context = {
-                'first_name': recipient.first_name,
-                'last_name': recipient.last_name,
-                'course': course.type.title,
-                'offering': course.offering.name,
+                "first_name": recipient.first_name,
+                "last_name": recipient.last_name,
+                "course": course.type.title,
+                "offering": course.offering.name,
             }
 
             if survey:
@@ -63,10 +66,10 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                     email_template=email_template,
                     course=course,
                     user=recipient,
-                    url_expire_date=survey_url_expire_date
+                    url_expire_date=survey_url_expire_date,
                 )
-                context['survey_url'] = survey_instance.create_full_url()
-                context['survey_expiration'] = survey_instance.url_expire_date
+                context["survey_url"] = survey_instance.create_full_url()
+                context["survey_expiration"] = survey_instance.url_expire_date
 
             subject: str = email_subject
             message: Optional[str] = None
@@ -77,46 +80,58 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 message = message or email_template.content
                 html_message = html_message or email_template.html_content
 
-            emails.append(dict(
-                to=recipient.email,
-                reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
-                subject=subject,
-                message=message,
-                html_message=html_message,
-                context=context,
-            ))
+            emails.append(
+                dict(
+                    to=recipient.email,
+                    reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                    subject=subject,
+                    message=message,
+                    html_message=html_message,
+                    context=context,
+                )
+            )
 
-    log.info('Sending {} emails'.format(len(emails)))
+    log.info("Sending {} emails".format(len(emails)))
     send_all_emails(emails)
 
 
-def send_vouchers(data, recipients):
-    amount = data['amount']
-    percentage = data['percentage']
-    purpose = data['purpose']
-    expires_flag = data['expires_flag']
-    expires = data['expires']
+def send_vouchers(data, recipients, user):
+    amount = data["amount"]
+    percentage = data["percentage"]
+    purpose = data["purpose"]
+    expires_flag = data["expires_flag"]
+    expires = data["expires"]
 
     emails = []
 
     for recipient in recipients:
-        voucher = Voucher(purpose=purpose, percentage=percentage, amount=amount, expires=expires if expires_flag else None)
-        voucher.save()
+        with reversion.create_revision():
+            voucher = Voucher.objects.create(
+                purpose=purpose,
+                percentage=percentage,
+                amount=amount,
+                expires=expires if expires_flag else None,
+            )
+            reversion.set_user(user)
+            reversion.set_comment(f"Sent voucher email to {recipient}")
+
         generate_voucher_pdfs(vouchers=[voucher])
 
         email_context = {
-            'first_name': recipient.first_name,
-            'last_name': recipient.last_name,
-            'voucher_key': voucher.key,
-            'voucher_url': voucher.pdf_file.url,
+            "first_name": recipient.first_name,
+            "last_name": recipient.last_name,
+            "voucher_key": voucher.key,
+            "voucher_url": voucher.pdf_file.url,
         }
 
-        emails.append(dict(
-            to=recipient.email,
-            template='voucher',
-            context=email_context,
-            attachments={'Voucher.pdf': voucher.pdf_file.file}
-        ))
+        emails.append(
+            dict(
+                to=recipient.email,
+                template="voucher",
+                context=email_context,
+                attachments={"Voucher.pdf": voucher.pdf_file.file},
+            )
+        )
 
-    log.info('Sending {} emails'.format(len(emails)))
+    log.info("Sending {} emails".format(len(emails)))
     send_all_emails(emails)

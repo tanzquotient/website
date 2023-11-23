@@ -11,29 +11,32 @@ from courses.models import Subscribe, PaymentMethod
 
 class CounterPaymentDetailView(FormView):
     form_class = forms.Form
-    template_name = 'payment/counter/details.html'
-    success_url = reverse_lazy('payment:counterpayment_index')
+    template_name = "payment/counter/details.html"
+    success_url = reverse_lazy("payment:counterpayment_index")
 
     def get_context_data(self, **kwargs):
-        usi = self.kwargs['usi']
+        usi = self.kwargs["usi"]
         subscription = Subscribe.objects.filter(usi=usi).first()
 
         context = super(CounterPaymentDetailView, self).get_context_data(**kwargs)
-        context['subscription'] = subscription
+        context["subscription"] = subscription
 
         return context
 
-    @method_decorator(permission_required('courses.access_counterpayment'))
+    @method_decorator(permission_required("courses.access_counterpayment"))
     def dispatch(self, *args, **kwargs):
         return super(CounterPaymentDetailView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form, **kwargs):
-        usi = self.kwargs['usi']
+        usi = self.kwargs["usi"]
         subscription = Subscribe.objects.filter(usi=usi).first()
 
         # redirect and show message
         if subscription.mark_as_paid(PaymentMethod.COUNTER, self.request.user):
-            messages.add_message(self.request, messages.SUCCESS,
-                                 "USI " + usi + " " + _('successfully marked as paid.'))
+            messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                "USI " + usi + " " + _("successfully marked as paid."),
+            )
 
         return super(CounterPaymentDetailView, self).form_valid(form)

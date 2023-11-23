@@ -20,7 +20,9 @@ def finalize_payments(modeladmin, request, queryset):
     PaymentProcessor().finalize_payments(queryset)
 
 
-finalize_payments.short_description = "Finalize selected payments (set payment method and send payment confirmation)"
+finalize_payments.short_description = (
+    "Finalize selected payments (set payment method and send payment confirmation)"
+)
 
 
 def check_balance(modeladmin, request, queryset):
@@ -44,11 +46,12 @@ def mark_payment_as_course_payment(modeladmin, request, queryset):
         payment.state = State.PROCESSED
         payment.type = Type.COURSE_PAYMENT_TRANSFER
         payment.save()
-        
+
+
 def mark_archive(modeladmin, request, queryset):
     for payment in queryset:
         payment.state = State.ARCHIVE
-        payment.save()    
+        payment.save()
 
 
 mark_archive.short_description = "Archive selected payments"
