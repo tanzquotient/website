@@ -22,10 +22,6 @@ from utils.tables.table_view_or_export import table_view_or_export
 
 from . import figures, services
 from .forms.subscribe_form import SubscribeForm
-<<<<<<< HEAD
-from .models import (Course, IrregularLesson, Offering, OfferingType,
-                     RegularLessonException, Style, Subscribe)
-=======
 from .models import (
     Course,
     Style,
@@ -35,7 +31,6 @@ from .models import (
     IrregularLesson,
     RegularLessonException,
 )
->>>>>>> c336f3f42bd060da99d8d3d0dd1cbaad21cfc4f0
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
 
@@ -58,21 +53,6 @@ def course_list(
         )
 
     offerings = services.get_offerings_to_display(show_preview).prefetch_related(
-<<<<<<< HEAD
-        'period__cancellations',
-        'course_set__type',
-        'course_set__period__cancellations',
-        'course_set__regular_lessons',
-        'course_set__room__address',
-        'course_set__room__translations',
-        Prefetch('course_set__irregular_lessons',
-                 queryset=IrregularLesson.objects.order_by('date', 'time_from')),
-        Prefetch('course_set__regular_lessons__exceptions',
-                 queryset=RegularLessonException.objects.order_by('date')),
-        Prefetch('course_set__subscriptions', queryset=Subscribe.objects.active(
-        ), to_attr='active_subscriptions'),
-        'course_set__subscriptions',
-=======
         "period__cancellations",
         "course_set__type",
         "course_set__period__cancellations",
@@ -93,7 +73,6 @@ def course_list(
             to_attr="active_subscriptions",
         ),
         "course_set__subscriptions",
->>>>>>> c336f3f42bd060da99d8d3d0dd1cbaad21cfc4f0
     )
 
     c_offerings = []
@@ -194,9 +173,8 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
         # Could possibly also add students, though careful with privacy
         for teacher in teachers:
             if teacher.email is not None:
-                # TODO: decide whether exposing the E-Mail is ok, or if we should hide 
-                # this ical behind login
-                attendee = vCalAddress("MAILTO:{}".format(teacher.email))
+                # exposing the E-Mail is not ok, maybe don't want to 
+                attendee = vCalAddress("MAILTO:{}".format("kontakt@tanzquotient.org"))#teacher.email))
                 attendee.params['cn'] = vText(teacher.first_name + " "  + teacher.last_name)
                 attendee.params['ROLE'] = vText('Teacher')
                 event.add('attendee', attendee, encode=0)
