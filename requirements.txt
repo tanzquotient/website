@@ -1,27 +1,27 @@
 # Django
-Django==4.2.6
+Django==4.2.8
 
 # Django Extensions
 django-debug-toolbar==4.2.0     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
 django-post-office==3.8.0       # Send and manage emails asynchronously, database based email templates
-django-reversion==5.0.6         # Version control for model instances, e.g. used for subscriptions
+django-reversion==5.0.8         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.5.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-ckeditor==6.7.0          # Django admin CKEditor integration
-django-allauth==0.58.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==0.58.2          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
 django-cms==3.11.4              # Open source content management system based on the Django
-djangocms-text-ckeditor==5.1.4  # Text plugin for django CMS using CKEditor 4
+djangocms-text-ckeditor==5.1.5  # Text plugin for django CMS using CKEditor 4
 
 # Rest framework
 djangorestframework==3.14.0     # Toolkit for building Web APIs
 django-parler-rest==2.2         # Adding translation support to django-rest-framework
 
 # Tasks
-celery==5.3.4                   # Task queue with focus on real-time processing, while also supporting task scheduling
+celery==5.3.6                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
 django-celery-beat==2.5.0       # Store periodic task schedules in the database
 django-celery-results==2.5.1    # Stores Celery task results
@@ -30,31 +30,31 @@ django-redis==5.4.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.2                 # For Microsoft Excel Files
 svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
-reportlab==4.0.6                # For generating PDFs and graphics
+reportlab==4.0.8                # For generating PDFs and graphics
 pyyaml==6.0.1                   # Used for generating environment variable file
 
 # SSH
 paramiko==3.3.1                 # Used to get finance files from PostFinance
 
 # Database
-psycopg[binary]==3.1.12         # Driver for PostgreSQL
+psycopg[binary]==3.1.14         # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.2         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.28.73                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
-minio==7.1.17                   # Perform bucket and object operations, used for initializing Minio
+boto3==1.33.12                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+minio==7.2.0                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==21.2.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==1.32.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==1.38.0              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==5.18.0                  # For generating charts and graphs
 pytz==2023.3.post1              # timezone calculations
-pylint==3.0.2                   # Default linter
+pylint==3.0.3                   # Default linter
 shortuuid==1.0.11               # For generating short and unique ID's and codes
-django-hijack==3.4.2            # Superuser can impersonate other users
+django-hijack==3.4.4            # Superuser can impersonate other users
 python-dotenv==1.0.0            # Used to load environment variables from .env file
 sphinx-automodapi==0.16.0       # For generating Sphinx API docs
