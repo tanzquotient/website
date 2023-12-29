@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import os
+from datetime import timedelta
 from typing import Union
 
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,9 +17,10 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
-from icalendar import Calendar, Event, vCalAddress, vDatetime, vText
+from icalendar import Calendar, Event, vCalAddress, vDatetime, vDuration, vText
 
 from courses.forms import UserEditForm, create_initial_from_user
+from courses.models.choices import SubscribeState
 from courses.models.regular_lesson import RegularLesson
 from courses.utils import find_duplicate_users, merge_duplicate_users
 from tq_website import settings
@@ -152,7 +154,7 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     return render(request, "courses/course_detail.html", context)
 
 
-def _lesson_to_ical_event(course: Course, lesson: list[Union[RegularLesson, IrregularLesson]]):
+def _lesson_to_ical_event(course: Course, lesson: Union[RegularLesson, IrregularLesson]):
     event = Event()
     event['dtstart'] = vDatetime(lesson.time_from)
     event['dtend'] = vDatetime(lesson.time_to)
@@ -429,7 +431,7 @@ def _user_specific_token(user: User) -> str:
     return hashlib.sha256(str_to_hash.encode()).hexdigest()
 
 
-def user_courses_ical(request: HttpRequest, user_id: int, security_token: str) -> HttpResponse:
+def user_ical(request: HttpRequest, user_id: int, security_token: str) -> HttpResponse:
     user = get_object_or_404(User, pk=user_id)
 
     security_token = request.GET.get('token', '')
@@ -439,11 +441,23 @@ def user_courses_ical(request: HttpRequest, user_id: int, security_token: str) -
     cal = Calendar()
     cal.add('version', '2.0')
     cal.add('prodid', "-//Tanzquotient user calendar {}//mxm.dk//".format(user_id))
-    subscriptions = user.profile.get_subscriptions()
+    # could also add e.g. `description` if we had a good one.
+    # probably would want to translate?
+    # also, we could use the legacy properties as well (e.g., X-WR-CALNAME), to support more calendars
+    # but I argue it's not worth the effort, these properties are not so important
+    cal.add('name', "Tanzquotient {}".format(user.get_full_name()))
+    cal.add('refresh-interval', vDuration(timedelta(hours=12)))
+    # @var subscriptions Iterable[Course]
+    subscriptions = [s.course for s in user.profile.get_subscriptions(
+    ) if s.state in SubscribeState.ACCEPTED_STATES]
+    subscriptions.extend([
+        t.course for t in user.teaching_courses.all() if not t.course.cancelled
+    ])
     for course in subscriptions:
         lessons = course.get_lessons()
         for lesson in lessons:
-            cal.add_component(_lesson_to_ical_event(course, lesson))
+            cal.add_component(_lesson_to_ical_event(
+                course, lesson))
 
     return HttpResponse(cal.to_ical(), content_type='text/calendar')
 

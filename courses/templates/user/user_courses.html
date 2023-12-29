@@ -33,7 +33,7 @@
 
     <div class="row">
         <h3 class="col-sm-11">{% trans "My Subscriptions" %}</h3>
-        <a href="{% url "user_courses_ical" user.id %}?token={{ token }}" class="col-sm-1" title="{% trans "iCalendar export" %}">        
+        <a href="{% url "user_ical" user.id %}?token={{ token }}" class="col-sm-1" title="{% trans "Add to calendar" %}">        
             <i class="fa fa-calendar fa-lg"></i>
         </a>
     </div>
