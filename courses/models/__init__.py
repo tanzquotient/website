@@ -1,4 +1,5 @@
 from .choices import *
+from .lesson_occurrence import *
 from .teach import Teach
 from .offering import Offering
 from .address import Address

@@ -57,14 +57,9 @@ def get_offerings_by_year(
 def course_sort_key(course: Course) -> tuple:
     default_date = date(year=9999, month=1, day=1)
     default_time = time(hour=23, minute=59, second=59)
-    first_date = course.get_first_lesson_date() or default_date
-    first_regular = course.get_first_regular_lesson()
-    first_irregular = course.get_first_irregular_lesson()
-    first_time = (
-        first_regular.time_from
-        if first_regular
-        else (first_irregular.time_from if first_irregular else default_time)
-    )
+    first_date_time = course.get_first_lesson_start()
+    first_date = first_date_time.date() if first_date_time else default_date
+    first_time = first_date_time.time() if first_date_time else default_time
 
     if course.offering.type != OfferingType.REGULAR:
         return first_date, first_time

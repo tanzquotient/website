@@ -1,8 +1,12 @@
-from datetime import datetime, timedelta
+import operator
+from datetime import datetime, timedelta, date
+from functools import reduce
+from typing import Iterable
 
 from django.db import models
+from pytz import timezone
 
-from . import Weekday
+from . import Weekday, LessonOccurrence
 
 
 class RegularLesson(models.Model):
@@ -16,28 +20,30 @@ class RegularLesson(models.Model):
     def get_weekday_number(self) -> int:
         return Weekday.NUMBERS[self.weekday]
 
-    def get_total_time(self) -> timedelta:
+    def get_occurrences(self) -> Iterable[LessonOccurrence]:
         period = self.course.get_period()
         cancellations = self.course.get_cancellation_dates()
 
-        all_days_in_period = (
-            period.date_from + timedelta(x)
-            for x in range((period.date_to - period.date_from).days + 1)
+        all_dates_in_period = map(
+            lambda offset: period.date_from + timedelta(days=offset),
+            range((period.date_to - period.date_from).days + 1),
         )
 
-        course_days_in_period = filter(
-            lambda date: date.weekday() == Weekday.NUMBERS[self.weekday]
-            and date not in cancellations,
-            all_days_in_period,
-        )
+        def has_date_a_lesson(d: date) -> bool:
+            return (
+                d.weekday() == Weekday.NUMBERS[self.weekday] and d not in cancellations
+            )
 
-        amount_lessons = len(list(course_days_in_period))
+        def to_lesson_occurrence(d: date) -> LessonOccurrence:
+            return LessonOccurrence(
+                start=datetime.combine(d, self.time_from, timezone("Europe/Zurich")),
+                end=datetime.combine(d, self.time_to, timezone("Europe/Zurich")),
+            )
 
-        time_per_lesson = datetime.combine(
-            datetime.today(), self.time_to
-        ) - datetime.combine(datetime.today(), self.time_from)
+        return map(to_lesson_occurrence, filter(has_date_a_lesson, all_dates_in_period))
 
-        return amount_lessons * time_per_lesson
+    def get_total_time(self) -> timedelta:
+        return reduce(operator.add, map(lambda l: l.duration, self.get_occurrences()))
 
     def __str__(self) -> str:
         return (

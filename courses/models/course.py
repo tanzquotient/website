@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from decimal import Decimal
 from numbers import Number
 from typing import Optional, Union, Iterable
@@ -25,9 +25,11 @@ from courses.models import (
     RegularLesson,
     IrregularLesson,
     RegularLessonException,
+    LessonOccurrence,
 )
 from partners.models import Partner
 from survey.models import Survey
+from utils.helpers import optional_min, optional_max
 
 
 class Course(TranslatableModel):
@@ -459,6 +461,20 @@ class Course(TranslatableModel):
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
 
+    def get_lesson_occurrences(self) -> Iterable[LessonOccurrence]:
+        return [
+            occurrence
+            for lesson in self.get_lessons()
+            for occurrence in lesson.get_occurrences()
+        ]
+
+    def get_regular_lesson_occurrences(self) -> Iterable[LessonOccurrence]:
+        return [
+            occurrence
+            for lesson in self.regular_lessons.all()
+            for occurrence in lesson.get_occurrences()
+        ]
+
     def get_all_regular_lesson_exceptions(self) -> list[RegularLessonException]:
         exceptions = []
         for regular_lesson in self.regular_lessons.all():
@@ -518,75 +534,37 @@ class Course(TranslatableModel):
         else:
             return None
 
-    def get_first_irregular_lesson(self) -> Optional[IrregularLesson]:
-        if self.irregular_lessons.exists():
-            return self.irregular_lessons.first()
-        return None
-
-    def get_last_irregular_lesson(self) -> Optional[IrregularLesson]:
-        if self.irregular_lessons.exists():
-            return self.irregular_lessons.last()
-        return None
-
-    @staticmethod
-    def next_weekday(d: date, weekday: int) -> date:
-        days_ahead = weekday - d.weekday()
-        if days_ahead < 0:  # Target day already happened
-            days_ahead += 7
-        return d + timedelta(days_ahead)
-
-    def get_first_regular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_first_regular_lesson()
-        if lesson:
-            return Course.next_weekday(
-                self.get_period().date_from, lesson.get_weekday_number()
-            )
-        else:
-            return None
-
-    def get_last_regular_lesson_date(self) -> Optional[date]:
-        if self.regular_lessons.exists():
-            course_weekdays = [
-                Weekday.NUMBERS[lesson.weekday] for lesson in self.regular_lessons.all()
-            ]
-
-            # Find last course day before date_to
-            for day_delta in range(7):
-                day = self.get_period().date_to - timedelta(days=day_delta)
-                if day.weekday() in course_weekdays:
-                    return day
-
-        return None
-
-    def get_first_irregular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_first_irregular_lesson()
-        return lesson.date if lesson else None
-
-    def get_last_irregular_lesson_date(self) -> Optional[date]:
-        lesson = self.get_last_irregular_lesson()
-        return lesson.date if lesson else None
+    def get_first_lesson_start(self) -> Optional[datetime]:
+        first = optional_min(self.get_lesson_occurrences())
+        return first.start if first else None
 
     def get_first_lesson_date(self) -> Optional[date]:
-        d1 = self.get_first_irregular_lesson_date()
-        d2 = self.get_first_regular_lesson_date()
-        if d1 is None and d2 is None:
-            return None
-        if d1 is None:
-            return d2
-        if d2 is None:
-            return d1
+        start = self.get_first_lesson_start()
+        return start.date() if start else None
 
-        return d1 if d1 < d2 else d2
+    def get_last_lesson_end(self) -> Optional[datetime]:
+        last = optional_max(self.get_lesson_occurrences())
+        return last.end if last else None
 
     def get_last_lesson_date(self) -> Optional[date]:
-        d1 = self.get_last_irregular_lesson_date()
-        d2 = self.get_last_regular_lesson_date()
-        if d1 is None:
-            return d2
-        if d2 is None:
-            return d1
+        end = self.get_last_lesson_end()
+        return end.date() if end else None
 
-        return d1 if d1 > d2 else d2
+    def get_first_regular_lesson_start(self) -> Optional[datetime]:
+        first = optional_min(self.get_regular_lesson_occurrences())
+        return first.start if first else None
+
+    def get_first_regular_lesson_date(self) -> Optional[date]:
+        start = self.get_first_regular_lesson_start()
+        return start.date() if start else None
+
+    def get_last_regular_lesson_end(self) -> Optional[datetime]:
+        last = optional_max(self.get_regular_lesson_occurrences())
+        return last.end if last else None
+
+    def get_last_regular_lesson_date(self) -> Optional[date]:
+        end = self.get_last_regular_lesson_end()
+        return end.date() if end else None
 
     def get_common_irregular_weekday(self) -> Optional[str]:
         """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
