@@ -31,7 +31,12 @@
         </p>
     {% endif %}
 
-    <h3>{% trans "My Subscriptions" %}</h3>
+    <div class="row">
+        <h3 class="col-sm-11">{% trans "My Subscriptions" %}</h3>
+        <a href="{% url "user_ical" user.id %}?token={{ token }}" class="col-sm-1" title="{% trans "Add to calendar" %}">        
+            <i class="fa fa-calendar fa-lg"></i>
+        </a>
+    </div>
     {% with subscriptions=user.profile.get_subscriptions  %}
         {% for subscription in subscriptions %}
             {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account only %}

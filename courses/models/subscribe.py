@@ -35,7 +35,7 @@ from . import (
 class Subscribe(Model):
     # Identifying data
     user = ForeignKey(to=User, related_name="subscriptions", on_delete=PROTECT)
-    course = ForeignKey("Course", related_name="subscriptions", on_delete=PROTECT)
+    course = ForeignKey(to="Course", related_name="subscriptions", on_delete=PROTECT)
 
     # Partner, matching, lead/follow preference
     partner = ForeignKey(

@@ -1,34 +1,36 @@
+import hashlib
 import logging
+import os
+from datetime import timedelta
+from typing import Union
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
-from django.http import Http404, HttpResponse, HttpRequest
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
+from icalendar import Calendar, Event, vCalAddress, vDatetime, vDuration, vText
 
 from courses.forms import UserEditForm, create_initial_from_user
-from courses.utils import merge_duplicate_users, find_duplicate_users
+from courses.models.choices import SubscribeState
+from courses.models.regular_lesson import RegularLesson
+from courses.utils import find_duplicate_users, merge_duplicate_users
 from tq_website import settings
 from utils.plots import plot_figure
 from utils.tables.table_view_or_export import table_view_or_export
-from . import services, figures
+
+from . import figures, services
 from .forms.subscribe_form import SubscribeForm
-from .models import (
-    Course,
-    Style,
-    Offering,
-    OfferingType,
-    Subscribe,
-    IrregularLesson,
-    RegularLessonException,
-)
+from .models import (Course, IrregularLesson, Offering, OfferingType,
+                     RegularLessonException, Style, Subscribe)
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
 
@@ -152,6 +154,41 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     return render(request, "courses/course_detail.html", context)
 
 
+def _lesson_to_ical_event(course: Course, lesson: Union[RegularLesson, IrregularLesson]):
+    event = Event()
+    event['dtstart'] = vDatetime(lesson.time_from)
+    event['dtend'] = vDatetime(lesson.time_to)
+    event.add('summary', vText(course.name))
+    event.add('description', vText(course.format_description()))
+    event.add('location', vText(course.room))
+
+    return event
+
+
+def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
+    course = get_object_or_404(Course.objects, id=course_id)
+    cal = Calendar()
+    cal.add('version', '2.0')
+    cal.add('prodid', "-//Tanzquotient calendar {}//mxm.dk//".format(course_id))
+    lessons = course.get_lessons()
+    teachers = course.get_teachers()
+    for lesson in lessons:
+        event = _lesson_to_ical_event(course, lesson)
+        # Attendees:
+        # Could possibly add teachers, students, etc.
+        # However, exposing the E-Mail is not ok, and attendees don't exist without,
+        # so we don't add any attendees. If we did, the code would look like this:
+        # for teacher in teachers:
+        #     if teacher.email is not None:
+        #         attendee = vCalAddress("MAILTO:{}".format(teacher.email))
+        #         attendee.params['cn'] = vText(teacher.first_name + " "  + teacher.last_name)
+        #         attendee.params['ROLE'] = vText('Teacher')
+        #         event.add('attendee', attendee, encode=0)
+        cal.add_component(event)
+
+    return HttpResponse(cal.to_ical(), content_type='text/calendar')
+
+
 @login_required
 def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
     course = get_object_or_404(Course.objects, id=course_id)
@@ -181,7 +218,8 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
 
     # Sign up user for course if form is valid
     if form.is_valid():
-        subscription = services.subscribe(course, request.user, form.cleaned_data)
+        subscription = services.subscribe(
+            course, request.user, form.cleaned_data)
         context = {
             "course": course,
             "subscription": subscription,
@@ -379,9 +417,49 @@ def user_courses(request: HttpRequest) -> HttpResponse:
     template_name = "user/user_courses.html"
     context = {
         "user": request.user,
+        "token": _user_specific_token(request.user),
         "payment_account": settings.PAYMENT_ACCOUNT["default"],
     }
     return render(request, template_name, context)
+
+
+def _user_specific_token(user: User) -> str:
+    # without needing to extend the user, we can use its joined date (& time!),
+    # salt it with the secret key, and we should have an acceptable (-> hardly guessable) hash
+    str_to_hash = "{}-{}-{}".format(user.date_joined,
+                                    os.environ.get("SECRET_KEY"), user.username)
+    return hashlib.sha256(str_to_hash.encode()).hexdigest()
+
+
+def user_ical(request: HttpRequest, user_id: int, security_token: str) -> HttpResponse:
+    user = get_object_or_404(User, pk=user_id)
+
+    security_token = request.GET.get('token', '')
+    if (security_token != _user_specific_token(user)):
+        raise PermissionDenied()
+
+    cal = Calendar()
+    cal.add('version', '2.0')
+    cal.add('prodid', "-//Tanzquotient user calendar {}//mxm.dk//".format(user_id))
+    # could also add e.g. `description` if we had a good one.
+    # probably would want to translate?
+    # also, we could use the legacy properties as well (e.g., X-WR-CALNAME), to support more calendars
+    # but I argue it's not worth the effort, these properties are not so important
+    cal.add('name', "Tanzquotient {}".format(user.get_full_name()))
+    cal.add('refresh-interval', vDuration(timedelta(hours=12)))
+    # @var subscriptions Iterable[Course]
+    subscriptions = [s.course for s in user.profile.get_subscriptions(
+    ) if s.state in SubscribeState.ACCEPTED_STATES]
+    subscriptions.extend([
+        t.course for t in user.teaching_courses.all() if not t.course.cancelled
+    ])
+    for course in subscriptions:
+        lessons = course.get_lessons()
+        for lesson in lessons:
+            cal.add_component(_lesson_to_ical_event(
+                course, lesson))
+
+    return HttpResponse(cal.to_ical(), content_type='text/calendar')
 
 
 @login_required
