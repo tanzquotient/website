@@ -2,17 +2,16 @@ import logging
 from typing import Iterable
 
 from post_office.models import Email
+from celery import shared_task
 
 from . import send_email
 
 log = logging.getLogger("tq")
 
-
 def send_all_emails(emails: Iterable[dict]) -> list[Email]:
-    sent_emails = list()
-    for email in emails:
-        sent_email = send_email(**email)
-        if sent_email:
-            sent_emails.append(sent_email)
+    sent_emails = [send_single_email_task.delay(email) for email in emails]
+    return [result.get() for result in sent_emails]
 
-    return sent_emails
+@shared_task(name="send_single_email_task")
+def send_single_email_task(email: dict) -> Email:
+    return send_email(**email)
