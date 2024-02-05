@@ -8,12 +8,15 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.syndication.views import add_domain
 from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
+from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 from icalendar import Calendar, Event, vDatetime, vDuration, vText
@@ -159,12 +162,39 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     return render(request, "courses/course_detail.html", context)
 
 
-def _lesson_to_ical_event(course: Course, lesson_occurrence: LessonOccurrence):
+def _lesson_to_ical_event(
+    course: Course, lesson_occurrence: LessonOccurrence, request: HttpRequest
+):
     event = Event()
     event["dtstart"] = vDatetime(lesson_occurrence.start)
     event["dtend"] = vDatetime(lesson_occurrence.end)
     event.add("summary", vText(course.type.title))
     event.add("location", vText(course.room))
+    event.add(
+        "description",
+        "\n\n".join(
+            [
+                strip_tags(string)
+                for string in [
+                    course.description,
+                    course.type.description,
+                    course.format_prices(),
+                    f"{_('Teachers')}: {course.format_teachers()}"
+                    if course.get_teachers()
+                    else None,
+                ]
+                if string
+            ]
+        ),
+    )
+    event.add(
+        "url",
+        add_domain(
+            get_current_site(request),
+            reverse("courses:course_detail", kwargs=dict(course_id=course.id)),
+            request.is_secure(),
+        ),
+    )
 
     # Attendees:
     # Could possibly add teachers, students, etc.
@@ -181,13 +211,13 @@ def _lesson_to_ical_event(course: Course, lesson_occurrence: LessonOccurrence):
 
 
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
-    course = get_object_or_404(Course.objects, id=course_id)
+    course: Course = get_object_or_404(Course.objects, id=course_id)
     cal = Calendar()
     cal.add("version", "2.0")
     cal.add("prodid", f"-//Tanzquotient calendar for course {course_id}//mxm.dk//")
     cal.add("name", course.type.title)
     for occurrence in course.get_lesson_occurrences():
-        event = _lesson_to_ical_event(course, occurrence)
+        event = _lesson_to_ical_event(course, occurrence, request)
         cal.add_component(event)
 
     return HttpResponse(cal.to_ical(), content_type="text/calendar")
@@ -457,7 +487,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     )
     for course in courses:
         for occurrence in course.get_lesson_occurrences():
-            cal.add_component(_lesson_to_ical_event(course, occurrence))
+            cal.add_component(_lesson_to_ical_event(course, occurrence, request))
 
     return HttpResponse(cal.to_ical(), content_type="text/calendar")
 

@@ -1,7 +1,7 @@
-import datetime
-import os
-from pytz import timezone
+from datetime import datetime, time, date, timedelta
+from typing import Optional
 
+from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django_ical.views import ICalFeed
@@ -10,60 +10,46 @@ from .models import Event
 
 
 class EventFeed(ICalFeed):
-    # A unique id for this calendar. For details see: http://www.kanzaki.com/docs/ical/prodid.html
-    product_id = "-//Tanzquotient Website calendar v1.1"
+    product_id = "-//Tanzquotient Events//mxm.dk//"
+    timezone = "UTC"
 
-    def items(self):
+    def items(self) -> QuerySet[Event]:
         return Event.objects.filter(cancelled=False).all()
 
-    def item_title(self, item):
+    def item_title(self, item: Event) -> str:
         return item.safe_translation_getter("name", any_language=True) or "Untitled"
 
-    def item_description(self, item):
-        description = item.name
-        description += os.linesep
-        description += (
-            item.safe_translation_getter("description", any_language=True) or ""
+    def item_description(self, event: Event) -> str:
+        return "\n\n".join(
+            [
+                strip_tags(string)
+                for string in [
+                    event.description,
+                    event.category.description if event.category is not None else None,
+                    event.format_prices(),
+                ]
+                if string
+            ]
         )
 
-        price_string = item.format_prices()
-        if price_string:
-            description += os.linesep
-            description += price_string
+    def item_start_datetime(self, event: Event) -> [date | datetime]:
+        if event.time_from is None:
+            return event.date
+        return datetime.combine(event.date, event.time_from or time.min)
 
-        # add link (depending on item type) also to description since some calendar programs do not display link field
-        description += os.linesep
-        description += self.item_link(item)
+    def item_end_datetime(self, event: Event) -> [date | datetime]:
+        date_to = event.date_to or event.date
+        if event.time_to is None:
+            return date_to + timedelta(days=1)
+        return datetime.combine(date_to, event.time_to or time.max)
 
-        return strip_tags(description)
+    def item_location(self, event: Event) -> Optional[str]:
+        if event.room is None:
+            return None
+        return event.room.name
 
-    def item_start_datetime(self, item):
-        date = item.date
-        if item.time_from is None:
-            # no start time is available
-            return date
-        start = datetime.datetime.combine(date, item.time_from)
-        return start - timezone("Europe/Zurich").utcoffset(start)
+    def item_link(self, event: Event) -> str:
+        return reverse("events:detail", kwargs=dict(event_id=event.id))
 
-    def item_end_datetime(self, item):
-        date = item.date
-        if item.date_to:
-            date = item.date_to
-        if item.time_to is None:
-            # no end time is available
-            return date
-        end = datetime.datetime.combine(date, item.time_to)
-        return end - timezone("Europe/Zurich").utcoffset(end)
-
-    def item_location(self, item):
-        return item.room
-
-    def item_link(self, item):
-        return reverse("courses:home")
-
-    # must be unique in order to display all events correctly in most calendar programs
-    def item_guid(self, item):
-        domain = "tanzquotient"
-        namespace = "event"
-        guid = "{0}_{1}_{2}".format(domain, namespace, item.id)
-        return guid
+    def item_guid(self, event: Event) -> str:
+        return f"tanzquotient_event_{event.id}"
