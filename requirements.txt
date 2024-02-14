@@ -1,5 +1,5 @@
 # Django
-Django==4.2.10
+Django==5.0.2
 
 # Django Extensions
 django-debug-toolbar==4.3.0     # For developement. Gives additional insights into e.g. database queries
