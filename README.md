@@ -77,9 +77,14 @@ on the Google Drive in the IT folder.
 Restore the database:
 
 ```shell
+# If you have pg_restore installed
 pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
+
+# Using Docker
+docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --schema='public' --create < dbfilename.sql
 ```
 
+Maybe required if the database name in the prod dump differs from your local database name:
 Rename the database to the local name:
 
 ```postgresql
@@ -89,8 +94,10 @@ ALTER DATABASE tq_prod_website_tq_website RENAME TO tq_website;
 
 ## Documentation
 
-There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
-
+- Not-quite-up-to-date: [ReadTheDocs](https://tq-website.readthedocs.io/en/latest/)
+- IT and developer documentation: [Tanzquotient Wiki](https://wiki.vseth.ethz.ch/display/0519TAN/How+To%3A+IT)
+  (requires you to be added to the TQ team by the IT board member)
+- General VSETH docs about SIP: https://dev.vseth.ethz.ch/
 
 [github]: https://github.com/tanzquotient/tq_website
 
@@ -103,8 +110,6 @@ There is a not-quite-up-to-date documentation at [ReadTheDocs][RTD].
 [github]: https://github.com/tanzquotient/tq_website
 
 [sip]: https://dev.vseth.ethz.ch/
-
-[RTD]: https://tq-website.readthedocs.io/en/latest/
 
 [RTD-user]: https://tq-website.readthedocs.io/en/latest/introduction/non_programmer_howto.html
 
