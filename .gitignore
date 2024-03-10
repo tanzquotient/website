@@ -107,3 +107,7 @@ docs/sphinx/_static
 
 # Overrides file for env vars
 overrides*.yml
+
+# ignore generated jupyter notebook files
+etc/jupyter
+share/
