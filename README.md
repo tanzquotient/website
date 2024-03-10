@@ -14,8 +14,10 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 1. Make sure [Docker][docker] is installed.
 2. Clone this repo: `git clone <repo-url>`
-3. Create a python environment using python `>= 3.9`. You can for example set it up with
-   a [venv](https://docs.python.org/3/library/venv.html).
+3. Create a python environment using python `>= 3.9`.
+   You can for example set it up with a [venv](https://docs.python.org/3/library/venv.html).
+   1. `python3 -m venv venv`
+   1. `source venv/bin/activate`
 5. Initialize the project: `./scripts/initialize_project.sh`
 6. Run the project: `python manage.py runserver`
 7. Find the website at [localhost:8000][local_instance]
