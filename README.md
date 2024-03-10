@@ -77,11 +77,11 @@ on the Google Drive in the IT folder.
 Restore the database:
 
 ```shell
-# If you have pg_restore installed
-pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
-
 # Using Docker
 docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --schema='public' --create < dbfilename.sql
+
+# If you have pg_restore installed and know what you are doing
+pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
 ```
 
 Maybe required if the database name in the prod dump differs from your local database name:
