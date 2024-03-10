@@ -103,6 +103,7 @@ docs/sphinx/_static
 *fixture.yml
 *fixture.xml
 *fixture.yaml
+*.sql
 
 # Overrides file for env vars
 overrides*.yml
