@@ -78,7 +78,7 @@ Restore the database:
 
 ```shell
 # Using Docker
-docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --schema='public' --create < dbfilename.sql
+docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --schema='public' --create --dbname tq_prod_website_tq_website < dbfilename.sql
 
 # If you have pg_restore installed and know what you are doing
 pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
