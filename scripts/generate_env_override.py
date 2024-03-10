@@ -13,6 +13,7 @@ VARIABLES_FILE = "variables.yml"
 OVERRIDE_FILE = "overrides.yml"
 DEV_OVERRIDES = "configurations/dev-overrides.yml"
 
+import sys
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Generate the environment overrides")
@@ -25,7 +26,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if os.path.exists(OVERRIDE_FILE) and not args.force:
-        raise SystemExit("{} already exists - skipping".format(OVERRIDE_FILE))
+        print(f"{OVERRIDE_FILE} already exists - skipping")
+        sys.exit(0)
 
     # Load variables
     with open(VARIABLES_FILE) as var_file:

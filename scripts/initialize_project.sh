@@ -1,4 +1,6 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+
+set -eux
 
 # Install python requirements
 pip install -r requirements.txt
@@ -23,7 +25,7 @@ sed -i "s/TQ_S3_FINANCE_HOST: .*/TQ_S3_FINANCE_HOST: $ip/" overrides.yml
 python scripts/generate_env.py # regenerate env to include the new overrides
 
 echo "Finishing initialisation..."
-mkdir logs
+mkdir -p logs
 
 # Initialize minio
 python scripts/initialize_minio.py
