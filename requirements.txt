@@ -1,5 +1,5 @@
 # Django
-Django==5.0.2
+Django==5.0.3
 
 # Django Extensions
 django-debug-toolbar==4.3.0     # For developement. Gives additional insights into e.g. database queries
@@ -23,7 +23,7 @@ django-parler-rest==2.2         # Adding translation support to django-rest-fram
 # Tasks
 celery==5.3.6                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
-django-celery-beat==2.5.0       # Store periodic task schedules in the database
+django-celery-beat==2.6.0       # Store periodic task schedules in the database
 django-celery-results==2.5.1    # Stores Celery task results
 django-redis==5.4.0             # Redis cache and session backend for Django
 
