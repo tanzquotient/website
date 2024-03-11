@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 # This Compose file can be used in a development environment.
 
@@ -6,7 +6,7 @@ services:
 
   # Database (Postgres)
   postgres:
-    image: postgres:14
+    image: postgres:16
     container_name: tq-postgres
     environment:
       POSTGRES_USER: ${TQ_DB_USER}
