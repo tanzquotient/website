@@ -15,9 +15,7 @@ services:
     volumes:
       - "postgres-volume:/var/lib/postgresql/data"
     ports:
-      - "${TQ_DB_PORT_DEBUG_HOST}:5432"
-    expose:
-      - "5432"
+      - "127.0.0.1:${TQ_DB_PORT_DEBUG_HOST}:5432"
     restart: unless-stopped
 
   # S3 storage
@@ -27,8 +25,8 @@ services:
     volumes:
       - data-volume:/data
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     environment:
       MINIO_ACCESS_KEY: ${TQ_S3_MEDIA_ACCESS_KEY}
       MINIO_SECRET_KEY: ${TQ_S3_MEDIA_SECRET_KEY}
