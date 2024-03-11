@@ -22,6 +22,6 @@ python manage.py migrate
 
 # Load test data
 # TODO: build proper test data
-# python manage.py loaddata fixtures/*
+python manage.py loaddata fixtures/*
 
 echo "Done initialising TQ website."
