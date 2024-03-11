@@ -22,6 +22,8 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 6. Run the project: `python manage.py runserver`
 7. Find the website at [localhost:8000][local_instance]
 
+When you are done developing, stop the containers again: `docker compose down`.
+
 ### Using Intellij or PyCharm
 
 Useful resources:
