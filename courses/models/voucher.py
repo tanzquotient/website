@@ -19,6 +19,7 @@ from django.db.models import (
     PROTECT,
 )
 from django.utils.translation import gettext_lazy as _
+from reversion.models import Version
 from reversion import revisions as reversion
 
 from courses.models import Subscribe
@@ -134,7 +135,7 @@ class Voucher(Model):
                 voucher_for_remainder = Voucher.objects.create(
                     amount=remainder, purpose=self.purpose, expires=self.expires
                 )
-                reversion.set_user(user or subscription.user)
+                reversion.set_user(User.objects.get(id=Version.objects.get_for_object(self).order_by("revision__date_created").first().revision.user.id))
                 reversion.set_comment(
                     f"Voucher for remaining amount created by applying voucher "
                     f"{self.key} for {subscription}"
