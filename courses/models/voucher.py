@@ -64,6 +64,12 @@ class Voucher(Model):
         on_delete=PROTECT,
         help_text=_("The voucher was applied for this subscription."),
     )
+    comment = CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text=_("Optional description of the purpose of the voucher.")
+    )
 
     class Meta:
         constraints = [
