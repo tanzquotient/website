@@ -545,7 +545,8 @@ class VoucherAdmin(VersionAdmin):
         "subscription__user__email",
     ]
     actions = [mark_voucher_as_used,
-               export_vouchers_csv]
+               export_vouchers_csv,
+               export_vouchers_xlsx]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
 
     @staticmethod

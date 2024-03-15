@@ -375,3 +375,10 @@ def export_vouchers_csv(modeladmin, request, queryset):
     for c in queryset:
         keys.append(c.key)
     return services.export_vouchers(keys, "csv")
+
+@admin.action(description="Export selected vouchers as XLSX")
+def export_vouchers_xlsx(modeladmin, request, queryset):
+    keys = []
+    for c in queryset:
+        keys.append(c.key)
+    return services.export_vouchers(keys, "xlsx")
