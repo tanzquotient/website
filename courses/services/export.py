@@ -3,6 +3,7 @@ from typing import Iterable, Optional
 from django.http import HttpResponse
 
 from courses import models as models
+from courses.admin import VoucherAdmin as VoucherAdmin
 from utils import export
 
 
@@ -138,4 +139,63 @@ def export_teacher_payment_information(
             dict(data=courses, name="Courses"),
             dict(data=personal_data, name="Personal Data"),
         ],
+    )
+
+def export_vouchers(
+    voucher_keys: Iterable[int], export_format: str = "csv"
+) -> Optional[HttpResponse]:
+    
+    def redeemed_amount(voucher: models.Voucher) -> Optional[str]:
+        tot_amount = sum(
+            [reduction.amount for reduction in voucher.price_reductions.all()]
+        )
+        if tot_amount != 0:
+            return tot_amount
+
+    vouchers = []
+    for key in voucher_keys:
+        vouchers.append(models.Voucher.objects.get(key=key))
+
+    data = []
+    data.append(
+        [
+            "Key",
+            "Purpose",
+            "Comment",
+            "Percentage",
+            "Amount",
+            "Redeemed amount",
+            "Issued",
+            "Issuer",
+            "Used timestamp",
+            "Offering",
+            "Course",
+            "Redeemer",
+            "Expires"
+        ]
+    )
+    for v in vouchers:
+        data.append(
+            [
+                v.key,
+                v.purpose,
+                v.comment,
+                v.percentage,
+                v.amount,
+                VoucherAdmin.redeemed_amount(v),
+                v.issued,
+                VoucherAdmin.issuer(v),
+                VoucherAdmin.used_timestamp(v),
+                VoucherAdmin.offering(v),
+                VoucherAdmin.course(v),
+                VoucherAdmin.redeemer(v),
+                v.expires
+            ]
+        )
+
+    if len(data) == 0:
+        return None
+
+    return export(
+        export_format, title="Vouchers", data=data, multiple=False
     )
