@@ -544,25 +544,30 @@ class VoucherAdmin(VersionAdmin):
         "subscription__user__username",
         "subscription__user__email",
     ]
-    actions = [mark_voucher_as_used]
+    actions = [mark_voucher_as_used,
+               export_vouchers_csv]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
 
-    def comment_shortened(self, voucher: Voucher, max_len: int=30) -> Optional[str]:
+    @staticmethod
+    def comment_shortened(voucher: Voucher, max_len: int=30) -> Optional[str]:
         if voucher.comment and len(voucher.comment) > max_len:
             return voucher.comment[:max_len] + "[...]"
         else:
             return voucher.comment
     comment_shortened.short_description = "comment"
 
-    def percentage(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def percentage(voucher: Voucher) -> Optional[str]:
         if voucher.percentage:
             return voucher.percentage
 
-    def amount(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def amount(voucher: Voucher) -> Optional[str]:
         if voucher.amount:
             return voucher.amount
 
-    def redeemed_amount(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def redeemed_amount(voucher: Voucher) -> Optional[str]:
         tot_amount = sum(
             [reduction.amount for reduction in voucher.price_reductions.all()]
         )
@@ -585,19 +590,23 @@ class VoucherAdmin(VersionAdmin):
         if issuer:
             return issuer.get_full_name()
 
-    def used_timestamp(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def used_timestamp(voucher: Voucher) -> Optional[str]:
         if voucher.price_reductions.exists():
             return voucher.price_reductions.first().created_at
 
-    def offering(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def offering(voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.course.offering.name
 
-    def course(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def course(voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.course.type.title
 
-    def redeemer(self, voucher: Voucher) -> Optional[str]:
+    @staticmethod
+    def redeemer(voucher: Voucher) -> Optional[str]:
         if voucher.subscription:
             return voucher.subscription.user.get_full_name()
 
