@@ -144,13 +144,6 @@ def export_teacher_payment_information(
 def export_vouchers(
     voucher_keys: Iterable[int], export_format: str = "csv"
 ) -> Optional[HttpResponse]:
-    
-    def redeemed_amount(voucher: models.Voucher) -> Optional[str]:
-        tot_amount = sum(
-            [reduction.amount for reduction in voucher.price_reductions.all()]
-        )
-        if tot_amount != 0:
-            return tot_amount
 
     vouchers = []
     for key in voucher_keys:
