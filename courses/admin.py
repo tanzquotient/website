@@ -518,6 +518,7 @@ class VoucherAdmin(VersionAdmin):
     list_display = (
         "key",
         "purpose",
+        "comment_shortened",
         "percentage",
         "amount",
         "redeemed_amount",
@@ -545,6 +546,13 @@ class VoucherAdmin(VersionAdmin):
     ]
     actions = [mark_voucher_as_used]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
+
+    def comment_shortened(self, voucher: Voucher, max_len: int=30) -> Optional[str]:
+        if voucher.comment and len(voucher.comment) > max_len:
+            return voucher.comment[:max_len] + "[...]"
+        else:
+            return voucher.comment
+    comment_shortened.short_description = "comment"
 
     def percentage(self, voucher: Voucher) -> Optional[str]:
         if voucher.percentage:
