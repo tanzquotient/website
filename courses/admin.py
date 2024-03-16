@@ -527,6 +527,7 @@ class VoucherAdmin(VersionAdmin):
         "used_timestamp",
         "offering",
         "course",
+        "sent_to_full_name",
         "redeemer",
         "pdf_file",
         "expires",
@@ -548,9 +549,14 @@ class VoucherAdmin(VersionAdmin):
                export_vouchers_csv,
                export_vouchers_xlsx]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
+    raw_id_fields = ["sent_to"]
 
-    @staticmethod
-    def comment_shortened(voucher: Voucher, max_len: int=30) -> Optional[str]:
+    def sent_to_full_name(self, voucher: Voucher) -> Optional[str]:
+        if voucher.sent_to:
+            return voucher.sent_to.get_full_name()
+    sent_to_full_name.short_description = "sent to"
+
+    def comment_shortened(self, voucher: Voucher, max_len: int=30) -> Optional[str]:
         if voucher.comment and len(voucher.comment) > max_len:
             return voucher.comment[:max_len] + "[...]"
         else:
