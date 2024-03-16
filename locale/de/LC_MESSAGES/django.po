@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 18:45+0100\n"
+"POT-Creation-Date: 2024-03-16 15:20+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -390,17 +390,25 @@ msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgid "This field is required if you are a student."
 msgstr "Pflichtfeld für Studierende"
 
-#: courses/forms/voucher_form.py:14 courses/models/voucher.py:44
+#: courses/forms/voucher_form.py:14 courses/models/voucher.py:45
 msgid "Reduction in percent (0-100)."
 msgstr "Rabatt in Prozent (0-100)."
 
-#: courses/forms/voucher_form.py:16 courses/models/voucher.py:41
+#: courses/forms/voucher_form.py:16 courses/models/voucher.py:42
 msgid "Value of the voucher in CHF."
 msgstr "Wert des Gutscheins in CHF."
 
 #: courses/forms/voucher_form.py:19
 msgid "Set expire date?"
 msgstr "Ablaufdatum setzen?"
+
+#: courses/forms/voucher_form.py:27
+msgid "Custom message to add at the beginning of the email (English)."
+msgstr ""
+
+#: courses/forms/voucher_form.py:31
+msgid "Custom message to add at the beginning of the email (German)."
+msgstr ""
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
@@ -562,21 +570,29 @@ msgstr "keine Präferenz, zum führen eingeteilt"
 msgid "no preference, assigned as follower"
 msgstr "keine Präferenz, zum geführt werden eingeteilt"
 
-#: courses/models/voucher.py:50
+#: courses/models/voucher.py:51
 msgid "Used to redeem voucher."
 msgstr "Wir zum Einlösen des Gutscheins verwendet"
 
-#: courses/models/voucher.py:54
+#: courses/models/voucher.py:55
 msgid "If not set, the voucher will not expire."
 msgstr "Falls nicht gesetzt, wird der Gutschein kein Ablaufdatum haben."
 
-#: courses/models/voucher.py:58
+#: courses/models/voucher.py:59
 msgid "Will be generated."
 msgstr "Wird generiert."
 
-#: courses/models/voucher.py:65
+#: courses/models/voucher.py:66
 msgid "The voucher was applied for this subscription."
 msgstr "Der Gutschein wurde für diese Anmeldung eingelöst"
+
+#: courses/models/voucher.py:72
+msgid "Optional description of the purpose of the voucher."
+msgstr ""
+
+#: courses/models/voucher.py:80
+msgid "User that the voucher was sent to."
+msgstr ""
 
 #: courses/services/data/teachers_overview.py:35
 msgid "unknown year"
@@ -1632,24 +1648,24 @@ msgstr "Keine Anmeldungen"
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
-#: courses/views.py:362 templates/menu/desktop_user_menu.html:12
+#: courses/views.py:392 templates/menu/desktop_user_menu.html:12
 #: templates/menu/mobile_admin_menu.html:17
 msgid "Teachers overview"
 msgstr "Übersicht Lehrer:innen"
 
-#: courses/views.py:372
+#: courses/views.py:402
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:375
+#: courses/views.py:405
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:378
+#: courses/views.py:408
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:381
+#: courses/views.py:411
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
