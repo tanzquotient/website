@@ -71,6 +71,14 @@ class Voucher(Model):
         null=True,
         help_text=_("Optional description of the purpose of the voucher.")
     )
+    sent_to = ForeignKey(
+        to=User,
+        related_name="voucher",
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+        help_text=_("User that the voucher was sent to.")
+    )
 
     class Meta:
         constraints = [
