@@ -101,6 +101,8 @@ def send_vouchers(data, recipients, user):
     purpose = data["purpose"]
     expires_flag = data["expires_flag"]
     expires = data["expires"]
+    custom_msg_en = data["custom_email_message_en"]
+    custom_msg_de = data["custom_email_message_de"]
 
     emails = []
 
@@ -111,6 +113,7 @@ def send_vouchers(data, recipients, user):
                 percentage=percentage,
                 amount=amount,
                 expires=expires if expires_flag else None,
+                sent_to = recipient
             )
             reversion.set_user(user)
             reversion.set_comment(f"Sent voucher email to {recipient}")
@@ -122,6 +125,8 @@ def send_vouchers(data, recipients, user):
             "last_name": recipient.last_name,
             "voucher_key": voucher.key,
             "voucher_url": voucher.pdf_file.url,
+            "custom_msg_en": custom_msg_en,
+            "custom_msg_de": custom_msg_de
         }
 
         emails.append(
@@ -129,7 +134,7 @@ def send_vouchers(data, recipients, user):
                 to=recipient.email,
                 template="voucher",
                 context=email_context,
-                attachments={"Voucher.pdf": voucher.pdf_file.file},
+                attachments={"Voucher.pdf": voucher.pdf_file.file}
             )
         )
 
