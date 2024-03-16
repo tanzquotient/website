@@ -22,6 +22,14 @@ class VoucherForm(forms.Form):
         widget=SelectDateWidget,
         initial=datetime.date.today() + datetime.timedelta(days=365),
     )
+    custom_email_message_en = forms.CharField(
+        max_length=200,
+        label=_("Custom message to add at the beginning of the email (English).")
+    )
+    custom_email_message_de = forms.CharField(
+        max_length=200,
+        label=_("Custom message to add at the beginning of the email (German).")
+    )
 
     def clean(self) -> dict:
         cleaned_data = super().clean()
