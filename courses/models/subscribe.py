@@ -165,16 +165,16 @@ class Subscribe(Model):
         if self.open_amount().is_zero():
             return self.mark_as_paid(self.paymentmethod)
         
-    def get_last_confirmed_date(self) -> Optional[datetime.date]:
-        return  Version.objects.get_for_object(self).filter(comment=f"Updated state to {SubscribeState.CONFIRMED}") \
+    def get_last_updated_date(self) -> Optional[datetime.date]:
+        return  Version.objects.get_for_object(self) \
                 .order_by("revision__date_created").last().revision.date_created.date()
 
     def is_to_pay_for(self, extra_time: datetime.timedelta = datetime.timedelta(days=7)):
-        if self.get_last_confirmed_date() is None:
+        if self.get_last_updated_date() is None:
             return False
 
         return  self.state in SubscribeState.TO_PAY_STATES and \
-                self.get_last_confirmed_date() + extra_time < datetime.date.today()
+                self.get_last_updated_date() + extra_time < datetime.date.today()
 
     def is_payment_overdue(self) -> bool:
         if self.paid() or self.state not in SubscribeState.TO_PAY_STATES:
