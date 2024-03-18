@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
+from reversion import revisions as reversion
 
 from courses import models as models
 from courses.emailcenter import (
@@ -83,14 +84,17 @@ def confirm_subscription(
         raise NoPartnerException()
 
     if subscription.state == models.SubscribeState.NEW:
-        subscription.generate_price_to_pay()  # Make sure the price is generated
-        new_state = (
-            SubscribeState.COMPLETED
-            if not subscription.price_to_pay
-            else SubscribeState.CONFIRMED
-        )
-        subscription.state = new_state
-        subscription.save()
+        with reversion.create_revision():
+            subscription.generate_price_to_pay()  # Make sure the price is generated
+            new_state = (
+                SubscribeState.COMPLETED
+                if not subscription.price_to_pay
+                else SubscribeState.CONFIRMED
+            )
+            subscription.state = new_state
+            subscription.save()
+
+            reversion.set_comment(f"Updated state to {new_state}")
 
         mail = send_participation_confirmation(subscription)
         if mail:
