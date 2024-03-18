@@ -457,6 +457,9 @@ class Course(TranslatableModel):
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
         return last_date < date.today()
+    
+    def has_started_for(self, extra_time: timedelta = timedelta(days=7)) -> bool:
+        return self.get_first_lesson_date() + extra_time < date.today()
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
