@@ -18,6 +18,7 @@ from django.db.models import (
 )
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion
+from reversion.models import Version
 
 from courses import managers
 from utils import CodeGenerator
@@ -163,12 +164,25 @@ class Subscribe(Model):
         # If open amount == 0, but not reflected in self.state
         if self.open_amount().is_zero():
             return self.mark_as_paid(self.paymentmethod)
+        
+    def get_last_confirmed_date(self) -> Optional[datetime.date]:
+        return  Version.objects.get_for_object(self).filter(comment=f"Updated state to {SubscribeState.CONFIRMED}") \
+                .order_by("revision__date_created").last().revision.date_created.date()
+
+    def is_to_pay_for(self, extra_time: datetime.timedelta = datetime.timedelta(days=7)):
+        if self.get_last_confirmed_date() is None:
+            return False
+
+        return  self.state in SubscribeState.TO_PAY_STATES and \
+                self.get_last_confirmed_date() + extra_time < datetime.date.today()
 
     def is_payment_overdue(self) -> bool:
         if self.paid() or self.state not in SubscribeState.TO_PAY_STATES:
             return False
 
-        return self.course.is_over() and self.course.offering.is_over()
+        return  self.course.offering.is_over() and \
+                self.course.has_started_for(datetime.timedelta(days=7)) and \
+                self.is_to_pay_for(datetime.timedelta(days=7))
 
     def mark_as_paid(self, payment_method, user=None) -> bool:
         if self.state == SubscribeState.CONFIRMED:
