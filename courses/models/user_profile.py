@@ -17,7 +17,7 @@ from django.db.models import (
     CharField,
 )
 from django.dispatch import receiver
-from django_countries.fields import CountryField
+from django_countries.data import COUNTRIES
 from djangocms_text_ckeditor.fields import HTMLField
 
 from courses import managers
@@ -69,7 +69,7 @@ class UserProfile(Model):
     about_me = HTMLField(blank=True, null=True)
 
     birthdate = DateField(blank=True, null=True)
-    nationality = CountryField(blank=True, null=True)
+    nationality = CharField(max_length=2, choices=[("", "Select country")] + list(COUNTRIES.items()), blank=True, null=True)
     residence_permit = CharField(
         max_length=30, choices=Residence.CHOICES, blank=True, null=True
     )
