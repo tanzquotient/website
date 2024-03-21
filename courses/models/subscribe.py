@@ -164,25 +164,35 @@ class Subscribe(Model):
         # If open amount == 0, but not reflected in self.state
         if self.open_amount().is_zero():
             return self.mark_as_paid(self.paymentmethod)
-        
-    def get_last_updated_date(self) -> Optional[datetime.date]:
-        return  Version.objects.get_for_object(self) \
-                .order_by("revision__date_created").last().revision.date_created.date()
 
-    def is_to_pay_for(self, extra_time: datetime.timedelta = datetime.timedelta(days=7)):
+    def get_last_updated_date(self) -> Optional[datetime.date]:
+        return (
+            Version.objects.get_for_object(self)
+            .order_by("revision__date_created")
+            .last()
+            .revision.date_created.date()
+        )
+
+    def is_to_pay_for(
+        self, extra_time: datetime.timedelta = datetime.timedelta(days=7)
+    ):
         if self.get_last_updated_date() is None:
             return False
 
-        return  self.state in SubscribeState.TO_PAY_STATES and \
-                self.get_last_updated_date() + extra_time < datetime.date.today()
+        return (
+            self.state in SubscribeState.TO_PAY_STATES
+            and self.get_last_updated_date() + extra_time < datetime.date.today()
+        )
 
     def is_payment_overdue(self) -> bool:
         if self.paid() or self.state not in SubscribeState.TO_PAY_STATES:
             return False
 
-        return  self.course.offering.is_over() and \
-                self.course.has_started_for(datetime.timedelta(days=7)) and \
-                self.is_to_pay_for(datetime.timedelta(days=7))
+        return (
+            self.course.offering.is_over()
+            and self.course.has_started_for(datetime.timedelta(days=7))
+            and self.is_to_pay_for(datetime.timedelta(days=7))
+        )
 
     def mark_as_paid(self, payment_method, user=None) -> bool:
         if self.state == SubscribeState.CONFIRMED:
