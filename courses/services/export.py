@@ -141,6 +141,7 @@ def export_teacher_payment_information(
         ],
     )
 
+
 def export_vouchers(
     voucher_keys: Iterable[int], export_format: str = "csv"
 ) -> Optional[HttpResponse]:
@@ -164,7 +165,7 @@ def export_vouchers(
             "Offering",
             "Course",
             "Redeemer",
-            "Expires"
+            "Expires",
         ]
     )
     for v in vouchers:
@@ -182,13 +183,11 @@ def export_vouchers(
                 VoucherAdmin.offering(v),
                 VoucherAdmin.course(v),
                 VoucherAdmin.redeemer(v),
-                v.expires
+                v.expires,
             ]
         )
 
     if len(data) == 0:
         return None
 
-    return export(
-        export_format, title="Vouchers", data=data, multiple=False
-    )
+    return export(export_format, title="Vouchers", data=data, multiple=False)

@@ -69,7 +69,7 @@ class Voucher(Model):
         max_length=100,
         blank=True,
         null=True,
-        help_text=_("Optional description of the purpose of the voucher.")
+        help_text=_("Optional description of the purpose of the voucher."),
     )
     sent_to = ForeignKey(
         to=User,
@@ -77,7 +77,7 @@ class Voucher(Model):
         on_delete=PROTECT,
         blank=True,
         null=True,
-        help_text=_("User that the voucher was sent to.")
+        help_text=_("User that the voucher was sent to."),
     )
 
     class Meta:
@@ -143,7 +143,14 @@ class Voucher(Model):
                 voucher_for_remainder = Voucher.objects.create(
                     amount=remainder, purpose=self.purpose, expires=self.expires
                 )
-                reversion.set_user(User.objects.get(id=Version.objects.get_for_object(self).order_by("revision__date_created").first().revision.user.id))
+                reversion.set_user(
+                    User.objects.get(
+                        id=Version.objects.get_for_object(self)
+                        .order_by("revision__date_created")
+                        .first()
+                        .revision.user.id
+                    )
+                )
                 reversion.set_comment(
                     f"Voucher for remaining amount created by applying voucher "
                     f"{self.key} for {subscription}"

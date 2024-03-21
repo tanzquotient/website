@@ -545,22 +545,22 @@ class VoucherAdmin(VersionAdmin):
         "subscription__user__username",
         "subscription__user__email",
     ]
-    actions = [mark_voucher_as_used,
-               export_vouchers_csv,
-               export_vouchers_xlsx]
+    actions = [mark_voucher_as_used, export_vouchers_csv, export_vouchers_xlsx]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
     raw_id_fields = ["sent_to"]
 
     def sent_to_full_name(self, voucher: Voucher) -> Optional[str]:
         if voucher.sent_to:
             return voucher.sent_to.get_full_name()
+
     sent_to_full_name.short_description = "sent to"
 
-    def comment_shortened(self, voucher: Voucher, max_len: int=30) -> Optional[str]:
+    def comment_shortened(self, voucher: Voucher, max_len: int = 30) -> Optional[str]:
         if voucher.comment and len(voucher.comment) > max_len:
             return voucher.comment[:max_len] + "[...]"
         else:
             return voucher.comment
+
     comment_shortened.short_description = "comment"
 
     @staticmethod
