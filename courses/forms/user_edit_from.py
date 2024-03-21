@@ -63,7 +63,9 @@ class UserEditForm(forms.Form):
     about_me.help_text = _(
         "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
     )
-    nationality = LazyTypedChoiceField(choices=[("", _("Select country"))] + list(COUNTRIES.items()), required=False)
+    nationality = LazyTypedChoiceField(
+        choices=[("", _("Select country"))] + list(COUNTRIES.items()), required=False
+    )
     residence_permit = forms.ChoiceField(choices=Residence.CHOICES, required=False)
     ahv_number = forms.CharField(max_length=255, required=False)
     zemis_number = forms.CharField(max_length=255, required=False)
@@ -71,7 +73,9 @@ class UserEditForm(forms.Form):
     bank_name = forms.CharField(max_length=255, required=False)
     bank_zip_code = forms.CharField(max_length=255, required=False)
     bank_city = forms.CharField(max_length=255, required=False)
-    bank_country = LazyTypedChoiceField(choices=[("", _("Select country"))] + list(COUNTRIES.items()), required=False)
+    bank_country = LazyTypedChoiceField(
+        choices=[("", _("Select country"))] + list(COUNTRIES.items()), required=False
+    )
 
     def clean(self) -> dict:
         cleaned_data = super(UserEditForm, self).clean()

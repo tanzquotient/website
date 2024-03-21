@@ -69,7 +69,12 @@ class UserProfile(Model):
     about_me = HTMLField(blank=True, null=True)
 
     birthdate = DateField(blank=True, null=True)
-    nationality = CharField(max_length=2, choices=[("", "Select country")] + list(COUNTRIES.items()), blank=True, null=True)
+    nationality = CharField(
+        max_length=2,
+        choices=[("", "Select country")] + list(COUNTRIES.items()),
+        blank=True,
+        null=True,
+    )
     residence_permit = CharField(
         max_length=30, choices=Residence.CHOICES, blank=True, null=True
     )
