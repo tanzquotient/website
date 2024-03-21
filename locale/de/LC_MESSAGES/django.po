@@ -404,11 +404,11 @@ msgstr "Ablaufdatum setzen?"
 
 #: courses/forms/voucher_form.py:27
 msgid "Custom message to add at the beginning of the email (English)."
-msgstr ""
+msgstr "Zusatzinformation am Anfang der Email (Englisch)"
 
 #: courses/forms/voucher_form.py:31
 msgid "Custom message to add at the beginning of the email (German)."
-msgstr ""
+msgstr "Zusatzinformation am Anfang der Email (Deutsch)"
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
@@ -588,11 +588,11 @@ msgstr "Der Gutschein wurde für diese Anmeldung eingelöst"
 
 #: courses/models/voucher.py:72
 msgid "Optional description of the purpose of the voucher."
-msgstr ""
+msgstr "Optionaler Kommentar zum Gutscheinzweck"
 
 #: courses/models/voucher.py:80
 msgid "User that the voucher was sent to."
-msgstr ""
+msgstr "Person, an die der Gutschein gesendet wurde."
 
 #: courses/services/data/teachers_overview.py:35
 msgid "unknown year"
