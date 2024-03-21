@@ -24,11 +24,11 @@ class VoucherForm(forms.Form):
     )
     custom_email_message_en = forms.CharField(
         max_length=200,
-        label=_("Custom message to add at the beginning of the email (English).")
+        label=_("Custom message to add at the beginning of the email (English)."),
     )
     custom_email_message_de = forms.CharField(
         max_length=200,
-        label=_("Custom message to add at the beginning of the email (German).")
+        label=_("Custom message to add at the beginning of the email (German)."),
     )
 
     def clean(self) -> dict:
