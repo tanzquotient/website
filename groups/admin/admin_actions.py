@@ -5,6 +5,7 @@ from groups.services import duplicate_groups as service_duplicate_groups
 def update_groups(admin, request, queryset):
     service_update_groups(queryset=queryset)
 
+
 def duplicate_groups(admin, request, queryset):
     service_duplicate_groups(queryset=queryset)
 
