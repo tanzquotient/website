@@ -5,7 +5,7 @@ from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group, User
 from django.forms import ModelForm, ModelMultipleChoiceField
 
-from .admin_actions import update_groups
+from .admin_actions import update_groups, duplicate_groups
 
 
 class GroupForm(ModelForm):
@@ -25,7 +25,7 @@ class GroupForm(ModelForm):
 
 
 class TQGroupAdmin(GroupAdmin):
-    actions = list(GroupAdmin.actions) + [update_groups]
+    actions = list(GroupAdmin.actions) + [update_groups, duplicate_groups]
     form = GroupForm
 
     def save_model(self, request, obj, form, change):
