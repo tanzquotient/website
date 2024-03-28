@@ -173,7 +173,7 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
         "invitation_sent",
     )
 
-    actions = [let_url_expire_now]
+    actions = [let_url_expire_now, fix_unintentional_reviews]
 
     def has_add_permission(self, request) -> bool:
         return False
