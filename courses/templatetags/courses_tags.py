@@ -1,10 +1,13 @@
 from django import template
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 
 from courses.models import Weekday, OfferingType, Course
 from courses.services import get_offerings_by_year
-from survey.models import Answer
+from survey.models import SurveyInstance, Answer
 from survey.models.types import QuestionType
+from django.contrib.auth.models import User
+from django.utils import timezone
+from django.http import HttpRequest
 
 register = template.Library()
 
@@ -25,11 +28,11 @@ def offerings_list(detail_url: str, only_public: bool = True) -> dict:
 
 
 @register.inclusion_tag(filename="courses/snippets/course_reviews.html")
-def course_reviews(course: Course) -> dict:
+def course_reviews(course: Course, user: User, request: HttpRequest) -> dict:
     course_answers = Answer.objects.filter(
         survey_instance__course__type=course.type,
     )
-
+    
     course_teachers = course.get_teachers()
     teachers_answers = Answer.objects.exclude(
         survey_instance__course__type=course.type,
@@ -38,6 +41,8 @@ def course_reviews(course: Course) -> dict:
         course=course,
         course_reviews=course_reviews_for_queryset(course_answers),
         teachers_reviews=course_reviews_for_queryset(teachers_answers),
+        user=user,
+        request=request
     )
 
 
@@ -67,3 +72,48 @@ def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
         )
         for answer in text_answers
     ]
+
+@register.simple_tag
+def user_can_review(course: Course, user: User, include_same_type: bool = True) -> bool:
+    
+    course_query = Q(course__type=course.type) if include_same_type else Q(course=course)
+    expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
+
+    return SurveyInstance.objects.filter(
+        expire_date_query,
+        course_query,
+        user=user
+    ).count() > 0
+
+@register.simple_tag
+def user_has_reviewed(course: Course, user: User, include_same_type: bool = True) -> bool:
+    
+    course_query = Q(course__type=course.type) if include_same_type else Q(course=course)
+
+    return SurveyInstance.objects.filter(
+        course_query,
+        user=user,
+        is_completed=False
+    ).count() == 0
+
+@register.simple_tag
+def get_link_to_course_evaluation(course: Course, user: User, include_same_type: bool = True) -> str:
+    
+    expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
+
+    survey_instance = SurveyInstance.objects.filter(
+        expire_date_query,
+        user=user,
+        is_completed=False,
+        course=course
+    )
+
+    if include_same_type and survey_instance.count() == 0:
+        survey_instance = SurveyInstance.objects.filter(
+            expire_date_query,
+            user=user,
+            is_completed=False,
+            course__type=course.type
+        )
+
+    return survey_instance[0].create_full_url() if survey_instance.count() > 0 else "#"
