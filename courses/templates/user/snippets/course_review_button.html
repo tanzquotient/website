@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% user_has_reviewed course user False as has_reviewed %}
+{% user_can_review course user False as can_review %}
+{% if can_review %}
+{% if not has_reviewed %}
+    <a target="_blank" href="{% get_link_to_course_evaluation course user False %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
+{% else %}
+    <div class="mt-2 alert alert-success" role="alert">
+        {% trans "Thank you for reviewing this course!" %}
+    </div>
+{% endif %}
+{% endif %}
