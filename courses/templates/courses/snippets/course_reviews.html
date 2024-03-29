@@ -3,6 +3,7 @@
 
 
 <h4 class="my-3">{% trans "Reviews" %}</h4>
+{% include "courses/snippets/course_review_button.html" with course=course user=user only %}
 <h5>{% trans "Reviews for " %}{{ course.type }}</h5>
 {% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' %}
 <h5>{% trans "Reviews the teachers got for other courses" %}</h5>
