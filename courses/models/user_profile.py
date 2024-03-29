@@ -5,7 +5,7 @@ from typing import Optional, Iterable
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
-from django.db.models import CASCADE, SET_NULL
+from django.db.models import CASCADE, SET_NULL, Q
 from django.db.models import (
     Model,
     IntegerField,
@@ -19,6 +19,7 @@ from django.db.models import (
 from django.dispatch import receiver
 from django_countries.data import COUNTRIES
 from djangocms_text_ckeditor.fields import HTMLField
+from django.utils import timezone
 
 from courses import managers
 from . import (
@@ -31,6 +32,8 @@ from . import (
     Course,
     Teach,
 )
+
+from survey.models import SurveyInstance
 
 
 def upload_path(_, filename) -> str:
@@ -242,6 +245,16 @@ class UserProfile(Model):
 
             return missing
         return []
+    
+    def has_open_surveys(self) -> bool:
+    
+        expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
+
+        return SurveyInstance.objects.filter(
+            expire_date_query,
+            user=self.user,
+            is_completed=False
+        ).count() > 0
 
     class Meta:
         permissions = (("access_counterpayment", "Can access counter payment"),)
