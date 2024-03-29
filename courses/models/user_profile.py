@@ -245,16 +245,19 @@ class UserProfile(Model):
 
             return missing
         return []
-    
-    def has_open_surveys(self) -> bool:
-    
-        expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
-        return SurveyInstance.objects.filter(
-            expire_date_query,
-            user=self.user,
-            is_completed=False
-        ).count() > 0
+    def has_open_surveys(self) -> bool:
+
+        expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(
+            url_expire_date=None
+        )
+
+        return (
+            SurveyInstance.objects.filter(
+                expire_date_query, user=self.user, is_completed=False
+            ).count()
+            > 0
+        )
 
     class Meta:
         permissions = (("access_counterpayment", "Can access counter payment"),)
