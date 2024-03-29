@@ -219,7 +219,7 @@ class UserProfile(Model):
         return Residence.PERMITS[self.residence_permit]
 
     def get_nationality(self) -> str:
-        return self.nationality.name
+        return COUNTRIES[self.nationality]
 
     def is_complete(self) -> bool:
         return not self.missing_values()
