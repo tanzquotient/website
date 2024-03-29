@@ -126,6 +126,7 @@
                         </a>
                     {% endif %}
                 </p>
+                {% include "user/snippets/course_review_button.html" with course=subscription.course user=user only %}
             </div>
         </div>
     </div>
