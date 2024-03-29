@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% if user.is_anonymous %}
+    <div class="mt-2 alert alert-info" role="alert">
+        <a href="{% url 'account_login' %}?next={{ request.path }}">
+            <i class="fa fa-arrow-circle-right"></i>
+            {% trans "Sign in to write a review." %}
+        </a>
+    </div>
+{% else %}
+    {% user_can_review course user True as can_review %}
+    {% if can_review %}
+        {% user_has_reviewed course user True as has_reviewed %}
+        {% if has_reviewed %}
+            <div class="mt-2 alert alert-success" role="alert">
+                {% trans "Thank you for reviewing this course!" %}
+                {% if user.profile.has_open_surveys %}
+                    <br><hr>
+                        {% trans " You still have some courses awaiting evaluation." %}
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans " Please go to 'My Courses' to review them." %}
+                        </a>
+                        {% trans " Thank you!" %}
+                {% endif %}
+            </div>
+        {% else %}
+            <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
+        {% endif %}
+    {% else %}
+    <div class="mt-2 alert alert-info" role="alert">
+        {% trans "You can only review courses that you already completed." %}
+        {% if user.profile.has_open_surveys %}
+            <br><hr>
+            {% trans " You still have some courses awaiting evaluation." %}
+            <a href="{% url "user_courses" %}">
+                <i class="fa fa-arrow-circle-right"></i>
+                {% trans " Please go to 'My Courses' to review them." %}
+            </a>
+            {% trans " Thank you!" %}
+        {% endif %}
+    </div>
+    {% endif %}
+{% endif %}
