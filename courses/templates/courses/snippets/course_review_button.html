@@ -26,7 +26,18 @@
                 {% endif %}
             </div>
         {% else %}
-            <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
+            {% user_has_reviewed course user False as has_reviewed_exact_course %}
+            {% if has_reviewed_exact_course %}
+                <div class="mt-2 alert alert-info" role="alert">
+                    {% trans "You have taken a " %}
+                    {{ course.type.title }}
+                    {% trans " course in the past but haven't reviewed it yet." %}
+                    <br>
+                    <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mt-2" role="button">{% trans "Review this course" %}</a>
+                </div>
+            {% else %}
+                <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
+            {% endif %}
         {% endif %}
     {% else %}
     <div class="mt-2 alert alert-info" role="alert">
