@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-16 15:20+0100\n"
+"POT-Creation-Date: 2024-04-02 10:56+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -379,7 +379,13 @@ msgstr "Choose day"
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Hint: you can also enter HTML code"
 
-#: courses/forms/user_edit_from.py:83 courses/forms/user_edit_from.py:87
+#: courses/forms/user_edit_from.py:67 courses/forms/user_edit_from.py:77
+#, fuzzy
+#| msgid "Select month"
+msgid "Select country"
+msgstr "Select country"
+
+#: courses/forms/user_edit_from.py:87 courses/forms/user_edit_from.py:91
 msgid "This field is required if you are a student."
 msgstr "This field is required if you are a student."
 
@@ -415,7 +421,7 @@ msgstr "lead"
 msgid "follow"
 msgstr "follow"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:290
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:314
 msgid "no preference"
 msgstr "no preference"
 
@@ -547,19 +553,19 @@ msgstr "At least one more person is needed"
 msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
-#: courses/models/subscribe.py:293
+#: courses/models/subscribe.py:317
 msgid "leader"
 msgstr "leader"
 
-#: courses/models/subscribe.py:294
+#: courses/models/subscribe.py:318
 msgid "follower"
 msgstr "follower"
 
-#: courses/models/subscribe.py:297
+#: courses/models/subscribe.py:321
 msgid "no preference, assigned as leader"
 msgstr "no preference, assigned as leader"
 
-#: courses/models/subscribe.py:298
+#: courses/models/subscribe.py:322
 msgid "no preference, assigned as follower"
 msgstr "no preference, assigned as follower"
 
@@ -657,15 +663,15 @@ msgstr "Irregular weekday"
 msgid "Unknown month"
 msgstr "Unknown month"
 
-#: courses/services/subscriptions.py:135
+#: courses/services/subscriptions.py:139
 msgid "{} of {} confirmed successfully"
 msgstr "{} of {} confirmed successfully"
 
-#: courses/services/subscriptions.py:207
+#: courses/services/subscriptions.py:211
 msgid "{} unrejected successfully"
 msgstr "{} unrejected successfully"
 
-#: courses/services/subscriptions.py:216
+#: courses/services/subscriptions.py:220
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr "{} subscriptions were not confirmed because no partner set"
 
@@ -907,15 +913,59 @@ msgstr "Costs"
 msgid "Time"
 msgstr "Time"
 
+#: courses/templates/courses/snippets/course_review_button.html:8
+msgid "Sign in to write a review."
+msgstr "Sign in to write a review."
+
+#: courses/templates/courses/snippets/course_review_button.html:17
+#: courses/templates/user/snippets/course_review_button.html:11
+msgid "Thank you for reviewing this course!"
+msgstr "Thank you for reviewing this course!"
+
+#: courses/templates/courses/snippets/course_review_button.html:20
+#: courses/templates/courses/snippets/course_review_button.html:47
+msgid " You still have some courses awaiting evaluation."
+msgstr " You still have some courses awaiting evaluation."
+
+#: courses/templates/courses/snippets/course_review_button.html:23
+#: courses/templates/courses/snippets/course_review_button.html:50
+msgid " Please go to 'My Courses' to review them."
+msgstr " Please go to 'My Courses' to review them."
+
+#: courses/templates/courses/snippets/course_review_button.html:25
+#: courses/templates/courses/snippets/course_review_button.html:52
+msgid " Thank you!"
+msgstr " Thank you!"
+
+#: courses/templates/courses/snippets/course_review_button.html:32
+msgid "You have taken a "
+msgstr "You have taken a "
+
+#: courses/templates/courses/snippets/course_review_button.html:34
+msgid " course in the past but haven't reviewed it yet."
+msgstr " course in the past but haven't reviewed it yet."
+
+#: courses/templates/courses/snippets/course_review_button.html:36
+#: courses/templates/courses/snippets/course_review_button.html:39
+#: courses/templates/user/snippets/course_review_button.html:8
+#, fuzzy
+#| msgid "Reviews for "
+msgid "Review this course"
+msgstr "Review this course"
+
+#: courses/templates/courses/snippets/course_review_button.html:44
+msgid "You can only review courses that you already completed."
+msgstr "You can only review courses that you already completed."
+
 #: courses/templates/courses/snippets/course_reviews.html:5
 msgid "Reviews"
 msgstr "Reviews"
 
-#: courses/templates/courses/snippets/course_reviews.html:6
+#: courses/templates/courses/snippets/course_reviews.html:7
 msgid "Reviews for "
 msgstr "Reviews for "
 
-#: courses/templates/courses/snippets/course_reviews.html:8
+#: courses/templates/courses/snippets/course_reviews.html:9
 msgid "Reviews the teachers got for other courses"
 msgstr "Reviews the teachers got for other courses"
 

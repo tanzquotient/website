@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-16 15:20+0100\n"
+"POT-Creation-Date: 2024-04-02 10:56+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -386,7 +386,13 @@ msgstr "Wähle Tag"
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
-#: courses/forms/user_edit_from.py:83 courses/forms/user_edit_from.py:87
+#: courses/forms/user_edit_from.py:67 courses/forms/user_edit_from.py:77
+#, fuzzy
+#| msgid "Select month"
+msgid "Select country"
+msgstr ""
+
+#: courses/forms/user_edit_from.py:87 courses/forms/user_edit_from.py:91
 msgid "This field is required if you are a student."
 msgstr "Pflichtfeld für Studierende"
 
@@ -422,7 +428,7 @@ msgstr "führen"
 msgid "follow"
 msgstr "folgen"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:290
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:314
 msgid "no preference"
 msgstr "keine Präferenz"
 
@@ -554,19 +560,19 @@ msgstr "Es wird noch eine weitere Person benötigt."
 msgid "At least {} more people are needed."
 msgstr "Es werden noch {} Personen benötigt."
 
-#: courses/models/subscribe.py:293
+#: courses/models/subscribe.py:317
 msgid "leader"
 msgstr "führen"
 
-#: courses/models/subscribe.py:294
+#: courses/models/subscribe.py:318
 msgid "follower"
 msgstr "geführt werden"
 
-#: courses/models/subscribe.py:297
+#: courses/models/subscribe.py:321
 msgid "no preference, assigned as leader"
 msgstr "keine Präferenz, zum führen eingeteilt"
 
-#: courses/models/subscribe.py:298
+#: courses/models/subscribe.py:322
 msgid "no preference, assigned as follower"
 msgstr "keine Präferenz, zum geführt werden eingeteilt"
 
@@ -670,15 +676,15 @@ msgstr "Ungültiger Wochentag"
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/services/subscriptions.py:135
+#: courses/services/subscriptions.py:139
 msgid "{} of {} confirmed successfully"
 msgstr "{} von {} erfolgreich bestätigt"
 
-#: courses/services/subscriptions.py:207
+#: courses/services/subscriptions.py:211
 msgid "{} unrejected successfully"
 msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
-#: courses/services/subscriptions.py:216
+#: courses/services/subscriptions.py:220
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 "{} Anmeldung wurden nicht bestätigt, da kein:e Partner:in gesetzt wurde"
@@ -922,15 +928,59 @@ msgstr "Kosten"
 msgid "Time"
 msgstr "Zeit"
 
+#: courses/templates/courses/snippets/course_review_button.html:8
+msgid "Sign in to write a review."
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:17
+#: courses/templates/user/snippets/course_review_button.html:11
+msgid "Thank you for reviewing this course!"
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:20
+#: courses/templates/courses/snippets/course_review_button.html:47
+msgid " You still have some courses awaiting evaluation."
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:23
+#: courses/templates/courses/snippets/course_review_button.html:50
+msgid " Please go to 'My Courses' to review them."
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:25
+#: courses/templates/courses/snippets/course_review_button.html:52
+msgid " Thank you!"
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:32
+msgid "You have taken a "
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:34
+msgid " course in the past but haven't reviewed it yet."
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:36
+#: courses/templates/courses/snippets/course_review_button.html:39
+#: courses/templates/user/snippets/course_review_button.html:8
+#, fuzzy
+#| msgid "Reviews for "
+msgid "Review this course"
+msgstr ""
+
+#: courses/templates/courses/snippets/course_review_button.html:44
+msgid "You can only review courses that you already completed."
+msgstr ""
+
 #: courses/templates/courses/snippets/course_reviews.html:5
 msgid "Reviews"
 msgstr "Bewertungen"
 
-#: courses/templates/courses/snippets/course_reviews.html:6
+#: courses/templates/courses/snippets/course_reviews.html:7
 msgid "Reviews for "
 msgstr "Bewertungen für "
 
-#: courses/templates/courses/snippets/course_reviews.html:8
+#: courses/templates/courses/snippets/course_reviews.html:9
 msgid "Reviews the teachers got for other courses"
 msgstr "Bewertungen die die Lehrpersonen für andere Kursen bekommen haben"
 
