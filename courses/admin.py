@@ -339,7 +339,9 @@ class SubscribeAdmin(VersionAdmin):
             "course__offering__period",
             "course__succeeding_courses",
             "course__preceding_courses__subscriptions",
+            "course__type",
             "course__type__styles",
+            "course__type__styles__parent_style",
         )
 
     actions = [
@@ -356,7 +358,7 @@ class SubscribeAdmin(VersionAdmin):
         send_vouchers_for_subscriptions,
     ]
 
-    raw_id_fields = ("user", "partner")
+    raw_id_fields = ("user", "partner", "course")
 
     change_list_template = "courses/admin/subscribe_change_list.html"
 
