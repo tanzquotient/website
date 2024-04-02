@@ -15,7 +15,11 @@ log = logging.getLogger("tq")
 def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType, int]]:
     """returns similar courses that the user did before in the system"""
 
-    relevant_exp = [related_style.id for style in self.course.type.styles.all() for related_style in style.related()]
+    relevant_exp = [
+        related_style.id
+        for style in self.course.type.styles.all()
+        for related_style in style.related()
+    ]
 
     relevant_courses = Counter(
         [
