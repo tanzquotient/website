@@ -9,13 +9,14 @@
         </a>
     </div>
 {% else %}
+    {% has_open_surveys user as user_has_open_surveys %}
     {% user_can_review course user True as can_review_course_type %}
     {% if can_review_course_type %}
         {% user_has_reviewed course user True as has_reviewed_course_type %}
         {% if has_reviewed_course_type %}
             <div class="mt-2 alert alert-success" role="alert">
                 {% trans "Thank you for reviewing this course!" %}
-                {% if user.profile.has_open_surveys %}
+                {% if user_has_open_surveys %}
                     <br><hr>
                         {% trans "You still have some courses awaiting evaluation." %}
                         <a href="{% url "user_courses" %}">
@@ -42,7 +43,7 @@
     {% else %}
     <div class="mt-2 alert alert-info" role="alert">
         {% trans "You can only review courses that you already completed." %}
-        {% if user.profile.has_open_surveys %}
+        {% if user_has_open_surveys %}
             <br><hr>
             {% trans "You still have some courses awaiting evaluation." %}
             <a href="{% url "user_courses" %}">
