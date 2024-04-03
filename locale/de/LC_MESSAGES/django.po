@@ -388,7 +388,7 @@ msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
 #: courses/forms/user_edit_from.py:67 courses/forms/user_edit_from.py:77
 msgid "Select country"
-msgstr ""
+msgstr "Land auswählen"
 
 #: courses/forms/user_edit_from.py:87 courses/forms/user_edit_from.py:91
 msgid "This field is required if you are a student."
@@ -928,45 +928,45 @@ msgstr "Zeit"
 
 #: courses/templates/courses/snippets/course_review_button.html:8
 msgid "Sign in to write a review."
-msgstr ""
+msgstr "Melde dich an, um eine Bewertung zu schreiben"
 
 #: courses/templates/courses/snippets/course_review_button.html:18
 #: courses/templates/user/snippets/course_review_button.html:11
 msgid "Thank you for reviewing this course!"
-msgstr ""
+msgstr "Danke, für deine Bewertung des Kurses!"
 
 #: courses/templates/courses/snippets/course_review_button.html:21
 #: courses/templates/courses/snippets/course_review_button.html:48
 msgid "You still have some courses awaiting evaluation."
-msgstr ""
+msgstr "Du hast Kurse die du bewerten kannst."
 
 #: courses/templates/courses/snippets/course_review_button.html:24
 #: courses/templates/courses/snippets/course_review_button.html:51
 msgid "Please go to 'My Courses' to review them."
-msgstr ""
+msgstr "Bitte gehe zu 'Meine Kurse' um diese zu bewerten."
 
 #: courses/templates/courses/snippets/course_review_button.html:26
 #: courses/templates/courses/snippets/course_review_button.html:53
 msgid "Thank you!"
-msgstr ""
+msgstr "Danke!"
 
 #: courses/templates/courses/snippets/course_review_button.html:33
 msgid "You have taken a"
-msgstr ""
+msgstr "Du hast einen"
 
 #: courses/templates/courses/snippets/course_review_button.html:35
 msgid "course in the past but haven't reviewed it yet."
-msgstr ""
+msgstr "Kurs belegt, aber noch keine Bewertung abgegeben."
 
 #: courses/templates/courses/snippets/course_review_button.html:37
 #: courses/templates/courses/snippets/course_review_button.html:40
 #: courses/templates/user/snippets/course_review_button.html:8
 msgid "Review this course"
-msgstr ""
+msgstr "Bewerte diesen Kurs"
 
 #: courses/templates/courses/snippets/course_review_button.html:45
 msgid "You can only review courses that you already completed."
-msgstr ""
+msgstr "Du kannst nur Kurse bewerten, die du auch abgeschlossen hast."
 
 #: courses/templates/courses/snippets/course_reviews.html:5
 msgid "Reviews"
@@ -1573,22 +1573,18 @@ msgid "Details & edit"
 msgstr "Details & bearbeiten"
 
 #: courses/templates/user/snippets/open_surveys.html:7
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review our courses!"
-msgstr ""
+msgstr "Bewerte unsere Kurse!"
 
 #: courses/templates/user/snippets/open_surveys.html:9
 msgid ""
 "You have pending review requests for the following courses. Please consider "
 "taking 5 minutes to complete them, thank you!"
-msgstr ""
+msgstr "Es warten noch Kurse auf deine Bewertung. Wir würden uns freuen, wenn du dir 5 Minuten nehmen könntest um uns Feedback zu geben. Vielen Dank!"
 
 #: courses/templates/user/snippets/open_surveys.html:13
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review now"
-msgstr ""
+msgstr "Jetzt bewerten"
 
 #: courses/templates/user/snippets/subscription.html:16
 msgid "More Info"
