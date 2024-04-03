@@ -17,21 +17,21 @@
                 {% trans "Thank you for reviewing this course!" %}
                 {% if user.profile.has_open_surveys %}
                     <br><hr>
-                        {% trans " You still have some courses awaiting evaluation." %}
+                        {% trans "You still have some courses awaiting evaluation." %}
                         <a href="{% url "user_courses" %}">
                             <i class="fa fa-arrow-circle-right"></i>
-                            {% trans " Please go to 'My Courses' to review them." %}
+                            &nbsp;{% trans "Please go to 'My Courses' to review them." %}
                         </a>
-                        {% trans " Thank you!" %}
+                        {% trans "Thank you!" %}
                 {% endif %}
             </div>
         {% else %}
             {% user_has_reviewed course user False as has_reviewed_exact_course %}
             {% if has_reviewed_exact_course %}
                 <div class="mt-2 alert alert-info" role="alert">
-                    {% trans "You have taken a " %}
-                    {{ course.type.title }}
-                    {% trans " course in the past but haven't reviewed it yet." %}
+                    {% trans "You have taken a" %}
+                    &nbsp;{{ course.type.title }}&nbsp;
+                    {% trans "course in the past but haven't reviewed it yet." %}
                     <br>
                     <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mt-2" role="button">{% trans "Review this course" %}</a>
                 </div>
@@ -44,12 +44,12 @@
         {% trans "You can only review courses that you already completed." %}
         {% if user.profile.has_open_surveys %}
             <br><hr>
-            {% trans " You still have some courses awaiting evaluation." %}
+            {% trans "You still have some courses awaiting evaluation." %}
             <a href="{% url "user_courses" %}">
                 <i class="fa fa-arrow-circle-right"></i>
-                {% trans " Please go to 'My Courses' to review them." %}
+                &nbsp;{% trans "Please go to 'My Courses' to review them." %}
             </a>
-            {% trans " Thank you!" %}
+            &nbsp;{% trans "Thank you!" %}
         {% endif %}
     </div>
     {% endif %}
