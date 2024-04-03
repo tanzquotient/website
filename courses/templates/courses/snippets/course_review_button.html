@@ -9,10 +9,10 @@
         </a>
     </div>
 {% else %}
-    {% user_can_review course user True as can_review %}
-    {% if can_review %}
-        {% user_has_reviewed course user True as has_reviewed %}
-        {% if has_reviewed %}
+    {% user_can_review course user True as can_review_course_type %}
+    {% if can_review_course_type %}
+        {% user_has_reviewed course user True as has_reviewed_course_type %}
+        {% if has_reviewed_course_type %}
             <div class="mt-2 alert alert-success" role="alert">
                 {% trans "Thank you for reviewing this course!" %}
                 {% if user.profile.has_open_surveys %}
