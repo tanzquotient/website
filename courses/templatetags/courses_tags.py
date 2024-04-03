@@ -124,3 +124,16 @@ def get_link_to_course_evaluation(
         )
 
     return survey_instance[0].create_full_url() if survey_instance.count() > 0 else "#"
+
+
+@register.simple_tag
+def has_open_surveys(user: User) -> bool:
+
+    expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
+
+    return (
+        SurveyInstance.objects.filter(
+            expire_date_query, user=user, is_completed=False
+        ).count()
+        > 0
+    )
