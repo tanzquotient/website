@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 12:18+0200\n"
+"POT-Creation-Date: 2024-04-03 13:10+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -930,43 +930,41 @@ msgstr "Zeit"
 msgid "Sign in to write a review."
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:17
+#: courses/templates/courses/snippets/course_review_button.html:18
 #: courses/templates/user/snippets/course_review_button.html:11
 msgid "Thank you for reviewing this course!"
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:20
-#: courses/templates/courses/snippets/course_review_button.html:47
+#: courses/templates/courses/snippets/course_review_button.html:21
+#: courses/templates/courses/snippets/course_review_button.html:48
 msgid "You still have some courses awaiting evaluation."
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:23
-#: courses/templates/courses/snippets/course_review_button.html:50
+#: courses/templates/courses/snippets/course_review_button.html:24
+#: courses/templates/courses/snippets/course_review_button.html:51
 msgid "Please go to 'My Courses' to review them."
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:25
-#: courses/templates/courses/snippets/course_review_button.html:52
+#: courses/templates/courses/snippets/course_review_button.html:26
+#: courses/templates/courses/snippets/course_review_button.html:53
 msgid "Thank you!"
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:32
-#, fuzzy
-#| msgid "You can not make it?"
+#: courses/templates/courses/snippets/course_review_button.html:33
 msgid "You have taken a"
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:34
+#: courses/templates/courses/snippets/course_review_button.html:35
 msgid "course in the past but haven't reviewed it yet."
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:36
-#: courses/templates/courses/snippets/course_review_button.html:39
+#: courses/templates/courses/snippets/course_review_button.html:37
+#: courses/templates/courses/snippets/course_review_button.html:40
 #: courses/templates/user/snippets/course_review_button.html:8
 msgid "Review this course"
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:44
+#: courses/templates/courses/snippets/course_review_button.html:45
 msgid "You can only review courses that you already completed."
 msgstr ""
 
@@ -1574,6 +1572,24 @@ msgstr "Kontakte (vCard)"
 msgid "Details & edit"
 msgstr "Details & bearbeiten"
 
+#: courses/templates/user/snippets/open_surveys.html:7
+#, fuzzy
+#| msgid "Reviews for "
+msgid "Review our courses!"
+msgstr ""
+
+#: courses/templates/user/snippets/open_surveys.html:9
+msgid ""
+"You have pending review requests for the following courses. Please consider "
+"taking 5 minutes to complete them, thank you!"
+msgstr ""
+
+#: courses/templates/user/snippets/open_surveys.html:13
+#, fuzzy
+#| msgid "Reviews for "
+msgid "Review now"
+msgstr ""
+
 #: courses/templates/user/snippets/subscription.html:16
 msgid "More Info"
 msgstr "Mehr Infos"
@@ -1688,11 +1704,11 @@ msgstr "Derzeit sind keine Kurse verfügbar."
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/user_courses.html:44
+#: courses/templates/user/user_courses.html:45
 msgid "No subscriptions"
 msgstr "Keine Anmeldungen"
 
-#: courses/templates/user/user_courses.html:49
+#: courses/templates/user/user_courses.html:50
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
