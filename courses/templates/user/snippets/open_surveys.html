@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% has_open_surveys user as user_has_open_surveys %}
+{% if user_has_open_surveys %}
+    <div class="mt-2 alert alert-info" role="alert">
+        <h5 class="alert-heading">{% trans "Review our courses!" %}</h5>
+        <hr>
+        {% trans "You have pending review requests for the following courses. Please consider taking 5 minutes to complete them, thank you!" %}
+        {% get_open_surveys user as open_surveys %}
+        <ul class="mb-0 mt-2">
+        {% for open_survey in open_surveys %}
+            <li><a href="{% url "courses:course_detail" open_survey.course_id %}">{{ open_survey.course.type }}</a> - <a target="_blank" href="{% get_link_to_course_evaluation open_survey.course user False %}">{% trans "Review now" %}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}

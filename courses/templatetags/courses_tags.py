@@ -137,3 +137,15 @@ def has_open_surveys(user: User) -> bool:
         ).count()
         > 0
     )
+
+
+@register.simple_tag
+def get_open_surveys(user: User) -> tuple[SurveyInstance]:
+
+    expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
+
+    return tuple(
+        SurveyInstance.objects.filter(
+            expire_date_query, user=user, is_completed=False
+        ).all()
+    )
