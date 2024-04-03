@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-02 10:56+0200\n"
+"POT-Creation-Date: 2024-04-03 12:18+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -387,8 +387,6 @@ msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
 #: courses/forms/user_edit_from.py:67 courses/forms/user_edit_from.py:77
-#, fuzzy
-#| msgid "Select month"
 msgid "Select country"
 msgstr ""
 
@@ -939,32 +937,32 @@ msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:20
 #: courses/templates/courses/snippets/course_review_button.html:47
-msgid " You still have some courses awaiting evaluation."
+msgid "You still have some courses awaiting evaluation."
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:23
 #: courses/templates/courses/snippets/course_review_button.html:50
-msgid " Please go to 'My Courses' to review them."
+msgid "Please go to 'My Courses' to review them."
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:25
 #: courses/templates/courses/snippets/course_review_button.html:52
-msgid " Thank you!"
+msgid "Thank you!"
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:32
-msgid "You have taken a "
+#, fuzzy
+#| msgid "You can not make it?"
+msgid "You have taken a"
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:34
-msgid " course in the past but haven't reviewed it yet."
+msgid "course in the past but haven't reviewed it yet."
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:36
 #: courses/templates/courses/snippets/course_review_button.html:39
 #: courses/templates/user/snippets/course_review_button.html:8
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review this course"
 msgstr ""
 
