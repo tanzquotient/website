@@ -1,13 +1,13 @@
 from django import template
+from django.contrib.auth.models import User
 from django.db.models import QuerySet, Q
+from django.http import HttpRequest
+from django.utils import timezone
 
 from courses.models import Weekday, OfferingType, Course
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
 from survey.models.types import QuestionType
-from django.contrib.auth.models import User
-from django.utils import timezone
-from django.http import HttpRequest
 
 register = template.Library()
 
@@ -76,7 +76,6 @@ def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
 
 @register.simple_tag
 def user_can_review(course: Course, user: User, include_same_type: bool = True) -> bool:
-
     course_query = (
         Q(course__type=course.type) if include_same_type else Q(course=course)
     )
@@ -94,7 +93,6 @@ def user_can_review(course: Course, user: User, include_same_type: bool = True) 
 def user_has_reviewed(
     course: Course, user: User, include_same_type: bool = True
 ) -> bool:
-
     course_query = (
         Q(course__type=course.type) if include_same_type else Q(course=course)
     )
@@ -111,7 +109,6 @@ def user_has_reviewed(
 def get_link_to_course_evaluation(
     course: Course, user: User, include_same_type: bool = True
 ) -> str:
-
     expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
     survey_instance = SurveyInstance.objects.filter(
@@ -128,12 +125,11 @@ def get_link_to_course_evaluation(
 
 @register.simple_tag
 def has_open_surveys(user: User) -> bool:
-
     expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
     return (
         SurveyInstance.objects.filter(
-            expire_date_query, user=user, is_completed=False
+            expire_date_query, user=user, is_completed=False, course__isnull=False
         ).count()
         > 0
     )
@@ -141,11 +137,10 @@ def has_open_surveys(user: User) -> bool:
 
 @register.simple_tag
 def get_open_surveys(user: User) -> tuple[SurveyInstance]:
-
     expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
     return tuple(
         SurveyInstance.objects.filter(
-            expire_date_query, user=user, is_completed=False
+            expire_date_query, user=user, is_completed=False, course__isnull=False
         ).all()
     )
