@@ -4,7 +4,7 @@ from django.db.models import QuerySet, Q
 from django.http import HttpRequest
 from django.utils import timezone
 
-from courses.models import Weekday, OfferingType, Course
+from courses.models import Weekday, OfferingType, Course, Subscribe, SubscribeState
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
 from survey.models.types import QuestionType
@@ -72,6 +72,28 @@ def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
         )
         for answer in text_answers
     ]
+
+
+@register.simple_tag
+def user_has_taken_course(
+    course: Course, user: User, include_same_type: bool = True
+) -> bool:
+    course_query = (
+        Q(course__type=course.type) if include_same_type else Q(course=course)
+    )
+
+    subscriptions = Subscribe.objects.filter(
+        course_query,
+        user=user,
+        state__in=SubscribeState.ACCEPTED_STATES,
+        course__is_over=True,
+    ).all()
+
+    for subscription in subscriptions:
+        if subscription.course.is_over():
+            return True
+
+    return False
 
 
 @register.simple_tag
