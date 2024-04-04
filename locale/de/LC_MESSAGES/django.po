@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-04 10:20+0200\n"
+"POT-Creation-Date: 2024-04-04 22:58+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -965,7 +965,7 @@ msgid "Review this course"
 msgstr "Bewerte diesen Kurs"
 
 #: courses/templates/courses/snippets/course_review_button.html:48
-msgid "Sorry, you cannot review this course (anymore)."
+msgid "Evaluation is closed for this course."
 msgstr ""
 
 #: courses/templates/courses/snippets/course_review_button.html:50
