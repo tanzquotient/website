@@ -644,3 +644,7 @@ if not DEBUG:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
     )
+
+# Increase fileds number limit for GET/POST requests
+# TODO: remove after migrating newsletter to celery task
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
