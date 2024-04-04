@@ -86,7 +86,6 @@ def user_has_taken_course(
         course_query,
         user=user,
         state__in=SubscribeState.ACCEPTED_STATES,
-        course__is_over=True,
     ).all()
 
     for subscription in subscriptions:
