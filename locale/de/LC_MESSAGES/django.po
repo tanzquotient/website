@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 18:18+0200\n"
+"POT-Creation-Date: 2024-04-04 10:20+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -936,20 +936,17 @@ msgid "Thank you for reviewing this course!"
 msgstr "Danke, für deine Bewertung des Kurses!"
 
 #: courses/templates/courses/snippets/course_review_button.html:23
-#: courses/templates/courses/snippets/course_review_button.html:50
-#: courses/templates/courses/snippets/course_review_button.html:64
+#: courses/templates/courses/snippets/course_review_button.html:54
 msgid "You still have some courses awaiting evaluation."
 msgstr "Du hast Kurse die du bewerten kannst."
 
 #: courses/templates/courses/snippets/course_review_button.html:26
-#: courses/templates/courses/snippets/course_review_button.html:53
-#: courses/templates/courses/snippets/course_review_button.html:67
+#: courses/templates/courses/snippets/course_review_button.html:57
 msgid "Please go to 'My Courses' to review them."
 msgstr "Bitte gehe zu 'Meine Kurse' um diese zu bewerten."
 
 #: courses/templates/courses/snippets/course_review_button.html:28
-#: courses/templates/courses/snippets/course_review_button.html:55
-#: courses/templates/courses/snippets/course_review_button.html:69
+#: courses/templates/courses/snippets/course_review_button.html:59
 msgid "Thank you!"
 msgstr "Danke!"
 
@@ -967,13 +964,11 @@ msgstr "Kurs belegt, aber noch keine Bewertung abgegeben."
 msgid "Review this course"
 msgstr "Bewerte diesen Kurs"
 
-#: courses/templates/courses/snippets/course_review_button.html:47
-#, fuzzy
-#| msgid "Thank you for reviewing this course!"
+#: courses/templates/courses/snippets/course_review_button.html:48
 msgid "Sorry, you cannot review this course (anymore)."
 msgstr ""
 
-#: courses/templates/courses/snippets/course_review_button.html:61
+#: courses/templates/courses/snippets/course_review_button.html:50
 msgid "You can only review courses that you already completed."
 msgstr "Du kannst nur Kurse bewerten, die du auch abgeschlossen hast."
 
