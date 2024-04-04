@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 13:10+0200\n"
+"POT-Creation-Date: 2024-04-04 15:01+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -610,21 +610,21 @@ msgstr "Summe Jahre"
 msgid "Total hours"
 msgstr "Summe Stunden"
 
-#: courses/services/general.py:49
+#: courses/services/general.py:52
 #: events/templates/events/snippets/event_list.html:4
 #: events/templates/events/snippets/event_list_entry.html:3
 msgid "No entry fee"
 msgstr "Freier Eintritt"
 
-#: courses/services/general.py:53
+#: courses/services/general.py:56
 msgid "free for students"
 msgstr "Kostenlos für Studierende"
 
-#: courses/services/general.py:55 courses/services/general.py:66
+#: courses/services/general.py:58 courses/services/general.py:69
 msgid "otherwise {:g} CHF"
 msgstr "sonst {:g} CHF"
 
-#: courses/services/general.py:64
+#: courses/services/general.py:67
 msgid "{:g} CHF for students"
 msgstr "{:g} CHF für Studierende"
 
@@ -1572,19 +1572,33 @@ msgstr "Kontakte (vCard)"
 msgid "Details & edit"
 msgstr "Details & bearbeiten"
 
-#: courses/templates/user/snippets/open_surveys.html:7
+#: courses/templates/user/snippets/open_surveys.html:11
 msgid "Review our courses!"
 msgstr "Bewerte unsere Kurse!"
 
-#: courses/templates/user/snippets/open_surveys.html:9
+#: courses/templates/user/snippets/open_surveys.html:13
 msgid ""
 "You have pending review requests for the following courses. Please consider "
 "taking 5 minutes to complete them, thank you!"
-msgstr "Es warten noch Kurse auf deine Bewertung. Wir würden uns freuen, wenn du dir 5 Minuten nehmen könntest um uns Feedback zu geben. Vielen Dank!"
+msgstr ""
+"Es warten noch Kurse auf deine Bewertung. Wir würden uns freuen, wenn du dir "
+"5 Minuten nehmen könntest um uns Feedback zu geben. Vielen Dank!"
 
-#: courses/templates/user/snippets/open_surveys.html:13
+#: courses/templates/user/snippets/open_surveys.html:17
+#: courses/templates/user/snippets/open_surveys.html:31
 msgid "Review now"
 msgstr "Jetzt bewerten"
+
+#: courses/templates/user/snippets/open_surveys.html:25
+#: payment/templates/finance/account/detail.html:27
+msgid "Show"
+msgstr "Zeige"
+
+#: courses/templates/user/snippets/open_surveys.html:25
+#, fuzzy
+#| msgid "Show more"
+msgid "more"
+msgstr ""
 
 #: courses/templates/user/snippets/subscription.html:16
 msgid "More Info"
@@ -2118,10 +2132,6 @@ msgstr "mit angewendeten Filtern"
 #: payment/templates/finance/account/detail.html:26
 msgid "Transaction list"
 msgstr "Transaktionsliste"
-
-#: payment/templates/finance/account/detail.html:27
-msgid "Show"
-msgstr "Zeige"
 
 #: payment/templates/finance/account/detail.html:31
 msgid "without"
