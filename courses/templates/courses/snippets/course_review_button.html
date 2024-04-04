@@ -12,39 +12,43 @@
     {% user_has_taken_course course user True as has_taken_course_type %}
     {% has_open_surveys user as user_has_open_surveys %}
     {% user_can_review course user True as can_review_course_type %}
-    {% if has_taken_course_type %}
-        {% if can_review_course_type %}
-            {% user_has_reviewed course user True as has_reviewed_course_type %}
-            {% if has_reviewed_course_type %}
-                <div class="mt-2 alert alert-success" role="alert">
-                    {% trans "Thank you for reviewing this course!" %}
-                    {% if user_has_open_surveys %}
-                        <br><hr>
-                            {% trans "You still have some courses awaiting evaluation." %}
-                            <a href="{% url "user_courses" %}">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                &nbsp;{% trans "Please go to 'My Courses' to review them." %}
-                            </a>
-                            {% trans "Thank you!" %}
-                    {% endif %}
+    
+    {% if can_review_course_type %}
+        {% user_has_reviewed course user True as has_reviewed_course_type %}
+        {% if has_reviewed_course_type %}
+            <div class="mt-2 alert alert-success" role="alert">
+                {% trans "Thank you for reviewing this course!" %}
+                {% if user_has_open_surveys %}
+                    <br><hr>
+                        {% trans "You still have some courses awaiting evaluation." %}
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            &nbsp;{% trans "Please go to 'My Courses' to review them." %}
+                        </a>
+                        {% trans "Thank you!" %}
+                {% endif %}
+            </div>
+        {% else %}
+            {% user_has_reviewed course user False as has_reviewed_exact_course %}
+            {% if has_reviewed_exact_course %}
+                <div class="mt-2 alert alert-info" role="alert">
+                    {% trans "You have taken a" %}
+                    &nbsp;{{ course.type.title }}&nbsp;
+                    {% trans "course in the past but haven't reviewed it yet." %}
+                    <br>
+                    <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mt-2" role="button">{% trans "Review this course" %}</a>
                 </div>
             {% else %}
-                {% user_has_reviewed course user False as has_reviewed_exact_course %}
-                {% if has_reviewed_exact_course %}
-                    <div class="mt-2 alert alert-info" role="alert">
-                        {% trans "You have taken a" %}
-                        &nbsp;{{ course.type.title }}&nbsp;
-                        {% trans "course in the past but haven't reviewed it yet." %}
-                        <br>
-                        <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mt-2" role="button">{% trans "Review this course" %}</a>
-                    </div>
-                {% else %}
-                    <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
-                {% endif %}
+                <a target="_blank" href="{% get_link_to_course_evaluation course user True %}" class="btn btn-success mb-3" role="button">{% trans "Review this course" %}</a>
             {% endif %}
-        {% else %}
+        {% endif %}
+    {% else %}
         <div class="mt-2 alert alert-info" role="alert">
-            {% trans "Sorry, you cannot review this course (anymore)." %}
+            {% if has_taken_course_type %}
+                {% trans "Sorry, you cannot review this course (anymore)." %}
+            {% else %}
+                {% trans "You can only review courses that you already completed." %}
+            {% endif %}
             {% if user_has_open_surveys %}
                 <br><hr>
                 {% trans "You still have some courses awaiting evaluation." %}
@@ -55,19 +59,5 @@
                 &nbsp;{% trans "Thank you!" %}
             {% endif %}
         </div>
-        {% endif %}
-    {% else %}
-    <div class="mt-2 alert alert-info" role="alert">
-        {% trans "You can only review courses that you already completed." %}
-        {% if user_has_open_surveys %}
-            <br><hr>
-            {% trans "You still have some courses awaiting evaluation." %}
-            <a href="{% url "user_courses" %}">
-                <i class="fa fa-arrow-circle-right"></i>
-                &nbsp;{% trans "Please go to 'My Courses' to review them." %}
-            </a>
-            &nbsp;{% trans "Thank you!" %}
-        {% endif %}
-    </div>
     {% endif %}
 {% endif %}
