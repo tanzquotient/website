@@ -10,10 +10,6 @@ from tq_website import settings
 
 from courses.models import Subscribe
 
-import logging
-
-log = logging.getLogger("tq")
-
 
 def create_qrbill_for_subscription(subscribe: Subscribe) -> QRBill:
     payment_account = settings.PAYMENT_ACCOUNT["default"]
@@ -36,7 +32,7 @@ def to_svg_string(qr_bill: QRBill) -> str:
         return file.getvalue()
 
 
-def to_pdf(qr_bill: QRBill, pdf_file) -> bytes:
+def to_pdf(qr_bill: QRBill, pdf_file) -> None:
     with TemporaryFile(encoding="utf-8", mode="r+") as temp:
         qr_bill.as_svg(temp)
         temp.seek(0)
