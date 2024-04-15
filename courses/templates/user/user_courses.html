@@ -37,6 +37,11 @@
             {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
         </a>
     </div>
+    <div class="alert alert-info">
+        <h4 class="alert-heading"><span class="badge bg-success">{% trans "NEW" %}</span> QR-bill</h4>
+        <hr>
+        {% trans "You can now pay your subscriptions using the QR-bill. Follow the payment link of your unpaid subscriptions below to check it out." %}
+    </div>
     {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
         {% for subscription in subscriptions %}
