@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+from tempfile import TemporaryFile
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -11,6 +12,7 @@ import courses.models
 from courses.models import Subscribe, Teach, Course
 from email_system.services import send_email
 from tq_website import settings as my_settings
+from payment.utils import create_qrbill_for_subscription, to_pdf
 
 log = logging.getLogger("tq")
 
@@ -83,12 +85,16 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     else:
         template = "participation_confirmation_without_partner_nocouple"
 
-    return send_email(
-        to=subscription.user.email,
-        reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
-        template=template,
-        context=context,
-    )
+    
+    with TemporaryFile() as pdf_file:
+        to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
+        return send_email(
+            to=subscription.user.email,
+            reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+            template=template,
+            context=context,
+            attachments={f"QR-bill_{context['usi']}.pdf": pdf_file},
+        )
 
 
 def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
