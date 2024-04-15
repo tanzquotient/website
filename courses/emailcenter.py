@@ -85,7 +85,6 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     else:
         template = "participation_confirmation_without_partner_nocouple"
 
-    
     with TemporaryFile() as pdf_file:
         to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
         return send_email(
