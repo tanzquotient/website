@@ -154,7 +154,6 @@ class ScaleAdmin(TranslatableAdmin):
 class SurveyInstanceAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "invitation_sent",
         "survey",
         "user",
         "course",
@@ -170,7 +169,6 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
         SubscribeCourseListFilter,
         "url_expire_date",
         "last_update",
-        "invitation_sent",
     )
 
     actions = [let_url_expire_now, fix_unintentional_reviews]

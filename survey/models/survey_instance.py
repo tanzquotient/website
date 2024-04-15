@@ -54,7 +54,6 @@ class SurveyInstance(Model):
         null=False,
         max_length=32,
     )
-    invitation_sent = BooleanField(default=False)
     is_completed = BooleanField(default=False)
 
     def has_answers(self) -> bool:
