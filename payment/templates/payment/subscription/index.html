@@ -37,11 +37,26 @@
                     {% trans "If you've got any vouchers, you may apply them below." %}
                 </p>
                 <hr>
+                <h5 class="alert-heading">{% trans "Bank account coordinates" %}</h5>
                 <p class="mb-0">
                     {% include "payment/account/info.html" %}
                 </p>
-                <div>
-                    {% qrbill_for_subscription subscription %}
+                <hr>
+                <div class="mt-3">
+                    <h5 class="alert-heading"><span class="badge bg-success">{% trans "NEW" %}</span> {% trans "QR-bill" %}</h5>
+                    <p>
+                        {% trans "Please scan the QR-bill below with your home banking app to fill in the payment details automatically." %}
+                    </p>
+                    <div style="text-align: center;">
+                        {% qrbill_for_subscription subscription %}
+                    </div>
+                </div>
+                <hr>
+                <div class="mt-3">
+                    <h5 class="alert-heading">{% trans "Note" %}</h5>
+                    <p>
+                        {% trans "It can take up to a week for your payment to be acquired by our system." %}
+                    </p>
                 </div>
             </div>
         {% endif %}
