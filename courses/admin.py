@@ -14,7 +14,15 @@ from courses.filters import *
 
 @admin.register(Offering)
 class OfferingAdmin(admin.ModelAdmin):
-    list_display = ("name", "period", "display", "active", "preview", "opens_soon")
+    list_display = (
+        "name",
+        "period",
+        "display",
+        "active",
+        "preview",
+        "opens_soon",
+        "survey",
+    )
 
     actions = [
         display,

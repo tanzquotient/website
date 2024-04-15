@@ -2,6 +2,7 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from . import OfferingType
@@ -50,6 +51,17 @@ class Offering(models.Model):
         default=10,
         help_text="Defines how offerings are ordered on the course page. The lower "
         "the number, the further on top.",
+    )
+    survey = models.ForeignKey(
+        "survey.Survey",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        help_text=_(
+            "If not empty, will automatically send a survey invitation "
+            "to all participants in each course, "
+            "as soon as the respective course is over."
+        ),
     )
 
     def is_public(self) -> bool:
