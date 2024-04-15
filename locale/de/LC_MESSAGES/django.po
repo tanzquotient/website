@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-04 22:58+0200\n"
+"POT-Creation-Date: 2024-04-15 15:48+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -557,6 +557,14 @@ msgstr "Es wird noch eine weitere Person benötigt."
 #: courses/models/course.py:411
 msgid "At least {} more people are needed."
 msgstr "Es werden noch {} Personen benötigt."
+
+#: courses/models/offering.py:61
+msgid ""
+"If not empty, will automatically send a survey invitation to all "
+"participants in each course, as soon as the respective course is over."
+msgstr ""
+"If not empty, will automatically send a survey invitation to all "
+"participants in each course, as soon as the respective course is over."
 
 #: courses/models/subscribe.py:317
 msgid "leader"
@@ -1599,8 +1607,6 @@ msgid "Show"
 msgstr "Zeige"
 
 #: courses/templates/user/snippets/open_surveys.html:25
-#, fuzzy
-#| msgid "Show more"
 msgid "more"
 msgstr ""
 
@@ -1726,24 +1732,24 @@ msgstr "Keine Anmeldungen"
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
-#: courses/views.py:392 templates/menu/desktop_user_menu.html:12
+#: courses/views.py:394 templates/menu/desktop_user_menu.html:12
 #: templates/menu/mobile_admin_menu.html:17
 msgid "Teachers overview"
 msgstr "Übersicht Lehrer:innen"
 
-#: courses/views.py:402
+#: courses/views.py:404
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:405
+#: courses/views.py:407
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:408
+#: courses/views.py:410
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:411
+#: courses/views.py:413
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
