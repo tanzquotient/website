@@ -1,3 +1,4 @@
+import logging
 from typing import Iterable, Optional
 
 from django.contrib.auth.models import User
@@ -6,6 +7,11 @@ from django.http import HttpResponse
 from courses.models import Course, Offering
 from utils import export
 from survey.models import Survey, SurveyInstance
+from email_system.services import send_all_emails
+from post_office.models import EmailTemplate
+from tq_website import settings
+
+log = logging.getLogger("tq")
 
 
 def export_surveys(
@@ -52,9 +58,11 @@ def export_surveys(
             # only take the newest answer if multiple submissions
             answers = instance.answers.order_by("-id")
             row = [
-                f"{instance.user.first_name} {instance.user.last_name}"
-                if instance.user
-                else "",
+                (
+                    f"{instance.user.first_name} {instance.user.last_name}"
+                    if instance.user
+                    else ""
+                ),
                 f"{instance.user.email}" if instance.user else "",
                 course_name,
             ]
@@ -95,3 +103,73 @@ def get_or_create_survey_instance(survey: Survey, user: User) -> SurveyInstance:
     survey_instance = SurveyInstance(survey=survey, user=user)
     survey_instance.save()
     return survey_instance
+
+
+def send_course_surveys() -> None:
+    email_template = EmailTemplate.objects.get(name="survey_invitation")
+    emails = []
+
+    # get all offerings with a survey assigned
+    offerings = Offering.objects.filter(
+        survey__isnull=False,
+    )
+
+    for offering in offerings:
+        # get all courses in the offering
+        courses = Course.objects.filter(
+            offering=offering,
+            cancelled=False,
+        )
+        for course in courses:
+
+            # check if the course is over
+            if not course.is_over():
+                continue
+
+            survey_instances_for_course = SurveyInstance.objects.filter(
+                course=course,
+                survey=offering.survey,
+            )
+
+            users_already_invited: list[User] = [
+                survey_instance_for_course.user
+                for survey_instance_for_course in survey_instances_for_course
+            ]
+            recipients: list[User] = [
+                p.user
+                for p in course.participatory().all()
+                if p.user not in users_already_invited
+            ]
+
+            for recipient in recipients:
+                # create a survey instance
+                survey_instance = SurveyInstance.objects.create(
+                    survey=offering.survey,
+                    email_template=email_template,
+                    course=course,
+                    user=recipient,
+                )
+
+                context = {
+                    "first_name": recipient.first_name,
+                    "last_name": recipient.last_name,
+                    "course": course.type.title,
+                    "offering": course.offering.name,
+                    "survey_url": survey_instance.create_full_url(),
+                    "survey_expiration": survey_instance.url_expire_date,
+                }
+                log.info(
+                    f"Will send survey invitation to {recipient.username} for course {course.type.title} in offering {course.offering.name}"
+                )
+
+                emails.append(
+                    dict(
+                        to=recipient.email,
+                        reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                        template=email_template,
+                        context=context,
+                    )
+                )
+
+    log.info(f"Sending {len(emails)} emails")
+    send_all_emails(emails)
