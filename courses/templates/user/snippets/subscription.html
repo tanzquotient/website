@@ -73,21 +73,11 @@
                         {% endif %}
                     </div>
                     <div class="mt-2">
-                        {% trans "Unpaid subscription info" %}
-                    </div>
-                    <div class="mt-2">
-                        <div>
-                            {% include "payment/account/info.html" %}
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <strong>{% trans "Use voucher" %}</strong>
-                        <div>
-                            <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
-                                {% trans "Redeem voucher here" %}
-                                <i class="fa fa-arrow-circle-right fa-lg"></i>
-                            </a>
-                        </div>
+                        {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %} 
+                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                            {% trans "Payment" %}
+                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                        </a>
                     </div>
                 {% endif %}
             </div>
