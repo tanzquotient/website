@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-15 15:48+0200\n"
+"POT-Creation-Date: 2024-04-15 23:19+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -791,7 +791,7 @@ msgstr "Kursanmeldung"
 
 #: courses/templates/courses/course_subscribe_form.html:19
 #: courses/templates/courses/course_subscribe_status.html:18
-#: payment/templates/payment/subscription/index.html:49
+#: payment/templates/payment/subscription/index.html:68
 msgid "Info"
 msgstr "Infos"
 
@@ -1092,7 +1092,7 @@ msgstr "Zur Zeit unbekannt"
 #: payment/templates/finance/offering/unpaid/index.html:12
 #: payment/templates/payment/counter/details.html:26
 #: payment/templates/payment/courses/confirm.html:24
-#: payment/templates/payment/subscription/index.html:59
+#: payment/templates/payment/subscription/index.html:78
 msgid "Course"
 msgstr "Kurs"
 
@@ -1370,7 +1370,7 @@ msgstr ""
 
 #: courses/templates/courses/snippets/subscription_info.html:22
 #: courses/templates/courses/snippets/subscription_info.html:32
-#: courses/templates/user/snippets/subscription.html:99
+#: courses/templates/user/snippets/subscription.html:89
 msgid "Subscription received"
 msgstr "Anmeldung eingegangen"
 
@@ -1554,7 +1554,7 @@ msgid "Payment status"
 msgstr "Zahlungsstatus"
 
 #: courses/templates/user/snippets/course_as_teacher.html:32
-#: courses/templates/user/snippets/subscription.html:119
+#: courses/templates/user/snippets/subscription.html:109
 #: payment/templates/finance/offering/courses/index.html:39
 #: payment/templates/finance/offering/courses/index.html:50
 msgid "Paid"
@@ -1640,65 +1640,62 @@ msgid "Unpaid"
 msgstr "Nicht bezahlt"
 
 #: courses/templates/user/snippets/subscription.html:76
-#: payment/templates/payment/subscription/index.html:35
-msgid "Unpaid subscription info"
-msgstr "Bitte überweise das Kursgeld an folgendes Konto."
+msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
+msgstr ""
 
-#: courses/templates/user/snippets/subscription.html:84
-msgid "Use voucher"
-msgstr "Gutschein verwenden"
+#: courses/templates/user/snippets/subscription.html:78
+#: payment/cms_toolbars.py:10
+#: payment/templates/payment/subscription/index.html:97
+msgid "Payment"
+msgstr "Bezahlung"
 
-#: courses/templates/user/snippets/subscription.html:87
-msgid "Redeem voucher here"
-msgstr "Gutschein hier einlösen"
-
-#: courses/templates/user/snippets/subscription.html:96
+#: courses/templates/user/snippets/subscription.html:86
 msgid "State"
 msgstr "Status"
 
-#: courses/templates/user/snippets/subscription.html:101
+#: courses/templates/user/snippets/subscription.html:91
 msgid "New subscription info"
 msgstr ""
 "Wir haben die Anmeldung erhalten. Die Teilnahme ist noch nicht fix. Wir "
 "senden die Bestätigung so bald wie möglich."
 
-#: courses/templates/user/snippets/subscription.html:103
+#: courses/templates/user/snippets/subscription.html:93
 msgid "Subscription confirmed"
 msgstr "Anmeldung bestätigt"
 
-#: courses/templates/user/snippets/subscription.html:105
+#: courses/templates/user/snippets/subscription.html:95
 msgid "Confirmed subscription info"
 msgstr "Die Teilnahme ist fix."
 
-#: courses/templates/user/snippets/subscription.html:107
+#: courses/templates/user/snippets/subscription.html:97
 msgid "Rejected"
 msgstr "Abgelehnt"
 
-#: courses/templates/user/snippets/subscription.html:109
+#: courses/templates/user/snippets/subscription.html:99
 msgid "Rejected subscription info"
 msgstr "Leider mussten wir die Anmeldung ablehnen."
 
-#: courses/templates/user/snippets/subscription.html:111
+#: courses/templates/user/snippets/subscription.html:101
 msgid "Completed"
 msgstr "Besucht"
 
-#: courses/templates/user/snippets/subscription.html:113
+#: courses/templates/user/snippets/subscription.html:103
 msgid "Completed subscription info"
 msgstr "Alles abgeschlossen."
 
-#: courses/templates/user/snippets/subscription.html:115
+#: courses/templates/user/snippets/subscription.html:105
 msgid "To reimburse"
 msgstr "Zu erstatten"
 
-#: courses/templates/user/snippets/subscription.html:117
+#: courses/templates/user/snippets/subscription.html:107
 msgid "To reimburse subscription info"
 msgstr "Rückerstattung wird noch durchgeführt."
 
-#: courses/templates/user/snippets/subscription.html:121
+#: courses/templates/user/snippets/subscription.html:111
 msgid "Paid subscription info"
 msgstr "Wir haben die Bezahlung erhalten. Vielen Dank!"
 
-#: courses/templates/user/snippets/subscription.html:124
+#: courses/templates/user/snippets/subscription.html:114
 #: events/templates/events/snippets/event_card.html:19
 msgid "Show details"
 msgstr "Details anzeigen"
@@ -1724,11 +1721,22 @@ msgstr "Derzeit sind keine Kurse verfügbar."
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/user_courses.html:45
+#: courses/templates/user/user_courses.html:41
+#: payment/templates/payment/subscription/index.html:46
+msgid "NEW"
+msgstr ""
+
+#: courses/templates/user/user_courses.html:43
+msgid ""
+"You can now pay your subscriptions using the QR-bill. Follow the payment "
+"link of your unpaid subscriptions below to check it out."
+msgstr ""
+
+#: courses/templates/user/user_courses.html:50
 msgid "No subscriptions"
 msgstr "Keine Anmeldungen"
 
-#: courses/templates/user/user_courses.html:50
+#: courses/templates/user/user_courses.html:55
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
@@ -1842,7 +1850,7 @@ msgstr "Event Kategorien"
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:9
 #: payment/templates/finance/account/detail.html:41
-#: payment/templates/payment/subscription/index.html:79
+#: payment/templates/payment/subscription/index.html:98
 msgid "Date"
 msgstr "Datum"
 
@@ -2005,13 +2013,8 @@ msgstr "Schau am besten direkt auf der Website eines Partner nach."
 msgid "Visit partner"
 msgstr "Zum Partner"
 
-#: payment/cms_toolbars.py:10
-#: payment/templates/payment/subscription/index.html:78
-msgid "Payment"
-msgstr "Bezahlung"
-
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/subscription/index.html:71
+#: payment/templates/payment/subscription/index.html:90
 msgid "Voucher"
 msgstr "Gutschein"
 
@@ -2096,6 +2099,7 @@ msgid "Course Totals"
 msgstr "Summe Kurse"
 
 #: payment/services/offering_finance_teachers.py:37
+#: payment/templates/payment/subscription/index.html:56
 msgid "Note"
 msgstr "Bemerkung"
 
@@ -2235,7 +2239,7 @@ msgstr "Differenz"
 #: payment/templates/finance/offering/unpaid/index.html:13
 #: payment/templates/payment/counter/details.html:36
 #: payment/templates/payment/courses/confirm.html:33
-#: payment/templates/payment/subscription/index.html:116
+#: payment/templates/payment/subscription/index.html:135
 msgid "Open Amount"
 msgstr "Offener Betrag"
 
@@ -2364,7 +2368,7 @@ msgid "Participants will show up here, once they have been confirmed."
 msgstr "Teilnehmer:innen werden hier angezeigt sobald sie bestätigt wurden."
 
 #: payment/templates/payment/courses/course.html:46
-#: payment/templates/payment/subscription/index.html:22
+#: payment/templates/payment/subscription/index.html:23
 #: survey/templates/survey/components/download.html:3
 #: templates/snippets/download.html:3
 msgid "Download"
@@ -2443,19 +2447,19 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
-#: payment/templates/payment/subscription/index.html:10
+#: payment/templates/payment/subscription/index.html:11
 msgid "Payment Status"
 msgstr "Zahlungsstatus"
 
-#: payment/templates/payment/subscription/index.html:13
+#: payment/templates/payment/subscription/index.html:14
 msgid "Voucher applied"
 msgstr "Gutschein eingelöst"
 
-#: payment/templates/payment/subscription/index.html:15
+#: payment/templates/payment/subscription/index.html:16
 msgid "The voucher has been successfully applied (see details below)."
 msgstr "Der Gutschein wurde erfolgreich eingelöst (siehe Details unten)."
 
-#: payment/templates/payment/subscription/index.html:20
+#: payment/templates/payment/subscription/index.html:21
 msgid ""
 "The voucher used was valued more than the remaining amount for this course. "
 "Download the voucher for the remainder by clicking the following button."
@@ -2463,44 +2467,68 @@ msgstr ""
 "Der Wert des verwendeten Gutscheins war grösser als der offene Kursbetrag."
 "Lade den Gutschein mit dem Restwert jetzt herunter."
 
-#: payment/templates/payment/subscription/index.html:29
+#: payment/templates/payment/subscription/index.html:30
 msgid "This subscription has been fully paid. Thank you!"
 msgstr "Der Kurs wurde vollständig bezahlt, dankeschön!"
 
-#: payment/templates/payment/subscription/index.html:33
+#: payment/templates/payment/subscription/index.html:34
 msgid "Open amount"
 msgstr "Offener Betrag"
 
 #: payment/templates/payment/subscription/index.html:36
+msgid "Unpaid subscription info"
+msgstr "Bitte überweise das Kursgeld an folgendes Konto."
+
+#: payment/templates/payment/subscription/index.html:37
 msgid "If you've got any vouchers, you may apply them below."
 msgstr "Falls du Gutscheine hast, kannst du sie unten einlösen"
 
+#: payment/templates/payment/subscription/index.html:40
+#, fuzzy
+#| msgid "Bank account"
+msgid "Bank account coordinates"
+msgstr "Kontonummer"
+
+#: payment/templates/payment/subscription/index.html:46
+msgid "QR-bill"
+msgstr ""
+
 #: payment/templates/payment/subscription/index.html:48
+msgid ""
+"Please scan the QR-bill below with your home banking app to fill in the "
+"payment details automatically."
+msgstr ""
+
+#: payment/templates/payment/subscription/index.html:58
+msgid "It can take up to a week for your payment to be acquired by our system."
+msgstr ""
+
+#: payment/templates/payment/subscription/index.html:67
 msgid "Item"
 msgstr "Posten"
 
-#: payment/templates/payment/subscription/index.html:50
-#: payment/templates/payment/subscription/index.html:72
+#: payment/templates/payment/subscription/index.html:69
+#: payment/templates/payment/subscription/index.html:91
 msgid "Value"
 msgstr "Wert"
 
-#: payment/templates/payment/subscription/index.html:55
+#: payment/templates/payment/subscription/index.html:74
 msgid "Dance course"
 msgstr "Tanzkurs"
 
-#: payment/templates/payment/subscription/index.html:63
+#: payment/templates/payment/subscription/index.html:82
 msgid "Participant"
 msgstr "Teilnehmer:in"
 
-#: payment/templates/payment/subscription/index.html:72
+#: payment/templates/payment/subscription/index.html:91
 msgid "Code"
 msgstr "Code"
 
-#: payment/templates/payment/subscription/index.html:93
+#: payment/templates/payment/subscription/index.html:112
 msgid "Voucher code"
 msgstr "Gutscheincode"
 
-#: payment/templates/payment/subscription/index.html:103
+#: payment/templates/payment/subscription/index.html:122
 msgid "Redeem Voucher"
 msgstr "Gutschein einlösen"
 
@@ -2970,6 +2998,12 @@ msgstr "Seiteninhalt"
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "Die IBAN is inkorrekt."
+
+#~ msgid "Use voucher"
+#~ msgstr "Gutschein verwenden"
+
+#~ msgid "Redeem voucher here"
+#~ msgstr "Gutschein hier einlösen"
 
 #~ msgid "Unknown"
 #~ msgstr "Unbekannt"
