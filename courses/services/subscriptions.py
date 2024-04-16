@@ -38,7 +38,7 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
 
     # Handle couple subscription
     if data["single_or_couple"] == SingleCouple.COUPLE:
-        partner = User.objects.get(email=data["partner_email"])
+        partner = User.objects.get(email__iexact=data["partner_email"])
 
         partner_subscription, _ = Subscribe.objects.get_or_create(
             user=partner, course=course
