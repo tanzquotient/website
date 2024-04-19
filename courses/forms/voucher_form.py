@@ -5,7 +5,7 @@ from django.forms import ValidationError
 from django.forms.widgets import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
-from ..models import VoucherPurpose
+from ..models import VoucherPurpose, Voucher
 from ..utils import validate_amount_and_percentage, validate_amount, validate_percentage
 
 
@@ -34,7 +34,7 @@ class VoucherForm(forms.Form):
     )
     voucher_comment = forms.CharField(
         required=False,
-        max_length=100,
+        max_length=Voucher._meta.get_field('comment').max_length,
         label=_("Internal comment for the voucher.")
     )
 
