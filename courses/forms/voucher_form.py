@@ -30,6 +30,11 @@ class VoucherForm(forms.Form):
         max_length=200,
         label=_("Custom message (German)."),
     )
+    voucher_comment = forms.CharField(
+        required=False,
+        max_length=100,
+        label=_("Internal comment for the voucher.")
+    )
 
     def clean(self) -> dict:
         cleaned_data = super().clean()
