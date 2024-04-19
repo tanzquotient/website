@@ -23,10 +23,12 @@ class VoucherForm(forms.Form):
         initial=datetime.date.today() + datetime.timedelta(days=365),
     )
     custom_email_message_en = forms.CharField(
+        required=False,
         max_length=200,
         label=_("Custom message (English)."),
     )
     custom_email_message_de = forms.CharField(
+        required=False,
         max_length=200,
         label=_("Custom message (German)."),
     )
