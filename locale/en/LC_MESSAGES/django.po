@@ -402,12 +402,12 @@ msgid "Set expire date?"
 msgstr "Set expire date"
 
 #: courses/forms/voucher_form.py:27
-msgid "Custom message to add at the beginning of the email (English)."
-msgstr "Custom message to add at the beginning of the email (English)."
+msgid "Custom message (English)."
+msgstr "Custom message (English)."
 
 #: courses/forms/voucher_form.py:31
-msgid "Custom message to add at the beginning of the email (German)."
-msgstr "Custom message to add at the beginning of the email (German)."
+msgid "Custom message (German)."
+msgstr "Custom message (German)."
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
