@@ -66,7 +66,7 @@ class Voucher(Model):
         help_text=_("The voucher was applied for this subscription."),
     )
     comment = CharField(
-        max_length=100,
+        max_length=200,
         blank=True,
         null=True,
         help_text=_("Optional description of the purpose of the voucher."),
