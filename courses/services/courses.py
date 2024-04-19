@@ -103,6 +103,7 @@ def send_vouchers(data, recipients, user):
     expires = data["expires"]
     custom_msg_en = data["custom_email_message_en"]
     custom_msg_de = data["custom_email_message_de"]
+    voucher_comment = data["voucher_comment"]
 
     emails = []
 
@@ -114,6 +115,7 @@ def send_vouchers(data, recipients, user):
                 amount=amount,
                 expires=expires if expires_flag else None,
                 sent_to=recipient,
+                comment=voucher_comment,
             )
             reversion.set_user(user)
             reversion.set_comment(f"Sent voucher email to {recipient}")
