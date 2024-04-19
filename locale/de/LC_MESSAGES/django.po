@@ -407,12 +407,12 @@ msgid "Set expire date?"
 msgstr "Ablaufdatum setzen?"
 
 #: courses/forms/voucher_form.py:27
-msgid "Custom message to add at the beginning of the email (English)."
-msgstr "Zusatzinformation am Anfang der Email (Englisch)"
+msgid "Custom message (English)."
+msgstr "Zusatzinformation (Englisch)"
 
 #: courses/forms/voucher_form.py:31
-msgid "Custom message to add at the beginning of the email (German)."
-msgstr "Zusatzinformation am Anfang der Email (Deutsch)"
+msgid "Custom message (German)."
+msgstr "Zusatzinformation (Deutsch)"
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
