@@ -101,8 +101,8 @@ def send_vouchers(data, recipients, user):
     purpose = data["purpose"]
     expires_flag = data["expires_flag"]
     expires = data["expires"]
-    custom_msg_en = data["custom_email_message_en"]
-    custom_msg_de = data["custom_email_message_de"]
+    custom_msg_en = data["custom_email_message_en"] or ""
+    custom_msg_de = data["custom_email_message_de"] or ""
     voucher_comment = data["voucher_comment"]
 
     emails = []
