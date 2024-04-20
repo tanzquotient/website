@@ -34,8 +34,8 @@ class VoucherForm(forms.Form):
     )
     voucher_comment = forms.CharField(
         required=False,
-        max_length=Voucher._meta.get_field('comment').max_length,
-        label=_("Internal comment for the voucher.")
+        max_length=Voucher._meta.get_field("comment").max_length,
+        label=_("Internal comment for the voucher."),
     )
 
     def clean(self) -> dict:
