@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-15 23:19+0200\n"
+"POT-Creation-Date: 2024-04-20 12:07+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -401,13 +401,17 @@ msgstr "Value of the voucher in CHF."
 msgid "Set expire date?"
 msgstr "Set expire date"
 
-#: courses/forms/voucher_form.py:27
+#: courses/forms/voucher_form.py:28
 msgid "Custom message (English)."
 msgstr "Custom message (English)."
 
-#: courses/forms/voucher_form.py:31
+#: courses/forms/voucher_form.py:33
 msgid "Custom message (German)."
 msgstr "Custom message (German)."
+
+#: courses/forms/voucher_form.py:38
+msgid "Internal comment for the voucher."
+msgstr "Internal comment for the voucher."
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
@@ -1721,24 +1725,11 @@ msgstr "There are currently no ongoing courses"
 msgid "Show all courses "
 msgstr "Show all Courses"
 
-#: courses/templates/user/user_courses.html:41
-#: payment/templates/payment/subscription/index.html:46
-msgid "NEW"
-msgstr "NEW"
-
-#: courses/templates/user/user_courses.html:43
-msgid ""
-"You can now pay your subscriptions using the QR-bill. Follow the payment "
-"link of your unpaid subscriptions below to check it out."
-msgstr ""
-"You can now pay your subscriptions using the QR-bill. Follow the payment "
-"link of your unpaid subscriptions below to check it out."
-
-#: courses/templates/user/user_courses.html:50
+#: courses/templates/user/user_courses.html:45
 msgid "No subscriptions"
 msgstr "No Subscriptions"
 
-#: courses/templates/user/user_courses.html:55
+#: courses/templates/user/user_courses.html:50
 msgid "Show available courses"
 msgstr "Show available courses"
 
@@ -2488,6 +2479,10 @@ msgid "Bank account coordinates"
 msgstr "Bank account coordinates"
 
 #: payment/templates/payment/subscription/index.html:46
+msgid "NEW"
+msgstr "NEW"
+
+#: payment/templates/payment/subscription/index.html:46
 msgid "QR-bill"
 msgstr "QR-bill"
 
@@ -2501,7 +2496,8 @@ msgstr ""
 
 #: payment/templates/payment/subscription/index.html:58
 msgid "It can take up to a week for your payment to be acquired by our system."
-msgstr "It can take up to a week for your payment to be acquired by our system."
+msgstr ""
+"It can take up to a week for your payment to be acquired by our system."
 
 #: payment/templates/payment/subscription/index.html:67
 msgid "Item"
@@ -2996,6 +2992,13 @@ msgstr "Side content"
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "The IBAN is invalid."
+
+#~ msgid ""
+#~ "You can now pay your subscriptions using the QR-bill. Follow the payment "
+#~ "link of your unpaid subscriptions below to check it out."
+#~ msgstr ""
+#~ "You can now pay your subscriptions using the QR-bill. Follow the payment "
+#~ "link of your unpaid subscriptions below to check it out."
 
 #~ msgid "Use voucher"
 #~ msgstr "Use voucher"
