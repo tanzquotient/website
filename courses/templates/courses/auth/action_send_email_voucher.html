@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <h1>{% trans "Email options" %}</h1>
+
+    {{ form }}
+
+    <br>
+    {% if vouchers_without_user|length > 0 %}
+    <div>
+        <strong>{% trans "Warning" %}!</strong>
+        {% trans "No email will be sent for the following vouchers, as no user is set for them:" %}
+        {{ vouchers_without_user|join:", " }}.
+    </div>
+    {% endif %}
+    <br>
+    <input type="hidden" name="action" value="{{ action }}" />
+    <input type="submit" name="go" value="Go" />
+</form>
+
+
+
+{% endblock %}

@@ -13,7 +13,7 @@ from tq_website import settings
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
 from .emailcenter import create_course_info
-from .forms import SendVoucherForm
+from .forms import SendVoucherForm, SendEmailVoucherForm
 
 
 @admin.action(description="Set displayed")
@@ -385,3 +385,33 @@ def export_vouchers_xlsx(modeladmin, request, queryset):
     for c in queryset:
         keys.append(c.key)
     return services.export_vouchers(keys, "xlsx")
+
+
+@admin.action(description="Email selected voucher(s)")
+def email_vouchers(modeladmin, request, queryset):
+    form = None
+    vouchers_with_users = [voucher for voucher in queryset if voucher.sent_to]
+    vouchers_without_users = [voucher for voucher in queryset if not voucher.sent_to]
+
+    if "go" in request.POST:
+        form = SendEmailVoucherForm(data=request.POST)
+
+        if form.is_valid():
+            services.courses.email_vouchers(
+                data=form.cleaned_data, vouchers=vouchers_with_users
+            )
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        form = SendEmailVoucherForm(
+            initial={
+                "_selected_action": map(str, queryset.values_list("id", flat=True))
+            }
+        )
+
+    context = {
+        "form": form,
+        "action": "email_vouchers",
+        "vouchers_without_user": [voucher.key for voucher in vouchers_without_users],
+    }
+    return render(request, "courses/auth/action_send_email_voucher.html", context)

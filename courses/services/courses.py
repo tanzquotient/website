@@ -142,3 +142,33 @@ def send_vouchers(data, recipients, user):
 
     log.info("Sending {} emails".format(len(emails)))
     send_all_emails(emails)
+
+
+def email_vouchers(data, vouchers: list[Voucher]):
+    custom_msg_en = data["custom_email_message_en"]
+    custom_msg_de = data["custom_email_message_de"]
+
+    emails = []
+
+    for voucher in vouchers:
+
+        email_context = {
+            "first_name": voucher.sent_to.first_name,
+            "last_name": voucher.sent_to.last_name,
+            "voucher_key": voucher.key,
+            "voucher_url": voucher.pdf_file.url,
+            "custom_msg_en": custom_msg_en,
+            "custom_msg_de": custom_msg_de,
+        }
+
+        emails.append(
+            dict(
+                to=voucher.sent_to.email,
+                template="voucher",
+                context=email_context,
+                attachments={"Voucher.pdf": voucher.pdf_file.file},
+            )
+        )
+
+    log.info("Sending {} emails".format(len(emails)))
+    send_all_emails(emails)

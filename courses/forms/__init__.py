@@ -4,3 +4,5 @@ from .custom_signup_form import CustomSignupForm
 from .voucher_form import VoucherForm
 from .voucher_generation_form import VoucherGenerationForm
 from .send_voucher_form import SendVoucherForm
+from .email_voucher_form import EmailVoucherForm
+from .send_email_voucher_form import SendEmailVoucherForm
