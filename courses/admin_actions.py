@@ -263,7 +263,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
         form = SendVoucherForm(
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True)),
-                "voucher_comment": f"Sent to subscriptions to: {', '.join(list(set([subscription.course.name for subscription in queryset])))}"
+                "voucher_comment": f"Sent to subscriptions to: {', '.join(list(set([subscription.course.name for subscription in queryset])))}",
             }
         )
 
