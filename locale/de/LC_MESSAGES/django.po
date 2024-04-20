@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-15 23:19+0200\n"
+"POT-Creation-Date: 2024-04-20 12:07+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -406,13 +406,17 @@ msgstr "Wert des Gutscheins in CHF."
 msgid "Set expire date?"
 msgstr "Ablaufdatum setzen?"
 
-#: courses/forms/voucher_form.py:27
+#: courses/forms/voucher_form.py:28
 msgid "Custom message (English)."
 msgstr "Zusatzinformation (Englisch)"
 
-#: courses/forms/voucher_form.py:31
+#: courses/forms/voucher_form.py:33
 msgid "Custom message (German)."
 msgstr "Zusatzinformation (Deutsch)"
+
+#: courses/forms/voucher_form.py:38
+msgid "Internal comment for the voucher."
+msgstr ""
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
@@ -1721,22 +1725,11 @@ msgstr "Derzeit sind keine Kurse verfügbar."
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/user_courses.html:41
-#: payment/templates/payment/subscription/index.html:46
-msgid "NEW"
-msgstr ""
-
-#: courses/templates/user/user_courses.html:43
-msgid ""
-"You can now pay your subscriptions using the QR-bill. Follow the payment "
-"link of your unpaid subscriptions below to check it out."
-msgstr ""
-
-#: courses/templates/user/user_courses.html:50
+#: courses/templates/user/user_courses.html:45
 msgid "No subscriptions"
 msgstr "Keine Anmeldungen"
 
-#: courses/templates/user/user_courses.html:55
+#: courses/templates/user/user_courses.html:50
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
@@ -2488,6 +2481,10 @@ msgstr "Falls du Gutscheine hast, kannst du sie unten einlösen"
 #| msgid "Bank account"
 msgid "Bank account coordinates"
 msgstr "Kontonummer"
+
+#: payment/templates/payment/subscription/index.html:46
+msgid "NEW"
+msgstr "NEW"
 
 #: payment/templates/payment/subscription/index.html:46
 msgid "QR-bill"
