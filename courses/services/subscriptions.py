@@ -156,7 +156,7 @@ def reject_subscription(
 ) -> None:
     """sends a rejection mail if subscription is rejected (by some other method)
     and no rejection mail was sent before"""
-    subscription.state = models.SubscribeState.REJECTED
+    subscription.state = models.SubscribeState.TO_REIMBURSE if subscription.state == models.SubscribeState.PAID else models.SubscribeState.REJECTED
     if subscription.partner is not None:
         partner_subscription = subscription.get_partner_subscription()
         partner_subscription.partner = None
