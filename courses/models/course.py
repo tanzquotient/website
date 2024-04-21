@@ -100,7 +100,7 @@ class Course(TranslatableModel):
             verbose_name="[TR] Information for participants",
             blank=True,
             null=True,
-            help_text=_("Shown only to participants of the course on course page. Can be set by teachers in the frontend.")
+            help_text=_("Shown only to participants of the course on the course page. Can be set by teachers in the frontend.")
         ),
     )
 
