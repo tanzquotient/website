@@ -1,7 +1,7 @@
 from django import forms
 
-from . import EmailVoucherForm
+from . import VoucherEmailForm
 
 
-class SendEmailVoucherForm(EmailVoucherForm):
+class SendVoucherEmailForm(VoucherEmailForm):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
