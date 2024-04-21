@@ -144,7 +144,7 @@ def send_vouchers(data, recipients, user):
     send_all_emails(emails)
 
 
-def email_vouchers(data, vouchers: list[Voucher]):
+def email_vouchers(data: dict, vouchers: list[Voucher]):
     custom_msg_en = data["custom_email_message_en"]
     custom_msg_de = data["custom_email_message_de"]
 
