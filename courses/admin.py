@@ -175,6 +175,7 @@ class CourseAdmin(TranslatableAdmin):
                     "max_subscribers",
                     "experience_mandatory",
                     "description",
+                    "information_for_participants",
                     "external_url",
                     "partner",
                 ]
