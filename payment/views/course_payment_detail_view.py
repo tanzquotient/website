@@ -29,6 +29,12 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         context["participatory"] = course.subscriptions.accepted().select_related(
             "user"
         )
+        context["information_for_participants_de"] = course.safe_translation_getter(
+            "information_for_participants", language_code="de"
+        )
+        context["information_for_participants_en"] = course.safe_translation_getter(
+            "information_for_participants", language_code="en"
+        )
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -43,6 +49,11 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
             if key in request.POST:
                 course.set_current_language(language)
                 course.description = request.POST[key]
+            
+            key = f"information-for-participants-{language}"
+            if key in request.POST:
+                course.set_current_language(language)
+                course.information_for_participants = request.POST[key]
 
         course.save()
 
