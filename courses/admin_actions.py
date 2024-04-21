@@ -13,7 +13,7 @@ from tq_website import settings
 from . import services
 from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
 from .emailcenter import create_course_info
-from .forms import SendVoucherForm, SendEmailVoucherForm
+from .forms import CreateSendVoucherForm, SendVoucherEmailForm
 
 
 @admin.action(description="Set displayed")
@@ -250,7 +250,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     form = None
 
     if "go" in request.POST:
-        form = SendVoucherForm(data=request.POST)
+        form = CreateSendVoucherForm(data=request.POST)
 
         if form.is_valid():
             recipients = [subscription.user for subscription in queryset]
@@ -260,7 +260,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = SendVoucherForm(
+        form = CreateSendVoucherForm(
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True)),
                 "voucher_comment": f"Sent to subscriptions to: {', '.join(list(set([subscription.course.name for subscription in queryset])))}",
@@ -394,7 +394,7 @@ def email_vouchers(modeladmin, request, queryset):
     vouchers_without_users = [voucher for voucher in queryset if not voucher.sent_to]
 
     if "go" in request.POST:
-        form = SendEmailVoucherForm(data=request.POST)
+        form = SendVoucherEmailForm(data=request.POST)
 
         if form.is_valid():
             services.courses.email_vouchers(
@@ -403,7 +403,7 @@ def email_vouchers(modeladmin, request, queryset):
             return HttpResponseRedirect(request.get_full_path())
 
     if not form:
-        form = SendEmailVoucherForm(
+        form = SendVoucherEmailForm(
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True))
             }
