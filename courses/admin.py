@@ -534,11 +534,11 @@ class VoucherAdmin(VersionAdmin):
         "redeemed_amount",
         "issued",
         "issuer",
+        "sent_to_full_name",
+        "redeemer",
         "used_timestamp",
         "offering",
         "course",
-        "sent_to_full_name",
-        "redeemer",
         "pdf_file",
         "expires",
     )
