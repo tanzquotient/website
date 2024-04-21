@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 12:07+0200\n"
+"POT-Creation-Date: 2024-04-21 11:24+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -232,6 +232,14 @@ msgstr "Nicht benötigt"
 msgid "Style"
 msgstr "Stil"
 
+#: courses/forms/email_voucher_form.py:8 courses/forms/voucher_form.py:28
+msgid "Custom message (English)."
+msgstr "Zusatzinformation (Englisch)"
+
+#: courses/forms/email_voucher_form.py:12 courses/forms/voucher_form.py:33
+msgid "Custom message (German)."
+msgstr "Zusatzinformation (Deutsch)"
+
 #: courses/forms/subscribe_form.py:32 courses/forms/subscribe_form.py:45
 msgid "This field is required."
 msgstr "Pflichtfeld"
@@ -405,14 +413,6 @@ msgstr "Wert des Gutscheins in CHF."
 #: courses/forms/voucher_form.py:19
 msgid "Set expire date?"
 msgstr "Ablaufdatum setzen?"
-
-#: courses/forms/voucher_form.py:28
-msgid "Custom message (English)."
-msgstr "Zusatzinformation (Englisch)"
-
-#: courses/forms/voucher_form.py:33
-msgid "Custom message (German)."
-msgstr "Zusatzinformation (Deutsch)"
 
 #: courses/forms/voucher_form.py:38
 msgid "Internal comment for the voucher."
@@ -724,6 +724,23 @@ msgstr "Empfänger:innen"
 #: courses/templates/courses/auth/action_send_course_email.html:21
 msgid "The email will be sent to all participants of the following courses"
 msgstr "Die Email wird an Personen aus folgenden Kursen gesendet."
+
+#: courses/templates/courses/auth/action_send_email_voucher.html:11
+#, fuzzy
+#| msgid "Emails"
+msgid "Email options"
+msgstr ""
+
+#: courses/templates/courses/auth/action_send_email_voucher.html:18
+#, fuzzy
+#| msgid "Warning:"
+msgid "Warning"
+msgstr "Warnung"
+
+#: courses/templates/courses/auth/action_send_email_voucher.html:19
+msgid ""
+"No email will be sent for the following vouchers, as no user is set for them:"
+msgstr ""
 
 #: courses/templates/courses/auth/action_send_voucher.html:11
 msgid "Voucher options"
