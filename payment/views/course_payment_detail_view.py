@@ -49,7 +49,7 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
             if key in request.POST:
                 course.set_current_language(language)
                 course.description = request.POST[key]
-            
+
             key = f"information-for-participants-{language}"
             if key in request.POST:
                 course.set_current_language(language)
