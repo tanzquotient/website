@@ -3,6 +3,7 @@ import re
 from typing import Optional
 
 from django.db.models import QuerySet
+from django.db import transaction
 
 from courses.models import Subscribe, PaymentMethod, SubscribeState
 from payment.models import Payment, SubscriptionPayment
@@ -25,11 +26,12 @@ class PaymentProcessor:
         - Mark subscriptions as paid
         - Finalizes payments
         """
-        queryset = queryset or Payment.objects
-        PaymentProcessor._detect_irrelevant_payments(queryset)
-        PaymentProcessor.match_payments(queryset)
-        PaymentProcessor.mark_subscriptions_as_paid(queryset)
-        PaymentProcessor.finalize_payments(queryset)
+        queryset = queryset or Payment.objects.select_for_update()
+        with transaction.atomic():
+            PaymentProcessor._detect_irrelevant_payments(queryset)
+            PaymentProcessor.match_payments(queryset)
+            PaymentProcessor.mark_subscriptions_as_paid(queryset)
+            PaymentProcessor.finalize_payments(queryset)
 
     @staticmethod
     def _detect_irrelevant_payments(queryset=Payment.objects) -> None:
@@ -95,6 +97,15 @@ class PaymentProcessor:
                     log.warning(
                         f"The state of {matched_subscription} is something other than confirmed. "
                         f"Got: {matched_subscription.state}"
+                    )
+                    payment.state = State.MANUAL
+                    payment.save()
+                    continue
+
+                # Prevent duplicate (Payment,Subscribe) pairs in SubscriptionPayment
+                if SubscriptionPayment.objects.filter(payment=payment, subscription=matched_subscription).exists():
+                    log.warning(
+                        f"Attempted insertion of duplicate ({payment},{matched_subscription}) pair in SubscriptionPayment."
                     )
                     payment.state = State.MANUAL
                     payment.save()
