@@ -12,6 +12,8 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ## Local Setup
 
+⚠️ Windows (including WSL) is no supported. Please use Linux or MacOS. ⚠️
+
 1. Make sure [Docker][docker] is installed.
 2. Clone this repo: `git clone <repo-url>`
 3. Create a python environment using python `>= 3.9`.
