@@ -72,20 +72,21 @@ Run `./scripts/generate_env.py [--sip] [--overrides FILE]` to generate the envir
 
 ### Restore Database dump
 
-Make sure you have `pg_restore` installed. The easiest way for installing is getting
-`postgresql-client`,
-
 Get a database dump from the IT board member of Tanzquotient or use one of the dumps
 on the Google Drive in the IT folder.
 
 Restore the database:
 
 ```shell
-# Using Docker
+# Wipe the old database
+docker exec -i tq-postgres psql -U root -d postgres -c "DROP DATABASE tq_prod_website_tq_website;"
+docker exec -i tq-postgres psql -U root -d postgres -c "CREATE DATABASE tq_prod_website_tq_website;"
+
+# Restore the dump
 docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --schema='public' --create --dbname tq_prod_website_tq_website < dbfilename.sql
 
-# If you have pg_restore installed and know what you are doing
-pg_restore --no-privileges --no-owner --format=c --schema='public' --create path/to/dump.sql
+# Run the migrations (just in case, e.g. if the SQL dump is old)
+python manage.py migrate
 ```
 
 Maybe required if the database name in the prod dump differs from your local database name:
