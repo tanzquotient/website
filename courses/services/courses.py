@@ -95,17 +95,15 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
     send_all_emails(emails)
 
 
-def send_vouchers(data, recipients, user):
+def create_send_vouchers(data, recipients, user):
     amount = data["amount"]
     percentage = data["percentage"]
     purpose = data["purpose"]
     expires_flag = data["expires_flag"]
     expires = data["expires"]
-    custom_msg_en = data["custom_email_message_en"] or ""
-    custom_msg_de = data["custom_email_message_de"] or ""
     voucher_comment = data["voucher_comment"]
 
-    emails = []
+    vouchers_to_send = []
 
     for recipient in recipients:
         with reversion.create_revision():
@@ -122,31 +120,14 @@ def send_vouchers(data, recipients, user):
 
         generate_voucher_pdfs(vouchers=[voucher])
 
-        email_context = {
-            "first_name": recipient.first_name,
-            "last_name": recipient.last_name,
-            "voucher_key": voucher.key,
-            "voucher_url": voucher.pdf_file.url,
-            "custom_msg_en": custom_msg_en,
-            "custom_msg_de": custom_msg_de,
-        }
+        vouchers_to_send.append(voucher)
 
-        emails.append(
-            dict(
-                to=recipient.email,
-                template="voucher",
-                context=email_context,
-                attachments={"Voucher.pdf": voucher.pdf_file.file},
-            )
-        )
-
-    log.info("Sending {} emails".format(len(emails)))
-    send_all_emails(emails)
+    email_vouchers(data=data, vouchers=vouchers_to_send)
 
 
 def email_vouchers(data: dict, vouchers: list[Voucher]):
-    custom_msg_en = data["custom_email_message_en"]
-    custom_msg_de = data["custom_email_message_de"]
+    custom_msg_en = data["custom_email_message_en"] or ""
+    custom_msg_de = data["custom_email_message_de"] or ""
 
     emails = []
 
