@@ -1,0 +1,11 @@
+{% load i18n %}
+
+
+{% if course.information_for_participants and user %}
+    {% if user in course.participants or user in course.get_teachers %}
+        <div>
+            <h5>{% trans "Information to participants" %}</h5>
+            {{ course.information_for_participants|safe }}
+        </div>
+    {% endif %}
+{% endif %}
