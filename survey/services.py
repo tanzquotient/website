@@ -3,6 +3,7 @@ from typing import Iterable, Optional
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.db import transaction
 
 from courses.models import Course, Offering
 from utils import export
@@ -110,72 +111,67 @@ def send_course_surveys() -> None:
     emails = []
 
     # get all offerings with a survey assigned
-    offerings = Offering.objects.filter(
+    offerings = Offering.objects.select_for_update().filter(
         survey__isnull=False,
     )
 
-    for offering in offerings:
-        # get all courses in the offering
-        courses = Course.objects.filter(
-            offering=offering,
-            cancelled=False,
-        )
-        for course in courses:
-
-            # check if the course is over
-            if not course.is_over():
-                continue
-
-            survey_instances_for_course = SurveyInstance.objects.filter(
-                course=course,
-                survey=offering.survey,
+    with transaction.atomic():
+        for offering in offerings:
+            # get all courses in the offering
+            courses = Course.objects.filter(
+                offering=offering,
+                cancelled=False,
             )
+            for course in courses:
 
-            users_already_invited: list[User] = [
-                survey_instance_for_course.user
-                for survey_instance_for_course in survey_instances_for_course
-            ]
-            recipients: list[User] = [
-                p.user
-                for p in course.participatory().all()
-                if p.user not in users_already_invited
-            ]
+                # check if the course is over
+                if not course.is_over():
+                    continue
 
-            for recipient in recipients:
-                # create a survey instance
-                survey_instance = SurveyInstance.objects.create(
-                    survey=offering.survey,
-                    email_template=email_template,
+                survey_instances_for_course = SurveyInstance.objects.filter(
                     course=course,
-                    user=recipient,
+                    survey=offering.survey,
                 )
 
-                context = {
-                    "first_name": recipient.first_name,
-                    "last_name": recipient.last_name,
-                    "course": course.type.title,
-                    "offering": course.offering.name,
-                    "offering_title_en": course.offering.safe_translation_getter(
-                        "title", language_code="en"
-                    ),
-                    "offering_title_de": course.offering.safe_translation_getter(
-                        "title", language_code="de"
-                    ),
-                    "survey_url": survey_instance.create_full_url(),
-                    "survey_expiration": survey_instance.url_expire_date,
-                }
-                log.info(
-                    f"Will send survey invitation to {recipient.username} for course {course.type.title} in offering {course.offering.name}"
-                )
+                users_already_invited: list[User] = [
+                    survey_instance_for_course.user
+                    for survey_instance_for_course in survey_instances_for_course
+                ]
+                recipients: list[User] = [
+                    p.user
+                    for p in course.participatory().all()
+                    if p.user not in users_already_invited
+                ]
 
-                emails.append(
-                    dict(
-                        to=recipient.email,
-                        reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
-                        template=email_template,
-                        context=context,
+                for recipient in recipients:
+                    # create a survey instance
+                    survey_instance = SurveyInstance.objects.create(
+                        survey=offering.survey,
+                        email_template=email_template,
+                        course=course,
+                        user=recipient,
                     )
-                )
 
-    log.info(f"Sending {len(emails)} emails")
-    send_all_emails(emails)
+                    context = {
+                        "first_name": recipient.first_name,
+                        "last_name": recipient.last_name,
+                        "course": course.type.title,
+                        "offering": course.offering.name,
+                        "survey_url": survey_instance.create_full_url(),
+                        "survey_expiration": survey_instance.url_expire_date,
+                    }
+                    log.info(
+                        f"Will send survey invitation to {recipient.username} for course {course.type.title} in offering {course.offering.name}"
+                    )
+
+                    emails.append(
+                        dict(
+                            to=recipient.email,
+                            reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                            template=email_template,
+                            context=context,
+                        )
+                    )
+
+        log.info(f"Sending {len(emails)} emails")
+        send_all_emails(emails)
