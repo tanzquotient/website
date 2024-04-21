@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 11:24+0200\n"
+"POT-Creation-Date: 2024-04-21 21:53+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -230,14 +230,6 @@ msgstr "Not required"
 msgid "Style"
 msgstr "Style"
 
-#: courses/forms/email_voucher_form.py:8 courses/forms/voucher_form.py:28
-msgid "Custom message (English)."
-msgstr "Custom message (English)."
-
-#: courses/forms/email_voucher_form.py:12 courses/forms/voucher_form.py:33
-msgid "Custom message (German)."
-msgstr "Custom message (German)."
-
 #: courses/forms/subscribe_form.py:32 courses/forms/subscribe_form.py:45
 msgid "This field is required."
 msgstr "This field is required."
@@ -397,6 +389,14 @@ msgstr "Select country"
 msgid "This field is required if you are a student."
 msgstr "This field is required if you are a student."
 
+#: courses/forms/voucher_email_form.py:8 courses/forms/voucher_form.py:28
+msgid "Custom message (English)."
+msgstr "Custom message (English)."
+
+#: courses/forms/voucher_email_form.py:12 courses/forms/voucher_form.py:33
+msgid "Custom message (German)."
+msgstr "Custom message (German)."
+
 #: courses/forms/voucher_form.py:14 courses/models/voucher.py:45
 msgid "Reduction in percent (0-100)."
 msgstr "Reduction in percent (0-100)."
@@ -477,83 +477,91 @@ msgstr "Saturday"
 msgid "Sunday"
 msgstr "Sunday"
 
-#: courses/models/course.py:322
+#: courses/models/course.py:103
+msgid ""
+"Shown only to participants of the course on the course page. Can be set by "
+"teachers in the frontend."
+msgstr ""
+"Shown only to participants of the course on the course page. Can be set by "
+"teachers in the frontend."
+
+#: courses/models/course.py:328
 msgid "We did not receive any subscriptions yet."
 msgstr "We did not receive any subscriptions yet."
 
-#: courses/models/course.py:335
+#: courses/models/course.py:341
 msgid "Currently there is:"
 msgstr "Currently there is:"
 
-#: courses/models/course.py:336
+#: courses/models/course.py:342
 msgid "Currently there are:"
 msgstr "Currently there are:"
 
-#: courses/models/course.py:340
+#: courses/models/course.py:346
 msgid "We received one subscription so far."
 msgstr "We received one subscription so far."
 
-#: courses/models/course.py:341
+#: courses/models/course.py:347
 msgid "We received {} subscriptions so far."
 msgstr "We received {} subscriptions so far."
 
-#: courses/models/course.py:356
+#: courses/models/course.py:362
 msgid "One couple"
 msgstr "One couple"
 
-#: courses/models/course.py:358
+#: courses/models/course.py:364
 msgid "{} couples"
 msgstr "{} couples"
 
-#: courses/models/course.py:362
+#: courses/models/course.py:368
 msgid "One individual follower"
 msgstr "One individual follower"
 
-#: courses/models/course.py:364
+#: courses/models/course.py:370
 msgid "{} individual followers"
 msgstr "{} individual followers"
 
-#: courses/models/course.py:368
+#: courses/models/course.py:374
 msgid "One individual leader"
 msgstr "One individual leader"
 
-#: courses/models/course.py:370
+#: courses/models/course.py:376
 msgid "{} individual leaders"
 msgstr "{} individual leaders"
 
-#: courses/models/course.py:374
+#: courses/models/course.py:380
 msgid "One person with no lead or follow preference"
 msgstr "One person with no lead or follow preference"
 
-#: courses/models/course.py:376
+#: courses/models/course.py:382
 msgid "{} people with no lead or follow preference"
 msgstr "{} people with no lead or follow preference"
 
-#: courses/models/course.py:398
-msgid ""
-"With this one couple is possible in total, but at least {} couples are "
-"needed."
-msgstr ""
-"With this one couple is possible in total, but at least {} couples are "
-"needed."
-
-#: courses/models/course.py:401
-msgid ""
-"With this {} couples are possible in total, but at least {} couples are "
-"needed."
-msgstr ""
-"With this {} couples are possible in total, but at least {} couples are "
-"needed."
-
 #: courses/models/course.py:404
+msgid ""
+"With this one couple is possible in total, but at least {} couples are "
+"needed."
+msgstr ""
+"With this one couple is possible in total, but at least {} couples are "
+"needed."
+
+#: courses/models/course.py:407
+msgid ""
+"With this {} couples are possible in total, but at least {} couples are "
+"needed."
+msgstr ""
+"With this {} couples are possible in total, but at least {} couples are "
+"needed."
+
+#: courses/models/course.py:410
 msgid "At least {} couples are needed."
 msgstr "At least {} couples are needed."
 
-#: courses/models/course.py:410
+#: courses/models/course.py:416
 msgid "At least one more person is needed"
 msgstr "At least one more person is needed"
 
-#: courses/models/course.py:411
+#: courses/models/course.py:417
 msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
@@ -1049,6 +1057,12 @@ msgstr "Let me specify"
 #: courses/templates/courses/snippets/historic_offerings_overview.html:4
 msgid "Past courses"
 msgstr "Past courses"
+
+#: courses/templates/courses/snippets/info_to_participants.html:7
+#, fuzzy
+#| msgid "Send to Participants"
+msgid "Information to participants"
+msgstr "Information to participants"
 
 #: courses/templates/courses/snippets/lesson_components/lessons.html:8
 #: courses/templates/courses/snippets/lesson_components/lessons_compact.html:8
@@ -2450,7 +2464,21 @@ msgstr ""
 "You may add additional info for this specific course. It will show up on the "
 "detail page for this course only."
 
-#: payment/templates/payment/courses/snippets/course_description.html:23
+#: payment/templates/payment/courses/snippets/course_description.html:24
+#, fuzzy
+#| msgid "Participant"
+msgid "Participant info"
+msgstr "Participant info"
+
+#: payment/templates/payment/courses/snippets/course_description.html:26
+msgid ""
+"You may add additional info that will be visible only to course participants "
+"(WhatsApp link, cloud link, ASVZ QR code...)."
+msgstr ""
+"You may add additional info that will be visible only to course participants "
+"(WhatsApp link, cloud link, ASVZ QR code...)."
+
+#: payment/templates/payment/courses/snippets/course_description.html:29
 msgid "Save"
 msgstr "Save"
 
