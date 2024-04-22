@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 21:53+0200\n"
+"POT-Creation-Date: 2024-04-22 13:59+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -482,65 +482,71 @@ msgstr "Samstag"
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: courses/models/course.py:103
+#: courses/models/course.py:104
 msgid ""
 "Shown only to participants of the course on the course page. Can be set by "
 "teachers in the frontend."
 msgstr ""
 
-#: courses/models/course.py:328
+#: courses/models/course.py:112
+msgid ""
+"Shown only to participants of the course on the course page. Cannot be set "
+"by teachers in the frontend."
+msgstr ""
+
+#: courses/models/course.py:338
 msgid "We did not receive any subscriptions yet."
 msgstr "Wir haben noch keine Anmeldungen erhalten."
 
-#: courses/models/course.py:341
+#: courses/models/course.py:351
 msgid "Currently there is:"
 msgstr "Aktuelle angemeldet ist:"
 
-#: courses/models/course.py:342
+#: courses/models/course.py:352
 msgid "Currently there are:"
 msgstr "Aktuell angemeldet sind:"
 
-#: courses/models/course.py:346
+#: courses/models/course.py:356
 msgid "We received one subscription so far."
 msgstr "Wir haben bis jetzt eine Anmeldungen erhalten."
 
-#: courses/models/course.py:347
+#: courses/models/course.py:357
 msgid "We received {} subscriptions so far."
 msgstr "Wir haben bis jetzt {} Anmeldungen erhalten."
 
-#: courses/models/course.py:362
+#: courses/models/course.py:372
 msgid "One couple"
 msgstr "Ein Paar"
 
-#: courses/models/course.py:364
+#: courses/models/course.py:374
 msgid "{} couples"
 msgstr "{} Paare"
 
-#: courses/models/course.py:368
+#: courses/models/course.py:378
 msgid "One individual follower"
 msgstr "Eine Person, die geführt werden möchte"
 
-#: courses/models/course.py:370
+#: courses/models/course.py:380
 msgid "{} individual followers"
 msgstr "{} Personen, die geführt werden möchten"
 
-#: courses/models/course.py:374
+#: courses/models/course.py:384
 msgid "One individual leader"
 msgstr "Eine Person, die führen möchte"
 
-#: courses/models/course.py:376
+#: courses/models/course.py:386
 msgid "{} individual leaders"
 msgstr "{} Personen, die führen möchten"
 
-#: courses/models/course.py:380
+#: courses/models/course.py:390
 msgid "One person with no lead or follow preference"
 msgstr "Eine Person ohne Präferenz bezüglich Führen"
 
-#: courses/models/course.py:382
+#: courses/models/course.py:392
 msgid "{} people with no lead or follow preference"
 msgstr "{} Personen ohne Präferenz bezüglich Führen"
 
-#: courses/models/course.py:404
+#: courses/models/course.py:414
 msgid ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
@@ -548,7 +554,7 @@ msgstr ""
 "Aktuell ist somit ein Paar möglich, aber es werden mindestens {} Paare "
 "benötigt."
 
-#: courses/models/course.py:407
+#: courses/models/course.py:417
 msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
@@ -556,17 +562,23 @@ msgstr ""
 "Aktuell sind somit {} Paare möglich, aber es werden mindestens {} Paare "
 "benötigt."
 
-#: courses/models/course.py:410
+#: courses/models/course.py:420
 msgid "At least {} couples are needed."
 msgstr "Es werden mindestens {} Paare benötigt."
 
-#: courses/models/course.py:416
+#: courses/models/course.py:426
 msgid "At least one more person is needed"
 msgstr "Es wird noch eine weitere Person benötigt."
 
-#: courses/models/course.py:417
+#: courses/models/course.py:427
 msgid "At least {} more people are needed."
 msgstr "Es werden noch {} Personen benötigt."
+
+#: courses/models/course_type.py:37
+msgid ""
+"Shown only to participants of courses of this type on the course page. "
+"Cannot be set by teachers in the frontend."
+msgstr ""
 
 #: courses/models/offering.py:61
 msgid ""
@@ -1056,10 +1068,14 @@ msgstr "Lass mich tippen"
 msgid "Past courses"
 msgstr "Vergangene Kurse"
 
-#: courses/templates/courses/snippets/info_to_participants.html:7
-#, fuzzy
-#| msgid "Send to Participants"
+#: courses/templates/courses/snippets/info_to_participants.html:8
 msgid "Information to participants"
+msgstr ""
+
+#: courses/templates/courses/snippets/info_to_participants.html:11
+msgid ""
+"Note: this information is only visible to teachers and participants of this "
+"course."
 msgstr ""
 
 #: courses/templates/courses/snippets/lesson_components/lessons.html:8
@@ -2464,8 +2480,6 @@ msgstr ""
 "Informationen werden auf der Detailseite erscheinen."
 
 #: payment/templates/payment/courses/snippets/course_description.html:24
-#, fuzzy
-#| msgid "Participant"
 msgid "Participant info"
 msgstr ""
 
