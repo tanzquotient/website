@@ -65,6 +65,12 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
         "account_recipient": conf["recipient"],
         "account_post_number": conf["post_number"] or "-",
         "voucher_url": voucher_url,
+        "course_type_participant_info_en": subscription.course.type.safe_translation_getter("information_for_participants", language_code="en"),
+        "course_type_participant_info_de": subscription.course.type.safe_translation_getter("information_for_participants", language_code="de"),
+        "course_participant_info_admin_en": subscription.course.safe_translation_getter("information_for_participants_admin", language_code="en"),
+        "course_participant_info_admin_de": subscription.course.safe_translation_getter("information_for_participants_admin", language_code="de"),
+        "course_participant_info_teachers_en": subscription.course.safe_translation_getter("information_for_participants_teachers", language_code="en"),
+        "course_participant_info_teachers_de": subscription.course.safe_translation_getter("information_for_participants_teachers", language_code="de"),
     }
 
 
