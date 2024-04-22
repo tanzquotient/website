@@ -14,16 +14,16 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ⚠️ Windows (including WSL) is no supported. Please use Linux or MacOS. ⚠️
 
+
 1. Make sure [Docker][docker] is installed.
-1. Clone this repo: `git clone <repo-url>`
-1. Create a python environment using python `>= 3.9`.
-   You can for example set it up with a [venv](https://docs.python.org/3/library/venv.html).
+2. Clone this repo: `git clone <repo-url>`
+3. Create a python environment using python `>= 3.9`. You can for example set it up with a [venv](https://docs.python.org/3/library/venv.html).
    1. `python3 -m venv venv`
-   1. `source venv/bin/activate`
-1. Initialize the project: `./scripts/initialize_project.sh` (this will install the requirements and start the Docker containers)
-1. Run the project: `python manage.py runserver` (from within your venv!)
-1. Find the website at [localhost:8000][local_instance]
-1. Import a database dump (see below)
+   2. `source venv/bin/activate`
+4. Initialize the project: `./scripts/initialize_project.sh` (this will install the requirements and start the Docker containers)
+5. Run the project: `python manage.py runserver` (from within your venv!)
+6. Find the website at [localhost:8000][local_instance]
+7. Import a database dump (see below)
 
 When you are done developing, stop the containers again: `docker compose down`.
 
