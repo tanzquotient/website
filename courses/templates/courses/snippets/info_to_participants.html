@@ -1,11 +1,16 @@
 {% load i18n %}
 
 
-{% if course.information_for_participants_teachers and user %}
-    {% if user in course.participants or user in course.get_teachers %}
+{% if course.information_for_participants_teachers or course.information_for_participants_admin %}
+    {% if user and user in course.participants|add:course.get_teachers %}
         <div>
             <h5>{% trans "Information to participants" %}</h5>
-            {{ course.information_for_participants_teachers|safe }}
+            {% if course.information_for_participants_admin %}
+                <div>{{ course.information_for_participants_admin|safe }}</div>
+            {% endif %}
+            {% if course.information_for_participants_teachers %}
+                <div>{{ course.information_for_participants_teachers|safe }}</div>
+            {% endif %}
         </div>
     {% endif %}
 {% endif %}
