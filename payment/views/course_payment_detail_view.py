@@ -29,11 +29,11 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         context["participatory"] = course.subscriptions.accepted().select_related(
             "user"
         )
-        context["information_for_participants_de"] = course.safe_translation_getter(
-            "information_for_participants", language_code="de"
+        context["information_for_participants_teachers_de"] = course.safe_translation_getter(
+            "information_for_participants_teachers", language_code="de"
         )
-        context["information_for_participants_en"] = course.safe_translation_getter(
-            "information_for_participants", language_code="en"
+        context["information_for_participants_teachers_en"] = course.safe_translation_getter(
+            "information_for_participants_teachers", language_code="en"
         )
         return context
 
@@ -53,7 +53,7 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
             key = f"information-for-participants-{language}"
             if key in request.POST:
                 course.set_current_language(language)
-                course.information_for_participants = request.POST[key]
+                course.information_for_participants_teachers = request.POST[key]
 
         course.save()
 
