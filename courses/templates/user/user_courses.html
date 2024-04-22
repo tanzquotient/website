@@ -40,11 +40,18 @@
     {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
     {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
-        {% for subscription in subscriptions %}
-            {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user only %}
-        {% empty %}
-            <p>{% trans "No subscriptions" %}</p>
-        {% endfor %}
+        {% if subscriptions %}
+            <button id="expandAll" class="btn btn-primary user-course-expand-button" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">Expand All</button>
+            <button id="collapseAll" class="btn btn-primary" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">Collapse All</button>
+        {% endif %}
+
+        <div class="accordion user-course-accordion" id="accordionExample">
+            {% for subscription in subscriptions %}
+                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user only %}
+            {% empty %}
+                <p>{% trans "No subscriptions" %}</p>
+            {% endfor %}
+        </div>
     {% endwith %}
     <p>
         <a href="{% url "courses:list" %}">

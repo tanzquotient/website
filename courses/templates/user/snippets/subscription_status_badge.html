@@ -1,0 +1,16 @@
+{% load i18n %}
+
+
+{% if subscription.state == 'new' %}
+    <span class="badge bg-info">{% trans "Subscription received" %}</span>
+{% elif subscription.state == 'confirmed' %}
+    <span class="badge bg-success">{% trans "Subscription confirmed" %}</span>
+{% elif subscription.state == 'rejected' %}
+    <span class="badge bg-danger">{% trans "Rejected" %}</span>
+{% elif subscription.state == 'completed' %}
+    <span class="badge bg-success">{% trans "Completed" %}</span>
+{% elif subscription.state == 'to_reimburse' %}
+    <span class="badge bg-dark">{% trans "To reimburse" %}</span>
+{% elif subscription.state == 'payed' %}
+    <span class="badge bg-success">{% trans "Paid" %}</span>
+{% endif %}
