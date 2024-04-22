@@ -104,6 +104,14 @@ class Course(TranslatableModel):
                 "Shown only to participants of the course on the course page. Can be set by teachers in the frontend."
             ),
         ),
+        information_for_participants_admin=HTMLField(
+            verbose_name="[TR] Information for participants (editable by admins only)",
+            blank=True,
+            null=True,
+            help_text=_(
+                "Shown only to participants of the course on the course page. Cannot be set by teachers in the frontend."
+            ),
+        ),
     )
 
     # For regular courses only
