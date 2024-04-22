@@ -111,3 +111,6 @@ overrides*.yml
 # ignore generated jupyter notebook files
 etc/jupyter
 share/
+
+# venv
+venv/

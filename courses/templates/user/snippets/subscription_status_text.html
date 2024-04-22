@@ -1,0 +1,21 @@
+{% load i18n %}
+
+
+{% if subscription.state == 'new' %}
+    {% trans "New subscription info" %}
+{% elif subscription.state == 'confirmed' %}
+    {% trans "Confirmed subscription info" %}
+{% elif subscription.state == 'rejected' %}
+    {% trans "Rejected subscription info" %}
+{% elif subscription.state == 'completed' %}
+    {% trans "Completed subscription info" %}
+{% elif subscription.state == 'to_reimburse' %}
+    {% trans "To reimburse subscription info" %}
+{% elif subscription.state == 'payed' %}
+    {% trans "Paid subscription info" %}
+    <br/>
+    <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+        {% trans "Show details" %}
+        <i class="fa fa-arrow-circle-right fa-lg"></i>
+    </a>
+{% endif %}

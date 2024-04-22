@@ -1,53 +1,69 @@
 {% load i18n %}
 
-<div class="card card-default mb-4">
-    <div class="card-header">
-        {{ subscription.course.type }}
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-xs-12 col-sm-4">
-                <p>
-                    <strong>{% trans "Time" %}</strong>
-                    <br/>
-                    {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
-                </p>
-                <p>
-                    <strong>{% trans "More Info" %}</strong>
-                    <a href="{% url "courses:course_detail" subscription.course_id %}">
-                        <br/>
-                        {% trans "Course details" %}
-                        <i class="fa fa-arrow-circle-right fa-lg"></i>
-                    </a>
-                    <a href="{% url "courses:course_ical" subscription.course_id %}">
-                        <br/>
-                        {% trans "Add to calendar" %}
-                        <i class="fa fa-calendar fa-lg"></i>
-                    </a>
-                </p>
-                <div>
-                    {% if subscription.course.type.couple_course %}
-                        <div class="col-xs-12">
-                            <p>
-                                <strong>{% trans "Your Role" %}</strong>
-                                <br/>
-                                {{ subscription.get_assigned_role_str }}
-                            </p>
-                        </div>
-                    {% endif %}
-                    {% if subscription.partner %}
-                        <div class="col-xs-12">
-                            <p>
-                                <strong>{% trans "Partner" %}</strong>
-                                <br/>
-                                {{ subscription.partner.get_full_name }}
-                                <br/>
-                                {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
-                            </p>
-                        </div>
-                    {% endif %}
+
+<div class="accordion-item" id="accordion-item-id-{{ subscription.course.id }}">
+    <h2 class="accordion-header accordion-header-subscription" id="accordion-header-subscription-id-{{ subscription.course.id }}">
+        <button class="accordion-button bg-light collapsed accordion-button-subscription d-block" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-subcription-course-id-{{ subscription.course.id }}" aria-expanded="false" aria-controls="accordion-subcription-course-id-{{ subscription.course.id }}">
+            <div class="row align-content-center">
+                <div class="col">
+                    <b>{{ subscription.course.type }}</b>
                 </div>
-            </div>
+                <div class="col">
+                    {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
+                </div>
+                <div class="col">
+                    {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
+                </div>
+              </div>            
+        </button>        
+    </h2>
+    <div id="accordion-subcription-course-id-{{ subscription.course.id }}" class="accordion-collapse collapse accordion-subscrption-body" aria-labelledby="accordion-header-subscription-id-{{ subscription.course.id }}" data-bs-parent="#accordion-item-id-{{ subscription.course.id }}">
+        <div class="accordion-body fs-6 py-4">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <p>
+                        <strong>{% trans "Time" %}</strong>
+                        <br/>
+                        {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
+                    </p>
+                    <p>
+                        <strong>{% trans "More Info" %}</strong>
+                        <a href="{% url "courses:course_detail" subscription.course_id %}">
+                            <br/>
+                            {% trans "Course details" %}
+                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                        </a>
+                        <a href="{% url "courses:course_ical" subscription.course_id %}">
+                            <br/>
+                            {% trans "Add to calendar" %}
+                            <i class="fa fa-calendar fa-lg"></i>
+                        </a>
+                    </p>
+                    <div>
+                        {% if subscription.course.type.couple_course %}
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>{% trans "Your Role" %}</strong>
+                                    <br/>
+                                    {{ subscription.get_assigned_role_str }}
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if subscription.partner %}
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>{% trans "Partner" %}</strong>
+                                    <br/>
+                                    {{ subscription.partner.get_full_name }}
+                                    <br/>
+                                    {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                                </p>
+                            </div>
+                        {% endif %}
+    </div>
+
+    </div>
+        </div>
             <div class="col-xs-12 col-sm-4">
                 <div>
                     <strong>{% trans "Costs" %}</strong>
@@ -85,36 +101,9 @@
                 <p>
                     <strong>{% trans "State" %}</strong>
                     <br/>
-                    {% if subscription.state == 'new' %}
-                        <span class="badge bg-info">{% trans "Subscription received" %}</span>
-                        <br/>
-                        {% trans "New subscription info" %}
-                    {% elif subscription.state == 'confirmed' %}
-                        <span class="badge bg-success">{% trans "Subscription confirmed" %}</span>
-                        <br/>
-                        {% trans "Confirmed subscription info" %}
-                    {% elif subscription.state == 'rejected' %}
-                        <span class="badge bg-danger">{% trans "Rejected" %}</span>
-                        <br/>
-                        {% trans "Rejected subscription info" %}
-                    {% elif subscription.state == 'completed' %}
-                        <span class="badge bg-success">{% trans "Completed" %}</span>
-                        <br/>
-                        {% trans "Completed subscription info" %}
-                    {% elif subscription.state == 'to_reimburse' %}
-                        <span class="badge bg-dark">{% trans "To reimburse" %}</span>
-                        <br/>
-                        {% trans "To reimburse subscription info" %}
-                    {% elif subscription.state == 'payed' %}
-                        <span class="badge bg-success">{% trans "Paid" %}</span>
-                        <br/>
-                        {% trans "Paid subscription info" %}
-                        <br/>
-                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
-                            {% trans "Show details" %}
-                            <i class="fa fa-arrow-circle-right fa-lg"></i>
-                        </a>
-                    {% endif %}
+                    {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
+                    <br>
+                    {% include "user/snippets/subscription_status_text.html" with subscription=subscription only %}
                 </p>
                 {% include "user/snippets/course_review_button.html" with course=subscription.course user=user only %}
             </div>
