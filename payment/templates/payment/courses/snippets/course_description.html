@@ -25,7 +25,7 @@
         <div class="alert alert-success">
             {% trans "You may add additional info that will be visible only to course participants (WhatsApp link, cloud link, ASVZ QR code...)." %}
         </div>
-        <textarea name="information-for-participants-{{ language }}" id="information-for-participants-{{ language }}" rows="20" cols="80">{{ information_for_participants|default:""|safe }}</textarea>
+        <textarea name="information-for-participants-{{ language }}" id="information-for-participants-{{ language }}" rows="20" cols="80">{{ information_for_participants_teachers|default:""|safe }}</textarea>
         <button type="submit" class="btn btn-success mt-3" name="save" value="save">{% trans "Save" %}</button>
     </form>
 </div>

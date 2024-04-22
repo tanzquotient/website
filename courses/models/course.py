@@ -96,8 +96,8 @@ class Course(TranslatableModel):
             help_text="Description specific for this course. "
             "(Gets displayed combined with the description of the course style)",
         ),
-        information_for_participants=HTMLField(
-            verbose_name="[TR] Information for participants",
+        information_for_participants_teachers=HTMLField(
+            verbose_name="[TR] Information for participants (editable by teachers)",
             blank=True,
             null=True,
             help_text=_(
