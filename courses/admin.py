@@ -245,7 +245,7 @@ class CourseTypeAdmin(TranslatableAdmin):
     ordering = ["translations__title"]
 
     fieldsets = [
-        ("Information", {"fields": ["title", "subtitle", "description"]}),
+        ("Information", {"fields": ["title", "subtitle", "description", "information_for_participants"]}),
         ("Details", {"fields": ["level", "styles"]}),
         ("Options", {"fields": ["couple_course"]}),
     ]
