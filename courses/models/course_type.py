@@ -1,6 +1,7 @@
 from django.db import models
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+from django.utils.translation import gettext_lazy as _
 
 
 class CourseType(TranslatableModel):
@@ -27,6 +28,14 @@ class CourseType(TranslatableModel):
             blank=True,
             null=True,
             help_text="This text is added to the description of each course instance.",
+        ),
+        information_for_participants=HTMLField(
+            verbose_name="[TR] Information for participants",
+            blank=True,
+            null=True,
+            help_text=_(
+                "Shown only to participants of courses of this type on the course page. Cannot be set by teachers in the frontend."
+            ),
         ),
     )
 
