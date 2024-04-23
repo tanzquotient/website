@@ -7,7 +7,7 @@
 
 {% block main_content %}
     <div class="container-fluid mt-4">
-        <h2 class="mb-0">{{ offering.name }}</h2>
+        <h2 class="mb-0">{{ offering.get_title }}</h2>
         <div class="fs-5">{{ offering.period.date_as_string }} </div>
 
         {% include "finance/offering/common/tabs.html" %}

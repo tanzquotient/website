@@ -2,11 +2,11 @@
 {% load i18n %}
 
 {% block title %}
-    {{ offering.name }}
+    {{ offering.get_title }}
 {% endblock title%}
 
 {% block lead_title %}
-    {{ offering.name }}
+    {{ offering.get_title }}
 {% endblock %}
 
 {% block main_content %}

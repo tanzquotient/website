@@ -155,6 +155,8 @@ def send_course_surveys() -> None:
                     "last_name": recipient.last_name,
                     "course": course.type.title,
                     "offering": course.offering.name,
+                    "offering_title_en": course.offering.safe_translation_getter("title", language_code="en"),
+                    "offering_title_de": course.offering.safe_translation_getter("title", language_code="de"),
                     "survey_url": survey_instance.create_full_url(),
                     "survey_expiration": survey_instance.url_expire_date,
                 }
