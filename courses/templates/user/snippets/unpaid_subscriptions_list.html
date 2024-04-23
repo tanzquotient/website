@@ -4,9 +4,9 @@
 {% with subscriptions=user.profile.unpaid_subscriptions %}
     {% if subscriptions|length %}
         <div class="alert alert-info">
-            <h4 class="alert-heading">
+            <h5 class="alert-heading">
                 {% trans "Unpaid subscriptions" %}
-            </h4>
+            </h5>
             <hr>
             {% trans "You have unpaid subscriptions to the following courses:" %}
             <ul class="mb-0 mt-2">
