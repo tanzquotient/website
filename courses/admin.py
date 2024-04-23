@@ -13,7 +13,7 @@ from courses.filters import *
 
 
 @admin.register(Offering)
-class OfferingAdmin(admin.ModelAdmin):
+class OfferingAdmin(TranslatableAdmin):
     list_display = (
         "name",
         "period",
@@ -32,6 +32,22 @@ class OfferingAdmin(admin.ModelAdmin):
         offering_emaillist,
         export_teacher_payment_information_csv,
         export_teacher_payment_information_excel,
+    ]
+
+    fieldsets = [
+        (
+            "Information",
+            {
+                "fields": [
+                    "name",
+                    "title",
+                    "period",
+                    "type",
+                ]
+            },
+        ),
+        ("Visibility", {"fields": ["display", "active", "preview", "opens_soon", "group_into_sections", "limit_courses_per_section", "order"]}),
+        ("Automatic survey", {"fields": ["survey"]}),
     ]
 
 

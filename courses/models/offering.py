@@ -4,14 +4,18 @@ from decimal import Decimal
 
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from parler.models import TranslatableModel, TranslatedFields
 
 from . import OfferingType
 
 
-class Offering(models.Model):
+class Offering(TranslatableModel):
     """An offering is a list of courses to be offered in the given period"""
 
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=30, unique=True, blank=False, help_text=_("Identifier of the offering. For internal use."))
+    translations = TranslatedFields(
+        title = models.CharField(max_length=30, blank=True, null=True, verbose_name="[TR] Title", help_text=_("Title of the offering shown to users."))
+    )
     period = models.ForeignKey("Period", on_delete=models.PROTECT)
     type = models.CharField(
         max_length=3,
