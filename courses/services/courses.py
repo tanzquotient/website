@@ -58,8 +58,12 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 "last_name": recipient.last_name,
                 "course": course.type.title,
                 "offering": course.offering.name,
-                "offering_title_en": course.offering.safe_translation_getter("title", language_code="en"),
-                "offering_title_de": course.offering.safe_translation_getter("title", language_code="de"),
+                "offering_title_en": course.offering.safe_translation_getter(
+                    "title", language_code="en"
+                ),
+                "offering_title_de": course.offering.safe_translation_getter(
+                    "title", language_code="de"
+                ),
             }
 
             if survey:

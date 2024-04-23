@@ -12,9 +12,20 @@ from . import OfferingType
 class Offering(TranslatableModel):
     """An offering is a list of courses to be offered in the given period"""
 
-    name = models.CharField(max_length=30, unique=True, blank=False, help_text=_("Identifier of the offering. For internal use."))
+    name = models.CharField(
+        max_length=30,
+        unique=True,
+        blank=False,
+        help_text=_("Identifier of the offering. For internal use."),
+    )
     translations = TranslatedFields(
-        title = models.CharField(max_length=30, blank=True, null=True, verbose_name="[TR] Title", help_text=_("Title of the offering shown to users."))
+        title=models.CharField(
+            max_length=30,
+            blank=True,
+            null=True,
+            verbose_name="[TR] Title",
+            help_text=_("Title of the offering shown to users."),
+        )
     )
     period = models.ForeignKey("Period", on_delete=models.PROTECT)
     type = models.CharField(
@@ -96,7 +107,7 @@ class Offering(TranslatableModel):
             for key, value in course.payment_totals().items():
                 totals[key] += value
         return totals
-    
+
     def get_title(self) -> str:
         return self.title if self.title else self.name
 

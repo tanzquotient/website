@@ -46,7 +46,20 @@ class OfferingAdmin(TranslatableAdmin):
                 ]
             },
         ),
-        ("Visibility", {"fields": ["display", "active", "preview", "opens_soon", "group_into_sections", "limit_courses_per_section", "order"]}),
+        (
+            "Visibility",
+            {
+                "fields": [
+                    "display",
+                    "active",
+                    "preview",
+                    "opens_soon",
+                    "group_into_sections",
+                    "limit_courses_per_section",
+                    "order",
+                ]
+            },
+        ),
         ("Automatic survey", {"fields": ["survey"]}),
     ]
 
