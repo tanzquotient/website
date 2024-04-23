@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% with subscriptions=user.profile.unpaid_subscriptions %}
+    {% if subscriptions|length %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">
+                {% trans "Unpaid subscriptions" %}
+            </h4>
+            <hr>
+            {% trans "You have unpaid subscriptions to the following courses:" %}
+            <ul class="mb-0 mt-2">
+                {% for subscription in subscriptions %}
+                    <li>
+                        <a href="{% url "courses:course_detail" subscription.course_id %}">
+                            {{ subscription.course.type.title }}
+                        </a>
+                         - {% trans "Go to" %} 
+                         <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                            {% trans "Payment" %}
+                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr>
+            <strong>{% trans "Note" %}:</strong>
+            {% trans "It can take up to a week for your payment to be acquired by our system." %}
+        </div>
+    {% endif %}
+{% endwith %}
