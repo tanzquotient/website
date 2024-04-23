@@ -37,6 +37,7 @@
             {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
         </a>
     </div>
+    {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
     {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
         {% for subscription in subscriptions %}
