@@ -6,7 +6,7 @@
         {% trans "Used for:" %}
         {% if offerings %}
             {% for offering in offerings %}
-                {{ offering.get_title }}{% if not forloop.last %}, {% endif %}
+                {{ offering.name }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         {% else %}
             {% trans "Nothing yet" %}

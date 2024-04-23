@@ -9,7 +9,7 @@
         {% for offering in offerings %}
             <a href="{% url "survey:results" survey.id %}?offering_id={{ offering.id }}"
                class="btn btn-sm mb-1 {% if selected_offering and selected_offering == offering %} btn-success {% else %} btn-outline-success {% endif %}">
-               {{ offering.get_title }}
+               {{ offering.name }}
             </a>
         {% endfor %}
     </div>

@@ -17,7 +17,7 @@
                             <button class="accordion-button collapsed {% if not offering.display %} bg-secondary bg-opacity-10{% endif %}"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ offering.id }}"
                                     aria-expanded="false" aria-controls="collapse-{{ offering.id }}">
-                                    {{ offering.get_title }}
+                                    {{ offering.name }}
                             </button>
                         </h2>
                         <div id="collapse-{{ offering.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ offering.id }}" data-bs-parent="#offering-accordion">
