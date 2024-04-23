@@ -96,6 +96,9 @@ class Offering(TranslatableModel):
             for key, value in course.payment_totals().items():
                 totals[key] += value
         return totals
+    
+    def get_title(self) -> str:
+        return self.title if self.title else self.name
 
     def __str__(self) -> str:
         return "{}".format(self.name)
