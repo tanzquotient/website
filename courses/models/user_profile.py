@@ -189,7 +189,7 @@ class UserProfile(Model):
             for subscription in self.get_subscriptions()
             if subscription.is_payment_overdue()
         ]
-    
+
     def unpaid_subscriptions(self) -> Iterable[Subscribe]:
         return [
             subscription
