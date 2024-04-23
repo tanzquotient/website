@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-22 13:59+0200\n"
+"POT-Creation-Date: 2024-04-23 15:02+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -589,7 +589,15 @@ msgstr ""
 "Shown only to participants of courses of this type on the course page. "
 "Cannot be set by teachers in the frontend."
 
-#: courses/models/offering.py:61
+#: courses/models/offering.py:15
+msgid "Identifier of the offering. For internal use."
+msgstr "Identifier of the offering. For internal use."
+
+#: courses/models/offering.py:17
+msgid "Title of the offering shown to users."
+msgstr "Title of the offering shown to users."
+
+#: courses/models/offering.py:65
 msgid ""
 "If not empty, will automatically send a survey invitation to all "
 "participants in each course, as soon as the respective course is over."
@@ -2672,7 +2680,7 @@ msgstr "Answer made visible"
 msgid "All offerings"
 msgstr "All offerings"
 
-#: survey/templates/survey/components/filter.html:21
+#: survey/templates/survey/components/filter.html:23
 msgid "All courses"
 msgstr "All courses"
 
