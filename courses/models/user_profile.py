@@ -28,6 +28,7 @@ from . import (
     StudentStatus,
     Residence,
     Subscribe,
+    SubscribeState,
     CourseType,
     Course,
     Teach,
@@ -187,6 +188,13 @@ class UserProfile(Model):
             subscription
             for subscription in self.get_subscriptions()
             if subscription.is_payment_overdue()
+        ]
+    
+    def unpaid_subscriptions(self) -> Iterable[Subscribe]:
+        return [
+            subscription
+            for subscription in self.get_subscriptions()
+            if subscription.state in SubscribeState.TO_PAY_STATES
         ]
 
     def get_subscribed_courses(self) -> Iterable[Course]:
