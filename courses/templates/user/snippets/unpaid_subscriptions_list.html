@@ -1,17 +1,18 @@
 {% load i18n %}
 {% load courses_tags %}
 
-{% with subscriptions=user.profile.unpaid_subscriptions %}
-    {% if subscriptions|length %}
-        <div class="alert alert-info">
+{% with unpaid_subscriptions=user.profile.unpaid_subscriptions overdue_subscriptions=user.profile.subscriptions_with_overdue_payment %}
+    {% if unpaid_subscriptions|length or overdue_subscriptions|length %}
+        <div class="alert alert-{{ overdue_subscriptions|length|yesno:"danger,warning" }}">
             <h5 class="alert-heading">
                 {% trans "Unpaid subscriptions" %}
             </h5>
             <hr>
             {% trans "You have unpaid subscriptions to the following courses:" %}
             <ul class="mb-0 mt-2">
-                {% for subscription in subscriptions %}
+                {% for subscription in overdue_subscriptions %}
                     <li>
+                        <span class="badge bg-danger">{% trans "OVERDUE" %}</span>
                         <a href="{% url "courses:course_detail" subscription.course_id %}">
                             {{ subscription.course.type.title }}
                         </a>
@@ -21,6 +22,20 @@
                             <i class="fa fa-arrow-circle-right fa-lg"></i>
                         </a>
                     </li>
+                {% endfor %}
+                {% for subscription in unpaid_subscriptions %}
+                    {% if subscription not in overdue_subscriptions %}
+                        <li>
+                            <a href="{% url "courses:course_detail" subscription.course_id %}">
+                                {{ subscription.course.type.title }}
+                            </a>
+                            - {% trans "Go to" %} 
+                            <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                                {% trans "Payment" %}
+                                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             <hr>
