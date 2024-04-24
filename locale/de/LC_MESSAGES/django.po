@@ -416,7 +416,7 @@ msgstr "Ablaufdatum setzen?"
 
 #: courses/forms/voucher_form.py:38
 msgid "Internal comment for the voucher."
-msgstr ""
+msgstr "Interner Kommentar für Gutscheine."
 
 #: courses/forms/voucher_generation_form.py:9
 msgid "How many voucher should be generated?"
@@ -486,13 +486,13 @@ msgstr "Sonntag"
 msgid ""
 "Shown only to participants of the course on the course page. Can be set by "
 "teachers in the frontend."
-msgstr ""
+msgstr "Wird nur Teilnehmenden und Lehrpersonen des Kurses angezeigt. Kann von Lehrpersonen selbst bearbeitet werden."
 
 #: courses/models/course.py:112
 msgid ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
-msgstr ""
+msgstr "Wird nur Teilnehmenden und Lehrpersonen des Kurses angezeigt. Kann nur von Admins bearbeitet werden."
 
 #: courses/models/course.py:338
 msgid "We did not receive any subscriptions yet."
@@ -578,15 +578,15 @@ msgstr "Es werden noch {} Personen benötigt."
 msgid ""
 "Shown only to participants of courses of this type on the course page. "
 "Cannot be set by teachers in the frontend."
-msgstr ""
+msgstr "Wird nur für Teilnehmende und Lehrpersonen dieses Kurstyps angezeigt. Kann nur von Admins bearbeitet werden."
 
 #: courses/models/offering.py:19
 msgid "Identifier of the offering. For internal use."
-msgstr ""
+msgstr "Interner Name des Angebots."
 
 #: courses/models/offering.py:27
 msgid "Title of the offering shown to users."
-msgstr ""
+msgstr "Öffentlicher Name des Angebots."
 
 #: courses/models/offering.py:76
 msgid ""
@@ -753,11 +753,9 @@ msgstr "Die Email wird an Personen aus folgenden Kursen gesendet."
 
 #: courses/templates/courses/auth/action_send_email_voucher.html:11
 msgid "Email options"
-msgstr ""
+msgstr "Emailoptionen"
 
 #: courses/templates/courses/auth/action_send_email_voucher.html:18
-#, fuzzy
-#| msgid "Warning:"
 msgid "Warning"
 msgstr "Warnung"
 
@@ -765,6 +763,7 @@ msgstr "Warnung"
 msgid ""
 "No email will be sent for the following vouchers, as no user is set for them:"
 msgstr ""
+"Für die folgenden Gutscheine wird keine Email versendet, weil kein User gesetzt ist:"
 
 #: courses/templates/courses/auth/action_send_voucher.html:11
 msgid "Voucher options"
@@ -1019,7 +1018,7 @@ msgstr "Bewerte diesen Kurs"
 
 #: courses/templates/courses/snippets/course_review_button.html:48
 msgid "Evaluation is closed for this course."
-msgstr ""
+msgstr "Die Evaluation für diesen Kurs ist geschlossen."
 
 #: courses/templates/courses/snippets/course_review_button.html:50
 msgid "You can only review courses that you already completed."
@@ -1078,13 +1077,13 @@ msgstr "Vergangene Kurse"
 
 #: courses/templates/courses/snippets/info_to_participants.html:8
 msgid "Information to participants"
-msgstr ""
+msgstr "Informationen für Teilnehmende"
 
 #: courses/templates/courses/snippets/info_to_participants.html:11
 msgid ""
 "Note: this information is only visible to teachers and participants of this "
 "course."
-msgstr ""
+msgstr "Beachte: diese Information is nur für Teilnehmende und Lehrpersonen dieses Kurses sichtbar."
 
 #: courses/templates/courses/snippets/lesson_components/lessons.html:8
 #: courses/templates/courses/snippets/lesson_components/lessons_compact.html:8
@@ -1503,7 +1502,7 @@ msgstr "Bemerkung"
 
 #: courses/templates/courses/snippets/user_profile_form_payment.html:10
 msgid "You need to update your payment information on SwissSalary as well."
-msgstr ""
+msgstr "Bitte aktualisiere deine Zahlungsdaten auch auf SwissSalary."
 
 #: courses/templates/payment/account/info.html:4
 #: courses/templates/user/profile.html:106
@@ -1674,7 +1673,7 @@ msgstr "Zeige"
 
 #: courses/templates/user/snippets/open_surveys.html:25
 msgid "more"
-msgstr ""
+msgstr "mehr"
 
 #: courses/templates/user/snippets/subscription.html:16
 msgid "More Info"
@@ -1707,7 +1706,7 @@ msgstr "Nicht bezahlt"
 
 #: courses/templates/user/snippets/subscription.html:76
 msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
-msgstr ""
+msgstr "Klicke hier für Zahlungsdetails, QR-Rechnung und zum Einlösen von Gutscheinen:"
 
 #: courses/templates/user/snippets/subscription.html:78
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
@@ -1776,7 +1775,7 @@ msgstr "Unbezahlte Anmeldungen"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:11
 msgid "You have unpaid subscriptions to the following courses:"
-msgstr ""
+msgstr "Die folgenden Kurse wurde noch nicht bezahlt:"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:15
 msgid "OVERDUE"
@@ -1785,12 +1784,12 @@ msgstr "ÜBERFÄLLIGE"
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:19
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:32
 msgid "Go to"
-msgstr ""
+msgstr "Gehe zu"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:43
 #: payment/templates/payment/subscription/index.html:58
 msgid "It can take up to a week for your payment to be acquired by our system."
-msgstr ""
+msgstr "Es kann bis zu einer Woche dauern, bis deine Zahlung von unserem System aufgenommen wird."
 
 #: courses/templates/user/user_courses.html:5
 #: courses/templates/user/user_courses.html:9
@@ -2516,13 +2515,13 @@ msgstr ""
 
 #: payment/templates/payment/courses/snippets/course_description.html:24
 msgid "Participant info"
-msgstr ""
+msgstr "Infos für Teilnehmende"
 
 #: payment/templates/payment/courses/snippets/course_description.html:26
 msgid ""
 "You may add additional info that will be visible only to course participants "
 "(WhatsApp link, cloud link, ASVZ QR code...)."
-msgstr ""
+msgstr "Du kannst hier Zusatzinfos hinzufügen, die nur für Teilnehmende sichtbar sind (z.B. Chat link, cloud link,...)."
 
 #: payment/templates/payment/courses/snippets/course_description.html:29
 msgid "Save"
@@ -2566,7 +2565,7 @@ msgstr "Falls du Gutscheine hast, kannst du sie unten einlösen"
 
 #: payment/templates/payment/subscription/index.html:40
 msgid "Bank account coordinates"
-msgstr ""
+msgstr "Bankverbindung"
 
 #: payment/templates/payment/subscription/index.html:46
 msgid "NEW"
@@ -2574,13 +2573,13 @@ msgstr "NEW"
 
 #: payment/templates/payment/subscription/index.html:46
 msgid "QR-bill"
-msgstr ""
+msgstr "QR-Rechnung"
 
 #: payment/templates/payment/subscription/index.html:48
 msgid ""
 "Please scan the QR-bill below with your home banking app to fill in the "
 "payment details automatically."
-msgstr ""
+msgstr "Bitte scanne die QR-Rechnung mit deiner Banking-App um die Zahlungsinfos automatisch auszufüllen."
 
 #: payment/templates/payment/subscription/index.html:67
 msgid "Item"
