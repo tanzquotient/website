@@ -494,8 +494,8 @@ msgid ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
 msgstr ""
-"Shown only to participants of the course on the course page. Can be set by "
-"teachers in the frontend."
+"Shown only to participants of the course on the course page. Cannot be set "
+"by teachers in the frontend."
 
 #: courses/models/course.py:338
 msgid "We did not receive any subscriptions yet."
