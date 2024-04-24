@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 10:36+0200\n"
+"POT-Creation-Date: 2024-04-24 11:48+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1494,6 +1494,17 @@ msgstr "Keine Informationen verfügbar"
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Zahlungsdaten eingeben (Nur für Lehrer:innen und Helfer:innen nötig)"
 
+#: courses/templates/courses/snippets/user_profile_form_payment.html:9
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
+#: payment/services/offering_finance_teachers.py:37
+#: payment/templates/payment/subscription/index.html:56
+msgid "Note"
+msgstr "Bemerkung"
+
+#: courses/templates/courses/snippets/user_profile_form_payment.html:10
+msgid "You need to update your payment information on SwissSalary as well."
+msgstr ""
+
 #: courses/templates/payment/account/info.html:4
 #: courses/templates/user/profile.html:106
 #: payment/services/offering_finance_teachers.py:106
@@ -1775,12 +1786,6 @@ msgstr "ÜBERFÄLLIGE"
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:32
 msgid "Go to"
 msgstr ""
-
-#: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
-#: payment/services/offering_finance_teachers.py:37
-#: payment/templates/payment/subscription/index.html:56
-msgid "Note"
-msgstr "Bemerkung"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:43
 #: payment/templates/payment/subscription/index.html:58

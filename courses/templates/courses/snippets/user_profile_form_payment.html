@@ -1,7 +1,15 @@
+{% load i18n %}
+
 {% include "courses/snippets/select.html" with field=form.nationality only %}
 {% include "courses/snippets/select.html" with field=form.residence_permit only %}
 {% include "courses/snippets/text_input.html" with field=form.ahv_number only %}
 {% include "courses/snippets/text_input.html" with field=form.zemis_number only %}
+{% if form.iban.value %}
+    <div class="alert alert-info mt-2 mb-0">
+        <strong>{% trans "Note" %}:</strong>
+        {% trans "You need to update your payment information on SwissSalary as well." %}
+    </div>
+{% endif %}
 {% include "courses/snippets/text_input.html" with field=form.iban only %}
 {% include "courses/snippets/text_input.html" with field=form.bank_name only %}
 {% include "courses/snippets/text_input.html" with field=form.bank_zip_code only %}
