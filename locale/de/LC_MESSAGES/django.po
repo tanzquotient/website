@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-23 15:02+0200\n"
+"POT-Creation-Date: 2024-04-24 09:48+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -580,15 +580,15 @@ msgid ""
 "Cannot be set by teachers in the frontend."
 msgstr ""
 
-#: courses/models/offering.py:15
+#: courses/models/offering.py:19
 msgid "Identifier of the offering. For internal use."
 msgstr ""
 
-#: courses/models/offering.py:17
+#: courses/models/offering.py:27
 msgid "Title of the offering shown to users."
 msgstr ""
 
-#: courses/models/offering.py:65
+#: courses/models/offering.py:76
 msgid ""
 "If not empty, will automatically send a survey invitation to all "
 "participants in each course, as soon as the respective course is over."
@@ -1699,6 +1699,7 @@ msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgstr ""
 
 #: courses/templates/user/snippets/subscription.html:78
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:20
 #: payment/cms_toolbars.py:10
 #: payment/templates/payment/subscription/index.html:97
 msgid "Payment"
@@ -1755,6 +1756,33 @@ msgstr "Wir haben die Bezahlung erhalten. Vielen Dank!"
 msgid "Show details"
 msgstr "Details anzeigen"
 
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:8
+#: payment/templates/finance/offering/common/tabs.html:13
+#: payment/templates/finance/offering/unpaid/index.html:116
+msgid "Unpaid subscriptions"
+msgstr "Unbezahlte Anmeldungen"
+
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:11
+#, fuzzy
+#| msgid "This survey is about the following course:"
+msgid "You have unpaid subscriptions to the following courses:"
+msgstr ""
+
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:18
+msgid "Go to"
+msgstr ""
+
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:27
+#: payment/services/offering_finance_teachers.py:37
+#: payment/templates/payment/subscription/index.html:56
+msgid "Note"
+msgstr "Bemerkung"
+
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:28
+#: payment/templates/payment/subscription/index.html:58
+msgid "It can take up to a week for your payment to be acquired by our system."
+msgstr ""
+
 #: courses/templates/user/user_courses.html:5
 #: courses/templates/user/user_courses.html:9
 #: courses/templates/user/user_courses.html:35
@@ -1776,11 +1804,11 @@ msgstr "Derzeit sind keine Kurse verfügbar."
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/user_courses.html:45
+#: courses/templates/user/user_courses.html:46
 msgid "No subscriptions"
 msgstr "Keine Anmeldungen"
 
-#: courses/templates/user/user_courses.html:50
+#: courses/templates/user/user_courses.html:51
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
@@ -2142,11 +2170,6 @@ msgstr "Stunden"
 msgid "Course Totals"
 msgstr "Summe Kurse"
 
-#: payment/services/offering_finance_teachers.py:37
-#: payment/templates/payment/subscription/index.html:56
-msgid "Note"
-msgstr "Bemerkung"
-
 #: payment/services/offering_finance_teachers.py:73
 msgid "Course cancelled"
 msgstr "Kurs abgesagt"
@@ -2233,11 +2256,6 @@ msgstr ""
 #: payment/templates/finance/account/index.html:18
 msgid "Show transactions"
 msgstr "Transaktionen anzeigen"
-
-#: payment/templates/finance/offering/common/tabs.html:13
-#: payment/templates/finance/offering/unpaid/index.html:116
-msgid "Unpaid subscriptions"
-msgstr "Unbezahlte Anmeldungen"
 
 #: payment/templates/finance/offering/common/tabs.html:24
 msgid "Revenue"
@@ -2555,10 +2573,6 @@ msgstr ""
 msgid ""
 "Please scan the QR-bill below with your home banking app to fill in the "
 "payment details automatically."
-msgstr ""
-
-#: payment/templates/payment/subscription/index.html:58
-msgid "It can take up to a week for your payment to be acquired by our system."
 msgstr ""
 
 #: payment/templates/payment/subscription/index.html:67
