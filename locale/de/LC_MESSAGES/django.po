@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 09:48+0200\n"
+"POT-Creation-Date: 2024-04-24 10:36+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1699,7 +1699,8 @@ msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgstr ""
 
 #: courses/templates/user/snippets/subscription.html:78
-#: courses/templates/user/snippets/unpaid_subscriptions_list.html:20
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
 #: payment/templates/payment/subscription/index.html:97
 msgid "Payment"
@@ -1763,22 +1764,25 @@ msgid "Unpaid subscriptions"
 msgstr "Unbezahlte Anmeldungen"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:11
-#, fuzzy
-#| msgid "This survey is about the following course:"
 msgid "You have unpaid subscriptions to the following courses:"
 msgstr ""
 
-#: courses/templates/user/snippets/unpaid_subscriptions_list.html:18
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:15
+msgid "OVERDUE"
+msgstr "ÜBERFÄLLIGE"
+
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:19
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:32
 msgid "Go to"
 msgstr ""
 
-#: courses/templates/user/snippets/unpaid_subscriptions_list.html:27
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
 #: payment/services/offering_finance_teachers.py:37
 #: payment/templates/payment/subscription/index.html:56
 msgid "Note"
 msgstr "Bemerkung"
 
-#: courses/templates/user/snippets/unpaid_subscriptions_list.html:28
+#: courses/templates/user/snippets/unpaid_subscriptions_list.html:43
 #: payment/templates/payment/subscription/index.html:58
 msgid "It can take up to a week for your payment to be acquired by our system."
 msgstr ""
@@ -2556,8 +2560,6 @@ msgid "If you've got any vouchers, you may apply them below."
 msgstr "Falls du Gutscheine hast, kannst du sie unten einlösen"
 
 #: payment/templates/payment/subscription/index.html:40
-#, fuzzy
-#| msgid "Bank account"
 msgid "Bank account coordinates"
 msgstr ""
 
