@@ -2559,7 +2559,7 @@ msgstr "Falls du Gutscheine hast, kannst du sie unten einlösen"
 #, fuzzy
 #| msgid "Bank account"
 msgid "Bank account coordinates"
-msgstr "Kontonummer"
+msgstr ""
 
 #: payment/templates/payment/subscription/index.html:46
 msgid "NEW"
