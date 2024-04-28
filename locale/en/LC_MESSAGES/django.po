@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 11:48+0200\n"
+"POT-Creation-Date: 2024-04-28 17:21+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -735,6 +735,7 @@ msgstr "{} of {} teachers reset successfully"
 
 #: courses/templates/courses/archive.html:6
 #: courses/templates/courses/list.html:20
+#: events/templates/events/archive.html:6
 msgid "Archive"
 msgstr "Archive"
 
@@ -1966,6 +1967,12 @@ msgstr "Upcoming"
 #: events/filters/event_date_filter.py:25
 msgid "This year"
 msgstr "This year"
+
+#: events/templates/events/archive.html:14
+#, fuzzy
+#| msgid "No events planned."
+msgid "No events in the archive."
+msgstr "No events in the archive."
 
 #: events/templates/events/event_detail.html:10
 msgid "Event details"
