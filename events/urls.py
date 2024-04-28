@@ -25,4 +25,6 @@ urlpatterns = [
         views.category_detail,
         name="category_detail",
     ),
+    path("archive/", views.archive, name="archive_thisyear"),
+    path("archive/<int:year>", views.archive, name="archive"),
 ]

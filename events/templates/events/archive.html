@@ -1,0 +1,19 @@
+{% extends "basis.html" %}
+{% load i18n %}
+{% load cms_tags %}
+
+{% block lead_title %}
+    {% trans "Archive" %} {{ year }}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        {% include "events/snippets/event_year_selector.html" %}
+        {% include "events/events.html" with show_when_no_events=False use_cards=False  %}
+        {% if events.count == 0 %}
+            <div class="alert alert-info">{% trans "No events in the archive." %}</div>
+        {% else %}
+            {% include "events/snippets/event_year_selector.html" %}
+        {% endif %}
+    </div>
+{% endblock main_content %}

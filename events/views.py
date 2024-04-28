@@ -2,6 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+
+import datetime
 
 from events.models import Event, EventCategory
 from events.models.event_registration import EventRegistration
@@ -24,6 +28,21 @@ def category_detail(request: HttpRequest, category_id: int) -> HttpResponse:
         "text": category.description,
         "image": category.image,
         "show_when_no_events": True,
+    }
+    return render(request, template_name, context)
+
+
+def archive(request: HttpRequest, year: int | None = None):
+    template_name = "events/archive.html"
+    today = timezone.now()
+    if year is None:
+        year = today.year
+
+    context = {
+        "year": year,
+        "events": Event.objects.filter(date__year=year, date__lt=today)
+        .all()
+        .order_by("date"),
     }
     return render(request, template_name, context)
 
