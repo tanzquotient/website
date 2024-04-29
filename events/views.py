@@ -35,14 +35,22 @@ def category_detail(request: HttpRequest, category_id: int) -> HttpResponse:
 def archive(request: HttpRequest, year: int | None = None):
     template_name = "events/archive.html"
     today = timezone.now()
+    min_year = Event.objects.order_by("date").first().date.year
     if year is None:
         year = today.year
+    else:
+        if year > today.year:
+            return redirect("events:archive", today.year)
+        if year < min_year:
+            return redirect("events:archive", min_year)
 
     context = {
         "year": year,
         "events": Event.objects.filter(date__year=year, date__lt=today)
         .all()
         .order_by("date"),
+        "max_year": today.year,
+        "min_year": min_year,
     }
     return render(request, template_name, context)
 

@@ -1,7 +1,7 @@
 <div class="text-center">
     <div class="btn-group mb-3 text-center" role="group">
-        <a class="btn btn-outline-secondary" href="{% url 'events:archive' year|add:"-1" %}"><i class="fa-solid fa-angles-left"></i> {{ year|add:"-1" }}</a>
+        <a class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}" href="{% url 'events:archive' year|add:"-1" %}"><i class="fa-solid fa-angles-left"></i> {{ year|add:"-1" }}</a>
         <button class="btn btn-outline-secondary" style="pointer-events: none;"><strong>{{ year }}</strong></button>
-        <a class="btn btn-outline-secondary" href="{% url 'events:archive' year|add:"+1" %}">{{ year|add:"+1" }} <i class="fa-solid fa-angles-right"></i></a>
+        <a class="btn btn-outline-secondary{% if year == max_year %} disabled{% endif %}" href="{% url 'events:archive' year|add:"+1" %}">{{ year|add:"+1" }} <i class="fa-solid fa-angles-right"></i></a>
     </div>
 </div>
