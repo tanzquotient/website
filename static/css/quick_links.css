@@ -26,3 +26,7 @@
     display: flex;
     color: #C51718;
 }
+
+[data-bs-theme="dark"] .quick-link .list-group-flush .list-group-item i {
+    color: #bf5b5d;
+}
