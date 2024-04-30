@@ -1,7 +1,47 @@
 <div class="text-center">
     <div class="btn-group mb-3 text-center" role="group">
-        <a class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}" href="{% url 'events:archive' year|add:"-1" %}"><i class="fa-solid fa-angles-left"></i> {{ year|add:"-1" }}</a>
-        <button class="btn btn-outline-secondary" style="pointer-events: none;"><strong>{{ year }}</strong></button>
-        <a class="btn btn-outline-secondary{% if year == max_year %} disabled{% endif %}" href="{% url 'events:archive' year|add:"+1" %}">{{ year|add:"+1" }} <i class="fa-solid fa-angles-right"></i></a>
+        <a 
+            class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}"
+            href="{% url 'events:archive' min_year %}">
+                <i class="fa-solid fa-angles-left"></i>
+        </a>
+        {% if year > min_year|add:"+1" %}
+            <button 
+                class="btn btn-outline-secondary"
+                style="pointer-events: none;">
+                    ...
+            </button>
+        {% endif %}
+        {% if year > min_year %}
+            <a 
+                class="btn btn-outline-secondary"
+                href="{% url 'events:archive' year|add:"-1" %}">
+                    {{ year|add:"-1" }}
+            </a>
+        {% endif %}
+        <button
+            class="btn btn-secondary"
+            style="pointer-events: none;">
+                <strong>{{ year }}</strong>
+        </button>
+        {% if year < max_year %}
+            <a 
+                class="btn btn-outline-secondary"
+                href="{% url 'events:archive' year|add:"+1" %}">
+                    {{ year|add:"+1" }}
+            </a>
+        {% endif %}
+        {% if year < max_year|add:"-1" %}
+            <button 
+                class="btn btn-outline-secondary"
+                style="pointer-events: none;">
+                    ...
+            </button>
+        {% endif %}
+        <a 
+            class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}"
+            href="{% url 'events:archive' max_year %}">
+                <i class="fa-solid fa-angles-right"></i>
+        </a>
     </div>
 </div>
