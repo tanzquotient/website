@@ -3,20 +3,24 @@ body {
 }
 
 /* Make links red to fit the theme of tanzquotient */
-[data-bs-theme="light"] a:not(.list-group-item) {
-    color: #C51718;
+[data-bs-theme="light"] {
+    a:not(.btn, .dropdown-item, .list-group-item) {
+        color: #C51718;
+    }
+
+    a:hover:not(.btn, .dropdown-item, .list-group-item) {
+        color: #9a1414;
+    }
 }
 
-[data-bs-theme="light"] a:hover:not(.list-group-item) {
-    color: #9a1414;
-}
+[data-bs-theme="dark"] {
+    a:not(.btn, .dropdown-item, .list-group-item) {
+        color: #bf5b5d;
+    }
 
-[data-bs-theme="dark"] a:not(.list-group-item) {
-    color: #bf5b5d;
-}
-
-[data-bs-theme="dark"] a:hover:not(.list-group-item) {
-    color: #bf6a6b;
+    a:hover(.btn, .dropdown-item, .list-group-item) {
+        color: #bf6a6b;
+    }
 }
 
 .text-tanzquotient {
@@ -46,7 +50,8 @@ a.text-tanzquotient:focus {
 
 
 /* Custom banner used for e.g. special events */
-.list-group-item, .banner-container {
+.list-group-item,
+.banner-container {
     overflow: hidden;
 }
 
