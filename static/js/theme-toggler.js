@@ -22,6 +22,8 @@
         }
     }
 
+    setTheme(getPreferredTheme())
+
     const setThemeIcon = theme => {
         document.querySelectorAll('#theme-icon').forEach((themeIcon) => {
             themeIcon.className = (theme === 'light') ? "fa-solid fa-moon fa-fw" : "fa-solid fa-sun fa-fw";
