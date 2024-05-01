@@ -40,12 +40,24 @@ a.text-tanzquotient:focus {
     background-color: #C51718;
 }
 
-.bg-footer-light {
-    background-color: #232323
+[data-bs-theme="light"] {
+    .bg-footer-light {
+        background-color: var(--bs-gray-800);
+    }
+
+    .bg-footer-dark {
+        background-color: var(--bs-gray-900);
+    }
 }
 
-.bg-footer-dark {
-    background-color: #191919;
+[data-bs-theme="dark"] {
+    .bg-footer-light {
+        background-color: var(--bs-gray-800);
+    }
+
+    .bg-footer-dark {
+        background-color: var(--bs-gray-700);
+    }
 }
 
 
