@@ -26,7 +26,7 @@
 
     const setThemeIcon = theme => {
         document.querySelectorAll('#theme-icon').forEach((themeIcon) => {
-            themeIcon.className = (theme === 'light') ? "fa-solid fa-moon fa-fw" : "fa-solid fa-sun fa-fw";
+            themeIcon.className = (theme === 'dark') ? "fa-solid fa-circle-half-stroke" : (theme === 'auto' ? "fa-solid fa-sun fa-fw" : "fa-solid fa-moon fa-fw");
         });
     }
 
@@ -46,7 +46,8 @@
 
         toggles.forEach((toggle) => {
             toggle.addEventListener('click', () => {
-                const theme = (getPreferredTheme() === 'dark') ? 'light' : 'dark'
+                const current = getPreferredTheme();
+                const theme = current === 'dark' ? 'auto' : (current === 'auto' ? 'light' : 'dark')
                 setThemeIcon(theme)
                 setStoredTheme(theme)
                 setTheme(theme)
