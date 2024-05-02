@@ -2,6 +2,14 @@
 {% load qrbill_tags %}
 {% load sekizai_tags %}
 
+{% addtoblock "css" %}
+    <style>
+        .qr-bill > svg {
+            max-width: 100%;
+        }
+    </style>
+{% endaddtoblock %}
+
 <h2 class="my-3">{% trans "Payment options" %}</h2>
 
 <div class="accordion" id="paymentOptionsAccordion">

@@ -10,7 +10,7 @@ from payment.utils import create_qrbill_for_subscription, to_pdf
 def subscription_qr_bill_export_pdf(request: HttpRequest, usi: str):
     subscription = get_object_or_404(Subscribe, usi=usi)
 
-    if subscription.paid or subscription.open_amount.is_zero:
+    if subscription.paid() or subscription.open_amount().is_zero():
         raise Http404
 
     else:
