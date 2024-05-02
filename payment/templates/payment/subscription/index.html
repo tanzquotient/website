@@ -1,17 +1,16 @@
 {% extends "basis.html" %}
 {% load qrbill_tags %}
 {% load i18n %}
+{% load sekizai_tags %}
 
 
-
-{% block lead %}
-<style>
-    .qr-bill > svg {
-        max-width: 100%;
-        background: white;
-    }
-</style>
-{% endblock %}
+{% addtoblock "css" %}
+    <style>
+        .qr-bill > svg {
+            max-width: 100%;
+        }
+    </style>
+{% endaddtoblock %}
 
 {% block main_content %}
     <div class="container">
