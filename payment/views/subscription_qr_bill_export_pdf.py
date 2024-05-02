@@ -6,9 +6,10 @@ from django.shortcuts import get_object_or_404, render
 from courses.models import Subscribe
 from payment.utils import create_qrbill_for_subscription, to_pdf
 
+
 def subscription_qr_bill_export_pdf(request: HttpRequest, usi: str):
     subscription = get_object_or_404(Subscribe, usi=usi)
-    
+
     with TemporaryFile() as pdf_file:
         to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
         length = pdf_file.tell()
