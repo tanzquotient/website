@@ -6,6 +6,8 @@ from tempfile import TemporaryFile
 from qrbill import QRBill
 from qrbill.bill import StructuredAddress
 
+import qrcode
+
 from tq_website import settings
 
 from courses.models import Subscribe
@@ -26,10 +28,19 @@ def create_qrbill_for_subscription(subscribe: Subscribe) -> QRBill:
     )
 
 
-def to_svg_string(qr_bill: QRBill) -> str:
-    with StringIO() as file:
-        qr_bill.as_svg(file)
-        return file.getvalue()
+def to_svg_string(qr_bill: QRBill, qr_only: bool = False) -> str:
+    if qr_only:
+        return qrcode.make(
+            qr_bill.qr_data(),
+            image_factory=qrcode.image.svg.SvgPathFillImage,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            border=1,
+        ).to_string(encoding="unicode")
+
+    else:
+        with StringIO() as file:
+            qr_bill.as_svg(file)
+            return file.getvalue()
 
 
 def to_pdf(qr_bill: QRBill, pdf_file) -> None:
