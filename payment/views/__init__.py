@@ -9,4 +9,5 @@ from .course_payment_export_excel import CoursePaymentExportExcel
 from .course_payment_export_vcard import CoursePaymentExportVCard
 from .courses_as_teacher_list import CoursesAsTeacherList
 from .subscription_payment_view import subscription_payment_view
+from .subscription_qr_bill_export_pdf import subscription_qr_bill_export_pdf
 from .finance import *

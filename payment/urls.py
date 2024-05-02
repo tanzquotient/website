@@ -18,6 +18,7 @@ urlpatterns = [
         name="counterpayment_index",
     ),
     path("payment/<usi:usi>/", subscription_payment_view, name="subscription_payment"),
+    path("payment/<usi:usi>/qr-bill/", subscription_qr_bill_export_pdf, name="subscription_qr_bill_export_pdf"),
     path(
         "auth/courses/", CoursesAsTeacherList.as_view(), name="courses_as_teacher_list"
     ),
