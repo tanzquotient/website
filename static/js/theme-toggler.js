@@ -26,7 +26,7 @@
 
     const setThemeIcon = theme => {
         document.querySelectorAll('#theme-icon').forEach((themeIcon) => {
-            themeIcon.className = (theme === 'dark') ? "fa-solid fa-circle-half-stroke" : (theme === 'auto' ? "fa-solid fa-sun fa-fw" : "fa-solid fa-moon fa-fw");
+            themeIcon.className = (theme === 'dark') ? "fa-solid fa-moon" : (theme === 'auto' ? "fa-solid fa-circle-half-stroke fa-fw" : "fa-solid fa-sun fa-fw");
         });
     }
 
