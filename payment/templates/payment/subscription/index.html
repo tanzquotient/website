@@ -2,8 +2,15 @@
 {% load qrbill_tags %}
 {% load i18n %}
 
-{% block lead %}
 
+
+{% block lead %}
+<style>
+    .qr-bill > svg {
+        max-width: 100%;
+        background: white;
+    }
+</style>
 {% endblock %}
 
 {% block main_content %}
@@ -31,33 +38,13 @@
             </div>
         {% else %}
             <div class="alert alert-warning">
-                <h4 class="alert-heading">{% trans "Open amount" %}</h4>
+                <h4 class="alert-heading">{% trans "Unpaid subscription" %}</h4>
                 <p>
-                    {% trans "Unpaid subscription info" %}
-                    {% trans "If you've got any vouchers, you may apply them below." %}
+                    {% trans "Please use one of the payment methods below to pay for this subscription." %}
                 </p>
                 <hr>
-                <h5 class="alert-heading">{% trans "Bank account coordinates" %}</h5>
-                <p class="mb-0">
-                    {% include "payment/account/info.html" %}
-                </p>
-                <hr>
-                <div class="mt-3">
-                    <h5 class="alert-heading"><span class="badge bg-success">{% trans "NEW" %}</span> {% trans "QR-bill" %}</h5>
-                    <p>
-                        {% trans "Please scan the QR-bill below with your home banking app to fill in the payment details automatically." %}
-                    </p>
-                    <div style="text-align: center;">
-                        {% qrbill_for_subscription subscription %}
-                    </div>
-                </div>
-                <hr>
-                <div class="mt-3">
-                    <h5 class="alert-heading">{% trans "Note" %}</h5>
-                    <p>
-                        {% trans "It can take up to a week for your payment to be acquired by our system." %}
-                    </p>
-                </div>
+                <strong>{% trans "Note" %}:</strong>
+                {% trans "It can take up to a week for your payment to be acquired by our system." %}
             </div>
         {% endif %}
         <div class="rounded-3 overflow-hidden">
@@ -103,27 +90,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="row gy-2 gx-3">
-                                    <div class="col-auto">
-                                        <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}"
-                                               type="text" maxlength="6" minlength="6" required name="voucher_code"
-                                               placeholder="{% trans "Voucher code" %}"
-                                               aria-label="default input example">
-                                        {% for error in voucher_form.voucher_code.errors %}
-                                            <div class="invalid-feedback">
-                                                {{ error }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-sm btn-success">
-                                            {% trans "Redeem Voucher" %}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                            {% include "payment/subscription/snippets/voucher_form.html" %}
                         </td>
                         <td>
                         </td>
@@ -139,5 +106,8 @@
                 </tfoot>
             </table>
         </div>
+        {% if not subscription.paid and not subscription.open_amount.is_zero %}
+            {% include "payment/subscription/snippets/payment_options.html" %}
+        {% endif %}
     </div>
 {% endblock main_content %}

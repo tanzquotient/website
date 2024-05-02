@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="row gy-2 gx-3">
+        <div class="col-auto">
+            <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}"
+                    type="text" maxlength="6" minlength="6" required name="voucher_code"
+                    placeholder="{% trans "Voucher code" %}"
+                    aria-label="Voucher code">
+            {% for error in voucher_form.voucher_code.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-sm btn-success">
+                {% trans "Redeem Voucher" %}
+            </button>
+        </div>
+    </div>
+</form>
