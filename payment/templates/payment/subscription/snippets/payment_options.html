@@ -46,11 +46,9 @@
             <a class="btn btn-success mt-3 mx-1" href="{% url "payment:subscription_qr_bill_export_pdf" subscription.usi %}">
               <i class="fa-solid fa-file-pdf"></i> {% trans "Download" %}
             </a>
-            {% if user.is_staff %}
-              <a class="btn btn-success mt-3 mx-1 d-none" id="shareBtn">
-                <i class="fa-solid fa-share-from-square"></i> {% trans "Share" %}
-              </a>
-            {% endif %}        
+            <a class="btn btn-success mt-3 mx-1 d-none" id="shareBtn">
+              <i class="fa-solid fa-share-from-square"></i> {% trans "Share" %}
+            </a> 
           </div>
       </div>
     </div>
@@ -76,29 +74,28 @@
 
 {% addtoblock "js" %}
 
-  {% if user.is_staff %}
-    <script type="text/javascript">
+  <script type="text/javascript">
 
-      const shareBtn = document.getElementById("shareBtn")
-      if (navigator.canShare)
-        shareBtn.classList.remove("d-none")
+    const shareBtn = document.getElementById("shareBtn")
+    const pdf_placeholder = new File([""], "empty.pdf", { type: "application/pdf" })
+    if (navigator.canShare({ [pdf_placeholder] }))
+      shareBtn.classList.remove("d-none")
 
-      shareBtn.onclick = async () => {
-        const response = await fetch("{% url "payment:subscription_qr_bill_export_pdf" subscription.usi %}");
-        const buffer = await response.arrayBuffer();
+    shareBtn.onclick = async () => {
+      const response = await fetch("{% url "payment:subscription_qr_bill_export_pdf" subscription.usi %}");
+      const buffer = await response.arrayBuffer();
 
-        const pdf = new File([buffer], "QR-bill_{{ subscription.usi }}.pdf", { type: "application/pdf" });
-        const files = [pdf];
+      const pdf = new File([buffer], "QR-bill_{{ subscription.usi }}.pdf", { type: "application/pdf" });
+      const files = [pdf];
 
-        // Share PDF file if supported.
-        if (navigator.canShare({ files }))
-          await navigator.share({
-            files,
-            title: "{% trans "Share this QR-bill" %}",
-            text: "{% trans "Open with your home banking app to pay" %}",
-          });
-      };
-    </script>
-  {% endif %}
+      // Share PDF file if supported.
+      if (navigator.canShare({ files }))
+        await navigator.share({
+          files,
+          title: "{% trans "Share this QR-bill" %}",
+          text: "{% trans "Open with your home banking app to pay" %}",
+        });
+    };
+  </script>
 
 {% endaddtoblock %}
