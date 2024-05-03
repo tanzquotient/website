@@ -80,16 +80,6 @@
                         <td class="text-end">-&nbsp;{{ subscription_payment.amount }}&nbsp;CHF</td>
                     </tr>
                 {% endfor %}
-                {% if not subscription.paid and subscription.open_amount > 0 %}
-                    <tr>
-                        <td></td>
-                        <td>
-                            {% include "payment/subscription/snippets/voucher_form.html" %}
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                {% endif %}
                 </tbody>
                 <tfoot>
                 <tr>
