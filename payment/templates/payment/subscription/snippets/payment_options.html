@@ -77,8 +77,8 @@
   <script type="text/javascript">
 
     const shareBtn = document.getElementById("shareBtn")
-    const pdf_placeholder = new File([""], "empty.pdf", { type: "application/pdf" })
-    if (navigator.canShare({ [pdf_placeholder] }))
+    const pdf_placeholder = [new File([""], "empty.pdf", { type: "application/pdf" })]
+    if (navigator.canShare( {pdf_placeholder} ))
       shareBtn.classList.remove("d-none")
 
     shareBtn.onclick = async () => {
