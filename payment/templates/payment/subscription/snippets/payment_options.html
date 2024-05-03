@@ -76,26 +76,29 @@
 
   <script type="text/javascript">
 
-    const shareBtn = document.getElementById("shareBtn")
-    const pdf_placeholder = [new File([""], "empty.pdf", { type: "application/pdf" })]
-    if (navigator.canShare( {pdf_placeholder} ))
-      shareBtn.classList.remove("d-none")
-
-    shareBtn.onclick = async () => {
+    document.addEventListener("DOMContentLoaded", async() => {
+      
+      const shareBtn = document.getElementById("shareBtn");
       const response = await fetch("{% url "payment:subscription_qr_bill_export_pdf" subscription.usi %}");
       const buffer = await response.arrayBuffer();
 
       const pdf = new File([buffer], "QR-bill_{{ subscription.usi }}.pdf", { type: "application/pdf" });
       const files = [pdf];
 
-      // Share PDF file if supported.
-      if (navigator.canShare({ files }))
-        await navigator.share({
-          files,
-          title: "{% trans "Share this QR-bill" %}",
-          text: "{% trans "Open with your home banking app to pay" %}",
-        });
-    };
+      if (navigator.canShare( {files} ))
+        shareBtn.classList.remove("d-none");
+
+      shareBtn.onclick = async () => {
+        if (navigator.canShare({ files }))
+          await navigator.share({
+            files,
+            title: "{% trans "Share this QR-bill" %}",
+            text: "{% trans "Open with your home banking app to pay" %}",
+          });
+      };
+
+    });
+
   </script>
 
 {% endaddtoblock %}
