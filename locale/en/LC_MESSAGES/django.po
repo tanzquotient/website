@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 17:21+0200\n"
+"POT-Creation-Date: 2024-05-03 09:31+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -840,7 +840,7 @@ msgstr "Course subscription"
 
 #: courses/templates/courses/course_subscribe_form.html:19
 #: courses/templates/courses/course_subscribe_status.html:18
-#: payment/templates/payment/subscription/index.html:68
+#: payment/templates/payment/subscription/index.html:49
 msgid "Info"
 msgstr "Info"
 
@@ -1166,7 +1166,7 @@ msgstr "Currently unknown"
 #: payment/templates/finance/offering/unpaid/index.html:12
 #: payment/templates/payment/counter/details.html:26
 #: payment/templates/payment/courses/confirm.html:24
-#: payment/templates/payment/subscription/index.html:78
+#: payment/templates/payment/subscription/index.html:59
 msgid "Course"
 msgstr "Course"
 
@@ -1514,7 +1514,7 @@ msgstr "Add salary payment info (only required for teachers and helpers)"
 #: courses/templates/courses/snippets/user_profile_form_payment.html:9
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
 #: payment/services/offering_finance_teachers.py:37
-#: payment/templates/payment/subscription/index.html:56
+#: payment/templates/payment/subscription/index.html:40
 msgid "Note"
 msgstr "Note"
 
@@ -1736,7 +1736,7 @@ msgstr "To see the payment details, pay with the QR-bill and apply vouchers:"
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
-#: payment/templates/payment/subscription/index.html:97
+#: payment/templates/payment/subscription/index.html:78
 msgid "Payment"
 msgstr "Payment"
 
@@ -1812,7 +1812,7 @@ msgid "Go to"
 msgstr "Go to"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:43
-#: payment/templates/payment/subscription/index.html:58
+#: payment/templates/payment/subscription/index.html:41
 msgid "It can take up to a week for your payment to be acquired by our system."
 msgstr ""
 "It can take up to a week for your payment to be acquired by our system."
@@ -1956,7 +1956,7 @@ msgstr "Event Categories"
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:9
 #: payment/templates/finance/account/detail.html:41
-#: payment/templates/payment/subscription/index.html:98
+#: payment/templates/payment/subscription/index.html:79
 msgid "Date"
 msgstr "Date"
 
@@ -2126,7 +2126,8 @@ msgid "Visit partner"
 msgstr "Visit partner"
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/subscription/index.html:90
+#: payment/templates/payment/subscription/index.html:71
+#: payment/templates/payment/subscription/snippets/payment_options.html:19
 msgid "Voucher"
 msgstr "Voucher"
 
@@ -2339,7 +2340,7 @@ msgstr "Difference"
 #: payment/templates/finance/offering/unpaid/index.html:13
 #: payment/templates/payment/counter/details.html:36
 #: payment/templates/payment/courses/confirm.html:33
-#: payment/templates/payment/subscription/index.html:135
+#: payment/templates/payment/subscription/index.html:86
 msgid "Open Amount"
 msgstr "Open Amount"
 
@@ -2467,7 +2468,8 @@ msgid "Participants will show up here, once they have been confirmed."
 msgstr "Participants will show up here, once they have been confirmed."
 
 #: payment/templates/payment/courses/course.html:46
-#: payment/templates/payment/subscription/index.html:23
+#: payment/templates/payment/subscription/index.html:24
+#: payment/templates/payment/subscription/snippets/payment_options.html:47
 #: survey/templates/survey/components/download.html:3
 #: templates/snippets/download.html:3
 msgid "Download"
@@ -2559,19 +2561,19 @@ msgstr ""
 msgid "Save"
 msgstr "Save"
 
-#: payment/templates/payment/subscription/index.html:11
+#: payment/templates/payment/subscription/index.html:12
 msgid "Payment Status"
 msgstr "Payment Status"
 
-#: payment/templates/payment/subscription/index.html:14
+#: payment/templates/payment/subscription/index.html:15
 msgid "Voucher applied"
 msgstr "Voucher applied"
 
-#: payment/templates/payment/subscription/index.html:16
+#: payment/templates/payment/subscription/index.html:17
 msgid "The voucher has been successfully applied (see details below)."
 msgstr "The voucher has been successfully applied (see details below)."
 
-#: payment/templates/payment/subscription/index.html:21
+#: payment/templates/payment/subscription/index.html:22
 msgid ""
 "The voucher used was valued more than the remaining amount for this course. "
 "Download the voucher for the remainder by clicking the following button."
@@ -2579,70 +2581,100 @@ msgstr ""
 "The voucher used was valued more than the open amount for this course. "
 "Download the voucher for the remainder by clicking the following button."
 
-#: payment/templates/payment/subscription/index.html:30
+#: payment/templates/payment/subscription/index.html:31
 msgid "This subscription has been fully paid. Thank you!"
 msgstr "This subscription has been fully paid. Thank you!"
 
-#: payment/templates/payment/subscription/index.html:34
-msgid "Open amount"
-msgstr "Open amount"
-
-#: payment/templates/payment/subscription/index.html:36
-msgid "Unpaid subscription info"
-msgstr "Please transfer the open course fee to the following account."
+#: payment/templates/payment/subscription/index.html:35
+#, fuzzy
+#| msgid "Unpaid subscriptions"
+msgid "Unpaid subscription"
+msgstr "Unpaid subscription"
 
 #: payment/templates/payment/subscription/index.html:37
-msgid "If you've got any vouchers, you may apply them below."
-msgstr "If you've got any vouchers, you may apply them below."
+msgid ""
+"Please use one of the payment methods below to pay for this subscription."
+msgstr ""
+"Please use one of the payment methods below to pay for this subscription."
 
-#: payment/templates/payment/subscription/index.html:40
+#: payment/templates/payment/subscription/index.html:48
+msgid "Item"
+msgstr "Item"
+
+#: payment/templates/payment/subscription/index.html:50
+#: payment/templates/payment/subscription/index.html:72
+msgid "Value"
+msgstr "Value"
+
+#: payment/templates/payment/subscription/index.html:55
+msgid "Dance course"
+msgstr "Dance course"
+
+#: payment/templates/payment/subscription/index.html:63
+msgid "Participant"
+msgstr "Participant"
+
+#: payment/templates/payment/subscription/index.html:72
+msgid "Code"
+msgstr "Code"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:13
+#, fuzzy
+#| msgid "Payment Details"
+msgid "Payment options"
+msgstr "Payment options"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:31
+msgid "NEW"
+msgstr "NEW"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:31
+msgid "QR-bill"
+msgstr "QR-bill"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:37
+#, fuzzy
+#| msgid ""
+#| "Please scan the QR-bill below with your home banking app to fill in the "
+#| "payment details automatically."
+msgid ""
+"Please scan/open the QR-bill below with your home banking app to fill in the "
+"payment details automatically."
+msgstr ""
+"Please scan/open the QR-bill below with your home banking app to fill in the "
+"payment details automatically."
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:51
+msgid "Share"
+msgstr "Share"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:61
+msgid "Bank transfer"
+msgstr "Bank transfer"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:66
 #, fuzzy
 #| msgid "Bank account"
 msgid "Bank account coordinates"
 msgstr "Bank account coordinates"
 
-#: payment/templates/payment/subscription/index.html:46
-msgid "NEW"
-msgstr "NEW"
+#: payment/templates/payment/subscription/snippets/payment_options.html:70
+msgid "Amount"
+msgstr "Amount"
 
-#: payment/templates/payment/subscription/index.html:46
-msgid "QR-bill"
-msgstr "QR-bill"
+#: payment/templates/payment/subscription/snippets/payment_options.html:97
+msgid "Share this QR-bill"
+msgstr "Share this QR-bill"
 
-#: payment/templates/payment/subscription/index.html:48
-msgid ""
-"Please scan the QR-bill below with your home banking app to fill in the "
-"payment details automatically."
-msgstr ""
-"Please scan the QR-bill below with your home banking app to fill in the "
-"payment details automatically."
+#: payment/templates/payment/subscription/snippets/payment_options.html:98
+msgid "Open with your home banking app to pay"
+msgstr "Open with your home banking app to pay"
 
-#: payment/templates/payment/subscription/index.html:67
-msgid "Item"
-msgstr "Item"
-
-#: payment/templates/payment/subscription/index.html:69
-#: payment/templates/payment/subscription/index.html:91
-msgid "Value"
-msgstr "Value"
-
-#: payment/templates/payment/subscription/index.html:74
-msgid "Dance course"
-msgstr "Dance course"
-
-#: payment/templates/payment/subscription/index.html:82
-msgid "Participant"
-msgstr "Participant"
-
-#: payment/templates/payment/subscription/index.html:91
-msgid "Code"
-msgstr "Code"
-
-#: payment/templates/payment/subscription/index.html:112
+#: payment/templates/payment/subscription/snippets/voucher_form.html:9
 msgid "Voucher code"
 msgstr "Voucher code"
 
-#: payment/templates/payment/subscription/index.html:122
+#: payment/templates/payment/subscription/snippets/voucher_form.html:19
 msgid "Redeem Voucher"
 msgstr "Redeem Voucher"
 
@@ -3111,6 +3143,15 @@ msgstr "Side content"
 msgid "The IBAN is invalid."
 msgstr "The IBAN is invalid."
 
+#~ msgid "Open amount"
+#~ msgstr "Open amount"
+
+#~ msgid "Unpaid subscription info"
+#~ msgstr "Please transfer the open course fee to the following account."
+
+#~ msgid "If you've got any vouchers, you may apply them below."
+#~ msgstr "If you've got any vouchers, you may apply them below."
+
 #~ msgid ""
 #~ "You can now pay your subscriptions using the QR-bill. Follow the payment "
 #~ "link of your unpaid subscriptions below to check it out."
@@ -3233,9 +3274,6 @@ msgstr "The IBAN is invalid."
 
 #~ msgid "USI"
 #~ msgstr "USI"
-
-#~ msgid "Amount"
-#~ msgstr "Amount"
 
 #~ msgid "Amount Due"
 #~ msgstr "Amount Due"
