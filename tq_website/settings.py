@@ -101,7 +101,7 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1  # Needed for DjangoCMS
 DEPLOYMENT_DOMAIN = environ["TQ_DEPLOYMENT_DOMAIN"]
-ALLOWED_HOSTS = environ["TQ_ALLOWED_HOSTS"].split(",")
+ALLOWED_HOSTS = ["*"] if DEBUG else environ["TQ_ALLOWED_HOSTS"].split(",")
 CSRF_TRUSTED_ORIGINS = [f"https://{domain}" for domain in ALLOWED_HOSTS]
 INTERNAL_IPS = ["127.0.0.1", "::1"]  # loopback
 USE_X_FORWARDED_HOST = True  # This should be set to true since we use NGINX as a proxy

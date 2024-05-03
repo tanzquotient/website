@@ -15,11 +15,11 @@
 <div class="accordion" id="paymentOptionsAccordion">
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#voucherCollapse" aria-expanded="true" aria-controls="voucherCollapse">
-          {% trans "Voucher" %}
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#voucherCollapse" aria-expanded="true" aria-controls="voucherCollapse">
+          <i class="fa-solid fa-ticket"></i>&nbsp;{% trans "Voucher" %}
       </button>
     </h2>
-    <div id="voucherCollapse" class="accordion-collapse collapse show" data-bs-parent="#paymentOptionsAccordion">
+    <div id="voucherCollapse" class="accordion-collapse collapse" data-bs-parent="#paymentOptionsAccordion">
       <div class="accordion-body">
           {% include "payment/subscription/snippets/voucher_form.html" %}
       </div>
@@ -27,11 +27,11 @@
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#qrBillCollapse" aria-expanded="false" aria-controls="qrBillCollapse">
-          <span class="badge bg-success">{% trans "NEW" %}</span>&nbsp{% trans "QR-bill" %}
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#qrBillCollapse" aria-expanded="false" aria-controls="qrBillCollapse">
+         <i class="fa-solid fa-qrcode"></i>&nbsp;{% trans "QR-bill" %}&nbsp;<span class="badge bg-success">{% trans "NEW" %}</span>
       </button>
     </h2>
-    <div id="qrBillCollapse" class="accordion-collapse collapse" data-bs-parent="#paymentOptionsAccordion">
+    <div id="qrBillCollapse" class="accordion-collapse collapse show" data-bs-parent="#paymentOptionsAccordion">
       <div class="accordion-body">
           <p>
               {% trans "Please scan/open the QR-bill below with your home banking app to fill in the payment details automatically." %}
@@ -49,7 +49,7 @@
             {% if user.is_staff %}
               <a class="btn btn-success mt-3 mx-1 d-none" id="shareBtn">
                 <i class="fa-solid fa-share-from-square"></i> {% trans "Share" %}
-              </a>    
+              </a>
             {% endif %}        
           </div>
       </div>
@@ -58,7 +58,7 @@
   <div class="accordion-item">
     <h2 class="accordion-header">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bankTransferCollapse" aria-expanded="false" aria-controls="bankTransferCollapse">
-          {% trans "Bank transfer" %}
+          <i class="fa-solid fa-money-bill-transfer"></i>&nbsp;{% trans "Bank transfer" %}
       </button>
     </h2>
     <div id="bankTransferCollapse" class="accordion-collapse collapse" data-bs-parent="#paymentOptionsAccordion">
@@ -100,5 +100,5 @@
       };
     </script>
   {% endif %}
-  
+
 {% endaddtoblock %}
