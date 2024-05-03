@@ -2655,8 +2655,8 @@ msgstr "Bank transfer"
 #: payment/templates/payment/subscription/snippets/payment_options.html:66
 #, fuzzy
 #| msgid "Bank account"
-msgid "Bank account coordinates"
-msgstr "Bank account coordinates"
+msgid "Bank account details"
+msgstr "Bank account details"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:70
 msgid "Amount"
