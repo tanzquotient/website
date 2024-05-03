@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 10:35+0200\n"
+"POT-Creation-Date: 2024-05-03 15:33+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -843,7 +843,7 @@ msgstr "Kursanmeldung"
 
 #: courses/templates/courses/course_subscribe_form.html:19
 #: courses/templates/courses/course_subscribe_status.html:18
-#: payment/templates/payment/subscription/index.html:49
+#: payment/templates/payment/subscription/index.html:35
 msgid "Info"
 msgstr "Infos"
 
@@ -1156,7 +1156,7 @@ msgstr "Zur Zeit unbekannt"
 #: payment/templates/finance/offering/unpaid/index.html:12
 #: payment/templates/payment/counter/details.html:26
 #: payment/templates/payment/courses/confirm.html:24
-#: payment/templates/payment/subscription/index.html:59
+#: payment/templates/payment/subscription/index.html:45
 msgid "Course"
 msgstr "Kurs"
 
@@ -1506,7 +1506,7 @@ msgstr "Zahlungsdaten eingeben (Nur für Lehrer:innen und Helfer:innen nötig)"
 #: courses/templates/courses/snippets/user_profile_form_payment.html:9
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
 #: payment/services/offering_finance_teachers.py:37
-#: payment/templates/payment/subscription/index.html:40
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:19
 msgid "Note"
 msgstr "Bemerkung"
 
@@ -1699,6 +1699,7 @@ msgid "free of charge"
 msgstr "kostenlos"
 
 #: courses/templates/user/snippets/subscription.html:66
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:10
 msgid "Overdue payment"
 msgstr "Zahlung überfällig"
 
@@ -1724,7 +1725,7 @@ msgstr ""
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
-#: payment/templates/payment/subscription/index.html:78
+#: payment/templates/payment/subscription/index.html:64
 msgid "Payment"
 msgstr "Bezahlung"
 
@@ -1799,7 +1800,7 @@ msgid "Go to"
 msgstr "Gehe zu"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:43
-#: payment/templates/payment/subscription/index.html:41
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:20
 msgid "It can take up to a week for your payment to be acquired by our system."
 msgstr ""
 "Es kann bis zu einer Woche dauern, bis deine Zahlung von unserem System "
@@ -1944,7 +1945,7 @@ msgstr "Event Kategorien"
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:9
 #: payment/templates/finance/account/detail.html:41
-#: payment/templates/payment/subscription/index.html:79
+#: payment/templates/payment/subscription/index.html:65
 msgid "Date"
 msgstr "Datum"
 
@@ -2112,7 +2113,7 @@ msgid "Visit partner"
 msgstr "Zum Partner"
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/subscription/index.html:71
+#: payment/templates/payment/subscription/index.html:57
 #: payment/templates/payment/subscription/snippets/payment_options.html:19
 msgid "Voucher"
 msgstr "Gutschein"
@@ -2328,7 +2329,7 @@ msgstr "Differenz"
 #: payment/templates/finance/offering/unpaid/index.html:13
 #: payment/templates/payment/counter/details.html:36
 #: payment/templates/payment/courses/confirm.html:33
-#: payment/templates/payment/subscription/index.html:86
+#: payment/templates/payment/subscription/index.html:72
 msgid "Open Amount"
 msgstr "Offener Betrag"
 
@@ -2569,37 +2570,24 @@ msgstr ""
 "Der Wert des verwendeten Gutscheins war grösser als der offene Kursbetrag."
 "Lade den Gutschein mit dem Restwert jetzt herunter."
 
-#: payment/templates/payment/subscription/index.html:31
-msgid "This subscription has been fully paid. Thank you!"
-msgstr "Der Kurs wurde vollständig bezahlt, dankeschön!"
-
-#: payment/templates/payment/subscription/index.html:35
-msgid "Unpaid subscription"
-msgstr "Unbezahlte Anmeldung"
-
-#: payment/templates/payment/subscription/index.html:37
-msgid ""
-"Please use one of the payment methods below to pay for this subscription."
-msgstr "Bitte verwende eine der untenstehenden Zahlungsmöglichkeiten um diesen Kurs zu bezahlen."
-
-#: payment/templates/payment/subscription/index.html:48
+#: payment/templates/payment/subscription/index.html:34
 msgid "Item"
 msgstr "Posten"
 
-#: payment/templates/payment/subscription/index.html:50
-#: payment/templates/payment/subscription/index.html:72
+#: payment/templates/payment/subscription/index.html:36
+#: payment/templates/payment/subscription/index.html:58
 msgid "Value"
 msgstr "Wert"
 
-#: payment/templates/payment/subscription/index.html:55
+#: payment/templates/payment/subscription/index.html:41
 msgid "Dance course"
 msgstr "Tanzkurs"
 
-#: payment/templates/payment/subscription/index.html:63
+#: payment/templates/payment/subscription/index.html:49
 msgid "Participant"
 msgstr "Teilnehmer:in"
 
-#: payment/templates/payment/subscription/index.html:72
+#: payment/templates/payment/subscription/index.html:58
 msgid "Code"
 msgstr "Code"
 
@@ -2623,29 +2611,44 @@ msgstr ""
 "Bitte scannen/offen die QR-Rechnung mit deiner Banking-App um die "
 "Zahlungsinfos automatisch auszufüllen."
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:51
+#: payment/templates/payment/subscription/snippets/payment_options.html:50
 msgid "Share"
 msgstr "Teilen"
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:61
+#: payment/templates/payment/subscription/snippets/payment_options.html:59
 msgid "Bank transfer"
 msgstr "Überweisung"
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:66
+#: payment/templates/payment/subscription/snippets/payment_options.html:64
 msgid "Bank account details"
 msgstr "Bankverbindung"
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:70
+#: payment/templates/payment/subscription/snippets/payment_options.html:68
 msgid "Amount"
 msgstr "Betrag"
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:97
+#: payment/templates/payment/subscription/snippets/payment_options.html:95
 msgid "Share this QR-bill"
 msgstr "Teile diese QR-Rechnung"
 
-#: payment/templates/payment/subscription/snippets/payment_options.html:98
+#: payment/templates/payment/subscription/snippets/payment_options.html:96
 msgid "Open with your home banking app to pay"
 msgstr "Öffne die PDF mit deiner Banking-App"
+
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:5
+msgid "This subscription has been fully paid. Thank you!"
+msgstr "Der Kurs wurde vollständig bezahlt, dankeschön!"
+
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:13
+msgid "Unpaid subscription"
+msgstr "Unbezahlte Anmeldung"
+
+#: payment/templates/payment/subscription/snippets/payment_state_alert.html:16
+msgid ""
+"Please use one of the payment methods below to pay for this subscription."
+msgstr ""
+"Bitte verwende eine der untenstehenden Zahlungsmöglichkeiten um diesen Kurs "
+"zu bezahlen."
 
 #: payment/templates/payment/subscription/snippets/voucher_form.html:9
 msgid "Voucher code"
