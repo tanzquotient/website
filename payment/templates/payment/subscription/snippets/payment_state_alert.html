@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% if subscription.paid or subscription.open_amount.is_zero %}
+    <div class="alert alert-success">
+        {% translate "This subscription has been fully paid. Thank you!" %}
+    </div>
+{% else %}
+    {% if subscription in user.profile.subscriptions_with_overdue_payment %}
+        <div class="alert alert-danger">
+            <h4 class="alert-heading">{% trans "Overdue payment" %}</h4>
+    {% else %}
+        <div class="alert alert-warning">
+            <h4 class="alert-heading">{% trans "Unpaid subscription" %}</h4>
+    {% endif %}
+        <p>
+            {% trans "Please use one of the payment methods below to pay for this subscription." %}
+        </p>
+        <hr>
+        <strong>{% trans "Note" %}:</strong>
+        {% trans "It can take up to a week for your payment to be acquired by our system." %}
+    </div>
+{% endif %}
