@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 09:31+0200\n"
+"POT-Creation-Date: 2024-05-03 10:35+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2625,12 +2625,12 @@ msgid "Payment options"
 msgstr "Payment options"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:31
-msgid "NEW"
-msgstr "NEW"
-
-#: payment/templates/payment/subscription/snippets/payment_options.html:31
 msgid "QR-bill"
 msgstr "QR-bill"
+
+#: payment/templates/payment/subscription/snippets/payment_options.html:31
+msgid "NEW"
+msgstr "NEW"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:37
 #, fuzzy

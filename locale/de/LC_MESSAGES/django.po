@@ -1958,7 +1958,7 @@ msgstr "Dieses Jahr"
 
 #: events/templates/events/archive.html:14
 msgid "No events in the archive."
-msgstr ""
+msgstr "Keine Events im Archiv."
 
 #: events/templates/events/event_detail.html:10
 msgid "Event details"
@@ -2574,15 +2574,13 @@ msgid "This subscription has been fully paid. Thank you!"
 msgstr "Der Kurs wurde vollständig bezahlt, dankeschön!"
 
 #: payment/templates/payment/subscription/index.html:35
-#, fuzzy
-#| msgid "Unpaid subscriptions"
 msgid "Unpaid subscription"
 msgstr "Unbezahlte Anmeldung"
 
 #: payment/templates/payment/subscription/index.html:37
 msgid ""
 "Please use one of the payment methods below to pay for this subscription."
-msgstr ""
+msgstr "Bitte verwende eine der untenstehenden Zahlungsmöglichkeiten um diesen Kurs zu bezahlen."
 
 #: payment/templates/payment/subscription/index.html:48
 msgid "Item"
@@ -2607,21 +2605,17 @@ msgstr "Code"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:13
 msgid "Payment options"
-msgstr ""
-
-#: payment/templates/payment/subscription/snippets/payment_options.html:31
-msgid "NEW"
-msgstr "NEW"
+msgstr "Zahlungsmöglichkeiten"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:31
 msgid "QR-bill"
 msgstr "QR-Rechnung"
 
+#: payment/templates/payment/subscription/snippets/payment_options.html:31
+msgid "NEW"
+msgstr "NEW"
+
 #: payment/templates/payment/subscription/snippets/payment_options.html:37
-#, fuzzy
-#| msgid ""
-#| "Please scan the QR-bill below with your home banking app to fill in the "
-#| "payment details automatically."
 msgid ""
 "Please scan/open the QR-bill below with your home banking app to fill in the "
 "payment details automatically."
@@ -2631,11 +2625,11 @@ msgstr ""
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:51
 msgid "Share"
-msgstr ""
+msgstr "Teilen"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:61
 msgid "Bank transfer"
-msgstr ""
+msgstr "Überweisung"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:66
 msgid "Bank account details"
@@ -2647,11 +2641,11 @@ msgstr "Betrag"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:97
 msgid "Share this QR-bill"
-msgstr ""
+msgstr "Teile diese QR-Rechnung"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:98
 msgid "Open with your home banking app to pay"
-msgstr ""
+msgstr "Öffne die PDF mit deiner Banking-App"
 
 #: payment/templates/payment/subscription/snippets/voucher_form.html:9
 msgid "Voucher code"
