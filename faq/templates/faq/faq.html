@@ -2,7 +2,7 @@
     {% for q in question_group.questions.displayed %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading-question-{{ q.id }}">
-            <button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-question-{{ q.id }}" aria-expanded="false" aria-controls="collapse-question-{{ q.id }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-question-{{ q.id }}" aria-expanded="false" aria-controls="collapse-question-{{ q.id }}">
                 <strong>{{ q.question_text }}</strong>
             </button>
         </h2>
