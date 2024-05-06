@@ -1,0 +1,58 @@
+Hallo {{ first_name }}
+
+Deine Teilnahme am Kurs {{ course }} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich!
+
+Du nimmst alleine an einem Partnerkurs teil bzw. das System weiss nichts von deinem/r Partner/in.
+Solltest du keine spezielle Abmachung mit dem TQ haben, dann melde dich bitte bei uns!
+In manchen (gratis) Workshops machen wir kein Matching.
+
+Nochmals alle Infos zum Kurs:
+{{ course_info|safe }}
+
+Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
+Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem TQ-Profil:
+{{ payment_url }}
+
+Wir freuen uns auf dich!
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+P.S.: Tanzen ist ein Kontaktsport.
+Da man sich sehr nahe kommt ist es wichtig sich an einige Regeln zu halten:
+1) Wir möchten, dass alle sich wohl fühlen. Achte auf deine und die Grenzen deines Partners oder deiner Partnerin.
+   Hier findest du weitere Informationen: https://tanzquotient.org/de/awareness/
+2) Benutze Deodorant, aber übertreibe nicht mit Parfüm.
+3) Stelle sicher, dass du einen frischen Atem hast. Bedenke, dass Kaugummi kauen deine:n Tanzpartner:in stören kann.
+
+
+____________
+
+
+Hi {{ first_name }},
+
+You are now officially registered for the course {{ course }}. Deregistration from the course is no longer possible!
+
+You have enrolled as a single for a partner course. Please contact us if you have no special agreement with somebody from the TQ!
+In some (free) workshops we don't do any matching.
+
+A summary of the course details:
+{{ course_info|safe }}
+
+Please transfer the course price before the course starts or within one week.
+You can find the payment details and payment options in your TQ profile:
+{{ payment_url }}
+
+We're looking forward to seeing you there!
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us at anmeldungen@tanzquotient.org
+
+P.S.: Dancing is a contact sport. 
+Since you get close to your partner it is important to abide to certain rules: 
+1) We want everyone to feel comfortable. Respect your and your partner's boundaries.
+   You can find more information here: https://tanzquotient.org/en/awareness/
+2) Use deodorant, but do not drown yourself in perfume.
+3) Make sure you have fresh breath, but remember that chewing gum might disturb your dance partner.

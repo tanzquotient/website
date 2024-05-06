@@ -1,0 +1,25 @@
+Hallo {{first_name}}
+
+Du hast kürzlich eine Zahlungs-Erinnerung erhalten für den Kurs {{course}}.
+
+Das war ein Versehen, deine Bezahlung ist bei uns korrekt registriert.
+
+Wir entschuldigen uns für den Fehler.
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+______________
+
+Hi {{first_name}},
+
+Recently you received a payment reminder for course {{course}}. 
+
+The reminder was a mistake from our side, your payment is successfully registered in our system.
+
+Sorry for the error.
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
