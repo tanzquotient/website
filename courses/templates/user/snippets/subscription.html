@@ -3,7 +3,7 @@
 
 <div class="accordion-item" id="accordion-item-id-{{ subscription.course.id }}">
     <h2 class="accordion-header accordion-header-subscription" id="accordion-header-subscription-id-{{ subscription.course.id }}">
-        <button class="accordion-button bg-light collapsed accordion-button-subscription d-block" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-subcription-course-id-{{ subscription.course.id }}" aria-expanded="false" aria-controls="accordion-subcription-course-id-{{ subscription.course.id }}">
+        <button class="accordion-button collapsed accordion-button-subscription d-block" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-subcription-course-id-{{ subscription.course.id }}" aria-expanded="false" aria-controls="accordion-subcription-course-id-{{ subscription.course.id }}">
             <div class="row align-content-center">
                 <div class="col">
                     <b>{{ subscription.course.type }}</b>
@@ -12,13 +12,15 @@
                     {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
                 </div>
                 <div class="col">
-                    {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
+                    <div class="float-end">
+                        {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
+                    </div>
                 </div>
               </div>            
         </button>        
     </h2>
     <div id="accordion-subcription-course-id-{{ subscription.course.id }}" class="accordion-collapse collapse accordion-subscrption-body" aria-labelledby="accordion-header-subscription-id-{{ subscription.course.id }}" data-bs-parent="#accordion-item-id-{{ subscription.course.id }}">
-        <div class="accordion-body fs-6 py-4">
+        <div class="accordion-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
                     <p>

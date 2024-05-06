@@ -1,5 +1,7 @@
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load static %}
+
 
 {% block head_title %}
     {% trans "My Courses" %}
@@ -32,20 +34,24 @@
     {% endif %}
 
     <div class="row mb-3">
-        <h3 class="col-sm-11">{% trans "My Courses" %}</h3>
-        <a href="{% url "user_ical" user.id %}?token={{ token }}">
-            {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
-        </a>
+        <div class="col-sm-11">
+            <h3>{% trans "My Courses" %}</h3>
+            <a href="{% url "user_ical" user.id %}?token={{ token }}">
+                {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
+            </a>
+        </div>        
     </div>
     {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
     {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
         {% if subscriptions %}
-            <button id="expandAll" class="btn btn-primary user-course-expand-button" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">Expand All</button>
-            <button id="collapseAll" class="btn btn-primary" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">Collapse All</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="expandAll" class="btn btn-link me-1" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Expand All" %}</button>
+                <button id="collapseAll" class="btn btn-link" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Collapse All" %}</button>
+            </div>
         {% endif %}
 
-        <div class="accordion user-course-accordion" id="accordionExample">
+        <div class="accordion mt-2 mb-2 accordion-user-course" id="accordion-subscription">
             {% for subscription in subscriptions %}
                 {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user only %}
             {% empty %}
@@ -60,4 +66,8 @@
         </a>
     </p>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "subscriptions_accordions.js" %}"></script>
 {% endblock %}
