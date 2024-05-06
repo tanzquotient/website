@@ -37,9 +37,5 @@
             <a class="nav-link" href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Log in" %}</a>
         </li>
     {% endif %}
-        <li class="nav-item">
-            <a class="nav-link" href="#" id="theme-toggle">
-                <i id="theme-icon"></i>
-            </a>
-        </li>
+    {% include "menu/desktop_colortheme_chooser.html" %}
 </ul>

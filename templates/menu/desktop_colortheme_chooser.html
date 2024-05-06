@@ -1,0 +1,13 @@
+{% load i18n menu_tags %}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button"
+       data-bs-toggle="dropdown" aria-expanded="false">
+       <i id="theme-icon" class="fa-solid fa-fw"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="auto" href="#"><i class="fa-solid fa-fw fa-circle-half-stroke"></i> {% trans "Auto" %}</a></li>
+        <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="light" href="#"><i class="fa-solid fa-fw fa-sun"></i> {% trans "Light" %}</a></li>
+        <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="dark" href="#"><i class="fa-solid fa-fw fa-moon"></i> {% trans "Dark" %}</a></li>
+    </ul>
+</li>
