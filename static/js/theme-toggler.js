@@ -3,6 +3,7 @@
 
     const getStoredTheme = () => localStorage.getItem('theme')
     const setStoredTheme = theme => localStorage.setItem('theme', theme)
+    const icon_classes = {auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon'}
 
     const getPreferredTheme = () => {
         const storedTheme = getStoredTheme()
@@ -26,7 +27,8 @@
 
     const setThemeIcon = theme => {
         document.querySelectorAll('#theme-icon').forEach((themeIcon) => {
-            themeIcon.className = (theme === 'dark') ? "fa-solid fa-moon" : (theme === 'auto' ? "fa-solid fa-circle-half-stroke fa-fw" : "fa-solid fa-sun fa-fw");
+            themeIcon.classList.remove(...Array.from(icon_classes))
+            themeIcon.classList.add(icon_classes[theme])
         });
     }
 
@@ -40,14 +42,13 @@
 
     window.addEventListener('DOMContentLoaded', () => {
 
-        const toggles = document.querySelectorAll('#theme-toggle')
+        const toggles = document.querySelectorAll('.dropdown-item.color-theme-selector')
         setTheme(getPreferredTheme())
         setThemeIcon(getPreferredTheme())
 
         toggles.forEach((toggle) => {
             toggle.addEventListener('click', () => {
-                const current = getPreferredTheme();
-                const theme = current === 'dark' ? 'auto' : (current === 'auto' ? 'light' : 'dark')
+                const theme = toggle.getAttribute("data-bs-color-theme")
                 setThemeIcon(theme)
                 setStoredTheme(theme)
                 setTheme(theme)
