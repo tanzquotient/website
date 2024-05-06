@@ -3,12 +3,13 @@ from typing import Iterable
 from django.db.models import (
     CharField,
     BooleanField,
-    ImageField,
     QuerySet,
     PositiveSmallIntegerField,
 )
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+from django_resized import ResizedImageField
+from django.utils.translation import gettext_lazy as _
 
 from events.models import Event
 from utils import TranslationUtils
@@ -16,7 +17,12 @@ from utils import TranslationUtils
 
 class EventCategory(TranslatableModel):
     is_featured = BooleanField(default=False)
-    image = ImageField(blank=True, null=True)
+    image = ResizedImageField(blank=True, null=True, size=[720, 405],
+        crop=["middle", "center"],
+        quality=75,
+        help_text=_(
+            "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
+        ),)
     position = PositiveSmallIntegerField("Position", default=0)
     translations = TranslatedFields(
         name=CharField(max_length=255, blank=False, null=False),
