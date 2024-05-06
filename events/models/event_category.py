@@ -17,12 +17,16 @@ from utils import TranslationUtils
 
 class EventCategory(TranslatableModel):
     is_featured = BooleanField(default=False)
-    image = ResizedImageField(blank=True, null=True, size=[720, 405],
+    image = ResizedImageField(
+        blank=True,
+        null=True,
+        size=[720, 405],
         crop=["middle", "center"],
         quality=75,
         help_text=_(
             "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
-        ),)
+        ),
+    )
     position = PositiveSmallIntegerField("Position", default=0)
     translations = TranslatedFields(
         name=CharField(max_length=255, blank=False, null=False),

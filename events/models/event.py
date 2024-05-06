@@ -6,7 +6,6 @@ from django.db.models import (
     DateField,
     DecimalField,
     ForeignKey,
-    ImageField,
     CharField,
     IntegerField,
     SET_NULL,
@@ -17,6 +16,7 @@ from django.utils.translation import gettext as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
+from django_resized import ResizedImageField
 
 from courses.models import Room
 from courses.services import format_prices
@@ -66,8 +66,13 @@ class Event(TranslatableModel):
         default=True,
         help_text="Defines if this event should be displayed on the website.",
     )
-    image = ImageField(
-        blank=True, null=True, help_text="Advertising image for this event."
+    image = ResizedImageField(
+        blank=True,
+        null=True,
+        size=[720, 405],
+        crop=["middle", "center"],
+        quality=75,
+        help_text="Advertising image for this event. Will be center cropped and rescaled to 720x405px (16:9) upon upload.",
     )
     registration_enabled = BooleanField(
         default=False,
