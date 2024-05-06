@@ -33,6 +33,7 @@ svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
 reportlab==4.2.0                # For generating PDFs and graphics
 pyyaml==6.0.1                   # Used for generating environment variable file
 qrbill==1.1.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
+django-resized==1.0.2           # Used to resize images on save of ImageField
 
 # SSH
 paramiko==3.4.0                 # Used to get finance files from PostFinance
