@@ -59,6 +59,9 @@ class UserEditForm(forms.Form):
     )
 
     picture = forms.ImageField(required=False)
+    picture.help_text = _(
+        "This image will be center cropped and rescaled to 512x512px upon upload."
+    )
     about_me = forms.CharField(widget=CKEditorWidget, required=False)
     about_me.help_text = _(
         "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"

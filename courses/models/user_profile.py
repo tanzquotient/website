@@ -10,7 +10,6 @@ from django.db.models import (
     Model,
     IntegerField,
     BooleanField,
-    ImageField,
     DateField,
     DecimalField,
     OneToOneField,
@@ -19,7 +18,8 @@ from django.db.models import (
 from django.dispatch import receiver
 from django_countries.data import COUNTRIES
 from djangocms_text_ckeditor.fields import HTMLField
-from django.utils import timezone
+from django_resized import ResizedImageField
+from django.utils.translation import gettext_lazy as _
 
 from courses import managers
 from . import (
@@ -69,7 +69,17 @@ class UserProfile(Model):
         "If this user is interested to get involved with our organisation."
     )
 
-    picture = ImageField(null=True, blank=True, upload_to=upload_path)
+    picture = ResizedImageField(
+        null=True,
+        blank=True,
+        size=[512, 512],
+        crop=["middle", "center"],
+        quality=75,
+        upload_to=upload_path,
+        help_text=_(
+            "Profile picture. Only available to teachers and board members. Will be center cropped and rescaled to 512x512px upon upload."
+        ),
+    )
     about_me = HTMLField(blank=True, null=True)
 
     birthdate = DateField(blank=True, null=True)
