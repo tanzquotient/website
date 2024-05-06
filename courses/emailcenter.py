@@ -11,10 +11,15 @@ from post_office.models import Email
 import courses.models
 from courses.models import Subscribe, Teach, Course
 from email_system.services import send_email
-from tq_website import settings as my_settings
 from payment.utils import create_qrbill_for_subscription, to_pdf
+from payment import payment_processor
 
 log = logging.getLogger("tq")
+
+
+# Note: the email templates used for rendering are stored in the database.
+# For convenience, the templates are also stored in git in the email_templates/ directory.
+# See the email_templates/README.md for details.
 
 
 def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
@@ -47,11 +52,7 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
 
 
 def _build_subscription_context(subscription: Subscribe) -> dict:
-    from payment import payment_processor
-
-    conf = my_settings.PAYMENT_ACCOUNT["default"]
-    current_site = settings.DEPLOYMENT_DOMAIN
-    voucher_url = current_site + reverse(
+    payment_url = settings.DEPLOYMENT_DOMAIN + reverse(
         "payment:subscription_payment", kwargs={"usi": subscription.usi}
     )
     return {
@@ -59,12 +60,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
         "last_name": subscription.user.last_name,
         "course": subscription.course.type.title,
         "course_info": create_course_info(subscription.course),
-        "usi": payment_processor.USI_PREFIX + subscription.usi,
-        "account_IBAN": conf["IBAN"],
-        "account_SWIFT": conf["SWIFT"],
-        "account_recipient": conf["recipient"],
-        "account_post_number": conf["post_number"] or "-",
-        "voucher_url": voucher_url,
+        "payment_url": payment_url,
         "course_type_participant_info_en": subscription.course.type.safe_translation_getter(
             "information_for_participants", language_code="en"
         ),
@@ -105,12 +101,14 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
 
     with TemporaryFile() as pdf_file:
         to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
+        usi = payment_processor.USI_PREFIX + subscription.usi
+
         return send_email(
             to=subscription.user.email,
             reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
             template=template,
             context=context,
-            attachments={f"QR-bill_{context['usi']}.pdf": pdf_file},
+            attachments={f"QR_bill_{usi}.pdf": pdf_file},
         )
 
 
