@@ -131,7 +131,11 @@ def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
 
 
 def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email]:
-    context = _build_subscription_context(subscription)
+    context = {
+        "first_name": subscription.user.first_name,
+        "last_name": subscription.user.last_name,
+        "course": subscription.course.type.title,
+    }
 
     template = "sorry_incorrect_payment_reminder"
 
