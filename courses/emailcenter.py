@@ -151,12 +151,17 @@ def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
 
     template = "payment_reminder"
 
-    return send_email(
-        to=subscription.user.email,
-        reply_to=settings.EMAIL_ADDRESS_FINANCES,
-        template=template,
-        context=context,
-    )
+    with TemporaryFile() as pdf_file:
+        to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
+        usi = payment_processor.USI_PREFIX + subscription.usi
+
+        return send_email(
+            to=subscription.user.email,
+            reply_to=settings.EMAIL_ADDRESS_FINANCES,
+            template=template,
+            context=context,
+            attachments={f"QR_bill_{usi}.pdf": pdf_file},
+        )
 
 
 def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
