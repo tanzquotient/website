@@ -1,9 +1,10 @@
 import uuid
 
-from django.db.models import CharField, ImageField, URLField, BooleanField
+from django.db.models import CharField, URLField, BooleanField
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
+from django_resized import ResizedImageField
 
 from utils import TranslationUtils
 
@@ -14,8 +15,17 @@ def upload_path(instance, filename):
 
 
 class Partner(TranslatableModel):
-    image = ImageField(
-        verbose_name=_("Image"), null=True, blank=True, upload_to=upload_path
+    image = ResizedImageField(
+        verbose_name=_("Image"),
+        null=True,
+        blank=True,
+        size=[720, 405],
+        crop=["middle", "center"],
+        quality=75,
+        help_text=_(
+            "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
+        ),
+        upload_to=upload_path,
     )
     url = URLField(blank=False, null=False)
     active = BooleanField(default=True)
