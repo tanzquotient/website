@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 15:33+0200\n"
+"POT-Creation-Date: 2024-05-08 01:13+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -382,15 +382,20 @@ msgstr "Wähle Monat"
 msgid "Choose Day"
 msgstr "Wähle Tag"
 
-#: courses/forms/user_edit_from.py:64
+#: courses/forms/user_edit_from.py:63
+msgid ""
+"This image will be center cropped and rescaled to 512x512px upon upload."
+msgstr ""
+
+#: courses/forms/user_edit_from.py:67
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
-#: courses/forms/user_edit_from.py:67 courses/forms/user_edit_from.py:77
+#: courses/forms/user_edit_from.py:70 courses/forms/user_edit_from.py:80
 msgid "Select country"
 msgstr "Land auswählen"
 
-#: courses/forms/user_edit_from.py:87 courses/forms/user_edit_from.py:91
+#: courses/forms/user_edit_from.py:90 courses/forms/user_edit_from.py:94
 msgid "This field is required if you are a student."
 msgstr "Pflichtfeld für Studierende"
 
@@ -617,6 +622,12 @@ msgstr "keine Präferenz, zum führen eingeteilt"
 #: courses/models/subscribe.py:322
 msgid "no preference, assigned as follower"
 msgstr "keine Präferenz, zum geführt werden eingeteilt"
+
+#: courses/models/user_profile.py:80
+msgid ""
+"Profile picture. Only available to teachers and board members. Will be "
+"center cropped and rescaled to 512x512px upon upload."
+msgstr ""
 
 #: courses/models/voucher.py:51
 msgid "Used to redeem voucher."
@@ -950,7 +961,7 @@ msgstr "Raum"
 
 #: courses/templates/courses/snippets/course_description.html:4
 #: courses/templates/courses/snippets/styles_modal.html:33
-#: email_system/models/tq_email_address.py:12 partners/models/partner.py:26
+#: email_system/models/tq_email_address.py:12 partners/models/partner.py:36
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -1137,7 +1148,7 @@ msgid "Intermediate"
 msgstr "Mittel"
 
 #: courses/templates/courses/snippets/level.html:12
-#: templates/menu/mobile_menu.html:24
+#: templates/menu/mobile_menu.html:20
 msgid "Advanced"
 msgstr "Fortgeschritten"
 
@@ -1957,6 +1968,10 @@ msgstr "Bevorstehend"
 msgid "This year"
 msgstr "Dieses Jahr"
 
+#: events/models/event_category.py:27 partners/models/partner.py:26
+msgid "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
+msgstr ""
+
 #: events/templates/events/archive.html:14
 msgid "No events in the archive."
 msgstr "Keine Events im Archiv."
@@ -2065,7 +2080,7 @@ msgid "Free of charge"
 msgstr "Kostenlos"
 
 #: events/templates/events/snippets/event_list.html:10
-#: partners/models/partner.py:25
+#: partners/models/partner.py:35
 #: payment/templates/payment/counter/details.html:20
 #: payment/templates/payment/courses/confirm.html:20
 #: payment/templates/payment/courses/course.html:90
@@ -2096,7 +2111,7 @@ msgstr "Vorstand"
 msgid "Partners"
 msgstr "Partner"
 
-#: partners/models/partner.py:18
+#: partners/models/partner.py:19
 msgid "Image"
 msgstr "Bild"
 
@@ -3026,8 +3041,23 @@ msgstr "Übernehmen"
 msgid "Hijack %(username)s"
 msgstr "Übernehme %(username)s"
 
+#: templates/menu/desktop_colortheme_chooser.html:9
+#: templates/menu/mobile_colortheme_language_chooser.html:18
+msgid "Auto"
+msgstr ""
+
+#: templates/menu/desktop_colortheme_chooser.html:10
+#: templates/menu/mobile_colortheme_language_chooser.html:19
+msgid "Light"
+msgstr ""
+
+#: templates/menu/desktop_colortheme_chooser.html:11
+#: templates/menu/mobile_colortheme_language_chooser.html:20
+msgid "Dark"
+msgstr ""
+
 #: templates/menu/desktop_language_chooser.html:5
-#: templates/menu/mobile_language_chooser.html:6
+#: templates/menu/mobile_language_chooser.html:5
 msgid "Change to language:"
 msgstr "Zu Sprache wechseln:"
 
@@ -3063,10 +3093,6 @@ msgstr "Finanzen"
 #: templates/menu/mobile_menu.html:9
 msgid "Pages"
 msgstr "Seiten"
-
-#: templates/menu/mobile_menu.html:19
-msgid "Language"
-msgstr "Sprache"
 
 #: templates/photologue/gallery_archive.html:4
 #: templates/photologue/gallery_archive.html:10
@@ -3124,6 +3150,9 @@ msgstr "Seiteninhalt"
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "Die IBAN is inkorrekt."
+
+#~ msgid "Language"
+#~ msgstr "Sprache"
 
 #~ msgid "Open amount"
 #~ msgstr "Offener Betrag"
