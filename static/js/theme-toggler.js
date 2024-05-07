@@ -3,15 +3,12 @@
 
     const getStoredTheme = () => localStorage.getItem('theme')
     const setStoredTheme = theme => localStorage.setItem('theme', theme)
-    const icon_classes = {auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon'}
+    const checkIcon = "<i class='fa-fw fa-solid fa-circle-check ml-1' id='color-theme-selector-check'></i>"
+    let color_selectors, theme_icons
 
     const getPreferredTheme = () => {
         const storedTheme = getStoredTheme()
-        if (storedTheme) {
-            return storedTheme
-        }
-
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        return storedTheme ? storedTheme : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     }
 
     const setTheme = theme => {
@@ -26,11 +23,24 @@
     setTheme(getPreferredTheme())
 
     const setThemeIcon = theme => {
-        document.querySelectorAll('#theme-icon').forEach((themeIcon) => {
-            themeIcon.classList.remove(...Array.from(icon_classes))
+        const icon_classes = { auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon' }
+        theme_icons.forEach((themeIcon) => {
+            themeIcon.classList.remove(...Object.values(icon_classes))
             themeIcon.classList.add(icon_classes[theme])
         });
     }
+
+    const setBold = theme =>
+        color_selectors.forEach((color_selector) =>
+            (color_selector.getAttribute("data-bs-color-theme") === theme) ? color_selector.classList.add("fw-bold") : color_selector.classList.remove("fw-bold")
+        )
+
+    const addTick = theme => {
+        document.querySelectorAll('#color-theme-selector-check').forEach((color_theme_selector_check) => color_theme_selector_check.remove())
+        color_selectors.forEach((color_selector) => 
+            (color_selector.getAttribute("data-bs-color-theme") === theme) ? color_selector.insertAdjacentHTML('beforeend', checkIcon) : 0
+    )}
+
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         const storedTheme = getStoredTheme()
@@ -42,16 +52,22 @@
 
     window.addEventListener('DOMContentLoaded', () => {
 
-        const toggles = document.querySelectorAll('.dropdown-item.color-theme-selector')
-        setTheme(getPreferredTheme())
-        setThemeIcon(getPreferredTheme())
+        color_selectors = document.querySelectorAll('.dropdown-item.color-theme-selector')
+        theme_icons = document.querySelectorAll('#theme-icon')
+        const theme = getPreferredTheme()
+        setTheme(theme)
+        setThemeIcon(theme)
+        setBold(theme)
+        addTick(theme)
 
-        toggles.forEach((toggle) => {
-            toggle.addEventListener('click', () => {
-                const theme = toggle.getAttribute("data-bs-color-theme")
+        color_selectors.forEach((color_selector) => {
+            color_selector.addEventListener('click', () => {
+                const theme = color_selector.getAttribute("data-bs-color-theme")
                 setThemeIcon(theme)
+                setBold(theme)
                 setStoredTheme(theme)
                 setTheme(theme)
+                addTick(theme)
             })
         })
     })
