@@ -16,25 +16,13 @@
         <ul class="navbar-nav">
             {% include 'menu/mobile_user_menu.html' %}
         </ul>
-        <div class="title">{% trans "Language" %}</div>
-        <ul class="navbar-nav">
-            {% language_chooser 'menu/mobile_language_chooser.html' %}
-        </ul>
         {% if user.is_staff or user.profile.is_teacher %}
             <div class="title">{% trans "Advanced" %}</div>
             <ul class="navbar-nav">
                 {% include 'menu/mobile_admin_menu.html' %}
             </ul>
         {% endif %}
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <button class="navbar-toggler" id="theme-toggle">
-                    <a class="nav-link" href="#">
-                        <i id="theme-icon"></i>
-                    </a>
-                </button>
-            </li>
-        </ul>
+        {% include 'menu/mobile_colortheme_language_chooser.html' %}
     </div>
 
 </div>
