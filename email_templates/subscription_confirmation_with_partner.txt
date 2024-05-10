@@ -1,0 +1,33 @@
+Hallo {{first_name}}
+
+Du wurdest soeben für den Kurs {{course}} zusammen mit {{partner_first_name}} angemeldet.
+Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv. Du erhältst nochmal eine Mail sobald wir deine Anmeldung bestätigt haben. Die Bestätigung kann erst einige Tage vor Kursbeginn eintreffen.
+
+Falls du dich doch noch vom Kurs abmelden möchtest, dann melde dich bitte JETZT bei uns. Nach Erhalt der zweiten Mail ist eine Abmeldug nicht mehr möglich.
+Falls der Kurs überbucht ist (was wir nicht hoffen) wirst du von uns eine Email mit der Absage erhalten.
+
+Den Status deiner Anmeldung kannst du jederzeit unter https://tanzquotient.org/profile/courses überprüfen.
+
+Liebe Grüsse
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+_____________
+
+Hi {{first_name}},
+
+Thank you for registering for the course {{course}}. You and {{partner_first_name}} have enrolled as a couple.
+You will receive an second email from us confirming whether you have been granted a place in this course. You may receive this email only some days before the start of the course.
+
+If you do not want to participate in this course please contact us NOW. After receiving the second confirmation email deregistration is no longer possible.
+If the course is overbooked (which we don't hope) you will receive a cancellation email.
+
+You can always view your current subscription status at https://tanzquotient.org/profile/courses
+
+Best regards,
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org

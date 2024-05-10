@@ -1,0 +1,23 @@
+Hallo {{first_name}}
+
+Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen darfst.
+Du wurdest für diesen Kurs nicht zugelassen wegen früheren Verfehlungen.
+
+Liebe Grüsse
+
+Dein TQ
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+________________
+
+Hi {{first_name}},
+
+We are sorry to inform you that you must not participate in the course {{course}}.
+You were banned because of an earlier misbehaviour.
+
+Best regards,
+
+Your TQ-team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org

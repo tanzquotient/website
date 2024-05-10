@@ -1,0 +1,28 @@
+Hallo {{first_name}}
+
+Wir müssen dir leider mitteilen, dass du derzeit nicht am Kurs {{course}} teilnehmen kannst, weil wir noch keine:n Partner:in für dich finden konnten. Wir suchen noch weiter bis zu zweiten Kursstunde und würden dir dann wieder eine Zusagen schicken.
+
+Solltest du doch noch jemanden in deinem Freundeskreis kennen, der gerne den Kurs mit dir besuchen würde, sage der Person bitte sie soll sich sofort einzeln anmelden und deinen Namen im Kommentarfeld erwähnen. Ansonsten schau doch auf der Website ob du einen anderen Kurs findest oder versuch es nächstes Quartal wieder.
+
+
+Liebe Grüsse
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org.
+Falls du den Kurs bereits bezahlt hast, melde dich bei finanzen@tanzquotient.org
+
+________________
+
+Hi {{first_name}},
+
+We are sorry to inform you that for now you can not participate in the course {{course}}. We could not find a partner for you, but we will keep looking until before the second lesson. In case we find one we will let you know.
+
+In case you found a partner yourself, please tell your partner to register immediately as single participant and to write your name in the comment section. Otherwise look at our Website to find another course or try it again next course period.
+
+Best regards,
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org.
+If you have already paid for the course, please contact finanzen@tanzquotient.org
