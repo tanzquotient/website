@@ -33,7 +33,7 @@ You are now officially registered for the course {{course}}.  Deregistration fro
 Your partners' contact information :
 {{partner_info}}
 
-A summary of  the course details :
+A summary of the course details:
 {{course_info|safe}}
 
 Please transfer the course price before the course starts or within one week.
