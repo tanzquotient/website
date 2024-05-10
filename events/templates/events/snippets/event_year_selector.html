@@ -37,7 +37,7 @@
             </button>
         {% endif %}
         <a 
-            class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}"
+            class="btn btn-outline-secondary{% if year == max_year %} disabled{% endif %}"
             href="{% url 'events:archive' max_year %}">
                 <i class="fa-solid fa-angles-right"></i>
         </a>
