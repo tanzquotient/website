@@ -1,0 +1,23 @@
+Hallo {{first_name}}
+
+Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen kannst.
+Schau doch auf der Website ob du einen anderen Kurs findest oder versuch es nächstes Quartal wieder.
+
+Liebe Grüsse
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+________________
+
+Hi {{first_name}},
+
+We are sorry to inform you, that you cannot participate in the course {{course}}.
+Please look at our website to find another course or try it again in the next course period.
+
+Best regards,
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org

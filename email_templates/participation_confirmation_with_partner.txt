@@ -1,0 +1,71 @@
+Hallo {{first_name}}
+
+Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich!
+
+Die Kontaktdaten deines Partners/deiner Partnerin sind:
+{{partner_info}}
+
+Nochmals alle Infos zum Kurs:
+{{course_info|safe}}
+
+Bitte überweise das Kursgeld vor Kursbeginn oder innerhalb einer Woche, und zwar an folgendes Konto (benütze für die Überweisung KEINEN EINZAHLUNGSSCHEIN):
+
+IBAN: {{account_IBAN}}
+Postkonto-Nr: {{account_post_number}}
+SWIFT/BIC-Nr: {{account_SWIFT}}
+Empfänger: {{account_recipient}}
+Mitteilungsfeld: {{usi}}
+
+Falls du auch das Geld für deine:n Partner:in überweist, gib auch seine/ihre Nummer mit an!
+Du besitzt stattdessen einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {{voucher_url}}
+Mehr Informationen zur Online-Zahlung findest du unter tanzquotient.org/de/faq/payment/
+
+Im Kurs selbst nehmen wir nur noch in Ausnahmefällen Geld an!
+
+Wir freuen uns auf dich!
+
+Dein TQ
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+P.S.: Partnertanz ist ein Kontaktsport. 
+Da man sich sehr nahe kommt ist es wichtig sich an einige Regeln zu halten:
+1) Benutze Deodorant, aber übertreibe nicht mit Parfüm.
+2) Stelle sicher, dass du einen frischen Atem hast. Bedenke, dass Kaugummi kauen deine:n Tanzpartner:in stören kann.
+
+______________
+
+Hi {{first_name}},
+
+You are now officially registered for the course {{course}}.  Deregistration from the course is no longer possible!
+
+Your partners' contact information :
+{{partner_info}}
+
+A summary of  the course details :
+{{course_info|safe}}
+
+Please transfer the course price before the course starts or within one week to the following account (DO NOT USE A PAYMENT SLIP to place the transaction):
+
+IBAN: {{account_IBAN}}
+Postkonto-Nr: {{account_post_number}}
+SWIFT/BIC-Nr: {{account_SWIFT}}
+Recipient: {{account_recipient}}
+Message: {{usi}}
+
+If you also pay for your partner, please enter their number too!
+You own a voucher instead? Pay by voucher BEFORE the course starts:: {{voucher_url}}
+You can find more information about online payment here: tanzquotient.org/en/faq/payment/
+
+You can only pay in the course in exceptional cases!
+
+We're looking forward to seeing you there!
+
+Your TQ-team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
+
+P.S.: Dancing is a contact sport. 
+Since you get close to your partner it is important to abide to certain rules: 
+1) Use deodorant, but do not drown yourself in perfume.
+2) Make sure you have fresh breath, but remember that chewing gum might disturb your dance partner.

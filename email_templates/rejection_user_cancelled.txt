@@ -1,0 +1,22 @@
+Hallo {{first_name}}
+
+Dies ist eine Bestätigung dass du dich selbst vom Kurs {{course}} abgemeldet hast.
+
+Liebe Grüsse
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+
+________________
+
+Hi {{first_name}},
+
+This is a confirmation that you cancelled yourself from the course {{course}}.
+
+Best regards,
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
