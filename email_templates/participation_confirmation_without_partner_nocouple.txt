@@ -5,18 +5,9 @@ Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs is
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
-Bitte überweise das Kursgeld vor Kursbeginn oder innerhalb einer Woche, und zwar an folgendes Konto (benütze für die Überweisung KEINEN EINZAHLUNGSSCHEIN):
-
-IBAN: {{account_IBAN}}
-Postkonto-Nr: {{account_post_number}}
-SWIFT/BIC-Nr: {{account_SWIFT}}
-Empfänger: {{account_recipient}}
-Mitteilungsfeld: {{usi}}
-
-Du besitzt stattdessen einen Gutschein? Löse ihn VOR Kursbeginn hier ein: {{voucher_url}}
-Mehr Informationen zur Online-Zahlung findest du unter tanzquotient.org/de/faq/payment/
-
-Im Kurs selbst nehmen wir nur noch in Ausnahmefällen Geld an.
+Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
+Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem TQ-Profil:
+{{ payment_url }}
 
 Wir freuen uns auf dich!
 
@@ -40,18 +31,9 @@ You are now officially registered for the course {{course}}. Deregistration from
 Here's the course info:
 {{course_info|safe}}
 
-Please transfer the course price before the course starts or within one week to the following account (DO NOT USE A PAYMENT SLIP to place the transaction):
-
-IBAN: {{account_IBAN}}
-Postkonto-Nr: {{account_post_number}}
-SWIFT/BIC-Nr: {{account_SWIFT}}
-Recipient: {{account_recipient}}
-Message: {{usi}}
-
-You own a voucher instead? Pay by voucher BEFORE the course starts:: {{voucher_url}}
-You can find more information about online payment here: tanzquotient.org/en/faq/payment/
-
-You can only pay in the course in exceptional cases!
+Please transfer the course price before the course starts or within one week.
+You can find the payment details and payment options in your TQ profile:
+{{ payment_url }}
 
 We're looking forward to seeing you there!
 
