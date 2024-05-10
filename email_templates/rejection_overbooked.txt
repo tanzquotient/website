@@ -2,7 +2,8 @@ Hallo {{first_name}}
 
 Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen kannst, weil der Kurs überbucht ist.
 
-Das Interesse an unseren Kursen ist wieder so hoch, sodass wir nicht für alle Platz haben. Wir bemühen uns die nachgefragtesten Kurse weiter auszubauen, aber wir haben leider nicht unbeschränkt Räume und Lehrer zur Verfügung.
+Das Interesse an unseren Kursen ist wieder so hoch, sodass wir nicht für alle Platz haben.
+Wir bemühen uns die nachgefragtesten Kurse weiter auszubauen, aber wir haben leider nicht unbeschränkt Räume und Lehrer:innen zur Verfügung.
 
 Schau doch auf der Website ob du noch einen anderen Kurs findest oder versuch es nächstes Quartal/Semester wieder.
 
@@ -18,7 +19,8 @@ Hi {{first_name}},
 
 We are sorry to inform you, that you can not participate in the course {{course}}. The course is overbooked.
 
-The interest in our courses is again so high that we cannot accommodate everyone. We are trying to expand our offerings, but unfortunately we don't have unlimited rooms and teachers.
+The interest in our courses is again so high that we cannot accommodate everyone.
+We are trying to expand our offerings, but unfortunately we don't have unlimited rooms and teachers.
 
 Check the website to see if you can find another course or try again next quarter/semester.
 
