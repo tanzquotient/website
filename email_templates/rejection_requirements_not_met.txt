@@ -8,6 +8,12 @@ Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanz
 
 Liebe Grüsse
 
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+________________
+
 
 Hello {{first_name}},
 
@@ -15,4 +21,8 @@ We regret to inform you that you did not secure a spot in the course {{course}}.
 
 For our guidelines on who can participate in which courses, please visit https://tanzquotient.org/en/faq/.
 
-Best regards.
+Best regards,
+
+Your Tanzquotient Team
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
