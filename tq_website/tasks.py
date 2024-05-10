@@ -6,6 +6,7 @@ from groups.services import update_groups
 from survey.services import send_course_surveys
 from payment.payment_processor import PaymentProcessor
 from payment.parser import ISO2022Parser, ZkbCsvParser
+from email_system.services import send_queued_group_emails
 
 
 @shared_task(
@@ -35,3 +36,8 @@ def task_update_groups() -> None:
 @shared_task(name="send_course_surveys", ignore_result=True)
 def task_send_course_surveys() -> None:
     send_course_surveys()
+
+
+@shared_task(name="send_queued_group_emails", ignore_result=True)
+def task_send_queued_group_emails() -> None:
+    send_queued_group_emails()

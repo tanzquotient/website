@@ -1,7 +1,7 @@
 from django.contrib import admin, messages
 from django.contrib.messages import WARNING
 
-from email_system.services import send_group_email, copy_group_email
+from email_system.services import copy_group_email
 from email_system.models.choices import GroupEmailState
 
 

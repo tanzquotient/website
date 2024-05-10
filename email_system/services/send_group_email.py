@@ -1,11 +1,14 @@
 from datetime import datetime
 
+from django.db import transaction
+
 from courses.models import UserProfile
 from email_system.models import GeneratedIndividualEmail, GroupEmail
 from groups.definitions import GroupDefinitions
 from utils import TranslationUtils
 from . import send_all_emails
 from ..models import UnsubscribeCode
+from ..models.choices import GroupEmailState
 
 
 def _get_language(user) -> str:
@@ -64,10 +67,17 @@ def send_group_email(group_email: GroupEmail) -> None:
             )
         )
 
-    sent_emails = send_all_emails(emails)
-    for email in sent_emails:
-        # Save generated mail
-        GeneratedIndividualEmail.objects.create(email=email, source=group_email)
+    send_all_emails(emails)
 
     group_email.sent_at = datetime.now()
+    group_email.state = GroupEmailState.SENT
     group_email.save()
+
+
+def send_queued_group_emails() -> None:
+    queued_group_emails: list[GroupEmail] = GroupEmail.objects.filter(
+        state=GroupEmailState.QUEUED
+    ).select_for_update()
+    with transaction.atomic():
+        for group_email in queued_group_emails:
+            send_group_email(group_email)
