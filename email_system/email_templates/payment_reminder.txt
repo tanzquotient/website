@@ -32,7 +32,7 @@ Sum of used vouchers: {{ reductions }} CHF
 Received fee: {{ paid_amount }} CHF
 Open amout: {{ open_amount }} CHF
 
-A summary of  the course details :
+A summary of the course details:
 {{ course_info|safe }}
 
 You can find the payment details and payment options in your TQ profile:

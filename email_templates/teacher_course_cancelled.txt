@@ -1,4 +1,5 @@
 Hallo {{first_name}}
+
 Wir bedauern, dir mitteilen zu müssen, dass der Kurs {{course}} abgesagt wurde.
 Wahrscheinlich gab es zu wenige Teilnehmer:innen.
 
@@ -14,6 +15,7 @@ Bei Fragen wende dich an anmeldungen@tanzquotient.org.
 ________________
 
 Hi {{first_name}},
+
 We are sorry to inform you that the course {{course}} has been cancelled.
 Probably there were too few participants.
 
