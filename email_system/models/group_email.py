@@ -44,7 +44,7 @@ class GroupEmail(TranslatableModel):
     )
 
     def is_sent(self):
-        return self.state == GroupEmailState.SENT or self.sent_at is not None
+        return self.state == GroupEmailState.SENT
 
     def get_recipients(self):
         return self.target_group.user_set.all()
