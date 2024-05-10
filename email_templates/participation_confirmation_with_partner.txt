@@ -2,8 +2,9 @@ Hallo {{first_name}}
 
 Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich!
 
-Die Kontaktdaten deines Partners/deiner Partnerin sind:
+Wir haben eine ausgeglichene Anzahl Follower und Leader im Kurs. Deine erste Kontaktperson ist:
 {{partner_info}}
+Diese Person kann dein:e erste:r Tanzpartner:in sein. In den meisten Kursen rotieren wir dann in den Tanzstunden die Partner:innen.
 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
@@ -30,8 +31,9 @@ Hi {{first_name}},
 
 You are now officially registered for the course {{course}}.  Deregistration from the course is no longer possible!
 
-Your partners' contact information :
+We have a balanced number of followers and leaders attending the course. Your first person of contact is:
 {{partner_info}}
+This person can be your first dance partner. In most courses we will then rotate partners during the lessons.
 
 A summary of the course details:
 {{course_info|safe}}
