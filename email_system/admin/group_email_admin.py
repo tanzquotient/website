@@ -12,11 +12,12 @@ from email_system.models import GroupEmail
 class GroupEmailAdmin(TranslatableAdmin):
     model = GroupEmail
 
-    list_display = ["subject", "target_group", "sent_at"]
+    list_display = ["subject", "target_group", "state", "sent_at"]
     list_filter = ["target_group"]
     search_fields = ["target_group__name"]
     actions = [send_emails_admin_action, copy_emails_admin_action]
-    fields = ["target_group", "reply_to", "subject", "message"]
+    fields = ["target_group", "state", "reply_to", "subject", "message"]
+    readonly_fields = ["state"]
 
     def has_change_permission(self, request, obj=None):
         if obj is not None:

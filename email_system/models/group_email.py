@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
 
+from .choices import GroupEmailState
+
 from utils import TranslationUtils
 
 
@@ -25,6 +27,13 @@ class GroupEmail(TranslatableModel):
         null=True,
     )
     sent_at = DateTimeField(null=True, blank=True)
+    state = CharField(
+        max_length=10,
+        blank=False,
+        db_index=True,
+        choices=GroupEmailState.CHOICES,
+        default=GroupEmailState.DRAFT,
+    )
 
     # Translated fields
     translations = TranslatedFields(
