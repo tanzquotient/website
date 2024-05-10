@@ -9,21 +9,12 @@ Offene Gebühr: {{open_amount}} CHF
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
-Bitte überweise das Kursgeld an folgendes Konto:
+Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem TQ-Profil:
+{{ payment_url }}
 
-IBAN: {{account_IBAN}}
-Postkonto-Nr: {{account_post_number}}
-SWIFT/BIC-Nr: {{account_SWIFT}}
-Empfänger: {{account_recipient}}
-Mitteilungsfeld: {{usi}}
+Hast du den Kurs schon bezahlt? Dann antworte bitte auf diese E-Mail und gib das Datum der Zahlung an.
 
-(Falls du auch das Geld für deine:n Partner:in überweist, gib auch seine/ihre Nummer mit an!)
-Du besitzt stattdessen einen Gutschein? Löse ihn hier ein: {{voucher_url}}
-Mehr Informationen zur Online-Zahlung findest du unter www.tanzquotient.org/de/payment
-
-
-Wenn du glaubst den Kurs schon bezahlt zu haben, dann antworte auf diese E-Mail mit der folgenden Angabe: Was ist das genaue Datum der Online-Zahlung?
-(es kann sein, dass deine Überweisung nicht zugeordnet werden konnte wenn du per EINZAHLUNGSSCHEIN bezahlt hast). Es ist wichtig die fehlende Bezahlung zu klären, andernfalls müssen wir dich auf die Sperrliste setzen, und das wollen wir nur ungern.
+Es ist wichtig die fehlende Bezahlung zu klären, andernfalls müssen wir dich auf die Sperrliste setzen, und das wollen wir nur ungern.
 
 Dein TQ
 www.tanzquotient.org
@@ -42,20 +33,12 @@ Open amout: {{open_amount}} CHF
 A summary of  the course details :
 {{course_info|safe}}
 
-Please transfer the course fee to the following account:
+You can find the payment details and payment options in your TQ profile:
+{{ payment_url }}
 
-IBAN: {{account_IBAN}}
-Postkonto-Nr: {{account_post_number}}
-SWIFT/BIC-Nr: {{account_SWIFT}}
-Recipient: {{account_recipient}}
-Message: {{usi}}
+Have you already paid for the course? Then please reply to this e-mail and state the date of payment.
 
-(If you also pay for your partner, enter their number too!)
-You own a voucher instead? Pay by voucher BEFORE the course starts:: {{voucher_url}}
-You can find more information about online payment here: www.tanzquotient.org/en/payment
-
-If you believe that you have already paid the course, answer to this mail and provide the following: What is the exact transaction date of the online payment?
-(it can happen that we could not identify your transaction e.g. if you payed by payment slip). It is important to resolve the missing payment, otherwise we have to put you on the blocklist.
+It is important to resolve the missing payment, otherwise we have to put you on the blocklist, and we don't want that.
 
 Your TQ-team
 www.tanzquotient.org
