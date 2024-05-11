@@ -6,6 +6,7 @@ from email_system.admin.admin_actions import (
     copy_emails_admin_action,
 )
 from email_system.models import GroupEmail
+from email_system.models.choices import GroupEmailState
 
 
 @admin.register(GroupEmail)
@@ -19,7 +20,7 @@ class GroupEmailAdmin(TranslatableAdmin):
     fields = ["target_group", "state", "reply_to", "subject", "message"]
     readonly_fields = ["state"]
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(self, request, obj: GroupEmail | None = None):
         if obj is not None:
-            return not obj.is_sent()
+            return obj.state == GroupEmailState.DRAFT
         return True

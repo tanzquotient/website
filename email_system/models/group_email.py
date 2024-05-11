@@ -43,9 +43,6 @@ class GroupEmail(TranslatableModel):
         ),
     )
 
-    def is_sent(self):
-        return self.state == GroupEmailState.SENT
-
     def get_recipients(self):
         return self.target_group.user_set.all()
 
