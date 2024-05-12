@@ -5,6 +5,7 @@ from ckeditor.widgets import CKEditorWidget
 
 
 from survey.models import Survey
+from courses.models.choices import SubscribeState
 
 
 class SendCourseEmailForm(forms.Form):
@@ -36,6 +37,14 @@ class SendCourseEmailForm(forms.Form):
         label=_("Send to Participants"),
         required=False,
         initial=True,
+    )
+
+    subscribe_state = forms.MultipleChoiceField(
+        choices=SubscribeState.CHOICES,
+        required=False,
+        label=_("Select the subscription state of participants that should receive the email:"),
+        widget=forms.CheckboxSelectMultiple,
+        initial=[choice for (choice, _) in SubscribeState.CHOICES],
     )
 
     send_to_teachers = forms.BooleanField(
