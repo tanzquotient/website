@@ -42,9 +42,11 @@ class SendCourseEmailForm(forms.Form):
     subscribe_state = forms.MultipleChoiceField(
         choices=SubscribeState.CHOICES,
         required=False,
-        label=_("Select the subscription state of participants that should receive the email:"),
+        label=_(
+            "Select the subscription state of participants that should receive the email:"
+        ),
         widget=forms.CheckboxSelectMultiple,
-        initial=[choice for (choice, _) in SubscribeState.CHOICES],
+        initial=SubscribeState.ACCEPTED_STATES,
     )
 
     send_to_teachers = forms.BooleanField(
