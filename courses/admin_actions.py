@@ -274,7 +274,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     return render(request, "courses/auth/action_send_voucher.html", context)
 
 
-@admin.action(description="Send an email to all participants of the selected course(s)")
+@admin.action(description="Send an email to subscriptions of the selected course(s)")
 def send_course_email(modeladmin, request, queryset) -> HttpResponse:
     form = None
 
