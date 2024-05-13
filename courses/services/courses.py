@@ -47,7 +47,9 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
     for course in courses:
         recipients: list[User] = []
         if send_to_participants:
-            subscribes = course.subscriptions.filter(state__in=data["subscribe_state"]).all()
+            subscribes = course.subscriptions.filter(
+                state__in=data["subscribe_state"]
+            ).all()
             recipients += [s.user for s in subscribes]
         if send_to_teachers:
             recipients += course.get_teachers()
