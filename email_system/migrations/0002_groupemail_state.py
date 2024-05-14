@@ -4,7 +4,7 @@ from django.db import migrations, models
 from email_system.models import GroupEmail
 from email_system.models.choices import GroupEmailState
 
-def set_state() -> None:
+def set_state(apps, schema_editor) -> None:
     group_emails: list[GroupEmail] = GroupEmail.objects.all()
     for group_email in group_emails:
         if group_email.sent_at is not None:
