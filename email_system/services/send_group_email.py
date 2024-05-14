@@ -30,6 +30,13 @@ def send_group_email(group_email: GroupEmail) -> None:
     emails = []
 
     for user in group_email.target_group.user_set.all():
+
+        # skip if already sent
+        if GeneratedIndividualEmail.objects.filter(
+            email__to=user.email, source=group_email
+        ).exists():
+            continue
+
         # Get context for email
         context = {
             "first_name": user.first_name,
@@ -67,7 +74,10 @@ def send_group_email(group_email: GroupEmail) -> None:
             )
         )
 
-    send_all_emails(emails)
+    sent_emails = send_all_emails(emails)
+    for email in sent_emails:
+        # Save generated mail
+        GeneratedIndividualEmail.objects.create(email=email, source=group_email)
 
     group_email.sent_at = datetime.now()
     group_email.state = GroupEmailState.SENT

@@ -21,4 +21,4 @@ class GeneratedIndividualEmail(Model):
     )
 
     class Meta:
-        verbose_name = _("Generated individual Email")
+        verbose_name = _("Generated individual emails")
