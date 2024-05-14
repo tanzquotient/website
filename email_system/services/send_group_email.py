@@ -85,9 +85,13 @@ def send_group_email(group_email: GroupEmail) -> None:
 
 
 def send_queued_group_emails() -> None:
-    queued_group_emails: list[GroupEmail] = GroupEmail.objects.filter(
-        state=GroupEmailState.QUEUED
-    ).select_for_update()
     with transaction.atomic():
+        queued_group_emails: list[GroupEmail] = (
+            GroupEmail.objects.select_for_update().filter(state=GroupEmailState.QUEUED)
+        )
         for group_email in queued_group_emails:
-            send_group_email(group_email)
+            group_email.state = GroupEmailState.SENDING
+            group_email.save()
+
+    for group_email in queued_group_emails:
+        send_group_email(group_email)
