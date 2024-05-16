@@ -9,6 +9,7 @@ from email_system.admin.admin_actions import (
 from email_system.models import GroupEmail
 from post_office.models import STATUS as EmailStatus
 
+
 @admin.register(GroupEmail)
 class GroupEmailAdmin(TranslatableAdmin):
     model = GroupEmail
@@ -19,21 +20,21 @@ class GroupEmailAdmin(TranslatableAdmin):
     actions = [send_emails_admin_action, copy_emails_admin_action]
     fields = ["target_group", "reply_to", "subject", "message"]
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(self, request, obj: GroupEmail | None = None):
         if obj is not None:
-            return not obj.is_sent()
+            return not obj.is_dispatched()
         return True
 
     def dispatched_at(self, group_email: GroupEmail) -> str:
-        if not group_email.generated_emails.exists():
+        if not group_email.is_dispatched():
             return None
         else:
-            return timezone.localtime(group_email.generated_emails.first().email.created).strftime(
-            "%d %b %Y %H:%M:%S"
-        )
+            return timezone.localtime(
+                group_email.generated_emails.first().email.created
+            ).strftime("%d %b %Y %H:%M:%S")
 
     def status(self, group_email: GroupEmail) -> str:
-        if not group_email.generated_emails.exists():
+        if not group_email.is_dispatched():
             return None
         else:
             generated_emails = group_email.generated_emails

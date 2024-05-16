@@ -24,7 +24,6 @@ class GroupEmail(TranslatableModel):
         blank=True,
         null=True,
     )
-    sent_at = DateTimeField(null=True, blank=True)
 
     # Translated fields
     translations = TranslatedFields(
@@ -34,8 +33,8 @@ class GroupEmail(TranslatableModel):
         ),
     )
 
-    def is_sent(self):
-        return self.sent_at is not None
+    def is_dispatched(self) -> bool:
+        return self.generated_emails.exists()
 
     def get_recipients(self):
         return self.target_group.user_set.all()
