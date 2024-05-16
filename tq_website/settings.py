@@ -410,11 +410,16 @@ if DEBUG:
 POST_OFFICE = {
     "BACKENDS": {
         # using djcelery's email backend as a backend for post office
-        "default": EMAIL_BACKEND
-        if DEBUG
-        else "djcelery_email.backends.CeleryEmailBackend",
+        "default": (
+            EMAIL_BACKEND if DEBUG else "djcelery_email.backends.CeleryEmailBackend"
+        ),
     },
-    "DEFAULT_PRIORITY": "now",
+    "CELERY_ENABLED": not DEBUG,
+    "DEFAULT_PRIORITY": "now" if DEBUG else "medium",
+}
+
+CELERY_EMAIL_TASK_CONFIG = {
+    "rate_limit": "10/s",  # * CELERY_EMAIL_CHUNK_SIZE (default: 10)
 }
 
 ###########
@@ -565,18 +570,20 @@ SECRET_KEY = environ["TQ_SECRET_KEY"]
 
 # Caching
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "tq_website",
-    }
-    if DEBUG
-    else {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": environ["TQ_REDIS_BROKER_URL"],
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    },
+    "default": (
+        {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tq_website",
+        }
+        if DEBUG
+        else {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": environ["TQ_REDIS_BROKER_URL"],
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    ),
     "db": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "tq_cache_table",
