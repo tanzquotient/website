@@ -410,11 +410,17 @@ if DEBUG:
 POST_OFFICE = {
     "BACKENDS": {
         # using djcelery's email backend as a backend for post office
-        "default": EMAIL_BACKEND
-        if DEBUG
-        else "djcelery_email.backends.CeleryEmailBackend",
+        "default": (
+            EMAIL_BACKEND if DEBUG else "djcelery_email.backends.CeleryEmailBackend"
+        ),
     },
-    "DEFAULT_PRIORITY": "now",
+    "CELERY_ENABLED": not DEBUG,
+    "DEFAULT_PRIORITY": "now" if DEBUG else "medium",
+    "MAX_RETRIES": 5,
+}
+
+CELERY_EMAIL_TASK_CONFIG = {
+    "rate_limit": "10/s",  # * CELERY_EMAIL_CHUNK_SIZE (default: 10)
 }
 
 ###########
