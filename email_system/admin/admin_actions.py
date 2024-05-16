@@ -1,4 +1,5 @@
 from django.contrib import messages, admin
+from django.db import transaction
 from django.contrib.messages import WARNING
 
 from email_system.services import send_group_email, copy_group_email
@@ -14,7 +15,8 @@ def send_emails_admin_action(modeladmin, request, queryset):
                 f"Skipping {email}. This email has already been sent",
             )
         else:
-            send_group_email(email)
+            with transaction.atomic():
+                send_group_email(email)
 
 
 @admin.action(description="Copy selected emails")
