@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.conf import settings
-from post_office.mail import send_queued
+from post_office.mail import send_queued_mail_until_done
+from django.db import transaction
 
 from groups.services import update_groups
 from survey.services import send_course_surveys
@@ -14,7 +15,7 @@ from payment.parser import ISO2022Parser, ZkbCsvParser
     **settings.CELERY_EMAIL_TASK_CONFIG
 )
 def send_queued_emails() -> None:
-    send_queued()
+    send_queued_mail_until_done()
 
 
 @shared_task(name="payment_parse_zkb_csv_files", ignore_result=True)
