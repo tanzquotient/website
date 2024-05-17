@@ -2,6 +2,7 @@ from typing import Any
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.http.request import HttpRequest
+from django.utils import timezone
 
 from post_office.models import Email
 
@@ -38,6 +39,6 @@ class GeneratedIndividualEmailAdmin(ModelAdmin):
         return Email.STATUS_CHOICES[generated_individual_email.email.status][1]
 
     def last_updated(self, generated_individual_email: GeneratedIndividualEmail) -> str:
-        return generated_individual_email.email.last_updated.strftime(
-            "%d %b %Y %H:%M:%S"
-        )
+        return timezone.localtime(
+            generated_individual_email.email.last_updated
+        ).strftime("%d %b %Y %H:%M:%S")
