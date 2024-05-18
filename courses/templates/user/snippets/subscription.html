@@ -5,16 +5,14 @@
     <h2 class="accordion-header accordion-header-subscription" id="accordion-header-subscription-id-{{ subscription.course.id }}">
         <button class="accordion-button collapsed accordion-button-subscription d-block" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-subcription-course-id-{{ subscription.course.id }}" aria-expanded="false" aria-controls="accordion-subcription-course-id-{{ subscription.course.id }}">
             <div class="row align-content-center">
-                <div class="col">
+                <div class="col-12 col-md-4 col-lg-5 mb-1">
                     <b>{{ subscription.course.type }}</b>
                 </div>
-                <div class="col">
+                <div class="col-12 col-md-4 col-lg-4 mb-1">
                     {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
                 </div>
-                <div class="col">
-                    <div class="float-end">
-                        {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
-                    </div>
+                <div class="col-12 col-md-4 col-lg-3">
+                    {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
                 </div>
               </div>            
         </button>        
@@ -62,52 +60,51 @@
                                 </p>
                             </div>
                         {% endif %}
-    </div>
-
-    </div>
-        </div>
-            <div class="col-xs-12 col-sm-4">
-                <div>
-                    <strong>{% trans "Costs" %}</strong>
-                    <div class="my-1">
-                        {% if subscription.get_price_to_pay %}
-                            {{ subscription.get_price_to_pay }} CHF
-                        {% else %}
-                            {% trans "free of charge" %}
-                        {% endif %}
                     </div>
                 </div>
-                {% if subscription.open_amount and subscription.state == 'confirmed' and not subscription.paid %}
-                    <div class="my-1">
-                        {% if subscription.is_payment_overdue %}
-                            <div>
-                                <span class="badge bg-danger">{% trans "Overdue payment" %}</span>
-                            </div>
-                            <div class="text-danger">
-                                {% trans "You will not be able to sign up for any courses as long as this course is unpaid." %}
-                            </div>
-                        {% else %}
-                            <span class="badge bg-warning">{% trans "Unpaid" %}</span>
-                        {% endif %}
+                <div class="col-xs-12 col-sm-4">
+                    <div>
+                        <strong>{% trans "Costs" %}</strong>
+                        <div class="my-1">
+                            {% if subscription.get_price_to_pay %}
+                                {{ subscription.get_price_to_pay }} CHF
+                            {% else %}
+                                {% trans "free of charge" %}
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="mt-2">
-                        {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %} 
-                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
-                            {% trans "Payment" %}
-                            <i class="fa fa-arrow-circle-right fa-lg"></i>
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <p>
-                    <strong>{% trans "State" %}</strong>
-                    <br/>
-                    {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
-                    <br>
-                    {% include "user/snippets/subscription_status_text.html" with subscription=subscription only %}
-                </p>
-                {% include "user/snippets/course_review_button.html" with course=subscription.course user=user only %}
+                    {% if subscription.open_amount and subscription.state == 'confirmed' and not subscription.paid %}
+                        <div class="my-1">
+                            {% if subscription.is_payment_overdue %}
+                                <div>
+                                    <span class="badge bg-danger">{% trans "Overdue payment" %}</span>
+                                </div>
+                                <div class="text-danger">
+                                    {% trans "You will not be able to sign up for any courses as long as this course is unpaid." %}
+                                </div>
+                            {% else %}
+                                <span class="badge bg-warning">{% trans "Unpaid" %}</span>
+                            {% endif %}
+                        </div>
+                        <div class="mt-2">
+                            {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %} 
+                            <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                                {% trans "Payment" %}
+                                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <p>
+                        <strong>{% trans "State" %}</strong>
+                        <br/>
+                        {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
+                        <br>
+                        {% include "user/snippets/subscription_status_text.html" with subscription=subscription only %}
+                    </p>
+                    {% include "user/snippets/course_review_button.html" with course=subscription.course user=user only %}
+                </div>
             </div>
         </div>
     </div>

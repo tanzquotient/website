@@ -45,9 +45,16 @@
     {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
         {% if subscriptions %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="expandAll" class="btn btn-link me-1" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Expand All" %}</button>
-                <button id="collapseAll" class="btn btn-link" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Collapse All" %}</button>
+            <div class="container text-end">
+                <div class="row">
+                    <div class="col-12 col-md-9 col-lg-10 mb-1">
+                        <button id="expandAll" class="btn btn-link" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Expand All" %}</button>
+    
+                    </div>    
+                    <div class="col-12 col-md-3 col-lg-2 mb-1">
+                        <button id="collapseAll" class="btn btn-link" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Collapse All" %}</button>
+                    </div>    
+                </div>
             </div>
         {% endif %}
 
