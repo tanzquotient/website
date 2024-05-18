@@ -14,7 +14,7 @@
                 <div>
                     {{ lesson.weekday|trans_weekday }}, {{ lesson.time_from|date:'H:i' }}
                     - {{ lesson.time_to|date:'H:i' }},
-                    {% include "courses/snippets/period.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date only %}
+                    {% include "courses/snippets/period_compact.html" with from=course.get_first_regular_lesson_date to=course.get_last_regular_lesson_date only %}
                 </div>
             {% endfor %}
         </div>
@@ -39,7 +39,7 @@
 
     {% if not regular and not irregular %}
         {% if course.get_period %}
-            {% include "courses/snippets/period.html" with from=course.get_period.date_from to=course.get_period.date_to only %}
+            {% include "courses/snippets/period_compact.html" with from=course.get_period.date_from to=course.get_period.date_to only %}
         {% else %}
             {% trans "Time unknown" %}
         {% endif %}
