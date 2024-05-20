@@ -8,7 +8,7 @@ from email_system.services import send_group_email, copy_group_email
 @admin.action(description="Send selected emails")
 def send_emails_admin_action(modeladmin, request, queryset):
     for email in queryset:
-        if email.is_sent():
+        if email.is_dispatched():
             messages.add_message(
                 request,
                 WARNING,
