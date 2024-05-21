@@ -2,22 +2,30 @@
 
 
 <div class="accordion-item" id="accordion-item-id-{{ subscription.course.id }}">
-    <h2 class="accordion-header accordion-header-subscription" id="accordion-header-subscription-id-{{ subscription.course.id }}">
-        <button class="accordion-button collapsed accordion-button-subscription d-block" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-subcription-course-id-{{ subscription.course.id }}" aria-expanded="false" aria-controls="accordion-subcription-course-id-{{ subscription.course.id }}">
-            <div class="row align-content-center">
-                <div class="col-12 col-md-4 col-lg-5 mb-1">
+    <h2 class="accordion-header"
+        id="accordion-header-subscription-id-{{ subscription.course.id }}">
+        <button class="accordion-button collapsed accordion-button-subscription"
+                type="button" data-bs-toggle="collapse"
+                data-bs-target="#accordion-subscription-course-id-{{ subscription.course.id }}"
+                aria-expanded="false"
+                aria-controls="accordion-subscription-course-id-{{ subscription.course.id }}">
+            <span class="w-100 row">
+                <span class="col-12 col-md-4 col-lg-5">
                     <b>{{ subscription.course.type }}</b>
-                </div>
-                <div class="col-12 col-md-4 col-lg-4 mb-1">
-                    {% include "courses/snippets/lesson_components/lessons.html" with course=subscription.course only %}
-                </div>
-                <div class="col-12 col-md-4 col-lg-3">
+                </span>
+                <span class="col-12 col-md-4 col-lg-5">
+                    {% include "courses/snippets/lesson_components/course_months.html" with course=subscription.course only %}
+                </span>
+                <span class="col-12 col-md-4 col-lg-2">
                     {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
-                </div>
-              </div>            
-        </button>        
+                </span>
+            </span>
+        </button>
     </h2>
-    <div id="accordion-subcription-course-id-{{ subscription.course.id }}" class="accordion-collapse collapse accordion-subscrption-body" aria-labelledby="accordion-header-subscription-id-{{ subscription.course.id }}" data-bs-parent="#accordion-item-id-{{ subscription.course.id }}">
+    <div id="accordion-subscription-course-id-{{ subscription.course.id }}"
+         class="accordion-collapse collapse accordion-subscription-body"
+         aria-labelledby="accordion-header-subscription-id-{{ subscription.course.id }}"
+         data-bs-parent="#accordion-item-id-{{ subscription.course.id }}">
         <div class="accordion-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
@@ -87,7 +95,7 @@
                             {% endif %}
                         </div>
                         <div class="mt-2">
-                            {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %} 
+                            {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %}
                             <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
                                 {% trans "Payment" %}
                                 <i class="fa fa-arrow-circle-right fa-lg"></i>
