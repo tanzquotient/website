@@ -22,7 +22,7 @@ class Offering(TranslatableModel):
         title=models.CharField(
             max_length=30,
             blank=True,
-            null=True,
+            null=False,
             verbose_name="[TR] Title",
             help_text=_("Title of the offering shown to users."),
         )
@@ -109,7 +109,11 @@ class Offering(TranslatableModel):
         return totals
 
     def get_title(self) -> str:
-        return self.title if self.title else self.name
+        return (
+            self.safe_translation_getter("title")
+            if self.safe_translation_getter("title") not in ["", None]
+            else self.name
+        )
 
     def __str__(self) -> str:
         return "{}".format(self.name)
