@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:13+0200\n"
+"POT-Creation-Date: 2024-05-21 23:24+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,60 +45,66 @@ msgstr "Select reason"
 msgid "Inform subscriber about cancellation"
 msgstr "Inform subscriber about cancellation"
 
-#: courses/admin_forms/send_course_email_form.py:14
+#: courses/admin_forms/send_course_email_form.py:15
 msgid "Email template"
 msgstr "Email template"
 
-#: courses/admin_forms/send_course_email_form.py:15
+#: courses/admin_forms/send_course_email_form.py:16
 msgid "Can be left empty if Subject and Content are specified."
 msgstr "Can be left empty if Subject and Content are specified."
 
-#: courses/admin_forms/send_course_email_form.py:20
-#: email_system/models/group_email.py:31
+#: courses/admin_forms/send_course_email_form.py:21
+#: email_system/models/group_email.py:30
 msgid "Subject"
 msgstr "Subject"
 
-#: courses/admin_forms/send_course_email_form.py:21
+#: courses/admin_forms/send_course_email_form.py:22
 msgid "If left empty, uses subject of template."
 msgstr "If left empty, uses subject of template."
 
-#: courses/admin_forms/send_course_email_form.py:25
+#: courses/admin_forms/send_course_email_form.py:26
 msgid "Content"
 msgstr "Content"
 
-#: courses/admin_forms/send_course_email_form.py:26
+#: courses/admin_forms/send_course_email_form.py:27
 msgid "Compose your own text. Email template will not be used."
 msgstr "Compose your own text. Email template will not be used."
 
-#: courses/admin_forms/send_course_email_form.py:28
+#: courses/admin_forms/send_course_email_form.py:29
 msgid "You can use the following placeholders:"
 msgstr "You can use the following placeholders:"
 
-#: courses/admin_forms/send_course_email_form.py:36
+#: courses/admin_forms/send_course_email_form.py:37
 msgid "Send to Participants"
 msgstr "Send to Participants"
 
-#: courses/admin_forms/send_course_email_form.py:42
+#: courses/admin_forms/send_course_email_form.py:46
+msgid ""
+"Select the subscription state of participants that should receive the email:"
+msgstr ""
+"Select the subscription state of participants that should receive the email:"
+
+#: courses/admin_forms/send_course_email_form.py:53
 msgid "Send to Teachers"
 msgstr "Send to Teachers"
 
-#: courses/admin_forms/send_course_email_form.py:48
+#: courses/admin_forms/send_course_email_form.py:59
 msgid "Optional: Select Survey"
 msgstr "Optional: Select Survey"
 
-#: courses/admin_forms/send_course_email_form.py:49
+#: courses/admin_forms/send_course_email_form.py:60
 msgid "If specified, you can use the 'survey_url' placeholder."
 msgstr "If specified, you can use the 'survey_url' placeholder."
 
-#: courses/admin_forms/send_course_email_form.py:55
+#: courses/admin_forms/send_course_email_form.py:66
 msgid "Optional: Expiration date for survey"
 msgstr "Optional: Expiration date for survey"
 
-#: courses/admin_forms/send_course_email_form.py:56
+#: courses/admin_forms/send_course_email_form.py:67
 msgid "Surveys will not expire if left empty."
 msgstr "Surveys will not expire if left empty."
 
-#: courses/admin_forms/send_course_email_form.py:70
+#: courses/admin_forms/send_course_email_form.py:81
 msgid ""
 "Subject not specified. Please specify either a template or enter the subject "
 "directly!"
@@ -106,7 +112,7 @@ msgstr ""
 "Subject not specified. Please specify either a template or enter the subject "
 "directly!"
 
-#: courses/admin_forms/send_course_email_form.py:77
+#: courses/admin_forms/send_course_email_form.py:88
 msgid ""
 "Content not specified. Please specify either a template or enter the content "
 "directly!"
@@ -386,8 +392,6 @@ msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Hint: you can also enter HTML code"
 
 #: courses/forms/user_edit_from.py:70 courses/forms/user_edit_from.py:80
-#, fuzzy
-#| msgid "Select month"
 msgid "Select country"
 msgstr "Select country"
 
@@ -492,10 +496,6 @@ msgstr ""
 "teachers in the frontend."
 
 #: courses/models/course.py:112
-#, fuzzy
-#| msgid ""
-#| "Shown only to participants of the course on the course page. Can be set "
-#| "by teachers in the frontend."
 msgid ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
@@ -584,10 +584,6 @@ msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
 #: courses/models/course_type.py:37
-#, fuzzy
-#| msgid ""
-#| "Shown only to participants of the course on the course page. Can be set "
-#| "by teachers in the frontend."
 msgid ""
 "Shown only to participants of courses of this type on the course page. "
 "Cannot be set by teachers in the frontend."
@@ -608,6 +604,8 @@ msgid ""
 "If not empty, will automatically send a survey invitation to all "
 "participants in each course, as soon as the respective course is over."
 msgstr ""
+"If not empty, will automatically send a survey invitation to all "
+"participants in each course, as soon as the respective course is over."
 
 #: courses/models/subscribe.py:317
 msgid "leader"
@@ -767,14 +765,10 @@ msgid "The email will be sent to all participants of the following courses"
 msgstr "The email will be sent to all participants of the following courses"
 
 #: courses/templates/courses/auth/action_send_email_voucher.html:11
-#, fuzzy
-#| msgid "Emails"
 msgid "Email options"
 msgstr "Email options"
 
 #: courses/templates/courses/auth/action_send_email_voucher.html:18
-#, fuzzy
-#| msgid "Warning:"
 msgid "Warning"
 msgstr "Warning"
 
@@ -843,7 +837,7 @@ msgid "Workshops"
 msgstr "Workshops"
 
 #: courses/templates/courses/course_detail.html:10
-#: courses/templates/user/snippets/subscription.html:19
+#: courses/templates/user/snippets/subscription.html:41
 msgid "Course details"
 msgstr "Course details"
 
@@ -877,13 +871,13 @@ msgstr ""
 "sent out in the following days."
 
 #: courses/templates/courses/course_subscribe_status.html:30
-#: courses/templates/user/snippets/subscription.html:32
+#: courses/templates/user/snippets/subscription.html:54
 msgid "Your Role"
 msgstr "Your Role"
 
 #: courses/templates/courses/course_subscribe_status.html:36
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
-#: courses/templates/user/snippets/subscription.html:41
+#: courses/templates/user/snippets/subscription.html:63
 #: payment/templates/payment/courses/course.html:79
 #: payment/templates/payment/courses/course.html:95
 msgid "Partner"
@@ -984,7 +978,7 @@ msgid "Raum"
 msgstr "Room"
 
 #: courses/templates/courses/snippets/course_info.html:31
-#: courses/templates/user/snippets/subscription.html:53
+#: courses/templates/user/snippets/subscription.html:75
 #: events/templates/events/snippets/event_info.html:13
 msgid "Costs"
 msgstr "Costs"
@@ -992,7 +986,7 @@ msgstr "Costs"
 #: courses/templates/courses/snippets/course_info.html:36
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:7
 #: courses/templates/user/snippets/course_as_teacher.html:8
-#: courses/templates/user/snippets/subscription.html:11
+#: courses/templates/user/snippets/subscription.html:33
 msgid "Time"
 msgstr "Time"
 
@@ -1007,42 +1001,30 @@ msgstr "Thank you for reviewing this course!"
 
 #: courses/templates/courses/snippets/course_review_button.html:23
 #: courses/templates/courses/snippets/course_review_button.html:54
-#, fuzzy
-#| msgid " You still have some courses awaiting evaluation."
 msgid "You still have some courses awaiting evaluation."
 msgstr "You still have some courses awaiting evaluation."
 
 #: courses/templates/courses/snippets/course_review_button.html:26
 #: courses/templates/courses/snippets/course_review_button.html:57
-#, fuzzy
-#| msgid " Please go to 'My Courses' to review them."
 msgid "Please go to 'My Courses' to review them."
 msgstr "Please go to 'My Courses' to review them."
 
 #: courses/templates/courses/snippets/course_review_button.html:28
 #: courses/templates/courses/snippets/course_review_button.html:59
-#, fuzzy
-#| msgid " Thank you!"
 msgid "Thank you!"
 msgstr "Thank you!"
 
 #: courses/templates/courses/snippets/course_review_button.html:35
-#, fuzzy
-#| msgid "You have taken a "
 msgid "You have taken a"
 msgstr "You have taken a"
 
 #: courses/templates/courses/snippets/course_review_button.html:37
-#, fuzzy
-#| msgid " course in the past but haven't reviewed it yet."
 msgid "course in the past but haven't reviewed it yet."
 msgstr "course in the past but haven't reviewed it yet."
 
 #: courses/templates/courses/snippets/course_review_button.html:39
 #: courses/templates/courses/snippets/course_review_button.html:42
 #: courses/templates/user/snippets/course_review_button.html:8
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review this course"
 msgstr "Review this course"
 
@@ -1106,8 +1088,6 @@ msgid "Past courses"
 msgstr "Past courses"
 
 #: courses/templates/courses/snippets/info_to_participants.html:8
-#, fuzzy
-#| msgid "Send to Participants"
 msgid "Information to participants"
 msgstr "Information to participants"
 
@@ -1457,7 +1437,7 @@ msgstr ""
 
 #: courses/templates/courses/snippets/subscription_info.html:22
 #: courses/templates/courses/snippets/subscription_info.html:32
-#: courses/templates/user/snippets/subscription.html:89
+#: courses/templates/user/snippets/subscription_status_badge.html:5
 msgid "Subscription received"
 msgstr "Subscription received"
 
@@ -1651,7 +1631,7 @@ msgid "Payment status"
 msgstr "Payment Status"
 
 #: courses/templates/user/snippets/course_as_teacher.html:32
-#: courses/templates/user/snippets/subscription.html:109
+#: courses/templates/user/snippets/subscription_status_badge.html:15
 #: payment/templates/finance/offering/courses/index.html:39
 #: payment/templates/finance/offering/courses/index.html:50
 msgid "Paid"
@@ -1682,8 +1662,6 @@ msgid "Details & edit"
 msgstr "Details & edit"
 
 #: courses/templates/user/snippets/open_surveys.html:11
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review our courses!"
 msgstr "Review our courses!"
 
@@ -1697,8 +1675,6 @@ msgstr ""
 
 #: courses/templates/user/snippets/open_surveys.html:17
 #: courses/templates/user/snippets/open_surveys.html:31
-#, fuzzy
-#| msgid "Reviews for "
 msgid "Review now"
 msgstr "Review now"
 
@@ -1708,30 +1684,28 @@ msgid "Show"
 msgstr "Show"
 
 #: courses/templates/user/snippets/open_surveys.html:25
-#, fuzzy
-#| msgid "Show more"
 msgid "more"
 msgstr "more"
 
-#: courses/templates/user/snippets/subscription.html:16
+#: courses/templates/user/snippets/subscription.html:38
 msgid "More Info"
 msgstr "More info"
 
-#: courses/templates/user/snippets/subscription.html:24
-#: courses/templates/user/user_courses.html:37
+#: courses/templates/user/snippets/subscription.html:46
+#: courses/templates/user/user_courses.html:41
 msgid "Add to calendar"
 msgstr "Add to calendar"
 
-#: courses/templates/user/snippets/subscription.html:58
+#: courses/templates/user/snippets/subscription.html:80
 msgid "free of charge"
 msgstr "free of charge"
 
-#: courses/templates/user/snippets/subscription.html:66
+#: courses/templates/user/snippets/subscription.html:88
 #: payment/templates/payment/subscription/snippets/payment_state_alert.html:10
 msgid "Overdue payment"
 msgstr "Overdue payment"
 
-#: courses/templates/user/snippets/subscription.html:69
+#: courses/templates/user/snippets/subscription.html:91
 msgid ""
 "You will not be able to sign up for any courses as long as this course is "
 "unpaid."
@@ -1739,15 +1713,15 @@ msgstr ""
 "You will not be able to sign up for any courses as long as this course is "
 "unpaid."
 
-#: courses/templates/user/snippets/subscription.html:72
+#: courses/templates/user/snippets/subscription.html:94
 msgid "Unpaid"
 msgstr "Unpaid"
 
-#: courses/templates/user/snippets/subscription.html:76
+#: courses/templates/user/snippets/subscription.html:98
 msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgstr "To see the payment details, pay with the QR-bill and apply vouchers:"
 
-#: courses/templates/user/snippets/subscription.html:78
+#: courses/templates/user/snippets/subscription.html:100
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
@@ -1755,52 +1729,52 @@ msgstr "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgid "Payment"
 msgstr "Payment"
 
-#: courses/templates/user/snippets/subscription.html:86
+#: courses/templates/user/snippets/subscription.html:108
 msgid "State"
 msgstr "State"
 
-#: courses/templates/user/snippets/subscription.html:91
-msgid "New subscription info"
-msgstr "We received your subscription. Please wait for the confirmation."
-
-#: courses/templates/user/snippets/subscription.html:93
+#: courses/templates/user/snippets/subscription_status_badge.html:7
 msgid "Subscription confirmed"
 msgstr "Subscription confirmed"
 
-#: courses/templates/user/snippets/subscription.html:95
+#: courses/templates/user/snippets/subscription_status_badge.html:9
+msgid "Rejected"
+msgstr "Rejected"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:11
+msgid "Completed"
+msgstr "Completed"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:13
+msgid "To reimburse"
+msgstr "To reimburse"
+
+#: courses/templates/user/snippets/subscription_status_text.html:5
+msgid "New subscription info"
+msgstr "We received your subscription. Please wait for the confirmation."
+
+#: courses/templates/user/snippets/subscription_status_text.html:7
 msgid "Confirmed subscription info"
 msgstr ""
 "Your subscription is now definitive. A place in the course is guaranteed"
 
-#: courses/templates/user/snippets/subscription.html:97
-msgid "Rejected"
-msgstr "Rejected"
-
-#: courses/templates/user/snippets/subscription.html:99
+#: courses/templates/user/snippets/subscription_status_text.html:9
 msgid "Rejected subscription info"
 msgstr "Unfortunately, we had to reject your subscription."
 
-#: courses/templates/user/snippets/subscription.html:101
-msgid "Completed"
-msgstr "Completed"
-
-#: courses/templates/user/snippets/subscription.html:103
+#: courses/templates/user/snippets/subscription_status_text.html:11
 msgid "Completed subscription info"
 msgstr "Everything done!"
 
-#: courses/templates/user/snippets/subscription.html:105
-msgid "To reimburse"
-msgstr "To reimburse"
-
-#: courses/templates/user/snippets/subscription.html:107
+#: courses/templates/user/snippets/subscription_status_text.html:13
 msgid "To reimburse subscription info"
 msgstr "Reimbursement pending."
 
-#: courses/templates/user/snippets/subscription.html:111
+#: courses/templates/user/snippets/subscription_status_text.html:15
 msgid "Paid subscription info"
 msgstr "We received your payment. Thank you!"
 
-#: courses/templates/user/snippets/subscription.html:114
+#: courses/templates/user/snippets/subscription_status_text.html:18
 #: events/templates/events/snippets/event_card.html:19
 msgid "Show details"
 msgstr "Show details"
@@ -1812,8 +1786,6 @@ msgid "Unpaid subscriptions"
 msgstr "Unpaid subscriptions"
 
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:11
-#, fuzzy
-#| msgid "This survey is about the following course:"
 msgid "You have unpaid subscriptions to the following courses:"
 msgstr "You have unpaid subscriptions to the following courses:"
 
@@ -1832,32 +1804,40 @@ msgid "It can take up to a week for your payment to be acquired by our system."
 msgstr ""
 "It can take up to a week for your payment to be acquired by our system."
 
-#: courses/templates/user/user_courses.html:5
-#: courses/templates/user/user_courses.html:9
-#: courses/templates/user/user_courses.html:35
+#: courses/templates/user/user_courses.html:7
+#: courses/templates/user/user_courses.html:11
+#: courses/templates/user/user_courses.html:39
 #: payment/templates/payment/courses/list.html:5
 #: templates/menu/desktop_user_menu.html:45
 #: templates/menu/mobile_user_menu.html:7
 msgid "My Courses"
 msgstr "My Courses"
 
-#: courses/templates/user/user_courses.html:14
+#: courses/templates/user/user_courses.html:16
 msgid "Teaching"
 msgstr "Teaching"
 
-#: courses/templates/user/user_courses.html:22
+#: courses/templates/user/user_courses.html:24
 msgid "There are currently no ongoing courses."
 msgstr "There are currently no ongoing courses"
 
-#: courses/templates/user/user_courses.html:28
+#: courses/templates/user/user_courses.html:30
 msgid "Show all courses "
 msgstr "Show all Courses"
 
-#: courses/templates/user/user_courses.html:46
+#: courses/templates/user/user_courses.html:47
+msgid "Expand All"
+msgstr "Expand All"
+
+#: courses/templates/user/user_courses.html:50
+msgid "Collapse All"
+msgstr "Collapse All"
+
+#: courses/templates/user/user_courses.html:63
 msgid "No subscriptions"
 msgstr "No Subscriptions"
 
-#: courses/templates/user/user_courses.html:51
+#: courses/templates/user/user_courses.html:68
 msgid "Show available courses"
 msgstr "Show available courses"
 
@@ -1898,15 +1878,15 @@ msgstr "Target group"
 msgid "Reply-To address"
 msgstr "Reply-To address"
 
-#: email_system/models/group_email.py:33
+#: email_system/models/group_email.py:32
 msgid "Message"
 msgstr "Message"
 
-#: email_system/models/group_email.py:33
+#: email_system/models/group_email.py:32
 msgid "Content of the email"
 msgstr "Content of the email"
 
-#: email_system/models/group_email.py:50
+#: email_system/models/group_email.py:49
 msgid "Group Email"
 msgstr "Group Email"
 
@@ -1988,8 +1968,6 @@ msgid "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
 msgstr "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
 
 #: events/templates/events/archive.html:14
-#, fuzzy
-#| msgid "No events planned."
 msgid "No events in the archive."
 msgstr "No events in the archive."
 
@@ -2563,8 +2541,6 @@ msgstr ""
 "detail page for this course only."
 
 #: payment/templates/payment/courses/snippets/course_description.html:24
-#, fuzzy
-#| msgid "Participant"
 msgid "Participant info"
 msgstr "Participant info"
 
@@ -2622,8 +2598,6 @@ msgid "Code"
 msgstr "Code"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:13
-#, fuzzy
-#| msgid "Payment Details"
 msgid "Payment options"
 msgstr "Payment options"
 
@@ -2636,10 +2610,6 @@ msgid "NEW"
 msgstr "NEW"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:37
-#, fuzzy
-#| msgid ""
-#| "Please scan the QR-bill below with your home banking app to fill in the "
-#| "payment details automatically."
 msgid ""
 "Please scan/open the QR-bill below with your home banking app to fill in the "
 "payment details automatically."
@@ -2656,8 +2626,6 @@ msgid "Bank transfer"
 msgstr "Bank transfer"
 
 #: payment/templates/payment/subscription/snippets/payment_options.html:64
-#, fuzzy
-#| msgid "Bank account"
 msgid "Bank account details"
 msgstr "Bank account details"
 
@@ -2678,8 +2646,6 @@ msgid "This subscription has been fully paid. Thank you!"
 msgstr "This subscription has been fully paid. Thank you!"
 
 #: payment/templates/payment/subscription/snippets/payment_state_alert.html:13
-#, fuzzy
-#| msgid "Unpaid subscriptions"
 msgid "Unpaid subscription"
 msgstr "Unpaid subscription"
 
@@ -3198,8 +3164,6 @@ msgstr "The IBAN is invalid."
 #~ msgid "Redeem voucher here"
 #~ msgstr "Redeem voucher here"
 
-#, fuzzy
-#~| msgid "Thank you for reviewing this course!"
 #~ msgid "Sorry, you cannot review this course (anymore)."
 #~ msgstr "Sorry, you cannot review this course (anymore)."
 

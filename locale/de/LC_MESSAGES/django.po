@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 01:13+0200\n"
+"POT-Creation-Date: 2024-05-21 23:24+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,62 +45,67 @@ msgstr "Kurs auswählen"
 msgid "Inform subscriber about cancellation"
 msgstr "Informiere Abonnent über Stornierung"
 
-#: courses/admin_forms/send_course_email_form.py:14
+#: courses/admin_forms/send_course_email_form.py:15
 msgid "Email template"
 msgstr "E-Mail Vorlage"
 
-#: courses/admin_forms/send_course_email_form.py:15
+#: courses/admin_forms/send_course_email_form.py:16
 msgid "Can be left empty if Subject and Content are specified."
 msgstr "Kann leer gelassen werden, falls Betreff unf Inhalt angegeben werden."
 
-#: courses/admin_forms/send_course_email_form.py:20
-#: email_system/models/group_email.py:31
+#: courses/admin_forms/send_course_email_form.py:21
+#: email_system/models/group_email.py:30
 msgid "Subject"
 msgstr "Betreff"
 
-#: courses/admin_forms/send_course_email_form.py:21
+#: courses/admin_forms/send_course_email_form.py:22
 msgid "If left empty, uses subject of template."
 msgstr "Betreff wird aus Template übernommen falls leer."
 
-#: courses/admin_forms/send_course_email_form.py:25
+#: courses/admin_forms/send_course_email_form.py:26
 msgid "Content"
 msgstr "Inhalt"
 
-#: courses/admin_forms/send_course_email_form.py:26
+#: courses/admin_forms/send_course_email_form.py:27
 msgid "Compose your own text. Email template will not be used."
 msgstr "Schreibe einen eigenen Text. Die Email Template wird nicht verwendet."
 
-#: courses/admin_forms/send_course_email_form.py:28
+#: courses/admin_forms/send_course_email_form.py:29
 msgid "You can use the following placeholders:"
 msgstr "Du kannst die folgenden Platzhalter verwenden:"
 
-#: courses/admin_forms/send_course_email_form.py:36
+#: courses/admin_forms/send_course_email_form.py:37
 msgid "Send to Participants"
 msgstr "An Teilnehmer:innen senden"
 
-#: courses/admin_forms/send_course_email_form.py:42
+#: courses/admin_forms/send_course_email_form.py:46
+msgid ""
+"Select the subscription state of participants that should receive the email:"
+msgstr "Wähle den Anmeldestatus aus, für welchen Teilnehmende diese Email bekommen sollen:"
+
+#: courses/admin_forms/send_course_email_form.py:53
 msgid "Send to Teachers"
 msgstr "An Lehrer:innen senden"
 
-#: courses/admin_forms/send_course_email_form.py:48
+#: courses/admin_forms/send_course_email_form.py:59
 msgid "Optional: Select Survey"
 msgstr "Optional Umfrage auswählen"
 
-#: courses/admin_forms/send_course_email_form.py:49
+#: courses/admin_forms/send_course_email_form.py:60
 msgid "If specified, you can use the 'survey_url' placeholder."
 msgstr ""
 "Falls eine Umfrage ausgewählt ist, kann der 'survey_url' Platzhalter "
 "verwendet werden."
 
-#: courses/admin_forms/send_course_email_form.py:55
+#: courses/admin_forms/send_course_email_form.py:66
 msgid "Optional: Expiration date for survey"
 msgstr "Optional: Ablaufdatum der Umfrage"
 
-#: courses/admin_forms/send_course_email_form.py:56
+#: courses/admin_forms/send_course_email_form.py:67
 msgid "Surveys will not expire if left empty."
 msgstr "Die Umfrage läuft nie ab, falls leer gelassen."
 
-#: courses/admin_forms/send_course_email_form.py:70
+#: courses/admin_forms/send_course_email_form.py:81
 msgid ""
 "Subject not specified. Please specify either a template or enter the subject "
 "directly!"
@@ -108,7 +113,7 @@ msgstr ""
 "Betreff nicht angegeben. Bitte gib ein Betreff an oder wähle eine Vorlage "
 "aus!"
 
-#: courses/admin_forms/send_course_email_form.py:77
+#: courses/admin_forms/send_course_email_form.py:88
 msgid ""
 "Content not specified. Please specify either a template or enter the content "
 "directly!"
@@ -385,7 +390,7 @@ msgstr "Wähle Tag"
 #: courses/forms/user_edit_from.py:63
 msgid ""
 "This image will be center cropped and rescaled to 512x512px upon upload."
-msgstr ""
+msgstr "Das Bild wird beim Upload mittig auf ein Quadrat zugeschnitten und auf 512x512px skaliert."
 
 #: courses/forms/user_edit_from.py:67
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
@@ -627,7 +632,7 @@ msgstr "keine Präferenz, zum geführt werden eingeteilt"
 msgid ""
 "Profile picture. Only available to teachers and board members. Will be "
 "center cropped and rescaled to 512x512px upon upload."
-msgstr ""
+msgstr "Profilbild. Nur für Lehrpersonen und Vorstand. Wird beim Upload mittig auf ein Quadrat zugeschnitten und auf 512x512px skaliert."
 
 #: courses/models/voucher.py:51
 msgid "Used to redeem voucher."
@@ -843,7 +848,7 @@ msgid "Workshops"
 msgstr "Workshops"
 
 #: courses/templates/courses/course_detail.html:10
-#: courses/templates/user/snippets/subscription.html:19
+#: courses/templates/user/snippets/subscription.html:41
 msgid "Course details"
 msgstr "Kursdetails"
 
@@ -877,13 +882,13 @@ msgstr ""
 "nächsten Tagen per Email."
 
 #: courses/templates/courses/course_subscribe_status.html:30
-#: courses/templates/user/snippets/subscription.html:32
+#: courses/templates/user/snippets/subscription.html:54
 msgid "Your Role"
 msgstr "Deine Rolle"
 
 #: courses/templates/courses/course_subscribe_status.html:36
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
-#: courses/templates/user/snippets/subscription.html:41
+#: courses/templates/user/snippets/subscription.html:63
 #: payment/templates/payment/courses/course.html:79
 #: payment/templates/payment/courses/course.html:95
 msgid "Partner"
@@ -985,7 +990,7 @@ msgid "Raum"
 msgstr "Raum"
 
 #: courses/templates/courses/snippets/course_info.html:31
-#: courses/templates/user/snippets/subscription.html:53
+#: courses/templates/user/snippets/subscription.html:75
 #: events/templates/events/snippets/event_info.html:13
 msgid "Costs"
 msgstr "Kosten"
@@ -993,7 +998,7 @@ msgstr "Kosten"
 #: courses/templates/courses/snippets/course_info.html:36
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:7
 #: courses/templates/user/snippets/course_as_teacher.html:8
-#: courses/templates/user/snippets/subscription.html:11
+#: courses/templates/user/snippets/subscription.html:33
 msgid "Time"
 msgstr "Zeit"
 
@@ -1445,7 +1450,7 @@ msgstr ""
 
 #: courses/templates/courses/snippets/subscription_info.html:22
 #: courses/templates/courses/snippets/subscription_info.html:32
-#: courses/templates/user/snippets/subscription.html:89
+#: courses/templates/user/snippets/subscription_status_badge.html:5
 msgid "Subscription received"
 msgstr "Anmeldung eingegangen"
 
@@ -1640,7 +1645,7 @@ msgid "Payment status"
 msgstr "Zahlungsstatus"
 
 #: courses/templates/user/snippets/course_as_teacher.html:32
-#: courses/templates/user/snippets/subscription.html:109
+#: courses/templates/user/snippets/subscription_status_badge.html:15
 #: payment/templates/finance/offering/courses/index.html:39
 #: payment/templates/finance/offering/courses/index.html:50
 msgid "Paid"
@@ -1696,25 +1701,25 @@ msgstr "Zeige"
 msgid "more"
 msgstr "mehr"
 
-#: courses/templates/user/snippets/subscription.html:16
+#: courses/templates/user/snippets/subscription.html:38
 msgid "More Info"
 msgstr "Mehr Infos"
 
-#: courses/templates/user/snippets/subscription.html:24
-#: courses/templates/user/user_courses.html:37
+#: courses/templates/user/snippets/subscription.html:46
+#: courses/templates/user/user_courses.html:41
 msgid "Add to calendar"
 msgstr "Zum Kalender hinzufügen"
 
-#: courses/templates/user/snippets/subscription.html:58
+#: courses/templates/user/snippets/subscription.html:80
 msgid "free of charge"
 msgstr "kostenlos"
 
-#: courses/templates/user/snippets/subscription.html:66
+#: courses/templates/user/snippets/subscription.html:88
 #: payment/templates/payment/subscription/snippets/payment_state_alert.html:10
 msgid "Overdue payment"
 msgstr "Zahlung überfällig"
 
-#: courses/templates/user/snippets/subscription.html:69
+#: courses/templates/user/snippets/subscription.html:91
 msgid ""
 "You will not be able to sign up for any courses as long as this course is "
 "unpaid."
@@ -1722,17 +1727,17 @@ msgstr ""
 "Du kannst dich für keine Kurse anmelden, solange dieser Kurs nicht bezahlt "
 "wird."
 
-#: courses/templates/user/snippets/subscription.html:72
+#: courses/templates/user/snippets/subscription.html:94
 msgid "Unpaid"
 msgstr "Nicht bezahlt"
 
-#: courses/templates/user/snippets/subscription.html:76
+#: courses/templates/user/snippets/subscription.html:98
 msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgstr ""
 "Klicke hier für Zahlungsdetails, QR-Rechnung und zum Einlösen von "
 "Gutscheinen:"
 
-#: courses/templates/user/snippets/subscription.html:78
+#: courses/templates/user/snippets/subscription.html:100
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
@@ -1740,53 +1745,53 @@ msgstr ""
 msgid "Payment"
 msgstr "Bezahlung"
 
-#: courses/templates/user/snippets/subscription.html:86
+#: courses/templates/user/snippets/subscription.html:108
 msgid "State"
 msgstr "Status"
 
-#: courses/templates/user/snippets/subscription.html:91
+#: courses/templates/user/snippets/subscription_status_badge.html:7
+msgid "Subscription confirmed"
+msgstr "Anmeldung bestätigt"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:9
+msgid "Rejected"
+msgstr "Abgelehnt"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:11
+msgid "Completed"
+msgstr "Besucht"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:13
+msgid "To reimburse"
+msgstr "Zu erstatten"
+
+#: courses/templates/user/snippets/subscription_status_text.html:5
 msgid "New subscription info"
 msgstr ""
 "Wir haben die Anmeldung erhalten. Die Teilnahme ist noch nicht fix. Wir "
 "senden die Bestätigung so bald wie möglich."
 
-#: courses/templates/user/snippets/subscription.html:93
-msgid "Subscription confirmed"
-msgstr "Anmeldung bestätigt"
-
-#: courses/templates/user/snippets/subscription.html:95
+#: courses/templates/user/snippets/subscription_status_text.html:7
 msgid "Confirmed subscription info"
 msgstr "Die Teilnahme ist fix."
 
-#: courses/templates/user/snippets/subscription.html:97
-msgid "Rejected"
-msgstr "Abgelehnt"
-
-#: courses/templates/user/snippets/subscription.html:99
+#: courses/templates/user/snippets/subscription_status_text.html:9
 msgid "Rejected subscription info"
 msgstr "Leider mussten wir die Anmeldung ablehnen."
 
-#: courses/templates/user/snippets/subscription.html:101
-msgid "Completed"
-msgstr "Besucht"
-
-#: courses/templates/user/snippets/subscription.html:103
+#: courses/templates/user/snippets/subscription_status_text.html:11
 msgid "Completed subscription info"
 msgstr "Alles abgeschlossen."
 
-#: courses/templates/user/snippets/subscription.html:105
-msgid "To reimburse"
-msgstr "Zu erstatten"
-
-#: courses/templates/user/snippets/subscription.html:107
+#: courses/templates/user/snippets/subscription_status_text.html:13
 msgid "To reimburse subscription info"
 msgstr "Rückerstattung wird noch durchgeführt."
 
-#: courses/templates/user/snippets/subscription.html:111
+#: courses/templates/user/snippets/subscription_status_text.html:15
 msgid "Paid subscription info"
 msgstr "Wir haben die Bezahlung erhalten. Vielen Dank!"
 
-#: courses/templates/user/snippets/subscription.html:114
+#: courses/templates/user/snippets/subscription_status_text.html:18
 #: events/templates/events/snippets/event_card.html:19
 msgid "Show details"
 msgstr "Details anzeigen"
@@ -1817,32 +1822,40 @@ msgstr ""
 "Es kann bis zu einer Woche dauern, bis deine Zahlung von unserem System "
 "aufgenommen wird."
 
-#: courses/templates/user/user_courses.html:5
-#: courses/templates/user/user_courses.html:9
-#: courses/templates/user/user_courses.html:35
+#: courses/templates/user/user_courses.html:7
+#: courses/templates/user/user_courses.html:11
+#: courses/templates/user/user_courses.html:39
 #: payment/templates/payment/courses/list.html:5
 #: templates/menu/desktop_user_menu.html:45
 #: templates/menu/mobile_user_menu.html:7
 msgid "My Courses"
 msgstr "Meine Kurse"
 
-#: courses/templates/user/user_courses.html:14
+#: courses/templates/user/user_courses.html:16
 msgid "Teaching"
 msgstr "Unterrichten"
 
-#: courses/templates/user/user_courses.html:22
+#: courses/templates/user/user_courses.html:24
 msgid "There are currently no ongoing courses."
 msgstr "Derzeit sind keine Kurse verfügbar."
 
-#: courses/templates/user/user_courses.html:28
+#: courses/templates/user/user_courses.html:30
 msgid "Show all courses "
 msgstr "Zeige alle Kurse"
 
-#: courses/templates/user/user_courses.html:46
+#: courses/templates/user/user_courses.html:47
+msgid "Expand All"
+msgstr "Alle ausklappen"
+
+#: courses/templates/user/user_courses.html:50
+msgid "Collapse All"
+msgstr "Alle zuklappen"
+
+#: courses/templates/user/user_courses.html:63
 msgid "No subscriptions"
 msgstr "Keine Anmeldungen"
 
-#: courses/templates/user/user_courses.html:51
+#: courses/templates/user/user_courses.html:68
 msgid "Show available courses"
 msgstr "Verfügbare Kurse anzeigen"
 
@@ -1883,15 +1896,15 @@ msgstr "Zielgruppe"
 msgid "Reply-To address"
 msgstr "Antwortadresse"
 
-#: email_system/models/group_email.py:33
+#: email_system/models/group_email.py:32
 msgid "Message"
 msgstr "Nachricht"
 
-#: email_system/models/group_email.py:33
+#: email_system/models/group_email.py:32
 msgid "Content of the email"
 msgstr "Inhalt der Email"
 
-#: email_system/models/group_email.py:50
+#: email_system/models/group_email.py:49
 msgid "Group Email"
 msgstr "Group Email"
 
@@ -1970,7 +1983,7 @@ msgstr "Dieses Jahr"
 
 #: events/models/event_category.py:27 partners/models/partner.py:26
 msgid "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
-msgstr ""
+msgstr "Wird beim Upload mittig auf 16:9 zugeschnitten und auf 720x405px skaliert."
 
 #: events/templates/events/archive.html:14
 msgid "No events in the archive."
@@ -3044,17 +3057,17 @@ msgstr "Übernehme %(username)s"
 #: templates/menu/desktop_colortheme_chooser.html:9
 #: templates/menu/mobile_colortheme_language_chooser.html:18
 msgid "Auto"
-msgstr ""
+msgstr "Automatisch"
 
 #: templates/menu/desktop_colortheme_chooser.html:10
 #: templates/menu/mobile_colortheme_language_chooser.html:19
 msgid "Light"
-msgstr ""
+msgstr "Hell"
 
 #: templates/menu/desktop_colortheme_chooser.html:11
 #: templates/menu/mobile_colortheme_language_chooser.html:20
 msgid "Dark"
-msgstr ""
+msgstr "Dunkel"
 
 #: templates/menu/desktop_language_chooser.html:5
 #: templates/menu/mobile_language_chooser.html:5
