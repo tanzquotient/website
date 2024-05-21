@@ -843,26 +843,29 @@ msgstr "Course details"
 
 #: courses/templates/courses/course_subscribe_form.html:11
 #: courses/templates/courses/course_subscribe_status.html:10
-msgid "Course subscription"
-msgstr "Course subscription"
+#, fuzzy
+#| msgid "Subscriptions"
+msgid "Subscription"
+msgstr "Subscription"
 
-#: courses/templates/courses/course_subscribe_form.html:19
-#: courses/templates/courses/course_subscribe_status.html:18
-#: payment/templates/payment/subscription/index.html:35
-msgid "Info"
-msgstr "Info"
+#: courses/templates/courses/course_subscribe_form.html:21
+#: courses/templates/courses/course_subscribe_status.html:20
+#: courses/templates/courses/snippets/detail.html:7
+#: courses/templates/courses/snippets/offering_components/offering.html:7
+msgid "Preview"
+msgstr "Preview"
 
-#: courses/templates/courses/course_subscribe_form.html:23
+#: courses/templates/courses/course_subscribe_form.html:33
 #: courses/templates/courses/snippets/subscribe_form.html:178
 #: templates/account/signup.html:8
 msgid "Sign Up"
 msgstr "Sign Up"
 
-#: courses/templates/courses/course_subscribe_status.html:23
+#: courses/templates/courses/course_subscribe_status.html:33
 msgid "You signed up successfully!"
 msgstr "You signed up successfully!"
 
-#: courses/templates/courses/course_subscribe_status.html:25
+#: courses/templates/courses/course_subscribe_status.html:35
 msgid ""
 "Thank you for subscribing to this course. The final confirmation will be "
 "sent out in the following days."
@@ -875,7 +878,7 @@ msgstr ""
 msgid "Your Role"
 msgstr "Your Role"
 
-#: courses/templates/courses/course_subscribe_status.html:36
+#: courses/templates/courses/course_subscribe_status.html:46
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
 #: courses/templates/user/snippets/subscription.html:63
 #: payment/templates/payment/courses/course.html:79
@@ -883,11 +886,11 @@ msgstr "Your Role"
 msgid "Partner"
 msgstr "Partner"
 
-#: courses/templates/courses/course_subscribe_status.html:49
+#: courses/templates/courses/course_subscribe_status.html:59
 msgid "Show all my courses"
 msgstr "Show all my courses"
 
-#: courses/templates/courses/course_subscribe_status.html:56
+#: courses/templates/courses/course_subscribe_status.html:66
 msgid "Go back to the course list"
 msgstr "Go back to the course list"
 
@@ -1057,11 +1060,6 @@ msgstr "No reviews yet."
 #: templates/snippets/collapsible_list.html:13
 msgid "Show more"
 msgstr "Show more"
-
-#: courses/templates/courses/snippets/detail.html:7
-#: courses/templates/courses/snippets/offering_components/offering.html:7
-msgid "Preview"
-msgstr "Preview"
 
 #: courses/templates/courses/snippets/gender_input.html:16
 msgid "Man"
@@ -2580,6 +2578,10 @@ msgstr ""
 msgid "Item"
 msgstr "Item"
 
+#: payment/templates/payment/subscription/index.html:35
+msgid "Info"
+msgstr "Info"
+
 #: payment/templates/payment/subscription/index.html:36
 #: payment/templates/payment/subscription/index.html:58
 msgid "Value"
@@ -3138,6 +3140,14 @@ msgstr "Side content"
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "The IBAN is invalid."
+
+#, fuzzy
+#~| msgid "Subscriptions"
+#~ msgid "Subscription:"
+#~ msgstr "Subscription:"
+
+#~ msgid "Course subscription"
+#~ msgstr "Course subscription"
 
 #~ msgid "Language"
 #~ msgstr "Language"
