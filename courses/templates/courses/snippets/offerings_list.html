@@ -30,7 +30,7 @@
                                 <ul>
                                     {% for offering in offerings %}
                                         <li>
-                                            <a href="{% url detail_url offering.id %}">{{ offering.name }}</a>
+                                            <a href="{% url detail_url offering.id %}">{{ offering.get_title }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
