@@ -557,17 +557,17 @@ class Course(TranslatableModel):
         first = optional_min(self.get_lesson_occurrences())
         return first.start if first else None
 
-    def get_first_lesson_date(self) -> Optional[date]:
+    def get_first_lesson_date(self) -> date:
         start = self.get_first_lesson_start()
-        return start.date() if start else None
+        return start.date() if start else self.get_period().date_from
 
     def get_last_lesson_end(self) -> Optional[datetime]:
         last = optional_max(self.get_lesson_occurrences())
         return last.end if last else None
 
-    def get_last_lesson_date(self) -> Optional[date]:
+    def get_last_lesson_date(self) -> date:
         end = self.get_last_lesson_end()
-        return end.date() if end else None
+        return end.date() if end else self.get_period().date_to
 
     def get_first_regular_lesson_start(self) -> Optional[datetime]:
         first = optional_min(self.get_regular_lesson_occurrences())

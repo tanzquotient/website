@@ -14,7 +14,7 @@
 {% block content %}
     {% if user.profile.is_teacher %}
         <h3>{% trans "Teaching" %}</h3>
-        <div class="row">
+        <div class="row g-3">
             {% for course in user.profile.get_current_teaching_courses %}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                     {% include "user/snippets/course_as_teacher.html" with course=course only %}
@@ -33,38 +33,35 @@
         </p>
     {% endif %}
 
-    <div class="row mb-3">
-        <div class="col-sm-11">
-            <h3>{% trans "My Courses" %}</h3>
-            <a href="{% url "user_ical" user.id %}?token={{ token }}">
-                {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
-            </a>
-        </div>        
-    </div>
-    {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
-    {% include "user/snippets/open_surveys.html" with user=user only %}
     {% with subscriptions=user.profile.get_subscriptions %}
-        {% if subscriptions %}
-            <div class="container text-end">
-                <div class="row">
-                    <div class="col-12 col-md-9 col-lg-10 mb-1">
-                        <button id="expandAll" class="btn btn-link" type="button" onclick="expandAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Expand All" %}</button>
-    
-                    </div>    
-                    <div class="col-12 col-md-3 col-lg-2 mb-1">
-                        <button id="collapseAll" class="btn btn-link" type="button" onclick="collapseAll()" data-toggle="collapse" data-target=".accordion-collapse" aria-expanded="false">{% trans "Collapse All" %}</button>
-                    </div>    
-                </div>
+        <div class="d-flex flex-wrap justify-content-between">
+            <div class="mb-2">
+                <h3 class="m-0">{% trans "My Courses" %}</h3>
+                <a href="{% url "user_ical" user.id %}?token={{ token }}">
+                    {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
+                </a>
             </div>
-        {% endif %}
-
-        <div class="accordion mt-2 mb-2 accordion-user-course" id="accordion-subscription">
+            {% if subscriptions %}
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-link" onclick="expandAll()">
+                        {% trans "Expand All" %}
+                    </button>
+                    <button class="btn btn-link" onclick="collapseAll()">
+                        {% trans "Collapse All" %}
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+        {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
+        {% include "user/snippets/open_surveys.html" with user=user only %}
+        <div class="accordion">
             {% for subscription in subscriptions %}
                 {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user only %}
-            {% empty %}
-                <p>{% trans "No subscriptions" %}</p>
             {% endfor %}
         </div>
+        {% if not subscriptions %}
+            <p>{% trans "No subscriptions" %}</p>
+        {% endif %}
     {% endwith %}
     <p>
         <a href="{% url "courses:list" %}">

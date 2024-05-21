@@ -1,0 +1,12 @@
+{% load courses_tags %}
+{% load i18n %}
+
+
+{% with start=course.get_first_lesson_date end=course.get_last_lesson_date %}
+    {{ start|date:'F' }}
+    {% if start.year != end.year %} {{ start|date:'Y' }} {% endif %}
+    {% if start.month != end.month or start.year != end.year %}
+        - {{ end|date:'F' }}
+    {% endif %}
+    {{ end|date:'Y' }}
+{% endwith %}
