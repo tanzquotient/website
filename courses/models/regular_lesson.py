@@ -6,7 +6,7 @@ from typing import Iterable
 from django.db import models
 from pytz import timezone
 
-from . import Weekday, LessonOccurrence
+from . import Weekday, LessonOccurrenceData
 
 
 class RegularLesson(models.Model):
@@ -20,7 +20,7 @@ class RegularLesson(models.Model):
     def get_weekday_number(self) -> int:
         return Weekday.NUMBERS[self.weekday]
 
-    def get_occurrences(self) -> Iterable[LessonOccurrence]:
+    def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
         period = self.course.get_period()
         cancellations = self.course.get_cancellation_dates()
 
@@ -34,8 +34,8 @@ class RegularLesson(models.Model):
                 d.weekday() == Weekday.NUMBERS[self.weekday] and d not in cancellations
             )
 
-        def to_lesson_occurrence(d: date) -> LessonOccurrence:
-            return LessonOccurrence(
+        def to_lesson_occurrence(d: date) -> LessonOccurrenceData:
+            return LessonOccurrenceData(
                 start=datetime.combine(d, self.time_from, timezone("Europe/Zurich")),
                 end=datetime.combine(d, self.time_to, timezone("Europe/Zurich")),
             )

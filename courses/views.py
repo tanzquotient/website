@@ -37,7 +37,7 @@ from .models import (
     RegularLessonException,
     Style,
     Subscribe,
-    LessonOccurrence,
+    LessonOccurrenceData,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -163,7 +163,7 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
 
 
 def _lesson_to_ical_event(
-    course: Course, lesson_occurrence: LessonOccurrence, request: HttpRequest
+    course: Course, lesson_occurrence: LessonOccurrenceData, request: HttpRequest
 ):
     event = Event()
     event["dtstart"] = vDatetime(lesson_occurrence.start)

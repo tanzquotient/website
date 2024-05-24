@@ -25,7 +25,7 @@ from courses.models import (
     RegularLesson,
     IrregularLesson,
     RegularLessonException,
-    LessonOccurrence,
+    LessonOccurrenceData,
 )
 from partners.models import Partner
 from survey.models import Survey
@@ -480,14 +480,14 @@ class Course(TranslatableModel):
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
 
-    def get_lesson_occurrences(self) -> Iterable[LessonOccurrence]:
+    def get_lesson_occurrences(self) -> Iterable[LessonOccurrenceData]:
         return [
             occurrence
             for lesson in self.get_lessons()
             for occurrence in lesson.get_occurrences()
         ]
 
-    def get_regular_lesson_occurrences(self) -> Iterable[LessonOccurrence]:
+    def get_regular_lesson_occurrences(self) -> Iterable[LessonOccurrenceData]:
         return [
             occurrence
             for lesson in self.regular_lessons.all()

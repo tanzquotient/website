@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 
 @dataclass(frozen=True, order=True)
-class LessonOccurrence:
+class LessonOccurrenceData:
     start: datetime
     end: datetime
 

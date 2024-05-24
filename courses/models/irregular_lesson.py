@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import CASCADE
 from pytz import timezone
 
-from courses.models import LessonOccurrence
+from courses.models import LessonOccurrenceData
 
 
 class IrregularLesson(models.Model):
@@ -31,13 +31,13 @@ class IrregularLesson(models.Model):
     class Meta:
         ordering = ["date", "time_from"]
 
-    def get_occurrence(self) -> LessonOccurrence:
-        return LessonOccurrence(
+    def get_occurrence(self) -> LessonOccurrenceData:
+        return LessonOccurrenceData(
             datetime.combine(self.date, self.time_from, timezone("Europe/Zurich")),
             datetime.combine(self.date, self.time_to, timezone("Europe/Zurich")),
         )
 
-    def get_occurrences(self) -> Iterable[LessonOccurrence]:
+    def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
         return [self.get_occurrence()]
 
     def get_total_time(self) -> timedelta:
