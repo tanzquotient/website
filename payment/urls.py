@@ -32,6 +32,11 @@ urlpatterns = [
         name="coursepayment_detail",
     ),
     path(
+        "auth/courses/<int:course>/teacher-presence",
+        CourseTeacherPresenceView.as_view(),
+        name="course_teacher_presence",
+    ),
+    path(
         "auth/courses/<int:course>/export/csv",
         CoursePaymentExportCsv.as_view(),
         name="coursepayment_export_csv",

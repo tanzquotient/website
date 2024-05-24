@@ -11,6 +11,12 @@
             </a>
         </p>
         <p>
+            <a href="{% url 'payment:course_teacher_presence' course=course.id %}">
+                <strong>{% trans "Log teacher presence" %}</strong>
+                <i class="fa fa-arrow-circle-right fa-lg"></i>
+            </a>
+        </p>
+        <p>
             <strong>{% trans "Time" %}</strong>
             <br/>
             {% include "courses/snippets/lesson_components/lessons.html" with course=course only %}
