@@ -5,6 +5,12 @@
     </div>
     <div class="card-body">
         <p>
+            <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
+                <strong>{% trans "Details & edit" %}</strong>
+                <i class="fa fa-arrow-circle-right fa-lg"></i>
+            </a>
+        </p>
+        <p>
             <strong>{% trans "Time" %}</strong>
             <br/>
             {% include "courses/snippets/lesson_components/lessons.html" with course=course only %}
@@ -47,11 +53,5 @@
                 <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (vCard)" %}</a>
             </p>
         {% endif %}
-        <p>
-            <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
-                <strong>{% trans "Details & edit" %}</strong>
-                <i class="fa fa-arrow-circle-right fa-lg"></i>
-            </a>
-        </p>
     </div>
 </div>
