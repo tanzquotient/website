@@ -1,4 +1,4 @@
-Hallo {{first_name}},
+Hallo {{first_name}}
 
 Du hast kürzlich am Kurs {{course}} teilgenommen. Herzlichen Dank! Wie hat er dir gefallen?
 
