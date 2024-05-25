@@ -20,7 +20,7 @@ Dein Tanzquotient
 www.tanzquotient.org
 Bei Fragen wende dich an finanzen@tanzquotient.org
 
-______________
+_______________
 
 Hi {{first_name}},
 

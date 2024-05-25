@@ -10,7 +10,7 @@ Dein Tanzquotient
 
 Bei Fragen wende dich an kontakt@tanzquotient.org
 
-________________
+_______________
 
 Hi {{first_name}},
 

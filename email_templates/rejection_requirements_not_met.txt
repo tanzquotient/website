@@ -12,8 +12,7 @@ Dein Tanzquotient
 tanzquotient.org
 Bei Fragen wende dich an anmeldungen@tanzquotient.org
 
-________________
-
+_______________
 
 Hello {{first_name}},
 

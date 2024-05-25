@@ -10,7 +10,7 @@ tanzquotient.org
 Bei Fragen wende dich an anmeldungen@tanzquotient.org.
 Falls du den Kurs bereits bezahlt hast, melde dich bei finanzen@tanzquotient.org
 
-________________
+_______________
 
 Hi {{first_name}},
 
