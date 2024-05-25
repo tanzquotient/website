@@ -3,7 +3,7 @@ Hallo {{first_name}}
 Wir müssen dir leider mitteilen, dass du keinen Platz im Kurs {{course}} erhalten hast.
 
 Dafür kann es verschiedene Gründe geben. In bestimmten Kursen werden Vorkenntnisse in den jeweiligen Tänzen vorausgesetzt (siehe Kursbeschreibung des jeweiligen Kurses).
-Wir hoffen es klappt beim nächsten Mal!  
+Wir hoffen es klappt beim nächsten Mal!
 Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.org/de/faq/
 
 Liebe Grüsse
