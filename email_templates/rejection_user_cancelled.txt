@@ -17,6 +17,6 @@ This is a confirmation that you cancelled yourself from the course {{course}}.
 
 Best regards,
 
-Your Tanzquotient Team
+Your Tanzquotient
 tanzquotient.org
 If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org

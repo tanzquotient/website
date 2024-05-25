@@ -4,7 +4,7 @@ Wir haben deine Zahlung für {{course}} dankend erhalten.
 
 Liebe Grüsse
 
-Dein TQ
+Dein Tanzquotient
 tanzquotient.org
 Bei Fragen wende dich an anmeldungen@tanzquotient.org
 
@@ -16,6 +16,6 @@ We received your payment for {{course}}. Thanks.
 
 Best regards,
 
-Your TQ-team
+Your Tanzquotient
 tanzquotient.org
 If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
