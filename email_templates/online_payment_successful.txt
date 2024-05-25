@@ -12,7 +12,7 @@ _______________
 
 Hi {{first_name}},
 
-We received your payment for {{course}}. Thanks.
+We received your payment for {{course}}. Thank you.
 
 Best regards,
 
