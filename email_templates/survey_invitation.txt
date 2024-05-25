@@ -1,7 +1,10 @@
 Hallo {{first_name}},
 
-Du hast kürzlich an einem unserer Tanzkurse teilgenommen. Herzlichen Dank! Wie hat er dir gefallen? Um uns das zu sagen, bitten wir dich an der Umfrage zur Kursbewertung {{course}} teilzunehmen.
-Es dauert nur 5 Minuten und hilft uns sehr. Bitte klicke zur Teilnahme auf den untenstehenden Link. Die Daten werden anonym ausgewertet und nicht an Dritte weitergegeben.
+Du hast kürzlich am Kurs {{course}} teilgenommen. Herzlichen Dank! Wie hat er dir gefallen?
+
+Um uns das zu sagen, bitten wir dich an der Umfrage zur Kursbewertung teilzunehmen.
+Es dauert nur 5 Minuten und hilft uns sehr. Klicke dazu auf den untenstehenden Link.
+Die Daten werden anonym ausgewertet und nicht an Dritte weitergegeben.
 
 {{survey_url}}
 
@@ -14,8 +17,11 @@ _______________
 
 Hi {{first_name}},
 
-You recently participated in one of our dance courses. Thank you! Did you like it? We would be happy if you take part in the course evaluation for {{course}}.
-It takes only 5 minutes and we greatly appreciate your help. To participate please click on the link below. The data will be analyzed anonymously and not be given to any third party.
+You recently participated in the course {{course}}. Thank you! How did you like it?
+
+We would be happy if you take part in the course evaluation.
+It takes only 5 minutes and we greatly appreciate your help. To participate please click on the link below.
+The data will be analyzed anonymously and not be given to any third party.
 
 {{survey_url}}
 
