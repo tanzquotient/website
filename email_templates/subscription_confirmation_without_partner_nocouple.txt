@@ -1,9 +1,13 @@
 Hallo {{first_name}}
 
-Du wurdest soeben für den Kurs {{course}} angemeldet. Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv.
-Du erhältst nochmal eine Mail, sobald wir deine Anmeldung bestätigt haben. Die Bestätigung kann erst einige Tage vor Kursbeginn eintreffen.
+Du wurdest soeben für den Kurs {{course}} angemeldet.
 
-Falls du dich doch noch vom Kurs abmelden möchtest, dann melde dich bitte JETZT bei uns. Nach Erhalt der zweiten Mail ist eine Abmeldug nicht mehr möglich.
+Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv.
+Du erhältst nochmal eine Mail, sobald wir deine Anmeldung bestätigt haben.
+Die Bestätigung kann erst einige Tage vor Kursbeginn eintreffen.
+
+Falls du dich doch noch vom Kurs abmelden möchtest, dann melde dich bitte JETZT bei uns.
+Nach Erhalt der zweiten Mail ist eine Abmeldug nicht mehr möglich.
 Falls der Kurs überbucht ist (was wir nicht hoffen) werden wir dir eine Email mit der Absage schicken.
 
 Den Status deiner Anmeldung kannst du jederzeit unter https://tanzquotient.org/profile/courses überprüfen.
@@ -19,9 +23,12 @@ _______________
 Hi {{first_name}},
 
 Thank you for registering for the course {{course}}.
-You will receive an email from us confirming whether you have been granted a place in this course. You may receive this email only some days before the start of the course.
 
-If you do not want to participate in this course please contact us NOW. After receiving the second confirmation email deregistration is no longer possible.
+You will receive an email from us confirming whether you have been granted a place in this course.
+You may receive this email only some days before the start of the course.
+
+If you do not want to participate in this course please contact us NOW.
+After receiving the second confirmation email deregistration is no longer possible.
 If the course is overbooked (which we do not hope) we will send you a cancellation email.
 
 You can always view your current subscription status at https://tanzquotient.org/profile/courses
