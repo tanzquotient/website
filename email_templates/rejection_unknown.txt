@@ -1,6 +1,7 @@
 Hallo {{first_name}}
 
 Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen kannst.
+
 Schau doch auf der Website ob du einen anderen Kurs findest oder versuch es nächstes Quartal wieder.
 
 Liebe Grüsse
@@ -14,6 +15,7 @@ _______________
 Hi {{first_name}},
 
 We are sorry to inform you, that you cannot participate in the course {{course}}.
+
 Please look at our website to find another course or try it again in the next course period.
 
 Best regards,

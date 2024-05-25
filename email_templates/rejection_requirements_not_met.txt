@@ -1,9 +1,9 @@
 Hallo {{first_name}}
 
 Wir müssen dir leider mitteilen, dass du keinen Platz im Kurs {{course}} erhalten hast.
+
 Dafür kann es verschiedene Gründe geben. In bestimmten Kursen werden Vorkenntnisse in den jeweiligen Tänzen vorausgesetzt (siehe Kursbeschreibung des jeweiligen Kurses).
 Wir hoffen es klappt beim nächsten Mal!  
-
 Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.org/de/faq/
 
 Liebe Grüsse
@@ -16,8 +16,9 @@ _______________
 
 Hello {{first_name}},
 
-We regret to inform you that you did not secure a spot in the course {{course}}. There can be various reasons for this. Certain courses require prior knowledge in specific dances (please refer to the course description for each respective course). We hope it works out next time!
+We regret to inform you that you did not secure a spot in the course {{course}}.
 
+There can be various reasons for this. Certain courses require prior knowledge in specific dances (please refer to the course description for each respective course). We hope it works out next time!
 For our guidelines on who can participate in which courses, please visit https://tanzquotient.org/en/faq/.
 
 Best regards,

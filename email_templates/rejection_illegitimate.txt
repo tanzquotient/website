@@ -1,6 +1,7 @@
 Hallo {{first_name}}
 
 Wir müssen dir leider mitteilen dass du nicht am Kurs {{course}} teilnehmen darst.
+
 Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.org/en/faq/
 
 Liebe Grüsse
@@ -14,6 +15,7 @@ _______________
 Hi {{first_name}},
 
 We are sorry to inform you that you cannot participate in the course {{course}}.
+
 See our policy about who can participate in which courses: https://tanzquotient.org/en/faq/
 
 Best regards,
