@@ -2,7 +2,7 @@ Hallo {{first_name}}
 
 Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich!
 
-Du nimmst alleine an einem Partnerkurs teil bzw. das System weiss nichts von deinem/r Partner/in. Solltest du keine spezielle Abmachung mit dem TQ haben, dann melde dich bitte bei uns! In manchen (gratis) Workshops machen wir kein Matching.
+Du nimmst alleine an einem Partnerkurs teil. Sollte dir das falsch vorkommen, melde dich bitte bei uns!
 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
@@ -28,7 +28,8 @@ _______________
 Hi {{first_name}},
 
 You are now officially registered for the course {{course}}. Deregistration from the course is no longer possible!
-You have enrolled as a single for a partner course. Please contact us if you have no special agreement with somebody from the TQ! In some (free) workshops we don't do any matching.
+
+You are participating as a single in a partner course. If you think this is an error, please contact us!
 
 Here's the course info:
 {{course_info|safe}}
