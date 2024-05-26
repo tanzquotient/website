@@ -18,7 +18,7 @@ Bitte überpüfe die Informationen für deine Kurse (Ort, Zeit, etc) und sag sof
 Bitte füge eine Beschreibung deines Kurses hier selbst hinzu (falls es nicht bereits eine gibt), ansonsten wird der Kurs nicht auf der Webseite gezeigt werden: {{coursepayment_url}}.
 Das und weitere Funktionen findest du nach dem Einloggen jederzeit im Menü oben rechts unter "My Courses".
 
-1) Nochmals alle Infos zum Kurs, wie du sie auch hier findest: {{room_url}}
+1) Nochmals alle Infos zum Kurs, wie du sie auch hier findest: {{course_url}}
 
 {{course_info|safe}}
 
@@ -67,7 +67,7 @@ Please check your courses' date, time etc. and let Tanzquotient immeadiately kno
 Please add a course description (in case there is not yet a description) to inform students what they will learn in your class under {{coursepayment_url}}, otherwise the course will not be displayed on the website.
 You can find this and other functions at any time in the top right menu "My Courses" after logging in.
 
-1) Here you can find the course descripton: {{room_url}}
+1) Here you can find the course descripton: {{course_url}}
 
 {{course_info|safe}}
 

@@ -206,7 +206,7 @@ def send_teacher_welcome(teach: Teach) -> Optional[Email]:
         "course": course.type.title,
         "course_internal_name": course.name,
         "course_info": create_course_info(course),
-        "room_url": course_url,
+        "course_url": course_url,
         "room_info": course.room.description if course.room else "",
         "room_instructions": course.room.instructions if course.room else "",
         "coursepayment_url": coursepayment_url,
