@@ -8,7 +8,7 @@ Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
 Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
-Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem TQ-Profil:
+Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem Tanzquotient-Profil:
 {{ payment_url }}
 
 Wir freuen uns auf dich!
@@ -35,7 +35,7 @@ Here's the course info:
 {{course_info|safe}}
 
 Please transfer the course price before the course starts or within one week.
-You can find the payment details and payment options in your TQ profile:
+You can find the payment details and payment options in your Tanzquotient profile:
 {{ payment_url }}
 
 We're looking forward to seeing you there!

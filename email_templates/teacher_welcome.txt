@@ -3,11 +3,11 @@ English version below
 
 Hallo {{first_name}}
 
-Du unterrichtest für den TQ den Kurs {{course}}.
+Du unterrichtest für den Tanzquotient den Kurs {{course}}.
 
 Zuerst herzlichen Dank, dass du bei uns unterrichtest!
 
-Für einige der Punkte ist ein TQ-Login notwendig. Falls du noch keinen hast bitten wir dich ein Profil auf unserer Wesbeite zu erstellen und auch gleich deine Zahlungsinformationen einzutragen: {{login_url}}
+Für einige der Punkte ist ein Tanzquotient-Login notwendig. Falls du noch keinen hast bitten wir dich ein Profil auf unserer Wesbeite zu erstellen und auch gleich deine Zahlungsinformationen einzutragen: {{login_url}}
 Du kannst dein Profil jetzt zusätzlich mit Text und Bild ausschmücken!
 
 Hier einige persönliche Informationen zu deinem Kurs, dem Raum und den Kursgeldern. Bitte lies dir JETZT alles aufmerksam durch, damit wir alles so einfach wie möglich abwickeln können.
@@ -28,12 +28,12 @@ Unter https://tanzquotient.org/en/courses/preview/ kannst du die geplanten Kurse
 Falls du im Kursraum kein Internet hast, findest du auf der verlinkten Seite auch ein Download zu einem Excel mit der Kursliste. Es kann sein, dass Überweisungen bis zu 3 Werktagen benötigen und deshalb Teilnehmer:innen noch nicht als bezahlt markiert sind.
 
 4) Lohn
-Der Lohn beträgt normalerweise 30 CHF/h pro Person für die ersten 200 Stunden, welche du beim TQ unterrichtest. Ab der 200. Stunde beträgt der Lohn 35 CHF/h. Für die Auszahlung bitten wir dich, die nötigen Angaben für Lohnzahlungen in deinem TQ-Profil zu ergänzen: {{ profile_url }}
+Der Lohn beträgt normalerweise 30 CHF/h pro Person für die ersten 200 Stunden, welche du beim Tanzquotient unterrichtest. Ab der 200. Stunde beträgt der Lohn 35 CHF/h. Für die Auszahlung bitten wir dich, die nötigen Angaben für Lohnzahlungen in deinem Tanzquotient-Profil zu ergänzen: {{ profile_url }}
 (Die Daten werden sicher auf unseren Schweizer Server gespeichert)
 
 5) Eine Raumbestätigung bekommst du noch in einer separaten Email.
 
-Auch möchten wir dich darauf aufmerksam machen, dass der TQ ein Jahresbudget für Lehrerweiterbildungen hat. Falls ihr hiervon profitieren möchtet stellt bitte einen Antrag an finanzen@tanzquotient.org. Die Anträge werden zwei Mal im Jahr bearbeitet: am 1. April und 1. Oktober. Stelle bitte sicher, dass du den Antrag rechtzeitig einreichst.
+Auch möchten wir dich darauf aufmerksam machen, dass der Tanzquotient ein Jahresbudget für Lehrerweiterbildungen hat. Falls ihr hiervon profitieren möchtet stellt bitte einen Antrag an finanzen@tanzquotient.org. Die Anträge werden zwei Mal im Jahr bearbeitet: am 1. April und 1. Oktober. Stelle bitte sicher, dass du den Antrag rechtzeitig einreichst.
 
 
 Dein Tanzquotient
@@ -45,11 +45,11 @@ _______________
 
 Hi {{first_name}}
 
-You are teaching the course {{course}} for TQ.
+You are teaching the course {{course}} for Tanzquotient.
 
 First we want to say thank you for helping us!
 
-For some of the points that follow, you are required to know your TQ login credentials. If you do not have an account yet please create one here: {{login_url}}
+For some of the points that follow, you are required to know your Tanzquotient login credentials. If you do not have an account yet please create one here: {{login_url}}
 Note that you have to use the email address at which you received this email. 
 You now have the option to embellish your profile with an image and further text. Here you can tell potential students about yourself and your teaching methods. 
 
@@ -70,12 +70,12 @@ At https://tanzquotient.org/en/courses/preview/ you can see the planned courses.
 3) On this page (also available from the menu), you can see your participants and which students have not yet paid for the course: {{coursepayment_url}}
 
 4) Salary
-Usually the salary is 30.- CHF per hour, per person for the first 200 hours you teach at TQ. From the 200th hour course on the salary will increase to 35.- CHF/h. We kindly ask you to provide all the information required for salary payment in your TQ profile: {{ profile_url }}
+Usually the salary is 30.- CHF per hour, per person for the first 200 hours you teach at Tanzquotient. From the 200th hour course on the salary will increase to 35.- CHF/h. We kindly ask you to provide all the information required for salary payment in your Tanzquotient profile: {{ profile_url }}
 (This information is safely stored on our Swiss servers.)
 
 5) You will receive a room confirmation in a separate email.
 
-We would also like to inform you about the existence of our budget for further education. If you plan to enrol in a course or workshop that will teach you skills beneficial to your performance as a TQ teacher you can apply to have some of your costs covered by us by sending an email to finanzen@tanzquotient.org. We evaluate the applications twice a year: on April 1st as well as October 1st. Make sure to apply on time to be able to have some of your costs covered by us.
+We would also like to inform you about the existence of our budget for further education. If you plan to enrol in a course or workshop that will teach you skills beneficial to your performance as a Tanzquotient teacher you can apply to have some of your costs covered by us by sending an email to finanzen@tanzquotient.org. We evaluate the applications twice a year: on April 1st as well as October 1st. Make sure to apply on time to be able to have some of your costs covered by us.
 
 
 Your Tanzquotient

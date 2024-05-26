@@ -9,7 +9,7 @@ Offene Gebühr: {{open_amount}} CHF
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
-Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem TQ-Profil:
+Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem Tanzquotient-Profil:
 {{ payment_url }}
 
 Hast du den Kurs schon bezahlt? Dann antworte bitte auf diese E-Mail und gib das Datum der Zahlung an.
@@ -33,7 +33,7 @@ Open amout: {{open_amount}} CHF
 A summary of the course details:
 {{course_info|safe}}
 
-You can find the payment details and payment options in your TQ profile:
+You can find the payment details and payment options in your Tanzquotient profile:
 {{ payment_url }}
 
 Have you already paid for the course? Then please reply to this e-mail and state the date of payment.
