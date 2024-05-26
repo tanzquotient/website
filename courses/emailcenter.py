@@ -52,7 +52,7 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
 
 
 def _build_subscription_context(subscription: Subscribe) -> dict:
-    payment_url = settings.DEPLOYMENT_DOMAIN + reverse(
+    payment_url = "https://" + settings.DEPLOYMENT_DOMAIN + reverse(
         "payment:subscription_payment", kwargs={"usi": subscription.usi}
     )
     return {
@@ -190,7 +190,7 @@ def send_teacher_welcome(teach: Teach) -> Optional[Email]:
         return None
     course = teach.course
 
-    current_site = settings.DEPLOYMENT_DOMAIN
+    current_site = "https://" + settings.DEPLOYMENT_DOMAIN
     course_url = current_site + reverse(
         "courses:course_detail", kwargs={"course_id": course.id}
     )
