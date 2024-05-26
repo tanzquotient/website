@@ -108,7 +108,7 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
             reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
             template=template,
             context=context,
-            attachments={f"QR_bill_{usi}.pdf": pdf_file},
+            attachments={f"QR-bill-{usi}.pdf": pdf_file},
         )
 
 
@@ -163,7 +163,7 @@ def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
             reply_to=settings.EMAIL_ADDRESS_FINANCES,
             template=template,
             context=context,
-            attachments={f"QR_bill_{usi}.pdf": pdf_file},
+            attachments={f"QR-bill-{usi}.pdf": pdf_file},
         )
 
 
