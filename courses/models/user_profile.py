@@ -220,7 +220,9 @@ class UserProfile(Model):
 
     def get_current_teaching_courses(self) -> Iterable[Course]:
         courses = [
-            t.course for t in self.user.teaching_courses.all() if not t.course.is_over()
+            t.course
+            for t in self.user.teaching_courses.all()
+            if not t.course.is_over_since(days=30)
         ]
         courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
         return courses

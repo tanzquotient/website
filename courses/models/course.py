@@ -474,6 +474,10 @@ class Course(TranslatableModel):
         last_date = self.get_last_lesson_date() or self.get_period().date_to
         return last_date < date.today()
 
+    def is_over_since(self, days: int) -> bool:
+        last_date = self.get_last_lesson_date() or self.get_period().date_to
+        return last_date + timedelta(days=days) < date.today()
+
     def has_started_for(self, extra_time: timedelta = timedelta(days=7)) -> bool:
         return self.get_first_lesson_date() + extra_time < date.today()
 
