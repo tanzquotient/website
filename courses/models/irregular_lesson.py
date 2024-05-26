@@ -33,8 +33,8 @@ class IrregularLesson(models.Model):
 
     def get_occurrence(self) -> LessonOccurrenceData:
         return LessonOccurrenceData(
-            datetime.combine(self.date, self.time_from, timezone("Europe/Zurich")),
-            datetime.combine(self.date, self.time_to, timezone("Europe/Zurich")),
+            timezone("Europe/Zurich").localize(datetime.combine(self.date, self.time_from)),
+            timezone("Europe/Zurich").localize(datetime.combine(self.date, self.time_to)),
         )
 
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:

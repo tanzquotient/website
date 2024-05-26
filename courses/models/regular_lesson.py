@@ -36,8 +36,8 @@ class RegularLesson(models.Model):
 
         def to_lesson_occurrence(d: date) -> LessonOccurrenceData:
             return LessonOccurrenceData(
-                start=datetime.combine(d, self.time_from, timezone("Europe/Zurich")),
-                end=datetime.combine(d, self.time_to, timezone("Europe/Zurich")),
+                timezone("Europe/Zurich").localize(datetime.combine(d, self.time_from)),
+                timezone("Europe/Zurich").localize(datetime.combine(d, self.time_to)),
             )
 
         return map(to_lesson_occurrence, filter(has_date_a_lesson, all_dates_in_period))
