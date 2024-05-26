@@ -71,7 +71,7 @@ At https://tanzquotient.org/en/courses/preview/ you can see the planned courses.
 
 4) Salary
 Usually the salary is 30.- CHF per hour, per person for the first 200 hours you teach at Tanzquotient.
-From the 200th hour course on the salary will increase to 35.- CHF/h.
+From the 200th hour onwards the salary increases to 35.- CHF per hour.
 We kindly ask you to provide all the information required for salary payment in your Tanzquotient profile: {{ profile_url }}
 
 5) You will receive a room confirmation in a separate email (only for some rooms).
