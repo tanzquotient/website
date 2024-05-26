@@ -24,8 +24,7 @@ Unter https://tanzquotient.org/en/courses/preview/ kannst du die geplanten Kurse
 2b) Anweisungen zum Raum:
 {{room_instructions}}
 
-3) Hier kannst du die Teilnehmer:innen einsehen und vermerken, wer bezahlt hat: {{coursepayment_url}}. Bitte überprüfe in der dritten Kurswoche ob alle Teilnehmer:innen bezahlt haben und erinnere sie ggf. daran. 
-Falls du im Kursraum kein Internet hast, findest du auf der verlinkten Seite auch ein Download zu einem Excel mit der Kursliste. Es kann sein, dass Überweisungen bis zu 3 Werktagen benötigen und deshalb Teilnehmer:innen noch nicht als bezahlt markiert sind.
+3) Hier kannst du die Teilnehmer:innen einsehen: {{coursepayment_url}}
 
 4) Lohn
 Der Lohn beträgt normalerweise 30 CHF/h pro Person für die ersten 200 Stunden, welche du beim Tanzquotient unterrichtest. Ab der 200. Stunde beträgt der Lohn 35 CHF/h. Für die Auszahlung bitten wir dich, die nötigen Angaben für Lohnzahlungen in deinem Tanzquotient-Profil zu ergänzen: {{ profile_url }}
@@ -67,7 +66,7 @@ At https://tanzquotient.org/en/courses/preview/ you can see the planned courses.
 2b) Instructions for the room:
 {{room_instructions}}
 
-3) On this page (also available from the menu), you can see your participants and which students have not yet paid for the course: {{coursepayment_url}}
+3) On this page you can see your participants: {{coursepayment_url}}
 
 4) Salary
 Usually the salary is 30.- CHF per hour, per person for the first 200 hours you teach at Tanzquotient. From the 200th hour course on the salary will increase to 35.- CHF/h. We kindly ask you to provide all the information required for salary payment in your Tanzquotient profile: {{ profile_url }}
