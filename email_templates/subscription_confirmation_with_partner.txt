@@ -22,7 +22,7 @@ _______________
 
 Hi {{first_name}},
 
-Thank you for registering for the course {{course}}. You and {{partner_first_name}} have enrolled as a couple.
+Thank you for registering for the course {{course}}. You and {{partner_first_name}} have enrolled.
 
 You will receive an second email from us confirming whether you have been granted a place in this course.
 You may receive this email only some days before the start of the course.
