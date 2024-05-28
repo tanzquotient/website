@@ -7,6 +7,7 @@ from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
 from reversion.models import Version
+from django.contrib.auth.models import User
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
@@ -155,6 +156,14 @@ class MemberAdmin(admin.ModelAdmin):
 class MemberAdmin(admin.ModelAdmin):
     list_display = ["course", "weekday", "time_from", "time_to"]
     inlines = (RegularLessonExceptionInline,)
+
+
+@admin.register(LessonOccurrence)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ["course", "start", "end", "get_teachers"]
+
+    def get_teachers(self, obj: LessonOccurrence) -> list[User]:
+        return "\n".join([p.username for p in obj.teachers.all()])
 
 
 @admin.register(Course)
