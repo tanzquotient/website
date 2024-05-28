@@ -11,4 +11,13 @@ class LessonOccurrence(models.Model):
     )
     start = models.DateTimeField(blank=False)
     end = models.DateTimeField(blank=False)
-    teachers = models.ManyToManyField(to=User, related_name="lesson_occurrences", blank=True, null=True)
+    teachers = models.ManyToManyField(
+        to=User, related_name="lesson_occurrences", blank=True, null=True
+    )
+
+    class Meta:
+        unique_together = (
+            "course",
+            "start",
+            "end",
+        )
