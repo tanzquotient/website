@@ -4,12 +4,7 @@
 {% block main_content %}
     {% with course.payment_totals as payment_totals %}
         <div class="container">
-            <h2 class="mb-0">{{ course.type.title }}</h2>
-            <div class="fs-5">{{ course.offering.name }}</div>
-            <div class="my-2 fs-6">{{ course.format_teachers }}</div>
-            <a class="my-2 btn btn-success btn-sm align-self-center" role="button" href="{% url 'courses:course_detail' course.id %}">
-                <i class="fa-solid fa-eye"></i> {% trans "Show course page" %}
-            </a>
+            {% include "payment/courses/snippets/course_info.html" with course=course only %}
             <div class="my-3">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
