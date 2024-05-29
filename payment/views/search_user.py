@@ -5,8 +5,10 @@ from django.http import HttpRequest, HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def search_user(request: HttpRequest):
 
     if not request.user.is_staff and not request.user.profile.is_teacher():
