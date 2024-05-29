@@ -1,8 +1,9 @@
-from decimal import Decimal
 from typing import Sequence
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.urls import reverse
 
 from courses.models import Offering, Teach, CourseSubscriptionType
 
@@ -82,7 +83,9 @@ def _courses(offerings: Sequence[Offering]) -> list:
                 notes.append(_("No participants"))
 
         row += [
-            course.name,
+            mark_safe(
+                f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
+            ),
             f"{teaching.hourly_wage} CHF",
             f"{hours}",
             f"{total:.2f} CHF",
