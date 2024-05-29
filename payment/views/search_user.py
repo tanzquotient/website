@@ -1,11 +1,16 @@
 import json
+from time import time
+
 from django.http import HttpRequest, HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
-from time import time
+from django.core.exceptions import PermissionDenied
 
 
 def search_user(request: HttpRequest):
+
+    if not request.user.is_staff and not request.user.profile.is_teacher():
+        raise PermissionDenied
 
     start = time()
 
@@ -46,7 +51,9 @@ def search_user(request: HttpRequest):
     users_contains = list(User.objects.filter(query_contains).all())
     # remove non-exact non-teacher matches if query sender is not staff
     if not request.user.is_staff:
-        users_contains = list(filter(lambda user: user.profile.is_teacher(), users_contains))
+        users_contains = list(
+            filter(lambda user: user.profile.is_teacher(), users_contains)
+        )
     users_list = users_exact + users_contains
     # remove duplicates
     users_list = list(dict.fromkeys(users_list))

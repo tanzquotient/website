@@ -24,25 +24,27 @@
                                     {% endif %}
                                     disabled>
             
-                            <input  type="hidden"
-                                    name="teacher_{{ lesson.start|date:"c" }}_{{ lesson.end|date:"c" }}_{{ forloop.counter0 }}"
-                                    id="teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                    {% if teacher %}
-                                        value="{{ teacher.id }}"
-                                    {% elif lesson_teachers.0 %}
-                                        value="-1"
-                                    {% endif %}
-                                    {% if lesson.end > now %}disabled{% endif %}>
-            
-                            <button class="btn btn-secondary"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="{{ modal_target }}"
-                                    data-target-input-text="#teacher_name_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                    data-target-input-id="#teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                    {% if lesson.end > now %}disabled{% endif %}>
-                                {% trans "Select" %}
-                            </button>
+                            {% if can_edit %}
+                                <input  type="hidden"
+                                        name="teacher_{{ lesson.start|date:"c" }}_{{ lesson.end|date:"c" }}_{{ forloop.counter0 }}"
+                                        id="teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                        {% if teacher %}
+                                            value="{{ teacher.id }}"
+                                        {% elif lesson_teachers.0 %}
+                                            value="-1"
+                                        {% endif %}
+                                        {% if lesson.end > now %}disabled{% endif %}>
+                
+                                <button class="btn btn-secondary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="{{ modal_target }}"
+                                        data-target-input-text="#teacher_name_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                        data-target-input-id="#teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                        {% if lesson.end > now %}disabled{% endif %}>
+                                    {% trans "Select" %}
+                                </button>
+                            {% endif %}
             
                         </div>
                     </div>
@@ -50,7 +52,9 @@
             {% endwith %}
         </div>
     {% endfor %}
-    <div class="text-center">
-        <input type="submit" class="btn btn-success mt-3 mx-auto btn-lg" name="submit">
-    </div>
+    {% if can_edit %}
+        <div class="text-center">
+            <input type="submit" class="btn btn-success mt-3 mx-auto btn-lg" name="submit">
+        </div>
+    {% endif %}
 </form>

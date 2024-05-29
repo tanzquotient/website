@@ -5,11 +5,13 @@ from django.utils import timezone
 from django.contrib import messages
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 from courses.models import Course, LessonOccurrence
+from payment.views import TeacherPresenceEnabled
 
 
-class CourseTeacherPresenceView(TemplateView):
+class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
     template_name = "payment/courses/teacher_presence.html"
 
     def get_context_data(self, **kwargs):
@@ -20,6 +22,7 @@ class CourseTeacherPresenceView(TemplateView):
         context["now"] = timezone.now()
         context["errors"] = kwargs.get("errors")
         context["success"] = kwargs.get("success")
+        context["can_edit"] = self.can_edit
 
         return context
 
@@ -28,7 +31,10 @@ class CourseTeacherPresenceView(TemplateView):
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
         """
-        errors = []
+        
+        if not self.can_edit:
+            raise PermissionDenied
+        
         if "submit" in request.POST:
             if "" in list(request.POST.values()):
                 # some teacher has not been selected
