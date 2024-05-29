@@ -31,10 +31,10 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
         """
-        
+
         if not self.can_edit:
             raise PermissionDenied
-        
+
         if "submit" in request.POST:
             if "" in list(request.POST.values()):
                 # some teacher has not been selected
