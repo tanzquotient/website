@@ -1,7 +1,6 @@
 from django import template
-from django.contrib.auth.models import User
 
-from courses.models import Offering, Teach
+from courses.models import Offering
 
 register = template.Library()
 
