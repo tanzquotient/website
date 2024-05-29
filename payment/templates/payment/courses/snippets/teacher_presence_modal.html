@@ -80,7 +80,11 @@
                         success: function(data){
                             $('#teachersTable > tbody').empty();
                             for (let i = 0; i < data.length; i++) {
-                                $('#teachersTable > tbody').append(`<tr data-teacher-id="${data[i]["id"]}" data-teacher-name="${data[i]["first_name"]} ${data[i]["last_name"]}"><td>${data[i]["first_name"]}</td><td>${data[i]["last_name"]}</td></tr>`);
+                                $('#teachersTable > tbody').append(`
+                                    <tr data-teacher-id="${data[i]["id"]}">
+                                    <td>${data[i]["first_name"]}</td>
+                                    <td>${data[i]["last_name"]}</td></tr>
+                                `);
                             }
                         },
                     });
@@ -89,7 +93,11 @@
             
             $("#teachersTable > tbody").on("click", "tr", function() {
             
-                $(modalCallerTargetInputText).val($(this).attr("data-teacher-name"));
+                let teacher_name = []
+                $(this).find('td').each(function() {
+                    teacher_name.push($(this).text());
+                  });
+                $(modalCallerTargetInputText).val(teacher_name.join(' '));
                 $(modalCallerTargetInputId).val($(this).attr("data-teacher-id"));
                 $("#teachersSearch").val("").trigger("input");
                 $('#teachersModal').modal("hide");
