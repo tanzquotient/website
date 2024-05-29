@@ -37,6 +37,11 @@ urlpatterns = [
         name="course_teacher_presence",
     ),
     path(
+        "auth/user-search",
+        search_user,
+        name="user_search",
+    ),
+    path(
         "auth/courses/<int:course>/export/csv",
         CoursePaymentExportCsv.as_view(),
         name="coursepayment_export_csv",

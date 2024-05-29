@@ -1,0 +1,11 @@
+{% load i18n %}
+
+{% if messages|length %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} mt-1">
+            <div class="alert-body">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

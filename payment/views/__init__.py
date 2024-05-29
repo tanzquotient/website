@@ -12,3 +12,4 @@ from .subscription_payment_view import subscription_payment_view
 from .subscription_qr_bill_export_pdf import subscription_qr_bill_export_pdf
 from .finance import *
 from .course_teacher_presence_view import CourseTeacherPresenceView
+from .search_user import search_user
