@@ -1,7 +1,6 @@
 import json
-from time import time
 
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -13,8 +12,6 @@ def search_user(request: HttpRequest):
 
     if not request.user.is_staff and not request.user.profile.is_teacher():
         raise PermissionDenied
-
-    start = time()
 
     search_string: str = request.POST.get("q", None)
     query_exact = Q()
@@ -67,7 +64,5 @@ def search_user(request: HttpRequest):
         }
         for user in users_list
     ]
-
-    print(time() - start)
 
     return HttpResponse(json.dumps(users), content_type="application/json")
