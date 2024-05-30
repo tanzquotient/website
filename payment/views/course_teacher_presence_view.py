@@ -52,6 +52,16 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
                     [_, start, end, _] = key.split("_")
                     data.setdefault(f"{start}_{end}", []).append(teacher_id)
                 for key, teachers in data.items():
+                    if not any(teacher != "-1" for teacher in teachers):
+                        messages.add_message(
+                            self.request,
+                            messages.ERROR,
+                            "You reported no teachers for one of the lessons." +
+                            " Please review your submission or contact " + 
+                            "Dance Administration if the lesson was cancelled.",
+                            extra_tags="alert-danger",
+                        )
+                        break
                     if len(teachers) != len(set(teachers)):
                         messages.add_message(
                             self.request,
