@@ -163,7 +163,9 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = ["course", "start", "end", "get_teachers"]
 
     def get_teachers(self, obj: LessonOccurrence) -> list[User]:
-        return "\n".join([p.username for p in obj.teachers.all()])
+        return ", ".join([p.get_full_name() for p in obj.teachers.all()])
+
+    get_teachers.short_description = "Teachers"
 
 
 @admin.register(Course)
