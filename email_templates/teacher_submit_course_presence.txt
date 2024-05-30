@@ -4,7 +4,7 @@ Hi {{first_name}},
 
 Thank you for teaching {{ course }}.
 Please take a minute to fill in and review the teacher presence form from your My Courses page.
-We will use ut to compute your salary.
+We will use it to compute your salary.
 
 Note: in case of multiple teachers, only one needs to provide this information. The presence log of the other teachers will be updated accordingly.
 
