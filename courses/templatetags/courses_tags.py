@@ -4,7 +4,14 @@ from django.db.models import QuerySet, Q
 from django.http import HttpRequest
 from django.utils import timezone
 
-from courses.models import Weekday, OfferingType, Course, Subscribe, SubscribeState
+from courses.models import (
+    Weekday,
+    OfferingType,
+    Course,
+    Subscribe,
+    SubscribeState,
+    LessonOccurrence,
+)
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
 from survey.models.types import QuestionType
@@ -165,3 +172,15 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
             expire_date_query, user=user, is_completed=False, course__isnull=False
         ).all()
     )
+
+
+@register.filter(name="is_over_since")
+def is_over_since(course: Course, days: int) -> bool:
+    return course.is_over_since(days=days)
+
+
+@register.filter(name="missing_presence_data")
+def missing_presence_data(course: Course) -> bool:
+    return LessonOccurrence.objects.filter(
+        course=course, end__lte=timezone.datetime.now(), teachers=None
+    ).exists()

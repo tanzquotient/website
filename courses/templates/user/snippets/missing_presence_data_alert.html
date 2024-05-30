@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% if course|missing_presence_data and course|is_over_since:-50 %}
+
+    <div class="alert alert-danger">
+        <h5 class="alert-heading">
+            {% trans "Missing data" %}
+        </h5>
+        <hr>
+        <div class="alert-body">
+            {% trans "Please fill in the teacher presence form for this course as soon as possible if you want to get paid." %}
+        </div>
+    </div>
+
+{% endif %}

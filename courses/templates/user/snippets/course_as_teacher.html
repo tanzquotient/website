@@ -4,6 +4,7 @@
         {{ course.type }}
     </div>
     <div class="card-body">
+        {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}
         <p>
             <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
                 <strong>{% trans "Details & edit" %}</strong>
