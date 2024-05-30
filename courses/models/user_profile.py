@@ -223,7 +223,13 @@ class UserProfile(Model):
             t.course
             for t in self.user.teaching_courses.all()
             if not t.course.is_over_since(days=30)
+        ] + [
+            lesson_occurrence.course
+            for lesson_occurrence in self.user.lesson_occurrences.all()
+            if not lesson_occurrence.course.is_over_since(days=30)
         ]
+        # remove duplicates
+        courses = list(dict.fromkeys(courses))
         courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
         return courses
 

@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if user.profile.is_teacher %}
+    {% if user.profile.is_teacher or user.profile.get_current_teaching_courses|length > 0 %}
         <h3>{% trans "Teaching" %}</h3>
         <div class="row g-3">
             {% for course in user.profile.get_current_teaching_courses %}
