@@ -26,6 +26,7 @@ from courses.models import (
     IrregularLesson,
     RegularLessonException,
     LessonOccurrenceData,
+    LessonOccurrence,
 )
 from partners.models import Partner
 from survey.models import Survey
@@ -483,6 +484,22 @@ class Course(TranslatableModel):
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
         return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
+
+    def update_lesson_occurrences(self) -> None:
+        for occurrence in self.get_lesson_occurrences():
+            # create lesson occurrences if they don't exist
+            LessonOccurrence.objects.get_or_create(
+                course=self, start=occurrence.start, end=occurrence.end
+            )
+
+        # delete extra lesson occurrences if they don't exist anymore
+        # get all lesson occurrences for the course
+        course_lesson_occurrences = LessonOccurrence.objects.filter(course=self)
+        for occurrence in self.get_lesson_occurrences():
+            course_lesson_occurrences.exclude(
+                start=occurrence.start, end=occurrence.end
+            )
+        course_lesson_occurrences.all().delete()
 
     def get_lesson_occurrences(self) -> Iterable[LessonOccurrenceData]:
         return [
