@@ -1,12 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta
-from courses.models import Course
 
 
 class LessonOccurrence(models.Model):
     course = models.ForeignKey(
-        to=Course,
+        to="Course",
         on_delete=models.CASCADE,
         related_name="lesson_occurrences",
         blank=False,

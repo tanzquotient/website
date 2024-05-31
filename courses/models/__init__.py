@@ -13,6 +13,7 @@ from .regular_lesson import RegularLesson
 from .lesson_details import LessonDetails
 from .regular_lesson_exception import RegularLessonException
 from .irregular_lesson import IrregularLesson
+from .lesson_occurrence import LessonOccurrence
 from .course_type import CourseType
 from .course import Course
 from .period_cancellation import PeriodCancellation
@@ -24,4 +25,3 @@ from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
 from .song import Song
 from .user_profile import UserProfile
-from .lesson_occurrence import LessonOccurrence
