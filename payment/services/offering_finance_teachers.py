@@ -1,11 +1,19 @@
 from typing import Sequence
+import datetime
+from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 
-from courses.models import Offering, Teach, CourseSubscriptionType
+from courses.models import (
+    Offering,
+    Teach,
+    CourseSubscriptionType,
+    LessonOccurrence,
+    Course,
+)
 
 
 def offering_finance_teachers(offerings: Sequence[Offering]) -> tuple[str, list, list]:
@@ -32,6 +40,7 @@ def _courses(offerings: Sequence[Offering]) -> list:
         _("First name"),
         _("Last name"),
         _("Courses"),
+        _("Main teacher"),
         _("Hourly Wages"),
         _("Hours"),
         _("Course Totals"),
@@ -43,56 +52,80 @@ def _courses(offerings: Sequence[Offering]) -> list:
         header += ["Offering"]
     courses.append(header)
 
-    teachings = (
-        Teach.objects.filter(course__offering__in=offerings)
-        .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
-        .order_by(
-            "teacher__first_name",
-            "teacher__last_name",
-            "course__offering_id",
-            "course__name",
+    # get all teachers in offerings
+    teachers: list[User] = (
+        User.objects.filter(
+            lesson_occurrences__in=LessonOccurrence.objects.filter(
+                course__offering__in=offerings
+            )
+            .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+            .all()
         )
+        .distinct()
         .all()
+        .order_by("first_name", "last_name")
     )
 
-    for idx, teaching in enumerate(teachings):
-        teacher = teaching.teacher
-        course = teaching.course
+    for teacher in teachers:
+        # get all courses for a teacher in offerings
+        teacher_courses = (
+            Course.objects.filter(offering__in=offerings)
+            .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
+            .filter(lesson_occurrences__teachers=teacher)
+            .distinct()
+            .all()
+            .order_by("offering_id", "name")
+        )
 
-        row = [
-            teacher.first_name or "",
-            teacher.last_name or "",
-        ]
-        if multiple_offerings:
-            row.append(course.offering or "")
+        for course in teacher_courses:
+            row = [
+                teacher.first_name or "",
+                teacher.last_name or "",
+            ]
+            if multiple_offerings:
+                row.append(course.offering or "")
 
-        hours = course.get_total_hours() if not course.cancelled else 0
-        total = teaching.hourly_wage * hours
+            if course.cancelled:
+                hours = 0
+            else:
+                hours = Decimal((sum(
+                    [
+                        lesson_occurrence.duration()
+                        for lesson_occurrence in LessonOccurrence.objects.filter(
+                            course=course, teachers=teacher
+                        ).all()
+                    ],
+                    datetime.timedelta(),
+                ).total_seconds()/3600).__round__(2))
 
-        notes = []
-        if course.cancelled:
-            notes.append(_("Course cancelled"))
-        else:
-            if course.teaching.count() > 2:
-                notes.append(
-                    _(
-                        "Course with more than two teachers, please check who taught how many lessons."
+            hourly_wage = teacher.profile.get_hourly_wage()
+            total = hourly_wage * hours
+
+            notes = []
+            if course.cancelled:
+                notes.append(_("Course cancelled"))
+            else:
+                if course.teaching.count() > 2:
+                    notes.append(
+                        _(
+                            "Course with more than two teachers, please check who taught how many lessons."
+                        )
                     )
-                )
-            if course.get_confirmed_count() == 0:
-                notes.append(_("No participants"))
+                if course.get_confirmed_count() == 0:
+                    notes.append(_("No participants"))
 
-        row += [
-            mark_safe(
-                f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
-            ),
-            f"{teaching.hourly_wage} CHF",
-            f"{hours}",
-            f"{total:.2f} CHF",
-            "; ".join(map(str, notes)),
-        ]
+            row += [
+                mark_safe(
+                    f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
+                ),
+                _("Yes") if teacher in course.get_teachers() else _("No"),
+                f"{hourly_wage} CHF",
+                f"{hours}",
+                f"{total:.2f} CHF",
+                "; ".join(map(str, notes)),
+            ]
 
-        courses.append(row)
+            courses.append(row)
 
     return courses
 
@@ -112,14 +145,17 @@ def _personal_details(offerings: Sequence[Offering]) -> list:
 
     personal_details.append(header)
 
-    teachers = (
-        User.objects.filter(teaching_courses__course__offering__in=offerings)
-        .exclude(
-            teaching_courses__course__subscription_type=CourseSubscriptionType.EXTERNAL
+    teachers: list[User] = (
+        User.objects.filter(
+            lesson_occurrences__in=LessonOccurrence.objects.filter(
+                course__offering__in=offerings
+            )
+            .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+            .all()
         )
-        .order_by("first_name", "last_name")
         .distinct()
         .all()
+        .order_by("first_name", "last_name")
     )
 
     for teacher in teachers:

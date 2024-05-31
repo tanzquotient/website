@@ -133,6 +133,18 @@ class UserProfile(Model):
 
     def is_student(self) -> bool:
         return self.student_status in StudentStatus.STUDENTS and self.legi
+    
+    def get_hourly_wage(self) -> Decimal:
+        # If a teacher has a fixed wage, return it
+        if self.fixed_hourly_wage is not None:
+            return self.fixed_hourly_wage
+
+        total_hours = self.total_hours_taught()
+        if total_hours >= 400:
+            return Decimal(40)
+        if total_hours >= 200:
+            return Decimal(35)
+        return Decimal(30)
 
     # At least one course ends in the future
     def is_current_teacher(self) -> bool:
