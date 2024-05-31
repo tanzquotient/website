@@ -7,6 +7,7 @@ from groups.services import update_groups
 from survey.services import send_course_surveys
 from payment.payment_processor import PaymentProcessor
 from payment.parser import ISO2022Parser, ZkbCsvParser
+from courses.services.teachers import send_presence_reminder
 
 
 @shared_task(
@@ -36,3 +37,8 @@ def task_update_groups() -> None:
 @shared_task(name="send_course_surveys", ignore_result=True)
 def task_send_course_surveys() -> None:
     send_course_surveys()
+
+
+@shared_task(name="send_course_presence_reminder", ignore_result=True)
+def task_send_course_presence_reminder() -> None:
+    send_presence_reminder()

@@ -1,8 +1,16 @@
+from datetime import date, timedelta
+import logging
+
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from courses import models as models
 from courses.emailcenter import send_teacher_welcome
+
+from tq_website import settings
+from email_system.services import send_all_emails
+
+log = logging.getLogger("tq")
 
 
 def welcome_teacher(teach):
@@ -52,3 +60,49 @@ def welcome_teachers_reset_flag(courses, request):
         messages.SUCCESS,
         _("{} of {} teachers reset successfully").format(count, total),
     )
+
+
+def send_presence_reminder() -> None:
+
+    # look for courses that ended yesterday
+    courses: list[models.Course] = list(models.Course.objects.all())
+    courses_yesterday = [
+        course
+        for course in courses
+        if course.get_last_lesson_date() == date.today() - timedelta(days=1)
+    ]
+
+    # look for courses that ended 7 days ago and for which some lesson occurrence
+    # is lacking presence data
+    courses_last_week = [
+        course
+        for course in courses
+        if (course.get_last_lesson_date() == date.today() - timedelta(days=7))
+        and course.lesson_occurrences.filter(teachers=None).exists()
+    ]
+
+    courses = courses_yesterday + courses_last_week
+
+    emails = []
+
+    for course in courses:
+        main_teachers = course.get_teachers()
+        for main_teacher in main_teachers:
+            context = {
+                "first_name": main_teacher.first_name,
+            }
+            log.info(
+                f"Will send presence form reminder to {main_teacher.username} for course {course.type.title} in offering {course.offering.name}"
+            )
+
+            emails.append(
+                dict(
+                    to=main_teacher.email,
+                    reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                    template="teacher_course_presence_reminder",
+                    context=context,
+                )
+            )
+
+    log.info(f"Sending {len(emails)} emails")
+    send_all_emails(emails)
