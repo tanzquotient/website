@@ -496,10 +496,10 @@ class Course(TranslatableModel):
         # get all lesson occurrences for the course
         course_lesson_occurrences = LessonOccurrence.objects.filter(course=self)
         for occurrence in self.get_lesson_occurrences():
-            course_lesson_occurrences.exclude(
+            course_lesson_occurrences = course_lesson_occurrences.exclude(
                 start=occurrence.start, end=occurrence.end
             )
-        course_lesson_occurrences.all().delete()
+        course_lesson_occurrences.delete()
 
     def get_lesson_occurrences(self) -> Iterable[LessonOccurrenceData]:
         return [
