@@ -162,6 +162,9 @@ class MemberAdmin(admin.ModelAdmin):
 class MemberAdmin(admin.ModelAdmin):
     list_display = ["course", "start", "end", "get_teachers"]
     readonly_fields = ["course", "start", "end"]
+    ordering = ["-start"]
+    list_filter = ["course__offering"]
+    search_fields = ["course"]
 
     def get_teachers(self, obj: LessonOccurrence) -> list[User]:
         return ", ".join([p.get_full_name() for p in obj.teachers.all()])
