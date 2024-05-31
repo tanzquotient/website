@@ -90,6 +90,7 @@ def send_presence_reminder() -> None:
         for main_teacher in main_teachers:
             context = {
                 "first_name": main_teacher.first_name,
+                "course": course.type.name,
             }
             log.info(
                 f"Will send presence form reminder to {main_teacher.username} for course {course.type.title} in offering {course.offering.name}"
