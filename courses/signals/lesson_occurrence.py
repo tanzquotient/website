@@ -1,11 +1,14 @@
 from django.db.models.signals import post_save, post_delete
+from django.db.models import Q
 from django.dispatch import receiver
 from courses.models import (
     RegularLesson,
     IrregularLesson,
     Course,
     RegularLessonException,
-    Offering, Period, PeriodCancellation
+    Offering,
+    Period,
+    PeriodCancellation,
 )
 
 
@@ -27,10 +30,15 @@ def update_lesson_occurrences(sender, instance, **kwargs):
         courses = [instance.course]
     elif sender == RegularLessonException:
         courses = [instance.regular_lesson.course]
-    elif sender in [Offering, Period]:
-        courses = list(instance.courses.all())
+    elif sender == Offering:
+        courses = list(instance.course_set.all())
+    elif sender == Period:
+        period_query = Q(period=instance) | Q(offering__period=instance)
+        courses = list(Course.objects.filter(period_query).all())
     elif sender == PeriodCancellation:
-        courses = list(instance.period.courses.all())
+        courses = list(instance.period.course_set.all())
+
+    print(courses)
 
     for course in courses:
         course.update_lesson_occurrences()
