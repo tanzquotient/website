@@ -35,7 +35,9 @@ from utils.helpers import optional_min, optional_max
 
 class Course(TranslatableModel):
     # Mandatory fields
-    offering = models.ForeignKey("Offering", on_delete=models.PROTECT)
+    offering = models.ForeignKey(
+        "Offering", on_delete=models.PROTECT, related_name="courses"
+    )
     name = models.CharField(max_length=255, blank=False)
     name.help_text = (
         "This name is just for reference and is not displayed anywhere on the website."
@@ -81,7 +83,11 @@ class Course(TranslatableModel):
         "Room", related_name="courses", blank=True, null=True, on_delete=models.PROTECT
     )
     period = models.ForeignKey(
-        "Period", blank=True, null=True, on_delete=models.PROTECT
+        "Period",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="courses",
     )
     period.help_text = (
         "You can set a custom period for this course here. "

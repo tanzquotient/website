@@ -5,6 +5,7 @@ from courses.models import (
     IrregularLesson,
     Course,
     RegularLessonException,
+    Offering, Period, PeriodCancellation
 )
 
 
@@ -12,16 +13,24 @@ from courses.models import (
 @receiver(post_save, sender=RegularLesson)
 @receiver(post_save, sender=RegularLessonException)
 @receiver(post_save, sender=IrregularLesson)
+@receiver(post_save, sender=Offering)
+@receiver(post_save, sender=Period)
+@receiver(post_save, sender=PeriodCancellation)
 @receiver(post_delete, sender=RegularLesson)
 @receiver(post_delete, sender=RegularLessonException)
 @receiver(post_delete, sender=IrregularLesson)
 def update_lesson_occurrences(sender, instance, **kwargs):
-    course: Course
+    courses: list[Course]
     if sender == Course:
-        course = instance
+        courses = [instance]
     elif sender in [RegularLesson, IrregularLesson]:
-        course = instance.course
+        courses = [instance.course]
     elif sender == RegularLessonException:
-        course = instance.regular_lesson.course
+        courses = [instance.regular_lesson.course]
+    elif sender in [Offering, Period]:
+        courses = list(instance.courses.all())
+    elif sender == PeriodCancellation:
+        courses = list(instance.period.courses.all())
 
-    course.update_lesson_occurrences()
+    for course in courses:
+        course.update_lesson_occurrences()
