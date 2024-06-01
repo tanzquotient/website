@@ -129,11 +129,14 @@ class UserProfile(Model):
 
     # convenience method for model user are added here
     def is_teacher(self) -> bool:
-        return self.user.teaching_courses.count() > 0
+        return self.user.teaching_courses.exists()
+    
+    def is_substitute_teacher(self) -> bool:
+        return not self.is_teacher() and self.user.lesson_occurrences.exists()
 
     def is_student(self) -> bool:
         return self.student_status in StudentStatus.STUDENTS and self.legi
-    
+
     def get_hourly_wage(self) -> Decimal:
         # If a teacher has a fixed wage, return it
         if self.fixed_hourly_wage is not None:
@@ -235,13 +238,28 @@ class UserProfile(Model):
             t.course
             for t in self.user.teaching_courses.all()
             if not t.course.is_over_since(days=30)
-        ] + [
+        ]
+        courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
+        return courses
+
+    def get_current_teaching_courses_as_substitute(self) -> Iterable[Course]:
+        courses = [
             lesson_occurrence.course
             for lesson_occurrence in self.user.lesson_occurrences.all()
             if not lesson_occurrence.course.is_over_since(days=30)
         ]
         # remove duplicates
         courses = list(dict.fromkeys(courses))
+        # remove courses as main teacher
+        courses = list(set(courses) - set(self.get_current_teaching_courses()))
+        courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
+        return courses
+
+    def get_all_current_teaching_courses(self) -> Iterable[Course]:
+        courses = (
+            self.get_current_teaching_courses()
+            + self.get_current_teaching_courses_as_substitute()
+        )
         courses.sort(key=lambda c: c.get_first_lesson_date() or date.min)
         return courses
 
