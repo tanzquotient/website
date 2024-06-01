@@ -42,12 +42,12 @@ def search_user(request: HttpRequest):
         query_contains.add(
             Q(first_name__istartswith=search_string)
             | Q(last_name__istartswith=search_string)
-            | Q(email__istartswith=search_string),
+            | Q(email__icontains=search_string),
             Q.OR,
         )
 
-    users_exact = list(User.objects.filter(query_exact).all())
-    users_contains = list(User.objects.filter(query_contains).all())
+    users_exact = sorted(list(User.objects.filter(query_exact).all()), key=lambda user: user.id)
+    users_contains = sorted(list(User.objects.filter(query_contains).all()), key=lambda user: user.id)
     # remove non-exact non-teacher matches if query sender is not staff
     if not request.user.is_staff:
         users_contains = list(
