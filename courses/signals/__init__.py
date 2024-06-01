@@ -1,1 +1,1 @@
-from .lesson_occurrence import *
+from .lesson_occurrence import update_lesson_occurrences
