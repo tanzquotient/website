@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load courses_tags %}
 
-{% if course|missing_presence_data and course|is_over_since:-50 %}
+{% if course|missing_presence_data and course|is_over_since:7 %}
 
     <div class="alert alert-danger">
         <h5 class="alert-heading">
