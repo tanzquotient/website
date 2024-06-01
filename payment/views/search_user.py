@@ -31,8 +31,8 @@ def search_user(request: HttpRequest):
             )
             # look for partial (first name, last name) match
             query_contains.add(
-                Q(first_name__icontains=split_1, last_name__icontains=split_2)
-                | Q(first_name__icontains=split_2, last_name__icontains=split_1),
+                Q(first_name__istartswith=split_1, last_name__istartswith=split_2)
+                | Q(first_name__istartswith=split_2, last_name__istartswith=split_1),
                 Q.OR,
             )
     else:
@@ -40,9 +40,9 @@ def search_user(request: HttpRequest):
         query_exact.add(Q(email__iexact=search_string), Q.OR)
         # look for partial first name, last name or email match
         query_contains.add(
-            Q(first_name__icontains=search_string)
-            | Q(last_name__icontains=search_string)
-            | Q(email__icontains=search_string),
+            Q(first_name__istartswith=search_string)
+            | Q(last_name__istartswith=search_string)
+            | Q(email__istartswith=search_string),
             Q.OR,
         )
 
