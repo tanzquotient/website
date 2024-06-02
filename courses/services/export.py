@@ -130,7 +130,7 @@ def export_teacher_payment_information(
 ):
     from payment import services
 
-    export_name, personal_data, courses = services.offering_finance_teachers(offerings)
+    export_name, personal_data, courses = services.offering_finance_teachers(offerings, use_html=False)
     return export(
         export_format,
         title=export_name,

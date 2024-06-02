@@ -13,7 +13,7 @@ def offering_finance_teachers_export(
     from payment import services
 
     export_name, personal_data, courses = services.offering_finance_teachers(
-        Offering.objects.filter(id=offering).all()
+        Offering.objects.filter(id=offering).all(), use_html=False
     )
     return export(
         export_format,

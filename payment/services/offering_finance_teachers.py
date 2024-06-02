@@ -16,7 +16,9 @@ from courses.models import (
 )
 
 
-def offering_finance_teachers(offerings: Sequence[Offering]) -> tuple[str, list, list]:
+def offering_finance_teachers(
+    offerings: Sequence[Offering], use_html: bool = False
+) -> tuple[str, list, list]:
     """Exports a summary of the given ``offering`` concerning payment of teachers.
 
     Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
@@ -27,13 +29,13 @@ def offering_finance_teachers(offerings: Sequence[Offering]) -> tuple[str, list,
     """
     export_name = f'Salaries - {(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")}'
 
-    courses = _courses(offerings)
+    courses = _courses(offerings, use_html=use_html)
     personal_details = _personal_details(offerings)
 
     return export_name, personal_details, courses
 
 
-def _courses(offerings: Sequence[Offering]) -> list:
+def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
     courses = []
 
     header = [
@@ -88,15 +90,20 @@ def _courses(offerings: Sequence[Offering]) -> list:
             if course.cancelled:
                 hours = 0
             else:
-                hours = Decimal((sum(
-                    [
-                        lesson_occurrence.duration()
-                        for lesson_occurrence in LessonOccurrence.objects.filter(
-                            course=course, teachers=teacher
-                        ).all()
-                    ],
-                    datetime.timedelta(),
-                ).total_seconds()/3600).__round__(2))
+                hours = Decimal(
+                    (
+                        sum(
+                            [
+                                lesson_occurrence.duration()
+                                for lesson_occurrence in LessonOccurrence.objects.filter(
+                                    course=course, teachers=teacher
+                                ).all()
+                            ],
+                            datetime.timedelta(),
+                        ).total_seconds()
+                        / 3600
+                    ).__round__(2)
+                )
 
             hourly_wage = teacher.profile.get_hourly_wage()
             total = hourly_wage * hours
@@ -115,8 +122,12 @@ def _courses(offerings: Sequence[Offering]) -> list:
                     notes.append(_("No participants"))
 
             row += [
-                mark_safe(
-                    f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
+                (
+                    mark_safe(
+                        f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
+                    )
+                    if use_html
+                    else course.name
                 ),
                 _("Yes") if teacher in course.get_teachers() else _("No"),
                 f"{hourly_wage} CHF",
