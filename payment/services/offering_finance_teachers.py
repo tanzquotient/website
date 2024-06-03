@@ -13,6 +13,7 @@ from courses.models import (
     CourseSubscriptionType,
     LessonOccurrence,
     Course,
+    LessonOccurrenceTeach,
 )
 
 
@@ -106,7 +107,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 )
 
             hourly_wage = (
-                LessonOccurrence.objects.filter(course=course, teachers=teacher)
+                LessonOccurrenceTeach.objects.filter(lesson_occurrence__course=course, teacher=teacher)
                 .first()
                 .hourly_wage
             )
