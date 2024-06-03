@@ -38,7 +38,5 @@ def update_lesson_occurrences(sender, instance, **kwargs):
     elif sender == PeriodCancellation:
         courses = list(instance.period.course_set.all())
 
-    print(courses)
-
     for course in courses:
         course.update_lesson_occurrences()
