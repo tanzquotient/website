@@ -10,9 +10,9 @@ def forwards(apps, schema_editor):
         course_lesson_occurrences: list[LessonOccurrence] = course.lesson_occurrences.all()
         for lesson_occurrence in course_lesson_occurrences:
             for teacher in course.get_teachers():
-                lesson_occurrence_teach = LessonOccurrenceTeach(lesson_occurrence=lesson_occurrence, teacher=teacher)
+                hourly_wage = Teach.objects.get(course=course, teacher=teacher).hourly_wage
+                lesson_occurrence_teach = LessonOccurrenceTeach(lesson_occurrence=lesson_occurrence, teacher=teacher, hourly_wage=hourly_wage)
                 lesson_occurrence_teach.save()
-                lesson_occurrence.teachers.add(lesson_occurrence_teach)
             lesson_occurrence.save()
 
 
