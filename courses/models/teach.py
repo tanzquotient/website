@@ -21,12 +21,6 @@ class Teach(models.Model):
         "the number of courses taught or the fixed wage set in the teachers profile.",
     )
 
-    def get_wage(self) -> Decimal:
-        time = self.course.get_total_hours()
-        hourly_wage = self.hourly_wage or self.calculate_hourly_wage()
-
-        return time * hourly_wage
-
     def save(self, *args, **kwargs) -> None:
         if self.hourly_wage is None:
             self.hourly_wage = self.calculate_hourly_wage()
@@ -36,18 +30,8 @@ class Teach(models.Model):
         # For external courses, teachers are not paid by us
         if self.course.is_external():
             return Decimal(0)
-
-        # If a teacher has a fixed wage, return it
-        fixed_wage = self.teacher.profile.fixed_hourly_wage
-        if fixed_wage is not None:
-            return fixed_wage
-
-        total_hours = self.teacher.profile.total_hours_taught()
-        if total_hours >= 400:
-            return Decimal(40)
-        if total_hours >= 200:
-            return Decimal(35)
-        return Decimal(30)
+        else:
+            return self.teacher.profile.get_hourly_wage()
 
     def __str__(self) -> str:
         return f"{self.teacher} teaches {self.course}"

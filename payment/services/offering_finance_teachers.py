@@ -105,7 +105,11 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                     ).__round__(2)
                 )
 
-            hourly_wage = teacher.profile.get_hourly_wage()
+            hourly_wage = (
+                LessonOccurrence.objects.filter(course=course, teachers=teacher)
+                .first()
+                .hourly_wage
+            )
             total = hourly_wage * hours
 
             notes = []
