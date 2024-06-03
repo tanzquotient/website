@@ -239,7 +239,7 @@ class UserProfile(Model):
             for t in self.user.teaching_courses.all()
             if not t.course.is_over_since(days=30)
         ]
-        courses.sort(key=lambda c: c.get_first_lesson_date())
+        courses.sort(key=Course.get_first_lesson_date)
         return courses
 
     def get_current_teaching_courses_as_substitute(self) -> Iterable[Course]:
@@ -252,7 +252,7 @@ class UserProfile(Model):
         courses = list(dict.fromkeys(courses))
         # remove courses as main teacher
         courses = list(set(courses) - set(self.get_current_teaching_courses()))
-        courses.sort(key=lambda c: c.get_first_lesson_date())
+        courses.sort(key=Course.get_first_lesson_date)
         return courses
 
     def get_all_current_teaching_courses(self) -> Iterable[Course]:
@@ -260,7 +260,7 @@ class UserProfile(Model):
             self.get_current_teaching_courses()
             + self.get_current_teaching_courses_as_substitute()
         )
-        courses.sort(key=lambda c: c.get_first_lesson_date())
+        courses.sort(key=Course.get_first_lesson_date)
         return courses
 
     def get_current_subscriptions(self) -> Iterable[Subscribe]:
