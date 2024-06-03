@@ -7,7 +7,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 
-from courses.models import Course, LessonOccurrence
+from courses.models import Course, LessonOccurrence, LessonOccurrenceTeach
 from payment.views import TeacherPresenceEnabled
 
 
@@ -56,9 +56,9 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
                         messages.add_message(
                             self.request,
                             messages.ERROR,
-                            "You reported no teachers for one of the lessons." +
-                            " Please review your submission or contact " + 
-                            "Dance Administration if the lesson was cancelled.",
+                            "You reported no teachers for one of the lessons."
+                            + " Please review your submission or contact "
+                            + "Dance Administration if the lesson was cancelled.",
                             extra_tags="alert-danger",
                         )
                         break
@@ -77,14 +77,21 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
                         end=datetime.fromisoformat(end),
                     )
 
-                    lesson_occurrence.teachers.clear()
-                    lesson_occurrence.teachers.add(
-                        *[
-                            User.objects.get(id=int(user_id))
-                            for user_id in teachers
-                            if user_id != "-1"
-                        ]
-                    )
+                    teachers = [
+                        User.objects.get(id=int(user_id))
+                        for user_id in teachers
+                        if user_id != "-1"
+                    ]
+                    for teacher in teachers:
+                        lesson_occurrence_teach, _ = (
+                            LessonOccurrenceTeach.objects.get_or_create(
+                                lesson_occurrence=lesson_occurrence, teacher=teacher
+                            )
+                        )
+                        lesson_occurrence_teach.save()
+                    LessonOccurrenceTeach.objects.filter(
+                        lesson_occurrence=lesson_occurrence
+                    ).exclude(teacher__in=teachers).delete()
                     lesson_occurrence.save()
                 messages.add_message(
                     self.request,
