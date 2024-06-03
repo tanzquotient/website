@@ -12,7 +12,7 @@ class LessonOccurrence(models.Model):
     )
     start = models.DateTimeField(blank=False)
     end = models.DateTimeField(blank=False)
-    teachers_new = models.ManyToManyField(
+    teachers = models.ManyToManyField(
         to=User,
         related_name="lesson_occurrences",
         blank=True,
