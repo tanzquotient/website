@@ -12,6 +12,16 @@ class LessonOccurrenceTeach(models.Model):
         to="LessonOccurrence", on_delete=models.CASCADE
     )
     teacher = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    hourly_wage = models.DecimalField(
+        blank=False,
+        decimal_places=2,
+        max_digits=6,
+    )
+
+    def save(self, *args, **kwargs):
+        if self.hourly_wage is None:
+            self.hourly_wage = self.calculate_hourly_wage()
+        super(LessonOccurrenceTeach, self).save(*args, **kwargs)
 
     def calculate_hourly_wage(self) -> Decimal:
         # For external courses, teachers are not paid by us
@@ -22,13 +32,6 @@ class LessonOccurrenceTeach(models.Model):
             return self.teacher.profile.get_hourly_wage(
                 until=self.lesson_occurrence.start
             )
-
-    hourly_wage = models.DecimalField(
-        blank=False,
-        default=calculate_hourly_wage,
-        decimal_places=2,
-        max_digits=6,
-    )
 
     def update_hourly_wage(self) -> None:
         self.hourly_wage = self.calculate_hourly_wage()
