@@ -24,7 +24,8 @@
                                         {% if lesson.end > now %}disabled{% endif %}>
                                 </select>
                                 <button class="btn btn-danger noTeacherBtn"
-                                        data-target="teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
+                                        data-target="teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                        {% if lesson.end > now %}disabled{% endif %}>
                                             {% trans "No teacher" %}
                                 </button>
                             {% else %}
