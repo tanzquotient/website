@@ -71,7 +71,6 @@ class TeachInlineForCourse(admin.TabularInline):
     fk_name = "course"
 
     raw_id_fields = ("teacher",)
-    readonly_fields = ["hourly_wage"]
 
 
 class SubscribeInlineForCourse(admin.TabularInline):
@@ -531,7 +530,7 @@ class PeriodAdmin(admin.ModelAdmin):
 @admin.register(Teach)
 class TeachAdmin(admin.ModelAdmin):
     raw_id_fields = ("teacher",)
-    list_display = ("id", "teacher", "course", "hourly_wage", "welcomed")
+    list_display = ("id", "teacher", "course", "welcomed")
     list_filter = (
         SubscribeOfferingListFilter,
         SubscribeCourseListFilter,
@@ -543,7 +542,6 @@ class TeachAdmin(admin.ModelAdmin):
         "teacher__last_name",
         "course__name",
         "course__type__translations__title",
-        "hourly_wage",
     ]
 
 

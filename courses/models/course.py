@@ -663,7 +663,6 @@ class Course(TranslatableModel):
             teach.pk = None
             teach.welcomed = False
             teach.course = self
-            teach.hourly_wage = None
             teach.save()
 
         return self
