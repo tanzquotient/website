@@ -47,7 +47,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
             else:
                 data = {}
                 for key, teacher_id in request.POST.items():
-                    if "teacher_" not in key:
+                    if "teacher_" not in key or "_text" in key:
                         continue
                     [_, start, end, _] = key.split("_")
                     data.setdefault(f"{start}_{end}", []).append(teacher_id)

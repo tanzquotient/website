@@ -13,4 +13,4 @@ from .subscription_qr_bill_export_pdf import subscription_qr_bill_export_pdf
 from .finance import *
 from .teacher_presence_enabled import TeacherPresenceEnabled
 from .course_teacher_presence_view import CourseTeacherPresenceView
-from .search_user import search_user
+from .search_teacher import search_teacher

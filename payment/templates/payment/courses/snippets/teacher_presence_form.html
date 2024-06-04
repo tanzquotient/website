@@ -2,6 +2,9 @@
 {% load sekizai_tags %}
 {% load teacher_presence_tags %}
 
+{% addtoblock "css" %}
+{% endaddtoblock %}
+
 <form method="post" id="teacherPresenceForm">
     {% csrf_token %}
     {% for lesson in course.get_lesson_occurrences %}
@@ -9,12 +12,25 @@
         <div class="row">
             {% with course|get_lesson_teachers:lesson as lesson_teachers %}
                 {% for teacher in lesson_teachers %}
-                    <div class="col-md-4 gy-2">
+                    <div class="col-lg-4 gy-2">
                         <div class="input-group">
-            
-                            <input  type="text"
-                                    class="form-control teacher-name-input"
-                                    id="teacher_name_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                            {% if can_edit %}
+                                <select class="form-control" 
+                                        name="teacher_{{ lesson.start|date:"c" }}_{{ lesson.end|date:"c" }}_{{ forloop.counter0 }}"
+                                        id="teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                        placeholder="{% trans "Teacher" %}"
+                                        data-url="{% url "payment:teacher_search" course.id %}"
+                                        autocomplete="off"
+                                        {% if lesson.end > now %}disabled{% endif %}>
+                                </select>
+                                <button class="btn btn-danger noTeacherBtn"
+                                        data-target="teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
+                                            {% trans "No teacher" %}
+                                </button>
+                            {% else %}
+                                <input  
+                                    type="text"
+                                    class="form-control"
                                     placeholder="{% trans "Select a teacher" %}"
                                     aria-label="{% trans "Teacher" %}"
                                     {% if teacher %}
@@ -22,30 +38,9 @@
                                     {% elif lesson_teachers.0 %}
                                         value="{% trans "No teacher" %}"
                                     {% endif %}
-                                    disabled>
-            
-                            {% if can_edit %}
-                                <input  type="hidden"
-                                        name="teacher_{{ lesson.start|date:"c" }}_{{ lesson.end|date:"c" }}_{{ forloop.counter0 }}"
-                                        id="teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                        {% if teacher %}
-                                            value="{{ teacher.id }}"
-                                        {% elif lesson_teachers.0 %}
-                                            value="-1"
-                                        {% endif %}
-                                        {% if lesson.end > now %}disabled{% endif %}>
-                
-                                <button class="btn btn-secondary"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="{{ modal_target }}"
-                                        data-target-input-text="#teacher_name_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                        data-target-input-id="#teacher_id_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
-                                        {% if lesson.end > now %}disabled{% endif %}>
-                                    {% trans "Select" %}
-                                </button>
+                                    disabled
+                                >
                             {% endif %}
-            
                         </div>
                     </div>
                 {% endfor %}
@@ -58,3 +53,59 @@
         </div>
     {% endif %}
 </form>
+
+{% if can_edit %}
+    {% addtoblock "js" %}
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous">
+        </script>
+        {% comment %} 
+            TODO: update import when BSv5 support is merged onto master
+        {% endcomment %}
+        <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@xcash-v300/dist/latest/bootstrap-autocomplete.min.js"></script>
+        <script type="text/javascript">
+           
+            $(function() {
+
+                $( ".noTeacherBtn" ).on( "click", function(event) {
+                    event.preventDefault();
+                    $(`#${$(this).attr("data-target")}`).autoComplete('set', { value: "-1", text: "{% trans "No teacher" %}" });;
+                });
+                {% for lesson in course.get_lesson_occurrences %}
+                    {% if lesson.end < now %}
+                        {% with course|get_lesson_teachers:lesson as lesson_teachers %}
+                            {% for teacher in lesson_teachers %}
+                                $('#teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}').autoComplete({
+                                    preventEnter: true,
+                                    minLength: 0,
+                                });
+                                $('#teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}').on('focus input', function(){
+                                    if ($(this).val() == "")
+                                        $(this).autoComplete('show');
+                                });
+                                {% if teacher %}
+                                    $('#teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}').autoComplete(
+                                        'set', {
+                                            value: "{{ teacher.id }}",
+                                            text: "{{ teacher.first_name }} {{ teacher.last_name }}",
+                                        },
+                                    );
+                                {% elif lesson_teachers.0 %}
+                                    $('#teacher_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}').autoComplete(
+                                        'set', {
+                                            value: "-1",
+                                            text: "{% trans "No teacher" %}",
+                                        },
+                                    );
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+            });
+        </script>
+
+    {% endaddtoblock %}
+{% endif %}

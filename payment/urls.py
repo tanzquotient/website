@@ -37,9 +37,9 @@ urlpatterns = [
         name="course_teacher_presence",
     ),
     path(
-        "auth/user-search",
-        search_user,
-        name="user_search",
+        "auth/<int:course>/teacher-search",
+        search_teacher,
+        name="teacher_search",
     ),
     path(
         "auth/courses/<int:course>/export/csv",

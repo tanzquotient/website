@@ -12,10 +12,7 @@
 
         {% include "payment/courses/snippets/teacher_presence_messages.html" with messages=messages only %}
         {% include "payment/courses/snippets/course_info.html" with course=course only %}
-        {% include "payment/courses/snippets/teacher_presence_form.html" with modal_target="#teachersModal" %}
-        {% if can_edit %}
-            {% include "payment/courses/snippets/teacher_presence_modal.html" with modal_id="teachersModal" %}
-        {% endif %}
+        {% include "payment/courses/snippets/teacher_presence_form.html" %}
 
     </div>
 
