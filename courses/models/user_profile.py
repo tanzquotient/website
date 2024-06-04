@@ -184,7 +184,7 @@ class UserProfile(Model):
         if until == "now":
             until = timezone.localtime(timezone.now())
         return sum(
-            [l.get_hours() for l in self.lesson_occurrences.filter(end__lt=until)],
+            [l.get_hours() for l in self.user.lesson_occurrences.filter(end__lt=until)],
             Decimal(0),
         )
 
