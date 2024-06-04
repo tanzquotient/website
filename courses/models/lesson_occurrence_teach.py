@@ -25,10 +25,7 @@ class LessonOccurrenceTeach(models.Model):
         # For external courses, teachers are not paid by us
         if self.lesson_occurrence.course.is_external():
             return Decimal(0)
-        # Main teachers get the hourly wage set at the creation of the course
-        elif Teach.objects.filter(course=self.lesson_occurrence.course, teacher=self.teacher).exists():
-            return Teach.objects.get(course=self.lesson_occurrence.course, teacher=self.teacher).hourly_wage
-        # Compute the hourly wage for substitute teachers
+        # Compute the hourly wage
         else:
             return self.teacher.profile.get_hourly_wage()
 
