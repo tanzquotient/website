@@ -1,5 +1,5 @@
 import uuid
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional, Iterable
 
@@ -20,6 +20,7 @@ from django_countries.data import COUNTRIES
 from djangocms_text_ckeditor.fields import HTMLField
 from django_resized import ResizedImageField
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 from courses import managers
 from . import (
@@ -130,19 +131,19 @@ class UserProfile(Model):
     # convenience method for model user are added here
     def is_teacher(self) -> bool:
         return self.user.teaching_courses.exists()
-    
+
     def is_substitute_teacher(self) -> bool:
         return not self.is_teacher() and self.user.lesson_occurrences.exists()
 
     def is_student(self) -> bool:
         return self.student_status in StudentStatus.STUDENTS and self.legi
 
-    def get_hourly_wage(self) -> Decimal:
+    def get_hourly_wage(self, until: datetime | str = "now") -> Decimal:
         # If a teacher has a fixed wage, return it
         if self.fixed_hourly_wage is not None:
             return self.fixed_hourly_wage
 
-        total_hours = self.total_hours_taught()
+        total_hours = self.total_hours_taught(until=until)
         if total_hours >= 400:
             return Decimal(40)
         if total_hours >= 200:
@@ -179,9 +180,11 @@ class UserProfile(Model):
     def courses_taught_count(self) -> int:
         return len(self.courses_taught())
 
-    def total_hours_taught(self) -> Decimal:
+    def total_hours_taught(self, until: datetime | str = "now") -> Decimal:
+        if until == "now":
+            until = timezone.localtime(timezone.now())
         return sum(
-            [teaching.course.get_total_hours() for teaching in self.courses_taught()],
+            [l.get_hours() for l in self.lesson_occurrences.filter(end__lt=until)],
             Decimal(0),
         )
 

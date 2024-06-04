@@ -1,1 +1,1 @@
-from .lesson_occurrence import update_lesson_occurrences
+from .lesson_occurrence import update_lesson_occurrences, update_hourly_wages

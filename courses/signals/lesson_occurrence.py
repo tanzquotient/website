@@ -9,6 +9,7 @@ from courses.models import (
     Offering,
     Period,
     PeriodCancellation,
+    LessonOccurrenceTeach,
 )
 
 
@@ -40,3 +41,13 @@ def update_lesson_occurrences(sender, instance, **kwargs):
 
     for course in courses:
         course.update_lesson_occurrences()
+
+
+@receiver(post_save, sender=LessonOccurrenceTeach)
+@receiver(post_delete, sender=LessonOccurrenceTeach)
+def update_hourly_wages(sender, instance, **kwargs):
+    for l in LessonOccurrenceTeach.objects.filter(
+        teacher=instance.teacher,
+        lesson_occurrence__start__gt=instance.lesson_occurrence.end,
+    ).all():
+        l.update_hourly_wage()

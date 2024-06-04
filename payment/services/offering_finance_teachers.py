@@ -44,7 +44,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
         _("Last name"),
         _("Courses"),
         _("Main teacher"),
-        _("Hourly Wages"),
         _("Hours"),
         _("Course Totals"),
         _("Note"),
@@ -95,23 +94,22 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                     (
                         sum(
                             [
-                                lesson_occurrence.duration()
+                                lesson_occurrence.get_hours()
                                 for lesson_occurrence in LessonOccurrence.objects.filter(
                                     course=course, teachers=teacher
                                 ).all()
                             ],
-                            datetime.timedelta(),
-                        ).total_seconds()
-                        / 3600
-                    ).__round__(2)
+                            Decimal(0),
+                        )
+                    )
                 )
 
-            hourly_wage = (
-                LessonOccurrenceTeach.objects.filter(lesson_occurrence__course=course, teacher=teacher)
-                .first()
-                .hourly_wage
+            total = sum(
+                l.get_wage()
+                for l in LessonOccurrenceTeach.objects.filter(
+                    lesson_occurrence__course=course, teacher=teacher
+                ).all()
             )
-            total = hourly_wage * hours
 
             notes = []
             if course.cancelled:
@@ -135,7 +133,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                     else course.name
                 ),
                 _("Yes") if teacher in course.get_teachers() else _("No"),
-                f"{hourly_wage} CHF",
                 f"{hours}",
                 f"{total:.2f} CHF",
                 "; ".join(map(str, notes)),
