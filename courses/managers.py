@@ -112,6 +112,9 @@ class SubscribeQuerySet(models.QuerySet):
 
     def matched(self) -> QuerySet:
         return self.active().filter(matching_state__in=MatchingState.MATCHED_STATES)
+    
+    def waiting_list(self) -> QuerySet:
+        return self.filter(state__in=SubscribeState.WAITING_LIST)
 
     def accepted(self) -> QuerySet:
         return self.filter(state__in=SubscribeState.ACCEPTED_STATES)

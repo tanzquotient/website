@@ -1,5 +1,6 @@
 class SubscribeState:
     NEW = "new"
+    WAITING_LIST = "waiting_list"
     CONFIRMED = "confirmed"
     PAID = "payed"
     COMPLETED = "completed"
@@ -8,6 +9,7 @@ class SubscribeState:
 
     CHOICES = (
         (NEW, "new"),
+        (WAITING_LIST, "waiting list"),
         (CONFIRMED, "confirmed (to pay)"),
         (PAID, "paid"),
         (COMPLETED, "completed"),
