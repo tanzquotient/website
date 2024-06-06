@@ -314,6 +314,28 @@ class Course(TranslatableModel):
 
         return matched_count, leads_count, follows_count, no_preference_count
 
+    def get_waiting_list_length(self, lead_follow=LeadFollow.NO_PREFERENCE) -> int:
+        if not self.type.couple_course:
+            # just return the total number of subscribes on the waitlist
+            return self.subscriptions.waiting_list().count()
+        else:
+            if lead_follow == LeadFollow.NO_PREFERENCE:
+                # get the shortest waiting list
+                return min(
+                    self.subscriptions.waiting_list()
+                    .filter(lead_follow=LeadFollow.LEAD)
+                    .count(),
+                    self.subscriptions.waiting_list()
+                    .filter(lead_follow=LeadFollow.FOLLOW)
+                    .count(),
+                )
+            else:
+                return (
+                    self.subscriptions.waiting_list()
+                    .filter(lead_follow=lead_follow)
+                    .count()
+                )
+
     def number_of_possible_couples(self) -> int:
         (
             matched_count,
