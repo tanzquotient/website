@@ -9,7 +9,7 @@ from courses.models import (
     OfferingType,
     Course,
     Subscribe,
-    SubscribeState,
+    SubscribeState, LeadFollow,
     LessonOccurrence,
 )
 from courses.services import get_offerings_by_year
@@ -184,3 +184,15 @@ def missing_presence_data(course: Course) -> bool:
     return course.lesson_occurrences.filter(
         end__lte=timezone.localtime.now(), teachers=None
     ).exists()
+
+@register.filter(name="get_waiting_list_length")
+def get_waiting_list_length_leaders(course: Course, lead_follow: str = "no_preference") -> int:
+    if lead_follow == "lead":
+        lead_follow = LeadFollow.LEAD
+    elif lead_follow == "follow":
+        lead_follow = LeadFollow.FOLLOW
+    else:
+        lead_follow = LeadFollow.NO_PREFERENCE
+    return course.get_waiting_list_length(lead_follow=lead_follow)
+
+
