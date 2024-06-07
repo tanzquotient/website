@@ -1,8 +1,11 @@
 {% load i18n %}
+{% load courses_tags %}
 
 
 {% if subscription.state == 'new' %}
     <span class="badge bg-info">{% trans "Subscription received" %}</span>
+{% elif subscription.state == 'waiting_list' %}
+    <span class="badge bg-info">{% trans "Waiting list: position" %} {{ subscription.get_position_on_waiting_list }}</span>
 {% elif subscription.state == 'confirmed' %}
     <span class="badge bg-success">{% trans "Subscription confirmed" %}</span>
 {% elif subscription.state == 'rejected' %}
