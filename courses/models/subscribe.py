@@ -151,38 +151,22 @@ class Subscribe(Model):
 
     get_user_student_status.short_description = "Student"
 
-    def get_position_on_waiting_list(
-        self, ignore_matching: bool = False, worst_case: bool = False
-    ) -> int:
+    def get_position_on_waiting_list(self) -> int:
         if not self.state == SubscribeState.WAITING_LIST:
             return 0
         else:
-            if self.state not in MatchingState.MATCHED_STATES or ignore_matching:
-                previous_subscribes_on_waitlist = (
-                    self.course.subscriptions.waiting_list().filter(date__lte=self.date)
+            if self.state not in MatchingState.MATCHED_STATES:
+                return self.course.get_waiting_list_length(
+                    lead_follow=self.lead_follow, until_subscribe=self
                 )
-                if self.lead_follow != LeadFollow.NO_PREFERENCE:
-                    return previous_subscribes_on_waitlist.filter(
-                        lead_follow=self.lead_follow
-                    ).count()
-                else:
-                    func = max if worst_case else min
-                    return func(
-                        [
-                            previous_subscribes_on_waitlist.filter(
-                                lead_follow=lead_follow
-                            ).count()
-                            for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
-                        ]
-                    )
             else:
-                return max(
-                    [
-                        s.get_position_on_waiting_list(
-                            ignore_matching=True, worst_case=True
-                        )
-                        for s in [self, self.get_partner_subscription()]
-                    ]
+                earliest_subscribe = (
+                    self
+                    if self.date < self.get_partner_subscription().date
+                    else self.get_partner_subscription()
+                )
+                return self.course.get_waiting_list_length(
+                    worst_case=True, until_subscribe=earliest_subscribe
                 )
 
     """"
