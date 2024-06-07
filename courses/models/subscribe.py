@@ -382,6 +382,25 @@ class Subscribe(Model):
             self.usi = self.generate_usi()
         if not self.price_to_pay:
             self.generate_price_to_pay()
+        if not self.state:
+            if self.matching_state not in MatchingState.MATCHED_STATES:
+                self.state = (
+                    SubscribeState.NEW
+                    if self.course.has_free_places_for(lead_or_follow=self.lead_follow)
+                    else SubscribeState.WAITING_LIST
+                )
+            else:
+                self.state = (
+                    SubscribeState.NEW
+                    if all(
+                        [
+                            self.course.has_free_places_for(lead_or_follow=lead_follow)
+                            for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
+                        ]
+                    )
+                    else SubscribeState.WAITING_LIST
+                )
+
         super(Subscribe, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs) -> None:
