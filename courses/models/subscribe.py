@@ -108,7 +108,9 @@ class Subscribe(Model):
         )
 
     def is_active(self) -> bool:
-        return self.state not in SubscribeState.REJECTED_STATES
+        return self.state not in SubscribeState.REJECTED_STATES + [
+            SubscribeState.WAITING_LIST
+        ]
 
     def is_matched(self) -> bool:
         return self.is_active() and self.matching_state in MatchingState.MATCHED_STATES
@@ -155,7 +157,7 @@ class Subscribe(Model):
             return 0
         else:
             if self.state not in MatchingState.MATCHED_STATES:
-                return 1 + self.course.get_waiting_list_length(
+                return self.course.get_waiting_list_length(
                     lead_follow=self.lead_follow, until_subscribe=self
                 )
             else:
@@ -164,7 +166,7 @@ class Subscribe(Model):
                     if self.date < self.get_partner_subscription().date
                     else self.get_partner_subscription()
                 )
-                return 1 + self.course.get_waiting_list_length(
+                return self.course.get_waiting_list_length(
                     worst_case=True, until_subscribe=earliest_subscribe
                 )
 

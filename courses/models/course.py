@@ -324,9 +324,10 @@ class Course(TranslatableModel):
         waiting_list = self.subscriptions.waiting_list()
 
         if until_subscribe is not None:
-            waiting_list = waiting_list.filter(date__lt=until_subscribe.date)
+            waiting_list = waiting_list.filter(date__lte=until_subscribe.date)
 
         waiting_list = waiting_list.order_by("date").all()
+        print(list(waiting_list))
 
         if not self.type.couple_course:
             # just return the total number of subscribes on the waitlist
@@ -352,6 +353,7 @@ class Course(TranslatableModel):
                     else:
                         waiting_list_length[LeadFollow.LEAD] += 1
 
+            print(waiting_list_length)
             if lead_follow == LeadFollow.NO_PREFERENCE or worst_case:
                 minmax = max if worst_case else min
                 return minmax(list(waiting_list_length.values()))
