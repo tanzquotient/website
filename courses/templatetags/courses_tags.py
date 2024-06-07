@@ -186,7 +186,7 @@ def missing_presence_data(course: Course) -> bool:
     ).exists()
 
 @register.filter(name="get_waiting_list_length")
-def get_waiting_list_length_leaders(course: Course, lead_follow: str = "no_preference") -> int:
+def get_waiting_list_length(course: Course, lead_follow: str = "no_preference") -> int:
     if lead_follow == "lead":
         lead_follow = LeadFollow.LEAD
     elif lead_follow == "follow":
