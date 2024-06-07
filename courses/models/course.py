@@ -315,15 +315,26 @@ class Course(TranslatableModel):
         return matched_count, leads_count, follows_count, no_preference_count
 
     def get_waiting_list_length(
-        self, lead_follow=LeadFollow.NO_PREFERENCE, worst_case: bool = False
+        self,
+        lead_follow=LeadFollow.NO_PREFERENCE,
+        worst_case: bool = False,
+        until_subscribe: Subscribe | None = None,
     ) -> int:
+
+        waiting_list = self.subscriptions.waiting_list()
+
+        if until_subscribe is not None:
+            waiting_list = waiting_list.filter(date__lt=until_subscribe.date)
+
+        waiting_list = waiting_list.order_by("date").all()
+
         if not self.type.couple_course:
             # just return the total number of subscribes on the waitlist
-            return self.subscriptions.waiting_list().count()
+            return waiting_list.count()
+
         else:
             # walk the waiting list assigning NO_PREFERENCE subscribes
             # to the shorter queue
-            waiting_list = self.subscriptions.waiting_list().order_by("date").all()
             waiting_list_length = {
                 LeadFollow.LEAD: 0,
                 LeadFollow.FOLLOW: 0,
