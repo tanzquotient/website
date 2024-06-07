@@ -314,27 +314,38 @@ class Course(TranslatableModel):
 
         return matched_count, leads_count, follows_count, no_preference_count
 
-    def get_waiting_list_length(self, lead_follow=LeadFollow.NO_PREFERENCE) -> int:
+    def get_waiting_list_length(
+        self, lead_follow=LeadFollow.NO_PREFERENCE, worst_case: bool = False
+    ) -> int:
         if not self.type.couple_course:
             # just return the total number of subscribes on the waitlist
             return self.subscriptions.waiting_list().count()
         else:
-            if lead_follow == LeadFollow.NO_PREFERENCE:
-                # get the shortest waiting list
-                return min(
-                    self.subscriptions.waiting_list()
-                    .filter(lead_follow=LeadFollow.LEAD)
-                    .count(),
-                    self.subscriptions.waiting_list()
-                    .filter(lead_follow=LeadFollow.FOLLOW)
-                    .count(),
-                )
+            # walk the waiting list assigning NO_PREFERENCE subscribes
+            # to the shorter queue
+            waiting_list = self.subscriptions.waiting_list().order_by("date").all()
+            waiting_list_length = {
+                LeadFollow.LEAD: 0,
+                LeadFollow.FOLLOW: 0,
+            }
+
+            for subscription in waiting_list:
+                if subscription.lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]:
+                    waiting_list_length[subscription.lead_follow] += 1
+                else:
+                    if (
+                        waiting_list_length[LeadFollow.LEAD]
+                        > waiting_list_length[LeadFollow.FOLLOW]
+                    ):
+                        waiting_list_length[LeadFollow.FOLLOW] += 1
+                    else:
+                        waiting_list_length[LeadFollow.LEAD] += 1
+
+            if lead_follow == LeadFollow.NO_PREFERENCE or worst_case:
+                minmax = max if worst_case else min
+                return minmax(list(waiting_list_length.values()))
             else:
-                return (
-                    self.subscriptions.waiting_list()
-                    .filter(lead_follow=lead_follow)
-                    .count()
-                )
+                return waiting_list_length[lead_follow]
 
     def number_of_possible_couples(self) -> int:
         (
