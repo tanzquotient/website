@@ -1,11 +1,13 @@
-from django.views.generic import TemplateView
+import json
+from datetime import datetime
+
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
-from datetime import datetime
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
+from django.views.generic import TemplateView
 
 from courses.models import Course, LessonOccurrence, LessonOccurrenceTeach
 from payment.views import TeacherPresenceEnabled
@@ -16,6 +18,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
 
     def get_context_data(self, **kwargs):
         course: Course = Course.objects.filter(id=kwargs.get("course")).first()
+        course.update_lesson_occurrences()
 
         context = super(CourseTeacherPresenceView, self).get_context_data(**kwargs)
         context["course"] = course
@@ -34,6 +37,22 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
 
         if not self.can_edit:
             raise PermissionDenied
+
+        if request.body:
+            body = json.loads(request.body)
+            teacher_id = body.get("teacher")
+            lesson_id = body.get("lesson")
+            remove = body.get("action") == "remove"
+            if teacher_id and lesson_id:
+                lesson = LessonOccurrence.objects.get(id=lesson_id)
+                if remove:
+                    LessonOccurrenceTeach.objects.filter(
+                        lesson_occurrence=lesson, teacher_id=teacher_id
+                    ).delete()
+                else:
+                    LessonOccurrenceTeach.objects.get_or_create(
+                        lesson_occurrence=lesson, teacher_id=teacher_id
+                    )
 
         if "submit" in request.POST:
             if "" in list(request.POST.values()):
@@ -83,10 +102,11 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
                         if user_id != "-1"
                     ]
                     for teacher in teachers:
-                        lesson_occurrence_teach, _ = (
-                            LessonOccurrenceTeach.objects.get_or_create(
-                                lesson_occurrence=lesson_occurrence, teacher=teacher
-                            )
+                        (
+                            lesson_occurrence_teach,
+                            _,
+                        ) = LessonOccurrenceTeach.objects.get_or_create(
+                            lesson_occurrence=lesson_occurrence, teacher=teacher
                         )
                         lesson_occurrence_teach.save()
                     LessonOccurrenceTeach.objects.filter(

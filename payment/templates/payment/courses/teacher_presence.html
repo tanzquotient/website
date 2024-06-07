@@ -2,16 +2,15 @@
 {% load i18n %}
 
 
-{% block lead_title %}
-    {% trans "Teacher presence" %}
+{% block lead %}
 {% endblock %}
 
 {% block main_content %}
 
-    <div class="container">
+    <div class="container mt-3">
 
-        {% include "payment/courses/snippets/teacher_presence_messages.html" with messages=messages only %}
         {% include "payment/courses/snippets/course_info.html" with course=course only %}
+        {% include "payment/courses/snippets/teacher_presence_messages.html" with messages=messages only %}
         {% include "payment/courses/snippets/teacher_presence_form.html" %}
 
     </div>
