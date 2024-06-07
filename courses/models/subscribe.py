@@ -76,7 +76,6 @@ class Subscribe(Model):
         null=False,
         db_index=True,
         choices=SubscribeState.CHOICES,
-        default=SubscribeState.NEW,
     )
 
     # Payment stuff
