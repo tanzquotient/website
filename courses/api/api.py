@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.http import Http404
 from rest_framework import generics
 from rest_framework import status
@@ -6,6 +7,7 @@ from rest_framework.views import APIView
 
 from .permissions import *
 from .serializers import *
+from ..models import Offering, Course, Subscribe, CourseType, Style
 
 
 class OfferingList(generics.ListAPIView):
