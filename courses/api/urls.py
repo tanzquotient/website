@@ -1,7 +1,17 @@
 from django.conf.urls import include
 from django.urls import path
 
-from .api import *
+from .api import (
+    UserDetail,
+    CoursePaymentDetail,
+    OfferingList,
+    OfferingDetail,
+    SubscriptionPayment,
+    FilteredEmailList,
+    CourseTypeDetail,
+    StyleList,
+    StyleDetail,
+)
 
 app_name = "courses_api"
 user_urls = [

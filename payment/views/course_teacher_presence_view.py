@@ -1,19 +1,26 @@
-import json
 from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import TemplateView
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from courses.models import Course, LessonOccurrence, LessonOccurrenceTeach
+from courses.api.serializers import LessonOccurrenceSerializer
+from courses.models import (
+    Course,
+    LessonOccurrence,
+    LessonOccurrenceTeach,
+)
 from payment.views import TeacherPresenceEnabled
 
 
-class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
+class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled, APIView):
     template_name = "payment/courses/teacher_presence.html"
 
     def get_context_data(self, **kwargs):
@@ -29,7 +36,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
 
         return context
 
-    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def post(self, request: Request, *args, **kwargs) -> HttpResponse:
         """
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
@@ -38,11 +45,11 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
         if not self.can_edit:
             raise PermissionDenied
 
-        if request.body:
-            body = json.loads(request.body)
-            teacher_id = body.get("teacher")
-            lesson_id = body.get("lesson")
-            remove = body.get("action") == "remove"
+        if request.data:
+            data = request.data
+            teacher_id = data.get("teacher")
+            lesson_id = data.get("lesson")
+            remove = data.get("action") == "remove"
             if teacher_id and lesson_id:
                 lesson = LessonOccurrence.objects.get(id=lesson_id)
                 if remove:
@@ -53,6 +60,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled):
                     LessonOccurrenceTeach.objects.get_or_create(
                         lesson_occurrence=lesson, teacher_id=teacher_id
                     )
+                return Response(LessonOccurrenceSerializer(lesson).data)
 
         if "submit" in request.POST:
             if "" in list(request.POST.values()):

@@ -10,22 +10,23 @@
 {% for lesson in course.lesson_occurrences.all %}
     <div class="mt-2">
         <div class="fw-bold">
-            {{ lesson.start|date:"l, j F Y, H:i" }}- {{ lesson.end|date:"H:i" }}</div>
+            {{ lesson.start|date:"l, j F Y, H:i" }} - {{ lesson.end|date:"H:i" }}</div>
         {% if can_edit %}
-            <div class="d-flex flex-wrap gap-2 mt-1">
+            <div class="d-flex flex-wrap gap-2 mt-1 mb-3" id="lesson-{{ lesson.id }}">
                 {% for teacher in lesson.teachers.all %}
-                    <span class="input-group input-group-sm w-auto">
+                    <span class="input-group input-group-sm w-auto teacher">
                         <span class="input-group-text border-secondary"
-                              id="inputGroup-sizing-sm">
+                        >
                         {{ teacher.first_name }} {{ teacher.last_name }}
                         </span>
                         <button class="btn btn-outline-danger" type="button"
-                                onclick="post({{ teacher.id }}, {{ lesson.id }}, 'remove')"><i
-                                class="fa-regular fa-circle-xmark"></i></button>
+                                onclick="remove_teacher({{ teacher.id }}, {{ lesson.id }})">
+                            <i class="fa-regular fa-circle-xmark"></i>
+                        </button>
                     </span>
                 {% endfor %}
 
-                <button class="btn btn-outline-success btn-sm" type="button"
+                <button class="btn btn-outline-success btn-sm add-teacher" type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
                     <i class="fa-solid fa-plus"></i> Add teacher
@@ -35,7 +36,7 @@
                     {% for teacher in course.get_teachers %}
                         <li>
                             <a class="dropdown-item"
-                               onclick="post({{ teacher.id }}, {{ lesson.id }}, 'add')">
+                               onclick="add_teacher({{ teacher.id }}, {{ lesson.id }})">
                                 {{ teacher.first_name }} {{ teacher.last_name }}
                             </a>
                         </li>
@@ -66,21 +67,61 @@
 {% if can_edit %}
     {% addtoblock "js" %}
 
-        <script type="text/javascript">
-            function post(teacher_id, lesson_id, action) {
-                fetch('', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                    },
-                    body: JSON.stringify({
-                        'action': action,
-                        'teacher': teacher_id,
-                        'lesson': lesson_id
-                    })
-                }).then(() => location.reload()) // TODO: just update html instead of reloading page
-            }
-        </script>
+        <template id="teacher-template">
+            <span class="input-group input-group-sm w-auto teacher">
+                <span class="input-group-text border-secondary teacher-name">
+                Teacher name
+                </span>
+                <button class="btn btn-outline-danger" type="button">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                </button>
+            </span>
+        </template>
+
     {% endaddtoblock %}
 {% endif %}
+<script type="text/javascript">
+    function post(teacher_id, lesson_id, action) {
+        return fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                'action': action,
+                'teacher': teacher_id,
+                'lesson': lesson_id
+            })
+        })
+    }
+
+    async function remove_teacher(teacher_id, lesson_id) {
+        const response = await post(teacher_id, lesson_id, "remove");
+        const data = await response.json()
+        update_view(data);
+    }
+
+    async function add_teacher(teacher_id, lesson_id) {
+        const response = await post(teacher_id, lesson_id, "add");
+        const data = await response.json()
+        update_view(data);
+    }
+
+    function update_view(data) {
+        const lesson_id = data["id"]
+        document.querySelectorAll(`#lesson-${lesson_id} .teacher`).forEach(item => item.remove())
+
+        const lessonContainer = document.getElementById(`lesson-${lesson_id}`)
+        const add_teacher_button = lessonContainer.querySelector(".add-teacher")
+        for (const teacher of data["teachers"]) {
+            const template = document.querySelector("#teacher-template");
+            const clone = template.content.cloneNode(true);
+            const name = clone.querySelector(".teacher-name");
+            name.textContent = `${teacher["first_name"]} ${teacher["last_name"]}`;
+            const button = clone.querySelector("button")
+            button.onclick = remove_teacher.bind(button, teacher["id"], lesson_id);
+            lessonContainer.insertBefore(clone, add_teacher_button);
+        }
+    }
+</script>

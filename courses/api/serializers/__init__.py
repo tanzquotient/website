@@ -5,3 +5,5 @@ from .style_serializer import StyleSerializer
 from .course_type_serializers import CourseTypeSerializer
 from .offering_serializer import OfferingSerializer
 from .course_payment_serializers import CoursePaymentSerializer
+from .lesson_occurrence_serializer import LessonOccurrenceSerializer
+from .lesson_occurrence_teach_serializer import LessonOccurrenceTeachSerializer
