@@ -6,7 +6,6 @@
 {% endaddtoblock %}
 
 <h3 class="mt-4">{% trans "Teacher presences" %}</h3>
-{% csrf_token %}
 {% for lesson in course.lesson_occurrences.all %}
     <div class="mt-2">
         <div class="fw-bold">
@@ -102,98 +101,99 @@
             </li>
         </template>
 
+        <script type="text/javascript">
+            function post(teacher_id, lesson_id, action) {
+                return fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'action': action,
+                        'teacher': teacher_id,
+                        'lesson': lesson_id
+                    })
+                })
+            }
+        
+            async function remove_teacher(teacher_id, lesson_id) {
+                set_remove_teacher_loading_view(teacher_id, lesson_id);
+                const response = await post(teacher_id, lesson_id, "remove");
+                const data = await response.json()
+                update_view(data);
+            }
+        
+            async function add_teacher(teacher_id, lesson_id) {
+                const loadingView = set_add_teacher_loading_view(lesson_id);
+                const response = await post(teacher_id, lesson_id, "add");
+                const data = await response.json()
+                loadingView.remove();
+                update_view(data);
+            }
+        
+            async function search(input, lesson_id) {
+                const value = input.value;
+        
+                const container = input.parentNode.parentNode;
+                container.querySelectorAll(".search-result").forEach(entry => entry.remove())
+        
+                if (!value) {
+                    return;
+                }
+        
+                container.appendChild(document.querySelector("#searching").content.cloneNode(true));
+                const response = await fetch(`{% url "payment:teacher_search" %}?q=${value}`);
+        
+                const data = await response.json();
+                container.querySelectorAll(".search-result").forEach(entry => entry.remove())
+                for (const searchResult of data) {
+                    const template = document.querySelector("#search-result");
+                    const clone = template.content.cloneNode(true);
+                    const link = clone.querySelector("a");
+                    link.textContent = searchResult["text"];
+                    link.onclick = add_teacher.bind(link, searchResult["value"], lesson_id);
+                    container.appendChild(clone);
+                }
+                container.querySelectorAll(".searching").forEach(element => element.remove());
+            }
+        
+            function set_add_teacher_loading_view(lesson_id) {
+                document.querySelectorAll(".search-input").forEach(input => input.value = "")
+                document.querySelectorAll(".search-result").forEach(result => result.remove())
+                const lessonContainer = document.getElementById(`lesson-${lesson_id}`);
+                const clone = document.querySelector("#add-teacher-loading-template").content.cloneNode(true);
+                const loadingButton = clone.querySelector("button");
+                lessonContainer.insertBefore(clone, lessonContainer.querySelector(".add-teacher"));
+                return loadingButton;
+            }
+        
+            function set_remove_teacher_loading_view(teacher_id, lesson_id) {
+                const teacherField = document.querySelector(`#lesson-${lesson_id}-teacher-${teacher_id}`)
+                teacherField.querySelector("button").remove()
+                const template = document.querySelector("#remove-button-loading-template");
+                const clone = template.content.cloneNode(true);
+                teacherField.appendChild(clone);
+            }
+        
+            function update_view(data) {
+                const lesson_id = data["id"]
+                document.querySelectorAll(`#lesson-${lesson_id} .teacher`).forEach(item => item.remove())
+        
+                const lessonContainer = document.getElementById(`lesson-${lesson_id}`)
+                const add_teacher_button = lessonContainer.querySelector(".add-teacher")
+                for (const teacher of data["teachers"]) {
+                    const template = document.querySelector("#teacher-template");
+                    const clone = template.content.cloneNode(true);
+                    const name = clone.querySelector(".teacher-name");
+                    name.textContent = `${teacher["first_name"]} ${teacher["last_name"]}`;
+                    const button = clone.querySelector("button")
+                    button.onclick = remove_teacher.bind(button, teacher["id"], lesson_id);
+                    clone.querySelector("#id").id = `lesson-${lesson_id}-teacher-${teacher["id"]}`;
+                    lessonContainer.insertBefore(clone, add_teacher_button);
+                }
+            }
+        </script>        
+
     {% endaddtoblock %}
 {% endif %}
-<script type="text/javascript">
-    function post(teacher_id, lesson_id, action) {
-        return fetch('', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify({
-                'action': action,
-                'teacher': teacher_id,
-                'lesson': lesson_id
-            })
-        })
-    }
-
-    async function remove_teacher(teacher_id, lesson_id) {
-        set_remove_teacher_loading_view(teacher_id, lesson_id);
-        const response = await post(teacher_id, lesson_id, "remove");
-        const data = await response.json()
-        update_view(data);
-    }
-
-    async function add_teacher(teacher_id, lesson_id) {
-        const loadingView = set_add_teacher_loading_view(lesson_id);
-        const response = await post(teacher_id, lesson_id, "add");
-        const data = await response.json()
-        loadingView.remove();
-        update_view(data);
-    }
-
-    async function search(input, lesson_id) {
-        const value = input.value;
-
-        const container = input.parentNode.parentNode;
-        container.querySelectorAll(".search-result").forEach(entry => entry.remove())
-
-        if (!value) {
-            return;
-        }
-
-        container.appendChild(document.querySelector("#searching").content.cloneNode(true));
-        const response = await fetch(`{% url "payment:teacher_search" %}?q=${value}`);
-
-        const data = await response.json();
-        container.querySelectorAll(".search-result").forEach(entry => entry.remove())
-        for (const searchResult of data) {
-            const template = document.querySelector("#search-result");
-            const clone = template.content.cloneNode(true);
-            const link = clone.querySelector("a");
-            link.textContent = searchResult["text"];
-            link.onclick = add_teacher.bind(link, searchResult["value"], lesson_id);
-            container.appendChild(clone);
-        }
-        container.querySelectorAll(".searching").forEach(element => element.remove());
-    }
-
-    function set_add_teacher_loading_view(lesson_id) {
-        document.querySelectorAll(".search-input").forEach(input => input.value = "")
-        document.querySelectorAll(".search-result").forEach(result => result.remove())
-        const lessonContainer = document.getElementById(`lesson-${lesson_id}`);
-        const clone = document.querySelector("#add-teacher-loading-template").content.cloneNode(true);
-        const loadingButton = clone.querySelector("button");
-        lessonContainer.insertBefore(clone, lessonContainer.querySelector(".add-teacher"));
-        return loadingButton;
-    }
-
-    function set_remove_teacher_loading_view(teacher_id, lesson_id) {
-        const teacherField = document.querySelector(`#lesson-${lesson_id}-teacher-${teacher_id}`)
-        teacherField.querySelector("button").remove()
-        const template = document.querySelector("#remove-button-loading-template");
-        const clone = template.content.cloneNode(true);
-        teacherField.appendChild(clone);
-    }
-
-    function update_view(data) {
-        const lesson_id = data["id"]
-        document.querySelectorAll(`#lesson-${lesson_id} .teacher`).forEach(item => item.remove())
-
-        const lessonContainer = document.getElementById(`lesson-${lesson_id}`)
-        const add_teacher_button = lessonContainer.querySelector(".add-teacher")
-        for (const teacher of data["teachers"]) {
-            const template = document.querySelector("#teacher-template");
-            const clone = template.content.cloneNode(true);
-            const name = clone.querySelector(".teacher-name");
-            name.textContent = `${teacher["first_name"]} ${teacher["last_name"]}`;
-            const button = clone.querySelector("button")
-            button.onclick = remove_teacher.bind(button, teacher["id"], lesson_id);
-            clone.querySelector("#id").id = `lesson-${lesson_id}-teacher-${teacher["id"]}`;
-            lessonContainer.insertBefore(clone, add_teacher_button);
-        }
-    }
-</script>
