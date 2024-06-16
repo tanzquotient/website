@@ -32,6 +32,9 @@ class TeacherPresenceEnabled(View):
         if user.is_staff or user.lesson_occurrences.filter(course=course).exists():
             allowed = True
 
+        if course.completed:
+            self.can_edit = False
+
         if not allowed:
             raise PermissionDenied
 
