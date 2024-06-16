@@ -259,7 +259,9 @@ def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
             total = sum(
                 l.get_wage()
                 for l in LessonOccurrenceTeach.objects.filter(
-                    lesson_occurrence__course=course, teacher=teacher
+                    lesson_occurrence__course=course,
+                    teacher=teacher,
+                    lesson_occurrence__course__cancelled=False,
                 ).all()
             )
 
@@ -323,7 +325,9 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
                     [
                         lesson_occurrence.get_hours()
                         for lesson_occurrence in LessonOccurrence.objects.filter(
-                            course__in=teacher_courses, teachers=teacher
+                            course__in=teacher_courses,
+                            teachers=teacher,
+                            course__cancelled=False,
                         ).all()
                     ],
                     Decimal(0),
@@ -333,16 +337,20 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
         teacher_total_salary = sum(
             l.get_wage()
             for l in LessonOccurrenceTeach.objects.filter(
-                lesson_occurrence__course__in=teacher_courses, teacher=teacher
+                lesson_occurrence__course__in=teacher_courses,
+                teacher=teacher,
+                lesson_occurrence__course__cancelled=False,
             ).all()
         )
 
-        courses.append([
-            teacher.first_name or "",
-            teacher.last_name or "",
-            f"{teacher_hours}",
-            f"{teacher_total_salary:.2f} CHF",
-        ])
+        courses.append(
+            [
+                teacher.first_name or "",
+                teacher.last_name or "",
+                f"{teacher_hours}",
+                f"{teacher_total_salary:.2f} CHF",
+            ]
+        )
 
     return courses
 
