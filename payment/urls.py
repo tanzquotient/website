@@ -37,7 +37,7 @@ urlpatterns = [
         name="course_teacher_presence",
     ),
     path(
-        "auth/<int:course>/teacher-search",
+        "auth/teacher-search",
         search_teacher,
         name="teacher_search",
     ),

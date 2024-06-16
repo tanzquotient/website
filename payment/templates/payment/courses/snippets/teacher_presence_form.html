@@ -136,14 +136,20 @@
     }
 
     async function search(input, lesson_id) {
+        const value = input.value;
+
         const container = input.parentNode.parentNode;
         container.querySelectorAll(".search-result").forEach(entry => entry.remove())
-        container.appendChild(document.querySelector("#searching").content.cloneNode(true));
 
-        const value = input.value;
-        const response = await fetch(`{% url "payment:teacher_search" course.id %}?q=${value}`);
+        if (!value) {
+            return;
+        }
+
+        container.appendChild(document.querySelector("#searching").content.cloneNode(true));
+        const response = await fetch(`{% url "payment:teacher_search" %}?q=${value}`);
 
         const data = await response.json();
+        container.querySelectorAll(".search-result").forEach(entry => entry.remove())
         for (const searchResult of data) {
             const template = document.querySelector("#search-result");
             const clone = template.content.cloneNode(true);
