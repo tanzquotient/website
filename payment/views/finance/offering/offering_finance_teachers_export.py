@@ -12,7 +12,7 @@ def offering_finance_teachers_export(
     export_format = request.GET.get("format", "csv")
     from payment import services
 
-    export_name, personal_data, courses = services.offering_finance_teachers(
+    export_name, personal_data, teachings = services.offering_finance_teachers(
         Offering.objects.filter(id=offering).all(), use_html=False
     )
     return export(
@@ -20,7 +20,7 @@ def offering_finance_teachers_export(
         title=export_name,
         multiple=True,
         data=[
-            dict(data=courses, name="Courses"),
+            dict(data=teachings, name="Teachings"),
             dict(data=personal_data, name="Personal Data"),
         ],
     )

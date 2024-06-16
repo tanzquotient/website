@@ -9,7 +9,7 @@ register = template.Library()
 def teachers_table(offering: Offering):
     from payment import services
 
-    _, personal_data, courses = services.offering_finance_teachers(
+    _, personal_data, teachings = services.offering_finance_teachers(
         [offering], use_html=True
     )
-    return dict(personal_data=personal_data, courses=courses)
+    return dict(personal_data=personal_data, teachings=teachings)
