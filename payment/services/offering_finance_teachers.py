@@ -46,7 +46,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
         _("Main teacher"),
         _("Hours"),
         _("Course Totals"),
-        _("Note"),
     ]
 
     multiple_offerings = len(offerings) > 1
@@ -111,19 +110,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 ).all()
             )
 
-            notes = []
-            if course.cancelled:
-                notes.append(_("Course cancelled"))
-            else:
-                if course.teaching.count() > 2:
-                    notes.append(
-                        _(
-                            "Course with more than two teachers, please check who taught how many lessons."
-                        )
-                    )
-                if course.get_confirmed_count() == 0:
-                    notes.append(_("No participants"))
-
             row += [
                 (
                     mark_safe(
@@ -135,7 +121,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 _("Yes") if teacher in course.get_teachers() else _("No"),
                 f"{hours}",
                 f"{total:.2f} CHF",
-                "; ".join(map(str, notes)),
             ]
 
             courses.append(row)
