@@ -14,10 +14,10 @@
         {% if can_edit %}
             <div class="d-flex flex-wrap gap-2 mt-1 mb-3" id="lesson-{{ lesson.id }}">
                 {% for teacher in lesson.teachers.all %}
-                    <span class="input-group input-group-sm w-auto teacher">
-                        <span class="input-group-text border-secondary"
-                        >
-                        {{ teacher.first_name }} {{ teacher.last_name }}
+                    <span class="input-group input-group-sm w-auto teacher"
+                          id="lesson-{{ lesson.id }}-teacher-{{ teacher.id }}">
+                        <span class="input-group-text border-secondary">
+                            {{ teacher.first_name }} {{ teacher.last_name }}
                         </span>
                         <button class="btn btn-outline-danger" type="button"
                                 onclick="remove_teacher({{ teacher.id }}, {{ lesson.id }})">
@@ -68,7 +68,7 @@
     {% addtoblock "js" %}
 
         <template id="teacher-template">
-            <span class="input-group input-group-sm w-auto teacher">
+            <span id="id" class="input-group input-group-sm w-auto teacher">
                 <span class="input-group-text border-secondary teacher-name">
                 Teacher name
                 </span>
@@ -76,6 +76,18 @@
                     <i class="fa-regular fa-circle-xmark"></i>
                 </button>
             </span>
+        </template>
+
+        <template id="add-teacher-loading-template">
+            <button class="btn btn-outline-success btn-sm" disabled type="button">
+                <span class="spinner-border spinner-border-sm"></span> Adding teacher
+            </button>
+        </template>
+
+        <template id="remove-button-loading-template">
+            <button class="btn btn-outline-danger" type="button" disabled>
+                <span class="spinner-border spinner-border-sm"></span>
+            </button>
         </template>
 
     {% endaddtoblock %}
@@ -97,15 +109,34 @@
     }
 
     async function remove_teacher(teacher_id, lesson_id) {
+        set_remove_teacher_loading_view(teacher_id, lesson_id);
         const response = await post(teacher_id, lesson_id, "remove");
         const data = await response.json()
         update_view(data);
     }
 
     async function add_teacher(teacher_id, lesson_id) {
+        const loadingView = set_add_teacher_loading_view(lesson_id);
         const response = await post(teacher_id, lesson_id, "add");
         const data = await response.json()
+        loadingView.remove();
         update_view(data);
+    }
+
+    function set_add_teacher_loading_view(lesson_id) {
+        const lessonContainer = document.getElementById(`lesson-${lesson_id}`);
+        const clone = document.querySelector("#add-teacher-loading-template").content.cloneNode(true);
+        const loadingButton = clone.querySelector("button");
+        lessonContainer.insertBefore(clone, lessonContainer.querySelector(".add-teacher"));
+        return loadingButton;
+    }
+
+    function set_remove_teacher_loading_view(teacher_id, lesson_id) {
+        const teacherField = document.querySelector(`#lesson-${lesson_id}-teacher-${teacher_id}`)
+        teacherField.querySelector("button").remove()
+        const template = document.querySelector("#remove-button-loading-template");
+        const clone = template.content.cloneNode(true);
+        teacherField.appendChild(clone);
     }
 
     function update_view(data) {
@@ -121,6 +152,7 @@
             name.textContent = `${teacher["first_name"]} ${teacher["last_name"]}`;
             const button = clone.querySelector("button")
             button.onclick = remove_teacher.bind(button, teacher["id"], lesson_id);
+            clone.querySelector("#id").id = `lesson-${lesson_id}-teacher-${teacher["id"]}`;
             lessonContainer.insertBefore(clone, add_teacher_button);
         }
     }
