@@ -30,9 +30,10 @@ def offering_finance_teachers(
 
     courses = _courses(offerings, use_html=use_html)
     teachings = _teachings(offerings, use_html=use_html)
+    teachers = _teachers(offerings, use_html=use_html)
     personal_details = _personal_details(offerings)
 
-    return export_name, personal_details, teachings, courses
+    return export_name, personal_details, teachings, courses, teachers
 
 
 def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
@@ -276,6 +277,72 @@ def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
             ]
 
             courses.append(row)
+
+    return courses
+
+
+def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
+    courses = []
+
+    header = [
+        _("First name"),
+        _("Last name"),
+        _("Hours"),
+        _("Course Totals"),
+    ]
+
+    courses.append(header)
+
+    # get all teachers in offerings
+    teachers: list[User] = (
+        User.objects.filter(
+            lesson_occurrences__in=LessonOccurrence.objects.filter(
+                course__offering__in=offerings
+            )
+            .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+            .all()
+        )
+        .distinct()
+        .all()
+        .order_by("first_name", "last_name")
+    )
+
+    for teacher in teachers:
+        # get all courses for a teacher in offerings
+        teacher_courses = (
+            Course.objects.filter(offering__in=offerings)
+            .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
+            .filter(lesson_occurrences__teachers=teacher)
+            .distinct()
+            .all()
+            .order_by("offering_id", "name")
+        )
+        teacher_hours = Decimal(
+            (
+                sum(
+                    [
+                        lesson_occurrence.get_hours()
+                        for lesson_occurrence in LessonOccurrence.objects.filter(
+                            course__in=teacher_courses, teachers=teacher
+                        ).all()
+                    ],
+                    Decimal(0),
+                )
+            )
+        )
+        teacher_total_salary = sum(
+            l.get_wage()
+            for l in LessonOccurrenceTeach.objects.filter(
+                lesson_occurrence__course__in=teacher_courses, teacher=teacher
+            ).all()
+        )
+
+        courses.append([
+            teacher.first_name or "",
+            teacher.last_name or "",
+            f"{teacher_hours}",
+            f"{teacher_total_salary:.2f} CHF",
+        ])
 
     return courses
 
