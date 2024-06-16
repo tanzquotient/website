@@ -37,3 +37,100 @@
         {% table personal_data %}
     </div>
 </div>
+
+<div class="modal" tabindex="-1" id="confirmModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{% trans "Are you sure?" %}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>{% trans "Marking a course as completed will freeze its teachers presence form permanently." %}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+          <button type="button" class="btn btn-primary" id="confirmBtn">{% trans "Yes, proceed" %}</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+        const completed_btns = document.querySelectorAll('.btn-completed');
+        const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+        let confirmationTarget = false;
+        let confirmationCaller = false;
+
+        document.getElementById('confirmModal').addEventListener('hide.bs.modal', event => {
+
+            confirmationTarget = false;
+            confirmationCaller = false;
+
+        });
+        
+        completed_btns.forEach(btn => {
+
+            btn.addEventListener('click', event => {
+                
+                confirmationTarget = btn.getAttribute('data-course-id');
+                confirmationCaller = btn;
+                modal.show();
+    
+            });
+        });
+
+        document.getElementById('confirmBtn').addEventListener('click', event => {
+
+            fetch("", {
+
+                method: "POST",
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token }}",
+                },
+
+                body: JSON.stringify({
+                    course: confirmationTarget,
+                }),
+
+            })
+            .then((response) => response.json())
+            .then((json) => {
+
+                if (json.result == "success"){
+                    if (confirmationTarget === "all"){
+
+                        completed_btns.forEach(btn => {
+
+                            if (btn !== confirmationCaller){
+                                btn.innerText = '{% trans "Course completed" %}';
+                                btn.classList.add("disabled");
+                            }
+
+                        });
+
+                    }
+                    
+                    else {
+
+                        confirmationCaller.innerText = '{% trans "Course completed" %}';
+                        confirmationCaller.classList.add("disabled");
+
+                    }
+
+                    modal.hide();
+                }
+            });
+
+        });
+
+    });
+    
+</script>

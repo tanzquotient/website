@@ -117,7 +117,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
         for key, value in lessons_for_x_teachers.items():
             status_text = ", ".join(
                 [
-                    f"{value} {_('lessons with')} {key} {_('teachers') if key != 1 else _('teacher')}"
+                    f"{value} {_('lessons') if value != 1 else _('lesson')} {_('with')} {key} {_('teachers') if key != 1 else _('teacher')}"
                 ]
             )
             teachers_number_text.append(
@@ -146,12 +146,14 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
         if use_html:
             row.append(
                 mark_safe(
-                    f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm'>{_('Disable presence editing')}</button>"
+                    f"<button class='btn btn-secondary btn-sm disabled'>{_('Course completed')}</button>" if course.completed else f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm btn-completed'>{_('Mark as completed')}</button>"
                 )
             )
 
         courses.append(row)
 
+    if use_html:
+        courses.append([""]*(len(header)-1) + [mark_safe(f"<button data-course-id='all' class='btn btn-secondary btn-sm btn-completed'>{_('Mark all as completed')}</button>")])
     return courses
 
 
