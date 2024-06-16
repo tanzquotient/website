@@ -29,7 +29,7 @@
                 <button class="btn btn-outline-success btn-sm add-teacher" type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
-                    <i class="fa-solid fa-plus"></i> Add teacher
+                    <i class="fa-solid fa-plus"></i> {% trans "Add teacher" %}
                 </button>
 
                 <ul class="dropdown-menu">
@@ -45,12 +45,10 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    {# TODO: Re-add search capability #}
                     <li class="px-1">
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control search-input"
                                placeholder="{% trans "Search teacher" %}"
-                               aria-label="{% trans "Teacher" %}"
-                               data-url="{% url "payment:teacher_search" course.id %}">
+                               oninput="search(this, {{ lesson.id }})">
 
                     </li>
                 </ul>
@@ -90,6 +88,20 @@
             </button>
         </template>
 
+        <template id="search-result">
+            <li class="search-result">
+                <a href="#" class="dropdown-item">
+                    Teacher Name
+                </a>
+            </li>
+        </template>
+
+        <template id="searching">
+            <li class="searching">
+                <span class="dropdown-item fst-italic">{% trans "Searching" %}...</span>
+            </li>
+        </template>
+
     {% endaddtoblock %}
 {% endif %}
 <script type="text/javascript">
@@ -123,7 +135,29 @@
         update_view(data);
     }
 
+    async function search(input, lesson_id) {
+        const container = input.parentNode.parentNode;
+        container.querySelectorAll(".search-result").forEach(entry => entry.remove())
+        container.appendChild(document.querySelector("#searching").content.cloneNode(true));
+
+        const value = input.value;
+        const response = await fetch(`{% url "payment:teacher_search" course.id %}?q=${value}`);
+
+        const data = await response.json();
+        for (const searchResult of data) {
+            const template = document.querySelector("#search-result");
+            const clone = template.content.cloneNode(true);
+            const link = clone.querySelector("a");
+            link.textContent = searchResult["text"];
+            link.onclick = add_teacher.bind(link, searchResult["value"], lesson_id);
+            container.appendChild(clone);
+        }
+        container.querySelectorAll(".searching").forEach(element => element.remove());
+    }
+
     function set_add_teacher_loading_view(lesson_id) {
+        document.querySelectorAll(".search-input").forEach(input => input.value = "")
+        document.querySelectorAll(".search-result").forEach(result => result.remove())
         const lessonContainer = document.getElementById(`lesson-${lesson_id}`);
         const clone = document.querySelector("#add-teacher-loading-template").content.cloneNode(true);
         const loadingButton = clone.querySelector("button");
