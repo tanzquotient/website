@@ -164,6 +164,11 @@ class Course(TranslatableModel):
 
     objects = managers.CourseManager()
 
+    def save(self, *args, **kwargs):
+        if self.subscription_type == CourseSubscriptionType.EXTERNAL:
+            self.completed = True
+        super(Course, self).save(*args, **kwargs)
+
     def participatory(self) -> QuerySet[Subscribe]:
         return self.subscriptions.accepted()
 

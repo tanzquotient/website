@@ -177,7 +177,7 @@ class CourseAdmin(TranslatableAdmin):
         "get_teachers_welcomed",
     )
     list_filter = ("offering", "subscription_type", "display", "active", "completed")
-    readonly_fields = []
+    readonly_fields = ["completed"]
     search_fields = [
         "name",
         "type__translations__title",
