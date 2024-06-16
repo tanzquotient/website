@@ -35,7 +35,7 @@
                 <ul class="dropdown-menu">
                     {% for teacher in course.get_teachers %}
                         <li>
-                            <a class="dropdown-item"
+                            <a href="#" class="dropdown-item"
                                onclick="add_teacher({{ teacher.id }}, {{ lesson.id }})">
                                 {{ teacher.first_name }} {{ teacher.last_name }}
                             </a>
