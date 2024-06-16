@@ -176,7 +176,8 @@ class CourseAdmin(TranslatableAdmin):
         "format_teachers",
         "get_teachers_welcomed",
     )
-    list_filter = ("offering", "subscription_type", "display", "active")
+    list_filter = ("offering", "subscription_type", "display", "active", "completed")
+    readonly_fields = ["completed"]
     search_fields = [
         "name",
         "type__translations__title",
@@ -219,7 +220,7 @@ class CourseAdmin(TranslatableAdmin):
         ),
         (
             "Admin",
-            {"fields": ["display", "active", "cancelled"]},
+            {"fields": ["display", "active", "cancelled", "completed"]},
         ),
     ]
 

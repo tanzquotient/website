@@ -75,6 +75,9 @@ class Course(TranslatableModel):
         help_text="If enabled, people registering for this course need to state their "
         "experience.",
     )
+    completed = models.BooleanField(
+        default=False, help_text="If true, will disable teachers presence editing."
+    )
 
     # Optional - apply to all course types
     room = models.ForeignKey(
@@ -644,6 +647,7 @@ class Course(TranslatableModel):
     def copy(self) -> Course:
         old = Course.objects.get(pk=self.id)
         self.pk = None
+        self.completed = False
         self.save()
 
         # copy regular lessons
