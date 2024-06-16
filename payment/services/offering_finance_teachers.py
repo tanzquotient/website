@@ -30,10 +30,129 @@ def offering_finance_teachers(
     """
     export_name = f'Salaries - {(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")}'
 
+    courses = _courses(offerings, use_html=use_html)
     teachings = _teachings(offerings, use_html=use_html)
     personal_details = _personal_details(offerings)
 
-    return export_name, personal_details, teachings
+    return export_name, personal_details, teachings, courses
+
+
+def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
+    courses = []
+
+    header = [
+        _("Course"),
+        _("Teachers per lesson"),
+        _("Status"),
+    ]
+
+    multiple_offerings = len(offerings) > 1
+    if multiple_offerings:
+        header.append(_("Offering"))
+
+    if use_html:
+        header.append(_("Actions"))
+
+    courses.append(header)
+
+    # get all courses in offerings
+    course_list: list[Course] = (
+        Course.objects.filter(offering__in=offerings)
+        .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
+        .all()
+    )
+
+    for course in course_list:
+        status = []
+
+        teachers_per_lesson = [
+            l.teachers.count() for l in course.lesson_occurrences.all()
+        ]
+
+        # check for lessons without teachers
+        if course.is_over():
+            lessons_without_teachers = teachers_per_lesson.count(0)
+            if lessons_without_teachers:
+                status_text = (
+                    f"{_('Lessons without teachers')}: {lessons_without_teachers}"
+                )
+                status.append(
+                    status_text
+                    if not use_html
+                    else f"<span class='badge text-bg-danger'>{status_text}</span>"
+                )
+
+        # check for lessons with more than two teachers
+        lessons_with_more_than_two_teachers = [
+            num_teachers > 2 for num_teachers in teachers_per_lesson
+        ].count(True)
+        if lessons_with_more_than_two_teachers:
+            status_text = f"{_('Lessons with more than 2 teachers')}: {lessons_with_more_than_two_teachers}"
+            status.append(
+                status_text
+                if not use_html
+                else f"<span class='badge text-bg-danger'>{status_text}</span>"
+            )
+
+        # check for lessons with different number of teachers (excluding empty)
+        nonzero_teachers_per_lesson = [
+            num_teachers for num_teachers in teachers_per_lesson if num_teachers > 0
+        ]
+        if len(set(nonzero_teachers_per_lesson)) > 1:
+            status_text = _("Uneven number of teachers per lesson")
+            status.append(
+                status_text
+                if not use_html
+                else f"<span class='badge text-bg-warning'>{status_text}</span>"
+            )
+
+        # count how many lessons with a certain number of teachers
+        lessons_for_x_teachers = dict()
+        teachers_number_text = []
+        for num_teachers in sorted(teachers_per_lesson):
+            lessons_for_x_teachers[num_teachers] = (
+                lessons_for_x_teachers.setdefault(num_teachers, 0) + 1
+            )
+
+        for key, value in lessons_for_x_teachers.items():
+            status_text = ", ".join(
+                [
+                    f"{value} {_('lessons with')} {key} {_('teachers') if key != 1 else _('teacher')}"
+                ]
+            )
+            teachers_number_text.append(
+                status_text
+                if not use_html
+                else f"<span class='badge text-bg-info'>{status_text}</span>"
+            )
+
+        row = [
+            (
+                mark_safe(
+                    f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
+                )
+                if use_html
+                else course.name
+            ),
+            (
+                mark_safe("<br>".join(teachers_number_text))
+                if use_html
+                else ", ".join(teachers_number_text)
+            ),
+            mark_safe("".join(status)) if use_html else ", ".join(status),
+        ]
+        if multiple_offerings:
+            row.append(course.offering)
+        if use_html:
+            row.append(
+                mark_safe(
+                    f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm'>{_('Disable presence editing')}</button>"
+                )
+            )
+
+        courses.append(row)
+
+    return courses
 
 
 def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
