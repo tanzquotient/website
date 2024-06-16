@@ -30,13 +30,13 @@ def offering_finance_teachers(
     """
     export_name = f'Salaries - {(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")}'
 
-    courses = _courses(offerings, use_html=use_html)
+    teachings = _teachings(offerings, use_html=use_html)
     personal_details = _personal_details(offerings)
 
-    return export_name, personal_details, courses
+    return export_name, personal_details, teachings
 
 
-def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
+def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
     courses = []
 
     header = [
