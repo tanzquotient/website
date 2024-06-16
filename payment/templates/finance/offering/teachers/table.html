@@ -9,15 +9,27 @@
         </button>
     </li>
     <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachers-tab" data-bs-toggle="pill" data-bs-target="#table-teachers"
-                type="button" role="tab" aria-controls="table-teachers" aria-selected="false">
-            {% trans "Teachers" %}
+        <button class="nav-link text-tanzquotient" id="table-teachers-tentative-tab" data-bs-toggle="pill" data-bs-target="#table-teachers-tentative"
+                type="button" role="tab" aria-controls="table-teachers-tentative" aria-selected="false">
+            {% trans "Teachers (tentative)" %}
         </button>
     </li>
     <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachings-tab" data-bs-toggle="pill" data-bs-target="#table-teachings"
-                type="button" role="tab" aria-controls="table-teachings" aria-selected="false">
-            {% trans "Teachings" %}
+        <button class="nav-link text-tanzquotient" id="table-teachers-completed-tab" data-bs-toggle="pill" data-bs-target="#table-teachers-completed"
+                type="button" role="tab" aria-controls="table-teachers-completed" aria-selected="false">
+            {% trans "Teachers (completed)" %}
+        </button>
+    </li>
+    <li class="nav-item ms-3" role="presentation">
+        <button class="nav-link text-tanzquotient" id="table-teachings-tentative-tab" data-bs-toggle="pill" data-bs-target="#table-teachings-tentative"
+                type="button" role="tab" aria-controls="table-teachings-tentative" aria-selected="false">
+            {% trans "Teachings (tentative)" %}
+        </button>
+    </li>
+    <li class="nav-item ms-3" role="presentation">
+        <button class="nav-link text-tanzquotient" id="table-teachings-completed-tab" data-bs-toggle="pill" data-bs-target="#table-teachings-completed"
+                type="button" role="tab" aria-controls="table-teachings-completed" aria-selected="false">
+            {% trans "Teachings (completed)" %}
         </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -34,13 +46,21 @@
          tabindex="0">
         {% table courses %}
     </div>
-    <div class="tab-pane fade table-responsive" id="table-teachers" role="tabpanel" aria-labelledby="table-teachers-tab"
+    <div class="tab-pane fade table-responsive" id="table-teachers-tentative" role="tabpanel" aria-labelledby="table-teachers-tentative-tab"
          tabindex="0">
-        {% table teachers %}
+        {% table teachers_tentative %}
     </div>
-    <div class="tab-pane fade table-responsive" id="table-teachings" role="tabpanel" aria-labelledby="table-teachings-tab"
+    <div class="tab-pane fade table-responsive" id="table-teachers-completed" role="tabpanel" aria-labelledby="table-teachers-completed-tab"
          tabindex="0">
-        {% table teachings %}
+        {% table teachers_completed %}
+    </div>
+    <div class="tab-pane fade table-responsive" id="table-teachings-tentative" role="tabpanel" aria-labelledby="table-teachings-tentative-tab"
+         tabindex="0">
+        {% table teachings_tentative %}
+    </div>
+    <div class="tab-pane fade table-responsive" id="table-teachings-completed" role="tabpanel" aria-labelledby="table-teachings-completed-tab"
+         tabindex="0">
+        {% table teachings_completed %}
     </div>
     <div class="tab-pane fade table-responsive" id="table-personal-data" role="tabpanel" aria-labelledby="table-personal-data-tab"
          tabindex="0">

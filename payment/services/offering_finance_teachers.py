@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 from courses.models import (
     Offering,
@@ -17,7 +18,7 @@ from courses.models import (
 
 def offering_finance_teachers(
     offerings: Sequence[Offering], use_html: bool = False
-) -> tuple[str, list, list]:
+) -> tuple[str, list, list, list, list, list, list]:
     """Exports a summary of the given ``offering`` concerning payment of teachers.
 
     Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
@@ -29,11 +30,21 @@ def offering_finance_teachers(
     export_name = f'Salaries - {(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")}'
 
     courses = _courses(offerings, use_html=use_html)
-    teachings = _teachings(offerings, use_html=use_html)
-    teachers = _teachers(offerings, use_html=use_html)
+    teachings_tentative = _teachings(offerings, use_html=use_html, only_completed=False)
+    teachings_completed = _teachings(offerings, use_html=use_html, only_completed=True)
+    teachers_tentative = _teachers(offerings, use_html=use_html, only_completed=False)
+    teachers_completed = _teachers(offerings, use_html=use_html, only_completed=True)
     personal_details = _personal_details(offerings)
 
-    return export_name, personal_details, teachings, courses, teachers
+    return (
+        export_name,
+        personal_details,
+        teachings_tentative,
+        teachings_completed,
+        courses,
+        teachers_tentative,
+        teachers_completed,
+    )
 
 
 def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
@@ -189,7 +200,9 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
     return courses
 
 
-def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
+def _teachings(
+    offerings: Sequence[Offering], use_html: bool = False, only_completed: bool = True
+) -> list:
     courses = []
 
     header = [
@@ -206,11 +219,17 @@ def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
         header += ["Offering"]
     courses.append(header)
 
+    lesson_occurrences_filter = (
+        Q(course__offering__in=offerings, course__completed=True)
+        if only_completed
+        else Q(course__offering__in=offerings)
+    )
+
     # get all teachers in offerings
     teachers: list[User] = (
         User.objects.filter(
             lesson_occurrences__in=LessonOccurrence.objects.filter(
-                course__offering__in=offerings
+                lesson_occurrences_filter
             )
             .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
             .all()
@@ -222,8 +241,13 @@ def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
 
     for teacher in teachers:
         # get all courses for a teacher in offerings
+        courses_filter = (
+            Q(offering__in=offerings, completed=True)
+            if only_completed
+            else Q(offering__in=offerings)
+        )
         teacher_courses = (
-            Course.objects.filter(offering__in=offerings)
+            Course.objects.filter(courses_filter)
             .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
             .filter(lesson_occurrences__teachers=teacher)
             .distinct()
@@ -283,7 +307,9 @@ def _teachings(offerings: Sequence[Offering], use_html: bool = False) -> list:
     return courses
 
 
-def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
+def _teachers(
+    offerings: Sequence[Offering], use_html: bool = False, only_completed: bool = True
+) -> list:
     courses = []
 
     header = [
@@ -295,11 +321,17 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
 
     courses.append(header)
 
+    lesson_occurrences_filter = (
+        Q(course__offering__in=offerings, course__completed=True)
+        if only_completed
+        else Q(course__offering__in=offerings)
+    )
+
     # get all teachers in offerings
     teachers: list[User] = (
         User.objects.filter(
             lesson_occurrences__in=LessonOccurrence.objects.filter(
-                course__offering__in=offerings
+                lesson_occurrences_filter
             )
             .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
             .all()
@@ -311,14 +343,20 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
 
     for teacher in teachers:
         # get all courses for a teacher in offerings
+        courses_filter = (
+            Q(offering__in=offerings, cancelled=False, completed=True)
+            if only_completed
+            else Q(offering__in=offerings, cancelled=False)
+        )
         teacher_courses = (
-            Course.objects.filter(offering__in=offerings)
+            Course.objects.filter(courses_filter)
             .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
             .filter(lesson_occurrences__teachers=teacher)
             .distinct()
             .all()
             .order_by("offering_id", "name")
         )
+
         teacher_hours = Decimal(
             (
                 sum(
@@ -327,7 +365,6 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
                         for lesson_occurrence in LessonOccurrence.objects.filter(
                             course__in=teacher_courses,
                             teachers=teacher,
-                            course__cancelled=False,
                         ).all()
                     ],
                     Decimal(0),
@@ -339,7 +376,6 @@ def _teachers(offerings: Sequence[Offering], use_html: bool = False) -> list:
             for l in LessonOccurrenceTeach.objects.filter(
                 lesson_occurrence__course__in=teacher_courses,
                 teacher=teacher,
-                lesson_occurrence__course__cancelled=False,
             ).all()
         )
 
