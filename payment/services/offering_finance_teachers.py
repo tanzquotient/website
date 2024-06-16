@@ -1,15 +1,13 @@
-from typing import Sequence
-import datetime
 from decimal import Decimal
+from typing import Sequence
 
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
-from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from courses.models import (
     Offering,
-    Teach,
     CourseSubscriptionType,
     LessonOccurrence,
     Course,
@@ -69,6 +67,14 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
             l.teachers.count() for l in course.lesson_occurrences.all()
         ]
 
+        if not course.is_over():
+            status_text = _("Course is not over yet")
+            status.append(
+                status_text
+                if not use_html
+                else f"<span class='badge text-bg-info'>{status_text}</span>"
+            )
+
         # check for lessons without teachers
         if course.is_over():
             lessons_without_teachers = teachers_per_lesson.count(0)
@@ -87,7 +93,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
             num_teachers > 2 for num_teachers in teachers_per_lesson
         ].count(True)
         if lessons_with_more_than_two_teachers:
-            status_text = f"{_('Lessons with more than 2 teachers')}: {lessons_with_more_than_two_teachers}"
+            status_text = _("Some lessons have more than two teachers")
             status.append(
                 status_text
                 if not use_html
@@ -99,7 +105,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
             num_teachers for num_teachers in teachers_per_lesson if num_teachers > 0
         ]
         if len(set(nonzero_teachers_per_lesson)) > 1:
-            status_text = _("Uneven number of teachers per lesson")
+            status_text = _("Not all lessons have the same number of teachers")
             status.append(
                 status_text
                 if not use_html
@@ -114,17 +120,33 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 lessons_for_x_teachers.setdefault(num_teachers, 0) + 1
             )
 
-        for key, value in lessons_for_x_teachers.items():
-            status_text = ", ".join(
-                [
-                    f"{value} {_('lessons') if value != 1 else _('lesson')} {_('with')} {key} {_('teachers') if key != 1 else _('teacher')}"
-                ]
-            )
-            teachers_number_text.append(
+        for num_teachers, num_lessons in lessons_for_x_teachers.items():
+            if num_teachers > 0:
+                status_text = (
+                    f"{num_lessons} {_('lessons') if num_lessons != 1 else _('lesson')} "
+                    f"{_('with')} {num_teachers} {_('teachers') if num_teachers != 1 else _('teacher')}"
+                )
+                teachers_number_text.append(status_text)
+
+        # If we didn't find issues, let the user know
+        if not status:
+            status_text = _("Everything looks good")
+            status.append(
                 status_text
                 if not use_html
-                else f"<span class='badge text-bg-info'>{status_text}</span>"
+                else f"<span class='badge text-bg-success'>{status_text}</span>"
             )
+
+        # No status message except the fact that the course is marked as completed
+        if course.completed:
+            status_text = _("Course marked as completed")
+            status = [
+                (
+                    status_text
+                    if not use_html
+                    else f"<span class='badge text-bg-info'>{status_text}</span>"
+                )
+            ]
 
         row = [
             (
@@ -139,21 +161,30 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 if use_html
                 else ", ".join(teachers_number_text)
             ),
-            mark_safe("".join(status)) if use_html else ", ".join(status),
+            mark_safe("<br/>".join(status)) if use_html else ", ".join(status),
         ]
         if multiple_offerings:
             row.append(course.offering)
         if use_html:
             row.append(
                 mark_safe(
-                    f"<button class='btn btn-secondary btn-sm disabled'>{_('Course completed')}</button>" if course.completed else f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm btn-completed'>{_('Mark as completed')}</button>"
+                    f"<button class='btn btn-secondary btn-sm disabled'>{_('Course completed')}</button>"
+                    if course.completed
+                    else f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm btn-completed'>{_('Mark as completed')}</button>"
                 )
             )
 
         courses.append(row)
 
     if use_html:
-        courses.append([""]*(len(header)-1) + [mark_safe(f"<button data-course-id='all' class='btn btn-secondary btn-sm btn-completed'>{_('Mark all as completed')}</button>")])
+        courses.append(
+            [""] * (len(header) - 1)
+            + [
+                mark_safe(
+                    f"<button data-course-id='all' class='btn btn-secondary btn-sm btn-completed'>{_('Mark all as completed')}</button>"
+                )
+            ]
+        )
     return courses
 
 
