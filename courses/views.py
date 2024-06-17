@@ -2,6 +2,8 @@ import hashlib
 import logging
 import os
 from datetime import timedelta
+from django.utils import timezone
+import pytz
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -166,8 +168,8 @@ def _lesson_to_ical_event(
     course: Course, lesson_occurrence: LessonOccurrenceData, request: HttpRequest
 ):
     event = Event()
-    event["dtstart"] = vDatetime(lesson_occurrence.start)
-    event["dtend"] = vDatetime(lesson_occurrence.end)
+    event["dtstart"] = vDatetime(timezone.localtime(lesson_occurrence.start, pytz.UTC))
+    event["dtend"] = vDatetime(timezone.localtime(lesson_occurrence.end, pytz.UTC))
     event.add("summary", vText(course.type.title))
     event.add("location", vText(course.room))
     event.add(
