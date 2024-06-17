@@ -1,0 +1,46 @@
+{% load i18n %}
+{% load sekizai_tags %}
+
+<div class="modal fade" id="cancelSubscriptionModal"
+     tabindex="-1" aria-hidden="true"
+     aria-labelledby="cancelSubscriptionModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title text-reset" id="cancelSubscriptionModalLabel">{% trans "Are you sure?" %}</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% blocktrans %}
+                    By cancelling your subscription you give up your position in the queue.
+                {% endblocktrans %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" onclick="cancel_subscription()">{% trans "Cancel my subscription" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% addtoblock "js" %}
+
+    <script type="text/javascript">
+
+        const cancelSubscriptionModal = new bootstrap.Modal(document.getElementById("cancelSubscriptionModal"));
+
+        let courseToCancelId = 0;
+
+        document.getElementById("cancelSubscriptionModal").addEventListener('show.bs.modal', event => {
+            courseToCancelId = event.relatedTarget.getAttribute("data-course-id");
+        })
+
+        function cancel_subscription()
+        {
+            console.log(courseToCancelId);
+            cancelSubscriptionModal.hide();
+        }
+
+    </script>
+
+{% endaddtoblock %}

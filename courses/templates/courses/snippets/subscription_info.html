@@ -43,7 +43,7 @@
                                 {% trans "Go to 'My Courses' to see the status and further information" %}
                             </a>
                         </p>
-                        {% include "courses/snippets/cancel_subscription_button.html" %}
+                        {% include "courses/snippets/cancel_subscription_button.html" with course=course align_center=True only %}
                     </div>
                 {% else %}
                     <span class="badge rounded-pill bg-info">{% trans "Waiting list" %}</span>
@@ -71,4 +71,8 @@
     {% elif course.subscription_closed %}
         <em>{% trans "Registration closed" %}</em>
     {% endif %}
+{% endif %}
+
+{% if user and user.id in course.waiting_list_user_ids %}
+    {% include "courses/snippets/cancel_subscription_modal.html" %}
 {% endif %}

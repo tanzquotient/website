@@ -181,6 +181,12 @@ class Course(TranslatableModel):
             for subscription in self.subscriptions.all()
             if subscription.is_active()
         }
+    
+    def waiting_list_user_ids(self) -> set[int]:
+        return {
+            subscription.user_id
+            for subscription in self.subscriptions.waiting_list().all()
+        }
 
     def payment_totals(self) -> dict[str, Number]:
         """calculate different statistics in one method (performance optimization)"""

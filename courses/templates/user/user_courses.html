@@ -56,7 +56,7 @@
         {% include "user/snippets/open_surveys.html" with user=user only %}
         <div class="accordion">
             {% for subscription in subscriptions %}
-                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user only %}
+                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
             {% endfor %}
         </div>
         {% if not subscriptions %}
@@ -69,6 +69,10 @@
             <i class="fa fa-arrow-circle-right fa-lg"></i>
         </a>
     </p>
+
+    {% if user.subscriptions.waiting_list|length > 0 %}
+        {% include "courses/snippets/cancel_subscription_modal.html" %}
+    {% endif %}
 
 {% endblock %}
 
