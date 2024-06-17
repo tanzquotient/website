@@ -2,10 +2,10 @@ from decimal import Decimal
 from typing import Sequence
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.db.models import Q
 
 from courses.models import (
     Offering,
@@ -18,7 +18,7 @@ from courses.models import (
 
 def offering_finance_teachers(
     offerings: Sequence[Offering], use_html: bool = False
-) -> tuple[str, list, list, list, list, list, list]:
+) -> tuple[str, list[dict]]:
     """Exports a summary of the given ``offering`` concerning payment of teachers.
 
     Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
@@ -32,18 +32,20 @@ def offering_finance_teachers(
     courses = _courses(offerings, use_html=use_html)
     teachings_tentative = _teachings(offerings, use_html=use_html, only_completed=False)
     teachings_completed = _teachings(offerings, use_html=use_html, only_completed=True)
-    teachers_tentative = _teachers(offerings, use_html=use_html, only_completed=False)
-    teachers_completed = _teachers(offerings, use_html=use_html, only_completed=True)
+    teachers_tentative = _teachers(offerings, only_completed=False)
+    teachers_completed = _teachers(offerings, only_completed=True)
     personal_details = _personal_details(offerings)
 
     return (
         export_name,
-        personal_details,
-        teachings_tentative,
-        teachings_completed,
-        courses,
-        teachers_tentative,
-        teachers_completed,
+        [
+            dict(data=courses, name="Courses"),
+            dict(data=teachers_completed, name="Teachers Summary"),
+            dict(data=teachings_completed, name="Teachers by Course"),
+            dict(data=personal_details, name="Personal Data"),
+            dict(data=teachers_tentative, name="[Tentative] Teachers Summary"),
+            dict(data=teachings_tentative, name="[Tentative] Teachers by course"),
+        ],
     )
 
 
@@ -309,9 +311,22 @@ def _teachings(
     return courses
 
 
-def _teachers(
-    offerings: Sequence[Offering], use_html: bool = False, only_completed: bool = True
-) -> list:
+def _teachers(offerings: Sequence[Offering], only_completed: bool = True) -> list:
+    all_completed = all(
+        [course.completed for course in Course.objects.filter(offering__in=offerings)]
+    )
+
+    if only_completed and not all_completed:
+        return [
+            [_("Note")],
+            [
+                _(
+                    "Some courses are not marked as completed yet. "
+                    "Final data can not be shown."
+                )
+            ],
+        ]
+
     courses = []
 
     header = [

@@ -2,70 +2,25 @@
 {% load tq_tags %}
 
 <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link active text-tanzquotient" id="table-courses-tab" data-bs-toggle="pill" data-bs-target="#table-courses"
-                type="button" role="tab" aria-controls="table-courses" aria-selected="true">
-            {% trans "Courses" %}
-        </button>
-    </li>
-    <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachers-tentative-tab" data-bs-toggle="pill" data-bs-target="#table-teachers-tentative"
-                type="button" role="tab" aria-controls="table-teachers-tentative" aria-selected="false">
-            {% trans "Teachers (tentative)" %}
-        </button>
-    </li>
-    <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachers-completed-tab" data-bs-toggle="pill" data-bs-target="#table-teachers-completed"
-                type="button" role="tab" aria-controls="table-teachers-completed" aria-selected="false">
-            {% trans "Teachers (completed)" %}
-        </button>
-    </li>
-    <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachings-tentative-tab" data-bs-toggle="pill" data-bs-target="#table-teachings-tentative"
-                type="button" role="tab" aria-controls="table-teachings-tentative" aria-selected="false">
-            {% trans "Teachings (tentative)" %}
-        </button>
-    </li>
-    <li class="nav-item ms-3" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-teachings-completed-tab" data-bs-toggle="pill" data-bs-target="#table-teachings-completed"
-                type="button" role="tab" aria-controls="table-teachings-completed" aria-selected="false">
-            {% trans "Teachings (completed)" %}
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link text-tanzquotient" id="table-personal-data-tab" data-bs-toggle="pill"
-                data-bs-target="#table-personal-data" type="button" role="tab" aria-controls="table-personal-data"
-                aria-selected="false">
-            {% trans "Personal details" %}
-        </button>
-    </li>
+    {% for item in data  %}
+        <li class="nav-item ms-3" role="presentation">
+            <button class="nav-link {% if forloop.first %} active {% endif %} text-tanzquotient"
+                    id="table-{{ forloop.counter }}-tab" data-bs-toggle="pill" data-bs-target="#table-{{ forloop.counter }}"
+                    type="button" role="tab" aria-controls="table-{{ forloop.counter }}" aria-selected="{{ forloop.first }}">
+                {{ item.name }}
+            </button>
+        </li>
+    {% endfor %}
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade show active table-responsive" id="table-courses" role="tabpanel" aria-labelledby="table-courses-tab"
-         tabindex="0">
-        {% table courses %}
-    </div>
-    <div class="tab-pane fade table-responsive" id="table-teachers-tentative" role="tabpanel" aria-labelledby="table-teachers-tentative-tab"
-         tabindex="0">
-        {% table teachers_tentative %}
-    </div>
-    <div class="tab-pane fade table-responsive" id="table-teachers-completed" role="tabpanel" aria-labelledby="table-teachers-completed-tab"
-         tabindex="0">
-        {% table teachers_completed %}
-    </div>
-    <div class="tab-pane fade table-responsive" id="table-teachings-tentative" role="tabpanel" aria-labelledby="table-teachings-tentative-tab"
-         tabindex="0">
-        {% table teachings_tentative %}
-    </div>
-    <div class="tab-pane fade table-responsive" id="table-teachings-completed" role="tabpanel" aria-labelledby="table-teachings-completed-tab"
-         tabindex="0">
-        {% table teachings_completed %}
-    </div>
-    <div class="tab-pane fade table-responsive" id="table-personal-data" role="tabpanel" aria-labelledby="table-personal-data-tab"
-         tabindex="0">
-        {% table personal_data %}
-    </div>
+    {% for item in data  %}
+        <div class="tab-pane fade {% if forloop.first %} show active {% endif %} table-responsive"
+             id="table-{{ forloop.counter }}" role="tabpanel" aria-labelledby="table-{{ forloop.counter }}-tab"
+             tabindex="0">
+            {% table item.data %}
+        </div>
+    {% endfor %}
 </div>
 
 <div class="modal" tabindex="-1" id="confirmModal">
