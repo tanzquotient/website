@@ -27,6 +27,8 @@ from courses.models import (
     RegularLessonException,
     LessonOccurrenceData,
     LessonOccurrence,
+    Rejection,
+    RejectionReason,
 )
 from partners.models import Partner
 from survey.models import Survey
@@ -181,7 +183,7 @@ class Course(TranslatableModel):
             for subscription in self.subscriptions.all()
             if subscription.is_active()
         }
-    
+
     def waiting_list_user_ids(self) -> set[int]:
         return {
             subscription.user_id
@@ -363,6 +365,23 @@ class Course(TranslatableModel):
                 return minmax(list(waiting_list_length.values()))
             else:
                 return waiting_list_length[lead_follow]
+
+    def user_can_subscribe(self, user: User) -> bool:
+        # check whether an user can subscribe for a course
+        # i.e. they haven't subscribed yet, or
+        # they cancelled their subscription
+        return not (
+            (
+                self.subscriptions.filter(user=user).exists()
+                and not Rejection.objects.filter(
+                    subscription__course=self,
+                    subscription__user=user,
+                    reason=RejectionReason.USER_CANCELLED,
+                ).exists()
+            )
+            or (not self.is_subscription_allowed() and not user.is_staff)
+            or not self.has_free_places()
+        )
 
     def number_of_possible_couples(self) -> int:
         (

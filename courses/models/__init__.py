@@ -15,11 +15,11 @@ from .regular_lesson_exception import RegularLessonException
 from .irregular_lesson import IrregularLesson
 from .lesson_occurrence import LessonOccurrence
 from .course_type import CourseType
+from .rejection import Rejection
 from .course import Course
 from .period_cancellation import PeriodCancellation
 from .course_succession import CourseSuccession
 from .confirmation import Confirmation
-from .rejection import Rejection
 from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose

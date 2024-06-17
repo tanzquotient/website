@@ -40,6 +40,8 @@ from .models import (
     Style,
     Subscribe,
     LessonOccurrenceData,
+    Rejection,
+    RejectionReason,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -229,14 +231,10 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
 
 @login_required
 def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
-    course = get_object_or_404(Course.objects, id=course_id)
+    course: Course = get_object_or_404(Course.objects, id=course_id)
 
     # If user already signed up or sign up not possible: redirect to course detail
-    if (
-        course.subscriptions.filter(user=request.user).exists()
-        or (not course.is_subscription_allowed() and not request.user.is_staff)
-        or not course.has_free_places
-    ):
+    if not course.user_can_subscribe(request.user):
         return redirect("courses:course_detail", course_id=course_id)
 
     # If user has overdue payments -> block subscribing to new courses
