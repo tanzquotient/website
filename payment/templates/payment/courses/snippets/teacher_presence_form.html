@@ -53,10 +53,18 @@
                 </ul>
             </div>
         {% else %}
-            {% for teacher in lesson.teachers.all %}
-                {{ teacher.first_name }}
-                {{ teacher.last_name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
+            {% if lesson.teachers %}
+                <ul>
+                    {% for teacher in lesson.teachers.all %}
+                        <li>
+                            {{ teacher.first_name }} {{ teacher.last_name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% trans "No teachers" %}
+            {% endif %}
+
         {% endif %}
     </div>
 {% endfor %}
