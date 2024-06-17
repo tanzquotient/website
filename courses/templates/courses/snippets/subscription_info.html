@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n courses_tags %}
 {% if course.is_open_class %}
     {# No subscription needed (thus no subscribe status shown) #}
     <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
@@ -16,39 +16,38 @@
         {% if is_detail_page and not course.is_subscription_allowed and user.is_staff %}
             {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
         {% endif %}
-        {% if user %}
-            {% if user.id in course.subscribed_user_ids %}
-                {% if is_detail_page %}
-                    <div class="mt-2 alert alert-info" role="alert">
-                        <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
-                        <hr>
-                        <p>
-                            <a href="{% url "user_courses" %}">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                {% trans "Go to 'My Courses' to see the status and further information" %}
-                            </a>
-                        </p>
-                    </div>
-                {% else %}
-                    <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
-                {% endif %}
-            {% elif user.id in course.waiting_list_user_ids %}
-                {% if is_detail_page %}
-                    <div class="mt-2 alert alert-info" role="alert">
-                        <h5 class="alert-heading">{% trans "You are on the waiting list" %}</h5>
-                        <hr>
-                        <p>
-                            <a href="{% url "user_courses" %}">
-                                <i class="fa fa-arrow-circle-right"></i>
-                                {% trans "Go to 'My Courses' to see the status and further information" %}
-                            </a>
-                        </p>
-                        {% include "courses/snippets/cancel_subscription_button.html" with course=course align_center=True only %}
-                    </div>
-                {% else %}
-                    <span class="badge rounded-pill bg-info">{% trans "Waiting list" %}</span>
-                {% endif %}
-        {% endif %}
+        {% if user and user.id in course.subscribed_user_ids %}
+            {% if is_detail_page %}
+                <div class="mt-2 alert alert-info" role="alert">
+                    <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
+                    <hr>
+                    <p>
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Go to 'My Courses' to see the status and further information" %}
+                        </a>
+                    </p>
+                </div>
+            {% else %}
+                <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
+            {% endif %}
+        {% elif user and user.id in course.waiting_list_user_ids %}
+            {% if is_detail_page %}
+                <div class="mt-2 alert alert-info" role="alert">
+                    <h5 class="alert-heading">{% trans "You are on the waiting list" %}</h5>
+                    <h6 class="alert-heading">{% trans "Position" %}: {{ course|get_position_on_waiting_list:user }}</h6>
+                    <hr>
+                    <p>
+                        <a href="{% url "user_courses" %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Go to 'My Courses' to see the status and further information" %}
+                        </a>
+                    </p>
+                    {% include "courses/snippets/cancel_subscription_button.html" with course=course align_center=True only %}
+                </div>
+            {% else %}
+                <span class="badge rounded-pill bg-info">{% trans "Waiting list" %}</span>
+            {% endif %}
 
         {% elif is_detail_page and course.has_free_places %}
             <div class="my-3">
