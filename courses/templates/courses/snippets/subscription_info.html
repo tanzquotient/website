@@ -49,18 +49,20 @@
                 <span class="badge rounded-pill bg-info">{% trans "Waiting list" %}</span>
             {% endif %}
 
-        {% elif is_detail_page and course.has_free_places %}
-            <div class="my-3">
-                <a href="{% url 'courses:subscribe' course_id=course.id %}"
-                   class="btn btn-success"
-                   role="button">{% trans "Subscribe now" %}</a>
-            </div>
-        {% elif is_detail_page and not course.has_free_places %}
-            <div class="my-3">
-                <a href="{% url 'courses:subscribe' course_id=course.id %}"
-                class="btn btn-success"
-                role="button">{% trans "Join the waiting list" %}</a>
-            </div>
+        {% elif user and course|user_can_subscribe:user or not user %}
+            {% if is_detail_page and course.has_free_places %}
+                <div class="my-3">
+                    <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                    class="btn btn-success"
+                    role="button">{% trans "Subscribe now" %}</a>
+                </div>
+            {% elif is_detail_page and not course.has_free_places %}
+                <div class="my-3">
+                    <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                    class="btn btn-success"
+                    role="button">{% trans "Join the waiting list" %}</a>
+                </div>
+            {% endif %}
         {% endif %}
 
         {% include "courses/snippets/participants_info.html" %}

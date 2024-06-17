@@ -195,4 +195,12 @@ def get_waiting_list_length(course: Course, lead_follow: str = "no_preference") 
         lead_follow = LeadFollow.NO_PREFERENCE
     return course.get_waiting_list_length(lead_follow=lead_follow)
 
+@register.filter(name="get_position_on_waiting_list")
+def get_position_on_waiting_list(course: Course, user: User) -> int:
+    # get user's subscription for course
+    subscription: Subscribe = Subscribe.objects.get(course=course, user=user)
+    return subscription.get_position_on_waiting_list()
 
+@register.filter(name="user_can_subscribe")
+def user_can_subscribe(course: Course, user: User) -> bool:
+    return course.user_can_subscribe(user=user)
