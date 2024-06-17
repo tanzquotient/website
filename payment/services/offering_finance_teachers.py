@@ -173,7 +173,9 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 if use_html
                 else ", ".join(teachers_number_text)
             ),
-            mark_safe("<br/>".join(status)) if use_html else ", ".join(status),
+            mark_safe("<br/>".join(status))
+            if use_html
+            else ", ".join(map(str, status)),
         ]
         if multiple_offerings:
             row.append(course.offering)
