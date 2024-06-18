@@ -35,7 +35,6 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
 
     # let the save method set the state of the subscription
     user_subscription.state = None
-    Rejection.objects.filter(subscription=user_subscription).delete()
     user_subscription.lead_follow = data.get("lead_follow", LeadFollow.NO_PREFERENCE)
     user_subscription.experience = data.get("experience", None)
     user_subscription.comment = data.get("comment", None)
@@ -49,7 +48,6 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
         )
          # let the save method set the state of the subscription
         partner_subscription.state = None
-        Rejection.objects.filter(subscription=partner_subscription).delete()
         partner_subscription.lead_follow = LeadFollow.partner(
             user_subscription.lead_follow
         )
