@@ -18,6 +18,11 @@ urlpatterns = [
     path("<int:course_id>/detail/", views.course_detail, name="course_detail"),
     path("<int:course_id>/calendar/", views.course_ical, name="course_ical"),
     path("<int:course_id>/subscribe/", views.subscribe_form, name="subscribe"),
+    path(
+        "subscribe/cancel",
+        views.cancel_subscription_from_waiting_list,
+        name="cancel_subscription",
+    ),
     path("offering/<int:offering_id>/", views.offering_by_id, name="offering_by_id"),
     # Restricted pages
     path("auth/teachers", views.teachers_overview, name="teachers_overview"),

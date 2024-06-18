@@ -37,8 +37,26 @@
 
         function cancel_subscription()
         {
-            console.log(courseToCancelId);
-            cancelSubscriptionModal.hide();
+            fetch("{% url "courses:cancel_subscription" %}", {
+
+                method: "POST",
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token }}",
+                },
+
+                body: JSON.stringify({
+                    course_id: courseToCancelId,
+                }),
+
+            })
+            .then((response) => response.json())
+            .then((json) => 
+            {
+                if (json.result == "success")
+                    location.reload();
+            });
         }
 
     </script>

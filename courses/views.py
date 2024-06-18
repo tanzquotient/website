@@ -4,6 +4,7 @@ import os
 from datetime import timedelta
 from django.utils import timezone
 import pytz
+import json
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -42,6 +43,7 @@ from .models import (
     LessonOccurrenceData,
     Rejection,
     RejectionReason,
+    MatchingState,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -586,3 +588,34 @@ def export_offering_summary_excel(
     return services.export_summary(
         "xlsx", [Offering.objects.filter(pk=offering_id).first()]
     )
+
+
+@login_required
+def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
+
+    from courses.services import reject_subscriptions
+
+    course_id = json.loads(request.body).get("course_id")
+    if not request.method == "POST" or not course_id:
+        raise Http404()
+
+    course: Course = get_object_or_404(Course, id=int(course_id))
+    subscribe: Subscribe = get_object_or_404(
+        Subscribe, course=course, user=request.user
+    )
+    assert subscribe.state == SubscribeState.WAITING_LIST
+
+    subscriptions_to_reject = [subscribe]
+
+    if subscribe.matching_state == MatchingState.COUPLE:
+        partner_subscribe = subscribe.get_partner_subscription()
+        assert partner_subscribe.state == SubscribeState.WAITING_LIST
+        subscriptions_to_reject.append(partner_subscribe)
+
+    reject_subscriptions(
+        subscriptions=subscriptions_to_reject,
+        reason=RejectionReason.USER_CANCELLED,
+        send_email=False,
+    )
+
+    return HttpResponse(json.dumps({"result": "success"}))
