@@ -205,7 +205,7 @@ def unreject_subscriptions(
     unrejected_count = 0
     for subscription in subscriptions:
         if subscription.state == models.SubscribeState.REJECTED:
-            subscription.state = models.SubscribeState.NEW
+            subscription.state = None
             subscription.save()
             unrejected_count += 1
     if unrejected_count:
