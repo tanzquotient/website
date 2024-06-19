@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load courses_tags %}
 
 
 <div class="accordion-item" id="accordion-item-id-{{ subscription.course.id }}">
@@ -112,7 +113,7 @@
                         {% include "user/snippets/subscription_status_text.html" with subscription=subscription only %}
                     </p>
                     {% if subscription.get_position_on_waiting_list %}
-                        {% include "courses/snippets/cancel_subscription_button.html" with course=subscription.course align_center=False only %}
+                        {% include "courses/snippets/cancel_subscription_button.html" with course=subscription.course subscription_couple=subscription|is_couple align_center=False only %}
                     {% endif %}
                     {% include "user/snippets/course_review_button.html" with course=subscription.course user=user only %}
                 </div>

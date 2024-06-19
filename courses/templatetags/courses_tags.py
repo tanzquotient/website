@@ -11,6 +11,7 @@ from courses.models import (
     Subscribe,
     SubscribeState, LeadFollow,
     LessonOccurrence,
+    MatchingState,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -204,3 +205,7 @@ def get_position_on_waiting_list(course: Course, user: User) -> int:
 @register.filter(name="user_can_subscribe")
 def user_can_subscribe(course: Course, user: User) -> bool:
     return course.user_can_subscribe(user=user)
+
+@register.filter(name="is_couple")
+def is_couple(subscribe: Subscribe) -> bool:
+    return subscribe.matching_state == MatchingState.COUPLE
