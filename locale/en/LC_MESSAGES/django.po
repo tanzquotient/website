@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TQ Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 14:46+0200\n"
+"POT-Creation-Date: 2024-06-19 22:34+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -129,14 +129,13 @@ msgid "Music of dance styles"
 msgstr "Music of dance styles"
 
 #: courses/cms_toolbars.py:10 courses/templates/courses/list.html:6
-#: payment/services/offering_finance_teachers.py:42
+#: payment/services/offering_finance_teachers.py:215
 #: payment/templates/finance/offering/common/tabs.html:7
-#: payment/templates/finance/offering/teachers/table.html:8
 #: payment/templates/finance/offering/unpaid/index.html:118
 msgid "Courses"
 msgstr "Courses"
 
-#: courses/cms_toolbars.py:13 payment/templates/finance/offering/index.html:10
+#: courses/cms_toolbars.py:13 payment/templates/finance/offering/index.html:7
 msgid "Offerings"
 msgstr "Offerings"
 
@@ -295,17 +294,17 @@ msgstr ""
 
 #: courses/forms/user_edit_from.py:14
 #: courses/services/data/teachers_overview.py:45
-#: payment/services/offering_finance_teachers.py:40
-#: payment/services/offering_finance_teachers.py:135
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:24
+#: payment/services/offering_finance_teachers.py:213
+#: payment/services/offering_finance_teachers.py:333
+#: payment/services/offering_finance_teachers.py:413
 msgid "First name"
 msgstr "First name"
 
 #: courses/forms/user_edit_from.py:15
 #: courses/services/data/teachers_overview.py:45
-#: payment/services/offering_finance_teachers.py:41
-#: payment/services/offering_finance_teachers.py:135
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:24
+#: payment/services/offering_finance_teachers.py:214
+#: payment/services/offering_finance_teachers.py:334
+#: payment/services/offering_finance_teachers.py:413
 msgid "Last name"
 msgstr "Last name"
 
@@ -489,7 +488,7 @@ msgstr "Saturday"
 msgid "Sunday"
 msgstr "Sunday"
 
-#: courses/models/course.py:108
+#: courses/models/course.py:111
 msgid ""
 "Shown only to participants of the course on the course page. Can be set by "
 "teachers in the frontend."
@@ -497,7 +496,7 @@ msgstr ""
 "Shown only to participants of the course on the course page. Can be set by "
 "teachers in the frontend."
 
-#: courses/models/course.py:116
+#: courses/models/course.py:119
 msgid ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
@@ -505,59 +504,59 @@ msgstr ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
 
-#: courses/models/course.py:342
+#: courses/models/course.py:350
 msgid "We did not receive any subscriptions yet."
 msgstr "We did not receive any subscriptions yet."
 
-#: courses/models/course.py:355
+#: courses/models/course.py:363
 msgid "Currently there is:"
 msgstr "Currently there is:"
 
-#: courses/models/course.py:356
+#: courses/models/course.py:364
 msgid "Currently there are:"
 msgstr "Currently there are:"
 
-#: courses/models/course.py:360
+#: courses/models/course.py:368
 msgid "We received one subscription so far."
 msgstr "We received one subscription so far."
 
-#: courses/models/course.py:361
+#: courses/models/course.py:369
 msgid "We received {} subscriptions so far."
 msgstr "We received {} subscriptions so far."
 
-#: courses/models/course.py:376
+#: courses/models/course.py:384
 msgid "One couple"
 msgstr "One couple"
 
-#: courses/models/course.py:378
+#: courses/models/course.py:386
 msgid "{} couples"
 msgstr "{} couples"
 
-#: courses/models/course.py:382
+#: courses/models/course.py:390
 msgid "One individual follower"
 msgstr "One individual follower"
 
-#: courses/models/course.py:384
+#: courses/models/course.py:392
 msgid "{} individual followers"
 msgstr "{} individual followers"
 
-#: courses/models/course.py:388
+#: courses/models/course.py:396
 msgid "One individual leader"
 msgstr "One individual leader"
 
-#: courses/models/course.py:390
+#: courses/models/course.py:398
 msgid "{} individual leaders"
 msgstr "{} individual leaders"
 
-#: courses/models/course.py:394
+#: courses/models/course.py:402
 msgid "One person with no lead or follow preference"
 msgstr "One person with no lead or follow preference"
 
-#: courses/models/course.py:396
+#: courses/models/course.py:404
 msgid "{} people with no lead or follow preference"
 msgstr "{} people with no lead or follow preference"
 
-#: courses/models/course.py:418
+#: courses/models/course.py:426
 msgid ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
@@ -565,7 +564,7 @@ msgstr ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
 
-#: courses/models/course.py:421
+#: courses/models/course.py:429
 msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
@@ -573,15 +572,15 @@ msgstr ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
 
-#: courses/models/course.py:424
+#: courses/models/course.py:432
 msgid "At least {} couples are needed."
 msgstr "At least {} couples are needed."
 
-#: courses/models/course.py:430
+#: courses/models/course.py:438
 msgid "At least one more person is needed"
 msgstr "At least one more person is needed"
 
-#: courses/models/course.py:431
+#: courses/models/course.py:439
 msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
@@ -625,7 +624,7 @@ msgstr "no preference, assigned as leader"
 msgid "no preference, assigned as follower"
 msgstr "no preference, assigned as follower"
 
-#: courses/models/user_profile.py:80
+#: courses/models/user_profile.py:81
 msgid ""
 "Profile picture. Only available to teachers and board members. Will be "
 "center cropped and rescaled to 512x512px upon upload."
@@ -784,15 +783,15 @@ msgstr ""
 msgid "Voucher options"
 msgstr "Voucher options"
 
-#: courses/templates/courses/auth/offering_overview.html:15
+#: courses/templates/courses/auth/offering_overview.html:12
 msgid "Download summary of this offering here:"
 msgstr "Download summary of this offering here:"
 
-#: courses/templates/courses/auth/offering_overview.html:16
+#: courses/templates/courses/auth/offering_overview.html:13
 msgid "Download Excel"
 msgstr "Download Excel"
 
-#: courses/templates/courses/auth/offering_overview.html:21
+#: courses/templates/courses/auth/offering_overview.html:18
 msgid "Subscriptions by course"
 msgstr "Subscriptions by course"
 
@@ -820,36 +819,34 @@ msgstr "Back to profile"
 msgid "Update Profile"
 msgstr "Update Profile"
 
-#: courses/templates/courses/auth/subscription_overview.html:10
+#: courses/templates/courses/auth/subscription_overview.html:8
 msgid "Subscription Overview"
 msgstr "Subscription overview"
 
-#: courses/templates/courses/auth/subscription_overview.html:27
+#: courses/templates/courses/auth/subscription_overview.html:25
 #: courses/templates/courses/snippets/offerings_list.html:21
 msgid "Regular offerings"
 msgstr "Regular offerings"
 
-#: courses/templates/courses/auth/subscription_overview.html:39
+#: courses/templates/courses/auth/subscription_overview.html:37
 #: courses/templates/courses/snippets/offerings_list.html:23
 msgid "Workshops"
 msgstr "Workshops"
 
-#: courses/templates/courses/course_subscribe_form.html:20
+#: courses/templates/courses/course_subscribe_form.html:17
 #: courses/templates/courses/course_subscribe_status.html:20
 #: courses/templates/courses/snippets/detail.html:7
 #: courses/templates/courses/snippets/offering_components/offering.html:7
 msgid "Preview"
 msgstr "Preview"
 
-#: courses/templates/courses/course_subscribe_form.html:34
+#: courses/templates/courses/course_subscribe_form.html:31
 #: courses/templates/courses/snippets/subscribe_form.html:178
 #: templates/account/signup.html:8
 msgid "Sign Up"
 msgstr "Sign Up"
 
 #: courses/templates/courses/course_subscribe_status.html:10
-#, fuzzy
-#| msgid "Subscriptions"
 msgid "Subscription"
 msgstr "Subscription"
 
@@ -873,8 +870,8 @@ msgstr "Your Role"
 #: courses/templates/courses/course_subscribe_status.html:46
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
 #: courses/templates/user/snippets/subscription.html:63
-#: payment/templates/payment/courses/course.html:73
-#: payment/templates/payment/courses/course.html:89
+#: payment/templates/payment/courses/course.html:69
+#: payment/templates/payment/courses/course.html:85
 msgid "Partner"
 msgstr "Partner"
 
@@ -923,7 +920,7 @@ msgstr ""
 
 #: courses/templates/courses/snippets/address_input.html:3
 #: courses/templates/user/profile.html:93
-#: payment/services/offering_finance_teachers.py:135
+#: payment/services/offering_finance_teachers.py:413
 msgid "Address"
 msgstr "Address"
 
@@ -932,7 +929,7 @@ msgid "Bank Account"
 msgstr "Bank account"
 
 #: courses/templates/courses/snippets/course_comment.html:12
-#: payment/templates/finance/account/detail.html:28
+#: payment/templates/finance/account/detail.html:25
 msgid "with"
 msgstr "with"
 
@@ -1146,11 +1143,12 @@ msgid "Currently unknown"
 msgstr "Currently unknown"
 
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:6
+#: payment/services/offering_finance_teachers.py:56
 #: payment/templates/finance/offering/courses/index.html:12
 #: payment/templates/finance/offering/unpaid/index.html:12
-#: payment/templates/payment/counter/details.html:25
-#: payment/templates/payment/courses/confirm.html:23
-#: payment/templates/payment/subscription/index.html:45
+#: payment/templates/payment/counter/details.html:22
+#: payment/templates/payment/courses/confirm.html:20
+#: payment/templates/payment/subscription/index.html:41
 msgid "Course"
 msgstr "Course"
 
@@ -1164,6 +1162,7 @@ msgid "External link"
 msgstr "External link"
 
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:18
+#: payment/services/offering_finance_teachers.py:58
 msgid "Status"
 msgstr "Status"
 
@@ -1181,7 +1180,7 @@ msgid "Other offerings"
 msgstr "Other offerings"
 
 #: courses/templates/courses/snippets/participants_info.html:5
-#: events/templates/events/event_detail.html:50
+#: events/templates/events/event_detail.html:47
 msgid "fully booked"
 msgstr "fully booked"
 
@@ -1214,8 +1213,7 @@ msgstr "no lesson"
 #: courses/templates/courses/snippets/user_form.html:5
 #: courses/templates/courses/snippets/user_modal.html:69
 #: courses/templates/courses/snippets/user_profile_form.html:8
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:18
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:34
+#: payment/templates/finance/offering/teachers/table.html:37
 #: templates/account/change_password.html:19
 #: templates/account/change_password.html:25
 msgid "Close"
@@ -1274,14 +1272,14 @@ msgstr ""
 #: courses/templates/courses/snippets/student_status_input.html:12
 #: courses/templates/user/profile.html:151
 #: courses/templates/user/profile.html:159
-#: payment/services/offering_finance_teachers.py:121
+#: payment/services/offering_finance_teachers.py:304
 msgid "Yes"
 msgstr "Yes"
 
 #: courses/templates/courses/snippets/student_status_input.html:17
 #: courses/templates/user/profile.html:153
 #: courses/templates/user/profile.html:161
-#: payment/services/offering_finance_teachers.py:121
+#: payment/services/offering_finance_teachers.py:304
 msgid "No"
 msgstr "No"
 
@@ -1351,8 +1349,8 @@ msgstr ""
 #: courses/templates/courses/snippets/subscribe_form.html:96
 #: courses/templates/courses/snippets/subscribe_form.html:122
 #: courses/templates/user/profile.html:114
-#: payment/templates/payment/courses/course.html:61
-#: payment/templates/payment/courses/course.html:91
+#: payment/templates/payment/courses/course.html:57
+#: payment/templates/payment/courses/course.html:87
 msgid "Student status"
 msgstr "Student status"
 
@@ -1387,8 +1385,8 @@ msgid "Briefly describe your dancing experience"
 msgstr "Briefly describe your dancing experience"
 
 #: courses/templates/courses/snippets/subscribe_form.html:153
-#: payment/templates/finance/account/detail.html:44
-#: survey/templates/survey/changed_answers.html:32
+#: payment/templates/finance/account/detail.html:41
+#: survey/templates/survey/changed_answers.html:29
 msgid "Comment"
 msgstr "Comment"
 
@@ -1452,7 +1450,7 @@ msgid "Registration closed"
 msgstr "Registration closed"
 
 #: courses/templates/courses/snippets/user_contact.html:5
-#: payment/services/offering_finance_teachers.py:135
+#: payment/services/offering_finance_teachers.py:413
 msgid "Phone"
 msgstr "Phone"
 
@@ -1463,7 +1461,6 @@ msgstr "Some inputs are invalid"
 
 #: courses/templates/courses/snippets/user_modal.html:29
 #: courses/templates/user/profile.html:124
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:19
 msgid "Teacher"
 msgstr "Teacher"
 
@@ -1502,7 +1499,7 @@ msgstr "Add salary payment info (only required for teachers and helpers)"
 
 #: courses/templates/courses/snippets/user_profile_form_payment.html:9
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:42
-#: payment/services/offering_finance_teachers.py:47
+#: payment/services/offering_finance_teachers.py:321
 #: payment/templates/payment/subscription/snippets/payment_state_alert.html:19
 msgid "Note"
 msgstr "Note"
@@ -1513,7 +1510,7 @@ msgstr "You need to update your payment information on SwissSalary as well."
 
 #: courses/templates/payment/account/info.html:4
 #: courses/templates/user/profile.html:106
-#: payment/services/offering_finance_teachers.py:142
+#: payment/services/offering_finance_teachers.py:420
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -1546,12 +1543,11 @@ msgid "Change your password"
 msgstr "Change your password"
 
 #: courses/templates/user/profile.html:55
-#: payment/templates/finance/offering/teachers/table.html:15
 msgid "Personal details"
 msgstr "Personal details"
 
 #: courses/templates/user/profile.html:58
-#: payment/services/offering_finance_teachers.py:137
+#: payment/services/offering_finance_teachers.py:415
 msgid "Birth date"
 msgstr "Birth date"
 
@@ -1560,22 +1556,22 @@ msgid "Body height"
 msgstr "Body height"
 
 #: courses/templates/user/profile.html:67
-#: payment/services/offering_finance_teachers.py:138
+#: payment/services/offering_finance_teachers.py:416
 msgid "Nationality"
 msgstr "Nationality"
 
 #: courses/templates/user/profile.html:71
-#: payment/services/offering_finance_teachers.py:139
+#: payment/services/offering_finance_teachers.py:417
 msgid "Residence permit"
 msgstr "Residence permit"
 
 #: courses/templates/user/profile.html:75
-#: payment/services/offering_finance_teachers.py:140
+#: payment/services/offering_finance_teachers.py:418
 msgid "AHV number"
 msgstr "AHV number"
 
 #: courses/templates/user/profile.html:79
-#: payment/services/offering_finance_teachers.py:141
+#: payment/services/offering_finance_teachers.py:419
 msgid "Zemis number"
 msgstr "Zemis number"
 
@@ -1584,7 +1580,7 @@ msgid "Bank account"
 msgstr "Bank account"
 
 #: courses/templates/user/profile.html:108
-#: payment/services/offering_finance_teachers.py:143
+#: payment/services/offering_finance_teachers.py:421
 msgid "Bank"
 msgstr "Bank"
 
@@ -1622,10 +1618,10 @@ msgstr "Details & edit"
 
 #: courses/templates/user/snippets/course_as_teacher.html:16
 msgid "Log teacher presence"
-msgstr ""
+msgstr "Log teacher presence"
 
 #: courses/templates/user/snippets/course_as_teacher.html:34
-#: payment/templates/payment/courses/course.html:34
+#: payment/templates/payment/courses/course.html:30
 msgid "Participants"
 msgstr "Participants"
 
@@ -1662,13 +1658,15 @@ msgstr "Contacts (vCard)"
 
 #: courses/templates/user/snippets/missing_presence_data_alert.html:8
 msgid "Missing data"
-msgstr ""
+msgstr "Missing data"
 
 #: courses/templates/user/snippets/missing_presence_data_alert.html:12
 msgid ""
 "Please fill in the teacher presence form for this course as soon as possible "
 "if you want to get paid."
 msgstr ""
+"Please fill in the teacher presence form for this course as soon as possible "
+"if you want to get paid."
 
 #: courses/templates/user/snippets/open_surveys.html:11
 msgid "Review our courses!"
@@ -1688,7 +1686,7 @@ msgid "Review now"
 msgstr "Review now"
 
 #: courses/templates/user/snippets/open_surveys.html:25
-#: payment/templates/finance/account/detail.html:26
+#: payment/templates/finance/account/detail.html:23
 msgid "Show"
 msgstr "Show"
 
@@ -1738,7 +1736,7 @@ msgstr "To see the payment details, pay with the QR-bill and apply vouchers:"
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
-#: payment/templates/payment/subscription/index.html:64
+#: payment/templates/payment/subscription/index.html:60
 msgid "Payment"
 msgstr "Payment"
 
@@ -1963,8 +1961,8 @@ msgstr "Event Categories"
 
 #: events/filters/event_date_filter.py:10
 #: events/templates/events/snippets/event_extended_info.html:9
-#: payment/templates/finance/account/detail.html:40
-#: payment/templates/payment/subscription/index.html:65
+#: payment/templates/finance/account/detail.html:37
+#: payment/templates/payment/subscription/index.html:61
 msgid "Date"
 msgstr "Date"
 
@@ -1984,39 +1982,39 @@ msgstr "Will be center cropped and rescaled to 720x405px (16:9) upon upload."
 msgid "No events in the archive."
 msgstr "No events in the archive."
 
-#: events/templates/events/event_detail.html:16
+#: events/templates/events/event_detail.html:13
 msgid "Registration successful!"
 msgstr "Registration successful!"
 
-#: events/templates/events/event_detail.html:20
+#: events/templates/events/event_detail.html:17
 msgid "Registration successfully removed!"
 msgstr "Registration successfully removed!"
 
-#: events/templates/events/event_detail.html:37
+#: events/templates/events/event_detail.html:34
 msgid "Limited number of guests"
 msgstr "Limited number of guests"
 
-#: events/templates/events/event_detail.html:40
+#: events/templates/events/event_detail.html:37
 msgid "Max."
 msgstr "Max."
 
-#: events/templates/events/event_detail.html:46
+#: events/templates/events/event_detail.html:43
 msgid "available"
 msgstr "available"
 
-#: events/templates/events/event_detail.html:60
+#: events/templates/events/event_detail.html:57
 msgid "Registration"
 msgstr "Registration"
 
-#: events/templates/events/event_detail.html:64
+#: events/templates/events/event_detail.html:61
 msgid "You are registered"
 msgstr "You are registered"
 
-#: events/templates/events/event_detail.html:67
+#: events/templates/events/event_detail.html:64
 msgid "You can not make it?"
 msgstr "You can not make it?"
 
-#: events/templates/events/event_detail.html:70
+#: events/templates/events/event_detail.html:67
 msgid ""
 "Remove your registration in case you are not coming to the event to give "
 "someone else your spot. Thanks!"
@@ -2024,15 +2022,15 @@ msgstr ""
 "Remove your registration in case you are not coming to the event to give "
 "someone else your spot. Thanks!"
 
-#: events/templates/events/event_detail.html:73
+#: events/templates/events/event_detail.html:70
 msgid "Unregister"
 msgstr "Unregister"
 
-#: events/templates/events/event_detail.html:77
+#: events/templates/events/event_detail.html:74
 msgid "Secure a spot for this event by registering here."
 msgstr "Secure a spot for this event by registering here."
 
-#: events/templates/events/event_detail.html:80
+#: events/templates/events/event_detail.html:77
 msgid "Register now"
 msgstr "Register now"
 
@@ -2085,9 +2083,9 @@ msgstr "Free of charge"
 
 #: events/templates/events/snippets/event_list.html:10
 #: partners/models/partner.py:35
-#: payment/templates/payment/counter/details.html:19
-#: payment/templates/payment/courses/confirm.html:19
-#: payment/templates/payment/courses/course.html:84
+#: payment/templates/payment/counter/details.html:16
+#: payment/templates/payment/courses/confirm.html:16
+#: payment/templates/payment/courses/course.html:80
 msgid "Name"
 msgstr "Name"
 
@@ -2132,7 +2130,7 @@ msgid "Visit partner"
 msgstr "Visit partner"
 
 #: payment/cms_toolbars.py:13
-#: payment/templates/payment/subscription/index.html:57
+#: payment/templates/payment/subscription/index.html:53
 #: payment/templates/payment/subscription/snippets/payment_options.html:19
 msgid "Voucher"
 msgstr "Voucher"
@@ -2205,39 +2203,60 @@ msgstr "Postfinance XML"
 msgid "ZKB CSV"
 msgstr "ZKB CSV"
 
-#: payment/services/offering_finance_teachers.py:43
-#, fuzzy
-#| msgid "Send to Teachers"
+#: payment/services/offering_finance_teachers.py:57
+msgid "Teachers per lesson"
+msgstr "Teachers per lesson"
+
+#: payment/services/offering_finance_teachers.py:63
+msgid "Offering"
+msgstr "Offering"
+
+#: payment/services/offering_finance_teachers.py:66
+#: payment/templates/finance/offering/unpaid/index.html:14
+msgid "Actions"
+msgstr "Actions"
+
+#: payment/services/offering_finance_teachers.py:85
+msgid "Course is not over yet"
+msgstr "Course is not over yet"
+
+#: payment/services/offering_finance_teachers.py:110
+msgid "Some lessons have more than two teachers"
+msgstr "Some lessons have more than two teachers"
+
+#: payment/services/offering_finance_teachers.py:122
+msgid "Not all lessons have the same number of teachers"
+msgstr "Not all lessons have the same number of teachers"
+
+#: payment/services/offering_finance_teachers.py:147
+msgid "Everything looks good"
+msgstr "Everything looks good"
+
+#: payment/services/offering_finance_teachers.py:156
+msgid "Course marked as completed"
+msgstr "Course marked as completed"
+
+#: payment/services/offering_finance_teachers.py:216
 msgid "Main teacher"
-msgstr "Send to Teachers"
+msgstr "Main teacher"
 
-#: payment/services/offering_finance_teachers.py:44
-msgid "Hourly Wages"
-msgstr "Hourly wages"
-
-#: payment/services/offering_finance_teachers.py:45
+#: payment/services/offering_finance_teachers.py:217
+#: payment/services/offering_finance_teachers.py:335
 msgid "Hours"
 msgstr "Hours"
 
-#: payment/services/offering_finance_teachers.py:46
+#: payment/services/offering_finance_teachers.py:218
+#: payment/services/offering_finance_teachers.py:336
 msgid "Course Totals"
 msgstr "Course Totals"
 
-#: payment/services/offering_finance_teachers.py:106
-msgid "Course cancelled"
-msgstr "Course cancelled"
-
-#: payment/services/offering_finance_teachers.py:111
+#: payment/services/offering_finance_teachers.py:324
 msgid ""
-"Course with more than two teachers, please check who taught how many lessons."
+"Some courses are not marked as completed yet. Final data can not be shown."
 msgstr ""
-"Course with more than two teachers, please check who taught how many lessons."
+"Some courses are not marked as completed yet. Final data can not be shown."
 
-#: payment/services/offering_finance_teachers.py:115
-msgid "No participants"
-msgstr "No participants"
-
-#: payment/services/offering_finance_teachers.py:135
+#: payment/services/offering_finance_teachers.py:413
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -2245,61 +2264,61 @@ msgstr "E-mail"
 msgid "{} of {} reminded successfully"
 msgstr "{} of {} reminded successfully"
 
-#: payment/templates/finance/account/detail.html:9
+#: payment/templates/finance/account/detail.html:6
 msgid "Account transactions"
 msgstr "Account transactions"
 
-#: payment/templates/finance/account/detail.html:12
+#: payment/templates/finance/account/detail.html:9
 msgid "Summary"
 msgstr "Summary"
 
-#: payment/templates/finance/account/detail.html:13
+#: payment/templates/finance/account/detail.html:10
 msgid "with filters respected"
 msgstr "with filters respected"
 
-#: payment/templates/finance/account/detail.html:25
+#: payment/templates/finance/account/detail.html:22
 msgid "Transaction list"
 msgstr "Transaction list"
 
-#: payment/templates/finance/account/detail.html:30
+#: payment/templates/finance/account/detail.html:27
 msgid "without"
 msgstr "without"
 
-#: payment/templates/finance/account/detail.html:32
+#: payment/templates/finance/account/detail.html:29
 msgid "subscription payments"
 msgstr "Subscription payments"
 
-#: payment/templates/finance/account/detail.html:41
+#: payment/templates/finance/account/detail.html:38
 msgid "Details"
 msgstr "Details"
 
-#: payment/templates/finance/account/detail.html:42
+#: payment/templates/finance/account/detail.html:39
 msgid "Credit"
 msgstr "Credit"
 
-#: payment/templates/finance/account/detail.html:43
+#: payment/templates/finance/account/detail.html:40
 msgid "Debit"
 msgstr "Debit"
 
-#: payment/templates/finance/account/detail.html:80
+#: payment/templates/finance/account/detail.html:77
 #: payment/templates/finance/offering/courses/index.html:15
 #: payment/templates/finance/offering/courses/index.html:80
 msgid "Total"
 msgstr "Total"
 
-#: payment/templates/finance/account/detail.html:91
+#: payment/templates/finance/account/detail.html:88
 msgid "Save Comments"
 msgstr "Save Comments"
 
-#: payment/templates/finance/account/index.html:9
+#: payment/templates/finance/account/index.html:6
 msgid "Select period"
 msgstr "Select period"
 
-#: payment/templates/finance/account/index.html:10
+#: payment/templates/finance/account/index.html:7
 msgid "Please period you want to show the transactions for."
 msgstr "Please period you want to show the transactions for."
 
-#: payment/templates/finance/account/index.html:17
+#: payment/templates/finance/account/index.html:14
 msgid "Show transactions"
 msgstr "Show transactions"
 
@@ -2344,9 +2363,9 @@ msgstr "Difference"
 
 #: payment/templates/finance/offering/courses/index.html:55
 #: payment/templates/finance/offering/unpaid/index.html:13
-#: payment/templates/payment/counter/details.html:35
-#: payment/templates/payment/courses/confirm.html:32
-#: payment/templates/payment/subscription/index.html:72
+#: payment/templates/payment/counter/details.html:32
+#: payment/templates/payment/courses/confirm.html:29
+#: payment/templates/payment/subscription/index.html:68
 msgid "Open Amount"
 msgstr "Open Amount"
 
@@ -2358,6 +2377,27 @@ msgstr "Sum we are still supposed to get"
 msgid "Download summary of teacher payment information here:"
 msgstr "Download summary of teacher payment information here:"
 
+#: payment/templates/finance/offering/teachers/table.html:30
+msgid "Are you sure?"
+msgstr "Are you sure?"
+
+#: payment/templates/finance/offering/teachers/table.html:34
+msgid ""
+"Marking a course as completed will freeze its teachers presence form "
+"permanently."
+msgstr ""
+"Marking a course as completed will freeze its teachers presence form "
+"permanently."
+
+#: payment/templates/finance/offering/teachers/table.html:38
+msgid "Yes, proceed"
+msgstr "Yes, proceed"
+
+#: payment/templates/finance/offering/teachers/table.html:98
+#: payment/templates/finance/offering/teachers/table.html:108
+msgid "Course completed"
+msgstr "Course completed"
+
 #: payment/templates/finance/offering/unpaid/index.html:6
 msgid "No unpaid supscriptions."
 msgstr "No unpaid supscriptions."
@@ -2366,19 +2406,15 @@ msgstr "No unpaid supscriptions."
 msgid "Person"
 msgstr "Person"
 
-#: payment/templates/finance/offering/unpaid/index.html:14
-msgid "Actions"
-msgstr "Actions"
-
 #: payment/templates/finance/offering/unpaid/index.html:41
-#: payment/templates/payment/counter/details.html:47
-#: payment/templates/payment/courses/confirm.html:40
+#: payment/templates/payment/counter/details.html:44
+#: payment/templates/payment/courses/confirm.html:37
 msgid "Already paid"
 msgstr "Already paid"
 
 #: payment/templates/finance/offering/unpaid/index.html:49
-#: payment/templates/payment/counter/details.html:44
-#: payment/templates/payment/courses/confirm.html:38
+#: payment/templates/payment/counter/details.html:41
+#: payment/templates/payment/courses/confirm.html:35
 msgid "Mark as paid"
 msgstr "Mark as paid"
 
@@ -2420,78 +2456,78 @@ msgstr "Persons"
 msgid "Remind everyone"
 msgstr "Remind everyone"
 
-#: payment/templates/payment/counter/details.html:9
-#: payment/templates/payment/courses/confirm.html:9
+#: payment/templates/payment/counter/details.html:6
+#: payment/templates/payment/courses/confirm.html:6
 msgid "Payment Details"
 msgstr "Payment Details"
 
-#: payment/templates/payment/counter/details.html:31
-#: payment/templates/payment/courses/confirm.html:28
+#: payment/templates/payment/counter/details.html:28
+#: payment/templates/payment/courses/confirm.html:25
 msgid "Total Amount"
 msgstr "Total Amount"
 
-#: payment/templates/payment/counter/form.html:9
+#: payment/templates/payment/counter/form.html:6
 msgid "Enter USI"
 msgstr "Enter USI"
 
-#: payment/templates/payment/counter/form.html:13
+#: payment/templates/payment/counter/form.html:10
 msgid "Eindeutige Kursnummer (USI)"
 msgstr "Unique subscription identifier (USI)"
 
-#: payment/templates/payment/counter/form.html:16
+#: payment/templates/payment/counter/form.html:13
 msgid "Submit"
 msgstr "Submit"
 
-#: payment/templates/payment/courses/course.html:16
+#: payment/templates/payment/courses/course.html:12
 msgid "German"
 msgstr "German"
 
-#: payment/templates/payment/courses/course.html:19 tq_website/settings.py:322
+#: payment/templates/payment/courses/course.html:15 tq_website/settings.py:322
 #: tq_website/settings.py:339
 msgid "English"
 msgstr "English"
 
-#: payment/templates/payment/courses/course.html:37
+#: payment/templates/payment/courses/course.html:33
 msgid "Participants will show up here, once they have been confirmed."
 msgstr "Participants will show up here, once they have been confirmed."
 
-#: payment/templates/payment/courses/course.html:40
-#: payment/templates/payment/subscription/index.html:24
+#: payment/templates/payment/courses/course.html:36
+#: payment/templates/payment/subscription/index.html:20
 #: payment/templates/payment/subscription/snippets/payment_options.html:47
 #: survey/templates/survey/components/download.html:3
 #: templates/snippets/download.html:3
 msgid "Download"
 msgstr "Download"
 
-#: payment/templates/payment/courses/course.html:47
+#: payment/templates/payment/courses/course.html:43
 msgid "Contacts (.vcard)"
 msgstr "Contacts (vCard)"
 
-#: payment/templates/payment/courses/course.html:63
-#: payment/templates/payment/courses/course.html:107
+#: payment/templates/payment/courses/course.html:59
+#: payment/templates/payment/courses/course.html:103
 msgid "student"
 msgstr "student"
 
-#: payment/templates/payment/courses/course.html:65
-#: payment/templates/payment/courses/course.html:109
+#: payment/templates/payment/courses/course.html:61
+#: payment/templates/payment/courses/course.html:105
 msgid "not a student"
 msgstr "not a student"
 
-#: payment/templates/payment/courses/course.html:69
-#: payment/templates/payment/courses/course.html:92
+#: payment/templates/payment/courses/course.html:65
+#: payment/templates/payment/courses/course.html:88
 msgid "Course fees"
 msgstr "Course fees"
 
-#: payment/templates/payment/courses/course.html:72
-#: payment/templates/payment/courses/course.html:88
+#: payment/templates/payment/courses/course.html:68
+#: payment/templates/payment/courses/course.html:84
 msgid "Lead/Follow"
 msgstr "Lead/Follow"
 
-#: payment/templates/payment/courses/course.html:85
+#: payment/templates/payment/courses/course.html:81
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: payment/templates/payment/courses/course.html:86
+#: payment/templates/payment/courses/course.html:82
 msgid "Mobile"
 msgstr "Mobile"
 
@@ -2551,55 +2587,39 @@ msgstr "Save"
 msgid "Show course page"
 msgstr "Show course page"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:18
-#, fuzzy
-#| msgid "Select year"
-msgid "Select a teacher"
-msgstr "Select a teacher"
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:8
+msgid "Teacher presences"
+msgstr "Teacher presences"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:23
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:35
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:109
-#, fuzzy
-#| msgid "Teacher"
-msgid "No teacher"
-msgstr "No teacher"
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:31
+msgid "Add teacher"
+msgstr "Add teacher"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:45
-#, fuzzy
-#| msgid "Select year"
-msgid "Select"
-msgstr "Select"
-
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:17
-#, fuzzy
-#| msgid "Send to Teachers"
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:49
 msgid "Search teacher"
 msgstr "Search teacher"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_modal.html:29
-msgid "Start typing to get suggestions"
-msgstr "Start typing to get suggestions"
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:65
+msgid "No teachers"
+msgstr "No teachers"
 
-#: payment/templates/payment/courses/teacher_presence.html:6
-#, fuzzy
-#| msgid "Teacher welcomes"
-msgid "Teacher presence"
-msgstr "Teacher presence"
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:108
+msgid "Searching"
+msgstr "Searching"
 
-#: payment/templates/payment/subscription/index.html:12
+#: payment/templates/payment/subscription/index.html:8
 msgid "Payment Status"
 msgstr "Payment Status"
 
-#: payment/templates/payment/subscription/index.html:15
+#: payment/templates/payment/subscription/index.html:11
 msgid "Voucher applied"
 msgstr "Voucher applied"
 
-#: payment/templates/payment/subscription/index.html:17
+#: payment/templates/payment/subscription/index.html:13
 msgid "The voucher has been successfully applied (see details below)."
 msgstr "The voucher has been successfully applied (see details below)."
 
-#: payment/templates/payment/subscription/index.html:22
+#: payment/templates/payment/subscription/index.html:18
 msgid ""
 "The voucher used was valued more than the remaining amount for this course. "
 "Download the voucher for the remainder by clicking the following button."
@@ -2607,28 +2627,28 @@ msgstr ""
 "The voucher used was valued more than the open amount for this course. "
 "Download the voucher for the remainder by clicking the following button."
 
-#: payment/templates/payment/subscription/index.html:34
+#: payment/templates/payment/subscription/index.html:30
 msgid "Item"
 msgstr "Item"
 
-#: payment/templates/payment/subscription/index.html:35
+#: payment/templates/payment/subscription/index.html:31
 msgid "Info"
 msgstr "Info"
 
-#: payment/templates/payment/subscription/index.html:36
-#: payment/templates/payment/subscription/index.html:58
+#: payment/templates/payment/subscription/index.html:32
+#: payment/templates/payment/subscription/index.html:54
 msgid "Value"
 msgstr "Value"
 
-#: payment/templates/payment/subscription/index.html:41
+#: payment/templates/payment/subscription/index.html:37
 msgid "Dance course"
 msgstr "Dance course"
 
-#: payment/templates/payment/subscription/index.html:49
+#: payment/templates/payment/subscription/index.html:45
 msgid "Participant"
 msgstr "Participant"
 
-#: payment/templates/payment/subscription/index.html:58
+#: payment/templates/payment/subscription/index.html:54
 msgid "Code"
 msgstr "Code"
 
@@ -2739,24 +2759,24 @@ msgid ""
 msgstr ""
 "If set to true, teachers will be able to view the answers for their courses."
 
-#: survey/templates/survey/changed_answers.html:11
+#: survey/templates/survey/changed_answers.html:8
 msgid "Changed Answers"
 msgstr "Changed Answers"
 
-#: survey/templates/survey/changed_answers.html:12
+#: survey/templates/survey/changed_answers.html:9
 msgid "The following answers were changed at least once after being submitted."
 msgstr ""
 "The following answers were changed at least once after being submitted."
 
-#: survey/templates/survey/changed_answers.html:22
+#: survey/templates/survey/changed_answers.html:19
 msgid "Changes"
 msgstr "Changes"
 
-#: survey/templates/survey/changed_answers.html:28
+#: survey/templates/survey/changed_answers.html:25
 msgid "Answer was hidden"
 msgstr "Answer was hidden"
 
-#: survey/templates/survey/changed_answers.html:30
+#: survey/templates/survey/changed_answers.html:27
 msgid "Answer made visible"
 msgstr "Answer made visible"
 
@@ -2977,7 +2997,7 @@ msgstr "Do you really want to remove the selected e-mail address?"
 msgid "Sign In"
 msgstr "Sign In"
 
-#: templates/account/login.html:18
+#: templates/account/login.html:18 templates/account/password_reset.html:26
 msgid "Email address"
 msgstr "Email address"
 
@@ -2996,6 +3016,51 @@ msgstr "create a new account"
 #: templates/account/login.html:37
 msgid "Forgot Password?"
 msgstr "Forgot Password?"
+
+#: templates/account/password_reset.html:6
+#: templates/account/password_reset.html:11
+#: templates/account/password_reset_done.html:7
+#: templates/account/password_reset_done.html:17
+msgid "Password Reset"
+msgstr "Password Reset"
+
+#: templates/account/password_reset.html:18
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+msgstr ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+
+#: templates/account/password_reset.html:33
+msgid "Reset My Password"
+msgstr "Reset My Password"
+
+#: templates/account/password_reset.html:38
+msgid ""
+"\n"
+"            Please contact us if you have any trouble resetting your "
+"password.\n"
+"        "
+msgstr ""
+"\n"
+"            Please contact us if you have any trouble resetting your "
+"password.\n"
+"        "
+
+#: templates/account/password_reset_done.html:20
+msgid ""
+"\n"
+"                We have sent you an email. If you have not received it "
+"please check your spam folder. Otherwise contact us if you do not receive it "
+"in a few minutes.\n"
+"            "
+msgstr ""
+"\n"
+"                We have sent you an email. If you have not received it "
+"please check your spam folder. Otherwise contact us if you do not receive it "
+"in a few minutes.\n"
+"            "
 
 #: templates/account/signup.html:5
 msgid "Signup"
@@ -3021,11 +3086,11 @@ msgstr "VSETH Privacy Policy"
 msgid "Create Account"
 msgstr "Create Account"
 
-#: templates/error_base.html:22
+#: templates/error_base.html:19
 msgid "Take Me Home"
 msgstr "Take Me Home"
 
-#: templates/error_base.html:25
+#: templates/error_base.html:22
 msgid "Contact support"
 msgstr "Contact support"
 
@@ -3174,6 +3239,25 @@ msgstr "Side content"
 msgid "The IBAN is invalid."
 msgstr "The IBAN is invalid."
 
+#~ msgid "Hourly Wages"
+#~ msgstr "Hourly wages"
+
+#~ msgid "Course cancelled"
+#~ msgstr "Course cancelled"
+
+#~ msgid ""
+#~ "Course with more than two teachers, please check who taught how many "
+#~ "lessons."
+#~ msgstr ""
+#~ "Course with more than two teachers, please check who taught how many "
+#~ "lessons."
+
+#~ msgid "No participants"
+#~ msgstr "No participants"
+
+#~ msgid "Start typing to get suggestions"
+#~ msgstr "Start typing to get suggestions"
+
 #~ msgid "Offering Overview"
 #~ msgstr "Offering overview"
 
@@ -3191,11 +3275,6 @@ msgstr "The IBAN is invalid."
 
 #~ msgid "Course Management"
 #~ msgstr "Course Management"
-
-#, fuzzy
-#~| msgid "Subscriptions"
-#~ msgid "Subscription:"
-#~ msgstr "Subscription:"
 
 #~ msgid "Course subscription"
 #~ msgstr "Course subscription"
