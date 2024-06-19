@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
+from django.utils import timezone
 from reversion import revisions as reversion
 
 from courses import models as models
@@ -22,7 +23,6 @@ from courses.models import (
     MatchingState,
     SubscribeState,
     Course,
-    Rejection,
 )
 from courses.services.general import log
 
@@ -33,8 +33,10 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
 
     user_subscription, _ = Subscribe.objects.get_or_create(user=user, course=course)
 
-    # let the save method set the state of the subscription
+    # let the save method set the state of the subscription and reset the date
     user_subscription.state = None
+    user_subscription.date = timezone.localtime(timezone.now())
+
     user_subscription.lead_follow = data.get("lead_follow", LeadFollow.NO_PREFERENCE)
     user_subscription.experience = data.get("experience", None)
     user_subscription.comment = data.get("comment", None)
@@ -46,8 +48,11 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
         partner_subscription, _ = Subscribe.objects.get_or_create(
             user=partner, course=course
         )
-         # let the save method set the state of the subscription
+
+        # let the save method set the state of the subscription and reset the date
         partner_subscription.state = None
+        partner_subscription.date = timezone.localtime(timezone.now())
+
         partner_subscription.lead_follow = LeadFollow.partner(
             user_subscription.lead_follow
         )
