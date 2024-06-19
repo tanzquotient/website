@@ -1,3 +1,17 @@
+Hallo {{ first_name }},
+
+Danke, dass du den Kurs {{ course }} unterrichtet hast.
+Bitte nimm dir eine Minute Zeit, um die Anwesenheit der Lehrpersonen des Kurses auszufüllen und zu überprüfen. Du kannst das Formular auf der Tanzquotient Website unter "Meine Kurse" finden.
+Wir werden darauf basierend deinen Lohn berechnen.
+
+Hinweis: Bei mehreren Lehrpersonen muss nur eine Person diese Angaben machen. Die Anwesenheitsliste der anderen person wird entsprechend aktualisiert.
+
+Liebe Grüsse,
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen kannst du dich gerne unter tanzen@tanzquotient.org bei uns melden.
+
 _______________
 
 Hi {{first_name}},
@@ -12,4 +26,4 @@ Best regards,
 
 Your Tanzquotient
 tanzquotient.org
-If you have any questions, feel free to contact us at anmeldungen@tanzquotient.org.
+If you have any questions, feel free to contact us at tanzen@tanzquotient.org.
