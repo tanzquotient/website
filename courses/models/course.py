@@ -165,7 +165,7 @@ class Course(TranslatableModel):
     objects = managers.CourseManager()
 
     def save(self, *args, **kwargs):
-        if self.subscription_type == CourseSubscriptionType.EXTERNAL:
+        if self.subscription_type == CourseSubscriptionType.EXTERNAL or self.cancelled:
             self.completed = True
         super(Course, self).save(*args, **kwargs)
 
