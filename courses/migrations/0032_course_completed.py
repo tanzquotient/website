@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("courses", "0031_lessonoccurrence_create_from_courses"),
+        ("courses", "0030_remove_teach_hourly_wage_lessonoccurrence_and_more"),
     ]
 
     operations = [
