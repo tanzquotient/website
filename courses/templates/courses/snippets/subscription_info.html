@@ -74,6 +74,6 @@
     {% endif %}
 {% endif %}
 
-{% if user and user.id in course.waiting_list_user_ids %}
+{% if user and user.id in course.waiting_list_user_ids and is_detail_page %}
     {% include "courses/snippets/cancel_subscription_modal.html" %}
 {% endif %}
