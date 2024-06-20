@@ -156,7 +156,7 @@ class Subscribe(Model):
         if not self.state == SubscribeState.WAITING_LIST:
             return 0
         else:
-            if self.state not in MatchingState.MATCHED_STATES:
+            if self.matching_state not in MatchingState.MATCHED_STATES:
                 return self.course.get_waiting_list_length(
                     lead_follow=self.lead_follow, until_subscribe=self
                 )
