@@ -361,9 +361,10 @@ class Course(TranslatableModel):
                     else:
                         waiting_list_length[LeadFollow.LEAD] += 1
 
-            if lead_follow == LeadFollow.NO_PREFERENCE or worst_case:
-                minmax = max if worst_case else min
-                return minmax(list(waiting_list_length.values()))
+            if lead_follow == LeadFollow.NO_PREFERENCE:
+                return max(min(list(waiting_list_length.values())), 1)
+            elif worst_case:
+                return max(list(waiting_list_length.values()))
             else:
                 return waiting_list_length[lead_follow]
 
