@@ -175,9 +175,11 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 if use_html
                 else ", ".join(teachers_number_text)
             ),
-            mark_safe("<br/>".join(status))
-            if use_html
-            else ", ".join(map(str, status)),
+            (
+                mark_safe("<br/>".join(status))
+                if use_html
+                else ", ".join(map(str, status))
+            ),
         ]
         if multiple_offerings:
             row.append(course.offering)
@@ -236,6 +238,7 @@ def _teachings(
                 lesson_occurrences_filter
             )
             .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+            .exclude(course__cancelled=True)
             .all()
         )
         .distinct()
@@ -253,6 +256,7 @@ def _teachings(
         teacher_courses = (
             Course.objects.filter(courses_filter)
             .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
+            .exclude(cancelled=True)
             .filter(lesson_occurrences__teachers=teacher)
             .distinct()
             .all()
@@ -351,6 +355,7 @@ def _teachers(offerings: Sequence[Offering], only_completed: bool = True) -> lis
                 lesson_occurrences_filter
             )
             .exclude(course__subscription_type=CourseSubscriptionType.EXTERNAL)
+            .exclude(course__cancelled=True)
             .all()
         )
         .distinct()
@@ -368,6 +373,7 @@ def _teachers(offerings: Sequence[Offering], only_completed: bool = True) -> lis
         teacher_courses = (
             Course.objects.filter(courses_filter)
             .exclude(subscription_type=CourseSubscriptionType.EXTERNAL)
+            .exclude(cancelled=True)
             .filter(lesson_occurrences__teachers=teacher)
             .distinct()
             .all()
