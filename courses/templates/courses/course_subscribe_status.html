@@ -29,10 +29,31 @@
                 {% include "courses/snippets/course_info.html" with disable_modals=True %}
             </div>
             <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
-                <div class="alert alert-success">
-                    <h4 class="alert-heading">{% trans "You signed up successfully!" %}</h4>
+                <div class="alert alert-{{ waiting_list|yesno:"info,success" }}">
+                    <h4 class="alert-heading">
+                        {% if waiting_list %}
+                            {% trans "You joined the waiting list" %}
+                        {% else %}
+                            {% trans "You signed up successfully!" %}
+                        {% endif %}
+                    </h4>
                     <p>
-                        {% trans "Thank you for subscribing to this course. The final confirmation will be sent out in the following days." %}
+                        {% if waiting_list %}
+                            {% blocktrans %}
+                                Thank you for subscribing to this course. Keep an eye on your "My Courses" page to know your position in the queue.
+                                You can cancel your subscription as long as you are on the waiting list.
+                            {% endblocktrans %}
+                            {% if subscription.partner %}
+                                <br/>
+                                {% blocktrans %}
+                                    Since you signed up as a couple, your position on the waiting list depends on both leaders and followers 
+                                    queuing in front of you and your partner.
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% else %}
+                            {% trans "Thank you for subscribing to this course. The final confirmation will be sent out in the following days." %}
+                        {% endif %}
+                        
                     </p>
                     {% if subscription.course.type.couple_course %}
                         <hr>

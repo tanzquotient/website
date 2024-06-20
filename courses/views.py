@@ -260,6 +260,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
         context = {
             "course": course,
             "subscription": subscription,
+            "waiting_list": subscription.state == SubscribeState.WAITING_LIST
         }
         return render(request, "courses/course_subscribe_status.html", context=context)
 
