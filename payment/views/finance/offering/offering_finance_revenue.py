@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import Offering, CourseSubscriptionType
+from courses.models import Offering, CourseSubscriptionType, LessonOccurrenceTeach
 from utils import export
 
 
@@ -27,9 +27,14 @@ def get_data(offering: Offering):
     for course in offering.course_set.exclude(
         subscription_type=CourseSubscriptionType.EXTERNAL
     ).all():
-        hours = course.get_total_hours() if not course.cancelled else 0
 
-        wages = sum(teaching.hourly_wage * hours for teaching in course.teaching.all())
+        wages = sum(
+            l.get_wage()
+            for l in LessonOccurrenceTeach.objects.filter(
+                lesson_occurrence__course=course,
+                lesson_occurrence__course__cancelled=False,
+            ).all()
+        )
 
         totals = course.payment_totals()
         paid = totals["paid"]
