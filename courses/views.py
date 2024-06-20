@@ -597,7 +597,7 @@ def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
 
     data = json.loads(request.body)
     course_id = data.get("course_id")
-    cancel_partner = data.get("cancel_partner") == "true"
+    cancel_partner = data.get("cancel_partner")
     if not request.method == "POST" or not course_id:
         raise Http404()
 
