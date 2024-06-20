@@ -6,44 +6,38 @@
 
     {% if course.type.couple_course %}
         <div class="nav mt-4 btn-group" id="pills-tab" role="group">
-            <input type="radio" class="btn-check" name="single_or_couple" value="s" id="single" data-bs-toggle="pill" data-bs-target="#single-tab"
-                    {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
-            <label class="btn btn-outline-success" for="single">{% trans "Without partner" %}</label>
-            <input type="radio" class="btn-check" name="single_or_couple" value="c" id="couple" data-bs-toggle="pill" data-bs-target="#couple-tab"
-                    {% if form.single_or_couple.value == 'c' %} checked {% endif %}
-                    {% comment  %}
-                    If either leader or follower spots are fully booked, couples can not sign up anymore,
-                    as one of them would subscribe as the fully booked role.
-                    {% endcomment %}
-                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %} disabled {% endif %} />
-            <label class="btn btn-outline-success" for="couple">{% trans "With partner" %}</label>
-        </div>
-        <div class="form-text">
-            {% if course.get_free_places_count < 2 %}
-                <div class="alert alert-info my-2 p-2" role="alert">
-                    <i class="fa-solid fa-circle-info"></i> {% trans "At least two spots need to be available to sign up as a couple." %}
-                </div>
-            {% endif %}
-            {% if not course.has_free_places_for_leaders %}
-                <div class="alert alert-warning my-2 p-2 d-flex align-items-center" role="alert">
-                    <div class="me-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                    <div>
-                        {% trans "There are no spots available for leaders anymore. You can therefore only sign up as a follower (without a partner)." %}
-                    </div>
-                </div>
-            {% endif %}
-            {% if not course.has_free_places_for_followers %}
-               <div class="alert alert-warning my-2 p-2 d-flex align-items-center" role="alert">
-                    <div class="me-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                    <div>
-                        {% trans "There are no spots available for followers anymore. You can therefore only sign up as a leader (without a partner)." %}
-                    </div>
-               </div>
-            {% endif %}
+
+            <input type="radio"
+                   class="d-block btn-check{% if form.single_or_couple.value != 'c' %} active{% endif %}"
+                   name="single_or_couple" value="s" id="single"
+                   data-bs-toggle="pill" data-bs-target="#single-tab" role="tab"
+                   aria-selected="{% if form.single_or_couple.value != 'c' %}true{% else %}false{% endif %}"
+                   {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
+            <label class="btn btn-outline-success d-flex" for="single">
+                <span class="my-auto mx-auto">
+                    {% trans "Without partner" %}
+                    {% if not course.get_free_places_count %}
+                        <br>
+                        <span class="badge text-bg-info my-0 text-white d-block">{% trans "Waiting list" %}</span>
+                    {% endif %}
+                </span>
+            </label>
+
+            <input type="radio"
+                   class="btn-check"
+                   name="single_or_couple" value="c" id="couple"
+                   data-bs-toggle="pill" data-bs-target="#couple-tab" role="tab"
+                   {% if form.single_or_couple.value == 'c' %} checked {% endif %} />
+            <label class="btn btn-outline-success d-flex" for="couple">
+                <span class="my-auto mx-auto">
+                    {% trans "With partner" %}
+                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %}
+                        <br>
+                        <span class="badge text-bg-info my-0 text-white d-block">{% trans "Waiting list" %}</span>
+                    {% endif %}
+                </span>
+            </label>
+
         </div>
 
         <div class="tab-content" id="pills-tabContent">
@@ -55,20 +49,42 @@
                     <div class="col-xs-12 col-lg-6">
                         <div class="nav btn-group" role="group" aria-describedby="lead_follow_help">
                             <input type="radio" class="btn-check" name="lead_follow" value="l" id="lead"
-                                    {% if form.lead_follow.value == 'l' %} checked {% endif %}
-                                    {% if not course.has_free_places_for_leaders %} disabled {% endif %}>
-                            <label class="btn {% if course.has_free_places_for_leaders %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="lead">{% trans "Lead" %}</label>
+                                    {% if form.lead_follow.value == 'l' %} checked {% endif %}/>
+                            <label class="btn btn-outline-success d-flex" for="lead">
+                                <span class="my-auto mx-auto">
+                                    {% trans "Lead" %}
+                                    {% if not course.has_free_places_for_leaders %}
+                                        <span class="badge text-bg-info my-0 text-white d-block">{% trans "Waiting list" %}</span>
+                                    {% endif %}
+                                </span>
+                            </label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference"
                                     {% if form.lead_follow.value == 'n' %} checked {% endif %}
-                                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %} disabled {% endif %}>
-                            <label class="btn {% if course.has_free_places_for_leaders and course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}"
-                                   for="no_preference">{% trans "No preference" %}</label>
+                                    {% if course.get_free_places_count %}
+                                        {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %}
+                                            disabled
+                                        {% endif %}
+                                    {% endif %}/>
+                            <label class="btn btn-outline-success d-flex" for="no_preference">
+                                <span class="my-auto mx-auto">
+                                    {% trans "No preference" %}
+                                    {% if not course.has_free_places_for_leaders and not course.has_free_places_for_followers %}
+                                        <span class="badge text-bg-info my-0 text-white d-block">{% trans "Waiting list" %}</span>
+                                    {% endif %}
+                                </span>
+                            </label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="f" id="follow"
-                                    {% if form.lead_follow.value == 'f' %} checked {% endif %}
-                                    {% if not course.has_free_places_for_followers %} disabled {% endif %}>
-                            <label class="btn {% if course.has_free_places_for_followers %} btn-outline-success {% else %} btn-outline-secondary {% endif %}" for="follow">{% trans "Follow" %}</label>
+                                    {% if form.lead_follow.value == 'f' %} checked {% endif %}/>
+                            <label class="btn btn-outline-success d-flex" for="follow">
+                                <span class="my-auto mx-auto">
+                                    {% trans "Follow" %}
+                                    {% if not course.has_free_places_for_followers %}
+                                        <span class="badge text-bg-info my-0 text-white d-block">{% trans "Waiting list" %}</span>
+                                    {% endif %}
+                                </span>
+                            </label>
                         </div>
                         {% for error in form.lead_follow.errors %}
                             <div class="invalid-feedback d-inline">

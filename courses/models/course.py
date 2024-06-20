@@ -27,6 +27,7 @@ from courses.models import (
     RegularLessonException,
     LessonOccurrenceData,
     LessonOccurrence,
+    SubscribeState,
     Rejection,
     RejectionReason,
 )
@@ -372,7 +373,9 @@ class Course(TranslatableModel):
         # they cancelled their subscription
         return not (
             (
-                self.subscriptions.filter(user=user).exists()
+                self.subscriptions.filter(
+                    user=user, state__in=SubscribeState.REJECTED_STATES
+                ).exists()
                 and not Rejection.objects.filter(
                     subscription__course=self,
                     subscription__user=user,

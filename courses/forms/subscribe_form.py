@@ -50,50 +50,6 @@ class SubscribeForm(forms.Form):
 
             # Special validation for couple subscription to couple course
             if single_or_couple == SingleCouple.COUPLE:
-                # Validation if maximum number is specified
-                if self.course.max_subscribers is not None:
-                    # At least two spots need to be available
-                    # Note: (has_free_places_for_leaders && has_free_places_for_followers) does not
-                    #       imply that two spots are available, due to subscribers with no preference
-                    if self.course.get_free_places_count() < 2:
-                        self.add_error(
-                            "partner_email",
-                            ValidationError(
-                                message=_(
-                                    "At least two spots need to be available to sign up as a couple."
-                                ),
-                                code="not enough free spots for couple",
-                            ),
-                        )
-                        return cleaned_data
-
-                    # At least one spot for leaders needs to be available
-                    if not self.course.has_free_places_for_leaders():
-                        self.add_error(
-                            "partner_email",
-                            ValidationError(
-                                message=_(
-                                    "You can not sign up with a partner anymore, since one of you needs to be the "
-                                    "leader and there are no more spots for leaders."
-                                ),
-                                code="leaders fully booked",
-                            ),
-                        )
-                        return cleaned_data
-
-                    # At least one spot for followers needs to be available
-                    if not self.course.has_free_places_for_followers():
-                        self.add_error(
-                            "partner_email",
-                            ValidationError(
-                                message=_(
-                                    "You can not sign up with a partner anymore, since one of you needs to be the "
-                                    "follower and there are no more spots for followers."
-                                ),
-                                code="leaders fully booked",
-                            ),
-                        )
-                        return cleaned_data
 
                 if not partner_email:
                     error = ValidationError(
@@ -105,7 +61,9 @@ class SubscribeForm(forms.Form):
                     self.add_error("partner_email", error)
                     return cleaned_data
 
-                if not User.objects.filter(email__iexact=partner_email).exists(): # iexact: case insensitive
+                if not User.objects.filter(
+                    email__iexact=partner_email
+                ).exists():  # iexact: case insensitive
                     error = ValidationError(
                         message=_(
                             "No user found with this email address. Please make sure your partner has an account"
@@ -116,7 +74,10 @@ class SubscribeForm(forms.Form):
                     return cleaned_data
 
                 partner = User.objects.filter(email=partner_email).first()
-                if partner is None and User.objects.filter(email__iexact=partner_email).count() > 1:
+                if (
+                    partner is None
+                    and User.objects.filter(email__iexact=partner_email).count() > 1
+                ):
                     error = ValidationError(
                         message=_(
                             "Please check the upper/lower casing of this email address."
