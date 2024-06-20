@@ -14,17 +14,11 @@
                     {% if not course.has_free_places_for_leaders %}
                         <span class="badge rounded-pill bg-warning">
                             {% trans "Leaders: waiting list" %}
-                            {% if is_detail_page %}
-                                ({{ course|get_waiting_list_length:"lead" }})
-                            {% endif %}
                         </span>
                     {% endif %}
                     {% if not course.has_free_places_for_followers %}
                         <span class="badge rounded-pill bg-warning">
                             {% trans "Followers: waiting list" %}
-                            {% if is_detail_page %}
-                                ({{ course|get_waiting_list_length:"follow" }})
-                            {% endif %}
                         </span>
                     {% endif %}
                 {% endif %}
