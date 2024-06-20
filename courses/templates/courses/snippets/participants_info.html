@@ -2,16 +2,16 @@
 {% load courses_tags %}
 
 <div>
-    {% if not course.has_free_places and not is_detail_page %}
-        <em>{% trans "waiting list" %}</em>
+    {% if not course.has_free_places %}
+        {% if not is_detail_page %}
+            <em>{% trans "waiting list" %}</em>
+        {% endif %}
     {% else %}
         <div>
             {% if course.show_free_places_count %}
-                {% if course.has_free_places %}
-                    <span class="badge rounded-pill bg-success">
-                        {{ course.get_free_places_count }} {% trans "free" %}
-                    </span>
-                {% endif %}
+                <span class="badge rounded-pill bg-success">
+                    {{ course.get_free_places_count }} {% trans "free" %}
+                </span>
                 {% if course.type.couple_course %}
                     {% if not course.has_free_places_for_leaders %}
                         <span class="badge rounded-pill bg-warning">
