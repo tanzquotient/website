@@ -2,6 +2,11 @@
 <div class="card card-default">
     <div class="card-header">
         {{ course.type }}
+        {% if course.cancelled %}
+            <span class="text-uppercase badge text-bg-danger">
+                {% trans "Cancelled" %}
+            </span>
+        {% endif %}
     </div>
     <div class="card-body">
         {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}
@@ -11,12 +16,14 @@
                 <i class="fa fa-arrow-circle-right fa-lg"></i>
             </a>
         </p>
+        {% if not course.cancelled %}
         <p>
             <a href="{% url 'payment:course_teacher_presence' course=course.id %}">
                 <strong>{% trans "Log teacher presence" %}</strong>
                 <i class="fa fa-arrow-circle-right fa-lg"></i>
             </a>
         </p>
+        {% endif %}
         <p>
             <strong>{% trans "Time" %}</strong>
             <br/>
