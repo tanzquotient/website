@@ -45,8 +45,6 @@
                     </p>
                     {% include "courses/snippets/cancel_subscription_button.html" with course=course align_center=True only %}
                 </div>
-            {% else %}
-                <span class="badge rounded-pill bg-info">{% trans "Waiting list" %}</span>
             {% endif %}
 
         {% elif user and course|user_can_subscribe:user or not user %}
