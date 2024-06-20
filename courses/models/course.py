@@ -372,6 +372,7 @@ class Course(TranslatableModel):
         # i.e. they haven't subscribed yet, or
         # they cancelled their subscription
         return not (
+            # user is rejected but not because they cancelled
             (
                 self.subscriptions.filter(
                     user=user, state__in=SubscribeState.REJECTED_STATES
@@ -381,6 +382,12 @@ class Course(TranslatableModel):
                     subscription__user=user,
                     reason=RejectionReason.USER_CANCELLED,
                 ).exists()
+            )
+            # user has a subscription that is not rejected
+            or (
+                self.subscriptions.filter(user=user)
+                .exclude(state__in=SubscribeState.REJECTED_STATES)
+                .exists()
             )
             or (not self.is_subscription_allowed() and not user.is_staff)
             or not self.has_free_places()
