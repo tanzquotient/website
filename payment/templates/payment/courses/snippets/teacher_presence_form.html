@@ -27,7 +27,11 @@
 
                 <button class="btn btn-outline-success btn-sm add-teacher" type="button"
                         data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                        aria-expanded="false"
+                        {% if lesson.end > now %}
+                        disabled
+                        {% endif %}
+                        >
                     <i class="fa-solid fa-plus"></i> {% trans "Add teacher" %}
                 </button>
 
