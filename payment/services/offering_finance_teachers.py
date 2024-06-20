@@ -77,97 +77,108 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
     for course in course_list:
         status = []
 
-        teachers_per_lesson = [
-            l.teachers.count() for l in course.lesson_occurrences.all()
-        ]
-
-        if not course.is_over():
-            status_text = _("Course is not over yet")
-            status.append(
-                status_text
-                if not use_html
-                else f"<span class='badge text-bg-info'>{status_text}</span>"
-            )
-
-        # check for lessons without teachers
-        if course.is_over():
-            lessons_without_teachers = teachers_per_lesson.count(0)
-            if lessons_without_teachers:
-                status_text = (
-                    f"{_('Lessons without teachers')}: {lessons_without_teachers}"
-                )
-                status.append(
-                    status_text
-                    if not use_html
-                    else f"<span class='badge text-bg-danger'>{status_text}</span>"
-                )
-
-        # check for lessons with more than two teachers
-        lessons_with_more_than_two_teachers = [
-            num_teachers > 2 for num_teachers in teachers_per_lesson
-        ].count(True)
-        if lessons_with_more_than_two_teachers:
-            status_text = _("Some lessons have more than two teachers")
+        # if the course is cancelled, just write that as status
+        if course.cancelled:
+            status_text = _("Course cancelled")
             status.append(
                 status_text
                 if not use_html
                 else f"<span class='badge text-bg-danger'>{status_text}</span>"
             )
 
-        # check for lessons with different number of teachers (excluding empty)
-        nonzero_teachers_per_lesson = [
-            num_teachers for num_teachers in teachers_per_lesson if num_teachers > 0
-        ]
-        if len(set(nonzero_teachers_per_lesson)) > 1:
-            status_text = _("Not all lessons have the same number of teachers")
-            status.append(
-                status_text
-                if not use_html
-                else f"<span class='badge text-bg-warning'>{status_text}</span>"
-            )
+        else:
+            teachers_per_lesson = [
+                l.teachers.count() for l in course.lesson_occurrences.all()
+            ]
 
-        # count how many lessons with a certain number of teachers
-        lessons_for_x_teachers = dict()
-        teachers_number_text = []
-        for num_teachers in sorted(teachers_per_lesson):
-            lessons_for_x_teachers[num_teachers] = (
-                lessons_for_x_teachers.setdefault(num_teachers, 0) + 1
-            )
-
-        for num_teachers, num_lessons in lessons_for_x_teachers.items():
-            if num_teachers > 0:
-                status_text = (
-                    f"{num_lessons} {_('lessons') if num_lessons != 1 else _('lesson')} "
-                    f"{_('with')} {num_teachers} {_('teachers') if num_teachers != 1 else _('teacher')}"
-                )
-                teachers_number_text.append(status_text)
-
-        # If we didn't find issues, let the user know
-        if not status:
-            status_text = _("Everything looks good")
-            status.append(
-                status_text
-                if not use_html
-                else f"<span class='badge text-bg-success'>{status_text}</span>"
-            )
-
-        # No status message except the fact that the course is marked as completed
-        if course.completed:
-            status_text = _("Course marked as completed")
-            status = [
-                (
+            if not course.is_over():
+                status_text = _("Course is not over yet")
+                status.append(
                     status_text
                     if not use_html
                     else f"<span class='badge text-bg-info'>{status_text}</span>"
                 )
+
+            # check for lessons without teachers
+            if course.is_over():
+                lessons_without_teachers = teachers_per_lesson.count(0)
+                if lessons_without_teachers:
+                    status_text = (
+                        f"{_('Lessons without teachers')}: {lessons_without_teachers}"
+                    )
+                    status.append(
+                        status_text
+                        if not use_html
+                        else f"<span class='badge text-bg-danger'>{status_text}</span>"
+                    )
+
+            # check for lessons with more than two teachers
+            lessons_with_more_than_two_teachers = [
+                num_teachers > 2 for num_teachers in teachers_per_lesson
+            ].count(True)
+            if lessons_with_more_than_two_teachers:
+                status_text = _("Some lessons have more than two teachers")
+                status.append(
+                    status_text
+                    if not use_html
+                    else f"<span class='badge text-bg-danger'>{status_text}</span>"
+                )
+
+            # check for lessons with different number of teachers (excluding empty)
+            nonzero_teachers_per_lesson = [
+                num_teachers for num_teachers in teachers_per_lesson if num_teachers > 0
             ]
+            if len(set(nonzero_teachers_per_lesson)) > 1:
+                status_text = _("Not all lessons have the same number of teachers")
+                status.append(
+                    status_text
+                    if not use_html
+                    else f"<span class='badge text-bg-warning'>{status_text}</span>"
+                )
+
+            # count how many lessons with a certain number of teachers
+            lessons_for_x_teachers = dict()
+            teachers_number_text = []
+            for num_teachers in sorted(teachers_per_lesson):
+                lessons_for_x_teachers[num_teachers] = (
+                    lessons_for_x_teachers.setdefault(num_teachers, 0) + 1
+                )
+
+            for num_teachers, num_lessons in lessons_for_x_teachers.items():
+                if num_teachers > 0:
+                    status_text = (
+                        f"{num_lessons} {_('lessons') if num_lessons != 1 else _('lesson')} "
+                        f"{_('with')} {num_teachers} {_('teachers') if num_teachers != 1 else _('teacher')}"
+                    )
+                    teachers_number_text.append(status_text)
+
+            # If we didn't find issues, let the user know
+            if not status:
+                status_text = _("Everything looks good")
+                status.append(
+                    status_text
+                    if not use_html
+                    else f"<span class='badge text-bg-success'>{status_text}</span>"
+                )
+
+            # No status message except the fact that the course is marked as completed
+            if course.completed:
+                status_text = _("Course marked as completed")
+                status = [
+                    (
+                        status_text
+                        if not use_html
+                        else f"<span class='badge text-bg-info'>{status_text}</span>"
+                    )
+                ]
 
         row = [
             (
                 mark_safe(
                     f"<a href='{reverse('payment:course_teacher_presence', kwargs={'course': course.id})}'>{course.name}</a>"
                 )
-                if use_html
+                # if the course is cancelled, there is no teacher presence form
+                if use_html and not course.cancelled
                 else course.name
             ),
             (
