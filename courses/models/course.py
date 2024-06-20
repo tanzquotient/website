@@ -391,7 +391,6 @@ class Course(TranslatableModel):
                 .exists()
             )
             or (not self.is_subscription_allowed() and not user.is_staff)
-            or not self.has_free_places()
         )
 
     def number_of_possible_couples(self) -> int:
