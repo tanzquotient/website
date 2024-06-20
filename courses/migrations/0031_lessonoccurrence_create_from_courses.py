@@ -22,7 +22,7 @@ def forwards(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("courses", "0030_remove_teach_hourly_wage_lessonoccurrence_and_more"),
+        ("courses", "0032_course_completed"),
     ]
 
     operations = [
