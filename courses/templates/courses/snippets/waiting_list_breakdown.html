@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load courses_tags %}
+
+{% with course|get_waiting_list_composition as waiting_list %}
+    {% if waiting_list %}
+        <div class="my-3">
+            <div><strong>{% trans "Waiting list" %}</strong></div>
+            <div>{% trans "Currently there is:" %}</div>
+            <ul>
+                {% for text in waiting_list %}
+                    {% if text %}
+                        <li>{{ text }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}

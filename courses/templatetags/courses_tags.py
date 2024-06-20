@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import QuerySet, Q
 from django.http import HttpRequest
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from courses.models import (
     Weekday,
@@ -196,16 +197,80 @@ def get_waiting_list_length(course: Course, lead_follow: str = "no_preference") 
         lead_follow = LeadFollow.NO_PREFERENCE
     return course.get_waiting_list_length(lead_follow=lead_follow)
 
+
 @register.filter(name="get_position_on_waiting_list")
 def get_position_on_waiting_list(course: Course, user: User) -> int:
     # get user's subscription for course
     subscription: Subscribe = Subscribe.objects.get(course=course, user=user)
     return subscription.get_position_on_waiting_list()
 
+
 @register.filter(name="user_can_subscribe")
 def user_can_subscribe(course: Course, user: User) -> bool:
     return course.user_can_subscribe(user=user)
 
+
 @register.filter(name="is_couple")
 def is_couple(subscribe: Subscribe) -> bool:
     return subscribe.matching_state == MatchingState.COUPLE
+
+
+@register.filter(name="get_waiting_list_composition")
+def get_waiting_list_composition(course: Course) -> list|None:
+    waiting_list_subscriptions: list[Subscribe] = course.subscriptions.waiting_list()
+    if not waiting_list_subscriptions.exists():
+        return None 
+
+    composition = []
+
+    # couples
+    n_couples = (
+        waiting_list_subscriptions.filter(matching_state=MatchingState.COUPLE).count()
+        // 2
+    )
+    composition.append(
+        _("One couple")
+        if n_couples == 1
+        else f"{n_couples} {_('couples')}" if n_couples > 0 else None
+    )
+
+    # individuals
+    for lead_follow, text in [
+        (
+            LeadFollow.LEAD,
+            lambda n: (
+                _("One individual leader")
+                if n == 1
+                else f"{n} {_('individual leaders')}" if n > 0 else None
+            ),
+        ),
+        (
+            LeadFollow.FOLLOW,
+            lambda n: (
+                _("One individual follower")
+                if n == 1
+                else f"{n} {_('individual followers')}" if n > 0 else None
+            ),
+        ),
+        (
+            LeadFollow.NO_PREFERENCE,
+            lambda n: (
+                _("One person with no lead or follow preference")
+                if n == 1
+                else (
+                    f"{n} {_('people with no lead or follow preference')}"
+                    if n > 0
+                    else None
+                )
+            ),
+        ),
+    ]:
+        composition.append(
+            text(
+                waiting_list_subscriptions.filter(lead_follow=lead_follow)
+                .exclude(matching_state=MatchingState.COUPLE)
+                .count()
+            )
+        )
+
+    return composition
