@@ -19,7 +19,7 @@ class TeacherPresenceEnabled(View):
         self.can_edit = False
 
         user = self.request.user
-        course = Course.objects.get(id=int(kwargs["course"]))
+        course: Course = Course.objects.get(id=int(kwargs["course"]))
 
         if (
             user.is_superuser
@@ -34,6 +34,9 @@ class TeacherPresenceEnabled(View):
 
         if course.completed:
             self.can_edit = False
+
+        if course.cancelled:
+            allowed = False
 
         if not allowed:
             raise PermissionDenied
