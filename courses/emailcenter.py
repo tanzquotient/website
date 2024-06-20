@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from post_office.models import Email
 
 import courses.models
-from courses.models import Subscribe, Teach, Course
+from courses.models import Subscribe, Teach, Course, SubscribeState
 from email_system.services import send_email
 from payment.utils import create_qrbill_for_subscription, to_pdf
 from payment import payment_processor
@@ -30,18 +30,39 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
         "course_info": create_course_info(subscription.course),
     }
 
-    if subscription.partner is not None:
-        template = "subscription_confirmation_with_partner"
-        context.update(
-            {
-                "partner_first_name": subscription.partner.first_name,
-                "partner_last_name": subscription.partner.last_name,
-            }
-        )
-    elif subscription.course.type.couple_course:
-        template = "subscription_confirmation_without_partner"
+    if subscription.state == SubscribeState.WAITING_LIST:
+        context.update({
+            "waiting_list_position": subscription.get_position_on_waiting_list()
+        })
+        if subscription.partner is not None:
+            template = "subscription_confirmation_with_partner_waiting_list"
+            context.update(
+                {
+                    "partner_first_name": subscription.partner.first_name,
+                    "partner_last_name": subscription.partner.last_name,
+                }
+            )
+        elif subscription.course.type.couple_course:
+            template = "subscription_confirmation_without_partner_waiting_list"
+        else:
+            template = "subscription_confirmation_without_partner_nocouple_waiting_list"
+    
     else:
-        template = "subscription_confirmation_without_partner_nocouple"
+        context.update({
+            "waiting_list_position": subscription.get_position_on_waiting_list()
+        })
+        if subscription.partner is not None:
+            template = "subscription_confirmation_with_partner_waiting_list"
+            context.update(
+                {
+                    "partner_first_name": subscription.partner.first_name,
+                    "partner_last_name": subscription.partner.last_name,
+                }
+            )
+        elif subscription.course.type.couple_course:
+            template = "subscription_confirmation_without_partner_waiting_list"
+        else:
+            template = "subscription_confirmation_without_partner_nocouple_waiting_list"
 
     return send_email(
         to=subscription.user.email,
