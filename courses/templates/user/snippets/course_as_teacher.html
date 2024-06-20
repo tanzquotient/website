@@ -19,7 +19,13 @@
         {% if not course.cancelled %}
         <p>
             <a href="{% url 'payment:course_teacher_presence' course=course.id %}">
-                <strong>{% trans "Log teacher presence" %}</strong>
+                <strong>
+                    {% if course.completed %}
+                        {% trans "View teacher presence" %}
+                    {% else %}
+                        {% trans "Log teacher presence" %}
+                    {% endif %}
+                </strong>
                 <i class="fa fa-arrow-circle-right fa-lg"></i>
             </a>
         </p>
