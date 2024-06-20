@@ -215,6 +215,12 @@ def is_couple(subscribe: Subscribe) -> bool:
     return subscribe.matching_state == MatchingState.COUPLE
 
 
+@register.filter(name="get_user_subscription")
+def get_user_subscription(course: Course, user: User) -> Subscribe:
+    print(course.subscriptions.get(user=user))
+    return course.subscriptions.get(user=user)
+
+
 @register.filter(name="get_waiting_list_composition")
 def get_waiting_list_composition(course: Course) -> list|None:
     waiting_list_subscriptions: list[Subscribe] = course.subscriptions.waiting_list()

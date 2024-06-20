@@ -43,7 +43,7 @@
                             {% trans "Go to 'My Courses' to see the status and further information" %}
                         </a>
                     </p>
-                    {% include "courses/snippets/cancel_subscription_button.html" with course=course align_center=True only %}
+                    {% include "courses/snippets/cancel_subscription_button.html" with course=course subscription_couple=course|get_user_subscription:user|is_couple align_center=True only %}
                 </div>
             {% endif %}
 
