@@ -181,6 +181,8 @@ def reject_subscription(
     c = models.Rejection(subscription=subscription, reason=reason, mail_sent=False)
     c.save()
 
+    subscription.course.update_waiting_list()
+
     if (
         send_email
         and models.Rejection.objects.filter(

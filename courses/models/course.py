@@ -28,6 +28,7 @@ from courses.models import (
     LessonOccurrenceData,
     LessonOccurrence,
     SubscribeState,
+    MatchingState,
     Rejection,
     RejectionReason,
 )
@@ -367,6 +368,32 @@ class Course(TranslatableModel):
                 return max(list(waiting_list_length.values()))
             else:
                 return waiting_list_length[lead_follow]
+
+    def update_waiting_list(self):
+        # resets the state of subscribes in the waiting list
+        # so that they can move to NEW if any spot opened up
+        waiting_list: list[Subscribe] = self.subscriptions.waiting_list().order_by(
+            "date"
+        )
+        for s in waiting_list:
+            if s.matching_state not in MatchingState.MATCHED_STATES:
+                s.state == None
+                s.save()
+            else:
+                # check that both the current subscribe
+                # and the partner can leave the
+                # waiting list, otherwise stop
+                if (
+                    self.has_free_places_for_leaders()
+                    and self.has_free_places_for_followers()
+                ):
+                    s.state = SubscribeState.NEW
+                    partner_s = s.get_partner_subscription()
+                    partner_s.state = SubscribeState.NEW
+                    s.save()
+                    partner_s.save()
+                else:
+                    break
 
     def user_can_subscribe(self, user: User) -> bool:
         # check whether an user can subscribe for a course
