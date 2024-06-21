@@ -167,16 +167,13 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
     if len(set(nonzero_teachers_per_lesson)) > 1:
         status.append(
             _format_status(
-                _(
-                    "Not all lessons have the same number of teachers",
-                    "warning",
-                )
+                _("Not all lessons have the same number of teachers"), "warning"
             ),
         )
 
-    # If we didn't find issues, let the user know
-    if not status:
-        status = [_format_status(_("Everything looks good"), "success")]
+        # If we didn't find issues, let the user know
+        if not status:
+            status = [_format_status(_("Everything looks good"), "success")]
 
     return status
 
