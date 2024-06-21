@@ -342,32 +342,32 @@ class Course(TranslatableModel):
             # just return the total number of subscribes on the waitlist
             return waiting_list.count()
 
-        else:
-            # walk the waiting list assigning NO_PREFERENCE subscribes
-            # to the shorter queue
-            waiting_list_length = {
-                LeadFollow.LEAD: 0,
-                LeadFollow.FOLLOW: 0,
-            }
+        # walk the waiting list assigning NO_PREFERENCE subscribes
+        # to the shorter queue
+        waiting_list_length = {
+            LeadFollow.LEAD: 0,
+            LeadFollow.FOLLOW: 0,
+        }
 
-            for subscription in waiting_list:
-                if subscription.lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]:
-                    waiting_list_length[subscription.lead_follow] += 1
-                else:
-                    if (
-                        waiting_list_length[LeadFollow.LEAD]
-                        > waiting_list_length[LeadFollow.FOLLOW]
-                    ):
-                        waiting_list_length[LeadFollow.FOLLOW] += 1
-                    else:
-                        waiting_list_length[LeadFollow.LEAD] += 1
-
-            if lead_follow == LeadFollow.NO_PREFERENCE:
-                return max(min(list(waiting_list_length.values())), 1)
-            elif worst_case:
-                return max(list(waiting_list_length.values()))
+        for subscription in waiting_list:
+            if subscription.lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]:
+                waiting_list_length[subscription.lead_follow] += 1
             else:
-                return waiting_list_length[lead_follow]
+                if (
+                    waiting_list_length[LeadFollow.LEAD]
+                    > waiting_list_length[LeadFollow.FOLLOW]
+                ):
+                    waiting_list_length[LeadFollow.FOLLOW] += 1
+                else:
+                    waiting_list_length[LeadFollow.LEAD] += 1
+
+        if worst_case:
+            return max(waiting_list_length.values())
+
+        if lead_follow == LeadFollow.NO_PREFERENCE:
+            return max(min(waiting_list_length.values()), 1)
+
+        return waiting_list_length[lead_follow]
 
     def update_waiting_list(self):
         # resets the state of subscribes in the waiting list
