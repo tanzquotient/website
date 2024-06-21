@@ -1,8 +1,8 @@
+from datetime import timedelta
 from decimal import Decimal
 
-from django.db import models
 from django.contrib.auth.models import User
-from datetime import timedelta
+from django.db import models
 
 
 class LessonOccurrence(models.Model):
@@ -26,6 +26,9 @@ class LessonOccurrence(models.Model):
 
     def get_hours(self) -> Decimal:
         return Decimal(round(self.duration().total_seconds() / 3600, 2))
+
+    def __str__(self) -> str:
+        return f"{self.start} - {self.end}"
 
     class Meta:
         unique_together = (
