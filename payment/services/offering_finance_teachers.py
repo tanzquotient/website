@@ -157,7 +157,7 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
     ].count(True)
     if lessons_with_more_than_two_teachers:
         status.append(
-            _format_status(_("Some lessons have more than two teachers", "danger")),
+            _format_status(_("Some lessons have more than two teachers"), "danger"),
         )
 
     # check for lessons with different number of teachers (excluding empty)
