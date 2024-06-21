@@ -377,7 +377,7 @@ class Course(TranslatableModel):
         )
         for s in waiting_list:
             if s.matching_state not in MatchingState.MATCHED_STATES:
-                s.state == None
+                s.state = None
                 s.save()
             else:
                 # check that both the current subscribe
