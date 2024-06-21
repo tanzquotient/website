@@ -286,11 +286,12 @@ def admit_from_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> N
             messages.add_message(
                 request, messages.WARNING, f"{s} is not on the waiting list. Skipped."
             )
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        f"{counter} subscribes admitted from the waiting list",
-    )
+    if counter:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f"{counter} subscribes admitted from the waiting list",
+        )
 
 
 @admin.action(description="Move selected subscription(s) to waiting list")
@@ -307,9 +308,10 @@ def move_to_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> None
                 messages.WARNING,
                 f"{s} is not in state {SubscribeState.NEW}. Skipped.",
             )
-    messages.add_message(
-        request, messages.SUCCESS, f"{counter} subscribes moved to the waiting list"
-    )
+    if counter:
+        messages.add_message(
+            request, messages.SUCCESS, f"{counter} subscribes moved to the waiting list"
+        )
 
 
 @admin.action(description="Send an email to subscriptions of the selected course(s)")
