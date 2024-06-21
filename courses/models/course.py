@@ -336,7 +336,7 @@ class Course(TranslatableModel):
         if until_subscribe is not None:
             waiting_list = waiting_list.filter(date__lte=until_subscribe.date)
 
-        waiting_list = waiting_list.order_by("date").all()
+        waiting_list = waiting_list.all()
 
         if not self.type.couple_course:
             # just return the total number of subscribes on the waitlist
