@@ -39,16 +39,12 @@
                     </h4>
                     <p>
                         {% if waiting_list %}
-                            {% blocktrans %}
-                                Thank you for subscribing to this course. Keep an eye on your "My Courses" page to know your position in the queue.
-                                You can cancel your subscription as long as you are on the waiting list.
-                            {% endblocktrans %}
+                            {% trans "Thank you for subscribing to this course." %}
+                            {% trans 'Keep an eye on your "My Courses" page to know your position in the queue.' %}
+                            {% trans "You can cancel your subscription as long as you are on the waiting list." %}
                             {% if subscription.partner %}
                                 <br/>
-                                {% blocktrans %}
-                                    Since you signed up as a couple, your position on the waiting list depends on both leaders and followers 
-                                    queuing in front of you and your partner.
-                                {% endblocktrans %}
+                                {% trans "Since you signed up as a couple, your position on the waiting list depends on both leaders and followers queuing in front of you and your partner." %}
                             {% endif %}
                         {% else %}
                             {% trans "Thank you for subscribing to this course. The final confirmation will be sent out in the following days." %}
