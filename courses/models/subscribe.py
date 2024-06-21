@@ -155,20 +155,20 @@ class Subscribe(Model):
     def get_position_on_waiting_list(self) -> int:
         if not self.state == SubscribeState.WAITING_LIST:
             return 0
-        else:
-            if self.matching_state not in MatchingState.MATCHED_STATES:
-                return self.course.get_waiting_list_length(
-                    lead_follow=self.lead_follow, until_subscribe=self
-                )
-            else:
-                earliest_subscribe = (
-                    self
-                    if self.date < self.get_partner_subscription().date
-                    else self.get_partner_subscription()
-                )
-                return self.course.get_waiting_list_length(
-                    worst_case=True, until_subscribe=earliest_subscribe
-                )
+
+        if self.matching_state not in MatchingState.MATCHED_STATES:
+            return self.course.get_waiting_list_length(
+                lead_follow=self.lead_follow, until_subscribe=self
+            )
+
+        earliest_subscribe = (
+            self
+            if self.date < self.get_partner_subscription().date
+            else self.get_partner_subscription()
+        )
+        return self.course.get_waiting_list_length(
+            worst_case=True, until_subscribe=earliest_subscribe
+        )
 
     def assign_state(self) -> None:
         if self.matching_state not in MatchingState.MATCHED_STATES:
