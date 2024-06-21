@@ -170,6 +170,25 @@ class Subscribe(Model):
                     worst_case=True, until_subscribe=earliest_subscribe
                 )
 
+    def assign_state(self) -> None:
+        if self.matching_state not in MatchingState.MATCHED_STATES:
+            self.state = (
+                SubscribeState.NEW
+                if self.course.has_free_places_for(lead_or_follow=self.lead_follow)
+                else SubscribeState.WAITING_LIST
+            )
+        else:
+            self.state = (
+                SubscribeState.NEW
+                if all(
+                    [
+                        self.course.has_free_places_for(lead_or_follow=lead_follow)
+                        for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
+                    ]
+                )
+                else SubscribeState.WAITING_LIST
+            )
+
     """"
     ----------------------------------------------------------------
     Payment
@@ -384,23 +403,7 @@ class Subscribe(Model):
         if not self.price_to_pay:
             self.generate_price_to_pay()
         if not self.state:
-            if self.matching_state not in MatchingState.MATCHED_STATES:
-                self.state = (
-                    SubscribeState.NEW
-                    if self.course.has_free_places_for(lead_or_follow=self.lead_follow)
-                    else SubscribeState.WAITING_LIST
-                )
-            else:
-                self.state = (
-                    SubscribeState.NEW
-                    if all(
-                        [
-                            self.course.has_free_places_for(lead_or_follow=lead_follow)
-                            for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
-                        ]
-                    )
-                    else SubscribeState.WAITING_LIST
-                )
+            self.assign_state()
 
         super(Subscribe, self).save(*args, **kwargs)
 
