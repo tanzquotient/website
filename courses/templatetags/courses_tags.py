@@ -10,8 +10,8 @@ from courses.models import (
     OfferingType,
     Course,
     Subscribe,
-    SubscribeState, LeadFollow,
-    LessonOccurrence,
+    SubscribeState,
+    LeadFollow,
     MatchingState,
 )
 from courses.services import get_offerings_by_year
@@ -187,6 +187,7 @@ def missing_presence_data(course: Course) -> bool:
         end__lte=timezone.localtime.now(), teachers=None
     ).exists()
 
+
 @register.filter(name="get_waiting_list_length")
 def get_waiting_list_length(course: Course, lead_follow: str = "no_preference") -> int:
     if lead_follow == "lead":
@@ -221,10 +222,10 @@ def get_user_subscription(course: Course, user: User) -> Subscribe:
 
 
 @register.filter(name="get_waiting_list_composition")
-def get_waiting_list_composition(course: Course) -> list|None:
+def get_waiting_list_composition(course: Course) -> list | None:
     waiting_list_subscriptions: list[Subscribe] = course.subscriptions.waiting_list()
     if not waiting_list_subscriptions.exists():
-        return None 
+        return None
 
     composition = []
 
