@@ -18,5 +18,5 @@ class RejectionReason:
         (ILLEGITIMATE, "Users subscription is illegitimate"),
         (BANNED, "User is banned"),
         (COURSE_CANCELLED, "Course was cancelled"),
-        (WAITING_LIST, "User on waiitng list"),
+        (WAITING_LIST, "User on waiting list"),
     )
