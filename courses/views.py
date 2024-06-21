@@ -598,7 +598,6 @@ def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
 
     data = json.loads(request.body)
     course_id = data.get("course_id")
-    cancel_partner = data.get("cancel_partner")
     if not request.method == "POST" or not course_id:
         raise Http404()
 
@@ -610,7 +609,7 @@ def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
 
     subscriptions_to_reject = [subscribe]
 
-    if subscribe.matching_state == MatchingState.COUPLE and cancel_partner:
+    if subscribe.matching_state == MatchingState.COUPLE:
         partner_subscribe = subscribe.get_partner_subscription()
         assert partner_subscribe.state == SubscribeState.WAITING_LIST
         subscriptions_to_reject.append(partner_subscribe)

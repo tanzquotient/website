@@ -14,33 +14,16 @@
                 {% blocktrans %}
                     By cancelling your subscription you give up your position in the queue.
                 {% endblocktrans %}
+                <span id="cancelCoupleMsg">
+                    <hr/>
+                    {% blocktrans %}
+                        You signed up as a couple. Both your and your partner's subscriptions will be cancelled.
+                    {% endblocktrans %}
+                </span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" onclick="cancel_subscription()">{% trans "Confirm" %}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="cancelCoupleModal"
-     tabindex="-1" aria-hidden="true"
-     aria-labelledby="cancelCoupleModalLabel">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title text-reset" id="cancelCoupleModalLabel">{% trans "Couple subscription" %}</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% blocktrans %}
-                    You signed up as a couple. Do you want to cancel your partner's subscription as well?
-                {% endblocktrans %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" onclick="choose_partner_subscription_event(false)">{% trans "Cancel mine only" %}</button>
-                <button type="button" class="btn btn-danger" onclick="choose_partner_subscription_event(true)">{% trans "Cancel both" %}</button>
             </div>
         </div>
     </div>
@@ -51,28 +34,18 @@
     <script type="text/javascript">
 
         const cancelSubscriptionModal = new bootstrap.Modal(document.getElementById("cancelSubscriptionModal"));
-        const cancelCoupleModal = new bootstrap.Modal(document.getElementById("cancelCoupleModal"));
+        const cancelCoupleMsg = document.getElementById("cancelCoupleMsg");
 
         let courseToCancelId = 0;
-        let cancel_partner = false;
 
         function cancel_subscription_trigger(course_id, couple_subscription)
         {
             courseToCancelId = course_id;
             if (couple_subscription)
-                cancelCoupleModal.show();
+                cancelCoupleMsg.classList.remove("d-none");
             else
-            {
-                cancel_partner = false;
-                cancelSubscriptionModal.show();
-            }
-        }
-
-        function choose_partner_subscription_event(cancel_partner_choice)
-        {
-            cancel_partner = cancel_partner_choice;
-            cancelCoupleModal.hide();
-            cancelSubscriptionModal.show()
+                cancelCoupleMsg.classList.add("d-none");
+            cancelSubscriptionModal.show();
         }
 
         function cancel_subscription()
@@ -86,7 +59,6 @@
                 },
                 body: JSON.stringify({
                     course_id: courseToCancelId,
-                    cancel_partner: cancel_partner,
                 }),
 
             })
