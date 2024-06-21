@@ -402,26 +402,30 @@ class Course(TranslatableModel):
         # check whether an user can subscribe for a course
         # i.e. they haven't subscribed yet, or
         # they cancelled their subscription
-        return not (
-            # user is rejected but not because they cancelled
-            (
-                self.subscriptions.filter(
-                    user=user, state__in=SubscribeState.REJECTED_STATES
-                ).exists()
-                and not Rejection.objects.filter(
-                    subscription__course=self,
-                    subscription__user=user,
-                    reason=RejectionReason.USER_CANCELLED,
-                ).exists()
-            )
-            # user has a subscription that is not rejected
-            or (
-                self.subscriptions.filter(user=user)
-                .exclude(state__in=SubscribeState.REJECTED_STATES)
-                .exists()
-            )
-            or (not self.is_subscription_allowed() and not user.is_staff)
-        )
+
+        if not self.is_subscription_allowed() and not user.is_staff:
+            return False
+
+        if (
+            self.subscriptions.filter(user=user)
+            .exclude(state__in=SubscribeState.REJECTED_STATES)
+            .exists()
+        ):
+            return False
+
+        rejection_exists = self.subscriptions.filter(
+            user=user, state__in=SubscribeState.REJECTED_STATES
+        ).exists()
+        user_cancelled = Rejection.objects.filter(
+            subscription__course=self,
+            subscription__user=user,
+            reason=RejectionReason.USER_CANCELLED,
+        ).exists()
+
+        if rejection_exists and not user_cancelled:
+            return False
+
+        return True
 
     def number_of_possible_couples(self) -> int:
         (
