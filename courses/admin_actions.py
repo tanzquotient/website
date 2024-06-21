@@ -274,6 +274,44 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
     return render(request, "courses/auth/action_send_voucher.html", context)
 
 
+@admin.action(description="Admit selected subscription(s) from waiting list")
+def admit_from_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> None:
+    counter = 0
+    for s in queryset:
+        if s.state == SubscribeState.WAITING_LIST:
+            s.state = SubscribeState.NEW
+            s.save()
+            counter += 1
+        else:
+            messages.add_message(
+                request, messages.WARNING, f"{s} is not on the waiting list. Skipped."
+            )
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        f"{counter} subscribes admitted from the waiting list",
+    )
+
+
+@admin.action(description="Move selected subscription(s) to waiting list")
+def move_to_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> None:
+    counter = 0
+    for s in queryset:
+        if s.state == SubscribeState.NEW:
+            s.state = SubscribeState.WAITING_LIST
+            s.save()
+            counter += 1
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                f"{s} is not in state {SubscribeState.NEW}. Skipped.",
+            )
+    messages.add_message(
+        request, messages.SUCCESS, f"{counter} subscribes moved to the waiting list"
+    )
+
+
 @admin.action(description="Send an email to subscriptions of the selected course(s)")
 def send_course_email(modeladmin, request, queryset) -> HttpResponse:
     form = None
