@@ -21,9 +21,10 @@ def offering_finance_teachers(
 ) -> tuple[str, list[dict]]:
     """Exports a summary of the given ``offering`` concerning payment of teachers.
 
-    Contains profile data relevant for payment of teachers and how many lesson at what rate to be paid.
+    Contains profile data relevant for payment of teachers and how many lesson at what
+     rate to be paid.
 
-    :param export_format: export format
+    :param use_html: whether html is supported for the output
     :param offerings: offerings to include in summary
     :return: response or ``None`` if format not supported
     """
@@ -75,7 +76,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
     )
 
     for course in course_list:
-
         row = [
             (
                 mark_safe(
@@ -118,7 +118,6 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
 
 
 def _get_course_status(course: Course, use_html: bool) -> list[str]:
-
     def _format_status(status_text: str, text_class: str = "info") -> str:
         return (
             status_text
@@ -147,9 +146,9 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
         if lessons_without_teachers:
             status.append(
                 _format_status(
-                    f"{_('Lessons without teachers')}: {lessons_without_teachers}"
+                    f"{_('Lessons without teachers')}: {lessons_without_teachers}",
+                    "danger",
                 ),
-                "danger",
             )
 
     # check for lessons with more than two teachers
@@ -158,7 +157,7 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
     ].count(True)
     if lessons_with_more_than_two_teachers:
         status.append(
-            _format_status(_("Some lessons have more than two teachers")), "danger"
+            _format_status(_("Some lessons have more than two teachers", "danger")),
         )
 
     # check for lessons with different number of teachers (excluding empty)
@@ -167,8 +166,12 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
     ]
     if len(set(nonzero_teachers_per_lesson)) > 1:
         status.append(
-            _format_status(_("Not all lessons have the same number of teachers")),
-            "warning",
+            _format_status(
+                _(
+                    "Not all lessons have the same number of teachers",
+                    "warning",
+                )
+            ),
         )
 
     # If we didn't find issues, let the user know
@@ -178,7 +181,7 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
     return status
 
 
-def _get_num_teachers_per_lesson(course: Course) -> str:
+def _get_num_teachers_per_lesson(course: Course) -> list[str]:
     # count how many lessons with a certain number of teachers
     teachers_per_lesson = [l.teachers.count() for l in course.lesson_occurrences.all()]
 
