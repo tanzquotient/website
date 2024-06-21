@@ -376,7 +376,10 @@ class Course(TranslatableModel):
             "date"
         )
         for s in waiting_list:
-            if s.matching_state not in MatchingState.MATCHED_STATES:
+            if (
+                not self.type.couple_course
+                or s.matching_state not in MatchingState.MATCHED_STATES
+            ):
                 s.state = None
                 s.save()
             else:
