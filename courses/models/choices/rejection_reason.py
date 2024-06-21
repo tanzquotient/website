@@ -7,6 +7,7 @@ class RejectionReason:
     ILLEGITIMATE = "illegitimate"
     BANNED = "banned"
     COURSE_CANCELLED = "course_cancelled"
+    WAITING_LIST = "waiting_list"
 
     CHOICES = (
         (UNKNOWN, "Unknown"),
@@ -17,4 +18,5 @@ class RejectionReason:
         (ILLEGITIMATE, "Users subscription is illegitimate"),
         (BANNED, "User is banned"),
         (COURSE_CANCELLED, "Course was cancelled"),
+        (WAITING_LIST, "User on waiitng list"),
     )
