@@ -1,7 +1,7 @@
 {% load i18n %}
-{% load sekizai_tags %}
+{% load sekizai_tags courses_tags %}
 
-<div class="modal fade" id="cancelSubscriptionModal"
+<div class="modal fade" id="cancelSubscriptionModal-{{ subscription.id }}"
      tabindex="-1" aria-hidden="true"
      aria-labelledby="cancelSubscriptionModalLabel">
     <div class="modal-dialog modal-dialog-centered">
@@ -12,60 +12,15 @@
             </div>
             <div class="modal-body">
                 {% trans "By cancelling your subscription you give up your position in the queue." %}
-                <span id="cancelCoupleMsg">
+                {% if subscription|is_couple %}
                     <hr/>
                     {% trans "You signed up as a couple. Both your and your partner's subscriptions will be cancelled." %}
-                </span>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" onclick="cancel_subscription()">{% trans "Confirm" %}</button>
+                <a href="{% url "courses:cancel_subscription" subscription.id %}" class="btn btn-danger">{% trans "Confirm" %}</a>
             </div>
         </div>
     </div>
 </div>
-
-{% addtoblock "js" %}
-
-    <script type="text/javascript">
-
-        const cancelSubscriptionModal = new bootstrap.Modal(document.getElementById("cancelSubscriptionModal"));
-        const cancelCoupleMsg = document.getElementById("cancelCoupleMsg");
-
-        let courseToCancelId = 0;
-
-        function cancel_subscription_trigger(course_id, couple_subscription)
-        {
-            courseToCancelId = course_id;
-            if (couple_subscription)
-                cancelCoupleMsg.classList.remove("d-none");
-            else
-                cancelCoupleMsg.classList.add("d-none");
-            cancelSubscriptionModal.show();
-        }
-
-        function cancel_subscription()
-        {
-            fetch("{% url "courses:cancel_subscription" %}", {
-
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': "{{ csrf_token }}",
-                },
-                body: JSON.stringify({
-                    course_id: courseToCancelId,
-                }),
-
-            })
-            .then((response) => response.json())
-            .then((json) => 
-            {
-                if (json.result == "success")
-                    location.reload();
-            });
-        }
-
-    </script>
-
-{% endaddtoblock %}

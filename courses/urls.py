@@ -19,7 +19,7 @@ urlpatterns = [
     path("<int:course_id>/calendar/", views.course_ical, name="course_ical"),
     path("<int:course_id>/subscribe/", views.subscribe_form, name="subscribe"),
     path(
-        "subscribe/cancel",
+        "subscribe/<int:subscription_id>/cancel",
         views.cancel_subscription_from_waiting_list,
         name="cancel_subscription",
     ),

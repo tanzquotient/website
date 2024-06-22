@@ -43,7 +43,7 @@
                             {% trans "Go to 'My Courses' to see the status and further information" %}
                         </a>
                     </p>
-                    {% include "courses/snippets/cancel_subscription_button.html" with course=course subscription_couple=course|get_user_subscription:user|is_couple align_center=True only %}
+                    {% include "courses/snippets/cancel_subscription_button.html" with subscription=course|get_user_subscription:user align_center=True only %}
                 </div>
             {% endif %}
 
@@ -73,5 +73,5 @@
 {% endif %}
 
 {% if user and user.id in course.waiting_list_user_ids and is_detail_page %}
-    {% include "courses/snippets/cancel_subscription_modal.html" %}
+    {% include "courses/snippets/cancel_subscription_modal.html" with subscription=course|get_user_subscription:user only %}
 {% endif %}

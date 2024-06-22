@@ -1,0 +1,65 @@
+{% extends "basis.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ course.type.title }}
+{% endblock %}
+
+{% block lead_title %}
+    {% trans "Subscription cancelled" %}: {{ course.type.title }}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="d-none d-sm-block col-sm-5 col-md-4 col-lg-3 mb-4">
+                <div class="mb-2">
+                    <h3 class="mb-0">
+                        {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
+                        {{ course.type.title }}
+                    </h3>
+                    {% if course.type.subtitle %}
+                        <div class="mt-1">
+                            <em>{{ course.type.subtitle }}</em>
+                        </div>
+                    {% endif %}
+                </div>
+                {% include "courses/snippets/course_info.html" with disable_modals=True %}
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
+                <div class="alert alert-info">
+                    <h4 class="alert-heading">
+                        {% trans "Your subscription was cancelled successfully" %}
+                    </h4>
+                    <p>
+                        {% trans "You should receive a confirmation via email soon." %}
+                        {% trans "Should you change your mind, you are welcome to subscribe again." %}
+                        {% trans "Note that you will rejoin from the end of the queue." %}
+                    </p>
+                    {% if couple %}
+                        <hr/>
+                        {% trans "Your partner's subscription has been cancelled, too." %}
+                        {% trans "We have sent them a confirmation email as well." %}
+                    {% endif %}
+
+                    <hr>
+                    <p>
+                        <a href="{% url 'user_courses' %}">
+                            <i class="fa fa-arrow-circle-right"></i>
+                            {% trans "Show all my courses" %}
+                        </a>
+                    </p>
+                    <hr>
+                    <p>
+                        <a href="{% url 'courses:list' %}">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            {% trans "Go back to the course list" %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}

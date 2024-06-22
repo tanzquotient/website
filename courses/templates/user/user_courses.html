@@ -70,9 +70,9 @@
         </a>
     </p>
 
-    {% if user.subscriptions.waiting_list|length > 0 %}
-        {% include "courses/snippets/cancel_subscription_modal.html" %}
-    {% endif %}
+    {% for subscription in user.subscriptions.waiting_list %}
+        {% include "courses/snippets/cancel_subscription_modal.html" with subscription=subscription only %}
+    {% endfor %}
 
 {% endblock %}
 

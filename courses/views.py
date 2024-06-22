@@ -260,7 +260,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
         context = {
             "course": course,
             "subscription": subscription,
-            "waiting_list": subscription.state == SubscribeState.WAITING_LIST
+            "waiting_list": subscription.state == SubscribeState.WAITING_LIST,
         }
         return render(request, "courses/course_subscribe_status.html", context=context)
 
@@ -592,18 +592,14 @@ def export_offering_summary_excel(
 
 
 @login_required
-def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
+def cancel_subscription_from_waiting_list(
+    request: HttpRequest, subscription_id: int
+) -> HttpResponse:
 
     from courses.services import reject_subscriptions
 
-    data = json.loads(request.body)
-    course_id = data.get("course_id")
-    if not request.method == "POST" or not course_id:
-        raise Http404()
-
-    course: Course = get_object_or_404(Course, id=int(course_id))
     subscribe: Subscribe = get_object_or_404(
-        Subscribe, course=course, user=request.user
+        Subscribe, id=subscription_id, user=request.user
     )
     assert subscribe.state == SubscribeState.WAITING_LIST
 
@@ -617,7 +613,14 @@ def cancel_subscription_from_waiting_list(request: HttpRequest) -> HttpResponse:
     reject_subscriptions(
         subscriptions=subscriptions_to_reject,
         reason=RejectionReason.USER_CANCELLED,
-        send_email=False,
+        send_email=True,
     )
 
-    return HttpResponse(json.dumps({"result": "success"}))
+    return render(
+        request,
+        "courses/subscription_cancellation_confirmation.html",
+        {
+            "course": subscribe.course,
+            "couple": len(subscriptions_to_reject) > 1,
+        },
+    )

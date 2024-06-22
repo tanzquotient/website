@@ -1,8 +1,7 @@
 {% load i18n %}
 
 <div {% if align_center %}class="text-center"{% endif %}>
-    <button class="btn btn-danger"
-            onclick="cancel_subscription_trigger({{ course.id }}, {{ subscription_couple|yesno:"true,false" }})">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelSubscriptionModal-{{ subscription.id }}">
         {% trans "Cancel my subscription" %}
     </button>
 </div>
