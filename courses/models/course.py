@@ -71,6 +71,17 @@ class Course(TranslatableModel):
         "Defines if clients can subscribe to this course "
         "(if checked, course is active if offering is active)."
     )
+    early_signup = models.BooleanField(
+        default=True,
+        help_text=_(
+            (
+                "Defines if users eligible for early sign-up "
+                "can subscribe to this course "
+                "(if checked, course early sign-up is enabled "
+                "if offering early sign-up is enabled)."
+            )
+        ),
+    )
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
     )
@@ -577,6 +588,10 @@ class Course(TranslatableModel):
     def is_active(self) -> bool:
         return self.offering.active and self.active
 
+    @admin.display(description="ES", boolean=True)
+    def is_early_signup_enabled(self) -> bool:
+        return self.offering.early_signup and self.early_signup
+
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
 
@@ -594,6 +609,28 @@ class Course(TranslatableModel):
             return False
 
         return self.is_active()
+
+    def is_user_eligible_for_early_signup(
+        self, user: User, max_days: int = 180
+    ) -> bool:
+        if not self.type.predecessors:
+            return False
+
+        predecessor_subscribes = (
+            user.subscriptions.accepted()
+            .filter(course__type__in=self.type.predecessors)
+            .all()
+            .order_by("-course__offering__period__date_to")
+        )
+
+        for s in predecessor_subscribes:
+            if (
+                self.get_first_lesson_date() - s.course.get_last_lesson_date()
+                < timedelta(days=max_days)
+            ):
+                return True
+
+        return False
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to

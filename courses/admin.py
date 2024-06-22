@@ -20,6 +20,7 @@ class OfferingAdmin(TranslatableAdmin):
         "period",
         "display",
         "active",
+        "early_signup",
         "preview",
         "opens_soon",
         "survey",
@@ -166,6 +167,7 @@ class CourseAdmin(TranslatableAdmin):
         "room",
         "is_displayed",
         "is_active",
+        "is_early_signup_enabled",
         "is_cancelled",
         "is_evaluated",
         "subscription_type",
@@ -220,7 +222,15 @@ class CourseAdmin(TranslatableAdmin):
         ),
         (
             "Admin",
-            {"fields": ["display", "active", "cancelled", "completed"]},
+            {
+                "fields": [
+                    "display",
+                    "active",
+                    "cancelled",
+                    "completed",
+                    "early_signup",
+                ]
+            },
         ),
     ]
 
@@ -287,7 +297,7 @@ class CourseTypeAdmin(TranslatableAdmin):
             },
         ),
         ("Details", {"fields": ["level", "styles"]}),
-        ("Options", {"fields": ["couple_course"]}),
+        ("Options", {"fields": ["couple_course", "predecessors"]}),
     ]
 
     model = CourseType

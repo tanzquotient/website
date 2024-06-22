@@ -42,6 +42,15 @@ class Offering(TranslatableModel):
         default=False,
         help_text="Defines if clients can subscribe to courses in this offering.",
     )
+    early_signup = models.BooleanField(
+        default=False,
+        help_text=_(
+            (
+                "Defines if users eligible for early sign-up "
+                "can subscribe to courses in this offering."
+            )
+        ),
+    )
     preview = models.BooleanField(
         default=False,
         help_text="Defines if the offering should be displayed as preview",
