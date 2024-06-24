@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from courses import models as models
+from courses.models import choices as choices
 from courses.emailcenter import send_teacher_welcome
 
 from tq_website import settings
@@ -65,7 +66,11 @@ def welcome_teachers_reset_flag(courses, request):
 def send_presence_reminder() -> None:
 
     # look for courses that ended yesterday
-    courses: list[models.Course] = list(models.Course.objects.all())
+    courses: list[models.Course] = list(
+        models.Course.objects.exclude(cancelled=True)
+        .exclude(subscription_type=choices.CourseSubscriptionType.EXTERNAL)
+        .all()
+    )
     courses_yesterday = [
         course
         for course in courses
