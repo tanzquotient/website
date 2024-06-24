@@ -53,8 +53,7 @@ class Offering(TranslatableModel):
     )
     early_signup_max_days = models.PositiveSmallIntegerField(
         verbose_name=_("Max days for early sign-up"),
-        blank=True,
-        null=True,
+        blank=False,
         default=180,
         help_text=_(
             (

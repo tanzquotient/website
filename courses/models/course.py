@@ -602,7 +602,7 @@ class Course(TranslatableModel):
         return self.is_active()
 
     def is_user_eligible_for_early_signup(
-        self, user: User, max_days: int = 180
+        self, user: User
     ) -> bool:
         if not self.type.predecessors:
             return False
@@ -617,7 +617,7 @@ class Course(TranslatableModel):
         for s in predecessor_subscribes:
             if (
                 self.get_first_lesson_date() - s.course.get_last_lesson_date()
-                < timedelta(days=max_days)
+                < timedelta(days=self.offering.early_signup_max_days)
             ):
                 return True
 
