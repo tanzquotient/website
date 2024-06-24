@@ -121,12 +121,6 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
 
 
-class PredecessorCoursesInline(admin.TabularInline):
-    model = CourseSuccession
-    fk_name = "successor"
-    extra = 0
-
-
 class SongInline(admin.TabularInline):
     search_fields = [
         "title",
@@ -188,7 +182,6 @@ class CourseAdmin(TranslatableAdmin):
         RegularLessonInline,
         IrregularLessonInline,
         TeachInlineForCourse,
-        PredecessorCoursesInline,
         SubscribeInlineForCourse,
     )
     widgets = {"type": SortedSelect}
@@ -264,12 +257,6 @@ class CourseAdmin(TranslatableAdmin):
     @admin.display(description="C", boolean=True)
     def is_cancelled(course: Course) -> bool:
         return course.cancelled
-
-
-@admin.register(CourseSuccession)
-class CourseSuccession(admin.ModelAdmin):
-    list_display = ["predecessor", "successor"]
-    model = CourseSuccession
 
 
 @admin.register(CourseType)
@@ -397,8 +384,6 @@ class SubscribeAdmin(VersionAdmin):
             "course__period",
             "course__offering",
             "course__offering__period",
-            "course__succeeding_courses",
-            "course__preceding_courses__subscriptions",
             "course__type",
             "course__type__styles",
             "course__type__styles__parent_style",

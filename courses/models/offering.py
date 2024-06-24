@@ -52,16 +52,17 @@ class Offering(TranslatableModel):
         ),
     )
     early_signup_max_days = models.PositiveSmallIntegerField(
-        verbose_name=_("Max days for early sign-up")
+        verbose_name=_("Max days for early sign-up"),
         blank=True,
         null=True,
         default=180,
-        help_text=_((
-            "Maximum days between the last lesson of the preceding course "
-            "and the first one of the succeeding course to be eligible "
-            "for early sign-up (if applicable)"
+        help_text=_(
+            (
+                "Maximum days between the last lesson of the preceding course "
+                "and the first one of the succeeding course to be eligible "
+                "for early sign-up (if applicable)"
             )
-        )
+        ),
     )
     preview = models.BooleanField(
         default=False,

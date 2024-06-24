@@ -167,15 +167,6 @@ class Course(TranslatableModel):
         related_name="courses",
         through_fields=("course", "user"),
     )
-    preceding_courses = models.ManyToManyField(
-        "Course",
-        related_name="succeeding_courses",
-        through="CourseSuccession",
-        through_fields=("successor", "predecessor"),
-    )
-    preceding_courses.help_text = (
-        "The course(s) that are immediate predecessors of this course."
-    )
 
     objects = managers.CourseManager()
 
@@ -723,11 +714,6 @@ class Course(TranslatableModel):
         return " / ".join(dates)
 
     format_cancellations.short_description = "Cancellations"
-
-    def format_preceeding_courses(self) -> str:
-        return " / ".join(map(str, self.preceding_courses.all()))
-
-    format_preceeding_courses.short_description = "Predecessors"
 
     def get_first_regular_lesson(self) -> Optional[RegularLesson]:
         if self.regular_lessons.exists():
