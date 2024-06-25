@@ -409,6 +409,13 @@ class Course(TranslatableModel):
             return False
 
         if (
+            not self.is_active()
+            and not self.is_user_eligible_for_early_signup(user)
+            and not user.is_staff
+        ):
+            return False
+
+        if (
             self.subscriptions.filter(user=user)
             .exclude(state__in=SubscribeState.REJECTED_STATES)
             .exists()
@@ -599,12 +606,10 @@ class Course(TranslatableModel):
         if not self.is_regular():
             return False
 
-        return self.is_active()
+        return self.is_active() or self.is_early_signup_enabled()
 
-    def is_user_eligible_for_early_signup(
-        self, user: User
-    ) -> bool:
-        if not self.type.predecessors:
+    def is_user_eligible_for_early_signup(self, user: User) -> bool:
+        if not self.type.predecessors.exists():
             return False
 
         predecessor_subscribes = (
