@@ -54,6 +54,8 @@ class OfferingAdmin(TranslatableAdmin):
                 "fields": [
                     "display",
                     "active",
+                    "early_signup",
+                    "early_signup_max_days",
                     "preview",
                     "opens_soon",
                     "group_into_sections",
