@@ -614,7 +614,7 @@ class Course(TranslatableModel):
 
         predecessor_subscribes = (
             user.subscriptions.accepted()
-            .filter(course__type__in=self.type.predecessors)
+            .filter(course__type__in=self.type.predecessors.all())
             .all()
             .order_by("-course__offering__period__date_to")
         )
