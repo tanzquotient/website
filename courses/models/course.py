@@ -52,7 +52,7 @@ class Course(TranslatableModel):
         on_delete=models.PROTECT,
     )
     type.help_text = (
-        "The name of the course type is displayed on the website as the course title ."
+        "The name of the course type is displayed on the website as the course title."
     )
     subscription_type = models.CharField(
         max_length=20,
