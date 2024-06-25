@@ -280,3 +280,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
         )
 
     return composition
+
+@register.filter(name="is_user_eligible_for_early_signup")
+def is_user_eligible_for_early_signup(course: Course, user: User):
+    return course.is_user_eligible_for_early_signup(user)
