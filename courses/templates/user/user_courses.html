@@ -33,10 +33,13 @@
         </p>
     {% endif %}
 
+    <h3 class="m-0">{% trans "My Courses" %}</h3>
+    {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
+    {% include "user/snippets/open_surveys.html" with user=user only %}
+
     {% with subscriptions=user.profile.get_subscriptions %}
         <div class="d-flex flex-wrap justify-content-between">
-            <div class="mb-2">
-                <h3 class="m-0">{% trans "My Courses" %}</h3>
+            <div class="mb-2 my-auto">
                 <a href="{% url "user_ical" user.id %}?token={{ token }}">
                     {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
                 </a>
@@ -52,8 +55,6 @@
                 </div>
             {% endif %}
         </div>
-        {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
-        {% include "user/snippets/open_surveys.html" with user=user only %}
         <div class="accordion">
             {% for subscription in subscriptions %}
                 {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
