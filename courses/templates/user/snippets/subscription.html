@@ -13,10 +13,10 @@
                 <span class="col-12 col-md-4 col-lg-5">
                     <b>{{ subscription.course.type }}</b>
                 </span>
-                <span class="col-12 col-md-4 col-lg-5">
+                <span class="col-12 col-md-4 col-lg-4">
                     {% include "courses/snippets/lesson_components/course_months.html" with course=subscription.course only %}
                 </span>
-                <span class="col-12 col-md-4 col-lg-2">
+                <span class="col-12 col-md-4 col-lg-3">
                     {% include "user/snippets/subscription_status_badge.html" with subscription=subscription only %}
                 </span>
             </span>
