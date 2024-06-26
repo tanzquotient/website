@@ -1,0 +1,25 @@
+{% load i18n sekizai_tags %}
+
+<a tabindex="0"
+   class="text-secondary"
+   id="popover"
+   role="button"
+   data-bs-html="true"
+   data-bs-toggle="popover"
+   data-bs-trigger="focus"
+   data-bs-title="{% trans "Early Sign-Up" %}"
+   data-bs-content="
+   {% trans "Registration is currently limited to users who have taken preceding courses of this type in the recent past." %}
+   {% if need_login %}
+    <br/>
+    {% trans "Log in to check if you are eligible." %}
+   {% elif not_eligible %}
+    <br/>
+    {% trans "Unfortunately, you are not eligible for early sign-up to this course." %}
+   {% endif %}
+   <hr/>
+   {% trans "Please refer to the FAQ for more information:" %}
+   <a href='/faq'><i class='fa fa-arrow-circle-right'></i> FAQ</a>
+   ">
+   <i class="fa-solid fa-circle-question"></i>
+</a>
