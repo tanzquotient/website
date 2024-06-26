@@ -95,6 +95,9 @@
             {% if user.is_anonymous %}
                 <div class="alert alert-info">
                     {% trans "Registration is currently limited to users who have taken preceding courses of this type in the recent past. Log in to check if you are eligible." %}
+                    <hr/>
+                    {% trans "Please refer to the FAQ for more information:" %}
+                    <a href='/faq'><i class='fa fa-arrow-circle-right'></i> FAQ</a>
                 </div>
             {% elif course|is_user_eligible_for_early_signup:user %}
                 {% if course|user_can_subscribe:user %}
@@ -123,6 +126,9 @@
                 <div class="alert alert-info">
                     {% trans "Registration is currently limited to users who have taken preceding courses of this type in the recent past." %}
                     {% trans "Unfortunately, you are not eligible for early sign-up to this course." %}
+                    <hr/>
+                    {% trans "Please refer to the FAQ for more information:" %}
+                    <a href='/faq'><i class='fa fa-arrow-circle-right'></i> FAQ</a>
                 </div>
             {% endif %}
         {% else %}
