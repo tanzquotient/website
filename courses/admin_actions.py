@@ -36,6 +36,16 @@ def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
 
 
+@admin.action(description="Enable early sign-up")
+def enable_early_signup(modeladmin, request, queryset):
+    queryset.update(early_signup=True)
+
+
+@admin.action(description="Disable early sign-up")
+def disable_early_signup(modeladmin, request, queryset):
+    queryset.update(early_signup=False)
+
+
 @admin.action(description="Cancel course. This rejects all participants.")
 def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
     for c in queryset.all():
