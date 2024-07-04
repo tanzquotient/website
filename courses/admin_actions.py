@@ -36,6 +36,16 @@ def deactivate(modeladmin, request, queryset):
     queryset.update(active=False)
 
 
+@admin.action(description="Enable early sign-up")
+def enable_early_signup(modeladmin, request, queryset):
+    queryset.update(early_signup=True)
+
+
+@admin.action(description="Disable early sign-up")
+def disable_early_signup(modeladmin, request, queryset):
+    queryset.update(early_signup=False)
+
+
 @admin.action(description="Cancel course. This rejects all participants.")
 def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
     for c in queryset.all():
@@ -74,7 +84,6 @@ def copy_courses(modeladmin, request, queryset):
                 services.courses.copy_course(
                     c,
                     to=offering,
-                    set_preceeding_course=form.cleaned_data["set_preceeding_course"],
                 )
 
             return HttpResponseRedirect(request.get_full_path())
@@ -84,7 +93,6 @@ def copy_courses(modeladmin, request, queryset):
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True)),
                 "offering": services.get_subsequent_offering(),
-                "set_preceeding_course": True,
             }
         )
 

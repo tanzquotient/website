@@ -9,7 +9,3 @@ class CopyCourseForm(forms.Form):
     offering = forms.ModelChoiceField(
         queryset=Offering.objects.all(), label=_("Offering to copy into")
     )
-    set_preceeding_course = forms.BooleanField(required=False)
-    set_preceeding_course.help_text = (
-        "Should the copy of the course link to the original course as a predecessor?"
-    )

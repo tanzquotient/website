@@ -52,7 +52,7 @@ class Course(TranslatableModel):
         on_delete=models.PROTECT,
     )
     type.help_text = (
-        "The name of the course type is displayed on the website as the course title ."
+        "The name of the course type is displayed on the website as the course title."
     )
     subscription_type = models.CharField(
         max_length=20,
@@ -70,6 +70,17 @@ class Course(TranslatableModel):
     active.help_text = (
         "Defines if clients can subscribe to this course "
         "(if checked, course is active if offering is active)."
+    )
+    early_signup = models.BooleanField(
+        default=True,
+        help_text=_(
+            (
+                "Defines if users eligible for early sign-up "
+                "can subscribe to this course "
+                "(if checked, course early sign-up is enabled "
+                "if offering early sign-up is enabled)."
+            )
+        ),
     )
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
@@ -155,15 +166,6 @@ class Course(TranslatableModel):
         through="Subscribe",
         related_name="courses",
         through_fields=("course", "user"),
-    )
-    preceding_courses = models.ManyToManyField(
-        "Course",
-        related_name="succeeding_courses",
-        through="CourseSuccession",
-        through_fields=("successor", "predecessor"),
-    )
-    preceding_courses.help_text = (
-        "The course(s) that are immediate predecessors of this course."
     )
 
     objects = managers.CourseManager()
@@ -407,6 +409,13 @@ class Course(TranslatableModel):
             return False
 
         if (
+            not self.is_active()
+            and not self.is_user_eligible_for_early_signup(user)
+            and not user.is_staff
+        ):
+            return False
+
+        if (
             self.subscriptions.filter(user=user)
             .exclude(state__in=SubscribeState.REJECTED_STATES)
             .exists()
@@ -577,6 +586,10 @@ class Course(TranslatableModel):
     def is_active(self) -> bool:
         return self.offering.active and self.active
 
+    @admin.display(description="ES", boolean=True)
+    def is_early_signup_enabled(self) -> bool:
+        return self.offering.early_signup and self.early_signup
+
     def is_external(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.EXTERNAL
 
@@ -593,7 +606,27 @@ class Course(TranslatableModel):
         if not self.is_regular():
             return False
 
-        return self.is_active()
+        return self.is_active() or self.is_early_signup_enabled()
+
+    def is_user_eligible_for_early_signup(self, user: User) -> bool:
+        if not self.type.predecessors.exists():
+            return False
+
+        predecessor_subscribes = (
+            user.subscriptions.accepted()
+            .filter(course__type__in=self.type.predecessors.all())
+            .all()
+            .order_by("-course__offering__period__date_to")
+        )
+
+        for s in predecessor_subscribes:
+            if (
+                self.get_first_lesson_date() - s.course.get_last_lesson_date()
+                < timedelta(days=self.offering.early_signup_max_days)
+            ):
+                return True
+
+        return False
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
@@ -686,11 +719,6 @@ class Course(TranslatableModel):
         return " / ".join(dates)
 
     format_cancellations.short_description = "Cancellations"
-
-    def format_preceeding_courses(self) -> str:
-        return " / ".join(map(str, self.preceding_courses.all()))
-
-    format_preceeding_courses.short_description = "Predecessors"
 
     def get_first_regular_lesson(self) -> Optional[RegularLesson]:
         if self.regular_lessons.exists():

@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<a tabindex="0"
+   class="text-secondary"
+   id="popover"
+   role="button"
+   data-bs-html="true"
+   data-bs-toggle="popover"
+   data-bs-trigger="focus"
+   data-bs-title="{% trans "Early Sign-Up" %}"
+   data-bs-content="
+   {% include "courses/snippets/early_signup_text.html" %}
+   ">
+   <i class="fa-solid fa-circle-question"></i>
+</a>

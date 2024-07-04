@@ -11,58 +11,128 @@
         <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
     {% endif %}
 
-{% else %} {# Regular case: subscription in general possible #}
-    {% if course.is_subscription_allowed or user.is_staff and is_detail_page %}
-        {% if is_detail_page and not course.is_subscription_allowed and user.is_staff %}
-            {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
+{% else %}
+
+    {# Regular case: subscription in general possible #}
+
+    {# if the staff user would not be able to subscribe #}
+    {# without being staff, inform them #}
+    {% if user.is_staff and is_detail_page and not user.id in course.subscribed_user_ids and not user.id in course.waiting_list_user_ids %}
+        {% if not course.is_subscription_allowed %}
+            <div class="alert alert-info">
+                {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
+            </div>
+        {% elif course.is_early_signup_enabled and not course|is_user_eligible_for_early_signup:user %}
+            <div class="alert alert-info">
+                {% trans "Registration is currently limited to users eligible for early sign-up. But since you have admin rights you may register." %}
+            </div>
         {% endif %}
-        {% if user and user.id in course.subscribed_user_ids %}
-            {% if is_detail_page %}
-                <div class="mt-2 alert alert-info" role="alert">
-                    <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
-                    <hr>
-                    <p>
-                        <a href="{% url "user_courses" %}">
-                            <i class="fa fa-arrow-circle-right"></i>
-                            {% trans "Go to 'My Courses' to see the status and further information" %}
-                        </a>
-                    </p>
-                </div>
+    {% endif %}
+
+    {# if the user is subscribed, inform them #}
+    {% if user.id in course.subscribed_user_ids %}
+        {% if is_detail_page %}
+            <div class="mt-2 alert alert-info" role="alert">
+                <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
+                <hr>
+                <p>
+                    <a href="{% url "user_courses" %}">
+                        <i class="fa fa-arrow-circle-right"></i>
+                        {% trans "Go to 'My Courses' to see the status and further information" %}
+                    </a>
+                </p>
+            </div>
+        {% else %}
+            <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
+        {% endif %}
+        
+    {# if the user is on the waiting list, inform them #}
+    {% elif user.id in course.waiting_list_user_ids %}
+        {% if is_detail_page %}
+            <div class="mt-2 alert alert-info" role="alert">
+                <h5 class="alert-heading">{% trans "You are on the waiting list" %}</h5>
+                <h6 class="alert-heading">{% trans "Position" %}: {{ course|get_position_on_waiting_list:user }}</h6>
+                <hr>
+                <p>
+                    <a href="{% url "user_courses" %}">
+                        <i class="fa fa-arrow-circle-right"></i>
+                        {% trans "Go to 'My Courses' to see the status and further information" %}
+                    </a>
+                </p>
+                {% include "courses/snippets/cancel_subscription_button.html" with subscription=course|get_user_subscription:user align_center=True only %}
+            </div>
+        {% else %}
+            <span class="badge rounded-pill bg-info">{% trans "On the waiting list" %}</span>
+        {% endif %}
+    
+    {# the user is not subscribed/on the waiting list #}
+    {# -> show sign-up options (if enabled) #}
+    {% elif course.is_active or user.is_staff %}
+        {% if is_detail_page %}
+            {% if user.is_anonymous or course|user_can_subscribe:user %}
+                {% if course.has_free_places %}
+                    <div class="my-3">
+                        <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                        class="btn btn-success"
+                        role="button">{% trans "Subscribe now" %}</a>
+                    </div>
+                {% else %}
+                    <div class="my-3">
+                        <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                        class="btn btn-success"
+                        role="button">{% trans "Join the waiting list" %}</a>
+                    </div>
+                {% endif %}
+            {# for some reason the user cannot subscribe: let them know #}
             {% else %}
-                <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
-            {% endif %}
-        {% elif user and user.id in course.waiting_list_user_ids %}
-            {% if is_detail_page %}
-                <div class="mt-2 alert alert-info" role="alert">
-                    <h5 class="alert-heading">{% trans "You are on the waiting list" %}</h5>
-                    <h6 class="alert-heading">{% trans "Position" %}: {{ course|get_position_on_waiting_list:user }}</h6>
-                    <hr>
-                    <p>
-                        <a href="{% url "user_courses" %}">
-                            <i class="fa fa-arrow-circle-right"></i>
-                            {% trans "Go to 'My Courses' to see the status and further information" %}
-                        </a>
-                    </p>
-                    {% include "courses/snippets/cancel_subscription_button.html" with subscription=course|get_user_subscription:user align_center=True only %}
-                </div>
-            {% endif %}
-
-        {% elif user and course|user_can_subscribe:user or not user %}
-            {% if is_detail_page and course.has_free_places %}
-                <div class="my-3">
-                    <a href="{% url 'courses:subscribe' course_id=course.id %}"
-                    class="btn btn-success"
-                    role="button">{% trans "Subscribe now" %}</a>
-                </div>
-            {% elif is_detail_page and not course.has_free_places %}
-                <div class="my-3">
-                    <a href="{% url 'courses:subscribe' course_id=course.id %}"
-                    class="btn btn-success"
-                    role="button">{% trans "Join the waiting list" %}</a>
-                </div>
+                {% trans "You cannot subscribe to this course. Contact us if you think this is a mistake." %}
             {% endif %}
         {% endif %}
+        {% include "courses/snippets/participants_info.html" %}
 
+    {% elif course.is_early_signup_enabled %}
+        {% if is_detail_page %}
+            {% if user.is_anonymous %}
+                <div class="alert alert-info">
+                    {% include "courses/snippets/early_signup_text.html" with need_login=True %}
+                </div>
+            {% elif course|is_user_eligible_for_early_signup:user %}
+                {% if course|user_can_subscribe:user %}
+                    <div class="alert alert-success">
+                        {% trans "You are eligible for early sign-up to this course!" %}
+                    </div>
+                    {% if course.has_free_places %}
+                        <div class="my-3">
+                            <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                            class="btn btn-success"
+                            role="button">{% trans "Subscribe now" %}</a>
+                        </div>
+                    {% else %}
+                        <div class="my-3">
+                            <a href="{% url 'courses:subscribe' course_id=course.id %}"
+                            class="btn btn-success"
+                            role="button">{% trans "Join the waiting list" %}</a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-warning">
+                        {% trans "You cannot subscribe to this course. Contact us if you think this is a mistake." %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">
+                    {% include "courses/snippets/early_signup_text.html" with not_eligible=True %}
+                </div>
+            {% endif %}
+        {% else %}
+            {% if user.is_anonymous %}
+                <em>{% trans "Early Sign-Up" %}</em>&nbsp;
+                {% include "courses/snippets/early_signup_popover.html" with need_login=True %}
+            {% elif not course|is_user_eligible_for_early_signup:user %}
+                <em>{% trans "Early Sign-Up not possible" %}</em>
+                {% include "courses/snippets/early_signup_popover.html" with not_eligible=True %}
+            {% endif %}
+        {% endif %}
         {% include "courses/snippets/participants_info.html" %}
 
     {% elif course.offering.opens_soon %}

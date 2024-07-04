@@ -18,7 +18,6 @@ from .course_type import CourseType
 from .rejection import Rejection
 from .course import Course
 from .period_cancellation import PeriodCancellation
-from .course_succession import CourseSuccession
 from .confirmation import Confirmation
 from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher

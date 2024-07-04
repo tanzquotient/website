@@ -20,6 +20,7 @@ class OfferingAdmin(TranslatableAdmin):
         "period",
         "display",
         "active",
+        "early_signup",
         "preview",
         "opens_soon",
         "survey",
@@ -30,6 +31,8 @@ class OfferingAdmin(TranslatableAdmin):
         undisplay,
         activate,
         deactivate,
+        enable_early_signup,
+        disable_early_signup,
         offering_emaillist,
         export_teacher_payment_information_csv,
         export_teacher_payment_information_excel,
@@ -53,6 +56,8 @@ class OfferingAdmin(TranslatableAdmin):
                 "fields": [
                     "display",
                     "active",
+                    "early_signup",
+                    "early_signup_max_days",
                     "preview",
                     "opens_soon",
                     "group_into_sections",
@@ -120,12 +125,6 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
 
 
-class PredecessorCoursesInline(admin.TabularInline):
-    model = CourseSuccession
-    fk_name = "successor"
-    extra = 0
-
-
 class SongInline(admin.TabularInline):
     search_fields = [
         "title",
@@ -166,6 +165,7 @@ class CourseAdmin(TranslatableAdmin):
         "room",
         "is_displayed",
         "is_active",
+        "is_early_signup_enabled",
         "is_cancelled",
         "is_evaluated",
         "subscription_type",
@@ -186,7 +186,6 @@ class CourseAdmin(TranslatableAdmin):
         RegularLessonInline,
         IrregularLessonInline,
         TeachInlineForCourse,
-        PredecessorCoursesInline,
         SubscribeInlineForCourse,
     )
     widgets = {"type": SortedSelect}
@@ -220,7 +219,15 @@ class CourseAdmin(TranslatableAdmin):
         ),
         (
             "Admin",
-            {"fields": ["display", "active", "cancelled", "completed"]},
+            {
+                "fields": [
+                    "display",
+                    "active",
+                    "cancelled",
+                    "completed",
+                    "early_signup",
+                ]
+            },
         ),
     ]
 
@@ -229,6 +236,8 @@ class CourseAdmin(TranslatableAdmin):
         undisplay,
         activate,
         deactivate,
+        enable_early_signup,
+        disable_early_signup,
         cancel,
         welcome_teachers,
         welcome_teachers_reset_flag,
@@ -256,12 +265,6 @@ class CourseAdmin(TranslatableAdmin):
         return course.cancelled
 
 
-@admin.register(CourseSuccession)
-class CourseSuccession(admin.ModelAdmin):
-    list_display = ["predecessor", "successor"]
-    model = CourseSuccession
-
-
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
     list_display = (
@@ -287,7 +290,7 @@ class CourseTypeAdmin(TranslatableAdmin):
             },
         ),
         ("Details", {"fields": ["level", "styles"]}),
-        ("Options", {"fields": ["couple_course"]}),
+        ("Options", {"fields": ["couple_course", "predecessors"]}),
     ]
 
     model = CourseType
@@ -387,8 +390,6 @@ class SubscribeAdmin(VersionAdmin):
             "course__period",
             "course__offering",
             "course__offering__period",
-            "course__succeeding_courses",
-            "course__preceding_courses__subscriptions",
             "course__type",
             "course__type__styles",
             "course__type__styles__parent_style",

@@ -8,6 +8,18 @@ class CourseType(TranslatableModel):
     styles = models.ManyToManyField("Style", related_name="course_types", blank=True)
     level = models.IntegerField(default=None, blank=True, null=True)
     couple_course = models.BooleanField(default=True)
+    predecessors = models.ManyToManyField(
+        to="CourseType",
+        related_name="successors",
+        blank=True,
+        null=True,
+        help_text=_(
+            (
+                "Course types that allow for early subscription "
+                "(within time bounds) to courses if this type."
+            )
+        ),
+    )
 
     translations = TranslatedFields(
         title=models.CharField(

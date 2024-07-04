@@ -42,6 +42,27 @@ class Offering(TranslatableModel):
         default=False,
         help_text="Defines if clients can subscribe to courses in this offering.",
     )
+    early_signup = models.BooleanField(
+        default=False,
+        help_text=_(
+            (
+                "Defines if users eligible for early sign-up "
+                "can subscribe to courses in this offering."
+            )
+        ),
+    )
+    early_signup_max_days = models.PositiveSmallIntegerField(
+        verbose_name=_("Max days for early sign-up"),
+        blank=False,
+        default=180,
+        help_text=_(
+            (
+                "Maximum days between the last lesson of the preceding course "
+                "and the first one of the succeeding course to be eligible "
+                "for early sign-up (if applicable)"
+            )
+        ),
+    )
     preview = models.BooleanField(
         default=False,
         help_text="Defines if the offering should be displayed as preview",
