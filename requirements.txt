@@ -1,15 +1,15 @@
 # Django
-Django==5.0.6
+Django==5.0.7
 
 # Django Extensions
-django-debug-toolbar==4.4.5     # For developement. Gives additional insights into e.g. database queries
+django-debug-toolbar==4.4.6     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
 django-post-office==3.9.0       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.0.12        # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-ckeditor==6.7.1          # Django admin CKEditor integration
-django-allauth==0.63.3          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==0.63.5          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
@@ -43,7 +43,7 @@ psycopg[binary]==3.2.1          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.4         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.34.141                 # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.34.143                 # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.7                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
