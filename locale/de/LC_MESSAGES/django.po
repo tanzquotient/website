@@ -3212,7 +3212,7 @@ msgstr "Mein Passwort zurücksetzen"
 msgid "Please contact us if you have any trouble resetting your password."
 msgstr ""
 "Bitte kontaktiere uns, falls etwas beim Zurücksetzen des Passworts nicht "
-"klappt.\n"
+"klappt."
 
 #: templates/account/password_reset_done.html:20
 msgid ""
@@ -3221,7 +3221,7 @@ msgid ""
 msgstr ""
 "Wir haben dir eine Email gesendet. Falls du nichts empfangen hast, prüfe "
 "bitte deinen Spam-Ordner. Anderenfalls warte ein paar Minuten und "
-"kontaktiere uns wenn du immer noch nichts bekommen hast.\n"
+"kontaktiere uns wenn du immer noch nichts bekommen hast."
 
 #: templates/account/signup.html:5
 msgid "Signup"
