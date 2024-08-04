@@ -1099,8 +1099,6 @@ msgstr "Show more"
 
 #: courses/templates/courses/snippets/early_signup_popover.html:10
 #: courses/templates/courses/snippets/subscription_info.html:129
-#, fuzzy
-#| msgid "Sign Up"
 msgid "Early Sign-Up"
 msgstr "Early Sign-Up"
 
@@ -1494,10 +1492,6 @@ msgstr ""
 "admin rights you may register."
 
 #: courses/templates/courses/snippets/subscription_info.html:27
-#, fuzzy
-#| msgid ""
-#| "Registration is not (yet) allowed for regular users. But since you have "
-#| "admin rights you may register."
 msgid ""
 "Registration is currently limited to users eligible for early sign-up. But "
 "since you have admin rights you may register."
@@ -1525,8 +1519,6 @@ msgid "Position"
 msgstr "Position"
 
 #: courses/templates/courses/snippets/subscription_info.html:65
-#, fuzzy
-#| msgid "Join the waiting list"
 msgid "On the waiting list"
 msgstr "On the waiting list"
 
@@ -1542,10 +1534,6 @@ msgstr "Join the waiting list"
 
 #: courses/templates/courses/snippets/subscription_info.html:88
 #: courses/templates/courses/snippets/subscription_info.html:119
-#, fuzzy
-#| msgid ""
-#| "There are no surveys yet for courses you have taught. If you think this "
-#| "is a mistake, please contact us."
 msgid ""
 "You cannot subscribe to this course. Contact us if you think this is a "
 "mistake."
@@ -1629,14 +1617,10 @@ msgid "You need to update your payment information on SwissSalary as well."
 msgstr "You need to update your payment information on SwissSalary as well."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:10
-#, fuzzy
-#| msgid "Subscription received"
 msgid "Subscription cancelled"
 msgstr "Subscription cancelled"
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:33
-#, fuzzy
-#| msgid "{} subscriptions ({} couples) corrected successfully"
 msgid "Your subscription was cancelled successfully"
 msgstr "Your subscription was cancelled successfully"
 
@@ -1653,10 +1637,6 @@ msgid "Note that you will rejoin from the end of the queue."
 msgstr "Note that you will rejoin from the end of the queue."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:42
-#, fuzzy
-#| msgid ""
-#| "You signed up as a couple. Both your and your partner's subscriptions "
-#| "will be cancelled."
 msgid "Your partner's subscription has been cancelled, too."
 msgstr ""
 "Your partner's subscription has been cancelled, too."
