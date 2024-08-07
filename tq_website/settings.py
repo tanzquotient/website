@@ -484,7 +484,7 @@ LOGGING = {
     "loggers": {
         # this top level logger logs ALL messages
         "": {
-            "handlers": ["mail_admins", "file_errors", "console"],
+            "handlers": ["mail_admins", "file_errors"],
             "propagate": True,
             "level": "DEBUG",
         },
