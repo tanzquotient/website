@@ -476,7 +476,7 @@ LOGGING = {
             "formatter": "standard",
         },
         "console": {
-            "level": "DEBUG",
+            "level": "DEBUG" if DEBUG else "INFO",
             "class": "logging.StreamHandler",
             "formatter": "standard",
         },
