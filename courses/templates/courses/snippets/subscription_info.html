@@ -45,7 +45,8 @@
         {% else %}
             <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
         {% endif %}
-        
+        {% include "courses/snippets/participants_info.html" %}
+
     {# if the user is on the waiting list, inform them #}
     {% elif user.id in course.waiting_list_user_ids %}
         {% if is_detail_page %}
@@ -64,7 +65,8 @@
         {% else %}
             <span class="badge rounded-pill bg-info">{% trans "On the waiting list" %}</span>
         {% endif %}
-    
+        {% include "courses/snippets/participants_info.html" %}
+
     {# the user is not subscribed/on the waiting list #}
     {# -> show sign-up options (if enabled) #}
     {% elif course.is_active or user.is_staff %}
