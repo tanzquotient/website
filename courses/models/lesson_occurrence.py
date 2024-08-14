@@ -36,3 +36,4 @@ class LessonOccurrence(models.Model):
             "start",
             "end",
         )
+        ordering = ["course", "start"]
