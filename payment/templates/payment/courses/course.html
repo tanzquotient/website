@@ -4,7 +4,7 @@
 {% block main_content %}
     {% with course.payment_totals as payment_totals %}
         <div class="container">
-            {% include "payment/courses/snippets/course_info.html" with course=course only %}
+            {% include "payment/courses/snippets/course_info.html" with course=course show_log_button=1 only %}
             <div class="my-3">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
