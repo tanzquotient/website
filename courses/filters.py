@@ -103,6 +103,28 @@ class VoucherYearUsedListFilter(SimpleListFilter):
         if self.value() is not None:
             return queryset.filter(price_reductions__created_at__year=self.value())
         return queryset
+    
+
+class VoucherSentFilter(admin.SimpleListFilter):
+    title = _("Sent")
+    parameter_name = "sent"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("1", _("Yes")),
+            ("0", _("No")),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == "1":
+            return queryset.exclude(
+                sent_to=None
+            )
+        if self.value() == "0":
+            return queryset.filter(
+                sent_to=None
+            )
+
 
 
 # Class to filter vouchers by issuer -- not working yet

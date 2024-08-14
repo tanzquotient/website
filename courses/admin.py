@@ -588,6 +588,7 @@ class VoucherAdmin(VersionAdmin):
     )
     list_filter = (
         "used",
+        VoucherSentFilter,
         "purpose",
         VoucherOfferingListFilter,
         VoucherCourseListFilter,
@@ -598,6 +599,10 @@ class VoucherAdmin(VersionAdmin):
         "subscription__user__last_name",
         "subscription__user__username",
         "subscription__user__email",
+        "sent_to__first_name",
+        "sent_to__last_name",
+        "sent_to__username",
+        "sent_to__email",
     ]
     actions = [
         mark_voucher_as_used,
