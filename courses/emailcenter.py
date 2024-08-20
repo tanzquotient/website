@@ -48,11 +48,8 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
             template = "subscription_confirmation_without_partner_nocouple_waiting_list"
     
     else:
-        context.update({
-            "waiting_list_position": subscription.get_position_on_waiting_list()
-        })
         if subscription.partner is not None:
-            template = "subscription_confirmation_with_partner_waiting_list"
+            template = "subscription_confirmation_with_partner"
             context.update(
                 {
                     "partner_first_name": subscription.partner.first_name,
@@ -60,9 +57,9 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
                 }
             )
         elif subscription.course.type.couple_course:
-            template = "subscription_confirmation_without_partner_waiting_list"
+            template = "subscription_confirmation_without_partner"
         else:
-            template = "subscription_confirmation_without_partner_nocouple_waiting_list"
+            template = "subscription_confirmation_without_partner_nocouple"
 
     return send_email(
         to=subscription.user.email,
