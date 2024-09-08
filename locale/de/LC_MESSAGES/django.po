@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-04 13:11+0200\n"
+"POT-Creation-Date: 2024-09-08 17:15+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -234,7 +234,27 @@ msgstr "Paare"
 msgid "Not required"
 msgstr "Nicht benötigt"
 
-#: courses/filters.py:137
+#: courses/filters.py:109
+msgid "Sent"
+msgstr ""
+
+#: courses/filters.py:114
+#: courses/templates/courses/snippets/student_status_input.html:12
+#: courses/templates/user/profile.html:151
+#: courses/templates/user/profile.html:159
+#: payment/services/offering_finance_teachers.py:310
+msgid "Yes"
+msgstr "Ja"
+
+#: courses/filters.py:115
+#: courses/templates/courses/snippets/student_status_input.html:17
+#: courses/templates/user/profile.html:153
+#: courses/templates/user/profile.html:161
+#: payment/services/offering_finance_teachers.py:310
+msgid "No"
+msgstr "Nein"
+
+#: courses/filters.py:154
 msgid "Style"
 msgstr "Stil"
 
@@ -839,7 +859,7 @@ msgstr "Workshops"
 
 #: courses/templates/courses/course_subscribe_form.html:17
 #: courses/templates/courses/course_subscribe_status.html:19
-#: courses/templates/courses/snippets/detail.html:7
+#: courses/templates/courses/snippets/detail.html:10
 #: courses/templates/courses/snippets/offering_components/offering.html:7
 #: courses/templates/courses/subscription_cancellation_confirmation.html:19
 msgid "Preview"
@@ -1114,8 +1134,16 @@ msgstr "Noch keine Bewertungen."
 msgid "Show more"
 msgstr "Mehr anzeigen"
 
+#: courses/templates/courses/snippets/detail.html:8
+#: courses/templates/user/snippets/course_as_teacher.html:7
+#: events/templates/events/snippets/event_banner.html:6
+#: events/templates/events/snippets/event_list.html:27
+#: events/templates/events/snippets/event_title.html:4
+msgid "Cancelled"
+msgstr "Abgesagt"
+
 #: courses/templates/courses/snippets/early_signup_popover.html:10
-#: courses/templates/courses/snippets/subscription_info.html:129
+#: courses/templates/courses/snippets/subscription_info.html:131
 msgid "Early Sign-Up"
 msgstr ""
 
@@ -1215,7 +1243,6 @@ msgid "Intermediate"
 msgstr "Mittel"
 
 #: courses/templates/courses/snippets/level.html:12
-#: templates/menu/mobile_menu.html:20
 msgid "Advanced"
 msgstr "Fortgeschritten"
 
@@ -1355,20 +1382,6 @@ msgid ""
 msgstr ""
 "Falls diese Information falsch ist, aktualisiere sie bitte selbst in deinem "
 "Profil bevor du dich für den Kurs anmeldest."
-
-#: courses/templates/courses/snippets/student_status_input.html:12
-#: courses/templates/user/profile.html:151
-#: courses/templates/user/profile.html:159
-#: payment/services/offering_finance_teachers.py:310
-msgid "Yes"
-msgstr "Ja"
-
-#: courses/templates/courses/snippets/student_status_input.html:17
-#: courses/templates/user/profile.html:153
-#: courses/templates/user/profile.html:161
-#: payment/services/offering_finance_teachers.py:310
-msgid "No"
-msgstr "Nein"
 
 #: courses/templates/courses/snippets/styles_modal.html:37
 msgid "External Info"
@@ -1521,53 +1534,53 @@ msgid "Subscription received"
 msgstr "Anmeldung eingegangen"
 
 #: courses/templates/courses/snippets/subscription_info.html:41
-#: courses/templates/courses/snippets/subscription_info.html:59
+#: courses/templates/courses/snippets/subscription_info.html:60
 msgid "Go to 'My Courses' to see the status and further information"
 msgstr ""
 "Gehe zu 'Meine Kurse', um den Status und weitere Informationen zu sehen"
 
-#: courses/templates/courses/snippets/subscription_info.html:53
+#: courses/templates/courses/snippets/subscription_info.html:54
 msgid "You are on the waiting list"
 msgstr "Du bist auf der Warteliste"
 
-#: courses/templates/courses/snippets/subscription_info.html:54
+#: courses/templates/courses/snippets/subscription_info.html:55
 msgid "Position"
 msgstr "Position"
 
-#: courses/templates/courses/snippets/subscription_info.html:65
+#: courses/templates/courses/snippets/subscription_info.html:66
 msgid "On the waiting list"
 msgstr ""
 
-#: courses/templates/courses/snippets/subscription_info.html:77
-#: courses/templates/courses/snippets/subscription_info.html:108
+#: courses/templates/courses/snippets/subscription_info.html:79
+#: courses/templates/courses/snippets/subscription_info.html:110
 msgid "Subscribe now"
 msgstr "Jetzt anmelden"
 
-#: courses/templates/courses/snippets/subscription_info.html:83
-#: courses/templates/courses/snippets/subscription_info.html:114
+#: courses/templates/courses/snippets/subscription_info.html:85
+#: courses/templates/courses/snippets/subscription_info.html:116
 msgid "Join the waiting list"
 msgstr "Setze dich auf die Warteliste"
 
-#: courses/templates/courses/snippets/subscription_info.html:88
-#: courses/templates/courses/snippets/subscription_info.html:119
+#: courses/templates/courses/snippets/subscription_info.html:90
+#: courses/templates/courses/snippets/subscription_info.html:121
 msgid ""
 "You cannot subscribe to this course. Contact us if you think this is a "
 "mistake."
 msgstr ""
 
-#: courses/templates/courses/snippets/subscription_info.html:102
+#: courses/templates/courses/snippets/subscription_info.html:104
 msgid "You are eligible for early sign-up to this course!"
 msgstr ""
 
-#: courses/templates/courses/snippets/subscription_info.html:132
+#: courses/templates/courses/snippets/subscription_info.html:134
 msgid "Early Sign-Up not possible"
 msgstr ""
 
-#: courses/templates/courses/snippets/subscription_info.html:139
+#: courses/templates/courses/snippets/subscription_info.html:141
 msgid "Registration opens soon"
 msgstr "Anmeldung öffnet bald"
 
-#: courses/templates/courses/snippets/subscription_info.html:141
+#: courses/templates/courses/snippets/subscription_info.html:143
 msgid "Registration closed"
 msgstr "Anmeldung geschlossen"
 
@@ -1761,13 +1774,6 @@ msgstr "Get involved"
 #: courses/templates/user/profile.html:169
 msgid "About me"
 msgstr "Über mich"
-
-#: courses/templates/user/snippets/course_as_teacher.html:7
-#: events/templates/events/snippets/event_banner.html:6
-#: events/templates/events/snippets/event_list.html:27
-#: events/templates/events/snippets/event_title.html:4
-msgid "Cancelled"
-msgstr "Abgesagt"
 
 #: courses/templates/user/snippets/course_as_teacher.html:15
 msgid "Details & edit"
@@ -3342,6 +3348,12 @@ msgstr "Finanzen"
 #: templates/menu/mobile_menu.html:9
 msgid "Pages"
 msgstr "Seiten"
+
+#: templates/menu/mobile_menu.html:20
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Internal"
+msgstr ""
 
 #: templates/photologue/gallery_archive.html:4
 #: templates/photologue/gallery_archive.html:10

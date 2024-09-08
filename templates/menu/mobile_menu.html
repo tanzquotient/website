@@ -17,7 +17,7 @@
             {% include 'menu/mobile_user_menu.html' %}
         </ul>
         {% if user.is_staff or user.profile.is_teacher %}
-            <div class="title">{% trans "Advanced" %}</div>
+            <div class="title">{% trans "Internal" %}</div>
             <ul class="navbar-nav">
                 {% include 'menu/mobile_admin_menu.html' %}
             </ul>
