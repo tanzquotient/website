@@ -4,7 +4,11 @@
     <div class="col-12">
         <div class="mb-3">
             <h2 class="mb-0">
-                {% if not course.display %}<span class="badge bg-info">{% trans "Preview" %}</span>{% endif %}
+                {% if course.cancelled %}
+                    <span class="badge bg-danger">{% trans "Cancelled" %}</span>
+                {% elif not course.display %}
+                    <span class="badge bg-info">{% trans "Preview" %}</span>
+                {% endif %}    
                 {{ course.type.title }}
             </h2>
             {% if course.type.subtitle %}
