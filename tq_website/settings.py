@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 import os
 from os import environ
+import sys
 
 import sentry_sdk
 from django.core.files.storage import Storage, FileSystemStorage
@@ -29,6 +30,7 @@ LOG_DIR = os.path.join(BASE_DIR, "logs")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(environ["TQ_DEBUG"].lower() == "true")
+TESTING = "test" in sys.argv
 
 # Application definition
 INSTALLED_APPS = [
@@ -73,11 +75,9 @@ INSTALLED_APPS = [
     "partners.apps.PartnersConfig",
     "parler",
     "survey",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -93,6 +93,17 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "hijack.middleware.HijackUserMiddleware",
 ]
+
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#disable-the-toolbar-when-running-tests-optional
+if not TESTING:
+    INSTALLED_APPS = [
+        *INSTALLED_APPS,
+        "debug_toolbar",
+    ]
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",

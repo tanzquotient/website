@@ -25,12 +25,10 @@ urlpatterns = [
     path("api-auth/", include(rest_framework.urls, namespace="rest_framework")),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
+if settings.DEBUG and not settings.TESTING:
+    from debug_toolbar.toolbar import debug_toolbar_urls
 
-    urlpatterns += [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ]
+    urlpatterns += debug_toolbar_urls()
 
 # for testing error pages
 if settings.DEBUG:
