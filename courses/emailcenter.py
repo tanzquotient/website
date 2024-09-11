@@ -11,6 +11,7 @@ from post_office.models import Email
 import courses.models
 from courses.models import Subscribe, Teach, Course, SubscribeState
 from email_system.services import send_email
+import email_system.services.tq_email_templates as tmps
 from payment.utils import create_qrbill_for_subscription, to_pdf
 from payment import payment_processor
 
@@ -170,8 +171,6 @@ def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
     context["reductions"] = subscription.sum_of_reductions()
     context["paid_amount"] = subscription.sum_of_payments()
 
-    template = "payment_reminder"
-
     with TemporaryFile() as pdf_file:
         to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
         usi = payment_processor.USI_PREFIX + subscription.usi
@@ -179,7 +178,7 @@ def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
         return send_email(
             to=subscription.user.email,
             reply_to=settings.EMAIL_ADDRESS_FINANCES,
-            template=template,
+            template_tq=tmps.PAYMENT_REMINDER,
             context=context,
             attachments={f"QR-bill-{usi}.pdf": pdf_file},
         )

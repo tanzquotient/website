@@ -24,7 +24,7 @@ _______________
 
 Hi {{first_name}},
 
-We think that you did not yet pay the course fee for course {{course}}. 
+We think that you did not yet pay the course fee for the course {{course}}.
 
 You can find the payment details and payment options in your Tanzquotient profile:
 {{ payment_url }}
