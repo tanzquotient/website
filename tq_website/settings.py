@@ -582,18 +582,20 @@ SECRET_KEY = environ["TQ_SECRET_KEY"]
 
 # Caching
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "tq_website",
-    }
-    if DEBUG
-    else {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": environ["TQ_REDIS_BROKER_URL"],
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    },
+    "default": (
+        {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tq_website",
+        }
+        if DEBUG
+        else {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": environ["TQ_REDIS_BROKER_URL"],
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    ),
     "db": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "tq_cache_table",
