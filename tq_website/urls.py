@@ -10,6 +10,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from django.views.generic import TemplateView
+from photologue.views import GalleryListView
 
 import courses.urls
 import courses.views as courses_views
@@ -54,6 +55,9 @@ urlpatterns += i18n_patterns(
     path("events/", include(events.urls, namespace="events")),
     path("courses/", include(courses.urls, namespace="courses")),
     path("emails/", include(email_system.urls, namespace="email_system")),
+    path("photos/gallery/",
+        GalleryListView.as_view(paginate_by=5),
+        name='photos'),
     path("photos/", include(photologue.urls, namespace="photos")),
     path("hijack/", include("hijack.urls")),
     path("", include(payment.urls, namespace="payment")),
