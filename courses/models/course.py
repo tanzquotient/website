@@ -419,6 +419,9 @@ class Course(TranslatableModel):
         # i.e. they haven't subscribed yet, or
         # they cancelled their subscription
 
+        if self.cancelled:
+            return False
+
         if not self.is_subscription_allowed() and not user.is_staff and not partner_is_staff:
             return False
 
