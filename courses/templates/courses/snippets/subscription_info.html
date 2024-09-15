@@ -131,7 +131,7 @@
                 <em>{% trans "Early Sign-Up" %}</em>&nbsp;
                 {% include "courses/snippets/early_signup_popover.html" with need_login=True %}
             {% elif not course|is_user_eligible_for_early_signup:user %}
-                <em>{% trans "Early Sign-Up not possible" %}</em>
+                <em>{% trans "Early Sign-Up not possible" %}</em>&nbsp;
                 {% include "courses/snippets/early_signup_popover.html" with not_eligible=True %}
             {% endif %}
         {% endif %}
