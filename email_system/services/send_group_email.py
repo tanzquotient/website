@@ -24,7 +24,7 @@ def send_group_email(group_email: GroupEmail) -> None:
     elif group_email.target_group.name == GroupDefinitions.TEST.name:
         unsubscribe_context = GroupDefinitions.TEST.name
 
-    BATCH_SIZE = 500
+    BATCH_SIZE = 1000
     target_users = list(group_email.target_group.user_set.all())
     target_users_batches = [target_users[i:i + BATCH_SIZE] for i in range(0, len(target_users), BATCH_SIZE)]
     
