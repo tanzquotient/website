@@ -276,6 +276,7 @@ class CourseTypeAdmin(TranslatableAdmin):
     list_filter = ("level", CourseTypeStyleFilter, "couple_course")
     search_fields = ["translations__title", "translations__subtitle"]
     ordering = ["translations__title"]
+    filter_horizontal = ["predecessors", "styles"]
 
     fieldsets = [
         (
