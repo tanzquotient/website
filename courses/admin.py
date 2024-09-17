@@ -7,7 +7,6 @@ from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
 from reversion.models import Version
-from django.contrib.auth.models import User
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
@@ -275,7 +274,6 @@ class CourseTypeAdmin(TranslatableAdmin):
     )
     list_filter = ("level", CourseTypeStyleFilter, "couple_course")
     search_fields = ["translations__title", "translations__subtitle"]
-    ordering = ["translations__title"]
     filter_horizontal = ["predecessors", "styles"]
 
     fieldsets = [
@@ -295,9 +293,6 @@ class CourseTypeAdmin(TranslatableAdmin):
     ]
 
     model = CourseType
-
-    def get_queryset(self, request) -> QuerySet:
-        return super().get_queryset(request).translated("en")
 
 
 class SubscribeChangeList(ChangeList):

@@ -112,7 +112,7 @@ class SubscribeQuerySet(models.QuerySet):
 
     def matched(self) -> QuerySet:
         return self.active().filter(matching_state__in=MatchingState.MATCHED_STATES)
-    
+
     def waiting_list(self) -> QuerySet:
         return self.filter(state=SubscribeState.WAITING_LIST).order_by("date")
 
@@ -142,3 +142,8 @@ class SubscribeQuerySet(models.QuerySet):
 
     def new(self) -> QuerySet:
         return self.filter(state=SubscribeState.NEW)
+
+
+class CourseTypeManager(TranslatableManager):
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().order_by("translations__title").distinct()

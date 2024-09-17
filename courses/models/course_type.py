@@ -1,7 +1,9 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
-from django.utils.translation import gettext_lazy as _
+
+from ..managers import CourseTypeManager
 
 
 class CourseType(TranslatableModel):
@@ -55,6 +57,8 @@ class CourseType(TranslatableModel):
         return ", ".join(map(str, self.styles.all()))
 
     format_styles.short_description = "Styles"
+
+    objects = CourseTypeManager()
 
     def __str__(self) -> str:
         return self.title

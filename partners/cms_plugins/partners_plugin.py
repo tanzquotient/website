@@ -22,6 +22,7 @@ class PartnersPlugin(CMSPluginBase):
             Partner.objects.filter(active=True)
             .translated(language)
             .order_by("translations__name")
+            .distinct()
             .all()
         )
         context.update(
