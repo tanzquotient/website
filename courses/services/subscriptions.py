@@ -65,6 +65,18 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
         user_subscription.matching_state = MatchingState.COUPLE
         partner_subscription.matching_state = MatchingState.COUPLE
 
+        # if the course has a place for a couple,
+        # set state as NEW, else put both subscribes
+        # on the waiting list
+        subscribe_state = (
+            SubscribeState.NEW
+            if course.has_free_places_for_followers()
+            and course.has_free_places_for_leaders()
+            else SubscribeState.WAITING_LIST
+        )
+        partner_subscription.state = subscribe_state
+        user_subscription.state = subscribe_state
+
         # Finish partner subscription
         partner_subscription.save()
         send_subscription_confirmation(partner_subscription)
@@ -165,7 +177,11 @@ def reject_subscription(
 ) -> None:
     """sends a rejection mail if subscription is rejected (by some other method)
     and no rejection mail was sent before"""
-    subscription.state = models.SubscribeState.TO_REIMBURSE if subscription.state == models.SubscribeState.PAID else models.SubscribeState.REJECTED
+    subscription.state = (
+        models.SubscribeState.TO_REIMBURSE
+        if subscription.state == models.SubscribeState.PAID
+        else models.SubscribeState.REJECTED
+    )
     if subscription.partner is not None:
         partner_subscription = subscription.get_partner_subscription()
         partner_subscription.partner = None
