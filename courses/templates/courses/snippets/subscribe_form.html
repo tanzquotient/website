@@ -60,12 +60,7 @@
                             </label>
 
                             <input type="radio" class="btn-check" name="lead_follow" value="n" id="no_preference"
-                                    {% if form.lead_follow.value == 'n' %} checked {% endif %}
-                                    {% if course.get_free_places_count %}
-                                        {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers %}
-                                            disabled
-                                        {% endif %}
-                                    {% endif %}/>
+                                    {% if form.lead_follow.value == 'n' %} checked {% endif %}/>
                             <label class="btn btn-outline-success d-flex" for="no_preference">
                                 <span class="my-auto mx-auto">
                                     {% trans "No preference" %}
