@@ -1,53 +1,51 @@
 {% load i18n %}
 {% load courses_tags %}
 
-<div>
-    {% if not course.has_free_places %}
-        {% if not is_detail_page %}
-            <em>{% trans "waiting list" %}</em>
-        {% endif %}
-    {% else %}
-        <div>
-            {% if course.show_free_places_count %}
-                <span class="badge rounded-pill bg-success">
-                    {{ course.get_free_places_count }} {% trans "free" %}
-                </span>
-                {% if course.type.couple_course %}
-                    {% if not course.has_free_places_for_leaders %}
-                        <span class="badge rounded-pill bg-warning">
-                            {% trans "Leaders: waiting list" %}
-                        </span>
-                    {% endif %}
-                    {% if not course.has_free_places_for_followers %}
-                        <span class="badge rounded-pill bg-warning">
-                            {% trans "Followers: waiting list" %}
-                        </span>
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-            {% if not course.has_enough_participants %}
-                <span class="badge rounded-pill bg-danger">{% trans "more participants needed" %}</span>
-            {% endif %}
-        </div>
-    {% endif %}
 
-    {% if is_detail_page %}
-         <div class="my-3">
-            <div><strong>{% trans "Subscription status" %}</strong></div>
-            <div>{{ course.participants_info_title }}</div>
-             {% with course.participants_info_list as info_list %}
-                 {% if info_list %}
-                     <ul>
-                         {% for info in info_list %}
-                             <li> {{ info }}</li>
-                         {% endfor %}
-                     </ul>
-                 {% endif %}
-             {% endwith %}
-            {% if not course.has_enough_participants %}
-                    <div class="mt-2">{{ course.not_enough_participants_info }}</div>
-            {% endif %}
-        </div>
-        {% include "courses/snippets/waiting_list_breakdown.html" %}
+{% if not course.has_free_places %}
+    {% if not is_detail_page %}
+        <em>{% trans "waiting list" %}</em>
     {% endif %}
-</div>
+{% else %}
+    {% if course.show_free_places_count %}
+        <span class="badge rounded-pill bg-success">
+            {{ course.get_free_places_count }} {% trans "free" %}
+        </span>
+        {% if course.type.couple_course %}
+            {% if not course.has_free_places_for_leaders %}
+                <span class="badge rounded-pill bg-warning">
+                    {% trans "Leaders: waiting list" %}
+                </span>
+            {% endif %}
+            {% if not course.has_free_places_for_followers %}
+                <span class="badge rounded-pill bg-warning">
+                    {% trans "Followers: waiting list" %}
+                </span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% if not course.has_enough_participants %}
+        <span class="badge rounded-pill bg-danger">{% trans "more participants needed" %}</span>
+    {% endif %}
+{% endif %}
+
+{% if is_detail_page %}
+        <div class="my-3">
+        <div><strong>{% trans "Subscription status" %}</strong></div>
+        <div>{{ course.participants_info_title }}</div>
+            {% with course.participants_info_list as info_list %}
+                {% if info_list %}
+                    <ul>
+                        {% for info in info_list %}
+                            <li> {{ info }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        {% if not course.has_enough_participants %}
+                <div class="mt-2">{{ course.not_enough_participants_info }}</div>
+        {% endif %}
+    </div>
+    {% include "courses/snippets/waiting_list_breakdown.html" %}
+{% endif %}
+
