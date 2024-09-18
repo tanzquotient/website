@@ -4,7 +4,9 @@
 
 {% if not course.has_free_places %}
     {% if not is_detail_page %}
-        <em>{% trans "waiting list" %}</em>
+        <span class="badge rounded-pill bg-secondary">
+            {% trans "waiting list" %}
+        </span>
     {% endif %}
 {% else %}
     {% if course.show_free_places_count %}
@@ -13,13 +15,13 @@
         </span>
         {% if course.type.couple_course %}
             {% if not course.has_free_places_for_leaders %}
-                <span class="badge rounded-pill bg-warning">
-                    {% trans "Leaders: waiting list" %}
+                <span class="badge rounded-pill bg-secondary">
+                    {% trans "leaders: waiting list" %}
                 </span>
             {% endif %}
             {% if not course.has_free_places_for_followers %}
-                <span class="badge rounded-pill bg-warning">
-                    {% trans "Followers: waiting list" %}
+                <span class="badge rounded-pill bg-secondary">
+                    {% trans "followers: waiting list" %}
                 </span>
             {% endif %}
         {% endif %}
