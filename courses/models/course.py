@@ -14,6 +14,7 @@ from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+from django.core.exceptions import ValidationError
 
 from courses import managers
 from courses.models import (
@@ -173,7 +174,20 @@ class Course(TranslatableModel):
     def save(self, *args, **kwargs):
         if self.subscription_type == CourseSubscriptionType.EXTERNAL or self.cancelled:
             self.completed = True
+        self.clean()
         super(Course, self).save(*args, **kwargs)
+
+    def clean(self):
+        if not self.type.predecessors.exists():
+            # disallow enabling early signup altogether
+            raise ValidationError(
+                {
+                    "early_signup": (
+                        "Early sign up cannot be enabled for this "
+                        + "course as no predecessors are set for its type."
+                    )
+                }
+            )
 
     def participatory(self) -> QuerySet[Subscribe]:
         return self.subscriptions.accepted()
