@@ -24,7 +24,7 @@
             {% endif %}
         {% endif %}
     {% endif %}
-    {% if not course.has_enough_participants %}
+    {% if not course.has_enough_participants and course.is_active %}
         <span class="badge rounded-pill bg-danger">{% trans "more participants needed" %}</span>
     {% endif %}
 {% endif %}
