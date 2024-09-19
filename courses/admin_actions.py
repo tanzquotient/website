@@ -38,7 +38,10 @@ def deactivate(modeladmin, request, queryset):
 
 @admin.action(description="Enable early sign-up")
 def enable_early_signup(modeladmin, request, queryset):
-    queryset.update(early_signup=True)
+    # need to loop in order to call custom save() method
+    for instance in queryset:
+        instance.early_signup=True
+        instance.save()
 
 
 @admin.action(description="Disable early sign-up")

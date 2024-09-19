@@ -178,12 +178,12 @@ class Course(TranslatableModel):
         super(Course, self).save(*args, **kwargs)
 
     def clean(self):
-        if not self.type.predecessors.exists():
+        if not self.type.predecessors.exists() and self.early_signup:
             # disallow enabling early signup altogether
             raise ValidationError(
                 {
                     "early_signup": (
-                        "Early sign up cannot be enabled for this "
+                        "Early sign-up cannot be enabled for this "
                         + "course as no predecessors are set for its type."
                     )
                 }
