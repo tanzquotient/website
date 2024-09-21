@@ -58,12 +58,16 @@ def courses_confirmed_matched_lead_follow_free(offering: Offering) -> Figure:
             DataSeries(
                 name=str(_("Free")),
                 values=[
-                    max(
-                        0,
-                        course.max_subscribers - course.subscriptions.active().count(),
+                    (
+                        max(
+                            0,
+                            course.max_subscribers
+                            - course.subscriptions.active().count()
+                            + course.subscriptions.waiting_list().count(),
+                        )
+                        if course.max_subscribers
+                        else None
                     )
-                    if course.max_subscribers
-                    else None
                     for course in courses
                 ],
                 color="#9db4c0",
