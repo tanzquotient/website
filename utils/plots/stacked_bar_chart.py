@@ -23,6 +23,7 @@ def stacked_bar_chart(labels: list[str], data: list[DataSeries]) -> Figure:
                 orientation="h",
                 name=data_series.name,
                 marker=dict(color=data_series.color) if data_series.color else None,
+                visible=data_series.visible if data_series.visible else True
             )
             for index, data_series in enumerate(data)
         ],

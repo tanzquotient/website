@@ -8,7 +8,9 @@ class DataSeries:
         name: str,
         values: list[Union[float, int, Decimal]],
         color: Optional[str] = None,
+        visible: Optional[str] = None,
     ) -> None:
         self.name: str = name
         self.values: list[Union[float, int, Decimal]] = values
         self.color: Optional[str] = color
+        self.visible: Optional[str] = visible
