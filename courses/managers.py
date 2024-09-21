@@ -121,6 +121,9 @@ class SubscribeQuerySet(models.QuerySet):
 
     def active(self) -> QuerySet:
         return self.exclude(state__in=SubscribeState.REJECTED_STATES)
+    
+    def admitted(self) -> QuerySet:
+        return self.active().exclude(state=SubscribeState.WAITING_LIST)
 
     def paid(self) -> QuerySet:
         return self.filter(state__in=SubscribeState.PAID_STATES)
