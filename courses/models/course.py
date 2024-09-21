@@ -414,18 +414,19 @@ class Course(TranslatableModel):
                 else:
                     break
 
-    def user_can_subscribe(self, user: User) -> bool:
+    def user_can_subscribe(self, user: User, partner_is_staff: bool = False) -> bool:
         # check whether an user can subscribe for a course
         # i.e. they haven't subscribed yet, or
         # they cancelled their subscription
 
-        if not self.is_subscription_allowed() and not user.is_staff:
+        if not self.is_subscription_allowed() and not user.is_staff and not partner_is_staff:
             return False
 
         if (
             not self.is_active()
             and not self.is_user_eligible_for_early_signup(user)
             and not user.is_staff
+            and not partner_is_staff
         ):
             return False
 

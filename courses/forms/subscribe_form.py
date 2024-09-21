@@ -99,7 +99,7 @@ class SubscribeForm(forms.Form):
                     self.add_error("partner_email", error)
                     return cleaned_data
 
-                if not self.course.user_can_subscribe(partner):
+                if not self.course.user_can_subscribe(partner, self.user.is_staff):
                     error = ValidationError(
                         message=_("The partner you entered is already signed up or cannot subscribe to this course."),
                         code="partner already signed up",
