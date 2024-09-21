@@ -3,7 +3,7 @@
 
     const getStoredTheme = () => localStorage.getItem('theme')
     const setStoredTheme = theme => localStorage.setItem('theme', theme)
-    const checkIcon = "<i class='fa-fw fa-solid fa-circle-check ml-1' id='color-theme-selector-check'></i>"
+    const checkIcon = "<i class='bi bi-check-circle-fill ml-1' id='color-theme-selector-check'></i>"
     let color_selectors, theme_icons
 
     const getPreferredTheme = () => {
@@ -23,7 +23,7 @@
     setTheme(getPreferredTheme())
 
     const setThemeIcon = theme => {
-        const icon_classes = { auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon' }
+        const icon_classes = { auto: 'bi-circle-half', light: 'bi-sun-fill', dark: 'bi-moon-fill' }
         theme_icons.forEach((themeIcon) => {
             themeIcon.classList.remove(...Object.values(icon_classes))
             themeIcon.classList.add(icon_classes[theme])

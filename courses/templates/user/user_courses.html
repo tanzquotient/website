@@ -28,7 +28,7 @@
         <p class="mt-2">
             <a href="{% url 'payment:courses_as_teacher_list' %}">
                 {% trans "Show all courses " %}
-                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                <i class="bi bi-arrow-right-circle-fill"></i>
             </a>
         </p>
     {% endif %}
@@ -41,7 +41,7 @@
         <div class="d-flex flex-wrap justify-content-between">
             <div class="mb-2 my-auto">
                 <a href="{% url "user_ical" user.id %}?token={{ token }}">
-                    {% trans "Add to calendar" %} <i class="fa fa-calendar fa-lg"></i>
+                    {% trans "Add to calendar" %}  <i class="bi bi-calendar-fill"></i>
                 </a>
             </div>
             {% if subscriptions %}
@@ -67,7 +67,7 @@
     <p>
         <a href="{% url "courses:list" %}">
             {% trans "Show available courses" %}
-            <i class="fa fa-arrow-circle-right fa-lg"></i>
+            <i class="bi bi-arrow-right-circle-fill"></i>
         </a>
     </p>
 

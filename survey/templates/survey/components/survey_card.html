@@ -18,7 +18,7 @@
             <div>{{ answers_count }} {% trans "answers received" %}</div>
             <div class="mt-2">
                 <a href="{% url 'survey:results' survey.id %}" class="card-link">
-                    <i class="fas fa-poll-h"></i> {% trans "Show results" %}
+                    <i class="bi bi-bar-chart-fill"></i>{% trans "Show results" %}
                 </a>
             </div>
         </li>
@@ -27,7 +27,7 @@
             <div>{{ questions.count }} {% trans "questions in total" %}</div>
             <div class="mt-2">
                 <a href="{% url 'admin:survey_survey_change' survey.id %}" class="card-link">
-                    <i class="fas fa-edit"></i> {% trans "Edit survey" %}
+                    <i class="bi bi-pencil-square"></i> {% trans "Edit survey" %}
                 </a>
             </div>
         </li>

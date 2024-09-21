@@ -34,7 +34,7 @@
                             {% endif %}
                             <a href="{% url 'payment:subscription_payment' subscription.usi %}" target="_blank"
                                class="btn btn-sm btn-secondary">
-                                <i class="fa-solid fa-info-circle"></i>
+                                <i class="bi bi-info-circle-fill"></i>
                             </a>
                         </div>
                         {% if subscription.sum_of_payments > 0 %}
@@ -45,7 +45,7 @@
                         <!-- trigger modal -->
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#modal-{{ subscription.id }}">
-                            <i class="fa-solid fa-check"></i>
+                                <i class="bi bi-check-circle-fill"></i>
                             {% trans "Mark as paid" %}
                         </button>
 
@@ -65,7 +65,7 @@
                             <input type="hidden" name="remind" value="{{ subscription.id }}">
                             <button type="submit"
                                     class="btn btn-warning btn-sm">
-                                <i class="fa-regular fa-paper-plane"></i>
+                                    <i class="bi bi-send-fill"></i>
                                 {% trans "Send Reminder" %}
                             </button>
                         </form>
@@ -100,7 +100,7 @@
                                     <input type="hidden" name="mark_as_paid" value="{{ subscription.id }}">
                                     <button type="submit"
                                             class="btn btn-danger">
-                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        <i class="bi bi-exclamation-circle-fill"></i>
                                         {% trans "Manually mark as paid" %}
                                     </button>
                                 </form>
@@ -124,7 +124,7 @@
                         <input type="hidden" name="remind" value="all">
                         <button type="submit"
                                 class="btn btn-warning">
-                            <i class="fa-regular fa-paper-plane"></i>
+                            <i class="bi bi-send-fill"></i>
                             {% trans "Remind everyone" %}
                         </button>
                     </form>

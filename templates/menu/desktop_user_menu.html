@@ -3,39 +3,39 @@
 
 {% if user.is_staff %}
     <a class="dropdown-item" href="{% url 'admin:index' %}">
-        <span class="fa fa-cog fa-lg"></span> {% trans "Admin area" %}
+        <span class="bi bi-gear-fill"></span> {% trans "Admin area" %}
     </a>
     <a class="dropdown-item" href="{% url 'courses:subscription_overview' %}">
-        <span class="fa fa-bar-chart fa-lg"></span> {% trans "Course statistics" %}
+        <span class="bi bi-clipboard-data-fill"></span> {% trans "Course statistics" %}
     </a>
         <a class="dropdown-item" href="{% url 'courses:teachers_overview' %}">
-        <i class="fa-solid fa-chalkboard-user"></i> {% trans "Teachers overview" %}
+        <i class="bi bi-person-workspace"></i> {% trans "Teachers overview" %}
     </a>
     <a class="dropdown-item" href="{% url 'survey:overview' %}">
-        <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
+        <span class="bi bi-bar-chart-fill"></span> {% trans "Surveys" %}
     </a>
 {% endif %}
 {% if not user.is_staff and user.profile.is_teacher %}
     <a class="dropdown-item" href="{% url 'survey:overview_as_teacher' %}">
-        <span class="fa fa-poll-h fa-lg"></span> {% trans "Surveys" %}
+        <span class="bi bi-bar-chart-fill"></span> {% trans "Surveys" %}
     </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher %}
     <a class="dropdown-item" href="{% url 'payment:courses_as_teacher_list' %}">
-        <span class="fa fa-book fa-lg"></span> {% trans "Courses as teacher" %}
+        <span class="bi bi-journals"></span> {% trans "Courses as teacher" %}
     </a>
 {% endif %}
 {% if user.is_superuser or perms.courses.access_counterpayment %}
     <a class="dropdown-item" href="{% url 'payment:counterpayment_index' %}">
-        <span class="fa fa-money fa-lg"></span> {% trans "Counter payment" %}
+        <span class="fbi bi-cash-coin"></span> {% trans "Counter payment" %}
     </a>
 {% endif %}
 {% if user.is_superuser or perms.payment.change_payment %}
     <a class="dropdown-item" href="{% url 'payment:offering_finance_index_view' %}">
-        <span class="fa fa-credit-card fa-lg"></span> {% trans "Offering finance" %}
+        <span class="bi bi-credit-card-fill"></span> {% trans "Offering finance" %}
     </a>
     <a class="dropdown-item" href="{% url 'payment:account_finance_index_view' %}">
-        <span class="fa fa-credit-card fa-lg"></span> {% trans "Account finance" %}
+        <span class="bi bi-credit-card-fill"></span> {% trans "Account finance" %}
     </a>
 {% endif %}
 {% if user.is_staff or user.profile.is_teacher or perms.courses.access_counterpayment %}
@@ -48,5 +48,5 @@
     <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
 </a>
 <a class="dropdown-item" href="{% url 'account_logout' %}?next={{ request.path }}">
-    <span class="fa fa-sign-out fa-lg"></span>{% trans "Logout" %}
+    <span class="bi bi-door-closed-fill"></span>{% trans "Logout" %}
 </a>

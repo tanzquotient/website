@@ -21,13 +21,13 @@
                     <a href="{% url 'events:detail' event.id %}">
                         <div>{{ event.format_duration }}</div>
                     </a>
-                    <i class="fas fa-chevron-right"></i>
+                    <i class="bi bi-chevron-right"></i>
                 </li>
             {% endfor %}
             <li class="list-group-item list-group-item-action">
                 <a href="{% url 'events:category_detail' category.id %}">
                     {% trans "More" %}
-                    <i class="fas fa-chevron-right"></i>
+                    <i class="bi bi-chevron-right"></i>
                 </a>
             </li>
         </ul>

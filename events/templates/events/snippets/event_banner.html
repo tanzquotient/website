@@ -2,12 +2,12 @@
 
 {% if event.cancelled %}
     <span class="banner">
-        <i class="fa fa-ban fa-lg"></i>
+        <i class="bi bi-ban"></i>
         {% trans "Cancelled" %}
     </span>
 {% elif event.special %}
     <span class="banner">
-        <i class="fa fa-star"></i>
+        <i class="bi bi-star-fill"></i>
         {% trans "Special" %}
     </span>
 {% endif %}

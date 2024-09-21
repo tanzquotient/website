@@ -16,8 +16,8 @@
                     <hr>
                     <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div class="align-self-center">{% trans "The voucher used was valued more than the remaining amount for this course. Download the voucher for the remainder by clicking the following button." %}</div>
-                        <a role="button" href="{{ voucher_for_remainder.pdf_file.url }}" class="btn btn-light"><i
-                                class="fas fa-download"></i> {% trans "Download" %}</a>
+                        <a role="button" href="{{ voucher_for_remainder.pdf_file.url }}" class="btn btn-light">
+                            <i class="bi bi-download"></i> {% trans "Download" %}</a>
                     </div>
                 {% endif %}
             </div>

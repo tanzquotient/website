@@ -13,7 +13,7 @@
         <p>
             <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
                 <strong>{% trans "Details & edit" %}</strong>
-                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                <i class="bi bi-arrow-right-circle-fill"></i>
             </a>
         </p>
         {% if not course.cancelled %}
@@ -26,7 +26,7 @@
                         {% trans "Log teacher presence" %}
                     {% endif %}
                 </strong>
-                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                <i class="bi bi-arrow-right-circle-fill"></i>
             </a>
         </p>
         {% endif %}

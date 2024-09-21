@@ -4,15 +4,15 @@
 <div class="fs-5">{{ course.offering.name }}</div>
 <div class="my-2 fs-6">{{ course.format_teachers }}</div>
 <a class="my-2 btn btn-success btn-sm align-self-center" role="button" href="{% url 'courses:course_detail' course.id %}">
-    <i class="fa-solid fa-eye"></i> {% trans "Show course page" %}
+    <i class="bi bi-eye-fill"></i> {% trans "Show course page" %}
 </a>
 {% if not course.cancelled and show_log_button %}
     <a href="{% url 'payment:course_teacher_presence' course=course.id %}" class="btn btn-success btn-sm align-self-center">
             {% if course.completed %}
-                <i class="fa-solid fa-book-open-reader"></i>
+                <i class="bi bi-book-fill"></i>
                 {% trans "View teacher presence" %}
             {% else %}
-                <i class="fa-solid fa-file-pen"></i>
+                <i class="bi bi-pencil-square"></i>
                 {% trans "Log teacher presence" %}
             {% endif %}
     </a>

@@ -23,10 +23,10 @@
                                     <div class="list-group-item">
                                         <div class="d-flex flex-row justify-content-between">
                                             <div class="align-self-center">
-                                                <span class="fa fa-poll-h fa-lg"></span> {{ survey.title }}
+                                                <span class="bi bi-bar-chart-fill"></span> {{ survey.title }}
                                             </div>
                                             <a class="btn btn-success btn-sm align-self-center" role="button" href="{% url "survey:results" survey.id %}?course_id={{ course.id }}">
-                                                <i class="fa-solid fa-eye"></i> {% trans "Show results" %}
+                                                <i class="bi bi-eye-fill"></i> {% trans "Show results" %}
                                             </a>
                                         </div>
                                     </div>

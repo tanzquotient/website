@@ -3,7 +3,7 @@
         <a 
             class="btn btn-outline-secondary{% if year == min_year %} disabled{% endif %}"
             href="{% url 'events:archive' min_year %}">
-                <i class="fa-solid fa-angles-left"></i>
+                <i class="bi bi-chevron-double-left"></i>
         </a>
         {% if year > min_year|add:"+1" %}
             <button 
@@ -39,7 +39,7 @@
         <a 
             class="btn btn-outline-secondary{% if year == max_year %} disabled{% endif %}"
             href="{% url 'events:archive' max_year %}">
-                <i class="fa-solid fa-angles-right"></i>
+                <i class="bi bi-chevron-double-right"></i>
         </a>
     </div>
 </div>

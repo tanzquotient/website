@@ -4,7 +4,7 @@
     <div>
         {% get_current_language as LANGUAGE_CODE %}
         <button class="btn dropdown-toggle text-white border-light me-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-            <i class="fa-solid fa-fw fa-globe"></i> {{ LANGUAGE_CODE|upper }}
+            <i class="bi bi-globe"></i> {{ LANGUAGE_CODE|upper }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
             {% language_chooser "menu/mobile_language_chooser.html" %}
@@ -12,12 +12,12 @@
     </div>
     <div>
         <button class="btn dropdown-toggle text-white border-light" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
-            <i id="theme-icon" class="fa-solid fa-fw"></i>
+            <i id="theme-icon" class="bi"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="auto" href="#"><i class="fa-solid fa-fw fa-circle-half-stroke"></i> {% trans "Auto" %}</a></li>
-            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="light" href="#"><i class="fa-solid fa-fw fa-sun"></i> {% trans "Light" %}</a></li>
-            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="dark" href="#"><i class="fa-solid fa-fw fa-moon"></i> {% trans "Dark" %}</a></li>
+            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="auto" href="#"><i class="bi bi-circle-half"></i> {% trans "Auto" %}</a></li>
+            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="light" href="#"><i class="bi bi-sun-fill"></i> {% trans "Light" %}</a></li>
+            <li><a class="dropdown-item color-theme-selector" data-bs-color-theme="dark" href="#"><i class="bi bi-moon-fill"></i> {% trans "Dark" %}</a></li>
         </ul>
     </div>
 </div>

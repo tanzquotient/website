@@ -33,7 +33,7 @@
                 <div class="alert alert-info my-3">{% trans "Participants will show up here, once they have been confirmed." %}</div>
             {% else %}
                 <div class="btn-group my-3">
-                    <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="fas fa-download"></i> {% trans "Download" %}</a>
+                    <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="bi bi-download"></i> {% trans "Download" %}</a>
                     <button role="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
                     </button>

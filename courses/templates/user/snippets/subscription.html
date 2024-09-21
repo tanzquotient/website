@@ -40,12 +40,12 @@
                         <a href="{% url "courses:course_detail" subscription.course_id %}">
                             <br/>
                             {% trans "Course details" %}
-                            <i class="fa fa-arrow-circle-right fa-lg"></i>
+                            <i class="bi bi-arrow-right-circle-fill"></i>
                         </a>
                         <a href="{% url "courses:course_ical" subscription.course_id %}">
                             <br/>
                             {% trans "Add to calendar" %}
-                            <i class="fa fa-calendar fa-lg"></i>
+                            <i class="bi bi-calendar-fill"></i>
                         </a>
                     </p>
                     <div>
@@ -99,7 +99,7 @@
                             {% trans "To see the payment details, pay with the QR-bill and apply vouchers:" %}
                             <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
                                 {% trans "Payment" %}
-                                <i class="fa fa-arrow-circle-right fa-lg"></i>
+                                <i class="bi bi-arrow-right-circle-fill"></i>
                             </a>
                         </div>
                     {% endif %}

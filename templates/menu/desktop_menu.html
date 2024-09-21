@@ -14,7 +14,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {% get_current_language as LANGUAGE_CODE %}
-            <i class="fa-solid fa-globe"></i>  {{ LANGUAGE_CODE|upper }}
+            <i class="bi bi-globe"></i>  {{ LANGUAGE_CODE|upper }}
         </a>
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             {% language_chooser 'menu/desktop_language_chooser.html' %}
@@ -26,7 +26,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa-solid fa-user"></i> {% user_display user %}
+               <i class="bi bi-person-fill"></i> {% user_display user %}
             </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% include "menu/desktop_user_menu.html" %}

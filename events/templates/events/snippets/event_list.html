@@ -24,9 +24,9 @@
                             <a href="{% url 'events:detail' event.id %}">
                                 <p>
                                     {% if event.cancelled %}
-                                        <i class="fa fa-ban fa-lg"></i> {% trans "Cancelled" %}:
+                                        <i class="bi bi-ban"></i> {% trans "Cancelled" %}:
                                     {% elif event.special %}
-                                        <i class="fa fa-star"></i>
+                                        <i class="bi bi-star-fill"></i>
                                     {% endif %}
                                     {{ event.get_name }}
                                 </p>

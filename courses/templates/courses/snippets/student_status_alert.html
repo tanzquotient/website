@@ -9,7 +9,7 @@
             {% trans "If the information is outdated, please update it in your profile." %}
         </div>
         <a class="btn btn-sm btn-success mt-2" href="{% url 'edit_profile' %}" target="_blank" role="button">
-            <i class="fa-solid fa-pencil"></i> {% trans "Edit profile" %}
+            <i class="bi bi-pencil-fill"></i> {% trans "Edit profile" %}
         </a>
     </div>
 {% else %}
@@ -24,7 +24,7 @@
             {% trans "Should you be a student, please update your profile before subscribing to the course." %}
         </div>
         <a class="btn btn-sm btn-danger mt-2" href="{% url 'edit_profile' %}" target="_blank" role="button">
-            <i class="fa-solid fa-pencil"></i> {% trans "Edit profile" %}
+            <i class="bi bi-pencil-fill"></i> {% trans "Edit profile" %}
         </a>
     </div>
 {% endif %}

@@ -7,7 +7,7 @@
 {% block content %}
     <h1>{% trans "Edit profile" %}</h1>
     {% url 'profile' as auth_profile %}
-    <p><a href="{{ auth_profile }}"><i class="fa fa-arrow-circle-left fa-lg"></i> {% trans "Back to profile" %}</a>
+    <p><a href="{{ auth_profile }}"><i class="bi bi-arrow-left-circle-fill"></i> {% trans "Back to profile" %}</a>
 
     {% if not is_profile_complete and not form.errors %}
         <div class="alert alert-danger" role="alert">

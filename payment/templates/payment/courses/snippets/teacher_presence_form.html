@@ -20,7 +20,7 @@
                         </span>
                         <button class="btn btn-outline-danger" type="button"
                                 onclick="remove_teacher({{ teacher.id }}, {{ lesson.id }})">
-                            <i class="fa-regular fa-circle-xmark"></i>
+                            <i class="bi bi-x-circle-fill"></i>
                         </button>
                     </span>
                 {% endfor %}
@@ -32,7 +32,7 @@
                         disabled
                         {% endif %}
                         >
-                    <i class="fa-solid fa-plus"></i> {% trans "Add teacher" %}
+                        <i class="bi bi-plus-circle-fill"></i> {% trans "Add teacher" %}
                 </button>
 
                 <ul class="dropdown-menu">
@@ -82,7 +82,7 @@
                 Teacher name
                 </span>
                 <button class="btn btn-outline-danger" type="button">
-                    <i class="fa-regular fa-circle-xmark"></i>
+                    <i class="bi bi-x-circle-fill"></i>
                 </button>
             </span>
         </template>

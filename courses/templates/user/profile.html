@@ -21,28 +21,28 @@
             <p class="m-0 mb-2">
                 <a href="{% url "user_courses" %}">
                     {% trans "Show my courses" %}
-                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
                 </a>
             </p>
             {% url 'edit_profile' as edit_profile %}
             <p class="m-0  mb-2">
                 <a href="{{ edit_profile }}">
                     {% trans "Edit profile" %}
-                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
                 </a>
             </p>
             {% url 'account_email' as account_email %}
             <p class="m-0  mb-2">
                 <a href="{{ account_email }}">
                     {% trans "Manage your email addresses" %}
-                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
                 </a>
             </p>
             {% url 'change_password' as change_password %}
             <p class="m-0 mb-2">
                 <a href="{{ change_password }}">
                     {% trans "Change your password" %}
-                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                    <i class="bi bi-arrow-right-circle-fill"></i>
                 </a>
             </p>
         </div>
