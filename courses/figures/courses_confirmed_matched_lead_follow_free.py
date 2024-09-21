@@ -72,5 +72,13 @@ def courses_confirmed_matched_lead_follow_free(offering: Offering) -> Figure:
                 ],
                 color="#9db4c0",
             ),
+            DataSeries(
+                name=str(_("Waiting list")),
+                values=[
+                    (course.subscriptions.waiting_list().count()) for course in courses
+                ],
+                color="#f7d9bc",
+                visible="legendonly",
+            ),
         ],
     )
