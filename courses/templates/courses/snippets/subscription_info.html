@@ -4,8 +4,12 @@
     <i class="fa fa-connectdevelop fa-lg"></i> {% trans "Open class" %}
 {% elif course.is_external %} {# People can not subscribe here. #}
     {% if course.external_url and display_link %}
-        <a href="{{ course.external_url }}" target="_blank">
-            <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
+        <a href="{{ course.external_url }}" target="_blank"
+            {% if is_detail_page %}
+            class="btn btn-success mb-2" role="button"
+            {% endif %}>
+            <i class="fa fa-handshake-o fa-lg"></i>
+            {% trans "External partner course" %}
         </a>
     {% else %}
         <i class="fa fa-handshake-o fa-lg"></i> {% trans "External partner course" %}
