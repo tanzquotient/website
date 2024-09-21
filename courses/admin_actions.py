@@ -1,3 +1,6 @@
+from io import BytesIO
+import zipfile
+
 from django.contrib import admin
 from django.contrib import messages
 from django.db.models import QuerySet
@@ -40,7 +43,7 @@ def deactivate(modeladmin, request, queryset):
 def enable_early_signup(modeladmin, request, queryset):
     # need to loop in order to call custom save() method
     for instance in queryset:
-        instance.early_signup=True
+        instance.early_signup = True
         instance.save()
 
 
@@ -466,3 +469,23 @@ def email_vouchers(modeladmin, request, queryset):
         "vouchers_without_user": [voucher.key for voucher in vouchers_without_users],
     }
     return render(request, "courses/auth/action_send_email_voucher.html", context)
+
+
+@admin.action(description="Download selected voucher(s)")
+def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpResponse:
+    if queryset.count() == 1:
+        voucher = queryset.first()
+        response = HttpResponse(voucher.pdf_file.file, content_type="application/pdf")
+        response["Content-Disposition"] = (
+            f"attachment; filename=Voucher_{voucher.key}.pdf"
+        )
+    else:
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+            for voucher in queryset:
+                zip_file.write(voucher.pdf_file.path, f"Voucher_{voucher.key}.pdf")
+        zip_buffer.seek(0)
+        response = HttpResponse(zip_buffer, content_type="application/zip")
+        response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
+
+    return response

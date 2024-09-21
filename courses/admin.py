@@ -605,6 +605,7 @@ class VoucherAdmin(VersionAdmin):
         export_vouchers_csv,
         export_vouchers_xlsx,
         email_vouchers,
+        download_vouchers,
     ]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
     raw_id_fields = ["sent_to"]
