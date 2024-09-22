@@ -24,7 +24,7 @@
             <div class="alert alert-info">
                 {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
             </div>
-        {% elif course.is_early_signup_enabled and not course|is_user_eligible_for_early_signup:user %}
+        {% elif not course.is_active and course.is_early_signup_enabled and not course|is_user_eligible_for_early_signup:user %}
             <div class="alert alert-info">
                 {% trans "Registration is currently limited to users eligible for early sign-up. But since you have admin rights you may register." %}
             </div>
