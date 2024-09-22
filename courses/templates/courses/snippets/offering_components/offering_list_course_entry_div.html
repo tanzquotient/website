@@ -10,7 +10,7 @@
 
         {% if not hide_subscription_status %}
             <div class="mb-0">
-                {% include "courses/snippets/subscription_info.html" with course=item user=user display_link=False only %}
+                {% include "courses/snippets/subscription_info_list_item.html" with course=item user=user display_link=False only %}
             </div>
         {% endif %}
     </div>

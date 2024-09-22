@@ -29,7 +29,7 @@
     </td>
     {% if not hide_subscription_status %}
         <td>
-            {% include "courses/snippets/subscription_info.html" with course=item display_link=True user=user only %}
+            {% include "courses/snippets/subscription_info_list_item.html" with course=item display_link=True user=user only %}
         </td>
     {% endif %}
 </tr>
