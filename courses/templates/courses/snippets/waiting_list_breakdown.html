@@ -5,7 +5,13 @@
     {% if waiting_list %}
         <div class="my-3">
             <div><strong>{% trans "Waiting list" %}</strong></div>
-            <div>{% trans "Currently there is:" %}</div>
+            <div>
+                {% if waiting_list|length > 1 %}
+                    {% trans "Currently there are:" %}
+                {% else %}
+                    {% trans "Currently there is:" %}
+                {% endif %}
+            </div>
             <ul>
                 {% for text in waiting_list %}
                     {% if text %}

@@ -279,7 +279,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
             )
         )
 
-    return composition
+    return [text for text in composition if text is not None]
 
 @register.filter(name="is_user_eligible_for_early_signup")
 def is_user_eligible_for_early_signup(course: Course, user: User):
