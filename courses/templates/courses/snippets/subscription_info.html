@@ -38,22 +38,22 @@
     {% endif %}
 
 {# if the user is subscribed, inform them #}
-{% if user.id in course.subscribed_user_ids %}
-    {% if is_detail_page %}
-        <div class="mt-2 alert alert-info" role="alert">
-            <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
-            <hr>
-            <p>
-                <a href="{% url "user_courses" %}">
-                    <i class="bi bi-arrow-right-circle-fill"></i>
-                    {% trans "Go to 'My Courses' to see the status and further information" %}
-                </a>
-            </p>
-        </div>
-    {% else %}
-        <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
-    {% endif %}
-    {% include "courses/snippets/participants_info.html" %}
+    {% if user.id in course.subscribed_user_ids %}
+        {% if is_detail_page %}
+            <div class="mt-2 alert alert-info" role="alert">
+                <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
+                <hr>
+                <p>
+                    <a href="{% url "user_courses" %}">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                        {% trans "Go to 'My Courses' to see the status and further information" %}
+                    </a>
+                </p>
+            </div>
+        {% else %}
+            <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
+        {% endif %}
+        {% include "courses/snippets/participants_info.html" %}
 
 {# if the user is on the waiting list, inform them #}
     {% elif user.id in course.waiting_list_user_ids %}
@@ -139,10 +139,10 @@
         {% endif %}
         {% include "courses/snippets/participants_info.html" %}
 
-        {% elif course.offering.opens_soon %}
-            <em>{% trans "Registration opens soon" %}</em>
-        {% elif course.subscription_closed %}
-            <em>{% trans "Registration closed" %}</em>
+    {% elif course.offering.opens_soon %}
+        <em>{% trans "Registration opens soon" %}</em>
+    {% elif course.subscription_closed %}
+        <em>{% trans "Registration closed" %}</em>
     {% endif %}
 {% endif %}
 
