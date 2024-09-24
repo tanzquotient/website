@@ -1,5 +1,5 @@
 # Django
-Django==5.0.8
+Django==5.0.9
 
 # Django Extensions
 django-debug-toolbar==4.4.6     # For developement. Gives additional insights into e.g. database queries
@@ -9,12 +9,12 @@ django-reversion==5.1.0         # Version control for model instances, e.g. used
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-ckeditor==6.7.1          # Django admin CKEditor integration
-django-allauth==64.2.1          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.0.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
 django-cms==3.11.8              # Open source content management system based on the Django
-djangocms-text-ckeditor==5.1.5  # Text plugin for django CMS using CKEditor 4
+djangocms-text-ckeditor==5.1.6  # Text plugin for django CMS using CKEditor 4
 
 # Rest framework
 djangorestframework==3.15.2     # Toolkit for building Web APIs
@@ -43,8 +43,8 @@ psycopg[binary]==3.2.2          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.4         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.35.21                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
-minio==7.2.8                    # Perform bucket and object operations, used for initializing Minio
+boto3==1.35.25                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+minio==7.2.9                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==23.0.0                # Used to serve django for production
@@ -55,7 +55,7 @@ sentry_sdk==2.14.0              # Used for logging exceptions to Sentry.io
 # Utils
 plotly==5.24.1                  # For generating charts and graphs
 pytz==2024.2                    # timezone calculations
-pylint==3.2.7                   # Default linter
+pylint==3.3.1                   # Default linter
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.6.0            # Superuser can impersonate other users
 python-dotenv==1.0.1            # Used to load environment variables from .env file
