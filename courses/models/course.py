@@ -279,23 +279,17 @@ class Course(TranslatableModel):
         if free_places == 0:
             return False
 
-        matched_count = self.matched_subscriptions_count()
+        matched_count = self.subscriptions.active().matched().count()
         total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = self.single_subscriptions_with_preference_count(
-            lead_or_follow
+        current_count_for_preference = (
+            self.subscriptions.admitted().single_with_preference(lead_or_follow).count()
         )
         free_for_preference = total_for_preference - current_count_for_preference
 
         return free_for_preference >= 1
 
     def active_subscriptions_count(self) -> int:
-        return len(
-            {
-                subscription
-                for subscription in self.subscriptions.all()
-                if subscription.is_active()
-            }
-        )
+        return self.subscriptions.active().count()
 
     def matched_subscriptions_count(self) -> int:
         return len(
@@ -320,7 +314,13 @@ class Course(TranslatableModel):
         if self.max_subscribers is None:
             return None
 
-        total_count = self.max_subscribers - self.active_subscriptions_count()
+        total_count = (
+            self.max_subscribers
+            # users admitted
+            - self.subscriptions.admitted().count()
+            # couples that might be blocking the queue
+            - self.subscriptions.waiting_list().matched().count() // 2
+        )
         total_count = int(max(total_count, 0))
 
         return total_count
@@ -422,7 +422,11 @@ class Course(TranslatableModel):
         if self.cancelled:
             return False
 
-        if not self.is_subscription_allowed() and not user.is_staff and not partner_is_staff:
+        if (
+            not self.is_subscription_allowed()
+            and not user.is_staff
+            and not partner_is_staff
+        ):
             return False
 
         if (
