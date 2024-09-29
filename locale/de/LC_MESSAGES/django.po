@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-08 17:15+0200\n"
+"POT-Creation-Date: 2024-09-29 18:19+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -76,7 +76,7 @@ msgstr "Du kannst die folgenden Platzhalter verwenden:"
 
 #: courses/admin_forms/send_course_email_form.py:37
 msgid "Send to Participants"
-msgstr "An Teilnehmer:innen senden"
+msgstr "An Teilnehmende senden"
 
 #: courses/admin_forms/send_course_email_form.py:46
 msgid ""
@@ -196,7 +196,6 @@ msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
 #: courses/figures/courses_confirmed_matched_lead_follow_free.py:17
-#: courses/templates/user/snippets/course_as_teacher.html:50
 msgid "Confirmed"
 msgstr "Bestätigt"
 
@@ -206,25 +205,35 @@ msgstr "Als Paar eingeteilt"
 
 #: courses/figures/courses_confirmed_matched_lead_follow_free.py:29
 #: courses/figures/offering_lead_follow_couple.py:32
-#: courses/templates/courses/snippets/subscribe_form.html:55
+#: courses/templates/courses/snippets/subscribe_form.html:81
 msgid "Lead"
 msgstr "Führen"
 
 #: courses/figures/courses_confirmed_matched_lead_follow_free.py:39
 #: courses/figures/offering_lead_follow_couple.py:51
-#: courses/templates/courses/snippets/subscribe_form.html:71
+#: courses/templates/courses/snippets/subscribe_form.html:96
 msgid "No preference"
 msgstr "Keine Präferenz"
 
 #: courses/figures/courses_confirmed_matched_lead_follow_free.py:49
 #: courses/figures/offering_lead_follow_couple.py:70
-#: courses/templates/courses/snippets/subscribe_form.html:82
+#: courses/templates/courses/snippets/subscribe_form.html:110
 msgid "Follow"
 msgstr "Geführt werden"
 
 #: courses/figures/courses_confirmed_matched_lead_follow_free.py:59
 msgid "Free"
 msgstr "Frei"
+
+#: courses/figures/courses_confirmed_matched_lead_follow_free.py:76
+#: courses/templates/courses/snippets/subscribe_form.html:38
+#: courses/templates/courses/snippets/subscribe_form.html:56
+#: courses/templates/courses/snippets/subscribe_form.html:83
+#: courses/templates/courses/snippets/subscribe_form.html:98
+#: courses/templates/courses/snippets/subscribe_form.html:112
+#: courses/templates/courses/snippets/waiting_list_breakdown.html:7
+msgid "Waiting list"
+msgstr "Warteliste"
 
 #: courses/figures/offering_lead_follow_couple.py:20
 msgid "Couples"
@@ -236,7 +245,7 @@ msgstr "Nicht benötigt"
 
 #: courses/filters.py:109
 msgid "Sent"
-msgstr ""
+msgstr "Verschickt"
 
 #: courses/filters.py:114
 #: courses/templates/courses/snippets/student_status_input.html:12
@@ -499,7 +508,7 @@ msgstr "Samstag"
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: courses/models/course.py:126
+#: courses/models/course.py:128
 msgid ""
 "Shown only to participants of the course on the course page. Can be set by "
 "teachers in the frontend."
@@ -507,7 +516,7 @@ msgstr ""
 "Wird nur Teilnehmenden und Lehrpersonen des Kurses angezeigt. Kann von "
 "Lehrpersonen selbst bearbeitet werden."
 
-#: courses/models/course.py:134
+#: courses/models/course.py:136
 msgid ""
 "Shown only to participants of the course on the course page. Cannot be set "
 "by teachers in the frontend."
@@ -515,60 +524,61 @@ msgstr ""
 "Wird nur Teilnehmenden und Lehrpersonen des Kurses angezeigt. Kann nur von "
 "Admins bearbeitet werden."
 
-#: courses/models/course.py:472
+#: courses/models/course.py:494
 msgid "We did not receive any subscriptions yet."
 msgstr "Wir haben noch keine Anmeldungen erhalten."
 
-#: courses/models/course.py:485
-#: courses/templates/courses/snippets/waiting_list_breakdown.html:8
+#: courses/models/course.py:507
+#: courses/templates/courses/snippets/waiting_list_breakdown.html:12
 msgid "Currently there is:"
 msgstr "Aktuelle angemeldet ist:"
 
-#: courses/models/course.py:486
+#: courses/models/course.py:508
+#: courses/templates/courses/snippets/waiting_list_breakdown.html:10
 msgid "Currently there are:"
 msgstr "Aktuell angemeldet sind:"
 
-#: courses/models/course.py:490
+#: courses/models/course.py:512
 msgid "We received one subscription so far."
 msgstr "Wir haben bis jetzt eine Anmeldungen erhalten."
 
-#: courses/models/course.py:491
+#: courses/models/course.py:513
 msgid "We received {} subscriptions so far."
 msgstr "Wir haben bis jetzt {} Anmeldungen erhalten."
 
-#: courses/models/course.py:506 courses/templatetags/courses_tags.py:238
+#: courses/models/course.py:528 courses/templatetags/courses_tags.py:238
 msgid "One couple"
 msgstr "Ein Paar"
 
-#: courses/models/course.py:508
+#: courses/models/course.py:530
 msgid "{} couples"
 msgstr "{} Paare"
 
-#: courses/models/course.py:512 courses/templatetags/courses_tags.py:256
+#: courses/models/course.py:534 courses/templatetags/courses_tags.py:256
 msgid "One individual follower"
 msgstr "Eine Person, die geführt werden möchte"
 
-#: courses/models/course.py:514
+#: courses/models/course.py:536
 msgid "{} individual followers"
 msgstr "{} Personen, die geführt werden möchten"
 
-#: courses/models/course.py:518 courses/templatetags/courses_tags.py:248
+#: courses/models/course.py:540 courses/templatetags/courses_tags.py:248
 msgid "One individual leader"
 msgstr "Eine Person, die führen möchte"
 
-#: courses/models/course.py:520
+#: courses/models/course.py:542
 msgid "{} individual leaders"
 msgstr "{} Personen, die führen möchten"
 
-#: courses/models/course.py:524 courses/templatetags/courses_tags.py:264
+#: courses/models/course.py:546 courses/templatetags/courses_tags.py:264
 msgid "One person with no lead or follow preference"
 msgstr "Eine Person ohne Präferenz bezüglich Führen"
 
-#: courses/models/course.py:526
+#: courses/models/course.py:548
 msgid "{} people with no lead or follow preference"
 msgstr "{} Personen ohne Präferenz bezüglich Führen"
 
-#: courses/models/course.py:548
+#: courses/models/course.py:570
 msgid ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
@@ -576,7 +586,7 @@ msgstr ""
 "Aktuell ist somit ein Paar möglich, aber es werden mindestens {} Paare "
 "benötigt."
 
-#: courses/models/course.py:551
+#: courses/models/course.py:573
 msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
@@ -584,19 +594,19 @@ msgstr ""
 "Aktuell sind somit {} Paare möglich, aber es werden mindestens {} Paare "
 "benötigt."
 
-#: courses/models/course.py:554
+#: courses/models/course.py:576
 msgid "At least {} couples are needed."
 msgstr "Es werden mindestens {} Paare benötigt."
 
-#: courses/models/course.py:560
+#: courses/models/course.py:582
 msgid "At least one more person is needed"
 msgstr "Es wird noch eine weitere Person benötigt."
 
-#: courses/models/course.py:561
+#: courses/models/course.py:583
 msgid "At least {} more people are needed."
 msgstr "Es werden noch {} Personen benötigt."
 
-#: courses/models/course_type.py:49
+#: courses/models/course_type.py:51
 msgid ""
 "Shown only to participants of courses of this type on the course page. "
 "Cannot be set by teachers in the frontend."
@@ -614,7 +624,7 @@ msgstr "Öffentlicher Name des Angebots."
 
 #: courses/models/offering.py:55
 msgid "Max days for early sign-up"
-msgstr ""
+msgstr "Max. Tage für vorzeitige Anmeldung"
 
 #: courses/models/offering.py:97
 msgid ""
@@ -748,15 +758,15 @@ msgstr "Ungültiger Wochentag"
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/services/subscriptions.py:148
+#: courses/services/subscriptions.py:160
 msgid "{} of {} confirmed successfully"
 msgstr "{} von {} erfolgreich bestätigt"
 
-#: courses/services/subscriptions.py:222
+#: courses/services/subscriptions.py:238
 msgid "{} unrejected successfully"
 msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
-#: courses/services/subscriptions.py:231
+#: courses/services/subscriptions.py:247
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 "{} Anmeldung wurden nicht bestätigt, da kein:e Partner:in gesetzt wurde"
@@ -857,7 +867,7 @@ msgstr "Reguläre Angebote"
 msgid "Workshops"
 msgstr "Workshops"
 
-#: courses/templates/courses/course_subscribe_form.html:17
+#: courses/templates/courses/course_subscribe_form.html:18
 #: courses/templates/courses/course_subscribe_status.html:19
 #: courses/templates/courses/snippets/detail.html:10
 #: courses/templates/courses/snippets/offering_components/offering.html:7
@@ -865,8 +875,8 @@ msgstr "Workshops"
 msgid "Preview"
 msgstr "Vorschau"
 
-#: courses/templates/courses/course_subscribe_form.html:31
-#: courses/templates/courses/snippets/subscribe_form.html:193
+#: courses/templates/courses/course_subscribe_form.html:32
+#: courses/templates/courses/snippets/subscribe_form.html:238
 #: templates/account/signup.html:8
 msgid "Sign Up"
 msgstr "Registrieren"
@@ -924,8 +934,8 @@ msgstr "Deine Rolle"
 #: courses/templates/courses/course_subscribe_status.html:62
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
 #: courses/templates/user/snippets/subscription.html:64
-#: payment/templates/payment/courses/course.html:69
-#: payment/templates/payment/courses/course.html:85
+#: payment/templates/payment/courses/course.html:65
+#: payment/templates/payment/courses/course.html:81
 msgid "Partner"
 msgstr "Partner:in"
 
@@ -1034,6 +1044,10 @@ msgstr "Raum"
 msgid "Description"
 msgstr "Beschreibung"
 
+#: courses/templates/courses/snippets/course_detail_teacher_tools.html:5
+msgid "Teacher options"
+msgstr "Optionen für Lehrpersonen"
+
 #: courses/templates/courses/snippets/course_filter.html:6
 msgid "All styles"
 msgstr "Alle Stile"
@@ -1061,7 +1075,7 @@ msgstr "Kosten"
 
 #: courses/templates/courses/snippets/course_info.html:36
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:7
-#: courses/templates/user/snippets/course_as_teacher.html:34
+#: courses/templates/user/snippets/course_as_teacher.html:15
 #: courses/templates/user/snippets/subscription.html:34
 msgid "Time"
 msgstr "Zeit"
@@ -1135,6 +1149,7 @@ msgid "Show more"
 msgstr "Mehr anzeigen"
 
 #: courses/templates/courses/snippets/detail.html:8
+#: courses/templates/courses/snippets/subscription_info_list_item.html:3
 #: courses/templates/user/snippets/course_as_teacher.html:7
 #: events/templates/events/snippets/event_banner.html:6
 #: events/templates/events/snippets/event_list.html:27
@@ -1142,28 +1157,27 @@ msgstr "Mehr anzeigen"
 msgid "Cancelled"
 msgstr "Abgesagt"
 
-#: courses/templates/courses/snippets/early_signup_popover.html:10
-#: courses/templates/courses/snippets/subscription_info.html:131
+#: courses/templates/courses/snippets/early_signup_popover.html:12
 msgid "Early Sign-Up"
-msgstr ""
+msgstr "Vorzeitige Anmeldung"
 
 #: courses/templates/courses/snippets/early_signup_text.html:3
 msgid ""
 "Registration is currently limited to users who have taken preceding courses "
 "of this type in the recent past."
-msgstr ""
+msgstr "Die Anmeldung ist derzeit auf Personen, die kürzlich einen direkten Vorgängerkurs besucht haben, beschränkt."
 
 #: courses/templates/courses/snippets/early_signup_text.html:6
 msgid "Please log in to check if you are eligible."
-msgstr ""
+msgstr "Log dich ein um zu sehen, ob du berechtigt bist."
 
 #: courses/templates/courses/snippets/early_signup_text.html:9
 msgid "Unfortunately, you are not eligible for early sign-up to this course."
-msgstr ""
+msgstr "Leider bist du nicht für die vorzeitige Anmeldung für diesen Kurs berechtigt."
 
 #: courses/templates/courses/snippets/early_signup_text.html:12
 msgid "Please refer to the FAQ for more information:"
-msgstr ""
+msgstr "Mehr informationen findest du in den FAQs:"
 
 #: courses/templates/courses/snippets/gender_input.html:16
 msgid "Man"
@@ -1189,7 +1203,7 @@ msgstr "Lass mich tippen"
 msgid "Past courses"
 msgstr "Vergangene Kurse"
 
-#: courses/templates/courses/snippets/info_to_participants.html:8
+#: courses/templates/courses/snippets/info_to_participants.html:6
 msgid "Information to participants"
 msgstr "Informationen für Teilnehmende"
 
@@ -1200,6 +1214,23 @@ msgid ""
 msgstr ""
 "Beachte: diese Information is nur für Teilnehmende und Lehrpersonen dieses "
 "Kurses sichtbar."
+
+#: courses/templates/courses/snippets/info_to_participants.html:17
+msgid "Add info for participants"
+msgstr "Informationen für Teilnehmende hinzufügen"
+
+#: courses/templates/courses/snippets/info_to_participants.html:24
+msgid "Information is only visible for confirmed participants."
+msgstr "Diese Information is nur für bestätigte Teilnehmende dieses Kurses sichtbar."
+
+#: courses/templates/courses/snippets/info_to_participants.html:29
+msgid "Information for course participants available. Log in to see them."
+msgstr "Es sind Informationen für Kursteilnehmer:innen verfügbar. Melde dich an um diese zu sehen."
+
+#: courses/templates/courses/snippets/info_to_participants.html:35
+#: templates/menu/desktop_menu.html:24 templates/menu/mobile_user_menu.html:23
+msgid "Log in"
+msgstr "Anmelden"
 
 #: courses/templates/courses/snippets/lesson_components/lessons.html:8
 #: courses/templates/courses/snippets/lesson_components/lessons_compact.html:8
@@ -1267,7 +1298,7 @@ msgid "Course"
 msgstr "Kurs"
 
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:12
-#: courses/templates/user/snippets/course_as_teacher.html:40
+#: courses/templates/user/snippets/course_as_teacher.html:25
 msgid "Location"
 msgstr "Ort"
 
@@ -1293,25 +1324,25 @@ msgstr "Partnerangebote"
 msgid "Other offerings"
 msgstr "Andere Angebote"
 
-#: courses/templates/courses/snippets/participants_info.html:7
+#: courses/templates/courses/snippets/participants_info.html:8
 msgid "waiting list"
 msgstr "Warteliste"
 
-#: courses/templates/courses/snippets/participants_info.html:13
+#: courses/templates/courses/snippets/participants_info.html:14
 msgid "free"
 msgstr "frei"
 
-#: courses/templates/courses/snippets/participants_info.html:18
-msgid "Leaders: waiting list"
+#: courses/templates/courses/snippets/participants_info.html:19
+msgid "leaders: waiting list"
 msgstr "Leaders: Warteliste"
 
-#: courses/templates/courses/snippets/participants_info.html:23
-msgid "Followers: waiting list"
+#: courses/templates/courses/snippets/participants_info.html:24
+msgid "followers: waiting list"
 msgstr "Followers: Warteliste"
 
-#: courses/templates/courses/snippets/participants_info.html:29
+#: courses/templates/courses/snippets/participants_info.html:30
 msgid "more participants needed"
-msgstr "noch mehr Teilnehmer:innen benötigt"
+msgstr "noch mehr Teilnehmende benötigt"
 
 #: courses/templates/courses/snippets/participants_info.html:36
 msgid "Subscription status"
@@ -1338,7 +1369,7 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: courses/templates/courses/snippets/song_list.html:7
-#: tq_website/settings.py:369
+#: tq_website/settings.py:380
 msgid "Title"
 msgstr "Titel"
 
@@ -1391,28 +1422,19 @@ msgstr "Externe Infos"
 msgid "Video"
 msgstr "Video"
 
-#: courses/templates/courses/snippets/subscribe_form.html:18
+#: courses/templates/courses/snippets/subscribe_form.html:34
 msgid "Without partner"
 msgstr "Ohne Partner:in"
 
-#: courses/templates/courses/snippets/subscribe_form.html:21
-#: courses/templates/courses/snippets/subscribe_form.html:36
-#: courses/templates/courses/snippets/subscribe_form.html:57
-#: courses/templates/courses/snippets/subscribe_form.html:73
-#: courses/templates/courses/snippets/subscribe_form.html:84
-#: courses/templates/courses/snippets/waiting_list_breakdown.html:7
-msgid "Waiting list"
-msgstr "Warteliste"
-
-#: courses/templates/courses/snippets/subscribe_form.html:33
+#: courses/templates/courses/snippets/subscribe_form.html:52
 msgid "With partner"
 msgstr "Mit Partner:in"
 
-#: courses/templates/courses/snippets/subscribe_form.html:46
+#: courses/templates/courses/snippets/subscribe_form.html:68
 msgid "Do you want to lead or follow?"
 msgstr "Möchtest du führen oder geführt werden?"
 
-#: courses/templates/courses/snippets/subscribe_form.html:98
+#: courses/templates/courses/snippets/subscribe_form.html:126
 msgid ""
 "The leader is responsible for guiding the couple, the guided partner is "
 "referred to as the follower. In an old-fashioned setup gentlemen are leading "
@@ -1422,7 +1444,7 @@ msgstr ""
 "werden Aufgabe der Frau. Bei uns könnt ihr die Rolle Leader/Follower "
 "angeben, die ihr gerne lernen würdet, egal welches Geschlecht."
 
-#: courses/templates/courses/snippets/subscribe_form.html:105
+#: courses/templates/courses/snippets/subscribe_form.html:134
 msgid ""
 "Please note, that we will assign partners based on lead / follow "
 "preferences, not based on gender."
@@ -1430,7 +1452,7 @@ msgstr ""
 "Hinweis: Wir teilen Partner:innen basierend auf den hier angegeben "
 "Präferenzen zu, das Geschlecht wird nicht berücksichtigt."
 
-#: courses/templates/courses/snippets/subscribe_form.html:106
+#: courses/templates/courses/snippets/subscribe_form.html:135
 msgid ""
 "If you indicate no preference, we will assign you a fixed role based on the "
 "number of leaders and followers signed up for this course."
@@ -1438,30 +1460,30 @@ msgstr ""
 "Falls du keine Präferenz angibst, teilen wir dir eine fixe Rolle zu, "
 "basierend darauf wie viele Leute führen bzw. geführt werden wollen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:111
-#: courses/templates/courses/snippets/subscribe_form.html:137
+#: courses/templates/courses/snippets/subscribe_form.html:140
+#: courses/templates/courses/snippets/subscribe_form.html:172
 #: courses/templates/user/profile.html:114
-#: payment/templates/payment/courses/course.html:57
-#: payment/templates/payment/courses/course.html:87
+#: payment/templates/payment/courses/course.html:53
+#: payment/templates/payment/courses/course.html:83
 msgid "Student status"
 msgstr "Studierendenstatus"
 
-#: courses/templates/courses/snippets/subscribe_form.html:117
+#: courses/templates/courses/snippets/subscribe_form.html:148
 msgid "Email address of your partner"
 msgstr "Email Adresse deines Partners/deiner Partnerin"
 
-#: courses/templates/courses/snippets/subscribe_form.html:126
+#: courses/templates/courses/snippets/subscribe_form.html:160
 msgid ""
 "Provide the email address your partner used to register on this website."
 msgstr ""
 "Gib die Email-Adresse an, mit der sich dein Partner/deine Partnerin auf "
 "dieser Website registriert hat."
 
-#: courses/templates/courses/snippets/subscribe_form.html:129
+#: courses/templates/courses/snippets/subscribe_form.html:163
 msgid "Or select one of your past partners:"
 msgstr "Oder wähle von deinen vergangenen Partner:innen aus:"
 
-#: courses/templates/courses/snippets/subscribe_form.html:140
+#: courses/templates/courses/snippets/subscribe_form.html:175
 msgid ""
 "Please tell your partner to check their student status in their profile, to "
 "make sure they can benefit from the reduced course fee."
@@ -1470,50 +1492,53 @@ msgstr ""
 "eingetragenen Studierendenstatus überprüfen soll, um vom reduzierten "
 "Kurspreis zu profitieren."
 
-#: courses/templates/courses/snippets/subscribe_form.html:153
+#: courses/templates/courses/snippets/subscribe_form.html:188
 msgid "Experience"
 msgstr "Erfahrung"
 
-#: courses/templates/courses/snippets/subscribe_form.html:157
+#: courses/templates/courses/snippets/subscribe_form.html:193
 msgid "Briefly describe your dancing experience"
 msgstr "Beschreibe deine Tanzerfahrung kurz und bündig"
 
-#: courses/templates/courses/snippets/subscribe_form.html:168
+#: courses/templates/courses/snippets/subscribe_form.html:206
 #: payment/templates/finance/account/detail.html:41
 #: survey/templates/survey/changed_answers.html:29
 msgid "Comment"
 msgstr "Kommentar"
 
-#: courses/templates/courses/snippets/subscribe_form.html:170
+#: courses/templates/courses/snippets/subscribe_form.html:208
 msgid "Anything you want us to know?"
 msgstr "Würdest du uns gerne etwas mitteilen?"
 
-#: courses/templates/courses/snippets/subscribe_form.html:176
+#: courses/templates/courses/snippets/subscribe_form.html:215
 msgid "General terms and conditions"
 msgstr "Allgemeine Geschäftsbedingungen"
 
-#: courses/templates/courses/snippets/subscribe_form.html:180
+#: courses/templates/courses/snippets/subscribe_form.html:222
 msgid "View the general terms and conditions"
 msgstr "Sieh dir unsere Allgemeine Geschäftsbedingungen an"
 
-#: courses/templates/courses/snippets/subscribe_form.html:185
+#: courses/templates/courses/snippets/subscribe_form.html:230
 msgid "I accept the general terms and conditions."
 msgstr "Ich akzeptiere die Allgemeine Geschäftsbedingungen."
 
-#: courses/templates/courses/snippets/subscribe_form.html:188
+#: courses/templates/courses/snippets/subscribe_form.html:233
 msgid "You must accept the general terms and conditions."
 msgstr "Du musst die Allgemeine Geschäftsbedingungen akzeptieren"
 
-#: courses/templates/courses/snippets/subscription_info.html:4
+#: courses/templates/courses/snippets/subscription_info_detail.html:4
+#: courses/templates/courses/snippets/subscription_info_list_item.html:6
 msgid "Open class"
 msgstr "Open class"
 
-#: courses/templates/courses/snippets/subscription_info.html:8
-#: courses/templates/courses/snippets/subscription_info.html:11
+#: courses/templates/courses/snippets/subscription_info_detail.html:10
+#: courses/templates/courses/snippets/subscription_info_detail.html:13
+#: courses/templates/courses/snippets/subscription_info_list_item.html:11
+#: courses/templates/courses/snippets/subscription_info_list_item.html:14
 msgid "External partner course"
 msgstr "Externes Partnerangebot"
 
-#: courses/templates/courses/snippets/subscription_info.html:23
+#: courses/templates/courses/snippets/subscription_info_detail.html:25
 msgid ""
 "Registration is not (yet) allowed for regular users. But since you have "
 "admin rights you may register."
@@ -1521,68 +1546,70 @@ msgstr ""
 "Die Anmeldung ist geschlossen für reguläre User. Als Admin kannst du dich "
 "trotzdem jetzt anmelden."
 
-#: courses/templates/courses/snippets/subscription_info.html:27
+#: courses/templates/courses/snippets/subscription_info_detail.html:29
 msgid ""
 "Registration is currently limited to users eligible for early sign-up. But "
 "since you have admin rights you may register."
-msgstr ""
+msgstr "Derzeit können sich nur Leute Anmelden, die für die vorzeitige Anmeldung berechtigt sind. Aber als Admin kannst du dich trotzdem anmelden."
 
-#: courses/templates/courses/snippets/subscription_info.html:36
-#: courses/templates/courses/snippets/subscription_info.html:46
+#: courses/templates/courses/snippets/subscription_info_detail.html:37
+#: courses/templates/courses/snippets/subscription_info_list_item.html:23
 #: courses/templates/user/snippets/subscription_status_badge.html:6
 msgid "Subscription received"
 msgstr "Anmeldung eingegangen"
 
-#: courses/templates/courses/snippets/subscription_info.html:41
-#: courses/templates/courses/snippets/subscription_info.html:60
+#: courses/templates/courses/snippets/subscription_info_detail.html:42
+#: courses/templates/courses/snippets/subscription_info_detail.html:57
 msgid "Go to 'My Courses' to see the status and further information"
 msgstr ""
 "Gehe zu 'Meine Kurse', um den Status und weitere Informationen zu sehen"
 
-#: courses/templates/courses/snippets/subscription_info.html:54
+#: courses/templates/courses/snippets/subscription_info_detail.html:51
 msgid "You are on the waiting list"
 msgstr "Du bist auf der Warteliste"
 
-#: courses/templates/courses/snippets/subscription_info.html:55
+#: courses/templates/courses/snippets/subscription_info_detail.html:52
 msgid "Position"
 msgstr "Position"
 
-#: courses/templates/courses/snippets/subscription_info.html:66
-msgid "On the waiting list"
-msgstr ""
-
-#: courses/templates/courses/snippets/subscription_info.html:79
-#: courses/templates/courses/snippets/subscription_info.html:110
+#: courses/templates/courses/snippets/subscription_info_detail.html:72
+#: courses/templates/courses/snippets/subscription_info_detail.html:101
 msgid "Subscribe now"
 msgstr "Jetzt anmelden"
 
-#: courses/templates/courses/snippets/subscription_info.html:85
-#: courses/templates/courses/snippets/subscription_info.html:116
+#: courses/templates/courses/snippets/subscription_info_detail.html:78
+#: courses/templates/courses/snippets/subscription_info_detail.html:107
 msgid "Join the waiting list"
 msgstr "Setze dich auf die Warteliste"
 
-#: courses/templates/courses/snippets/subscription_info.html:90
-#: courses/templates/courses/snippets/subscription_info.html:121
+#: courses/templates/courses/snippets/subscription_info_detail.html:83
+#: courses/templates/courses/snippets/subscription_info_detail.html:112
 msgid ""
 "You cannot subscribe to this course. Contact us if you think this is a "
 "mistake."
-msgstr ""
+msgstr "Du kannst dich nicht für diesen Kurs anmelden. Kontaktiere uns, falls du denkst, dass es sich hierbei um einen Fehler handelt."
 
-#: courses/templates/courses/snippets/subscription_info.html:104
+#: courses/templates/courses/snippets/subscription_info_detail.html:95
 msgid "You are eligible for early sign-up to this course!"
-msgstr ""
+msgstr "Du bist für die vorzeitige Anmeldung für diesen Kurs berechtigt."
 
-#: courses/templates/courses/snippets/subscription_info.html:134
-msgid "Early Sign-Up not possible"
-msgstr ""
-
-#: courses/templates/courses/snippets/subscription_info.html:141
+#: courses/templates/courses/snippets/subscription_info_detail.html:123
+#: courses/templates/courses/snippets/subscription_info_list_item.html:41
 msgid "Registration opens soon"
 msgstr "Anmeldung öffnet bald"
 
-#: courses/templates/courses/snippets/subscription_info.html:143
+#: courses/templates/courses/snippets/subscription_info_detail.html:125
+#: courses/templates/courses/snippets/subscription_info_list_item.html:43
 msgid "Registration closed"
 msgstr "Anmeldung geschlossen"
+
+#: courses/templates/courses/snippets/subscription_info_list_item.html:28
+msgid "On the waiting list"
+msgstr "Auf der Warteliste"
+
+#: courses/templates/courses/snippets/subscription_info_list_item.html:37
+msgid "early sign-up"
+msgstr "vorzeitige Anmeldung"
 
 #: courses/templates/courses/snippets/user_contact.html:5
 #: payment/services/offering_finance_teachers.py:421
@@ -1645,31 +1672,31 @@ msgstr "Bitte aktualisiere deine Zahlungsdaten auch auf SwissSalary."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:10
 msgid "Subscription cancelled"
-msgstr ""
+msgstr "Anmeldung storniert"
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:33
 msgid "Your subscription was cancelled successfully"
-msgstr ""
+msgstr "Deine Anmeldung wurde erfolgreich storniert"
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:36
 msgid "You should receive a confirmation via email soon."
-msgstr ""
+msgstr "Du solltest bald eine Bestätigung per Email bekommen."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:37
 msgid "Should you change your mind, you are welcome to subscribe again."
-msgstr ""
+msgstr "Falls du dich umentscheiden solltest, kannst du dich gerne wieder anmelden."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:38
 msgid "Note that you will rejoin from the end of the queue."
-msgstr ""
+msgstr "Beachte, dass du dabei ans Ende der Warteschlange gesetzt wirst."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:42
 msgid "Your partner's subscription has been cancelled, too."
-msgstr ""
+msgstr "Die Anmeldung wurde auch für deine:n Partner:in storniert."
 
 #: courses/templates/courses/subscription_cancellation_confirmation.html:43
 msgid "We have sent them a confirmation email as well."
-msgstr ""
+msgstr "Wir deine:r Partner:in ebenfalls eine Bestätigung gesendet."
 
 #: courses/templates/payment/account/info.html:4
 #: courses/templates/user/profile.html:106
@@ -1775,55 +1802,27 @@ msgstr "Get involved"
 msgid "About me"
 msgstr "Über mich"
 
-#: courses/templates/user/snippets/course_as_teacher.html:15
+#: courses/templates/user/snippets/course_as_teacher.html:20
+#: courses/templates/user/snippets/subscription.html:47
+#: courses/templates/user/user_courses.html:44
+msgid "Add to calendar"
+msgstr "Zum Kalender hinzufügen"
+
+#: courses/templates/user/snippets/course_teacher_actions.html:8
+msgid "Show course page"
+msgstr "Zur Kursseite"
+
+#: courses/templates/user/snippets/course_teacher_actions.html:16
 msgid "Details & edit"
 msgstr "Details & bearbeiten"
 
-#: courses/templates/user/snippets/course_as_teacher.html:24
-#: payment/templates/payment/courses/snippets/course_info.html:13
+#: courses/templates/user/snippets/course_teacher_actions.html:26
 msgid "View teacher presence"
 msgstr "Lehrer:innen-Anwesenheiten erfassen"
 
-#: courses/templates/user/snippets/course_as_teacher.html:26
-#: payment/templates/payment/courses/snippets/course_info.html:16
+#: courses/templates/user/snippets/course_teacher_actions.html:29
 msgid "Log teacher presence"
 msgstr "Lehrer:innen-Anwesenheiten erfassen"
-
-#: courses/templates/user/snippets/course_as_teacher.html:47
-#: payment/templates/payment/courses/course.html:30
-msgid "Participants"
-msgstr "Teilnehmer:innen"
-
-#: courses/templates/user/snippets/course_as_teacher.html:55
-msgid "Payment status"
-msgstr "Zahlungsstatus"
-
-#: courses/templates/user/snippets/course_as_teacher.html:58
-#: courses/templates/user/snippets/subscription_status_badge.html:18
-#: payment/templates/finance/offering/courses/index.html:39
-#: payment/templates/finance/offering/courses/index.html:50
-msgid "Paid"
-msgstr "Bezahlt"
-
-#: courses/templates/user/snippets/course_as_teacher.html:62
-msgid "Not paid"
-msgstr "Nicht bezahlt"
-
-#: courses/templates/user/snippets/course_as_teacher.html:67
-msgid "Downloads"
-msgstr "Downloads"
-
-#: courses/templates/user/snippets/course_as_teacher.html:69
-msgid "Participants (Excel)"
-msgstr "Teilnehmer:innen (Excel)"
-
-#: courses/templates/user/snippets/course_as_teacher.html:71
-msgid "Participants (CSV)"
-msgstr "Teilnehmer:innen (CSV)"
-
-#: courses/templates/user/snippets/course_as_teacher.html:73
-msgid "Contacts (vCard)"
-msgstr "Kontakte (vCard)"
 
 #: courses/templates/user/snippets/missing_presence_data_alert.html:8
 msgid "Missing data"
@@ -1863,6 +1862,14 @@ msgstr "Zeige"
 msgid "more"
 msgstr "mehr"
 
+#: courses/templates/user/snippets/participants_download.html:3
+msgid "Download Participants"
+msgstr "Teilnehmende-Liste herunterladen"
+
+#: courses/templates/user/snippets/participants_download.html:10
+msgid "Contacts (.vcard)"
+msgstr "Kontakte (vCard)"
+
 #: courses/templates/user/snippets/subscription.html:39
 msgid "More Info"
 msgstr "Mehr Infos"
@@ -1870,11 +1877,6 @@ msgstr "Mehr Infos"
 #: courses/templates/user/snippets/subscription.html:42
 msgid "Course details"
 msgstr "Kursdetails"
-
-#: courses/templates/user/snippets/subscription.html:47
-#: courses/templates/user/user_courses.html:44
-msgid "Add to calendar"
-msgstr "Zum Kalender hinzufügen"
 
 #: courses/templates/user/snippets/subscription.html:81
 msgid "free of charge"
@@ -1934,6 +1936,12 @@ msgstr "Besucht"
 #: courses/templates/user/snippets/subscription_status_badge.html:16
 msgid "To reimburse"
 msgstr "Zu erstatten"
+
+#: courses/templates/user/snippets/subscription_status_badge.html:18
+#: payment/templates/finance/offering/courses/index.html:39
+#: payment/templates/finance/offering/courses/index.html:50
+msgid "Paid"
+msgstr "Bezahlt"
 
 #: courses/templates/user/snippets/subscription_status_text.html:5
 msgid "New subscription info"
@@ -1996,6 +2004,7 @@ msgstr ""
 #: courses/templates/user/user_courses.html:11
 #: courses/templates/user/user_courses.html:36
 #: payment/templates/payment/courses/list.html:5
+#: payment/templates/payment/courses/list.html:10
 #: templates/menu/desktop_user_menu.html:45
 #: templates/menu/mobile_user_menu.html:7
 msgid "My Courses"
@@ -2261,7 +2270,7 @@ msgstr "Kostenlos"
 #: partners/models/partner.py:35
 #: payment/templates/payment/counter/details.html:16
 #: payment/templates/payment/courses/confirm.html:16
-#: payment/templates/payment/courses/course.html:80
+#: payment/templates/payment/courses/course.html:76
 msgid "Name"
 msgstr "Name"
 
@@ -2652,66 +2661,55 @@ msgstr "Eindeutige Kursnummer (USI)"
 msgid "Submit"
 msgstr "Absenden"
 
-#: payment/templates/payment/courses/course.html:12
+#: payment/templates/payment/courses/course.html:16
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/courses/course.html:15 tq_website/settings.py:322
-#: tq_website/settings.py:339
+#: payment/templates/payment/courses/course.html:19 tq_website/settings.py:333
+#: tq_website/settings.py:350
 msgid "English"
 msgstr "Englisch"
 
-#: payment/templates/payment/courses/course.html:33
+#: payment/templates/payment/courses/course.html:34
+msgid "Participants"
+msgstr "Teilnehmende"
+
+#: payment/templates/payment/courses/course.html:37
 msgid "Participants will show up here, once they have been confirmed."
-msgstr "Teilnehmer:innen werden hier angezeigt sobald sie bestätigt wurden."
+msgstr "Teilnehmende werden hier angezeigt sobald sie bestätigt wurden."
 
-#: payment/templates/payment/courses/course.html:36
-#: payment/templates/payment/subscription/index.html:20
-#: payment/templates/payment/subscription/snippets/payment_options.html:47
-#: survey/templates/survey/components/download.html:3
-#: templates/snippets/download.html:3
-msgid "Download"
-msgstr "Download"
-
-#: payment/templates/payment/courses/course.html:43
-msgid "Contacts (.vcard)"
-msgstr "Kontakte (vCard)"
-
-#: payment/templates/payment/courses/course.html:59
-#: payment/templates/payment/courses/course.html:103
+#: payment/templates/payment/courses/course.html:55
+#: payment/templates/payment/courses/course.html:99
 msgid "student"
 msgstr "Student:in"
 
-#: payment/templates/payment/courses/course.html:61
-#: payment/templates/payment/courses/course.html:105
+#: payment/templates/payment/courses/course.html:57
+#: payment/templates/payment/courses/course.html:101
 msgid "not a student"
 msgstr "Kein:e Student:in"
 
-#: payment/templates/payment/courses/course.html:65
-#: payment/templates/payment/courses/course.html:88
+#: payment/templates/payment/courses/course.html:61
+#: payment/templates/payment/courses/course.html:84
 msgid "Course fees"
 msgstr "Kursgebühren"
 
-#: payment/templates/payment/courses/course.html:68
-#: payment/templates/payment/courses/course.html:84
+#: payment/templates/payment/courses/course.html:64
+#: payment/templates/payment/courses/course.html:80
 msgid "Lead/Follow"
 msgstr "Führen oder geführt werden"
 
-#: payment/templates/payment/courses/course.html:81
+#: payment/templates/payment/courses/course.html:77
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: payment/templates/payment/courses/course.html:82
+#: payment/templates/payment/courses/course.html:78
 msgid "Mobile"
 msgstr "Handynummer"
 
-#: payment/templates/payment/courses/list.html:10
-msgid "Select Course"
-msgstr "Kurs auswählen"
-
-#: payment/templates/payment/courses/list.html:11
-msgid "Please select the course you want to manage."
-msgstr "Bitte wähle den Kurs den verwalten möchtest"
+#: payment/templates/payment/courses/list.html:13
+#: survey/templates/survey/components/filter.html:23
+msgid "All courses"
+msgstr "Alle Kurse"
 
 #: payment/templates/payment/courses/snippets/course_description.html:5
 msgid "Course description"
@@ -2731,8 +2729,8 @@ msgid "No description set for this language."
 msgstr "Keine Beschreibung gesetzt für diese Sprache."
 
 #: payment/templates/payment/courses/snippets/course_description.html:16
-msgid "Additional info"
-msgstr "Zusätzliche Informationen"
+msgid "Public additional info"
+msgstr "Zusätzliche öffentliche Informationen"
 
 #: payment/templates/payment/courses/snippets/course_description.html:18
 msgid ""
@@ -2758,27 +2756,27 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
-#: payment/templates/payment/courses/snippets/course_info.html:7
-msgid "Show course page"
-msgstr "Zur Kursseite"
-
 #: payment/templates/payment/courses/snippets/teacher_presence_form.html:8
 msgid "Teacher presences"
 msgstr "Anwesenheiten der Lehrer:innen"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:35
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:34
 msgid "Add teacher"
 msgstr "Lehrer:in hinzufügen"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:53
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:39
+msgid "The presence can only be entered after the lesson is over."
+msgstr "Die Anwesenheit kann erst nach Ende der Lektion eingetragen werden."
+
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:58
 msgid "Search teacher"
 msgstr "Lehrer:in suchen"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:69
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:74
 msgid "No teachers"
 msgstr "Keine Lehrer:innen"
 
-#: payment/templates/payment/courses/snippets/teacher_presence_form.html:112
+#: payment/templates/payment/courses/snippets/teacher_presence_form.html:117
 msgid "Searching"
 msgstr "Suchen"
 
@@ -2801,6 +2799,13 @@ msgid ""
 msgstr ""
 "Der Wert des verwendeten Gutscheins war grösser als der offene Kursbetrag."
 "Lade den Gutschein mit dem Restwert jetzt herunter."
+
+#: payment/templates/payment/subscription/index.html:20
+#: payment/templates/payment/subscription/snippets/payment_options.html:47
+#: survey/templates/survey/components/download.html:3
+#: templates/snippets/download.html:3
+msgid "Download"
+msgstr "Download"
 
 #: payment/templates/payment/subscription/index.html:30
 msgid "Item"
@@ -2958,10 +2963,6 @@ msgstr "Antwort wurde sichtbar gemacht"
 #: survey/templates/survey/components/filter.html:8
 msgid "All offerings"
 msgstr "Alle Angebote"
-
-#: survey/templates/survey/components/filter.html:23
-msgid "All courses"
-msgstr "Alle Kurse"
 
 #: survey/templates/survey/components/question_result.html:28
 msgid "Show all answers"
@@ -3316,10 +3317,6 @@ msgstr "Dunkel"
 msgid "Change to language:"
 msgstr "Zu Sprache wechseln:"
 
-#: templates/menu/desktop_menu.html:37 templates/menu/mobile_user_menu.html:23
-msgid "Log in"
-msgstr "Anmelden"
-
 #: templates/menu/desktop_user_menu.html:9
 #: templates/menu/mobile_admin_menu.html:12
 msgid "Course statistics"
@@ -3350,10 +3347,8 @@ msgid "Pages"
 msgstr "Seiten"
 
 #: templates/menu/mobile_menu.html:20
-#, fuzzy
-#| msgid "Intermediate"
 msgid "Internal"
-msgstr ""
+msgstr "Internes"
 
 #: templates/photologue/gallery_archive.html:4
 #: templates/photologue/gallery_archive.html:10
@@ -3396,21 +3391,45 @@ msgstr "Vorstandsposten"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:321 tq_website/settings.py:329
+#: tq_website/settings.py:332 tq_website/settings.py:340
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:361
+#: tq_website/settings.py:372
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:365
+#: tq_website/settings.py:376
 msgid "Side content"
 msgstr "Seiteninhalt"
 
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "Die IBAN is inkorrekt."
+
+#~ msgid "Payment status"
+#~ msgstr "Zahlungsstatus"
+
+#~ msgid "Not paid"
+#~ msgstr "Nicht bezahlt"
+
+#~ msgid "Downloads"
+#~ msgstr "Downloads"
+
+#~ msgid "Participants (Excel)"
+#~ msgstr "Teilnehmende (Excel)"
+
+#~ msgid "Participants (CSV)"
+#~ msgstr "Teilnehmende (CSV)"
+
+#~ msgid "Contacts (vCard)"
+#~ msgstr "Kontakte (vCard)"
+
+#~ msgid "Select Course"
+#~ msgstr "Kurs auswählen"
+
+#~ msgid "Please select the course you want to manage."
+#~ msgstr "Bitte wähle den Kurs den verwalten möchtest"
 
 #~ msgid "At least two spots need to be available to sign up as a couple."
 #~ msgstr ""
