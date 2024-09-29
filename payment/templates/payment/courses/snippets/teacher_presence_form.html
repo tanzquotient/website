@@ -25,15 +25,20 @@
                     </span>
                 {% endfor %}
 
-                <button class="btn btn-outline-success btn-sm add-teacher" type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        {% if lesson.end > now %}
-                        disabled
-                        {% endif %}
-                        >
+
+                {% if lesson.end <= now %}
+                    <button class="btn btn-outline-success btn-sm add-teacher"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
                         <i class="bi bi-plus-circle-fill"></i> {% trans "Add teacher" %}
-                </button>
+                    </button>
+                {% else %}
+                    <div class="alert alert-light my-0 px-2 py-1">
+                        <i class="bi bi-info-circle-fill"></i>
+                        {% trans "The presence can only be entered after the lesson is over." %}
+                    </div>
+                {% endif %}
 
                 <ul class="dropdown-menu">
                     {% for teacher in course.get_teachers %}
@@ -128,14 +133,14 @@
                     })
                 })
             }
-        
+
             async function remove_teacher(teacher_id, lesson_id) {
                 set_remove_teacher_loading_view(teacher_id, lesson_id);
                 const response = await post(teacher_id, lesson_id, "remove");
                 const data = await response.json()
                 update_view(data);
             }
-        
+
             async function add_teacher(teacher_id, lesson_id) {
                 const loadingView = set_add_teacher_loading_view(lesson_id);
                 const response = await post(teacher_id, lesson_id, "add");
@@ -143,20 +148,20 @@
                 loadingView.remove();
                 update_view(data);
             }
-        
+
             async function search(input, lesson_id) {
                 const value = input.value;
-        
+
                 const container = input.parentNode.parentNode;
                 container.querySelectorAll(".search-result").forEach(entry => entry.remove())
-        
+
                 if (!value) {
                     return;
                 }
-        
+
                 container.appendChild(document.querySelector("#searching").content.cloneNode(true));
                 const response = await fetch(`{% url "payment:teacher_search" %}?q=${value}`);
-        
+
                 const data = await response.json();
                 container.querySelectorAll(".search-result").forEach(entry => entry.remove())
                 for (const searchResult of data) {
@@ -169,7 +174,7 @@
                 }
                 container.querySelectorAll(".searching").forEach(element => element.remove());
             }
-        
+
             function set_add_teacher_loading_view(lesson_id) {
                 document.querySelectorAll(".search-input").forEach(input => input.value = "")
                 document.querySelectorAll(".search-result").forEach(result => result.remove())
@@ -179,7 +184,7 @@
                 lessonContainer.insertBefore(clone, lessonContainer.querySelector(".add-teacher"));
                 return loadingButton;
             }
-        
+
             function set_remove_teacher_loading_view(teacher_id, lesson_id) {
                 const teacherField = document.querySelector(`#lesson-${lesson_id}-teacher-${teacher_id}`)
                 teacherField.querySelector("button").remove()
@@ -187,11 +192,11 @@
                 const clone = template.content.cloneNode(true);
                 teacherField.appendChild(clone);
             }
-        
+
             function update_view(data) {
                 const lesson_id = data["id"]
                 document.querySelectorAll(`#lesson-${lesson_id} .teacher`).forEach(item => item.remove())
-        
+
                 const lessonContainer = document.getElementById(`lesson-${lesson_id}`)
                 const add_teacher_button = lessonContainer.querySelector(".add-teacher")
                 for (const teacher of data["teachers"]) {
@@ -205,7 +210,7 @@
                     lessonContainer.insertBefore(clone, add_teacher_button);
                 }
             }
-        </script>        
+        </script>
 
     {% endaddtoblock %}
 {% endif %}
