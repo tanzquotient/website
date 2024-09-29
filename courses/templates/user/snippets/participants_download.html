@@ -1,0 +1,12 @@
+{% load i18n %}
+<div class="btn-group">
+    <a role="button" href="{% url "payment:coursepayment_export" course.id %}" class="btn btn-sm btn-success"><i class="bi bi-download"></i> {% trans "Download Participants" %}</a>
+    <button role="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export" course.id %}">Excel</a></li>
+        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_csv" course.id %}">CSV</a></li>
+        <li><a class="dropdown-item" href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (.vcard)" %}</a></li>
+    </ul>
+</div>

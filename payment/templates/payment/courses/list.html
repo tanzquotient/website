@@ -7,36 +7,12 @@
 
 {% block main_content %}
     <div class="container">
-        <h2>{% trans "Select Course" %}</h2>
-        <p>{% trans "Please select the course you want to manage." %}</p>
-        <div class="accordion" id="offering-accordion">
-            {% for offering in offerings %}
-                {% if user.is_staff or user.id in offering.get_teacher_ids  %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{ offering.id }}">
-                            <button class="accordion-button collapsed {% if not offering.display %} bg-secondary bg-opacity-10{% endif %}"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ offering.id }}"
-                                    aria-expanded="false" aria-controls="collapse-{{ offering.id }}">
-                                    {{ offering.name }}
-                            </button>
-                        </h2>
-                        <div id="collapse-{{ offering.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ offering.id }}" data-bs-parent="#offering-accordion">
-                            <div class="accordion-body p-0">
-                                <div class="list-group list-group-flush">
-                                    {% for course in offering.course_set.all %}
-                                        {% if user.is_staff or user.id in course.get_teacher_ids %}
-                                            <a class="list-group-item list-group-item-action" href="{% url "payment:coursepayment_detail" course=course.id %}">
-                                                {{ course.name}}
-                                            </a>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+        <h2>{% trans "My Courses" %}</h2>
+        {% include "payment/courses/snippets/teacher_courses_list.html" %}
+        {% if user.is_staff %}
+            <h2 class="mt-3">{% trans "All courses" %}</h2>
+            {% include "payment/courses/snippets/teacher_courses_list.html" with show_all_courses=True %}
+        {% endif %}
     </div>
 {% endblock main_content %}
 

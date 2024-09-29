@@ -1,39 +1,24 @@
 {% load i18n %}
 <div class="card card-default">
-    <div class="card-header">
-        {{ course.type }}
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <strong>{{ course.type }}</strong>
         {% if course.cancelled %}
             <span class="text-uppercase badge text-bg-danger">
                 {% trans "Cancelled" %}
             </span>
         {% endif %}
+
     </div>
     <div class="card-body">
         {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}
         <p>
-            <a href="{% url 'payment:coursepayment_detail' course=course.id %}">
-                <strong>{% trans "Details & edit" %}</strong>
-                <i class="bi bi-arrow-right-circle-fill"></i>
-            </a>
-        </p>
-        {% if not course.cancelled %}
-        <p>
-            <a href="{% url 'payment:course_teacher_presence' course=course.id %}">
-                <strong>
-                    {% if course.completed %}
-                        {% trans "View teacher presence" %}
-                    {% else %}
-                        {% trans "Log teacher presence" %}
-                    {% endif %}
-                </strong>
-                <i class="bi bi-arrow-right-circle-fill"></i>
-            </a>
-        </p>
-        {% endif %}
-        <p>
             <strong>{% trans "Time" %}</strong>
             <br/>
             {% include "courses/snippets/lesson_components/lessons.html" with course=course only %}
+            <a href="{% url "courses:course_ical" course.id %}">
+                <br/>
+                {% trans "Add to calendar" %}
+            </a>
         </p>
         {% if course.room %}
             <p>
@@ -42,36 +27,6 @@
                 {% include "courses/snippets/room_modal.html" with display_link=True room=course.room only %}
             </p>
         {% endif %}
-        {% if course.subscription_type == "regular" %}
-            <p>
-                <strong>{% trans "Participants" %}</strong>
-                <br/>
-                {% if course.get_confirmed_count %}
-                    {% trans "Confirmed" %}: {{ course.get_confirmed_count }}
-                {% endif %}
-            </p>
-            <p>
-                {% if course.payment_totals.paid_count or payment_totals.not_paid_count %}
-                    <strong>{% trans "Payment status" %}</strong>
-                    <br/>
-                    {% if course.payment_totals.paid_count %}
-                        {% trans "Paid" %}: {{ course.payment_totals.paid_count }}
-                    {% endif %}
-                    {% if course.payment_totals.not_paid_count %}
-                        <br/>
-                        {% trans "Not paid" %}: {{ course.payment_totals.not_paid_count }}
-                    {% endif %}
-                {% endif %}
-            </p>
-            <p>
-                <strong>{% trans "Downloads" %}</strong>
-                <br/>
-                <a href="{% url "payment:coursepayment_export" course.id %}">{% trans "Participants (Excel)" %}</a>
-                <br/>
-                <a href="{% url "payment:coursepayment_export_csv" course.id %}">{% trans "Participants (CSV)" %}</a>
-                <br/>
-                <a href="{% url "payment:coursepayment_export_vcard" course.id %}">{% trans "Contacts (vCard)" %}</a>
-            </p>
-        {% endif %}
+        {% include "user/snippets/course_teacher_actions.html" %}
     </div>
 </div>

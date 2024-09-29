@@ -1,15 +1,16 @@
-{% extends "basis.html" %}
+{% extends "basis_no_header.html" %}
 {% load i18n %}
 
 
-{% block lead %}
+{% block title %}
+    {{ course.type.title }}
 {% endblock %}
 
 {% block main_content %}
 
-    <div class="container mt-3">
+    <div class="container">
 
-        {% include "payment/courses/snippets/course_info.html" with course=course only %}
+        {% include "payment/courses/snippets/course_info.html" %}
         {% include "payment/courses/snippets/teacher_presence_messages.html" with messages=messages only %}
         {% include "payment/courses/snippets/teacher_presence_form.html" %}
 

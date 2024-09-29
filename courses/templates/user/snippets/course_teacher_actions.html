@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<div class="d-flex flex-wrap gap-1">
+    <a href="{% url 'courses:course_detail' course.id %}"
+       class="btn btn-success btn-sm align-self-center">
+        <i class="bi bi-eye-fill"></i> {% trans "Show course page" %}
+    </a>
+    {% url 'payment:coursepayment_detail' course=course.id as edit_url %}
+    {% if request.get_full_path != edit_url %}
+        <a href="{{ edit_url }}"
+           class="btn btn-success btn-sm align-self-center">
+            <i class="bi bi-pencil-square"></i>
+            {% trans "Details & edit" %}
+        </a>
+    {% endif %}
+    {% if not course.cancelled %}
+        {% url 'payment:course_teacher_presence' course=course.id as presence_url %}
+        {% if request.get_full_path != presence_url %}
+            <a href="{{ presence_url }}"
+               class="btn btn-success btn-sm align-self-center">
+                {% if course.completed %}
+                    <i class="bi bi-card-checklist"></i>
+                    {% trans "View teacher presence" %}
+                {% else %}
+                    <i class="bi bi-person-fill-check"></i>
+                    {% trans "Log teacher presence" %}
+                {% endif %}
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if course.get_confirmed_count > 0 %}
+        {% include "user/snippets/participants_download.html" %}
+    {% endif %}
+</div>

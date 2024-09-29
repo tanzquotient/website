@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<div class="accordion" id="offering-accordion">
+    {% for offering in offerings %}
+        {% if show_all_courses or user.id in offering.get_teacher_ids %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-{{ offering.id }}">
+                    <button class="accordion-button {% if not offering.display %} collapsed bg-secondary bg-opacity-10{% endif %}"
+                            type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-{{ offering.id }}"
+                            aria-expanded="false"
+                            aria-controls="collapse-{{ offering.id }}">
+                        {{ offering.name }}
+                    </button>
+                </h2>
+                <div id="collapse-{{ offering.id }}"
+                     class="accordion-collapse {% if not offering.display %}  collapse {% endif %}"
+                     aria-labelledby="heading-{{ offering.id }}"
+                     data-bs-parent="#offering-accordion">
+                    <div class="accordion-body p-0">
+                        <div class="list-group list-group-flush">
+                            {% for course in offering.course_set.all %}
+                                {% if show_all_courses or user.id in course.get_teacher_ids %}
+                                    <a class="list-group-item list-group-item-action"
+                                       href="{% url "payment:coursepayment_detail" course=course.id %}">
+                                        {{ course.name }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+
