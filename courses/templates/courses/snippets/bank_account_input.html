@@ -7,7 +7,7 @@
         <input type="text" class="form-control" id="{{ form.iban.id_for_label }}" name="{{ form.iban.html_name }}"
                placeholder="{{ form.iban.label }}" value="{{ form.iban.value|default:'' }}">
         {% if form.iban.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="bi bi-x-circle-fill form-control-feedback"></span>
         {% endif %}
         {% include "courses/snippets/field_errors.html" with field=form.iban %}
     </div>
@@ -16,7 +16,7 @@
                name="{{ form.bank_name.html_name }}"
                placeholder="{{ form.bank_name.label }}" value="{{ form.bank_name.value|default:'' }}">
         {% if form.bank_name.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="bi bi-x-circle-fill form-control-feedback"></span>
         {% endif %}
         {% include "courses/snippets/field_errors.html" with field=form.bank_name %}
     </div>
@@ -25,7 +25,7 @@
                name="{{ form.bank_zip_code.html_name }}"
                placeholder="{{ form.bank_zip_code.label }}" value="{{ form.bank_zip_code.value|default:'' }}">
         {% if form.bank_zip_code.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="bi bi-x-circle-fill form-control-feedback"></span>
         {% endif %}
         {% include "courses/snippets/field_errors.html" with field=form.bank_zip_code %}
     </div>
@@ -34,7 +34,7 @@
                name="{{ form.bank_city.html_name }}"
                placeholder="{{ form.bank_city.label }}" value="{{ form.bank_city.value|default:'' }}">
         {% if form.bank_city.errors %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="bi bi-x-circle-fill form-control-feedback"></span>
         {% endif %}
         {% include "courses/snippets/field_errors.html" with field=form.bank_city %}
     </div>

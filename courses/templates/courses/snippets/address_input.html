@@ -10,7 +10,7 @@
                    name="{{ form.street.html_name }}"
                    placeholder="{{ form.street.label }}" value="{{ form.street.value|default:'' }}">
             {% if form.street.errors %}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                <span class="bi bi-x-circle-fill form-control-feedback"></span>
             {% endif %}
             {% include "courses/snippets/field_errors.html" with field=form.street %}
         </div>
@@ -18,7 +18,7 @@
             <input type="text" class="form-control" id="{{ form.plz.id_for_label }}" name="{{ form.plz.html_name }}"
                    placeholder="{{ form.plz.label }}" value="{{ form.plz.value|default:'' }}">
             {% if form.plz.errors %}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                <span class="bi bi-x-circle-fill form-control-feedback"></span>
             {% endif %}
             {% include "courses/snippets/field_errors.html" with field=form.plz %}
         </div>
@@ -26,7 +26,7 @@
             <input type="text" class="form-control" id="{{ form.city.id_for_label }}" name="{{ form.city.html_name }}"
                    placeholder="{{ form.city.label }}" value="{{ form.city.value|default:'' }}">
             {% if form.city.errors %}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                <span class="bi bi-x-circle-fill form-control-feedback"></span>
             {% endif %}
             {% include "courses/snippets/field_errors.html" with field=form.city %}
         </div>

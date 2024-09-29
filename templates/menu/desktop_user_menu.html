@@ -42,11 +42,11 @@
     <div class="dropdown-divider"></div>
 {% endif %}
 <a class="dropdown-item" href="{% url 'user_courses' %}">
-    <span class="glyphicon glyphicon-th"></span>{% trans "My Courses" %}
+    <i class="bi bi-list-check"></i> {% trans "My Courses" %}
 </a>
 <a class="dropdown-item" href="{% url 'profile' %}">
-    <span class="glyphicon glyphicon-user"></span>{% trans "Profile" %}
+    <i class="bi bi-person-circle"></i> {% trans "Profile" %}
 </a>
 <a class="dropdown-item" href="{% url 'account_logout' %}?next={{ request.path }}">
-    <span class="bi bi-door-closed-fill"></span>{% trans "Logout" %}
+    <i class="bi bi-door-closed-fill"></i> {% trans "Logout" %}
 </a>

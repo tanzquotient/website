@@ -8,19 +8,6 @@
     <!-- Pages -->
     {% show_menu 0 1 0 1 'menu/pages.html' %}
 
-
-    <!-- Languages -->
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {% get_current_language as LANGUAGE_CODE %}
-            <i class="bi bi-globe"></i>  {{ LANGUAGE_CODE|upper }}
-        </a>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            {% language_chooser 'menu/desktop_language_chooser.html' %}
-        </div>
-    </li>
-
     <!-- User dropdown -->
     {% if user.is_authenticated %}
         <li class="nav-item dropdown">
@@ -37,5 +24,19 @@
             <a class="nav-link" href="{% url 'account_login' %}?next={{ request.path }}">{% trans "Log in" %}</a>
         </li>
     {% endif %}
+
+    <!-- Languages -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            <i class="bi bi-globe"></i>  {{ LANGUAGE_CODE|upper }}
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            {% language_chooser 'menu/desktop_language_chooser.html' %}
+        </div>
+    </li>
+
+    <!-- Theme -->
     {% include "menu/desktop_colortheme_chooser.html" %}
 </ul>
