@@ -1,0 +1,8 @@
+{% load i18n %}
+
+{% if user.is_staff or user in course.get_teachers %}
+    <div class="mb-3">
+        <h3>{% trans "Teacher options" %}</h3>
+        {% include "user/snippets/course_teacher_actions.html" %}
+    </div>
+{% endif %}

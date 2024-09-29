@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if course.description or course.type.description %}
-    <h4>{% trans "Description" %}</h4>
+    <h3>{% trans "Description" %}</h3>
     {% if course.description %}
         <div>
             {{ course.description|safe }}

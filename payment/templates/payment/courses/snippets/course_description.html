@@ -13,7 +13,7 @@
     </div>
 
 
-    <h4>{% trans "Additional info" %}</h4>
+    <h4>{% trans "Public additional info" %}</h4>
     <div class="alert alert-success">
         {% trans "You may add additional info for this specific course. It will show up on the detail page for this course only." %}
     </div>
@@ -21,7 +21,7 @@
         {% csrf_token %}
         <textarea name="description-{{ language }}" id="description-{{ language }}" rows="20" cols="80">{{ description|default:""|safe }}</textarea>
 
-        <h4 class="mt-3">{% trans "Participant info" %}</h4>
+        <h4 class="mt-3" id="participant-info-heading">{% trans "Participant info" %}</h4>
         <div class="alert alert-success">
             {% trans "You may add additional info that will be visible only to course participants (WhatsApp link, cloud link, ASVZ QR code...)." %}
         </div>

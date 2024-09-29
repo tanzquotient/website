@@ -8,7 +8,7 @@
                     <span class="badge bg-danger">{% trans "Cancelled" %}</span>
                 {% elif not course.display %}
                     <span class="badge bg-info">{% trans "Preview" %}</span>
-                {% endif %}    
+                {% endif %}
                 {{ course.type.title }}
             </h2>
             {% if course.type.subtitle %}
@@ -25,6 +25,9 @@
         {% include "courses/snippets/course_info.html" %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-8">
+        <div>
+            {% include "courses/snippets/course_detail_teacher_tools.html" %}
+        </div>
         <div>
             {% include "courses/snippets/info_to_participants.html" %}
         </div>

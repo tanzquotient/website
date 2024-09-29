@@ -1,26 +1,42 @@
 {% load i18n %}
 
 
-{% if course.information_for_participants_teachers or course.information_for_participants_admin or course.type.information_for_participants %}
-    {% if user %}
-        {% if user in course.participants or user in course.get_teachers or user.is_staff  %}
-            <div>
-                <h5>{% trans "Information to participants" %}</h5>
-                {% if user.is_staff %}
+{% with info=course.information_for_participants %}
+    {% if info or user.is_staff or user in course.get_teachers %}
+        <h3>{% trans "Information to participants" %}</h3>
+        {% if user in course.participants or user in course.get_teachers or user.is_staff %}
+            {% if user.is_staff or user in course.get_teachers %}
+                {% if info %}
                     <div class="alert alert-info">
                         {% trans "Note: this information is only visible to teachers and participants of this course." %}
                     </div>
+                {% else %}
+                    <a href="{% url 'payment:coursepayment_detail' course=course.id %}#participant-info-heading"
+                       class="btn btn-success btn-sm align-self-center mb-3">
+                        <i class="bi bi-pencil-square"></i>
+                        {% trans "Add info for participants" %}
+                    </a>
                 {% endif %}
-                {% if course.type.information_for_participants %}
-                    <div>{{ course.type.information_for_participants|safe }}</div>
-                {% endif %}
-                {% if course.information_for_participants_admin %}
-                    <div>{{ course.information_for_participants_admin|safe }}</div>
-                {% endif %}
-                {% if course.information_for_participants_teachers %}
-                    <div>{{ course.information_for_participants_teachers|safe }}</div>
-                {% endif %}
+            {% endif %}
+            <div>{{ info|safe }}</div>
+        {% elif user.is_authenticated %}
+            <div class="alert alert-info">
+                {% trans "Information is only visible for confirmed participants." %}
             </div>
+        {% else %}
+            <div class="alert alert-info">
+                <div>
+                    {% trans "Information for course participants available. Log in to see them." %}
+                </div>
+                <div class="mt-1">
+                    <a class="btn btn-sm btn-info"
+                       href="{% url 'account_login' %}?next={{ request.path }}">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        {% trans "Log in" %}
+                    </a>
+                </div>
+            </div>
+
         {% endif %}
     {% endif %}
-{% endif %}
+{% endwith %}

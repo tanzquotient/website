@@ -9,12 +9,12 @@ from typing import Optional, Union, Iterable
 from django.conf import settings
 from django.contrib import auth, admin
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
-from django.core.exceptions import ValidationError
 
 from courses import managers
 from courses.models import (
@@ -35,6 +35,7 @@ from courses.models import (
 )
 from partners.models import Partner
 from survey.models import Survey
+from utils import TranslationUtils
 from utils.helpers import optional_min, optional_max
 
 
@@ -346,7 +347,6 @@ class Course(TranslatableModel):
         worst_case: bool = False,
         until_subscribe: Subscribe | None = None,
     ) -> int:
-
         waiting_list = self.subscriptions.waiting_list()
 
         if until_subscribe is not None:
@@ -649,6 +649,19 @@ class Course(TranslatableModel):
                 return True
 
         return False
+
+    def information_for_participants(self) -> str:
+        return (
+            TranslationUtils.get_text_with_language_fallback_or_empty(
+                self.type, "information_for_participants"
+            )
+            + TranslationUtils.get_text_with_language_fallback_or_empty(
+                self, "information_for_participants_admin"
+            )
+            + TranslationUtils.get_text_with_language_fallback_or_empty(
+                self, "information_for_participants_teachers"
+            )
+        )
 
     def is_over(self) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
