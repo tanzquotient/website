@@ -1,4 +1,4 @@
-{% extends "basis.html" %}
+{% extends "basis_no_header.html" %}
 
 {% load static i18n %}
 {% load survey_tags %}
@@ -10,7 +10,7 @@
 
 {% block main_content %}
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
             {% for course in courses %}
                 <div class="col">
                     <div class="card">
@@ -21,7 +21,7 @@
                             {% if survey.teachers_allowed %}
                                 <div class="list-group list-group-flush">
                                     <div class="list-group-item">
-                                        <div class="d-flex flex-row justify-content-between">
+                                        <div class="d-flex flex-row justify-content-between flex-wrap gap-1">
                                             <div class="align-self-center">
                                                 <span class="bi bi-bar-chart-fill"></span> {{ survey.title }}
                                             </div>

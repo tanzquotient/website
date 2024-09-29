@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpRequest
@@ -19,7 +21,12 @@ def overview_as_teacher(request: HttpRequest) -> HttpResponse:
             ).prefetch_related("course__offering", "course__type")
         }
     )
-    courses.sort(key=lambda course: course.get_last_lesson_date())
+    courses.sort(
+        key=lambda course: (
+            date.today() - course.offering.period.date_to,
+            course.type.title,
+        ),
+    )
     return render(
         request, "survey/overview_as_teacher.html", context=dict(courses=courses)
     )
