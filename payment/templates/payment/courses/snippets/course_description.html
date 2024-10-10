@@ -1,6 +1,12 @@
-{% load i18n %}
-{% load sekizai_tags %}
+{% load i18n sekizai_tags static %}
 
+{% addtoblock "css" %}
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 200px;
+        }
+    </style>
+{% endaddtoblock %}
 <div>
     <h4>{% trans "Course description" %}</h4>
     <div class="alert alert-info">{% trans "The following description is shown for all courses of this type. Please contact the Tanzquotient dance administration if something should be changed." %}</div>
@@ -31,9 +37,10 @@
 </div>
 
 {% addtoblock "js" %}
+    <script type="text/javascript" src="{% static "js/ckeditor5-classic-editor.js" %}"></script>
     <script>
-        CKEDITOR.replace('description-{{ language }}', {'height': 200});
-        CKEDITOR.replace('information-for-participants-{{ language }}', {'height': 200});
+        createEditor('#description-{{ language }}');
+        createEditor('#information-for-participants-{{ language }}');
     </script>
 {% endaddtoblock %}
 

@@ -21,6 +21,10 @@ body {
     a:hover:not(.btn, .dropdown-item, .list-group-item) {
         color: #bf6a6b;
     }
+
+    .ck.ck-editor {
+        color: black !important;
+    }
 }
 
 .text-tanzquotient {
