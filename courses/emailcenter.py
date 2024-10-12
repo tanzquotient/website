@@ -31,9 +31,9 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
     }
 
     if subscription.state == SubscribeState.WAITING_LIST:
-        context.update({
-            "waiting_list_position": subscription.get_position_on_waiting_list()
-        })
+        context.update(
+            {"waiting_list_position": subscription.get_position_on_waiting_list()}
+        )
         if subscription.partner is not None:
             template = "subscription_confirmation_with_partner_waiting_list"
             context.update(
@@ -46,7 +46,7 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
             template = "subscription_confirmation_without_partner_waiting_list"
         else:
             template = "subscription_confirmation_without_partner_nocouple_waiting_list"
-    
+
     else:
         if subscription.partner is not None:
             template = "subscription_confirmation_with_partner"
@@ -70,9 +70,11 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
 
 
 def _build_subscription_context(subscription: Subscribe) -> dict:
-    payment_url = "https://" + settings.DEPLOYMENT_DOMAIN + reverse(
-        "payment:subscription_payment", kwargs={"usi": subscription.usi}
-    )
+    payment_url = (
+        "https://"
+        + settings.DEPLOYMENT_DOMAIN
+        + reverse("payment:subscription_payment", kwargs={"usi": subscription.usi})
+    ) if not subscription.open_amount().is_zero() else None
     return {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -117,17 +119,23 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     else:
         template = "participation_confirmation_without_partner_nocouple"
 
-    with TemporaryFile() as pdf_file:
-        to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
-        usi = payment_processor.USI_PREFIX + subscription.usi
+    email_args = {
+        "to": subscription.user.email,
+        "reply_to": settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+        "template": template,
+        "context": context,
+    }
 
-        return send_email(
-            to=subscription.user.email,
-            reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
-            template=template,
-            context=context,
-            attachments={f"QR-bill-{usi}.pdf": pdf_file},
-        )
+    if not subscription.open_amount().is_zero():
+        with TemporaryFile() as pdf_file:
+            to_pdf(create_qrbill_for_subscription(subscription), pdf_file)
+            usi = payment_processor.USI_PREFIX + subscription.usi
+
+            return send_email(
+                attachments={f"QR-bill-{usi}.pdf": pdf_file}, **email_args
+            )
+
+    return send_email(**email_args)
 
 
 def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:

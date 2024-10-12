@@ -6,11 +6,11 @@ Du nimmst alleine an einem Partnerkurs teil. Sollte dir das falsch vorkommen, me
 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
-
+{% if payment_url %}
 Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
 Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem Tanzquotient-Profil:
 {{ payment_url }}
-
+{% endif %}
 Wir freuen uns auf dich!
 
 Dein Tanzquotient
@@ -33,11 +33,11 @@ You are participating as a single in a partner course. If you think this is an e
 
 Here's the course info:
 {{course_info|safe}}
-
+{% if payment_url %}
 Please transfer the course price before the course starts or within one week.
 You can find the payment details and payment options in your Tanzquotient profile:
 {{ payment_url }}
-
+{% endif %}
 We're looking forward to seeing you there!
 
 Your Tanzquotient

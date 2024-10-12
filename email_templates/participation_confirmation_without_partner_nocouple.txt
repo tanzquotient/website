@@ -4,11 +4,11 @@ Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs is
 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
-
+{% if payment_url %}
 Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
 Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem Tanzquotient-Profil:
 {{ payment_url }}
-
+{% endif %}
 Wir freuen uns auf dich!
 
 Dein Tanzquotient
@@ -29,11 +29,11 @@ You are now officially registered for the course {{course}}. Deregistration from
 
 Here's the course info:
 {{course_info|safe}}
-
+{% if payment_url %}
 Please transfer the course price before the course starts or within one week.
 You can find the payment details and payment options in your Tanzquotient profile:
 {{ payment_url }}
-
+{% endif %}
 We're looking forward to seeing you there!
 
 Your Tanzquotient
