@@ -171,9 +171,9 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
             ),
         )
 
-        # If we didn't find issues, let the user know
-        if not status:
-            status = [_format_status(_("Everything looks good"), "success")]
+    # If we didn't find issues, let the user know
+    if not status:
+        status = [_format_status(_("Everything looks good"), "success")]
 
     return status
 
