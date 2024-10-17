@@ -118,7 +118,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
 
 
 def _get_course_status(course: Course, use_html: bool) -> list[str]:
-    def _format_status(status_text: str, text_class: str = "info") -> str:
+    def _format_status(status_text: str, text_class: str) -> str:
         return (
             status_text
             if not use_html
@@ -133,12 +133,12 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
 
     # No status message except the fact that the course is marked as completed
     if course.completed:
-        return [_format_status(_("Course marked as completed"))]
+        return [_format_status(_("Course marked as completed"), "success")]
 
     teachers_per_lesson = [l.teachers.count() for l in course.lesson_occurrences.all()]
 
     if not course.is_over():
-        status.append(_format_status(_("Course is not over yet")))
+        status.append(_format_status(_("Course is not over yet"), "secondary"))
 
     # check for lessons without teachers
     if course.is_over():
@@ -173,7 +173,7 @@ def _get_course_status(course: Course, use_html: bool) -> list[str]:
 
     # If we didn't find issues, let the user know
     if not status:
-        status = [_format_status(_("Everything looks good"), "success")]
+        status = [_format_status(_("Everything looks good"), "info")]
 
     return status
 
