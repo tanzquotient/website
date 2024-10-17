@@ -18,6 +18,8 @@ from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
 from django_resized import ResizedImageField
 
+from datetime import datetime
+
 from courses.models import Room
 from courses.services import format_prices
 from utils import TranslationUtils
@@ -112,9 +114,15 @@ class Event(TranslatableModel):
         date_from = self.date
         date_to = self.date_to if self.date_to else self.date
 
-        date_from_formatted = format_date(date_from, "D, d. N")
+        date_now = datetime.now()
+        date_now_year = date_now.year
+
+        format_date_without_year = date_from.year == date_to.year and date_from.year == date_now_year
+        date_format = "D, d. N" if format_date_without_year else "D, d. N Y"
+
+        date_from_formatted = format_date(date_from, date_format)
         time_from_formatted = self.time_from.strftime("%H:%M") if self.time_from else ""
-        date_to_formatted = format_date(date_to, "D, d. N")
+        date_to_formatted = format_date(date_to, date_format)
         time_to_formatted = self.time_to.strftime("%H:%M") if self.time_to else ""
 
         if date_from == date_to:
