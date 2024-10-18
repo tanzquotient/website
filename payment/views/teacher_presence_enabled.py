@@ -23,7 +23,7 @@ class TeacherPresenceEnabled(View):
 
         if (
             user.is_superuser
-            or user.has_perm("courses.change_lesson_occurrence")
+            or user.has_perm("courses.change_lessonoccurrence")
             or user.teaching_courses.filter(course=course).exists()
         ):
             allowed = True
