@@ -6,13 +6,21 @@ from django_countries.fields import LazyTypedChoiceField
 from django.utils.translation import gettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
 
-from courses.models import StudentStatus, Residence
+from courses.models import StudentStatus, Residence, UserProfile
 from utils.iban_validator import validate_iban
 
 
 class UserEditForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(UserEditForm, self).__init__(*args, **kwargs)
+
     first_name = forms.CharField(required=True, label=_("First name"))
     last_name = forms.CharField(required=True, label=_("Last name"))
+    display_name = forms.CharField(
+        required=False, max_length=30, label=_("Display name")
+    )
     phone_number = forms.CharField(max_length=255, required=False)
     phone_number.label = _("Telephone number (Mobile)")
     phone_number.help_text = _(
@@ -82,6 +90,17 @@ class UserEditForm(forms.Form):
 
     def clean(self) -> dict:
         cleaned_data = super(UserEditForm, self).clean()
+
+        if (
+            cleaned_data.get("display_name")
+            and UserProfile.objects.exclude(user=self.user)
+            .filter(display_name=cleaned_data.get("display_name"))
+            .exists()
+        ):
+            message = _(
+                "This display name is already in use. Please choose a different one."
+            )
+            self.add_error("display_name", message)
 
         is_student = cleaned_data.get("student_status", False)
 

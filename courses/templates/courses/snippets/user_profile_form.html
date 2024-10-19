@@ -18,6 +18,9 @@
         {% include "courses/snippets/text_input.html" with field=form.last_name only %}
     </div>
 </div>
+{% if is_teacher %}
+    {% include "courses/snippets/text_input.html" with field=form.display_name only %}
+{% endif %}
 
 {% include "courses/snippets/gender_input.html" with field=form.gender_options custom_field=form.gender_custom_value only %}
 

@@ -21,6 +21,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from django_resized import ResizedImageField
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from courses import managers
 from . import (
@@ -70,6 +71,15 @@ class UserProfile(Model):
         "If this user is interested to get involved with our organisation."
     )
 
+    display_name = CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+        help_text=(
+            "Displayed name. Only available for teachers. "\
+            "If not set, will fall back to full name."
+        ),
+    )
     picture = ResizedImageField(
         null=True,
         blank=True,
@@ -117,6 +127,22 @@ class UserProfile(Model):
 
     objects = managers.UserProfileManager()
 
+    def clean(self):
+        if (
+            self.display_name and 
+            UserProfile.objects.exclude(user=self.user)
+            .filter(display_name=self.display_name)
+            .exists()
+        ):
+            # disallow enabling early signup altogether
+            raise ValidationError(
+                {
+                    "display_name": _(
+                        "This display name is already in use. Please choose a different one."
+                    )
+                }
+            )
+
     @staticmethod
     @receiver(user_logged_in)
     def set_language(**kwargs) -> None:
@@ -131,6 +157,11 @@ class UserProfile(Model):
     # convenience method for model user are added here
     def is_teacher(self) -> bool:
         return self.user.teaching_courses.exists()
+
+    def get_display_name(self) -> str:
+        if not self.is_teacher() or not self.display_name:
+            return self.user.get_full_name()
+        return self.display_name
 
     def is_substitute_teacher(self) -> bool:
         return not self.is_teacher() and self.user.lesson_occurrences.exists()
