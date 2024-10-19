@@ -9,6 +9,7 @@ from payment.payment_processor import PaymentProcessor
 from payment.parser import ISO2022Parser, ZkbCsvParser
 from courses.services.teachers import send_presence_reminder
 from email_system.services import send_scheduled_group_emails
+from photologue.models import PhotoSize
 
 
 @shared_task(
@@ -48,3 +49,9 @@ def task_send_course_presence_reminder() -> None:
 @shared_task(name="send_scheduled_group_emails", ignore_result=True)
 def task_send_scheduled_group_emails() -> None:
     send_scheduled_group_emails()
+
+@shared_task(name="pre_cache_photologue_image_sizes", ignore_result=True)
+def task_pre_cache_photologue_image_sizes() -> None:
+    for size in PhotoSize.objects.all():
+        size.pre_cache = True
+        size.save()
