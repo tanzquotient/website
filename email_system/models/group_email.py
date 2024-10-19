@@ -24,6 +24,14 @@ class GroupEmail(TranslatableModel):
         blank=True,
         null=True,
     )
+    schedule_send = DateTimeField(
+        blank=True,
+        null=True,
+        help_text=(
+            "When the email should be dispatched automatically. "
+            "Won't be dispatched if empty."
+        ),
+    )
 
     # Translated fields
     translations = TranslatedFields(

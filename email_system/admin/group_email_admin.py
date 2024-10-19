@@ -14,11 +14,11 @@ from post_office.models import STATUS as EmailStatus
 class GroupEmailAdmin(TranslatableAdmin):
     model = GroupEmail
 
-    list_display = ["subject", "target_group", "dispatched_at", "status"]
+    list_display = ["subject", "target_group", "schedule_send", "dispatched_at", "status"]
     list_filter = ["target_group"]
     search_fields = ["target_group__name"]
     actions = [send_emails_admin_action, copy_emails_admin_action]
-    fields = ["target_group", "reply_to", "subject", "message"]
+    fields = ["target_group", "reply_to", "schedule_send", "subject", "message"]
 
     def has_change_permission(self, request, obj: GroupEmail | None = None):
         if obj is not None:

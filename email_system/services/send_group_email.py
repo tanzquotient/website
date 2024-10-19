@@ -1,4 +1,6 @@
 from datetime import datetime
+from django.utils import timezone
+from django.db import transaction
 
 from courses.models import UserProfile
 from email_system.models import GeneratedIndividualEmail, GroupEmail
@@ -15,6 +17,20 @@ def _get_language(user) -> str:
         return "en"
 
 
+def send_scheduled_group_emails() -> str:
+    group_emails_to_send: list[GroupEmail] = (
+        GroupEmail.objects.select_for_update()
+        .exclude(schedule_send=None)
+        .filter(schedule_send__lte=timezone.now())
+    )
+    with transaction.atomic():
+        for group_email in group_emails_to_send:
+            if group_email.is_dispatched():
+                continue
+            else:
+                send_group_email(group_email)
+
+
 def send_group_email(group_email: GroupEmail) -> None:
     unsubscribe_context = None
     if group_email.target_group.name == GroupDefinitions.NEWSLETTER.name:
@@ -26,8 +42,11 @@ def send_group_email(group_email: GroupEmail) -> None:
 
     BATCH_SIZE = 1000
     target_users = list(group_email.target_group.user_set.all())
-    target_users_batches = [target_users[i:i + BATCH_SIZE] for i in range(0, len(target_users), BATCH_SIZE)]
-    
+    target_users_batches = [
+        target_users[i : i + BATCH_SIZE]
+        for i in range(0, len(target_users), BATCH_SIZE)
+    ]
+
     for batch in target_users_batches:
         emails = []
 
@@ -52,7 +71,9 @@ def send_group_email(group_email: GroupEmail) -> None:
 
             if unsubscribe_context is not None:
                 unsubscribe_code, _ = UnsubscribeCode.objects.get_or_create(user=user)
-                unsubscribe_url = unsubscribe_code.get_unsubscribe_url(unsubscribe_context)
+                unsubscribe_url = unsubscribe_code.get_unsubscribe_url(
+                    unsubscribe_context
+                )
                 headers["List-unsubscribe"] = "<{}>".format(unsubscribe_url)
                 html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(
                     unsubscribe_url
