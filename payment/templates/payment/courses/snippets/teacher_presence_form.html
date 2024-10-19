@@ -62,7 +62,7 @@
                 </ul>
             </div>
         {% else %}
-            {% if lesson.teachers %}
+            {% if lesson.teachers|length > 0 %}
                 <ul>
                     {% for teacher in lesson.teachers.all %}
                         <li>
@@ -71,7 +71,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                {% trans "No teachers" %}
+                <i>{% trans "No teachers selected" %}</i>
             {% endif %}
 
         {% endif %}
