@@ -13,7 +13,7 @@
     <div class="row mb-4">
         {% if user.profile.picture %}
             <div class="col-12 col-sm-4">
-                <img class="avatar" src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
+                <img class="avatar" src="{{ user.profile.picture.url }}" alt="{{ user.profile.get_display_name }}">
             </div>
         {% endif %}
         <div class="col-12 col-sm-8">
