@@ -13,6 +13,7 @@ class TqStorage(S3Boto3Storage):
         custom_domain,
         access_key,
         secret_key,
+        file_overwrite,
         querystring_auth=True,
     ) -> None:
         config = dict(
@@ -22,6 +23,7 @@ class TqStorage(S3Boto3Storage):
             secret_key=secret_key,
             region_name=region,
             querystring_auth=querystring_auth,
+            file_overwrite=file_overwrite,
         )
         if custom_domain:
             config["custom_domain"] = custom_domain.format(bucket_name)
