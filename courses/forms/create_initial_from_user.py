@@ -8,6 +8,7 @@ def create_initial_from_user(user: User, initial: dict = None) -> dict:
 
     data["first_name"] = user.first_name
     data["last_name"] = user.last_name
+    data["display_name"] = user.profile.display_name
     data["gender_options"] = user.profile.gender
     if user.profile.gender not in ["man", "woman", "non-binary"]:
         data["gender_options"] = "custom"

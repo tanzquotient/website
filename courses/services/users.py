@@ -26,6 +26,7 @@ def update_user(user: User, user_data: dict) -> User:
         if key in user_data:
             setattr(profile, attr, user_data[key])
 
+    set_if_given("display_name")
     set_if_given("legi")
     set_if_given("gender")
     set_if_given("phone_number")

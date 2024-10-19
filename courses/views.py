@@ -511,6 +511,11 @@ class ProfileView(FormView):
 
     success_url = reverse_lazy("edit_profile")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_initial(self) -> dict:
         initial = create_initial_from_user(self.request.user)
         return initial
