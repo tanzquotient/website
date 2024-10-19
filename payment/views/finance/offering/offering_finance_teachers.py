@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse
 from django.db.models import Q
 import json
 
-from courses.models import Offering, Course
+from courses.models import Offering, Course, LessonOccurrenceTeach
 
 
 class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
@@ -19,7 +19,9 @@ class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        course_id = json.loads(request.body).get("course")
+        json_args = json.loads(request.body)
+        course_id = json_args.get("course")
+        fill_empty_lessons = json_args.get("fill_empty_lessons")
         query = (
             Q(offering__id=self.kwargs["offering"])
             if course_id == "all"
@@ -27,6 +29,13 @@ class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
         )
         courses: list[Course] = Course.objects.filter(query).all()
         for course in courses:
+            if fill_empty_lessons and course.lesson_occurrences.without_teachers().exists():
+                for l in course.lesson_occurrences.without_teachers():
+                    for t in course.get_teachers():
+                        LessonOccurrenceTeach.objects.create(
+                            lesson_occurrence=l,
+                            teacher=t
+                        )
             course.completed = True
             course.save()
 

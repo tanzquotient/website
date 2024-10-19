@@ -4,6 +4,8 @@ from decimal import Decimal
 from django.contrib.auth.models import User
 from django.db import models
 
+from courses import managers
+
 
 class LessonOccurrence(models.Model):
     course = models.ForeignKey(
@@ -20,6 +22,8 @@ class LessonOccurrence(models.Model):
         blank=True,
         through="LessonOccurrenceTeach",
     )
+
+    objects = managers.LessonOccurrenceQuerySet.as_manager()
 
     def duration(self) -> timedelta:
         return self.end - self.start

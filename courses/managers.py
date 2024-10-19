@@ -37,9 +37,11 @@ class CourseManager(TranslatableManager):
         courses = self.all()
         sorted_courses = sorted(
             courses,
-            key=lambda c: c.get_first_lesson_date()
-            if c.get_first_lesson_date()
-            else date(day=1, month=1, year=9999),
+            key=lambda c: (
+                c.get_first_lesson_date()
+                if c.get_first_lesson_date()
+                else date(day=1, month=1, year=9999)
+            ),
         )
         current_date = date(year=1, month=1, day=1)
         month_list = []
@@ -121,7 +123,7 @@ class SubscribeQuerySet(models.QuerySet):
 
     def active(self) -> QuerySet:
         return self.exclude(state__in=SubscribeState.REJECTED_STATES)
-    
+
     def admitted(self) -> QuerySet:
         return self.active().exclude(state=SubscribeState.WAITING_LIST)
 
@@ -150,3 +152,8 @@ class SubscribeQuerySet(models.QuerySet):
 class CourseTypeManager(TranslatableManager):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().order_by("translations__title").distinct()
+
+
+class LessonOccurrenceQuerySet(models.QuerySet):
+    def without_teachers(self) -> QuerySet:
+        return self.filter(teachers=None)

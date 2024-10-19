@@ -11,8 +11,17 @@
           <p>{% trans "Marking a course as completed will freeze its teachers presence form permanently." %}</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
-          <button type="button" class="btn btn-primary" id="confirmBtn">{% trans "Yes, proceed" %}</button>
+            <div class="form-check me-auto">
+                <input class="form-check-input" type="checkbox" value="" id="fill_empty_lessons">
+                <label class="form-check-label" for="fill_empty_lessons">
+                    {% trans "Fill empty lessons (if any) with main teachers" %}
+                </label>
+            </div>
+            <br/>
+            <div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            <button type="button" class="btn btn-primary" id="confirmBtn">{% trans "Yes, proceed" %}</button>
+            </div>
         </div>
       </div>
     </div>
@@ -60,6 +69,7 @@
 
                 body: JSON.stringify({
                     course: confirmationTarget,
+                    fill_empty_lessons: document.getElementById('fill_empty_lessons').checked,
                 }),
 
             })
