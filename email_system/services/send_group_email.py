@@ -95,5 +95,4 @@ def send_group_email(group_email: GroupEmail) -> None:
             # Save generated mail
             GeneratedIndividualEmail.objects.create(email=email, source=group_email)
 
-    group_email.sent_at = datetime.now()
     group_email.save()
