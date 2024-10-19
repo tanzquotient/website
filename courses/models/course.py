@@ -228,7 +228,7 @@ class Course(TranslatableModel):
         return totals
 
     def format_teachers(self) -> str:
-        names = list(map(auth.get_user_model().get_full_name, self.get_teachers()))
+        names = [t.profile.get_display_name() for t in self.get_teachers()]
         if not names:
             return ""
         if len(names) == 1:

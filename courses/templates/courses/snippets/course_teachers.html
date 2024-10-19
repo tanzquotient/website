@@ -2,10 +2,10 @@
     {% for teaching in teachings %}
         {% if display_link and not disable_modals %}
             <a href="#" data-bs-toggle="modal" data-bs-target="#user_modal-{{ teaching.teacher.id }}">
-                {{ teaching.teacher.get_full_name }}
+                {{ teaching.teacher.profile.get_display_name }}
             </a>
         {% else %}
-            {{ teaching.teacher.get_full_name }}
+            {{ teaching.teacher.profile.get_display_name }}
         {% endif %}
         {% if not forloop.last %}
             &amp;

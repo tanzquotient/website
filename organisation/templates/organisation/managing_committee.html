@@ -34,5 +34,5 @@
 
 
 {% for user in users %}
-    {% include "courses/snippets/user_modal.html" with user=user only %}
+    {% include "courses/snippets/user_modal.html" with user=user use_full_name=True only %}
 {% endfor %}
