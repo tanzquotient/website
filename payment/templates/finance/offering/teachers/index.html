@@ -15,5 +15,6 @@
         {% download_button url="payment:offering_teachers_export" offering=offering.id %}
     </div>
     {% teachers_table offering %}
+    {% include "finance/offering/teachers/snippets/mark_completed_modal.html" with offering=offering.id %}
 
 {% endblock %}
