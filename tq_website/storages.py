@@ -13,7 +13,7 @@ class TqStorage(S3Boto3Storage):
         custom_domain,
         access_key,
         secret_key,
-        file_overwrite,
+        file_overwrite=True,
         querystring_auth=True,
     ) -> None:
         config = dict(
