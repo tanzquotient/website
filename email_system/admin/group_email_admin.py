@@ -3,7 +3,6 @@ from django.utils import timezone
 from parler.admin import TranslatableAdmin
 
 from email_system.admin.admin_actions import (
-    send_emails_admin_action,
     copy_emails_admin_action,
 )
 from email_system.models import GroupEmail
