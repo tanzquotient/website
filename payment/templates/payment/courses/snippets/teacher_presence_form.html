@@ -6,6 +6,20 @@
 {% endaddtoblock %}
 
 <h3 class="mt-4">{% trans "Teacher presences" %}</h3>
+
+{% if not can_edit  %}
+    <div class="alert alert-warning" role="alert">
+        <h5 class="alert-heading">{% trans "Read Only" %}</h5>
+        <p class="mb-0">
+            {% if course.completed %}
+                {% trans "An administrator marked the teacher presence for this course as completed. You cannot edit it anymore." %}
+            {% else %}
+                {% trans "You don't have permissions to edit the teachers presences of this course." %}
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
+
 {% for lesson in course.lesson_occurrences.all %}
     <div class="mt-2">
         <div class="fw-bold">
