@@ -99,7 +99,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
                 mark_safe(
                     f"<button class='btn btn-secondary btn-sm disabled'>{_('Course completed')}</button>"
                     if course.completed
-                    else f"<button data-course-id='{course.id}' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark as completed')}</button>"
+                    else f"<button {'data-course-without-teachers=true' if course.lesson_occurrences.without_teachers().exists() else ''} data-course-id='{course.id}' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark as completed')}</button>"
                 )
             )
 
@@ -110,7 +110,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
             [""] * (len(header) - 1)
             + [
                 mark_safe(
-                    f"<button data-course-id='all' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark all as completed')}</button>"
+                    f"<button {'data-course-without-teachers=true' if any([c.lesson_occurrences.without_teachers().exists() for c in course_list]) else ''} data-course-id='all' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark all as completed')}</button>"
                 )
             ]
         )

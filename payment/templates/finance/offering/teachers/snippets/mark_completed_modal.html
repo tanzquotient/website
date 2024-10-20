@@ -12,9 +12,9 @@
         </div>
         <div class="modal-footer">
             <div class="form-check me-auto">
-                <input class="form-check-input" type="checkbox" value="" id="fill_empty_lessons">
+                <input class="form-check-input" type="checkbox" value="" id="fill_empty_lessons" checked>
                 <label class="form-check-label" for="fill_empty_lessons">
-                    {% trans "Fill empty lessons (if any) with main teachers" %}
+                    {% trans "Fill empty lessons with main teachers" %}
                 </label>
             </div>
             <br/>
@@ -34,6 +34,7 @@
 
         const completed_btns = document.querySelectorAll('.btn-completed');
         const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        const empty_lessons_checkbox = document.getElementById('fill_empty_lessons');
 
         let confirmationTarget = false;
         let confirmationCaller = false;
@@ -51,6 +52,9 @@
                 
                 confirmationTarget = btn.getAttribute('data-course-id');
                 confirmationCaller = btn;
+                btn.getAttribute('data-course-without-teachers') ?
+                    empty_lessons_checkbox.parentElement.classList.remove("d-none") :
+                    empty_lessons_checkbox.parentElement.classList.add("d-none");
                 modal.show();
     
             });
@@ -69,7 +73,7 @@
 
                 body: JSON.stringify({
                     course: confirmationTarget,
-                    fill_empty_lessons: document.getElementById('fill_empty_lessons').checked,
+                    fill_empty_lessons: empty_lessons_checkbox.checked,
                 }),
 
             })
