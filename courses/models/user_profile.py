@@ -159,7 +159,7 @@ class UserProfile(Model):
         return self.user.teaching_courses.exists()
 
     def get_display_name(self) -> str:
-        if not self.is_teacher() or not self.display_name:
+        if not self.display_name or not self.is_teacher():
             return self.user.get_full_name()
         return self.display_name
 
