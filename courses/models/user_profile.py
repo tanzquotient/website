@@ -134,7 +134,6 @@ class UserProfile(Model):
             .filter(display_name=self.display_name)
             .exists()
         ):
-            # disallow enabling early signup altogether
             raise ValidationError(
                 {
                     "display_name": _(
