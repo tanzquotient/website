@@ -7,7 +7,7 @@
 
 <h3 class="mt-4">{% trans "Teacher presences" %}</h3>
 
-{% if not can_edit  %}
+{% if not can_edit %}
     <div class="alert alert-warning" role="alert">
         <h5 class="alert-heading">{% trans "Read Only" %}</h5>
         <p class="mb-0">
@@ -91,6 +91,28 @@
         {% endif %}
     </div>
 {% endfor %}
+
+{% if perms.payment.change_payment or perms.courses.change_lessonoccurrence %}
+    <h4 class="mt-4">{% trans "Admin actions" %}</h4>
+    {% if not course.completed %}
+        {# We can mark as completed #}
+        <a class="btn btn-success btn-sm align-self-center btn-completed"
+           data-course-id="{{ course.id }}"
+                {% if course.lesson_occurrences.without_teachers.exists %}
+           data-course-without-teachers="true"
+                {% endif %}
+        >
+            <i class="bi bi-person-fill-lock"></i>
+            {% trans "Mark as completed" %}
+        </a>
+    {% endif %}
+    <a class="btn btn-secondary btn-sm align-self-center"
+       href="{% url 'payment:offering_teachers' course.offering.id %}">
+        <i class="bi bi-list-check"></i>
+        {% trans "Go to teacher presences of offering" %}
+    </a>
+{% endif %}
+
 
 {% if can_edit %}
     {% addtoblock "js" %}

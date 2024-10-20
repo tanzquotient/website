@@ -29,19 +29,6 @@
                     {% trans "Log teacher presence" %}
                 {% endif %}
             </a>
-        {% elif not course.completed %}
-            {% if perms.payment.change_payment or perms.courses.change_lessonoccurrence %}
-                {# We are in teacher presence form and can mark as completed #}
-                <a class="btn btn-success btn-sm align-self-center btn-completed"
-                   data-course-id="{{ course.id }}"
-                   {% if course.lesson_occurrences.without_teachers.exists %}
-                   data-course-without-teachers="true"
-                   {% endif %}
-                   >
-                    <i class="bi bi-person-fill-lock"></i>
-                    {% trans "Mark as completed" %}
-                </a>
-            {% endif %}
         {% endif %}
     {% endif %}
     {% if course.get_confirmed_count > 0 %}
