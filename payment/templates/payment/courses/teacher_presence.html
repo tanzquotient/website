@@ -14,8 +14,10 @@
         {% include "payment/courses/snippets/teacher_presence_messages.html" with messages=messages only %}
         {% include "payment/courses/snippets/teacher_presence_form.html" %}
 
-        {% if not course.cancelled and not course.completed and perms.payment.change_payment %}
-            {% include "finance/offering/teachers/snippets/mark_completed_modal.html" with offering=course.offering.id %}
+        {% if not course.cancelled and not course.completed %}
+            {% if perms.payment.change_payment or perms.courses.change_lessonoccurrence %}
+                {% include "finance/offering/teachers/snippets/mark_completed_modal.html" with offering=course.offering.id %}
+            {% endif %}
         {% endif %}
 
     </div>

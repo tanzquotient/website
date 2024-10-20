@@ -10,7 +10,11 @@ from courses.models import Offering, Course, LessonOccurrenceTeach
 
 class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
     template_name = "finance/offering/teachers/index.html"
-    permission_required = "payment.change_payment"
+
+    def has_permission(self) -> bool:
+        return self.request.user.has_perm(
+            "payment.change_payment"
+        ) or self.request.user.has_perm("courses.change_lessonoccurrence")
 
     def get_context_data(self, **kwargs: dict) -> dict:
         context = super().get_context_data(**kwargs)
@@ -29,12 +33,14 @@ class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):
         )
         courses: list[Course] = Course.objects.filter(query).all()
         for course in courses:
-            if fill_empty_lessons and course.lesson_occurrences.without_teachers().exists():
+            if (
+                fill_empty_lessons
+                and course.lesson_occurrences.without_teachers().exists()
+            ):
                 for l in course.lesson_occurrences.without_teachers():
                     for t in course.get_teachers():
                         LessonOccurrenceTeach.objects.create(
-                            lesson_occurrence=l,
-                            teacher=t
+                            lesson_occurrence=l, teacher=t
                         )
             course.completed = True
             course.save()
