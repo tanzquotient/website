@@ -7,7 +7,7 @@ from numbers import Number
 from typing import Optional, Union, Iterable
 
 from django.conf import settings
-from django.contrib import auth, admin
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -664,8 +664,10 @@ class Course(TranslatableModel):
         )
 
     def is_over(self) -> bool:
-        last_date = self.get_last_lesson_date() or self.get_period().date_to
-        return last_date < date.today()
+        course_end = self.get_last_lesson_end()
+        if course_end is not None:
+            return course_end < datetime.now()
+        return self.get_last_lesson_date() < date.today()
 
     def is_over_since(self, days: int) -> bool:
         last_date = self.get_last_lesson_date() or self.get_period().date_to
