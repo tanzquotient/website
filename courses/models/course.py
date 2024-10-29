@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta, datetime, timezone
 from decimal import Decimal
 from numbers import Number
 from typing import Optional, Union, Iterable
@@ -666,7 +666,7 @@ class Course(TranslatableModel):
     def is_over(self) -> bool:
         course_end = self.get_last_lesson_end()
         if course_end is not None:
-            return course_end < datetime.now()
+            return course_end < datetime.now(timezone.utc)
         return self.get_last_lesson_date() < date.today()
 
     def is_over_since(self, days: int) -> bool:
