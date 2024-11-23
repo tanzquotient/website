@@ -1,7 +1,7 @@
 Hallo {{ first_name }},
 
 Danke, dass du den Kurs {{ course }} unterrichtet hast.
-Bitte nimm dir eine Minute Zeit, um die Anwesenheit der Lehrpersonen des Kurses auszufüllen und zu überprüfen. Du kannst das Formular auf der Tanzquotient Website unter "Meine Kurse" finden.
+Bitte nimm dir eine Minute Zeit, um die Anwesenheit der Lehrpersonen des Kurses auszufüllen und zu überprüfen: {{ teacher_presence_url }}. Du kannst das Formular auch auf der Tanzquotient Website unter "Meine Kurse" finden.
 Wir werden darauf basierend deinen Lohn berechnen.
 
 Hinweis: Bei mehreren Lehrpersonen muss nur eine Person diese Angaben machen. Die Anwesenheitsliste der anderen person wird entsprechend aktualisiert.
@@ -17,7 +17,7 @@ _______________
 Hi {{first_name}},
 
 Thank you for teaching {{ course }}.
-Please take a minute to fill in and review the teacher presence form. You can access it from your My Courses page.
+Please take a minute to fill in and review the teacher presence form at: {{ teacher_presence_url }}. You can also access it from your My Courses page.
 We will use it to compute your salary.
 
 Note: in case of multiple teachers, only one needs to provide this information. The presence log of the other teachers will be updated accordingly.
