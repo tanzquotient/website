@@ -3,6 +3,7 @@ import logging
 
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from django.urls import reverse
 
 from courses import models as models
 from courses.models import choices as choices
@@ -96,6 +97,11 @@ def send_presence_reminder() -> None:
             context = {
                 "first_name": main_teacher.first_name,
                 "course": course.type.title,
+                "teacher_presence_url": (
+                    "https://"
+                    + settings.DEPLOYMENT_DOMAIN
+                    + reverse("payment:course_teacher_presence", kwargs={"course": course.id})
+                )
             }
             log.info(
                 f"Will send presence form reminder to {main_teacher.username} for course {course.type.title} in offering {course.offering.name}"
