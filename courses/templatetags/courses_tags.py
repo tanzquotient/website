@@ -114,8 +114,7 @@ def user_can_review(course: Course, user: User, include_same_type: bool = True) 
     return (
         SurveyInstance.objects.filter(
             expire_date_query, course_query, user=user
-        ).count()
-        > 0
+        ).exists()
     )
 
 
@@ -128,10 +127,9 @@ def user_has_reviewed(
     )
 
     return (
-        SurveyInstance.objects.filter(
+        not SurveyInstance.objects.filter(
             course_query, user=user, is_completed=False
-        ).count()
-        == 0
+        ).exists()
     )
 
 
@@ -160,8 +158,7 @@ def has_open_surveys(user: User) -> bool:
     return (
         SurveyInstance.objects.filter(
             expire_date_query, user=user, is_completed=False, course__isnull=False
-        ).count()
-        > 0
+        ).exists()
     )
 
 
