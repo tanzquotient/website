@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import (
@@ -46,7 +47,7 @@ class SurveyInstance(Model):
     )
     date = DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = DateTimeField(blank=True, null=True, auto_now=True)
-    url_expire_date = DateTimeField(blank=True, null=True)
+    url_expire_date = DateTimeField(blank=False)
     url_key = CharField(
         unique=True,
         default=CodeGenerator.short_uuid,
@@ -55,6 +56,11 @@ class SurveyInstance(Model):
         max_length=32,
     )
     is_completed = BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.url_expire_date:
+            self.url_expire_date = self.date + timedelta(days=90)
+        super().save(*args, **kwargs)
 
     def has_answers(self) -> bool:
         return self.answers.count() > 0
