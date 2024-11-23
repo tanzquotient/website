@@ -156,6 +156,7 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_USER_DISPLAY = lambda user: user.first_name if user.first_name else user.email
 ACCOUNT_SIGNUP_FORM_CLASS = "courses.forms.CustomSignupForm"
 ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 
 # Password validation (native django, not django-allauth)
 AUTH_PASSWORD_VALIDATORS = [
@@ -615,7 +616,7 @@ EMAIL_ADDRESS_EVENTS = "events@tanzquotient.org"
 EMAIL_ADDRESS_FINANCES = "finanzen@tanzquotient.org"
 EMAIL_ADDRESS_DANCE_ADMIN = "tanzen@tanzquotient.org"
 EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS = "anmeldungen@tanzquotient.org"
-EMAIL_ADDRESS_COURSE_IT = "informatik@tanzquotient.org"
+EMAIL_ADDRESS_IT = "informatik@tanzquotient.org"
 
 # Database
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
