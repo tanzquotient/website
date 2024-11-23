@@ -111,11 +111,9 @@ def user_can_review(course: Course, user: User, include_same_type: bool = True) 
     )
     expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
-    return (
-        SurveyInstance.objects.filter(
-            expire_date_query, course_query, user=user
-        ).exists()
-    )
+    return SurveyInstance.objects.filter(
+        expire_date_query, course_query, user=user
+    ).exists()
 
 
 @register.simple_tag
@@ -126,11 +124,9 @@ def user_has_reviewed(
         Q(course__type=course.type) if include_same_type else Q(course=course)
     )
 
-    return (
-        not SurveyInstance.objects.filter(
-            course_query, user=user, is_completed=False
-        ).exists()
-    )
+    return not SurveyInstance.objects.filter(
+        course_query, user=user, is_completed=False
+    ).exists()
 
 
 @register.simple_tag
@@ -155,11 +151,9 @@ def get_link_to_course_evaluation(
 def has_open_surveys(user: User) -> bool:
     expire_date_query = Q(url_expire_date__gte=timezone.now()) | Q(url_expire_date=None)
 
-    return (
-        SurveyInstance.objects.filter(
-            expire_date_query, user=user, is_completed=False, course__isnull=False
-        ).exists()
-    )
+    return SurveyInstance.objects.filter(
+        expire_date_query, user=user, is_completed=False, course__isnull=False
+    ).exists()
 
 
 @register.simple_tag
@@ -277,6 +271,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
         )
 
     return [text for text in composition if text is not None]
+
 
 @register.filter(name="is_user_eligible_for_early_signup")
 def is_user_eligible_for_early_signup(course: Course, user: User):
