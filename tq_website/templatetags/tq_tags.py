@@ -3,6 +3,7 @@ import uuid
 import shortuuid
 from django import template
 from django.urls import reverse
+from django.conf import settings
 
 register = template.Library()
 
@@ -31,3 +32,8 @@ def collapsible_list(items: list, limit: int, item_template: str):
         collapsible_items=items[limit:],
         item_template=item_template,
     )
+
+
+@register.simple_tag
+def settings_value(name):
+    return getattr(settings, name, "")
