@@ -15,13 +15,14 @@ from survey.models import SurveyInstance, Survey
 from tq_website import settings
 
 
-def copy_course(course, to=None):
+def copy_course(course: Course, to=None):
     if to is None:
         to = get_subsequent_offering()
     if to is not None:
         course_copy = course.copy()
         course_copy.offering = to
         course_copy.active = False
+        course_copy.cancelled = False
         course_copy.save()
 
 
