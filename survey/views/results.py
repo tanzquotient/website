@@ -45,9 +45,15 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
         .order_by("name")
         .all()
     )
-    selected_offering = offerings.first() if offerings.count() == 1 else None
-    if "offering_id" in request.GET and request.GET["offering_id"]:
+
+    selected_offering = None
+
+    if selected_course:
+        selected_offering = selected_course.offering
+    elif "offering_id" in request.GET and request.GET["offering_id"]:
         selected_offering = get_object_or_404(Offering, id=request.GET["offering_id"])
+    elif offerings.count() == 1:
+        selected_offering = offerings.first()
 
     courses = []
     if selected_offering:
@@ -61,7 +67,7 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     survey_instances = survey.survey_instances
     if selected_course:
         survey_instances = survey_instances.filter(course=selected_course)
-    if selected_offering:
+    elif selected_offering:
         survey_instances = survey_instances.filter(course__offering=selected_offering)
 
     context = dict(

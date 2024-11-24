@@ -16,10 +16,16 @@
 
         {% if user.is_staff %}
             <div class="my-4">
-                <a href="{% url "survey:changed_answers" %}" class="btn btn-sm btn-outline-dark"><i
+                <a href="{% url "survey:changed_answers" %}" class="btn btn-sm btn-outline-secondary"><i
                         class="bi bi-eye-fill"></i> {% trans "Show changed answers" %}</a>
             </div>
             {% include "survey/components/filter.html" %}
+        {% endif %}
+
+        {% if selected_course %}
+            <div class="my-3">
+                {% include "payment/courses/snippets/course_info.html" with course=selected_course %}
+            </div>
         {% endif %}
 
         <div class="alert alert-info" role="alert">

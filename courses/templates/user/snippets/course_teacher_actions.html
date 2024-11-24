@@ -9,7 +9,7 @@
         </a>
     {% endif %}
     {% url 'payment:coursepayment_detail' course=course.id as edit_url %}
-    {% if request.get_full_path != edit_url %}
+    {% if request.get_full_path != edit_url and not course.is_over %}
         <a href="{{ edit_url }}"
            class="btn btn-success btn-sm align-self-center">
             <i class="bi bi-pencil-square"></i>
@@ -31,7 +31,21 @@
             </a>
         {% endif %}
     {% endif %}
-    {% if course.get_confirmed_count > 0 %}
+    {% if course.get_confirmed_count > 0 and not course.is_over %}
         {% include "user/snippets/participants_download.html" %}
+    {% endif %}
+    {% if course.is_over %}
+        {% with course.surveys as surveys %}
+            {% for survey in surveys %}
+                {% url "survey:results" survey.id as survey_url %}
+                {% if survey.teachers_allowed and request.path != survey_url %}
+                    <a href="{{survey_url}}?course_id={{ course.id }}"
+                       class="btn btn-success btn-sm align-self-center">
+                        <i class="bi bi-file-earmark-bar-graph-fill"></i>
+                        {{ survey.title }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
     {% endif %}
 </div>
