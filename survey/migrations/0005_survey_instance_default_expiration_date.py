@@ -1,9 +1,9 @@
 from django.db import migrations
-from survey.models import SurveyInstance
 from datetime import timedelta
 
 
 def resize(apps, schema_editor):
+    SurveyInstance = apps.get_model("survey", "SurveyInstance")
     instances_to_update = SurveyInstance.objects.filter(
         url_expire_date__isnull=True
     ).all()
