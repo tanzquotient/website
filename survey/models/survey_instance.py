@@ -47,7 +47,7 @@ class SurveyInstance(Model):
     )
     date = DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = DateTimeField(blank=True, null=True, auto_now=True)
-    url_expire_date = DateTimeField(blank=False)
+    url_expire_date = DateTimeField(blank=False, help_text="If left empty, will default to 90 days after creation.")
     url_key = CharField(
         unique=True,
         default=CodeGenerator.short_uuid,
