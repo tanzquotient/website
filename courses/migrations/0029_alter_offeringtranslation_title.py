@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("courses", "0028_resize_userprofile_picture"),
+        ("courses", "0027_alter_userprofile_picture"),
     ]
 
     operations = [
