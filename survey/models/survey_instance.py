@@ -12,6 +12,7 @@ from django.db.models import (
 )
 from django.urls import reverse
 from post_office.models import EmailTemplate
+from django.utils import timezone
 
 from utils import CodeGenerator
 
@@ -59,7 +60,7 @@ class SurveyInstance(Model):
 
     def save(self, *args, **kwargs):
         if not self.url_expire_date:
-            self.url_expire_date = self.date + timedelta(days=90)
+            self.url_expire_date = (self.date or timezone.localdate()) + timedelta(days=90)
         super().save(*args, **kwargs)
 
     def has_answers(self) -> bool:
