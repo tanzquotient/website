@@ -1,15 +1,14 @@
 from celery import shared_task
 from django.conf import settings
 from post_office.mail import send_queued_mail_until_done
-from django.db import transaction
 
 from groups.services import update_groups
 from survey.services import send_course_surveys
 from payment.payment_processor import PaymentProcessor
-from payment.parser import ISO2022Parser, ZkbCsvParser
+from payment.parser import ZkbCsvParser
 from courses.services.teachers import send_presence_reminder
 from email_system.services import send_scheduled_group_emails
-from photologue.models import PhotoSize, ImageModel, PhotoSizeCache
+from photologue.models import ImageModel, PhotoSizeCache
 
 
 @shared_task(
