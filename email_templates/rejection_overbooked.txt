@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen kannst, weil der Kurs überbucht ist.
+Wir müssen dir leider mitteilen, dass du am folgenden Kurs nicht teilnehmen kannst, weil er überbucht ist:
 {{course_info|safe}}
 
 Das Interesse an unseren Kursen ist wieder so hoch, sodass wir nicht für alle Platz haben.

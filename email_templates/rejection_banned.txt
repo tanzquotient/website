@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen darfst.
+Wir müssen dir leider mitteilen, dass du am folgenden Kurs nicht teilnehmen darfst:
 {{course_info|safe}}
 
 Du wurdest für diesen Kurs nicht zugelassen wegen früheren Verfehlungen.
@@ -15,7 +15,7 @@ _______________
 
 Hi {{first_name}},
 
-We are sorry to inform you that you must not participate in the following course:
+We are sorry to inform you that you are not allowed to participate in the following course:
 {{course_info|safe}}
 
 You were banned because of an earlier misbehaviour.

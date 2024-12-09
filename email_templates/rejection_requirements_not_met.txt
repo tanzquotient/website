@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen, dass du keinen Platz im Kurs {{course}} erhalten hast.
+Wir müssen dir leider mitteilen, dass du im folgenden Kurs keinen Platz erhalten hast:
 {{course_info|safe}}
 
 Dafür kann es verschiedene Gründe geben. In bestimmten Kursen werden Vorkenntnisse in den jeweiligen Tänzen vorausgesetzt (siehe Kursbeschreibung des jeweiligen Kurses).

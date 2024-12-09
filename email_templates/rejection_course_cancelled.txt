@@ -1,10 +1,10 @@
 Hallo {{first_name}}
 
-Wir bedauern, dir mitteilen zu müssen, dass der Kurs {{course}} abgesagt wurde.
+Wir müssen dir leider mitteilen, dass der folgende Kurs abgesagt wurde:
 {{course_info|safe}}
 
 Schau bitte auf unsere Kursseite, vielleicht gibt es noch einen anderen Kurs der dir gefallen könnte.
-Genaure Informationen findest du unter https://tanzquotient.org/profile/courses
+Genauere Informationen findest du unter https://tanzquotient.org/profile/courses
 
 Liebe Grüsse
 

@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen, dass du nicht am Kurs {{course}} teilnehmen kannst.
+Wir müssen dir leider mitteilen, dass du am folgenden Kurs nicht teilnehmen kannst:
 {{course_info|safe}}
 
 Schau doch auf der Website ob du einen anderen Kurs findest oder versuch es nächstes Quartal wieder.

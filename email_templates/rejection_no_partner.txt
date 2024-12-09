@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen, dass du derzeit nicht am Kurs {{course}} teilnehmen kannst.
+Wir müssen dir leider mitteilen, dass du derzeit am folgenden Kurs nicht teilnehmen kannst:
 {{course_info|safe}}
 
 Wir konntent noch keine:n Partner:in für dich finden.

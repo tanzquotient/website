@@ -1,9 +1,9 @@
 Hallo {{first_name}}
 
-Wir müssen dir leider mitteilen dass du nicht am Kurs {{course}} teilnehmen darst.
+Wir müssen dir leider mitteilen, dass du am folgenden Kurs nicht teilnehmen darfst:
 {{course_info|safe}}
 
-Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.org/en/faq/
+Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.or/faq/
 
 Liebe Grüsse
 
@@ -18,10 +18,11 @@ Hi {{first_name}},
 We are sorry to inform you that you cannot participate in the following course:
 {{course_info|safe}}
 
-See our policy about who can participate in which courses: https://tanzquotient.org/en/faq/
+See our policy about who can participate in which courses: https://tanzquotient.org/faq/
 
 Best regards,
 
 Your Tanzquotient
 tanzquotient.org
-If you have any questions concerning the course, feel free to contact us: anmeldungen@tq.vseth.ch
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
+
