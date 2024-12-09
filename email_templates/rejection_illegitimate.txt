@@ -3,7 +3,7 @@ Hallo {{first_name}}
 Wir müssen dir leider mitteilen, dass du am folgenden Kurs nicht teilnehmen darfst:
 {{course_info|safe}}
 
-Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.or/faq/
+Für unsere Richtlinien wer an welchen Kursen teilnehmen darf siehe https://tanzquotient.org/faq/
 
 Liebe Grüsse
 
