@@ -1,6 +1,7 @@
 Hallo {{first_name}}
 
 Dies ist eine Bestätigung dass du dich selbst vom Kurs {{course}} abgemeldet hast.
+{{course_info|safe}}
 
 Liebe Grüsse
 
@@ -12,7 +13,8 @@ _______________
 
 Hi {{first_name}},
 
-This is a confirmation that you cancelled yourself from the course {{course}}.
+This is a confirmation that you cancelled yourself from the following course:
+{{course_info|safe}}
 
 Best regards,
 

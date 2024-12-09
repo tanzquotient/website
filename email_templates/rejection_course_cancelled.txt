@@ -1,6 +1,7 @@
 Hallo {{first_name}}
 
 Wir bedauern, dir mitteilen zu müssen, dass der Kurs {{course}} abgesagt wurde.
+{{course_info|safe}}
 
 Schau bitte auf unsere Kursseite, vielleicht gibt es noch einen anderen Kurs der dir gefallen könnte.
 Genaure Informationen findest du unter https://tanzquotient.org/profile/courses
@@ -16,7 +17,8 @@ _______________
 
 Hi {{first_name}},
 
-We are sorry to inform you that the course {{course}} has been cancelled.
+We are sorry to inform you that the following course has been cancelled:
+{{course_info|safe}}
 
 Please have a look at our website, maybe we offer another course that you like.
 You can check all details at https://tanzquotient.org/profile/courses

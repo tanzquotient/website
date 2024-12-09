@@ -1,6 +1,7 @@
 Hallo {{first_name}}
 
 Wir müssen dir leider mitteilen, dass du derzeit nicht am Kurs {{course}} teilnehmen kannst.
+{{course_info|safe}}
 
 Wir konntent noch keine:n Partner:in für dich finden.
 Wir suchen noch weiter bis zu zweiten Kursstunde und würden dir dann wieder eine Zusagen schicken.
@@ -19,7 +20,8 @@ _______________
 
 Hi {{first_name}},
 
-We are sorry to inform you that for the time being you cannot participate in the course {{course}}.
+We are sorry to inform you that for the time being you cannot participate in the following course:
+{{course_info|safe}}
 
 We could not find a partner for you, but we will keep looking until before the second lesson.
 In case we find one we will let you know.
