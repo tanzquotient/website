@@ -198,6 +198,7 @@ def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
         "course": subscription.course.type.title,
+        "course_info": create_course_info(subscription.course),
     }
 
     template = "rejection_{}".format(reason)
