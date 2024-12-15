@@ -11,7 +11,7 @@ def resize(apps, schema_editor):
         instance_to_update.url_expire_date = instance_to_update.date + timedelta(
             days=90
         )
-        instance_to_update.save()
+        instance_to_update.save(update_fields=["url_expire_date"])
 
 
 class Migration(migrations.Migration):
