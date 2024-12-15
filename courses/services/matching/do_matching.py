@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 
 from courses import models as models
 from courses.managers import SubscribeQuerySet
-from courses.models import LeadFollow, Subscribe
+from courses.models import LeadFollow, Subscribe, Course
 
 log = logging.getLogger("matching")
 
@@ -94,16 +94,30 @@ def _partition_subscribes(
 
 
 @transaction.atomic
-def _match_for_course(subscriptions: SubscribeQuerySet, course_id: int) -> int:
+def _match_for_course(
+    subscriptions: SubscribeQuerySet, course_id: int, request: HttpRequest = None
+) -> int:
     """
     Partitions the single subscribes into two lists.
     Afterwards, the lists are merged based on height
     """
-    to_match = list(
-        subscriptions.to_match().filter(course__id=course_id).order_by("date")
+    course = Course.objects.get(id=course_id)
+    to_match: SubscribeQuerySet = (
+        subscriptions.to_match().filter(course=course).order_by("date")
     )
 
-    a, b = _partition_subscribes(to_match)
+    if to_match.waiting_list().exists() and to_match.admitted().exists():
+        log.info(f"skipping {course}: waiting list and admitted subscriptions selected")
+        if request:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                f"Matching skipped for {course}: subscriptions both "
+                + "admitted and in the waiting list were selected",
+            )
+        return 0
+
+    a, b = _partition_subscribes(list(to_match))
     assert len(a) == len(b)
 
     def sort_key(subscribe: Subscribe) -> int:
@@ -139,11 +153,18 @@ def match_partners(
     match_count = 0
     for course_id in set(courses):
         log.info("matching for course id {}".format(course_id))
-        match_count += _match_for_course(subscriptions, course_id)
+        match_count += _match_for_course(subscriptions, course_id, request)
 
     log.info("{} couples matched successfully".format(match_count))
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        _("{} couples matched successfully").format(match_count),
-    )
+    if match_count > 0:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _("{} couples matched successfully").format(match_count),
+        )
+    else:
+        messages.add_message(
+            request,
+            messages.INFO,
+            _("No couple matched").format(match_count),
+        )
