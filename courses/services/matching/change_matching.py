@@ -36,7 +36,7 @@ def unmatch_partners(subscriptions, request):
     invalid_state_count = 0
     invalid_matching_state_count = 0
     for s in subscriptions.all():
-        if s.state == models.SubscribeState.NEW:
+        if s.state in [models.SubscribeState.NEW, models.SubscribeState.WAITING_LIST]:
             allowed_states = [models.MatchingState.MATCHED]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if (
@@ -83,7 +83,7 @@ def breakup_couple(subscriptions, request):
     invalid_state_count = 0
     invalid_matching_state_count = 0
     for s in subscriptions.all():
-        if s.state == models.SubscribeState.NEW:
+        if s.state in [models.SubscribeState.NEW, models.SubscribeState.WAITING_LIST]:
             allowed_states = [models.MatchingState.COUPLE]
             partner_subs = subscriptions.filter(user=s.partner, course=s.course)
             if (
