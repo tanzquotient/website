@@ -1,6 +1,6 @@
 from django import template
 from django.contrib.auth.models import User
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet, Q, Count
 from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -48,19 +48,28 @@ def course_reviews(course: Course, user: User, request: HttpRequest) -> dict:
     ).filter(survey_instance__course__teaching__teacher__in=course_teachers)
     return dict(
         course=course,
-        course_reviews=course_reviews_for_queryset(course_answers),
-        teachers_reviews=course_reviews_for_queryset(teachers_answers),
+        course_reviews=course_reviews_for_queryset(course_answers, course_teachers),
+        teachers_reviews=course_reviews_for_queryset(teachers_answers, course_teachers),
         user=user,
         request=request,
     )
 
 
-def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
+def course_reviews_for_queryset(
+    answers: QuerySet[Answer], teachers: list[User]
+) -> list:
+
     text_answers = (
         answers.filter(
             question__type=QuestionType.FREE_FORM,
             hide_from_public_reviews=False,
             question__public_review=True,
+        )
+        .annotate(
+            matching_teachers=Count(
+                "survey_instance__course__teaching",
+                filter=Q(survey_instance__course__teaching__teacher__in=teachers),
+            ),
         )
         .prefetch_related(
             "survey_instance",
@@ -69,7 +78,7 @@ def course_reviews_for_queryset(answers: QuerySet[Answer]) -> list:
             "survey_instance__course__type",
             "survey_instance__course__teaching__teacher",
         )
-        .order_by("-survey_instance__last_update")
+        .order_by("-matching_teachers", "-survey_instance__last_update")
         .distinct()
     )
 
