@@ -124,6 +124,11 @@ class PeriodCancellationInline(admin.TabularInline):
     extra = 2
 
 
+class RoomCancellationInline(admin.TabularInline):
+    model = RoomCancellation
+    extra = 2
+
+
 class SongInline(admin.TabularInline):
     search_fields = [
         "title",
@@ -554,7 +559,8 @@ class StyleAdmin(TranslatableAdmin):
 
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
-    pass
+    search_fields = ["name"]
+    inlines = (RoomCancellationInline,)
 
 
 @admin.register(Address)
