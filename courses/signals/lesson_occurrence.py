@@ -10,6 +10,7 @@ from courses.models import (
     Period,
     PeriodCancellation,
     LessonOccurrenceTeach,
+    RoomCancellation,
 )
 
 
@@ -20,9 +21,12 @@ from courses.models import (
 @receiver(post_save, sender=Offering)
 @receiver(post_save, sender=Period)
 @receiver(post_save, sender=PeriodCancellation)
+@receiver(post_save, sender=RoomCancellation)
 @receiver(post_delete, sender=RegularLesson)
 @receiver(post_delete, sender=RegularLessonException)
 @receiver(post_delete, sender=IrregularLesson)
+@receiver(post_delete, sender=PeriodCancellation)
+@receiver(post_delete, sender=RoomCancellation)
 def update_lesson_occurrences(sender, instance, **kwargs):
     courses: list[Course]
     if sender == Course:
@@ -38,6 +42,8 @@ def update_lesson_occurrences(sender, instance, **kwargs):
         courses = list(Course.objects.filter(period_query).all())
     elif sender == PeriodCancellation:
         courses = list(instance.period.course_set.all())
+    elif sender == RoomCancellation:
+        courses = list(instance.room.courses.all())
 
     for course in courses:
         course.update_lesson_occurrences()

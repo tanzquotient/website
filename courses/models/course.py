@@ -749,6 +749,8 @@ class Course(TranslatableModel):
                     dates.append(exception.date)
 
         dates += [c.date for c in self.get_period().cancellations.all()]
+        for c in self.room.cancellations.filter(date_to__gte=self.get_period().date_from, date_from__lte=self.get_period().date_to):
+            dates += c.get_dates_list()
         return sorted(dates)
 
     def format_cancellations(self) -> str:

@@ -70,6 +70,7 @@ def course_list(
         "period__cancellations",
         "course_set__type",
         "course_set__period__cancellations",
+        "course_set__room__cancellations",
         "course_set__regular_lessons",
         "course_set__room__address",
         "course_set__room__translations",

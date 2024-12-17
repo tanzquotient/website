@@ -21,6 +21,7 @@ def get_teachers_overview_data() -> list[list]:
             "course__offering__period__cancellations",
             "course__period",
             "course__period__cancellations",
+            "course__room__cancellations",
         )
         .all()
     ):
