@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime, timedelta, date
 
 
 class RoomCancellation(models.Model):
@@ -8,20 +7,10 @@ class RoomCancellation(models.Model):
     room = models.ForeignKey(
         "Room", related_name="cancellations", on_delete=models.CASCADE
     )
-    date_from = models.DateTimeField(blank=False)
-    date_to = models.DateTimeField(blank=False)
-
-    def get_dates_list(self) -> list[date]:
-        return [
-            (self.date_from + timedelta(days=i)).date()
-            for i in range((self.date_to - self.date_from).days + 1)
-        ]
+    date = models.DateField(blank=False)
 
     def __str__(self):
-        date_string = "{} - {}".format(
-            self.date_from.strftime("%d.%m.%Y %H:%m"),
-            self.date_to.strftime("%d.%m.%Y %H:%m"),
-        )
+        room_date_string = "{}, {}".format(self.room, self.date.strftime("%d.%m.%Y"))
         if self.name:
-            return "{} ({})".format(self.name, date_string)
-        return date_string
+            return "{} ({})".format(self.name, room_date_string)
+        return room_date_string
