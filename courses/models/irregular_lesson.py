@@ -38,7 +38,11 @@ class IrregularLesson(models.Model):
         return room or self.course.room
 
     def is_cancelled(self) -> bool:
-        return self.get_room().cancellations.filter(date=self.date).exists()
+        return (
+            False
+            if self.get_room() is None
+            else self.get_room().cancellations.filter(date=self.date).exists()
+        )
 
     def get_occurrence(self) -> LessonOccurrenceData:
         return LessonOccurrenceData(

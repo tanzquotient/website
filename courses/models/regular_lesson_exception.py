@@ -45,7 +45,12 @@ class RegularLessonException(models.Model):
         return room or self.regular_lesson.course.room
 
     def is_cancelled(self) -> bool:
-        return self.is_cancellation or self.get_room().cancellations.filter(date=self.date).exists()
+        return (
+            False
+            if self.get_room() is None
+            else self.is_cancellation
+            or self.get_room().cancellations.filter(date=self.date).exists()
+        )
 
     def is_applicable(self) -> bool:
         if self.date.weekday() != Weekday.NUMBERS[self.regular_lesson.weekday]:
