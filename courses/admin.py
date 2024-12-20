@@ -1,8 +1,10 @@
 # Register your models here.
 from typing import Optional
+from datetime import timedelta
 
 from django.contrib.admin.views.main import ChangeList
 from django.utils.html import format_html
+from django.utils import timezone
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -127,6 +129,13 @@ class PeriodCancellationInline(admin.TabularInline):
 class RoomCancellationInline(admin.TabularInline):
     model = RoomCancellation
     extra = 2
+
+    def get_queryset(self, request):
+        return (
+            super(RoomCancellationInline, self)
+            .get_queryset(request)
+            .filter(date__gte=timezone.now().date() - timedelta(days=90))
+        )
 
 
 class SongInline(admin.TabularInline):
