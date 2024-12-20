@@ -49,6 +49,10 @@
         {% for lesson in irregular %}
             {{ lesson.date|date:'D, d. N Y' }}, {{ lesson.time_from|date:'H:i' }} -
             {{ lesson.time_to|date:'H:i' }}
+            {% if lesson.lesson_details and lesson.lesson_details.room %}
+                <br/>
+                {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=lesson.lesson_details.room only %}
+            {% endif %}
             {% if not forloop.last %}
                 <br/>
             {% endif %}
