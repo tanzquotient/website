@@ -48,7 +48,7 @@ def update_lesson_occurrences(sender, instance, **kwargs):
     elif sender == RoomCancellation:
         courses = list(instance.room.courses.all())
     elif sender == LessonDetails:
-        courses = [instance.get_lesson().course]
+        courses = [instance.get_lesson().course] if not kwargs["created"] else []
 
     for course in courses:
         course.update_lesson_occurrences()
