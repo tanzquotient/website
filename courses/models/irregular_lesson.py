@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import CASCADE
 from pytz import timezone
 
-from courses.models import LessonOccurrenceData
+from courses.models import LessonOccurrenceData, Room, RoomCancellation
 
 
 class IrregularLesson(models.Model):
@@ -31,14 +31,29 @@ class IrregularLesson(models.Model):
     class Meta:
         ordering = ["date", "time_from"]
 
+    def get_room(self) -> Room:
+        room = None
+        if self.lesson_details is not None:
+            room = self.lesson_details.room
+        return room or self.course.room
+
+    def is_cancelled(self) -> bool:
+        return RoomCancellation.objects.filter(
+            date=self.date, room=self.get_room()
+        ).exists()
+
     def get_occurrence(self) -> LessonOccurrenceData:
         return LessonOccurrenceData(
-            timezone("Europe/Zurich").localize(datetime.combine(self.date, self.time_from)),
-            timezone("Europe/Zurich").localize(datetime.combine(self.date, self.time_to)),
+            timezone("Europe/Zurich").localize(
+                datetime.combine(self.date, self.time_from)
+            ),
+            timezone("Europe/Zurich").localize(
+                datetime.combine(self.date, self.time_to)
+            ),
         )
 
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
-        return [self.get_occurrence()]
+        return [self.get_occurrence()] if not self.is_cancelled() else []
 
     def get_total_time(self) -> timedelta:
         return self.get_occurrence().duration

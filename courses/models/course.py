@@ -677,7 +677,9 @@ class Course(TranslatableModel):
         return self.get_first_lesson_date() + extra_time < date.today()
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
-        return list(self.regular_lessons.all()) + list(self.irregular_lessons.all())
+        return list(self.regular_lessons.all()) + [
+            l for l in self.irregular_lessons.all() if not l.is_cancelled()
+        ]
 
     def update_lesson_occurrences(self) -> None:
         for occurrence in self.get_lesson_occurrences():
@@ -721,7 +723,7 @@ class Course(TranslatableModel):
         self,
     ) -> list[RegularLessonException]:
         return [
-            e for e in self.get_all_regular_lesson_exceptions() if not e.is_cancellation
+            e for e in self.get_all_regular_lesson_exceptions() if not e.is_cancellation and not e.is_cancelled()
         ]
 
     def get_lessons_as_strings(self) -> Iterable[str]:
@@ -745,12 +747,10 @@ class Course(TranslatableModel):
         dates = []
         for regular_lesson in self.regular_lessons.all():
             for exception in regular_lesson.exceptions.all():
-                if exception.is_cancellation:
+                if exception.is_cancellation or exception.is_cancelled():
                     dates.append(exception.date)
 
         dates += [c.date for c in self.get_period().cancellations.all()]
-        for c in self.room.cancellations.filter(date_to__gte=self.get_period().date_from, date_from__lte=self.get_period().date_to):
-            dates += c.get_dates_list()
         return sorted(dates)
 
     def format_cancellations(self) -> str:

@@ -1,12 +1,12 @@
 import operator
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, time
 from functools import reduce
 from typing import Iterable
 
 from django.db import models
 from pytz import timezone
 
-from . import Weekday, LessonOccurrenceData
+from . import Weekday, LessonOccurrenceData, RoomCancellation
 
 
 class RegularLesson(models.Model):
@@ -34,13 +34,38 @@ class RegularLesson(models.Model):
                 d.weekday() == Weekday.NUMBERS[self.weekday] and d not in cancellations
             )
 
-        def to_lesson_occurrence(d: date) -> LessonOccurrenceData:
+        def to_lesson_occurrence(
+            d: date, time_from: time | None = None, time_to: time | None = None
+        ) -> LessonOccurrenceData:
             return LessonOccurrenceData(
-                timezone("Europe/Zurich").localize(datetime.combine(d, self.time_from)),
-                timezone("Europe/Zurich").localize(datetime.combine(d, self.time_to)),
+                timezone("Europe/Zurich").localize(
+                    datetime.combine(d, time_from or self.time_from)
+                ),
+                timezone("Europe/Zurich").localize(
+                    datetime.combine(d, time_to or self.time_to)
+                ),
             )
 
-        return map(to_lesson_occurrence, filter(has_date_a_lesson, all_dates_in_period))
+        lesson_occurrences = []
+        for lesson_date in filter(has_date_a_lesson, all_dates_in_period):
+            if self.exceptions.filter(date=lesson_date).exists():
+                exception = self.exceptions.get(date=lesson_date)
+                if RoomCancellation.objects.filter(
+                    date=exception.date,
+                    room=exception.get_room(),
+                ):
+                    continue
+                lesson_occurrences.append(
+                    to_lesson_occurrence(
+                        lesson_date,
+                        exception.get_time_from(),
+                        exception.get_time_to(),
+                    )
+                )
+            else:
+                lesson_occurrences.append(to_lesson_occurrence(lesson_date))
+
+        return lesson_occurrences
 
     def get_total_time(self) -> timedelta:
         return reduce(operator.add, map(lambda l: l.duration, self.get_occurrences()))
