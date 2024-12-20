@@ -8,6 +8,7 @@ from .price_reduction import PriceReduction
 from .subscribe import Subscribe
 from .style import Style
 from .room import Room
+from .room_cancellation import RoomCancellation
 from .period import Period
 from .regular_lesson import RegularLesson
 from .lesson_details import LessonDetails
@@ -25,4 +26,3 @@ from .voucher_purpose import VoucherPurpose
 from .song import Song
 from .user_profile import UserProfile
 from .lesson_occurrence_teach import LessonOccurrenceTeach
-from .room_cancellation import RoomCancellation
