@@ -747,7 +747,7 @@ class Course(TranslatableModel):
         dates = []
         for regular_lesson in self.regular_lessons.all():
             for exception in regular_lesson.exceptions.all():
-                if exception.is_cancellation or exception.is_cancelled():
+                if exception.is_cancelled():
                     dates.append(exception.date)
 
         dates += [c.date for c in self.get_period().cancellations.all()]

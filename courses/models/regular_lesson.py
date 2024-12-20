@@ -50,10 +50,7 @@ class RegularLesson(models.Model):
         for lesson_date in filter(has_date_a_lesson, all_dates_in_period):
             if self.exceptions.filter(date=lesson_date).exists():
                 exception = self.exceptions.get(date=lesson_date)
-                if RoomCancellation.objects.filter(
-                    date=exception.date,
-                    room=exception.get_room(),
-                ):
+                if exception.is_cancelled():
                     continue
                 lesson_occurrences.append(
                     to_lesson_occurrence(
