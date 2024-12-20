@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import CASCADE
 from pytz import timezone
 
-from courses.models import LessonOccurrenceData, Room, RoomCancellation
+from courses.models import LessonOccurrenceData, Room
 
 
 class IrregularLesson(models.Model):
