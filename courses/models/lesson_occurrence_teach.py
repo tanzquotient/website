@@ -35,6 +35,7 @@ class LessonOccurrenceTeach(models.Model):
 
     def update_hourly_wage(self) -> None:
         self.hourly_wage = self.calculate_hourly_wage()
+        self.save()
 
     def get_wage(self) -> Decimal:
         hours = self.lesson_occurrence.get_hours()
