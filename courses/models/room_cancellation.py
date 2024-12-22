@@ -14,3 +14,6 @@ class RoomCancellation(models.Model):
         if self.name:
             return "{} ({})".format(self.name, room_date_string)
         return room_date_string
+
+    class Meta:
+        ordering = ["-date"]
