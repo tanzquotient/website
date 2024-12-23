@@ -1,19 +1,19 @@
 # Django
-Django==5.0.9
+Django==5.0.10
 
 # Django Extensions
 django-debug-toolbar==4.4.6     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
-django-post-office==3.9.0       # Send and manage emails asynchronously, database based email templates
+django-post-office==3.9.1       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-ckeditor==6.7.1          # Django admin CKEditor integration
-django-allauth==65.0.1          # Authentication, registration, account management, 3rd party account authentication
+django-ckeditor==6.7.2          # Django admin CKEditor integration
+django-allauth==65.3.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
-django-cms==3.11.8              # Open source content management system based on the Django
+django-cms==3.11.9              # Open source content management system based on the Django
 djangocms-text-ckeditor==5.1.6  # Text plugin for django CMS using CKEditor 4
 
 # Rest framework
@@ -33,7 +33,7 @@ svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
 reportlab==4.2.2                # For generating PDFs and graphics
 pyyaml==6.0.2                   # Used for generating environment variable file
 qrbill==1.1.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
-django-resized==1.0.2           # Used to resize images on save of ImageField
+django-resized==1.0.3           # Used to resize images on save of ImageField
 
 # SSH
 paramiko==3.5.0                 # Used to get finance files from PostFinance
@@ -57,6 +57,6 @@ plotly==5.24.1                  # For generating charts and graphs
 pytz==2024.2                    # timezone calculations
 pylint==3.3.1                   # Default linter
 shortuuid==1.0.13               # For generating short and unique ID's and codes
-django-hijack==3.6.0            # Superuser can impersonate other users
+django-hijack==3.7.1            # Superuser can impersonate other users
 python-dotenv==1.0.1            # Used to load environment variables from .env file
 sphinx-automodapi==0.18.0       # For generating Sphinx API docs
