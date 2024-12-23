@@ -169,6 +169,20 @@ class CourseTypeStyleFilter(SimpleListFilter):
             return queryset.filter(styles__in=children).distinct()
 
 
+class RoomCancellationFilter(SimpleListFilter):
+    title = _("Room")
+    parameter_name = "room"
+
+    def lookups(self, request, model_admin):
+        return [(r.id, r.name) for r in Room.objects.exclude(cancellations=None).all()]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+
+        return queryset.filter(room=self.value())
+
+
 class StyleParentFilter(SimpleListFilter):
     title = "parent style"
 

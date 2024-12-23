@@ -572,6 +572,13 @@ class RoomAdmin(TranslatableAdmin):
     inlines = (RoomCancellationInline,)
 
 
+@admin.register(RoomCancellation)
+class RoomAdmin(admin.ModelAdmin):
+    list_display = ["__str__", "date", "room"]
+    search_fields = ["name", "room"]
+    list_filter = ["date", RoomCancellationFilter]
+
+
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     pass
