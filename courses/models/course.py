@@ -327,7 +327,7 @@ class Course(TranslatableModel):
             matched_subscribes_per_preference
             + (
                 single_subscribes_lead
-                if lead_or_follow == LeadFollow
+                if lead_or_follow == LeadFollow.LEAD
                 else single_subscribes_follow
             )
             < self.max_subscribers / 2
