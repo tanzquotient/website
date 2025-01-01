@@ -280,14 +280,58 @@ class Course(TranslatableModel):
         if free_places == 0:
             return False
 
-        matched_count = self.subscriptions.active().matched().count()
-        total_for_preference = (self.max_subscribers - matched_count) / 2
-        current_count_for_preference = (
-            self.subscriptions.admitted().single_with_preference(lead_or_follow).count()
-        )
-        free_for_preference = total_for_preference - current_count_for_preference
+        if not self.type.couple_course:
+            return self.has_free_places()
 
-        return free_for_preference >= 1
+        matched_subscribes_per_preference = (
+            self.subscriptions.active().matched().count() / 2
+        )
+        single_subscribes_lead = (
+            self.subscriptions.admitted()
+            .single_with_preference(LeadFollow.LEAD)
+            .count()
+        )
+        single_subscribes_follow = (
+            self.subscriptions.admitted()
+            .single_with_preference(LeadFollow.FOLLOW)
+            .count()
+        )
+        single_subscribes_no_preference = (
+            self.subscriptions.admitted()
+            .single_with_preference(LeadFollow.NO_PREFERENCE)
+            .count()
+        )
+        while single_subscribes_no_preference > 1 or (
+            single_subscribes_no_preference > 0
+            and single_subscribes_lead != single_subscribes_follow
+        ):
+            if single_subscribes_lead < single_subscribes_follow:
+                single_subscribes_lead += 1
+                single_subscribes_no_preference -= 1
+            elif single_subscribes_follow < single_subscribes_lead:
+                single_subscribes_follow += 1
+                single_subscribes_no_preference -= 1
+            else:
+                single_subscribes_lead += 1
+                single_subscribes_follow += 1
+                single_subscribes_no_preference -= 2
+
+        if lead_or_follow == LeadFollow.NO_PREFERENCE:
+            return (
+                matched_subscribes_per_preference
+                + min(single_subscribes_lead, single_subscribes_follow)
+                < self.max_subscribers / 2
+            )
+
+        return (
+            matched_subscribes_per_preference
+            + (
+                single_subscribes_lead
+                if lead_or_follow == LeadFollow
+                else single_subscribes_follow
+            )
+            < self.max_subscribers / 2
+        )
 
     def active_subscriptions_count(self) -> int:
         return self.subscriptions.active().count()
