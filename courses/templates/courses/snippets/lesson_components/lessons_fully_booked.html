@@ -1,7 +1,7 @@
 {% load courses_tags %}
 {% load i18n %}
 
-{% with regular=course.regular_lessons.all irregular=course.irregular_lessons.all %}
+{% with regular=course.regular_lessons.all irregular=course.get_irregular_lessons %}
 
     {% if regular %}
         {% for lesson in regular %}

@@ -2,7 +2,7 @@
 {% load i18n %}
 
 
-{% with regular=course.regular_lessons.all irregular=course.irregular_lessons.all %}
+{% with regular=course.regular_lessons.all irregular=course.get_irregular_lessons %}
 
     {% if regular and irregular %}
         <u>{% trans "Regular lessons" %}:</u> <br/>

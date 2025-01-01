@@ -677,9 +677,10 @@ class Course(TranslatableModel):
         return self.get_first_lesson_date() + extra_time < date.today()
 
     def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
-        return list(self.regular_lessons.all()) + [
-            l for l in self.irregular_lessons.all() if not l.is_cancelled()
-        ]
+        return list(self.regular_lessons.all()) + self.get_irregular_lessons()
+
+    def get_irregular_lessons(self) -> list[IrregularLesson]:
+        return [l for l in self.irregular_lessons.all() if not l.is_cancelled()]
 
     def update_lesson_occurrences(self) -> None:
         for occurrence in self.get_lesson_occurrences():
