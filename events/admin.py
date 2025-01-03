@@ -21,6 +21,7 @@ class EventAdmin(TranslatableAdmin):
     list_filter = (
         EventDateFilter,
         "room",
+        "category",
     )
 
     model = Event
