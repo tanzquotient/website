@@ -31,7 +31,10 @@ from courses.services.general import log
 def subscribe(course: Course, user: User, data: dict) -> Subscribe:
     """Enrolls a user (and optionally a partner) in a course"""
 
-    user_subscription, _ = Subscribe.objects.get_or_create(user=user, course=course)
+    try:
+        user_subscription = Subscribe.objects.get(user=user, course=course)
+    except Subscribe.DoesNotExist:
+        user_subscription = Subscribe(user=user, course=course)
 
     # let the save method set the state of the subscription and reset the date
     user_subscription.state = None
@@ -45,9 +48,10 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
     if data["single_or_couple"] == SingleCouple.COUPLE:
         partner = User.objects.get(email__iexact=data["partner_email"])
 
-        partner_subscription, _ = Subscribe.objects.get_or_create(
-            user=partner, course=course
-        )
+        try:
+            partner_subscription = Subscribe.objects.get(user=partner, course=course)
+        except Subscribe.DoesNotExist:
+            partner_subscription = Subscribe(user=partner, course=course)
 
         # let the save method set the state of the subscription and reset the date
         partner_subscription.state = None
@@ -79,12 +83,13 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
 
         # Finish partner subscription
         partner_subscription.save()
-        send_subscription_confirmation(partner_subscription)
 
     # Finish user subscriptiong
     user_subscription.derive_matching_state()
     user_subscription.save()
     send_subscription_confirmation(user_subscription)
+    if data["single_or_couple"] == SingleCouple.COUPLE:
+        send_subscription_confirmation(partner_subscription)
 
     return user_subscription
 
