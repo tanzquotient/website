@@ -19,21 +19,22 @@ def subscription_payment_view(request: HttpRequest, usi: str):
     voucher_applied = False
 
     # Apply voucher
+    user = request.user or subscription.user
     if voucher_form.is_valid():
         voucher = Voucher.objects.get(key=voucher_form.cleaned_data["voucher_code"])
-        _, voucher_for_remainder = voucher.apply_to(subscription)
+        _, voucher_for_remainder = voucher.apply_to(subscription, user)
         voucher_applied = True
         voucher_form = VoucherForm()
 
     if voucher_for_remainder:
         email_context = {
-            "first_name": subscription.user.first_name,
-            "last_name": subscription.user.last_name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "voucher_key": voucher_for_remainder.key,
             "voucher_url": voucher_for_remainder.pdf_file.url,
         }
         send_email(
-            to=subscription.user.email,
+            to=user.email,
             template="voucher",
             context=email_context,
             attachments={"Voucher.pdf": voucher_for_remainder.pdf_file.file},

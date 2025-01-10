@@ -19,7 +19,6 @@ from django.db.models import (
     PROTECT,
 )
 from django.utils.translation import gettext_lazy as _
-from reversion.models import Version
 from reversion import revisions as reversion
 
 from courses.models import Subscribe
@@ -125,7 +124,7 @@ class Voucher(Model):
         super().save(force_insert, force_update, using, update_fields)
 
     def apply_to(
-        self, subscription: Subscribe, user: Optional[User] = None
+        self, subscription: Subscribe, user: User
     ) -> tuple[bool, Optional[Voucher]]:
         # Make sure that subscription.price_to_pay has been computed
         subscription.generate_price_to_pay()
@@ -140,21 +139,19 @@ class Voucher(Model):
             remainder = reduction_amount - open_amount_before
             reduction_amount = open_amount_before
             with transaction.atomic(), reversion.create_revision():
+                comment = (
+                    f"Automatically generated due to remaining value after applying"
+                    f" voucher {self.key} for {subscription}"
+                )
                 voucher_for_remainder = Voucher.objects.create(
-                    amount=remainder, purpose=self.purpose, expires=self.expires
+                    amount=remainder,
+                    purpose=self.purpose,
+                    expires=self.expires,
+                    sent_to=user,
+                    comment=comment,
                 )
-                reversion.set_user(
-                    User.objects.get(
-                        id=Version.objects.get_for_object(self)
-                        .order_by("revision__date_created")
-                        .first()
-                        .revision.user.id
-                    )
-                )
-                reversion.set_comment(
-                    f"Voucher for remaining amount created by applying voucher "
-                    f"{self.key} for {subscription}"
-                )
+                reversion.set_user(user)
+                reversion.set_comment(comment)
 
         if reduction_amount > 0:
             subscription.apply_price_reduction(reduction_amount, self, user)
