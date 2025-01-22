@@ -4,8 +4,8 @@
 <div>
     <h4>{% trans "Course description" %}</h4>
     <div class="alert alert-info">{% trans "The following description is shown for all courses of this type. Please contact the Tanzquotient dance administration if something should be changed." %}</div>
-        <div class="border text-muted rounded p-3 mb-3">
-            {% if not type_description %}
+    <div class="border text-muted rounded p-3 mb-3">
+        {% if not type_description %}
             <em class="text-black-50">{% trans "No description set for this language." %}</em>
         {% else %}
             {{ type_description|default:"<no description>"|safe }}
@@ -19,21 +19,14 @@
     </div>
     <form class="form-horizontal" role="form" action="{% url 'payment:coursepayment_detail' course.id %}" method="post">
         {% csrf_token %}
-        <textarea name="description-{{ language }}" id="description-{{ language }}" rows="20" cols="80">{{ description|default:""|safe }}</textarea>
+        {% include 'snippets/textarea-editor.html' with name='description-'|add:language value=description  %}
 
         <h4 class="mt-3" id="participant-info-heading">{% trans "Participant info" %}</h4>
         <div class="alert alert-success">
             {% trans "You may add additional info that will be visible only to course participants (WhatsApp link, cloud link, ASVZ QR code...)." %}
         </div>
-        <textarea name="information-for-participants-{{ language }}" id="information-for-participants-{{ language }}" rows="20" cols="80">{{ information_for_participants_teachers|default:""|safe }}</textarea>
+        {% include 'snippets/textarea-editor.html' with name='information-for-participants-'|add:language value=information_for_participants_teachers %}
         <button type="submit" class="btn btn-success mt-3" name="save" value="save">{% trans "Save" %}</button>
     </form>
 </div>
-
-{% addtoblock "js" %}
-    <script>
-        CKEDITOR.replace('description-{{ language }}', {'height': 200});
-        CKEDITOR.replace('information-for-participants-{{ language }}', {'height': 200});
-    </script>
-{% endaddtoblock %}
 

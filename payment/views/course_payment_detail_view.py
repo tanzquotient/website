@@ -31,12 +31,12 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         )
         context["information_for_participants_teachers_de"] = (
             course.safe_translation_getter(
-                "information_for_participants_teachers", language_code="de"
-            )
+            "information_for_participants_teachers", language_code="de"
+        )
         )
         context["information_for_participants_teachers_en"] = (
             course.safe_translation_getter(
-                "information_for_participants_teachers", language_code="en"
+            "information_for_participants_teachers", language_code="en"
             )
         )
         return context
@@ -52,12 +52,14 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
             key = f"description-{language}"
             if key in request.POST:
                 course.set_current_language(language)
-                course.description = request.POST[key]
+                value = request.POST[key]
+                course.description = value if value else None
 
             key = f"information-for-participants-{language}"
             if key in request.POST:
                 course.set_current_language(language)
-                course.information_for_participants_teachers = request.POST[key]
+                value = request.POST[key]
+                course.information_for_participants_teachers = value if value else None
 
         course.save()
 

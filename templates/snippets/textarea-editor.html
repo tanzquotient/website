@@ -1,0 +1,50 @@
+{% load sekizai_tags %}
+
+<div>
+    <div id="{{ name }}-editor">
+        {{ value|default:""|safe }}
+    </div>
+    <textarea name="{{ name }}" id="{{ name }}" hidden></textarea>
+</div>
+
+
+{% addtoblock "css" %}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+          rel="stylesheet"/>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <script>
+        {
+            let textArea = document.getElementById('{{ name }}');
+            const toolbarOptions = [
+                [{'header': [false, 4, 5, 6]}],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{'script': 'sub'}, {'script': 'super'}],     
+                ['link'],
+                [{'list': 'ordered'}, {'list': 'bullet'}],
+                ['clean']
+            ];
+            let editor = new Quill('#{{ name }}-editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions
+                },
+            });
+
+            function updateTextArea() {
+                let value = editor.getText().trim().length === 0 ? "" : editor.getSemanticHTML();
+                textArea.value = value;
+            }
+
+            updateTextArea();
+
+            editor.on('text-change', function () {
+                updateTextArea();
+            });
+        }
+    </script>
+    <!-- Initialize Quill editor -->
+{% endaddtoblock %}

@@ -258,67 +258,6 @@ TEMPLATES = [
     },
 ]
 
-############################################
-# Configuration of djangocms-text-ckeditor #
-############################################
-# CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
-CKEDITOR_UPLOAD_PATH = "uploads/"
-# CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' ## DO NOT LOAD twice since already loaded in template!
-CKEDITOR_IMAGE_BACKEND = "pillow"
-
-ckeditor_toolbar_cms = [
-    ["Undo", "Redo"],
-    ["cmsplugins", "-", "ShowBlocks"],
-    ["Format", "Styles"],
-    ["TextColor", "BGColor", "-", "PasteText", "PasteFromWord"],
-    ["Maximize"],
-    "/",
-    ["Source"],
-    "/",
-    [
-        "Bold",
-        "Italic",
-        "Underline",
-        "-",
-        "Subscript",
-        "Superscript",
-        "-",
-        "RemoveFormat",
-    ],
-    ["JustifyLeft", "JustifyCenter", "JustifyRight"],
-    ["HorizontalRule"],
-    [
-        "NumberedList",
-        "BulletedList",
-        "Blockquote",
-        "-",
-        "Outdent",
-        "Indent",
-        "-",
-        "Table",
-        "Link",
-        "Unlink",
-    ],
-]
-
-# show cms plugins drop down only if used in cms
-ckeditor_toolbar_htmlfield = ckeditor_toolbar_cms[:]
-ckeditor_toolbar_htmlfield[1] = ["ShowBlocks"]
-
-# useful documentation about CKEditor:
-# https://docs.ckeditor.com/#!/guide/dev_toolbarconcepts
-# complete list of all available toolbar elements:
-# https://ckeditor.com/forums/CKEditor/Complete-list-of-toolbar-items
-# documentation for Django CMS plugin:
-# https://pypi.python.org/pypi/djangocms-text-ckeditor/
-CKEDITOR_SETTINGS = {
-    "disableNativeSpellChecker": False,
-    "language": "en",
-    "toolbar_CMS": ckeditor_toolbar_cms,
-    "toolbar_HTMLField": ckeditor_toolbar_htmlfield,
-    "skin": "moono-lisa",
-}
-
 ###############################
 # Configuration of django-cms #
 ###############################
