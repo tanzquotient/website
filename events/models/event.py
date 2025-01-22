@@ -13,7 +13,7 @@ from django.db.models import (
 from django.template.defaultfilters import date as format_date
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
 from django_resized import ResizedImageField
@@ -117,7 +117,9 @@ class Event(TranslatableModel):
         date_now = datetime.now()
         date_now_year = date_now.year
 
-        format_date_without_year = date_from.year == date_to.year and date_from.year == date_now_year
+        format_date_without_year = (
+            date_from.year == date_to.year and date_from.year == date_now_year
+        )
         date_format = "D, d. N" if format_date_without_year else "D, d. N Y"
 
         date_from_formatted = format_date(date_from, date_format)

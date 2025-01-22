@@ -17,7 +17,7 @@ from django.db.models import (
 )
 from django.dispatch import receiver
 from django_countries.data import COUNTRIES
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from django_resized import ResizedImageField
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
@@ -76,7 +76,7 @@ class UserProfile(Model):
         blank=True,
         null=True,
         help_text=(
-            "Displayed name. Only available for teachers. "\
+            "Displayed name. Only available for teachers. "
             "If not set, will fall back to full name."
         ),
     )
@@ -129,8 +129,8 @@ class UserProfile(Model):
 
     def clean(self):
         if (
-            self.display_name and 
-            UserProfile.objects.exclude(user=self.user)
+            self.display_name
+            and UserProfile.objects.exclude(user=self.user)
             .filter(display_name=self.display_name)
             .exists()
         ):

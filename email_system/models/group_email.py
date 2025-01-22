@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.db.models import SET_NULL, ForeignKey, DateTimeField, CharField
 from django.utils.translation import gettext_lazy as _
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
 
 from utils import TranslationUtils

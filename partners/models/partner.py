@@ -2,7 +2,7 @@ import uuid
 
 from django.db.models import CharField, URLField, BooleanField
 from django.utils.translation import gettext_lazy as _
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from parler.models import TranslatedFields, TranslatableModel
 from django_resized import ResizedImageField
 

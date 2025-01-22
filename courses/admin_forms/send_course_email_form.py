@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from djangocms_text.widgets import TextEditorWidget
 from post_office.models import EmailTemplate
-from ckeditor.widgets import CKEditorWidget
 
 
 from survey.models import Survey
@@ -30,7 +30,7 @@ class SendCourseEmailForm(forms.Form):
         + " "
         + "first_name, last_name, course, offering, survey_url, survey_expiration",
         required=False,
-        widget=CKEditorWidget,
+        widget=TextEditorWidget,
     )
 
     send_to_participants = forms.BooleanField(

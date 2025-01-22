@@ -35,12 +35,10 @@ TESTING = "test" in sys.argv
 # Application definition
 INSTALLED_APPS = [
     "treebeard",
-    "ckeditor",
     "hijack",  # Ability to impersonate other users
-    # 'hijack.contrib.admin',
     "photologue",  # Django gallery plugin
     "sortedm2m",  # required for photologue
-    "djangocms_text_ckeditor",  # note this needs to be above the 'cms' entry
+    "djangocms_text",
     "cms",  # django CMS itself
     "menus",  # helper for model independent hierarchical website navigation
     "sekizai",  # for javascript and css management

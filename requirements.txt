@@ -8,13 +8,12 @@ django-post-office==3.9.1       # Send and manage emails asynchronously, databas
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-ckeditor==6.7.2          # Django admin CKEditor integration
 django-allauth==65.3.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 
 # Django CMS
 django-cms==3.11.9              # Open source content management system based on the Django
-djangocms-text-ckeditor==5.1.6  # Text plugin for django CMS using CKEditor 4
+djangocms-text==0.5.3           # Text plugin for django CMS
 
 # Rest framework
 djangorestframework==3.15.2     # Toolkit for building Web APIs
@@ -55,8 +54,6 @@ sentry_sdk==2.20.0              # Used for logging exceptions to Sentry.io
 # Utils
 plotly==5.24.1                  # For generating charts and graphs
 pytz==2024.2                    # timezone calculations
-pylint==3.3.3                   # Default linter
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.1            # Superuser can impersonate other users
 python-dotenv==1.0.1            # Used to load environment variables from .env file
-sphinx-automodapi==0.18.0       # For generating Sphinx API docs

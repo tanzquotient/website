@@ -2,7 +2,7 @@ from typing import Iterable
 
 from django.db import models
 from django.db.models import SET_NULL
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 

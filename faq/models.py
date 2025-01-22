@@ -1,9 +1,8 @@
 from django.db import models
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
+from parler.models import TranslatableModel, TranslatedFields
 
 from . import managers
-
-from parler.models import TranslatableModel, TranslatedFields
 
 
 # Create your models here.

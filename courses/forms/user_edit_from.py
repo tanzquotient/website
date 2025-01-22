@@ -1,17 +1,16 @@
 from datetime import date
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django_countries.data import COUNTRIES
 from django_countries.fields import LazyTypedChoiceField
-from django.utils.translation import gettext_lazy as _
-from ckeditor.widgets import CKEditorWidget
+from djangocms_text.widgets import TextEditorWidget
 
 from courses.models import StudentStatus, Residence, UserProfile
 from utils.iban_validator import validate_iban
 
 
 class UserEditForm(forms.Form):
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         super(UserEditForm, self).__init__(*args, **kwargs)
@@ -70,7 +69,7 @@ class UserEditForm(forms.Form):
     picture.help_text = _(
         "This image will be center cropped and rescaled to 512x512px upon upload."
     )
-    about_me = forms.CharField(widget=CKEditorWidget, required=False)
+    about_me = forms.CharField(widget=TextEditorWidget, required=False)
     about_me.help_text = _(
         "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
     )

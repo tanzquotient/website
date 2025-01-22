@@ -6,7 +6,7 @@ from django.db.models import (
     QuerySet,
     PositiveSmallIntegerField,
 )
-from djangocms_text_ckeditor.fields import HTMLField
+from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 from django_resized import ResizedImageField
 from django.utils.translation import gettext_lazy as _
