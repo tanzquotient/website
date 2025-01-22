@@ -12,7 +12,7 @@ django-allauth==65.3.1          # Authentication, registration, account manageme
 django-photologue==3.17         # Gallery application
 
 # Django CMS
-django-cms==3.11.9              # Open source content management system based on the Django
+django-cms==4.1.4              # Open source content management system based on the Django
 djangocms-text==0.5.3           # Text plugin for django CMS
 
 # Rest framework
