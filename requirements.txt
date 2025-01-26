@@ -1,5 +1,5 @@
 # Django
-Django==5.0.11
+Django==5.1.5
 
 # Django Extensions
 django-debug-toolbar==5.0.1     # For developement. Gives additional insights into e.g. database queries
@@ -12,8 +12,10 @@ django-allauth==65.3.1          # Authentication, registration, account manageme
 django-photologue==3.17         # Gallery application
 
 # Django CMS
-django-cms==3.11.9              # Open source content management system based on the Django
+django-cms==4.1.4               # Open source content management system based on the Django
 djangocms-text==0.5.3           # Text plugin for django CMS
+djangocms-versioning==2.2.0     # Core package of django CMS, is used to e.g. hava page histories
+djangocms-alias==2.0.2          # Core package of django CMS used for aliases
 
 # Rest framework
 djangorestframework==3.15.2     # Toolkit for building Web APIs

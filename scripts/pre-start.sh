@@ -14,6 +14,9 @@
 # All python manage.py commands will load the settings.py which in turns loads
 # all environment variables needed from .env
 
+# Migrate to Django CMS 4 (can be removed once Django CMS 4 is up and running)
+python manage.py cms4_migration
+
 # Apply the database migrations
 python3 manage.py migrate
 

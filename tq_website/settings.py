@@ -32,8 +32,12 @@ LOG_DIR = os.path.join(BASE_DIR, "logs")
 DEBUG = bool(environ["TQ_DEBUG"].lower() == "true")
 TESTING = "test" in sys.argv
 
+# We need to confirm the update to Django CMS 4
+CMS_CONFIRM_VERSION4 = True
+
 # Application definition
 INSTALLED_APPS = [
+    "djangocms_4_migration",
     "treebeard",
     "hijack",  # Ability to impersonate other users
     "photologue",  # Django gallery plugin
@@ -42,6 +46,8 @@ INSTALLED_APPS = [
     "cms",  # django CMS itself
     "menus",  # helper for model independent hierarchical website navigation
     "sekizai",  # for javascript and css management
+    "djangocms_versioning",
+    "djangocms_alias",
     "djangocms_admin_style",  # You must add 'djangocms_admin_style' in the list before 'django.contrib.admin'.
     "django.contrib.messages",  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     "django.contrib.humanize",
