@@ -192,7 +192,6 @@ S3_ENABLED = bool(environ["TQ_S3_ENABLED"].lower() == "true")
 # Define default storages
 if S3_ENABLED:
     DEFAULT_FILE_STORAGE = "tq_website.storages.MediaStorage"
-    STATICFILES_STORAGE = "tq_website.storages.StaticStorage"
 
 
 # Use ACL of bucket
