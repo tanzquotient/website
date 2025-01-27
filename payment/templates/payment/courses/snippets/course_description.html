@@ -6,7 +6,7 @@
     <div class="alert alert-info">{% trans "The following description is shown for all courses of this type. Please contact the Tanzquotient dance administration if something should be changed." %}</div>
     <div class="border text-muted rounded p-3 mb-3">
         {% if not type_description %}
-            <em class="text-black-50">{% trans "No description set for this language." %}</em>
+            <em class="text-secondary">{% trans "No description set for this language." %}</em>
         {% else %}
             {{ type_description|default:"<no description>"|safe }}
         {% endif %}
