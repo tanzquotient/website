@@ -10,6 +10,7 @@ django-countries==7.6.1         # Country choices for use with forms and fields 
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-allauth==65.3.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
+django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
 django-cms==4.1.4               # Open source content management system based on the Django
