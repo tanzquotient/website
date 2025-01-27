@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 import os
-from os import environ
 import sys
+from os import environ
 
 import sentry_sdk
 from django.core.files.storage import Storage, FileSystemStorage
@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     "sekizai",  # for javascript and css management
     "djangocms_versioning",
     "djangocms_alias",
-    "djangocms_admin_style",  # You must add 'djangocms_admin_style' in the list before 'django.contrib.admin'.
-    "django.contrib.messages",  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
+    "djangocms_admin_style",
+    # You must add 'djangocms_admin_style' in the list before 'django.contrib.admin'.
+    "django.contrib.messages",
+    # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     "django.contrib.humanize",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -124,7 +126,6 @@ X_FRAME_OPTIONS = "SAMEORIGIN"  # In order for django CMS to function, X_FRAME_O
 WSGI_APPLICATION = "tq_website.wsgi.application"
 ROOT_URLCONF = "tq_website.urls"
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -137,7 +138,6 @@ USE_TZ = True
 FORMAT_MODULE_PATH = [
     "tq_website.formats",
 ]
-
 
 ###############################################
 # Configuration of allauth account management #
@@ -186,13 +186,14 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
 )
 
-
 S3_ENABLED = bool(environ["TQ_S3_ENABLED"].lower() == "true")
 
 # Define default storages
 if S3_ENABLED:
-    DEFAULT_FILE_STORAGE = "tq_website.storages.MediaStorage"
-
+    STORAGES = {
+        "default": {"BACKEND": "tq_website.storages.MediaStorage"},
+        "staticfiles": {"BACKEND": "tq_website.storages.StaticStorage"},
+    }
 
 # Use ACL of bucket
 AWS_DEFAULT_ACL = None
@@ -232,7 +233,6 @@ S3_FINANCE_USE_SSL = bool(environ["TQ_S3_FINANCE_USE_SSL"].lower() == "true")
 S3_FINANCE_CUSTOM_DOMAIN = environ["TQ_S3_FINANCE_CUSTOM_DOMAIN"]
 S3_FINANCE_ACCESS_KEY = environ["TQ_S3_FINANCE_ACCESS_KEY"]
 S3_FINANCE_SECRET_KEY = environ["TQ_S3_FINANCE_SECRET_KEY"]
-
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
@@ -481,7 +481,8 @@ PARLER_LANGUAGES = {
     ),
     "default": {
         "fallbacks": ["de", "en"],  # defaults to PARLER_DEFAULT_LANGUAGE_CODE
-        "hide_untranslated": False,  # the default; let .active_translations() return fallbacks too.
+        "hide_untranslated": False,
+        # the default; let .active_translations() return fallbacks too.
     },
 }
 
@@ -518,7 +519,6 @@ DEBUG_TOOLBAR_PANELS = [
     "debug_toolbar.panels.redirects.RedirectsPanel",
     "debug_toolbar.panels.profiling.ProfilingPanel",
 ]
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ["TQ_SECRET_KEY"]
