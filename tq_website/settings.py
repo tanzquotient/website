@@ -37,7 +37,6 @@ CMS_CONFIRM_VERSION4 = True
 
 # Application definition
 INSTALLED_APPS = [
-    "djangocms_4_migration",
     "treebeard",
     "hijack",  # Ability to impersonate other users
     "photologue",  # Django gallery plugin
