@@ -2,10 +2,8 @@ import hashlib
 import logging
 import os
 from datetime import timedelta
-from django.utils import timezone
-import pytz
-import json
 
+import pytz
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -18,9 +16,12 @@ from django.db.models import Prefetch
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.edit import FormView
 from icalendar import Calendar, Event, vDatetime, vDuration, vText
 
@@ -41,7 +42,6 @@ from .models import (
     Style,
     Subscribe,
     LessonOccurrenceData,
-    Rejection,
     RejectionReason,
     MatchingState,
 )
@@ -54,6 +54,8 @@ log = logging.getLogger("tq")
 # Create your views here.
 
 
+@cache_page(5 * 60)
+@vary_on_cookie
 def course_list(
     request, subscription_type="all", style_name="all", show_preview=False
 ) -> HttpResponse:
@@ -117,6 +119,7 @@ def course_list(
     return render(request, template_name, context)
 
 
+@cache_page(60 * 60)
 def archive(request: HttpRequest) -> HttpResponse:
     template_name = "courses/archive.html"
     context = dict()
@@ -128,6 +131,8 @@ def course_list_preview(request) -> HttpResponse:
     return course_list(request, show_preview=True)
 
 
+@cache_page(5 * 60)
+@vary_on_cookie
 def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
     template_name = "courses/offering.html"
     offering = get_object_or_404(Offering.objects, id=offering_id)
