@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import QuerySet
 from parler.managers import TranslatableManager
 
-from courses.models import SubscribeState, LeadFollow, MatchingState
+from courses.models import SubscribeState, LeadFollow, MatchingState, Weekday
 
 
 class UserProfileManager(models.Manager):
@@ -18,12 +18,12 @@ class CourseManager(TranslatableManager):
     def weekday(self, weekday):
         result_list = []
         for c in self.all():
-            t = c.get_first_regular_lesson()
+            t = c.get_first_lesson_date()
             common_irr_weekday = c.get_common_irregular_weekday()
 
             weekday_to_add = None
             if t is not None:
-                weekday_to_add = t.weekday
+                weekday_to_add = Weekday.NUMBER_2_SLUG[t.weekday()]
             else:
                 if common_irr_weekday is not None:
                     weekday_to_add = common_irr_weekday

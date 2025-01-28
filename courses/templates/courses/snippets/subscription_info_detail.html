@@ -19,7 +19,7 @@
 
     {# if the staff user would not be able to subscribe #}
     {# without being staff, inform them #}
-    {% if user.is_staff and not user.id in course.subscribed_user_ids and not user.id in course.waiting_list_user_ids %}
+    {% if user.is_staff and course.id not in user.profile.get_active_subscribed_course_ids and course.id not in user.profile.get_waiting_list_course_ids %}
         {% if not course.is_subscription_allowed %}
             <div class="alert alert-info">
                 {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
@@ -32,7 +32,7 @@
     {% endif %}
 
 {# if the user is subscribed, inform them #}
-    {% if user.id in course.subscribed_user_ids %}
+    {% if course.id in user.profile.get_active_subscribed_course_ids %}
         <div class="mt-2 alert alert-info" role="alert">
             <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
             <hr>
@@ -46,7 +46,7 @@
         {% include "courses/snippets/participants_info.html" with is_detail_page=True %}
 
 {# if the user is on the waiting list, inform them #}
-    {% elif user.id in course.waiting_list_user_ids %}
+    {% elif course.id in user.profile.get_waiting_list_course_ids %}
         <div class="mt-2 alert alert-info" role="alert">
             <h5 class="alert-heading">{% trans "You are on the waiting list" %}</h5>
             <h6 class="alert-heading">{% trans "Position" %}: {{ course|get_position_on_waiting_list:user }}</h6>
@@ -126,6 +126,6 @@
     {% endif %}
 {% endif %}
 
-{% if user and user.id in course.waiting_list_user_ids %}
+{% if user and course.id in user.profile.get_waiting_list_course_ids %}
     {% include "courses/snippets/cancel_subscription_modal.html" with subscription=course|get_user_subscription:user only %}
 {% endif %}

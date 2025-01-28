@@ -69,11 +69,13 @@ def course_list(
     offerings = services.get_offerings_to_display(show_preview).prefetch_related(
         "period__cancellations",
         "course_set__type",
+        "course_set__type__translations",
         "course_set__period__cancellations",
         "course_set__room__cancellations",
         "course_set__regular_lessons",
         "course_set__room__address",
         "course_set__room__translations",
+        "course_set__lesson_occurrences",
         Prefetch(
             "course_set__irregular_lessons",
             queryset=IrregularLesson.objects.order_by("date", "time_from"),
@@ -485,7 +487,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     cal.add("refresh-interval", vDuration(timedelta(hours=12)))
     courses = [
         s.course
-        for s in user.profile.get_subscriptions()
+        for s in user.profile.subscriptions()
         if s.state in SubscribeState.ACCEPTED_STATES
     ]
     courses.extend(
@@ -514,7 +516,7 @@ class ProfileView(FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
 
     def get_initial(self) -> dict:
@@ -601,7 +603,6 @@ def export_offering_summary_excel(
 def cancel_subscription_from_waiting_list(
     request: HttpRequest, subscription_id: int
 ) -> HttpResponse:
-
     from courses.services import reject_subscriptions
 
     subscribe: Subscribe = get_object_or_404(

@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import QuerySet
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
@@ -264,11 +265,13 @@ class Course(TranslatableModel):
         return self.max_subscribers is not None
 
     def has_free_places(self) -> bool:
-        return self.max_subscribers is None or self.get_free_places_count() > 0
+        return self.max_subscribers is None or self.get_free_places_count > 0
 
+    @cached_property
     def has_free_places_for_leaders(self) -> bool:
         return self.has_free_places_for(LeadFollow.LEAD)
 
+    @cached_property
     def has_free_places_for_followers(self) -> bool:
         return self.has_free_places_for(LeadFollow.FOLLOW)
 
@@ -276,7 +279,7 @@ class Course(TranslatableModel):
         if self.max_subscribers is None:
             return True
 
-        free_places = self.get_free_places_count()
+        free_places = self.get_free_places_count
         if free_places == 0:
             return False
 
@@ -354,6 +357,7 @@ class Course(TranslatableModel):
             }
         )
 
+    @cached_property
     def get_free_places_count(self) -> Optional[int]:
         # No maximum => free places is not defined
         if self.max_subscribers is None:
@@ -742,7 +746,7 @@ class Course(TranslatableModel):
             )
         course_lesson_occurrences.delete()
 
-    def get_lesson_occurrences(self) -> Iterable[LessonOccurrenceData]:
+    def get_lesson_occurrences(self) -> list[LessonOccurrenceData]:
         return [
             occurrence
             for lesson in self.get_lessons()
@@ -813,16 +817,16 @@ class Course(TranslatableModel):
             return None
 
     def get_first_lesson_start(self) -> Optional[datetime]:
-        first = optional_min(self.get_lesson_occurrences())
-        return first.start if first else None
+        occurrences = list(self.lesson_occurrences.all())
+        return occurrences[0].start if occurrences else None
 
     def get_first_lesson_date(self) -> date:
         start = self.get_first_lesson_start()
         return start.date() if start else self.get_period().date_from
 
     def get_last_lesson_end(self) -> Optional[datetime]:
-        last = optional_max(self.get_lesson_occurrences())
-        return last.end if last else None
+        occurrences = list(self.lesson_occurrences.all())
+        return occurrences[-1].end if occurrences else None
 
     def get_last_lesson_date(self) -> date:
         end = self.get_last_lesson_end()

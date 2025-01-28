@@ -5,7 +5,8 @@ from typing import Optional, Iterable
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
-from django.db.models import CASCADE, SET_NULL, Q
+from django.core.exceptions import ValidationError
+from django.db.models import CASCADE, SET_NULL
 from django.db.models import (
     Model,
     IntegerField,
@@ -16,12 +17,12 @@ from django.db.models import (
     CharField,
 )
 from django.dispatch import receiver
-from django_countries.data import COUNTRIES
-from djangocms_text.fields import HTMLField
-from django_resized import ResizedImageField
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
+from django_countries.data import COUNTRIES
+from django_resized import ResizedImageField
+from djangocms_text.fields import HTMLField
 
 from courses import managers
 from . import (
@@ -35,8 +36,6 @@ from . import (
     Course,
     Teach,
 )
-
-from survey.models import SurveyInstance
 
 
 def upload_path(_, filename) -> str:
@@ -238,25 +237,36 @@ class UserProfile(Model):
 
         return styles
 
-    def get_subscriptions(self) -> Iterable[Subscribe]:
+    @cached_property
+    def subscriptions(self) -> Iterable[Subscribe]:
         return self.user.subscriptions.order_by("-date").all()
 
     def subscriptions_with_overdue_payment(self) -> Iterable[Subscribe]:
         return [
             subscription
-            for subscription in self.get_subscriptions()
+            for subscription in self.subscriptions
             if subscription.is_payment_overdue()
         ]
 
     def unpaid_subscriptions(self) -> Iterable[Subscribe]:
         return [
             subscription
-            for subscription in self.get_subscriptions()
+            for subscription in self.subscriptions
             if subscription.state in SubscribeState.TO_PAY_STATES
         ]
 
     def get_subscribed_courses(self) -> Iterable[Course]:
-        return [s.course for s in self.get_subscriptions()]
+        return [s.course for s in self.subscriptions]
+
+    def get_active_subscribed_course_ids(self) -> list[int]:
+        return [s.course_id for s in self.subscriptions if s.is_active()]
+
+    def get_waiting_list_course_ids(self) -> list[int]:
+        return [
+            s.course_id
+            for s in self.subscriptions
+            if s.state == SubscribeState.WAITING_LIST
+        ]
 
     def get_past_subscriptions(self) -> Iterable[Subscribe]:
         sql = (

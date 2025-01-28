@@ -1,7 +1,11 @@
+import datetime as dt
+from datetime import datetime, timedelta
+
 from django import template
 from django.contrib.auth.models import User
 from django.db.models import QuerySet, Q, Count
 from django.http import HttpRequest
+from django.template.defaultfilters import date
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -24,6 +28,76 @@ register = template.Library()
 @register.filter
 def trans_weekday(key: str) -> str:
     return Weekday.WEEKDAYS_TRANSLATIONS[key]
+
+
+@register.inclusion_tag(
+    filename="courses/snippets/lesson_components/course_lessons.html"
+)
+def course_lessons(course: Course) -> dict:
+    lessons = list(course.lesson_occurrences.all())
+    same_weekday = len({lesson.start.weekday() for lesson in lessons}) == 1
+    same_start_time = len({lesson.start.time() for lesson in lessons}) == 1
+    same_end_time = len({lesson.end.time() for lesson in lessons}) == 1
+    is_regular = same_weekday and same_start_time and same_end_time
+    if len(lessons) < 3 or not is_regular:
+        return dict(lines=[format_duration(l.start, l.end) for l in lessons])
+
+    last_lesson = lessons[-1]
+    first_lesson = lessons[0]
+    num_weeks = (last_lesson.start - first_lesson.start).days // 7
+    lesson_dates = [lesson.start.date() for lesson in lessons]
+    dates_in_period = [
+        first_lesson.start.date() + timedelta(days=7 * i) for i in range(num_weeks + 1)
+    ]
+    cancellations = [d for d in dates_in_period if d not in lesson_dates]
+
+    cancellation_lines = (
+        [f"{_('Cancellations')}: {', '.join([format_date(c) for c in cancellations])}"]
+        if cancellations
+        else []
+    )
+
+    regular_lines = [
+        f"{date(first_lesson.start, 'D, H:i')} - {date(first_lesson.end, 'H:i')}, {format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}",
+    ]
+
+    if len(lessons) <= len(regular_lines) + len(cancellation_lines):
+        return dict(lines=[format_duration(l.start, l.end) for l in lessons])
+
+    return dict(lines=regular_lines + cancellation_lines)
+
+
+@register.simple_tag
+def format_duration(start: datetime, end: datetime) -> str:
+    date_now = datetime.now()
+    current_year = date_now.year
+    format_date_without_year = start.year == end.year and start.year == current_year
+    date_format = "D, d. N" if format_date_without_year else "D, d. N Y"
+    time_format = "H:i"
+    date_time_format = f"{date_format}, {time_format}"
+
+    if start.date() == end.date():
+        return f"{date(start, date_format)}, {date(start, time_format)} - {date(end, time_format)}"
+
+    return f"{date(start, date_time_format)} - {date(end, date_time_format)}"
+
+
+@register.simple_tag
+def format_period(start: dt.date, end: dt.date) -> str:
+    today = dt.date.today()
+    current_year = today.year
+    format_date_without_year = start.year == end.year and start.year == current_year
+    date_format = "d. N" if format_date_without_year else "d. N Y"
+    return f"{date(start, date_format)} - {date(end, date_format)}"
+
+
+@register.simple_tag
+def format_date(value: dt.date) -> str:
+    today = dt.date.today()
+    current_year = today.year
+    format_date_without_year = value.year == current_year
+    date_format = "d. N" if format_date_without_year else "d. N Y"
+    return date(value, date_format)
 
 
 @register.inclusion_tag(filename="courses/snippets/offerings_list.html")
@@ -58,7 +132,6 @@ def course_reviews(course: Course, user: User, request: HttpRequest) -> dict:
 def course_reviews_for_queryset(
     answers: QuerySet[Answer], teachers: list[User]
 ) -> list:
-
     text_answers = (
         answers.filter(
             question__type=QuestionType.FREE_FORM,
@@ -237,7 +310,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
     composition.append(
         _("One couple")
         if n_couples == 1
-        else f"{n_couples} {_('couples')}" if n_couples > 0 else None
+        else f"{n_couples} {_('couples')}"
+        if n_couples > 0
+        else None
     )
 
     # individuals
@@ -247,7 +322,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual leader")
                 if n == 1
-                else f"{n} {_('individual leaders')}" if n > 0 else None
+                else f"{n} {_('individual leaders')}"
+                if n > 0
+                else None
             ),
         ),
         (
@@ -255,7 +332,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual follower")
                 if n == 1
-                else f"{n} {_('individual followers')}" if n > 0 else None
+                else f"{n} {_('individual followers')}"
+                if n > 0
+                else None
             ),
         ),
         (
