@@ -21,6 +21,7 @@ class PageTitlePluginModel(CMSPlugin):
     subtitle.help_text = "The subtitle to be displayed."
 
 
+@plugin_pool.register_plugin
 class PageTitlePlugin(CMSPluginBase):
     name = _("Page title")
     model = PageTitlePluginModel
@@ -50,11 +51,12 @@ class AlertPluginModel(CMSPlugin):
     type = models.CharField(choices=TYPES, max_length=20, blank=False, null=False)
 
 
+@plugin_pool.register_plugin
 class AlertPlugin(CMSPluginBase):
     name = _("Alert")
     model = AlertPluginModel
     render_template = "cms_plugins/alert.html"
-    text_enabled = False
+    text_enabled = True
     allow_children = False
 
     def render(self, context, instance, placeholder):
@@ -73,6 +75,7 @@ class QuickLinksPluginModel(CMSPlugin):
     text = models.CharField(max_length=100, blank=True, null=True)
 
 
+@plugin_pool.register_plugin
 class QuickLinksPlugin(CMSPluginBase):
     name = _("Quick Links")
     model = QuickLinksPluginModel
@@ -93,6 +96,7 @@ class RowPluginModel(CMSPlugin):
     column_classes = models.CharField(max_length=200, blank=True, null=True)
 
 
+@plugin_pool.register_plugin
 class RowPlugin(CMSPluginBase):
     name = _("Row")
     render_template = "plugins/row.html"
@@ -118,6 +122,7 @@ class UpcomingEventsAndCoursesPluginModel(CMSPlugin):
     )
 
 
+@plugin_pool.register_plugin
 class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
     name = _("Upcoming events and courses")
     model = UpcomingEventsAndCoursesPluginModel
@@ -194,32 +199,3 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
             }
         )
         return context
-
-
-class CountdownPluginModel(CMSPlugin):
-    text = models.TextField(max_length=255, blank=True, null=True)
-    finish_text = models.CharField(max_length=255, blank=True, null=True)
-    finish_datetime = models.DateTimeField()
-    finish_datetime.help_text = "Countdown finish date and time."
-    hide = models.BooleanField(default=True)
-    hide.help_text = "Hide Countdown after finished."
-
-
-class CountdownPlugin(CMSPluginBase):
-    name = _("Countdown")
-    model = CountdownPluginModel
-    render_template = "plugins/countdown.html"
-
-    text_enabled = True
-
-    def render(self, context, instance, placeholder):
-        context.update({"instance": instance})
-        return context
-
-
-plugin_pool.register_plugin(PageTitlePlugin)
-plugin_pool.register_plugin(AlertPlugin)
-plugin_pool.register_plugin(QuickLinksPlugin)
-plugin_pool.register_plugin(RowPlugin)
-plugin_pool.register_plugin(CountdownPlugin)
-plugin_pool.register_plugin(UpcomingEventsAndCoursesPlugin)
