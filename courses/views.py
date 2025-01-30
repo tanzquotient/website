@@ -492,7 +492,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     cal.add("refresh-interval", vDuration(timedelta(hours=12)))
     courses = [
         s.course
-        for s in user.profile.subscriptions()
+        for s in user.profile.subscriptions
         if s.state in SubscribeState.ACCEPTED_STATES
     ]
     courses.extend(
