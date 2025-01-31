@@ -56,7 +56,7 @@ sentry_sdk==2.20.0              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==6.0.0                  # For generating charts and graphs
-pytz==2024.2                    # timezone calculations
+pytz==2025.1                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.1            # Superuser can impersonate other users
 python-dotenv==1.0.1            # Used to load environment variables from .env file
