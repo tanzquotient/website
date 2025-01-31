@@ -26,6 +26,8 @@ from survey.models.types import QuestionType
 
 register = template.Library()
 
+TIME_ZONE = pytz.timezone(settings.TIME_ZONE)
+
 
 @register.filter
 def trans_weekday(key: str) -> str:
@@ -38,8 +40,8 @@ def trans_weekday(key: str) -> str:
 def course_lessons(course: Course) -> dict:
     lessons = list(course.lesson_occurrences.all())
     same_weekday = len({lesson.start.weekday() for lesson in lessons}) == 1
-    same_start_time = len({lesson.start.time() for lesson in lessons}) == 1
-    same_end_time = len({lesson.end.time() for lesson in lessons}) == 1
+    same_start_time = len({l.start.astimezone(TIME_ZONE).time() for l in lessons}) == 1
+    same_end_time = len({l.end.astimezone(TIME_ZONE).time() for l in lessons}) == 1
     is_regular = same_weekday and same_start_time and same_end_time
     if len(lessons) < 3 or not is_regular:
         return dict(lines=[format_duration(l.start, l.end) for l in lessons])
@@ -60,8 +62,8 @@ def course_lessons(course: Course) -> dict:
     )
 
     regular_lines = [
-        f"{date(first_lesson.start.astimezone(pytz.timezone(settings.TIME_ZONE)), 'D, H:i')} - "
-        f"{date(first_lesson.end.astimezone(pytz.timezone(settings.TIME_ZONE)), 'H:i')}, "
+        f"{date(first_lesson.start.astimezone(TIME_ZONE), 'D, H:i')} - "
+        f"{date(first_lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
         f"{format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}",
     ]
 
@@ -73,8 +75,8 @@ def course_lessons(course: Course) -> dict:
 
 @register.simple_tag
 def format_duration(start: datetime, end: datetime) -> str:
-    start = start.astimezone(pytz.timezone(settings.TIME_ZONE))
-    end = end.astimezone(pytz.timezone(settings.TIME_ZONE))
+    start = start.astimezone(TIME_ZONE)
+    end = end.astimezone(TIME_ZONE)
     date_now = datetime.now()
     current_year = date_now.year
     format_date_without_year = start.year == end.year and start.year == current_year
