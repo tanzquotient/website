@@ -1,7 +1,9 @@
 import datetime as dt
 from datetime import datetime, timedelta
 
+import pytz
 from django import template
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import QuerySet, Q, Count
 from django.http import HttpRequest
@@ -58,7 +60,9 @@ def course_lessons(course: Course) -> dict:
     )
 
     regular_lines = [
-        f"{date(first_lesson.start, 'D, H:i')} - {date(first_lesson.end, 'H:i')}, {format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}",
+        f"{date(first_lesson.start.astimezone(pytz.timezone(settings.TIME_ZONE)), 'D, H:i')} - "
+        f"{date(first_lesson.end.astimezone(pytz.timezone(settings.TIME_ZONE)), 'H:i')}, "
+        f"{format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}",
     ]
 
     if len(lessons) <= len(regular_lines) + len(cancellation_lines):
@@ -69,13 +73,14 @@ def course_lessons(course: Course) -> dict:
 
 @register.simple_tag
 def format_duration(start: datetime, end: datetime) -> str:
+    start = start.astimezone(pytz.timezone(settings.TIME_ZONE))
+    end = end.astimezone(pytz.timezone(settings.TIME_ZONE))
     date_now = datetime.now()
     current_year = date_now.year
     format_date_without_year = start.year == end.year and start.year == current_year
     date_format = "D, d. N" if format_date_without_year else "D, d. N Y"
     time_format = "H:i"
     date_time_format = f"{date_format}, {time_format}"
-
     if start.date() == end.date():
         return f"{date(start, date_format)}, {date(start, time_format)} - {date(end, time_format)}"
 
