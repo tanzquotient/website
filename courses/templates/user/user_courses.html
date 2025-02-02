@@ -37,7 +37,7 @@
     {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
     {% include "user/snippets/open_surveys.html" with user=user only %}
 
-    {% with subscriptions=user.profile.get_subscriptions %}
+    {% with subscriptions=user.profile.subscriptions %}
         <div class="d-flex flex-wrap justify-content-between">
             <div class="mb-2 my-auto">
                 <a href="{% url "user_ical" user.id %}?token={{ token }}">
