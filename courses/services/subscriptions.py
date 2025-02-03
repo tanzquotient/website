@@ -74,8 +74,8 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
         # on the waiting list
         subscribe_state = (
             SubscribeState.NEW
-            if course.has_free_places_for_followers()
-            and course.has_free_places_for_leaders()
+            if course.has_free_places_for_followers
+            and course.has_free_places_for_leaders
             else SubscribeState.WAITING_LIST
         )
         partner_subscription.state = subscribe_state

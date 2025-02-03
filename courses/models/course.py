@@ -451,8 +451,8 @@ class Course(TranslatableModel):
                 # and the partner can leave the
                 # waiting list, otherwise stop
                 if (
-                    self.has_free_places_for_leaders()
-                    and self.has_free_places_for_followers()
+                    self.has_free_places_for_leaders
+                    and self.has_free_places_for_followers
                 ):
                     s.state = SubscribeState.NEW
                     partner_s = s.get_partner_subscription()
