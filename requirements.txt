@@ -32,7 +32,7 @@ django-redis==5.4.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
-reportlab==4.2.5                # For generating PDFs and graphics
+reportlab==4.3.0                # For generating PDFs and graphics
 pyyaml==6.0.2                   # Used for generating environment variable file
 qrbill==1.1.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
