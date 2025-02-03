@@ -1,5 +1,3 @@
-version: '3'
-
 # This Compose file can be used in a development environment.
 
 services:
