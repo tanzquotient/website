@@ -38,7 +38,7 @@ qrbill==1.1.0                   # For generating swiss payment QR codes, that ca
 django-resized==1.0.3           # Used to resize images on save of ImageField
 
 # SSH
-paramiko==3.5.0                 # Used to get finance files from PostFinance
+paramiko==3.5.1                 # Used to get finance files from PostFinance
 
 # Database
 psycopg[binary]==3.2.4          # Driver for PostgreSQL
