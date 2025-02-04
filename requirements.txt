@@ -37,9 +37,6 @@ pyyaml==6.0.2                   # Used for generating environment variable file
 qrbill==1.1.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
 
-# SSH
-paramiko==3.5.0                 # Used to get finance files from PostFinance
-
 # Database
 psycopg[binary]==3.2.4          # Driver for PostgreSQL
 
