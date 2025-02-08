@@ -28,16 +28,7 @@ class Room(TranslatableModel):
                 "what entrance to use, or any additional information."
             ),
         ),
-        instructions=models.TextField(
-            verbose_name="[TR] Disclaimer",
-            blank=True,
-            null=True,
-            help_text=_(
-                "Instructions for teachers/staff. E.g. how to get access, how to use "
-                "the sound system, noise regulations, etc."
-            ),
-        ),
-        disclaimer=models.TextField(
+        disclaimer=HTMLField(
             verbose_name="[TR] Instructions",
             blank=True,
             null=True,
@@ -45,6 +36,15 @@ class Room(TranslatableModel):
                 "Important notes for this room, that will be shown together with the "
                 "course description. E.g. required ASVZ membership, notes on "
                 "last minute cancellations for food&lab, etc."
+            ),
+        ),
+        instructions=HTMLField(
+            verbose_name="[TR] Disclaimer",
+            blank=True,
+            null=True,
+            help_text=_(
+                "Instructions for teachers/staff. E.g. how to get access, how to use "
+                "the sound system, noise regulations, etc."
             ),
         ),
         information_for_participants=HTMLField(

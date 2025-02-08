@@ -26,7 +26,7 @@ Das und weitere Funktionen findest du nach dem Einloggen jederzeit im Menü oben
 {{room_info|striptags}}
 
 2b) Anweisungen zum Raum:
-{{room_instructions}}
+{{room_instructions|safe}}
 
 3) Hier kannst du die Teilnehmer:innen einsehen: {{coursepayment_url}}
 
@@ -76,7 +76,7 @@ You can find this and other functions at any time in the top right menu "My Cour
 {{room_info|striptags}}
 
 2b) Instructions for the room:
-{{room_instructions}}
+{{room_instructions|safe}}
 
 3) On this page you can see your participants: {{coursepayment_url}}
 
