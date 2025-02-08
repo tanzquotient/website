@@ -3,6 +3,6 @@
 {% if course.room and course.room.get_disclaimer %}
     <h3>{% trans "Room notice" %}</h3>
     <div>
-        {{ course.get_disclaimer|safe }}
+        {{ course.room.get_disclaimer|safe }}
     </div>
 {% endif %}
