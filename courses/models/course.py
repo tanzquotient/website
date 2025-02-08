@@ -701,6 +701,9 @@ class Course(TranslatableModel):
     def information_for_participants(self) -> str:
         return (
             TranslationUtils.get_text_with_language_fallback_or_empty(
+                self.room, "information_for_participants"
+            )
+            + TranslationUtils.get_text_with_language_fallback_or_empty(
                 self.type, "information_for_participants"
             )
             + TranslationUtils.get_text_with_language_fallback_or_empty(
