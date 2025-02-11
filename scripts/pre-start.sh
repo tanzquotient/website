@@ -23,11 +23,3 @@ python3 manage.py createinitialrevisions
 # Django CMS stuff
 python3 -Wa manage.py cms check
 python3 manage.py cms fix-tree
-
-# Load dummy data
-debug=`echo $TQ_DEBUG | awk '{print tolower($0)}'`
-echo "$debug"
-if [[ "$debug" == "true" ]]; then
-    echo "Loading dummy data..."
-    python3 manage.py loaddata fixtures/*
-fi

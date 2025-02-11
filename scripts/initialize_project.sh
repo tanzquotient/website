@@ -20,8 +20,4 @@ python scripts/initialize_minio.py
 python manage.py collectstatic --noinput -v 3
 python manage.py migrate
 
-# Load test data
-# TODO: build proper test data
-python manage.py loaddata fixtures/*
-
 echo "Done initialising TQ website."
