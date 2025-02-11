@@ -56,7 +56,7 @@
             });
 
             function updateTextArea() {
-                let value = editor.getText().trim().length === 0 ? "" : editor.getSemanticHTML();
+                let value = editor.getText().trim().length === 0 ? "" : editor.root.innerHTML;
                 textArea.value = value;
             }
 
