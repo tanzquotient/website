@@ -181,13 +181,13 @@ class CourseAdmin(TranslatableAdmin):
         "is_early_signup_enabled",
         "is_cancelled",
         "is_evaluated",
+        "are_teachers_welcomed",
         "subscription_type",
         "offering",
         "get_period",
         "format_cancellations",
         "format_prices",
         "format_teachers",
-        "get_teachers_welcomed",
     )
     list_filter = ("offering", "subscription_type", "display", "active", "completed")
     readonly_fields = ["completed"]
@@ -276,6 +276,11 @@ class CourseAdmin(TranslatableAdmin):
     @admin.display(description="C", boolean=True)
     def is_cancelled(course: Course) -> bool:
         return course.cancelled
+
+    @staticmethod
+    @admin.display(description="T", boolean=True)
+    def are_teachers_welcomed(course: Course) -> bool:
+        return course.get_teachers_welcomed()
 
 
 @admin.register(CourseType)
