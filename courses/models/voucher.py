@@ -83,18 +83,18 @@ class Voucher(Model):
         constraints = [
             CheckConstraint(
                 name="percentage is null or between 0 and 100",
-                check=(
+                condition=(
                     Q(percentage__isnull=True)
                     | (Q(percentage__gte=0) & Q(percentage__lte=100))
                 ),
             ),
             CheckConstraint(
                 name="amount is null or non-negative",
-                check=(Q(amount__isnull=True) | Q(amount__gte=0)),
+                condition=(Q(amount__isnull=True) | Q(amount__gte=0)),
             ),
             CheckConstraint(
                 name="either amount or percentage set (not both",
-                check=(
+                condition=(
                     Q(amount__isnull=False)
                     & Q(amount__gt=0)
                     & (Q(percentage__isnull=True) | Q(percentage=0))
