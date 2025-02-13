@@ -1,7 +1,5 @@
-from django.conf.urls import include
 from django.urls import path
 
-import courses.api.urls
 from courses import admin_views
 from courses import views
 
@@ -51,7 +49,4 @@ urlpatterns = [
         admin_views.voucher_generation_view,
         name="voucher_generation",
     ),
-    path(
-        "api/", include(courses.api.urls, namespace="courses_api")
-    ),  # nested namespace 'api'
 ]
