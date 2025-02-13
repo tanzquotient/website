@@ -148,7 +148,7 @@ LOGOUT_URL = "/accounts/logout/"
 # default redirect URL after login (if no GET parameter next is given)
 LOGIN_REDIRECT_URL = "/profile/courses"
 
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_USERNAME_REQUIRED = False

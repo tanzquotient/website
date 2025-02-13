@@ -14,7 +14,6 @@ class CourseType(TranslatableModel):
         to="CourseType",
         related_name="successors",
         blank=True,
-        null=True,
         help_text=_(
             (
                 "Course types that allow for early subscription "
