@@ -61,6 +61,17 @@ def course_list(
 ) -> HttpResponse:
     template_name = "courses/list.html"
 
+    context = course_list_context(
+        subscription_type=subscription_type,
+        style_name=style_name,
+        show_preview=show_preview,
+    )
+    return render(request, template_name, context)
+
+
+def course_list_context(
+    subscription_type="all", style_name="all", show_preview=False
+) -> dict:
     filter_styles = Style.objects.filter(filter_enabled=True)
 
     def matches_filter(c: Course) -> bool:
@@ -93,7 +104,6 @@ def course_list(
         ),
         "course_set__subscriptions",
     )
-
     c_offerings = []
     for offering in offerings:
         offering_sections = services.get_sections(offering, matches_filter)
@@ -105,7 +115,6 @@ def course_list(
                     "sections": offering_sections,
                 }
             )
-
     context = {
         "offerings": c_offerings,
         "filter": {
@@ -116,7 +125,7 @@ def course_list(
             "subscription_type": subscription_type,
         },
     }
-    return render(request, template_name, context)
+    return context
 
 
 @cache_page(60 * 60)

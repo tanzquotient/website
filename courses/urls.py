@@ -6,7 +6,6 @@ from courses import views
 app_name = "courses"
 urlpatterns = [
     # Public pages
-    path("", views.course_list, name="home"),
     path("list/", views.course_list, name="list"),
     path(
         "list/<subscription_type>/<style_name>/", views.course_list, name="list_style"

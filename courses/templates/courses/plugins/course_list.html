@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<div>
+    <div class="my-3">
+        {% include "courses/snippets/course_filter.html" with filter=filter only %}
+    </div>
+    {% for o in offerings %}
+        {% include "courses/snippets/offering_components/offering.html" with offering=o.offering sections=o.sections user=user limit_per_section=o.offering.limit_courses_per_section only %}
+    {% empty %}
+        <div class="alert alert-info">{% trans "No courses available" %}</div>
+    {% endfor %}
+</div>
