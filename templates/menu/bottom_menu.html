@@ -1,6 +1,17 @@
 {% load menu_tags %}
+{% load static %}
+{% load i18n %}
 
 {% for child in children %}
     <a class="text-light" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-    {% if not forloop.last %}|{% endif %}
+    |
 {% endfor %}
+<a class="text-light" href="
+    {% if LANGUAGE_CODE == "de" %}
+        {% static "elements/AGB_DE.pdf" %}
+    {% else %}
+        {% static "elements/GTC_EN.pdf" %}
+    {% endif %}
+">
+    {% trans "GTC" %}
+</a>
