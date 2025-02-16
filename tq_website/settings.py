@@ -267,6 +267,7 @@ TEMPLATES = [
 ###############################
 CMS_TEMPLATES = (
     ("template_basic.html", "Basic Template"),
+    ("template_no_header.html", "Template without Header"),
     ("template_sidebar.html", "Sidebar Template"),
 )
 
