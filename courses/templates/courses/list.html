@@ -1,4 +1,4 @@
-{% extends "template_basic.html" %}
+{% extends "basis.html" %}
 {% load i18n %}
 {% load cms_tags %}
 
@@ -9,7 +9,6 @@
 {% block main_content %}
     <div class="container">
         {% include "courses/snippets/course_filter.html" with filter=filter only %}
-        {% placeholder after_filter %}
         {% for o in offerings %}
             <p>
                 {% include "courses/snippets/offering_components/offering.html" with offering=o.offering sections=o.sections user=user limit_per_section=o.offering.limit_courses_per_section only %}</p>
