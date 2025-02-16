@@ -161,7 +161,6 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
             Course.objects.select_related("type", "offering")
             .prefetch_related(
                 "subscriptions",
-                "type__styles__songs",
                 "type__styles__translations",
                 "regular_lessons__exceptions",
                 "irregular_lessons",

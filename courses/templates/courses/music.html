@@ -1,6 +1,3 @@
 {% for style in styles %}
-    {% if style.songs.all %}
-        <h3>{{ style.name }}</h3>
-        {% include "courses/snippets/song_list.html" with songs=style.songs.all only %}
-    {% endif %}
+    <h3>{{ style.name }}</h3>
 {% endfor %}

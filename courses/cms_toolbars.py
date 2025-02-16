@@ -26,9 +26,6 @@ class CoursesToolbar(CMSToolbar):
         if self.request.user.has_perm("courses.change_style"):
             url = reverse("admin:courses_style_changelist")
             menu.add_sideframe_item(_("Styles"), url=url)
-        if self.request.user.has_perm("courses.change_song"):
-            url = reverse("admin:courses_song_changelist")
-            menu.add_sideframe_item(_("Songs"), url=url)
         if self.request.user.has_perm("courses.change_period"):
             url = reverse("admin:courses_period_changelist")
             menu.add_sideframe_item(_("Periods"), url=url)

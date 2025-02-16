@@ -138,22 +138,6 @@ class RoomCancellationInline(admin.TabularInline):
         )
 
 
-class SongInline(admin.TabularInline):
-    search_fields = [
-        "title",
-    ]
-    model = Song
-    extra = 5
-
-
-@admin.register(Song)
-class SongAdmin(admin.ModelAdmin):
-    list_display = ["title", "artist", "length", "speed", "style"]
-    list_filter = ("style",)
-    search_fields = ["title", "artist", "style__name"]
-    model = Song
-
-
 @admin.register(LessonDetails)
 class MemberAdmin(admin.ModelAdmin):
     list_display = [
@@ -568,7 +552,6 @@ class TeachAdmin(admin.ModelAdmin):
 class StyleAdmin(TranslatableAdmin):
     list_display = ("name", "parent_style", "filter_enabled")
     list_filter = ("filter_enabled", StyleParentFilter, StyleChildrenOfFilter)
-    inlines = (SongInline,)
 
 
 @admin.register(Room)

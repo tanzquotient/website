@@ -46,7 +46,6 @@
                                 <a href="{{ s.url_playlist }}" target=”_blank”>{% trans "Playlist" %}</a>
                             </p>
                         {% endif %}
-                        <p>{% include "courses/snippets/song_list.html" with songs=s.songs.all only %}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
