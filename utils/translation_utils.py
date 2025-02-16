@@ -8,6 +8,8 @@ from tq_website import settings
 class TranslationUtils:
     @staticmethod
     def get_text_with_language_fallback(model, attribute: str) -> Optional[str]:
+        if model is None:
+            return None
         for lang in [model.get_current_language()] + settings.PARLER_LANGUAGES[
             "default"
         ]["fallbacks"]:
