@@ -228,8 +228,11 @@ class Course(TranslatableModel):
 
         return totals
 
+    @cached_property
     def format_teachers(self) -> str:
-        names = [t.profile.get_display_name() for t in self.get_teachers()]
+        names = [
+            t.profile.display_name or t.get_full_name() for t in self.get_teachers()
+        ]
         if not names:
             return ""
         if len(names) == 1:

@@ -202,7 +202,7 @@ def _lesson_to_ical_event(
                     course.type.safe_translation_getter("description"),
                     course.format_prices(),
                     (
-                        f"{_('Teachers')}: {course.format_teachers()}"
+                        f"{_('Teachers')}: {course.format_teachers}"
                         if course.get_teachers()
                         else None
                     ),

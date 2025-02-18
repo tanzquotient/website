@@ -34,7 +34,9 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
             "questiongroup_set__question_set__scale__translations",
             "questiongroup_set__question_set__choice_set",
             "questiongroup_set__question_set__choice_set__translations",
-            "questiongroup_set__question_set__answers",
+            "questiongroup_set__question_set__answers__survey_instance__course__room",
+            "questiongroup_set__question_set__answers__survey_instance__course__type",
+            "questiongroup_set__question_set__answers__survey_instance__course__teaching__teacher__profile",
         )
         .first()
     )
