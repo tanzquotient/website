@@ -38,7 +38,7 @@ qrbill==1.1.0                   # For generating swiss payment QR codes, that ca
 django-resized==1.0.3           # Used to resize images on save of ImageField
 
 # Database
-psycopg[binary]==3.2.4          # Driver for PostgreSQL
+psycopg[binary]==3.2.5          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.5         # Provide a variety of storage backends, used for storing objects on Minio
