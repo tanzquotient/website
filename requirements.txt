@@ -42,7 +42,7 @@ psycopg[binary]==3.2.5          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.5         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.36.21                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.37.4                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
