@@ -1,10 +1,11 @@
 # Register your models here.
-from typing import Optional
 from datetime import timedelta
+from decimal import Decimal
+from typing import Optional
 
 from django.contrib.admin.views.main import ChangeList
-from django.utils.html import format_html
 from django.utils import timezone
+from django.utils.html import format_html
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -170,7 +171,9 @@ class CourseAdmin(TranslatableAdmin):
         "offering",
         "get_period",
         "format_cancellations",
-        "format_prices",
+        "price",
+        "num_lessons",
+        "total_hours",
         "format_teachers",
     )
     list_filter = ("offering", "subscription_type", "display", "active", "completed")
@@ -265,6 +268,23 @@ class CourseAdmin(TranslatableAdmin):
     @admin.display(description="T", boolean=True)
     def are_teachers_welcomed(course: Course) -> bool:
         return course.get_teachers_welcomed()
+
+    @staticmethod
+    @admin.display(description="Price")
+    def price(course: Course) -> str:
+        if course.price_special:
+            return course.price_special
+        return f"{course.price_with_legi} / {course.price_without_legi}"
+
+    @staticmethod
+    @admin.display(description="Hours")
+    def total_hours(course: Course) -> Decimal:
+        return course.get_total_hours()
+
+    @staticmethod
+    @admin.display(description="#")
+    def num_lessons(course: Course) -> int:
+        return course.lesson_occurrences.count()
 
 
 @admin.register(CourseType)

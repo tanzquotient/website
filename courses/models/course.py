@@ -879,9 +879,7 @@ class Course(TranslatableModel):
     get_teachers_welcomed.boolean = True
 
     def get_total_time(self) -> timedelta:
-        return sum(
-            [lesson.get_total_time() for lesson in self.get_lessons()], timedelta()
-        )
+        return sum([l.duration() for l in self.lesson_occurrences.all()], timedelta())
 
     def get_total_hours(self) -> Decimal:
         hour = timedelta(hours=1)
