@@ -9,7 +9,7 @@ class RoomCancellation(models.Model):
     )
     date = models.DateField(blank=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         room_date_string = "{}, {}".format(self.room, self.date.strftime("%d.%m.%Y"))
         if self.name:
             return "{} ({})".format(self.name, room_date_string)

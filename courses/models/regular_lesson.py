@@ -22,7 +22,7 @@ class RegularLesson(models.Model):
 
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
         period = self.course.get_period()
-        cancellations = self.course.get_cancellation_dates()
+        period_cancellations = period.cancellations.all()
 
         all_dates_in_period = map(
             lambda offset: period.date_from + timedelta(days=offset),
@@ -31,7 +31,8 @@ class RegularLesson(models.Model):
 
         def has_date_a_lesson(d: date) -> bool:
             return (
-                d.weekday() == Weekday.NUMBERS[self.weekday] and d not in cancellations
+                d.weekday() == Weekday.NUMBERS[self.weekday]
+                and d not in period_cancellations
             )
 
         def to_lesson_occurrence(
@@ -60,6 +61,8 @@ class RegularLesson(models.Model):
                     )
                 )
             else:
+                if self.course.room.is_cancelled(lesson_date):
+                    continue
                 lesson_occurrences.append(to_lesson_occurrence(lesson_date))
 
         return lesson_occurrences

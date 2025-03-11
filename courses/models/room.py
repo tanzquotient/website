@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from django.db import models
@@ -79,6 +80,9 @@ class Room(TranslatableModel):
             or self.get_description()
             or self.get_instructions()
         ) is not None
+
+    def is_cancelled(self, query_date: date) -> bool:
+        return self.cancellations.filter(date=query_date).exists()
 
     def __str__(self) -> str:
         return self.name

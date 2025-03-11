@@ -789,17 +789,6 @@ class Course(TranslatableModel):
     def format_lessons(self) -> str:
         return " & ".join(self.get_lessons_as_strings())
 
-    def get_regular_lesson_cancellation_dates(self) -> list[date]:
-        def is_applicable(cancelled_date) -> bool:
-            weekdays = [Weekday.NUMBERS[r.weekday] for r in self.regular_lessons.all()]
-            if cancelled_date.weekday() not in weekdays:
-                return False
-
-            period = self.get_period()
-            return period.date_from <= cancelled_date <= period.date_to
-
-        return [d for d in self.get_cancellation_dates() if is_applicable(d)]
-
     def get_cancellation_dates(self) -> list[date]:
         dates = []
         for regular_lesson in self.regular_lessons.all():
@@ -807,8 +796,23 @@ class Course(TranslatableModel):
                 if exception.is_cancelled():
                     dates.append(exception.date)
 
+        dates += [c.date for c in self.room.cancellations.all()] if self.room else []
         dates += [c.date for c in self.get_period().cancellations.all()]
-        return sorted(dates)
+
+        weekdays = [Weekday.NUMBERS[r.weekday] for r in self.regular_lessons.all()]
+        irregular_dates = [l.date for l in self.get_irregular_lessons()]
+
+        def is_applicable(cancelled_date) -> bool:
+            if (
+                cancelled_date.weekday() not in weekdays
+                and cancelled_date not in irregular_dates
+            ):
+                return False
+
+            period = self.get_period()
+            return period.date_from <= cancelled_date <= period.date_to
+
+        return sorted([d for d in dates if is_applicable(d)])
 
     def format_cancellations(self) -> str:
         dates = [d.strftime("%d.%m.%Y") for d in self.get_cancellation_dates()]

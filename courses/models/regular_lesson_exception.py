@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import CASCADE
 
-from courses.models import Weekday, Room, RoomCancellation
+from courses.models import Weekday, Room
 
 
 class RegularLessonException(models.Model):
@@ -45,12 +45,10 @@ class RegularLessonException(models.Model):
         return room or self.regular_lesson.course.room
 
     def is_cancelled(self) -> bool:
-        return (
-            False
-            if self.get_room() is None
-            else self.is_cancellation
-            or self.get_room().cancellations.filter(date=self.date).exists()
-        )
+        if self.is_cancellation:
+            return True
+        room = self.get_room()
+        return room is not None and room.is_cancelled(self.date)
 
     def is_applicable(self) -> bool:
         if self.date.weekday() != Weekday.NUMBERS[self.regular_lesson.weekday]:
