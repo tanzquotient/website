@@ -790,14 +790,14 @@ class Course(TranslatableModel):
         return " & ".join(self.get_lessons_as_strings())
 
     def get_cancellation_dates(self) -> list[date]:
-        dates = []
+        dates = set()
         for regular_lesson in self.regular_lessons.all():
             for exception in regular_lesson.exceptions.all():
                 if exception.is_cancelled():
-                    dates.append(exception.date)
+                    dates.add(exception.date)
 
-        dates += [c.date for c in self.room.cancellations.all()] if self.room else []
-        dates += [c.date for c in self.get_period().cancellations.all()]
+        dates |= {c.date for c in self.room.cancellations.all()} if self.room else set()
+        dates |= {c.date for c in self.get_period().cancellations.all()}
 
         weekdays = [Weekday.NUMBERS[r.weekday] for r in self.regular_lessons.all()]
         irregular_dates = [l.date for l in self.get_irregular_lessons()]
