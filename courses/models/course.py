@@ -737,7 +737,8 @@ class Course(TranslatableModel):
         return [l for l in self.irregular_lessons.all() if not l.is_cancelled()]
 
     def update_lesson_occurrences(self) -> None:
-        for occurrence in self.get_lesson_occurrences():
+        occurrences = self.get_lesson_occurrences()
+        for occurrence in occurrences:
             # create lesson occurrences if they don't exist
             LessonOccurrence.objects.get_or_create(
                 course=self, start=occurrence.start, end=occurrence.end
@@ -746,7 +747,7 @@ class Course(TranslatableModel):
         # delete extra lesson occurrences if they don't exist anymore
         # get all lesson occurrences for the course
         course_lesson_occurrences = LessonOccurrence.objects.filter(course=self)
-        for occurrence in self.get_lesson_occurrences():
+        for occurrence in occurrences:
             course_lesson_occurrences = course_lesson_occurrences.exclude(
                 start=occurrence.start, end=occurrence.end
             )

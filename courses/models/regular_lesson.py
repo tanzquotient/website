@@ -22,7 +22,7 @@ class RegularLesson(models.Model):
 
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
         period = self.course.get_period()
-        period_cancellations = period.cancellations.all()
+        period_cancellations = [p.date for p in period.cancellations.all()]
 
         all_dates_in_period = map(
             lambda offset: period.date_from + timedelta(days=offset),
