@@ -8,13 +8,13 @@ django-post-office==3.9.1       # Send and manage emails asynchronously, databas
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.4.1          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.5.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
 django-cms==4.1.4               # Open source content management system based on the Django
-djangocms-text==0.7.1           # Text plugin for django CMS
+djangocms-text==0.8.0           # Text plugin for django CMS
 djangocms-versioning==2.2.1     # Core package of django CMS, is used to e.g. hava page histories
 djangocms-alias==2.0.2          # Core package of django CMS used for aliases
 
@@ -38,11 +38,11 @@ qrbill==1.1.0                   # For generating swiss payment QR codes, that ca
 django-resized==1.0.3           # Used to resize images on save of ImageField
 
 # Database
-psycopg[binary]==3.2.5          # Driver for PostgreSQL
+psycopg[binary]==3.2.6          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.5         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.37.9                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.37.13                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
