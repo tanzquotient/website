@@ -382,12 +382,14 @@ class Subscribe(Model):
         )
 
     def get_partner_subscription(self) -> Optional[Subscribe]:
-        if self.partner is None:
+        if self.partner_id is None:
             return None
 
-        partner_subscription_query = self.course.subscriptions.filter(user=self.partner)
-        if partner_subscription_query.count() == 1:
-            return partner_subscription_query.get()
+        partner_subscriptions = [
+            s for s in self.course.subscriptions.all() if s.user_id == self.partner_id
+        ]
+        if len(partner_subscriptions) == 1:
+            return partner_subscriptions[0]
 
     def clean(self) -> None:
         # Don't allow subscriptions with partner equals to subscriber

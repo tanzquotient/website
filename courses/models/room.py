@@ -82,7 +82,7 @@ class Room(TranslatableModel):
         ) is not None
 
     def is_cancelled(self, query_date: date) -> bool:
-        return self.cancellations.filter(date=query_date).exists()
+        return any((query_date == c.date for c in self.cancellations.all()))
 
     def __str__(self) -> str:
         return self.name

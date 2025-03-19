@@ -44,6 +44,7 @@ from .models import (
     LessonOccurrenceData,
     RejectionReason,
     MatchingState,
+    UserProfile,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -469,9 +470,47 @@ def offering_overview(request: HttpRequest, offering_id: int) -> HttpResponse:
 @login_required
 def user_courses(request: HttpRequest) -> HttpResponse:
     template_name = "user/user_courses.html"
+    user_id = request.user.id
+    user: User = (
+        User.objects.filter(id=user_id)
+        .prefetch_related(
+            "profile",
+            "teaching_courses__course__lesson_occurrences",
+            "profile__user__teaching_courses__course__lesson_occurrences",
+        )
+        .get()
+    )
+    profile = (
+        UserProfile.objects.filter(user_id=user_id)
+        .prefetch_related(
+            "user__teaching_courses__course__lesson_occurrences",
+            "user__lesson_occurrences__course__lesson_occurrences",
+            "user__teaching_courses__course__survey_instances__survey",
+            "user__lesson_occurrences__course__survey_instances__survey",
+        )
+        .get()
+    )
+    subscriptions = (
+        user.subscriptions.prefetch_related(
+            "course__lesson_occurrences",
+            "course__irregular_lessons__lesson_details__room__cancellations",
+            "course__regular_lessons__exceptions__lesson_details__room__cancellations",
+            "course__room__cancellations",
+            "course__type",
+            "price_reductions",
+            "course__period__cancellations",
+            "course__offering__period__cancellations",
+            "rejections",
+            "partner__profile",
+        )
+        .order_by("-date")
+        .all()
+    )
     context = {
-        "user": request.user,
-        "token": _user_specific_token(request.user),
+        "user": user,
+        "profile": profile,
+        "subscriptions": subscriptions,
+        "token": _user_specific_token(user),
         "payment_account": settings.PAYMENT_ACCOUNT["default"],
     }
     return render(request, template_name, context)

@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block content %}
-    {% if user.profile.is_teacher or user.profile.is_substitute_teacher %}
+    {% if profile.is_teacher or profile.is_substitute_teacher %}
         <h3 class="mb-3">{% trans "Teaching" %}</h3>
         <div class="row g-3">
-            {% for course in user.profile.get_all_current_teaching_courses %}
+            {% for course in profile.get_all_current_teaching_courses %}
                 <div class="col-xs-12 col-md-6 col-xl-4">
                     {% include "user/snippets/course_as_teacher.html" with course=course only %}
                 </div>
@@ -37,33 +37,31 @@
     {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
     {% include "user/snippets/open_surveys.html" with user=user only %}
 
-    {% with subscriptions=user.profile.subscriptions %}
-        <div class="d-flex flex-wrap justify-content-between">
-            <div class="mb-2 my-auto">
-                <a href="{% url "user_ical" user.id %}?token={{ token }}">
-                    {% trans "Add to calendar" %}  <i class="bi bi-calendar-fill"></i>
-                </a>
+    <div class="d-flex flex-wrap justify-content-between">
+        <div class="mb-2 my-auto">
+            <a href="{% url "user_ical" user.id %}?token={{ token }}">
+                {% trans "Add to calendar" %} <i class="bi bi-calendar-fill"></i>
+            </a>
+        </div>
+        {% if subscriptions %}
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-link" onclick="expandAll()">
+                    {% trans "Expand All" %}
+                </button>
+                <button class="btn btn-link" onclick="collapseAll()">
+                    {% trans "Collapse All" %}
+                </button>
             </div>
-            {% if subscriptions %}
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-link" onclick="expandAll()">
-                        {% trans "Expand All" %}
-                    </button>
-                    <button class="btn btn-link" onclick="collapseAll()">
-                        {% trans "Collapse All" %}
-                    </button>
-                </div>
-            {% endif %}
-        </div>
-        <div class="accordion">
-            {% for subscription in subscriptions %}
-                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
-            {% endfor %}
-        </div>
-        {% if not subscriptions %}
-            <p>{% trans "No subscriptions" %}</p>
         {% endif %}
-    {% endwith %}
+    </div>
+    <div class="accordion">
+        {% for subscription in subscriptions %}
+            {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
+        {% endfor %}
+    </div>
+    {% if not subscriptions %}
+        <p>{% trans "No subscriptions" %}</p>
+    {% endif %}
     <p>
         <a href="{% url "courses:list" %}">
             {% trans "Show available courses" %}

@@ -370,7 +370,8 @@ def is_user_eligible_for_early_signup(course: Course, user: User):
 
 @register.filter(name="rejection_reason")
 def rejection_reason(subscription: Subscribe) -> str:
-    return subscription.rejections.first().reason or RejectionReason.UNKNOWN
+    reasons = [r.reason for r in subscription.rejections.all()]
+    return reasons[0] if len(reasons) > 0 else RejectionReason.UNKNOWN
 
 
 @register.filter(name="rejection_reason_text")
