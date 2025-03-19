@@ -11,7 +11,13 @@
 {% elif subscription.state == 'confirmed' %}
     <span class="badge bg-success">{% trans "Subscription confirmed" %}</span>
 {% elif subscription.state == 'rejected' %}
-    <span class="badge bg-danger">{% trans "Rejected" %}</span>
+    {% with subscription|rejection_reason as reason %}
+        {% if reason == "user_cancelled" %}
+            <span class="badge bg-secondary">{{ reason|rejection_reason_text }}</span>
+        {% else %}
+            <span class="badge bg-danger">{{ reason|rejection_reason_text }}</span>
+        {% endif %}
+    {% endwith %}
 {% elif subscription.state == 'completed' %}
     <span class="badge bg-success">{% trans "Completed" %}</span>
 {% elif subscription.state == 'to_reimburse' %}

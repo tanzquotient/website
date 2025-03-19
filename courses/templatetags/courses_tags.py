@@ -19,6 +19,7 @@ from courses.models import (
     SubscribeState,
     LeadFollow,
     MatchingState,
+    RejectionReason,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -317,9 +318,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
     composition.append(
         _("One couple")
         if n_couples == 1
-        else f"{n_couples} {_('couples')}"
-        if n_couples > 0
-        else None
+        else f"{n_couples} {_('couples')}" if n_couples > 0 else None
     )
 
     # individuals
@@ -329,9 +328,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual leader")
                 if n == 1
-                else f"{n} {_('individual leaders')}"
-                if n > 0
-                else None
+                else f"{n} {_('individual leaders')}" if n > 0 else None
             ),
         ),
         (
@@ -339,9 +336,7 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual follower")
                 if n == 1
-                else f"{n} {_('individual followers')}"
-                if n > 0
-                else None
+                else f"{n} {_('individual followers')}" if n > 0 else None
             ),
         ),
         (
@@ -371,3 +366,26 @@ def get_waiting_list_composition(course: Course) -> list | None:
 @register.filter(name="is_user_eligible_for_early_signup")
 def is_user_eligible_for_early_signup(course: Course, user: User):
     return course.is_user_eligible_for_early_signup(user)
+
+
+@register.filter(name="rejection_reason")
+def rejection_reason(subscription: Subscribe) -> str:
+    return subscription.rejections.first().reason or RejectionReason.UNKNOWN
+
+
+@register.filter(name="rejection_reason_text")
+def rejection_reason_text(reason: RejectionReason) -> str:
+    if reason == RejectionReason.USER_CANCELLED:
+        return _("You cancelled")
+    if reason == RejectionReason.COURSE_CANCELLED:
+        return _("Course cancelled")
+    return _("Rejected")
+
+
+@register.filter(name="rejection_reason_info")
+def rejection_reason_info(reason: RejectionReason) -> str:
+    if reason == RejectionReason.USER_CANCELLED:
+        return _("You deregistered from this course")
+    if reason == RejectionReason.COURSE_CANCELLED:
+        return _("This course could unfortunately not take place.")
+    return _("Rejected subscription info")
