@@ -26,17 +26,14 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
         context["type_description_en"] = course.type.safe_translation_getter(
             "description", language_code="en"
         )
-        context["participatory"] = course.subscriptions.accepted().select_related(
-            "user"
-        )
         context["information_for_participants_teachers_de"] = (
             course.safe_translation_getter(
-            "information_for_participants_teachers", language_code="de"
-        )
+                "information_for_participants_teachers", language_code="de"
+            )
         )
         context["information_for_participants_teachers_en"] = (
             course.safe_translation_getter(
-            "information_for_participants_teachers", language_code="en"
+                "information_for_participants_teachers", language_code="en"
             )
         )
         return context

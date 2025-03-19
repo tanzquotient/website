@@ -37,6 +37,11 @@ urlpatterns = [
         name="course_teacher_presence",
     ),
     path(
+        "auth/courses/<int:course>/participants",
+        CourseParticipantsView.as_view(),
+        name="course_participants",
+    ),
+    path(
         "auth/teacher-search",
         search_teacher,
         name="teacher_search",

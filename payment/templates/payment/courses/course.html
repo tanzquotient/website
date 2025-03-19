@@ -6,108 +6,31 @@
 {% endblock %}
 
 {% block main_content %}
-    {% with course.payment_totals as payment_totals %}
-        <div class="container">
-            {% include "payment/courses/snippets/course_info.html" %}
-            <div class="my-3">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="nav-item">
-                        <a class="nav-link active" href="#editor-de" aria-controls="editor-de" role="tab" data-bs-toggle="tab">{% trans "German" %}</a>
-                    </li>
-                    <li  class="nav-item" role="presentation">
-                        <a class="nav-link" href="#editor-en" aria-controls="editor-en" role="tab" data-bs-toggle="tab">{% trans "English" %}</a>
-                    </li>
-                </ul>
+    <div class="container">
+        {% include "payment/courses/snippets/course_info.html" %}
+        <div class="my-3">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="nav-item">
+                    <a class="nav-link active" href="#editor-de"
+                       aria-controls="editor-de" role="tab"
+                       data-bs-toggle="tab">{% trans "German" %}</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="#editor-en" aria-controls="editor-en"
+                       role="tab" data-bs-toggle="tab">{% trans "English" %}</a>
+                </li>
+            </ul>
 
-                <!-- Tab panes -->
-                <div class="tab-content p-3 border border-top-0">
-                    <div role="tabpanel" class="tab-pane active" id="editor-de">
-                        {% include "payment/courses/snippets/course_description.html" with language="de" type_description=type_description_de description=description_de information_for_participants_teachers=information_for_participants_teachers_de %}
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="editor-en">
-                        {% include "payment/courses/snippets/course_description.html" with language="en" type_description=type_description_en description=description_en information_for_participants_teachers=information_for_participants_teachers_en %}
-                    </div>
+            <!-- Tab panes -->
+            <div class="tab-content p-3 border border-top-0">
+                <div role="tabpanel" class="tab-pane active" id="editor-de">
+                    {% include "payment/courses/snippets/course_description.html" with language="de" type_description=type_description_de description=description_de information_for_participants_teachers=information_for_participants_teachers_de %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="editor-en">
+                    {% include "payment/courses/snippets/course_description.html" with language="en" type_description=type_description_en description=description_en information_for_participants_teachers=information_for_participants_teachers_en %}
                 </div>
             </div>
-
-            <h3 class="mb-0">{% trans "Participants" %}</h3>
-
-            {% if not participatory %}
-                <div class="alert alert-info my-3">{% trans "Participants will show up here, once they have been confirmed." %}</div>
-            {% else %}
-                <div class="my-3">
-                   {% include "user/snippets/participants_download.html" %}
-                </div>
-
-                <div class="d-block d-md-none">
-                    <div class="list-group">
-                        {% for subscription in participatory %}
-                            <div class="list-group-item">
-                                <div><strong>{{ subscription.user.get_full_name }}</strong></div>
-                                <div><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></div>
-                                {% if subscription.user.profile.phone_number %}
-                                    <div>{{ subscription.user.profile.phone_number }}</div>
-                                {% endif %}
-                                <div class="mt-1">
-                                    {% trans "Student status" %}:
-                                    {% if subscription.user.profile.is_student %}
-                                        {% trans "student" %}
-                                    {% else %}
-                                        {% trans "not a student" %}
-                                    {% endif %}
-                                </div>
-                            <div>
-                                {% trans "Course fees" %}: {{ subscription.price_to_pay }} CHF
-                            </div>
-                                {% if course.type.couple_course %}
-                                    <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
-                                    <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="d-none d-md-block">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>{% trans "Name" %}</th>
-                            <th>{% trans "E-Mail" %}</th>
-                            <th>{% trans "Mobile" %}</th>
-                            {% if course.type.couple_course %}
-                                <th>{% trans "Lead/Follow" %}</th>
-                                <th>{% trans "Partner" %}</th>
-                            {% endif %}
-                            <th>{% trans "Student status" %}</th>
-                            <th>{% trans "Course fees" %}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for subscription in participatory %}
-                            <tr>
-                                <td>{{ subscription.user.get_full_name }}</td>
-                                <td><a href="mailto:{{ subscription.user.email }}" class="">{{ subscription.user.email }}</a></td>
-                                <td>{{ subscription.user.profile.phone_number }}</td>
-                                {% if course.type.couple_course %}
-                                    <td>{{ subscription.get_assigned_role_str }}</td>
-                                    <td>{{ subscription.get_partner_name }}</td>
-                                {% endif %}
-                               <td>
-                                    {% if subscription.user.profile.is_student %}
-                                        {% trans "student" %}
-                                    {% else %}
-                                        {% trans "not a student" %}
-                                    {% endif %}
-                                </td>
-                                <td>{{ subscription.price_to_pay }} CHF</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endif %}
         </div>
-    {% endwith %}
+    </div>
 {% endblock main_content %}

@@ -51,7 +51,6 @@ def export_subscriptions(
             data.append(
                 ["First name", "Last name", "E-Mail", "Mobile"]
                 + (["Lead/Follow", "Partner"] if course.type.couple_course else [])
-                + ["Student status", "Course fees"]
             )
 
             for s in subscriptions:
@@ -67,10 +66,6 @@ def export_subscriptions(
                         if course.type.couple_course
                         else []
                     )
-                    + [
-                        "student" if s.user.profile.is_student() else "not a student",
-                        s.price_to_pay,
-                    ]
                 )
 
         export_data.append({"name": course.name, "data": data})
