@@ -52,6 +52,7 @@ class IrregularLesson(models.Model):
             timezone("Europe/Zurich").localize(
                 datetime.combine(self.date, self.time_to)
             ),
+            self.get_room(),
         )
 
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:

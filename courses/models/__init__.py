@@ -1,5 +1,4 @@
 from .choices import *
-from .lesson_occurrence_data import LessonOccurrenceData
 from .teach import Teach
 from .offering import Offering
 from .address import Address
@@ -8,6 +7,7 @@ from .price_reduction import PriceReduction
 from .subscribe import Subscribe
 from .style import Style
 from .room import Room
+from .lesson_occurrence_data import LessonOccurrenceData
 from .room_cancellation import RoomCancellation
 from .period import Period
 from .regular_lesson import RegularLesson
