@@ -2,7 +2,7 @@
 Django==5.1.7
 
 # Django Extensions
-django-debug-toolbar==5.0.1     # For developement. Gives additional insights into e.g. database queries
+django-debug-toolbar==5.1.0     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
 django-post-office==3.9.1       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
@@ -42,17 +42,17 @@ psycopg[binary]==3.2.6          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.5         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.37.13                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.37.18                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.22.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.24.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==6.0.0                  # For generating charts and graphs
+plotly==6.0.1                  # For generating charts and graphs
 pytz==2025.1                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.1            # Superuser can impersonate other users
