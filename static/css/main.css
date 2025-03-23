@@ -60,6 +60,13 @@ a.text-tanzquotient:focus {
     }
 }
 
+/* Make border of invalid inputs shaded red */
+input:user-invalid,
+textarea:user-invalid {
+    border-color:red;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    outline: none;
+}
 
 /* Custom banner used for e.g. special events */
 .list-group-item,
