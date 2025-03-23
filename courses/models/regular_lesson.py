@@ -6,7 +6,7 @@ from typing import Iterable
 from django.db import models
 from pytz import timezone
 
-from . import Weekday, LessonOccurrenceData
+from . import Weekday, LessonOccurrenceData, Room
 
 
 class RegularLesson(models.Model):
@@ -36,7 +36,7 @@ class RegularLesson(models.Model):
             )
 
         def to_lesson_occurrence(
-            d: date, time_from: time | None = None, time_to: time | None = None
+            d: date, time_from: time | None = None, time_to: time | None = None, room: Room | None = None,
         ) -> LessonOccurrenceData:
             return LessonOccurrenceData(
                 timezone("Europe/Zurich").localize(
@@ -45,6 +45,7 @@ class RegularLesson(models.Model):
                 timezone("Europe/Zurich").localize(
                     datetime.combine(d, time_to or self.time_to)
                 ),
+                room or self.course.room,
             )
 
         lesson_occurrences = []
@@ -58,6 +59,7 @@ class RegularLesson(models.Model):
                         lesson_date,
                         exception.get_time_from(),
                         exception.get_time_to(),
+                        exception.get_room(),
                     )
                 )
             else:
