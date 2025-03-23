@@ -57,6 +57,15 @@ class RegularLessonException(models.Model):
         period = self.regular_lesson.course.get_period()
         return period.date_from <= self.date <= period.date_to
 
+    def has_irregular_time(self) -> bool:
+        return (
+            self.get_time_from() != self.regular_lesson.time_from
+            or self.get_time_to() != self.regular_lesson.time_to
+        )
+    
+    def has_irregular_room(self) -> bool:
+        return self.get_room() != self.regular_lesson.course.room
+
     class Meta:
         ordering = ["date"]
 

@@ -1,6 +1,11 @@
+{% if not disable_lists %}<ul>{% endif %}
 {% for date in cancellation_dates %}
+    {% if not disable_lists %}<li>{% endif %}
     {{ date|date:'D, d. N Y' }}
-    {% if not forloop.last %}
+    {% if not disable_lists %}
+        </li>
+    {% elif not forloop.last %}
         <br/>
     {% endif %}
 {% endfor %}
+{% if not disable_lists %}</ul>{% endif %}
