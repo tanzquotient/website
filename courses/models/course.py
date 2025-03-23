@@ -11,7 +11,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q, Case, When, Value, IntegerField
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
@@ -33,6 +33,7 @@ from courses.models import (
     MatchingState,
     Rejection,
     RejectionReason,
+    Room,
 )
 from partners.models import Partner
 from survey.models import Survey
@@ -672,6 +673,25 @@ class Course(TranslatableModel):
 
     def is_regular(self) -> bool:
         return self.subscription_type == CourseSubscriptionType.REGULAR
+
+    @cached_property
+    def rooms(self) -> QuerySet[Room]:
+        return (
+            Room.objects.filter(
+                Q(courses=self)
+                | Q(lessons__regular_lesson_exception__regular_lesson__course=self)
+                | Q(lessons__irregular_lesson__course=self)
+            )
+            .annotate(
+                priority=Case(
+                    When(pk=self.room.pk, then=Value(0)),  # Ensures these are first
+                    default=Value(1),
+                    output_field=IntegerField(),
+                )
+            )
+            .distinct()
+            .order_by("priority")
+        )
 
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()

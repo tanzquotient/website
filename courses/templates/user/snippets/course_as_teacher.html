@@ -11,21 +11,24 @@
     </div>
     <div class="card-body">
         {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}
-        <p>
-            <strong>{% trans "Time" %}</strong>
-            <br/>
-            {% include "courses/snippets/lesson_components/lessons.html" with course=course only %}
+        <strong>{% trans "Lessons" %}</strong>
+        <div class="mb-2">
+            {% include "courses/snippets/lesson_components/lessons.html" with course=course disable_lists=True only %}
             <a href="{% url "courses:course_ical" course.id %}">
                 <br/>
                 {% trans "Add to calendar" %}
             </a>
-        </p>
-        {% if course.room %}
-            <p>
-                <strong>{% trans "Location" %}</strong>
-                <br/>
-                {% include "courses/snippets/room_modal.html" with display_link=True room=course.room only %}
-            </p>
+        </div>
+        {% if course.rooms.exists %}
+            <strong>{% trans "Location" %}</strong>
+            <div class="mb-2">
+                {% for room in course.rooms %}
+                    {% include "courses/snippets/room_modal.html" with display_link=True room=course.room only %}
+                    {% if not forloop.last %}
+                        <br/>
+                    {% endif %}
+                {% endfor %}
+            </div>
         {% endif %}
         {% include "user/snippets/course_teacher_actions.html" %}
     </div>

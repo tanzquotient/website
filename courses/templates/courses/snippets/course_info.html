@@ -19,12 +19,20 @@
     {% endif %}
 
 
-    {% if course.room %}
-        <strong>{% trans "Raum" %}</strong>
+    {% if course.rooms %}
+        <strong>
+            {% if course.rooms|length == 1 %}
+                {% trans "Room" %}
+            {% else %}
+                {% trans "Rooms" %}
+            {% endif %}
+        </strong>
         <br/>
-        <p>
-            {% include "courses/snippets/room_modal.html" with display_link=True disable_modals=disable_modals room=course.room only %}
-        </p>
+            {% for room in course.rooms %}
+                {% include "courses/snippets/room_modal.html" with display_link=True disable_modals=disable_modals room=room only %}
+                <br/>
+            {% endfor %}
+        <br/>
     {% endif %}
 
     {% if course.format_prices %}
@@ -33,7 +41,13 @@
         <p>{{ course.format_prices|default:"-" }}</p>
     {% endif %}
 
-    <strong>{% trans "Time" %}</strong>
+    <strong>
+        {% if course.room and course.rooms|length == 1 %}
+            {% trans "Time" %}
+        {% else %}
+            {% trans "Time and room" %}
+        {% endif %}
+    </strong>
     <br/>
     {% include "courses/snippets/lesson_components/lessons.html" with course=course display_link=True disable_modals=disable_modals only %}
 </div>

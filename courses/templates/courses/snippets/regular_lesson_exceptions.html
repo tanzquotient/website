@@ -1,22 +1,25 @@
 {% load i18n %}
-{% for exception in exceptions %}
-    {{ exception.date|date:'D, d. N Y' }}:
-    {% if exception.is_cancellation %}
-        {% trans "no lesson" %}
-    {% else %}
-        {% if exception.time_from or exception.time_to %}
-            {{ exception.get_time_from|date:'H:i' }} - {{ exception.get_time_to|date:'H:i' }}
-            {% if exception.lesson_details %}
-                <br/>
+{% if not disable_lists %}<ul>{% endif %}
+    {% for exception in exceptions %}
+    {% if not disable_lists %}<li>{% endif %}
+            {{ exception.date|date:'D, d. N Y' }}:
+            {% if exception.is_cancellation %}
+                {% trans "no lesson" %}
+            {% else %}
+                {% if exception.has_irregular_time %}
+                    {{ exception.get_time_from|date:'H:i' }} - {{ exception.get_time_to|date:'H:i' }}
+                    {% if exception.has_irregular_room %}
+                        <br/>
+                    {% endif %}
+                {% endif %}
+                {% if exception.has_irregular_room %}
+                    {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=exception.get_room only %}
+                {% endif %}
             {% endif %}
+        {% if not disable_lists %}
+            </li>
+        {% elif not forloop.last %}
+            <br/>
         {% endif %}
-        {% if exception.lesson_details %}
-            {% if exception.lesson_details.room %}
-                {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=exception.lesson_details.room only %}
-            {% endif %}
-        {% endif %}
-    {% endif %}
-    {% if not forloop.last %}
-        <br/>
-    {% endif %}
-{% endfor %}
+    {% endfor %}
+{% if not disable_lists %}</ul>{% endif %}

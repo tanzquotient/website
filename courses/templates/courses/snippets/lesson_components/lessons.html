@@ -11,10 +11,9 @@
 
     {% if regular %}
 
-
         {% for lesson in regular %}
             {{ lesson.weekday|trans_weekday }}, {{ lesson.time_from|date:'H:i' }} -
-            {{ lesson.time_to|date:'H:i' }}
+            {{ lesson.time_to|date:'H:i' }}{% if course.rooms|length > 1 %}, {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=course.room only %}{% endif %}
             {% if not forloop.last %}
                 <br/>
             {% endif %}
@@ -26,14 +25,14 @@
             <br/>
             <u>{% trans "Exceptions" %}:</u>
             <br/>
-            {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link disable_modals=disable_modals exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
+            {% include "courses/snippets/regular_lesson_exceptions.html" with display_link=display_link disable_modals=disable_modals disable_lists=disable_lists course=course exceptions=course.get_not_cancelled_regular_lesson_exceptions only %}
         {% endif %}
 
         {% if course.get_cancellation_dates %}
             <br/>
             <u>{% trans "Cancellations" %}:</u>
             <br/>
-            {% include "courses/snippets/course_cancellation.html" with cancellation_dates=course.get_cancellation_dates only %}
+            {% include "courses/snippets/course_cancellation.html" with cancellation_dates=course.get_cancellation_dates disable_lists=disable_lists only %}
         {% endif %}
 
     {% endif %}
@@ -46,17 +45,22 @@
     {% endif %}
 
     {% if irregular %}
+        {% if irregular|length > 1 and not disable_lists %}<ul>{% endif %}
         {% for lesson in irregular %}
+            {% if irregular|length > 1 and not disable_lists %}<li>{% endif %}
             {{ lesson.date|date:'D, d. N Y' }}, {{ lesson.time_from|date:'H:i' }} -
             {{ lesson.time_to|date:'H:i' }}
-            {% if lesson.lesson_details and lesson.lesson_details.room %}
+            {% if course.rooms|length > 1 %}
                 <br/>
-                {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=lesson.lesson_details.room only %}
+                {% include "courses/snippets/room_modal.html" with display_link=display_link disable_modals=disable_modals room=lesson.get_room only %}
             {% endif %}
-            {% if not forloop.last %}
+            {% if irregular|length > 1 and not disable_lists %}
+                </li>
+            {% elif not forloop.last %}
                 <br/>
             {% endif %}
         {% endfor %}
+        {% if irregular|length > 1 and not disable_lists %}</ul>{% endif %}
     {% endif %}
 
     {% if not regular and not irregular %}
