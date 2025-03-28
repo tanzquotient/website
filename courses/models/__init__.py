@@ -25,3 +25,5 @@ from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
 from .user_profile import UserProfile
 from .lesson_occurrence_teach import LessonOccurrenceTeach
+from .attendance import Attendance
+from .skills import Skills

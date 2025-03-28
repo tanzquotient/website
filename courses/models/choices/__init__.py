@@ -9,3 +9,4 @@ from .offering_type import OfferingType
 from .course_subscription_type import CourseSubscriptionType
 from .leadfollow import LeadFollow
 from .single_couple import SingleCouple
+from .attendance_state import AttendanceState
