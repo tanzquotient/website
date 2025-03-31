@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n courses_tags %}
 <div class="card card-default">
     <div class="card-header d-flex align-items-center justify-content-between">
         <strong>{{ course.type }}</strong>
@@ -13,7 +13,7 @@
         {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}
         <strong>{% trans "Lessons" %}</strong>
         <div class="mb-2">
-            {% include "courses/snippets/lesson_components/lessons.html" with course=course disable_lists=True only %}
+            {% course_lessons_detailed course=course %}
             <a href="{% url "courses:course_ical" course.id %}">
                 <br/>
                 {% trans "Add to calendar" %}
