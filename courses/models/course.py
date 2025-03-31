@@ -675,23 +675,13 @@ class Course(TranslatableModel):
         return self.subscription_type == CourseSubscriptionType.REGULAR
 
     @cached_property
-    def rooms(self) -> QuerySet[Room]:
-        return (
-            Room.objects.filter(
-                Q(courses=self)
-                | Q(lessons__regular_lesson_exception__regular_lesson__course=self)
-                | Q(lessons__irregular_lesson__course=self)
-            )
-            .annotate(
-                priority=Case(
-                    When(pk=self.room.pk, then=Value(0)),  # Ensures these are first
-                    default=Value(1),
-                    output_field=IntegerField(),
-                )
-            )
-            .distinct()
-            .order_by("priority")
-        )
+    def rooms(self) -> list[Room]:
+    # TODO: replace with query when updating Lesson model
+        return list(set(([self.room] or []) + [
+            l.room
+            for l in self.lesson_occurrences.all()
+            if l.room and l.room != self.room
+        ]))
 
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()
