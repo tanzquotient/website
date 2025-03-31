@@ -20,6 +20,7 @@ from courses.models import (
     LeadFollow,
     MatchingState,
     RejectionReason,
+    LessonOccurrence,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -38,7 +39,7 @@ def trans_weekday(key: str) -> str:
 @register.inclusion_tag(
     filename="courses/snippets/lesson_components/course_lessons.html"
 )
-def course_lessons(course: Course) -> dict:
+def course_lessons_compact(course: Course) -> dict:
     lessons = list(course.lesson_occurrences.all())
     same_weekday = len({lesson.start.weekday() for lesson in lessons}) == 1
     same_start_time = len({l.start.astimezone(TIME_ZONE).time() for l in lessons}) == 1
@@ -72,6 +73,26 @@ def course_lessons(course: Course) -> dict:
         return dict(lines=[format_duration(l.start, l.end) for l in lessons])
 
     return dict(lines=regular_lines + cancellation_lines)
+
+
+@register.inclusion_tag(
+    filename="courses/snippets/lesson_components/course_lessons.html"
+)
+def course_lessons_detailed(course: Course) -> dict:
+    if len(course.rooms) < 2:
+        return course_lessons_compact(course)
+
+    lines = []
+    lesson_occurrences: QuerySet[LessonOccurrence] = course.lesson_occurrences.all()
+    for lesson in lesson_occurrences:
+        lesson: LessonOccurrence
+        lines += [
+            f"{date(lesson.start.astimezone(TIME_ZONE), 'D, d. b, H:i')} - "
+            f"{date(lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
+            f"{lesson.room.name}"
+        ]
+
+    return dict(lines=lines)
 
 
 @register.simple_tag
