@@ -2,9 +2,11 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.utils.functional import cached_property
 from django.db import models
 
 from courses import managers
+from courses.models import Room, IrregularLesson, RegularLessonException
 
 
 class LessonOccurrence(models.Model):
@@ -24,6 +26,13 @@ class LessonOccurrence(models.Model):
     )
 
     objects = managers.LessonOccurrenceQuerySet.as_manager()
+
+    @cached_property
+    def room(self) -> Room:
+        for l in self.course.get_lesson_occurrences():
+            if l.start == self.start and l.end == self.end:
+                return l.room
+        return self.course.room
 
     def duration(self) -> timedelta:
         return self.end - self.start
