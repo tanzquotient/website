@@ -677,7 +677,7 @@ class Course(TranslatableModel):
     @cached_property
     def rooms(self) -> list[Room]:
     # TODO: replace with query when updating Lesson model
-        return list(set(([self.room] or []) + [
+        return list(set(([self.room] if self.room else []) + [
             l.room
             for l in self.lesson_occurrences.all()
             if l.room and l.room != self.room
