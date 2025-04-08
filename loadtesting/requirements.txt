@@ -1,2 +1,2 @@
 # Loadtesting
-locust==2.33.2
+locust==2.34.0

@@ -8,12 +8,12 @@ django-post-office==3.9.1       # Send and manage emails asynchronously, databas
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.6.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.7.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.17         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
-django-cms==4.1.4               # Open source content management system based on the Django
+django-cms==4.1.5               # Open source content management system based on the Django
 djangocms-text==0.8.3           # Text plugin for django CMS
 djangocms-versioning==2.2.1     # Core package of django CMS, is used to e.g. hava page histories
 djangocms-alias==2.0.2          # Core package of django CMS used for aliases
@@ -23,7 +23,7 @@ djangorestframework==3.16.0     # Toolkit for building Web APIs
 django-parler-rest==2.2         # Adding translation support to django-rest-framework
 
 # Tasks
-celery==5.5.0                   # Task queue with focus on real-time processing, while also supporting task scheduling
+celery==5.5.1                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
 django-celery-beat==2.7.0       # Store periodic task schedules in the database
 django-celery-results==2.5.1    # Stores Celery task results
@@ -42,7 +42,7 @@ psycopg[binary]==3.2.6          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.6         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.37.26                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.37.29                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
