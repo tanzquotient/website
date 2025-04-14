@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import ForeignKey, CASCADE, ManyToManyField, Model
+from django.db.models import OneToOneField, CASCADE, ManyToManyField, Model
 from django.utils.translation import gettext_lazy as _
 
 
@@ -11,7 +11,7 @@ class Skill(Model):
     be eligible for e.g. substituting for Ballrom 6
     """
 
-    user = ForeignKey(User, related_name="skills", on_delete=CASCADE)
+    user = OneToOneField(User, related_name="skill", on_delete=CASCADE)
     unlocked_course_types = ManyToManyField(
         "CourseType",
         related_name="skills",

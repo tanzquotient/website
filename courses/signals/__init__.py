@@ -1,3 +1,4 @@
 from .lesson_occurrence import update_lesson_occurrences, update_hourly_wages
+from .skill import create_skill_on_user_creation, update_skill_on_subscribe
 from .course import update_waiting_lists
 from .user import create_user_profile
