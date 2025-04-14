@@ -3,6 +3,7 @@ from datetime import timedelta
 from decimal import Decimal
 from typing import Optional
 
+from django.contrib.admin import ModelAdmin
 from django.contrib.admin.views.main import ChangeList
 from django.utils import timezone
 from django.utils.html import format_html
@@ -316,6 +317,24 @@ class CourseTypeAdmin(TranslatableAdmin):
     ]
 
     model = CourseType
+
+
+@admin.register(Skill)
+class SkillAdmin(ModelAdmin):
+    model = Skill
+    list_display = [
+        "user__email",
+        "user__first_name",
+        "user__last_name",
+        "unlocked_course_types_count",
+    ]
+    search_fields = ["user__first_name", "user__last_name", "user__email"]
+    filter_horizontal = ["unlocked_course_types"]
+
+    @staticmethod
+    @admin.display(description="Unlocked course types")
+    def unlocked_course_types_count(skill: Skill) -> int:
+        return skill.unlocked_course_types.count()
 
 
 class SubscribeChangeList(ChangeList):
