@@ -3,7 +3,7 @@ from django.db.models import ForeignKey, CASCADE, ManyToManyField, Model
 from django.utils.translation import gettext_lazy as _
 
 
-class Skills(Model):
+class Skill(Model):
     """
     We want to store this information, instead of computing it on the fly, to allow
     manually unlocking skills for users.
@@ -13,7 +13,7 @@ class Skills(Model):
 
     user = ForeignKey(User, related_name="skills", on_delete=CASCADE)
     unlocked_course_types = ManyToManyField(
-        "Course",
+        "CourseType",
         related_name="skills",
         help_text=_(
             "Course types which this user has unlocked. "
