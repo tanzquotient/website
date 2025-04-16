@@ -17,6 +17,7 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
+from .views import WellKnownRedirectView
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),
@@ -40,6 +41,11 @@ if settings.DEBUG:
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Make the ".well-known" static directory accessible via the root of the page
+urlpatterns += [
+    path(".well-known/<path:path>", WellKnownRedirectView.as_view()),
+]
 
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
