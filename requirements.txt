@@ -25,8 +25,8 @@ django-parler-rest==2.2         # Adding translation support to django-rest-fram
 # Tasks
 celery==5.5.1                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
-django-celery-beat==2.7.0       # Store periodic task schedules in the database
-django-celery-results==2.5.1    # Stores Celery task results
+django-celery-beat==2.8.0       # Store periodic task schedules in the database
+django-celery-results==2.6.0    # Stores Celery task results
 django-redis==5.4.0             # Redis cache and session backend for Django
 
 # Files and encoding
@@ -42,14 +42,14 @@ psycopg[binary]==3.2.6          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.6         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.37.29                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.37.34                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.25.1              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.26.1              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==6.0.1                  # For generating charts and graphs
