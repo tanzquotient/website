@@ -8,7 +8,7 @@
   ],
   "packageRules": [
     {
-      "groupName": "all non-major dependencies",
+      "groupName": "All non-major dependencies",
       "groupSlug": "minor-or-patch",
       "matchPackageNames": [
         "*"
@@ -16,6 +16,13 @@
       "matchUpdateTypes": [
         "minor",
         "patch"
+      ]
+    },
+    {
+      "groupName": "Django",
+      "groupSlug": "django",
+      "matchPackageNames": [
+        "django"
       ]
     }
   ]
