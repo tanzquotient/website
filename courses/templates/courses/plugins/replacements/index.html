@@ -1,0 +1,18 @@
+{% load courses_tags %}
+{% load i18n %}
+
+{% for lesson in lessons %}
+    <div class="mb-3">
+        <div class="fw-bold">{{ lesson.course.type.title }}
+            <span class="mx-2 badge text-bg-info" role="group">
+                2 followers are needed
+            </span>
+        </div>
+        <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+        <div class="my-1">
+            <button class="btn btn-sm btn-outline-info">
+                <i class="bi bi-person-check"></i> {% trans "Claim spot" %}
+            </button>
+        </div>
+    </div>
+{% endfor %}

@@ -1,1 +1,3 @@
 from .course_list_plugin import CourseListPlugin
+from .replacements_plugin import ReplacementsPlugin
+from .my_next_lessons_plugin import MyNextLessonsPlugin
