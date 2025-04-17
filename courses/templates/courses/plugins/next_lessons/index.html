@@ -1,0 +1,23 @@
+{% load courses_tags %}
+{% load i18n %}
+
+<div>
+    {% for course in courses %}
+        <div>
+            <div class="fw-bold">{{ course.type.title }}</div>
+            {% for lesson in course.lesson_occurrences.all %}
+                <div class="mb-2">
+                    <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                    <div class="my-1">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-success"><i
+                                    class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">{% trans "I can't come" %}</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
