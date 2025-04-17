@@ -32,8 +32,7 @@ LOG_DIR = os.path.join(BASE_DIR, "logs")
 DEBUG = bool(environ["TQ_DEBUG"].lower() == "true")
 TESTING = "test" in sys.argv
 
-# We need to confirm the update to Django CMS 4
-CMS_CONFIRM_VERSION4 = True
+CMS_PERMISSION = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -149,7 +148,7 @@ LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/profile/courses"
 
 ACCOUNT_LOGIN_METHODS = {"username", "email"}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
