@@ -23,6 +23,7 @@ def copy_course(course: Course, to=None):
         course_copy.offering = to
         course_copy.active = False
         course_copy.cancelled = False
+        course_copy.completed = False
         course_copy.save()
 
 
