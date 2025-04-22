@@ -13,7 +13,7 @@ django-photologue==3.17         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
-django-cms==4.1.5               # Open source content management system based on the Django
+django-cms==4.1.6               # Open source content management system based on the Django
 djangocms-text==0.8.3           # Text plugin for django CMS
 djangocms-versioning==2.2.1     # Core package of django CMS, is used to e.g. hava page histories
 djangocms-alias==2.0.2          # Core package of django CMS used for aliases
@@ -32,7 +32,7 @@ django-redis==5.4.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.5.1                   # Used for creating vouchers from SVG tremplate
-reportlab==4.3.1                # For generating PDFs and graphics
+reportlab==4.4.0                # For generating PDFs and graphics
 pyyaml==6.0.2                   # Used for generating environment variable file
 qrbill==1.1.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
@@ -42,7 +42,7 @@ psycopg[binary]==3.2.6          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.6         # Provide a variety of storage backends, used for storing objects on Minio
-boto3==1.37.34                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+boto3==1.38.0                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
 minio==7.2.15                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
