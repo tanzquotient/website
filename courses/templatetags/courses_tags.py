@@ -280,6 +280,19 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
 
 
 @register.simple_tag
+def role(user: User, course: Course) -> str:
+    for subscribe in course.subscriptions.all():
+        if subscribe.user == user:
+            return subscribe.assigned_role()
+    raise ValueError("User is not subscribed to course")
+
+
+@register.simple_tag
+def has_assigned_role(user: User, course: Course) -> bool:
+    return role(user, course) != LeadFollow.NO_PREFERENCE
+
+
+@register.simple_tag
 def attendance_state(user: User, lesson: LessonOccurrence) -> str:
     attendance = lesson.attendances.filter(user=user).first()
     return attendance.state if attendance else Attendance.DEFAULT_STATE

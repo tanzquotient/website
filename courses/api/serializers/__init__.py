@@ -1,3 +1,4 @@
 from .user_serializer import UserSerializer
 from .lesson_occurrence_serializer import LessonOccurrenceSerializer
 from .my_attendance_serializer import MyAttendanceSerializer
+from .choose_role_serializer import ChooseRoleSerializer

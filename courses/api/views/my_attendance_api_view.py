@@ -1,11 +1,18 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from ..serializers import MyAttendanceSerializer
-from ...models import Attendance, LessonOccurrence
+from ...models import (
+    Attendance,
+    LessonOccurrence,
+    Subscribe,
+    LeadFollow,
+    SubscribeState,
+)
 
 
 class MyAttendanceApiView(APIView):
@@ -21,6 +28,16 @@ class MyAttendanceApiView(APIView):
         lesson_occurrence = get_object_or_404(
             LessonOccurrence, pk=data["lesson_occurrence"]
         )
+
+        if Subscribe.objects.filter(
+            user=user,
+            course=lesson_occurrence.course,
+            state__in=SubscribeState.ACCEPTED_STATES,
+            lead_follow=LeadFollow.NO_PREFERENCE,
+        ).exists():
+            raise ValidationError(
+                detail="Make sure you have a role set for this course."
+            )
 
         if state == Attendance.DEFAULT_STATE:
             Attendance.objects.filter(

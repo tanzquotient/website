@@ -2,7 +2,7 @@ from django.urls import path
 
 from courses import admin_views
 from courses import views
-from courses.api.views import MyAttendanceApiView
+from courses.api.views import MyAttendanceApiView, ChooseRoleApiView
 
 app_name = "courses"
 urlpatterns = [
@@ -50,4 +50,5 @@ urlpatterns = [
         name="voucher_generation",
     ),
     path("api/my-attendance/", MyAttendanceApiView.as_view(), name="my_attendance"),
+    path("api/choose-role/", ChooseRoleApiView.as_view(), name="choose_role"),
 ]
