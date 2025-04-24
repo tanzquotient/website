@@ -6,18 +6,91 @@
         <div>
             <div class="fw-bold">{{ course.type.title }}</div>
             {% for lesson in course.lesson_occurrences.all %}
-                <div class="mb-2">
-                    <div>{% format_duration start=lesson.start end=lesson.end %}</div>
-                    <div class="my-1">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-success"><i
-                                    class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
+                {% if lesson.start > now %}
+                    <div class="mb-2">
+                        <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                        {% attendance_state user=request.user lesson=lesson as state %}
+                        <div class="my-1">
+                            {# Buttons if present #}
+                            <div id="buttons-present-{{ lesson.id }}"
+                                 class="btn-group"
+                                 role="group"
+                                    {% if state != 'present' %} hidden {% endif %}>
+                                <button class="btn btn-sm btn-success">
+                                    <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning"
+                                        onclick="post_state({{ lesson.id }}, 'absent_excused')">
+                                    {% trans "I can't come" %}
+                                </button>
+                            </div>
+
+                            {# Buttons if absent #}
+                            <div id="buttons-absent-{{ lesson.id }}"
+                                 class="btn-group"
+                                 role="group"
+                                    {% if state != 'absent_excused' %}
+                                 hidden {% endif %}>
+                                <button class="btn btn-sm btn-outline-success"
+                                        onclick="post_state({{ lesson.id }}, 'present')">
+                                    {% trans "I will be there" %}
+                                </button>
+                                <button class="btn btn-sm btn-warning">
+                                    <i class="bi bi-x-circle-fill"></i> {% trans "I can't come" %}
+                                </button>
+                            </div>
+
+                            {# Buttons during loading #}
+                            <button id="loading-{{ lesson.id }}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    hidden disabled>
+                                <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
                             </button>
-                            <button class="btn btn-sm btn-outline-warning">{% trans "I can't come" %}</button>
+
+                            {# Something went wrong #}
+                            <div id="error-{{ lesson.id }}" hidden class="alert alert-danger p-2" role="alert">
+                                <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}
 </div>
+
+<script type="text/javascript">
+    async function post_state(lesson_id, state) {
+        const buttonsPresent = document.querySelector(`#buttons-present-${lesson_id}`)
+        const buttonsAbsent = document.querySelector(`#buttons-absent-${lesson_id}`)
+        const loading = document.querySelector(`#loading-${lesson_id}`)
+        loading.hidden = false
+        buttonsPresent.hidden = true
+        buttonsAbsent.hidden = true
+        const formData = new FormData();
+        formData.append("lesson_occurrence", lesson_id);
+        formData.append("state", state);
+        const response = await fetch('{% url "courses:my_attendance" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        if (!response.ok) {
+            document.querySelector(`#error-${lesson_id}`).hidden = false
+            loading.hidden = true
+            return
+        }
+        const data = await response.json()
+        console.log(data) // TODO update UI
+        loading.hidden = true
+        if (data["state"] === "present") {
+            buttonsPresent.hidden = false
+        }
+        if (data["state"] === "absent_excused") {
+            buttonsAbsent.hidden = false
+        }
+    }
+</script>
+

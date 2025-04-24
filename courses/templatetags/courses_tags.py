@@ -21,6 +21,7 @@ from courses.models import (
     MatchingState,
     RejectionReason,
     LessonOccurrence,
+    Attendance,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -276,6 +277,12 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
             expire_date_query, user=user, is_completed=False, course__isnull=False
         ).all()
     )
+
+
+@register.simple_tag
+def attendance_state(user: User, lesson: LessonOccurrence) -> str:
+    attendance = lesson.attendances.filter(user=user).first()
+    return attendance.state if attendance else Attendance.DEFAULT_STATE
 
 
 @register.filter(name="is_over_since")

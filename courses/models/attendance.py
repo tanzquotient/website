@@ -5,6 +5,8 @@ from .choices import AttendanceState
 
 
 class Attendance(Model):
+    DEFAULT_STATE = AttendanceState.PRESENT
+
     user = ForeignKey(to=User, related_name="attendances", on_delete=CASCADE)
     lesson_occurrence = ForeignKey(
         to="LessonOccurrence", related_name="attendances", on_delete=CASCADE
@@ -14,7 +16,7 @@ class Attendance(Model):
         blank=False,
         null=False,
         choices=AttendanceState.CHOICES,
-        default=AttendanceState.PRESENT,
+        default=DEFAULT_STATE,
     )
 
     class Meta:
