@@ -83,7 +83,6 @@
             return
         }
         const data = await response.json()
-        console.log(data) // TODO update UI
         loading.hidden = true
         if (data["state"] === "present") {
             buttonsPresent.hidden = false

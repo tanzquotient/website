@@ -20,6 +20,8 @@ class MyNextLessonsPlugin(CMSPluginBase):
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
         now = datetime.now(tz=timezone("Europe/Zurich"))
+        # TODO handle missing lead/follow preference
+        # I.e. ask user what their role is in the course, before allowing to change attendance
         courses = (
             Course.objects.filter(
                 subscriptions__user=context["user"],
