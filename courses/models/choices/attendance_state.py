@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AttendanceState:
-    PRESENT = "p"
+    PRESENT = "present"
     ABSENT_EXCUSED = "absent_excused"
     ABSENT_NOT_EXCUSED = "absent_not_excused"
     REPLACEMENT_CONFIRMED = "replacement_confirmed"

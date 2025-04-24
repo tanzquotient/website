@@ -24,11 +24,13 @@ class MyNextLessonsPlugin(CMSPluginBase):
             Course.objects.filter(
                 subscriptions__user=context["user"],
                 subscriptions__state__in=SubscribeState.ACCEPTED_STATES,
-                lesson_occurrences__end__gt=now,
+                lesson_occurrences__start__gt=now,
             )
             .prefetch_related("lesson_occurrences")
             .annotate(start=Min("lesson_occurrences__start"))
             .order_by("start")
             .distinct()
         )
-        return dict(courses=courses)
+        context["now"] = now
+        context["courses"] = courses
+        return context
