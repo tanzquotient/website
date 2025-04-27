@@ -1,111 +1,130 @@
 {% load courses_tags %}
 {% load i18n %}
 
-<div class="row row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
-    {% for course in courses %}
-        <div>
-            <div class="fw-bold">{{ course.type.title }}</div>
-            {% role user=request.user course=course as role %}
-            {% for lesson in course.lesson_occurrences.all %}
-                {% if lesson.start > now %}
-                    <div class="mb-2">
-                        <div>{% format_duration start=lesson.start end=lesson.end %}</div>
-                        {% attendance_state user=request.user lesson=lesson as state %}
-                        <div class="my-1">
-                            {# Buttons if present #}
-                            <div id="buttons-present-{{ lesson.id }}"
-                                 class="btn-group"
-                                 role="group"
-                                    {% if state != 'present' %} hidden {% endif %}>
-                                <button class="btn btn-sm btn-success">
-                                    <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
-                                </button>
-                                <button class="btn btn-sm btn-outline-warning"
-                                        onclick="post_state({{ lesson.id }}, 'absent_excused', {{ course.id }}, '{{ role }}' === 'n')">
-                                    {% trans "I can't come" %}
-                                </button>
-                            </div>
+<div class="d-flex flex-column gap-2 flex-lg-row gap-lg-4 flex-wrap">
+    {% for lesson in lessons %}
+        {% role user=request.user course=lesson.course as role %}
+        <div class="upcoming-lesson" {% if forloop.counter > 3 %} hidden {% endif %}>
+            <div class="fw-bold">{{ lesson.course.type.title }}</div>
+            <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+            {% attendance_state user=request.user lesson=lesson as state %}
+            <div class="my-1">
+                {# Buttons if present #}
+                <div id="buttons-present-{{ lesson.id }}"
+                     class="btn-group"
+                     role="group"
+                        {% if state != 'present' %} hidden {% endif %}>
+                    <button class="btn btn-sm btn-success">
+                        <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning"
+                            onclick="post_state({{ lesson.id }}, 'absent_excused', {{ lesson.course_id }}, '{{ role }}' === 'n')">
+                        {% trans "I can't come" %}
+                    </button>
+                </div>
 
-                            {# Buttons if absent #}
-                            <div id="buttons-absent-{{ lesson.id }}"
-                                 class="btn-group"
-                                 role="group"
-                                    {% if state != 'absent_excused' %}
-                                 hidden {% endif %}>
-                                <button class="btn btn-sm btn-outline-success"
-                                        onclick="post_state({{ lesson.id }}, 'present', {{ course.id }}, '{{ role }}' === 'n')">
-                                    {% trans "I will be there" %}
-                                </button>
-                                <button class="btn btn-sm btn-warning">
-                                    <i class="bi bi-x-circle-fill"></i> {% trans "I can't come" %}
-                                </button>
-                            </div>
+                {# Buttons if absent #}
+                <div id="buttons-absent-{{ lesson.id }}"
+                     class="btn-group"
+                     role="group"
+                        {% if state != 'absent_excused' %}
+                     hidden {% endif %}>
+                    <button class="btn btn-sm btn-outline-success"
+                            onclick="post_state({{ lesson.id }}, 'present', {{ lesson.course_id }}, '{{ role }}' === 'n')">
+                        {% trans "I will be there" %}
+                    </button>
+                    <button class="btn btn-sm btn-warning">
+                        <i class="bi bi-x-circle-fill"></i> {% trans "I can't come" %}
+                    </button>
+                </div>
 
-                            {# Buttons during loading #}
-                            <button id="loading-{{ lesson.id }}"
-                                    class="btn btn-sm btn-outline-secondary"
-                                    hidden disabled>
-                                <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
-                            </button>
+                {# Buttons during loading #}
+                <button id="loading-{{ lesson.id }}"
+                        class="btn btn-sm btn-outline-secondary"
+                        hidden disabled>
+                    <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
+                </button>
 
-                            {# Something went wrong #}
-                            <div id="error-{{ lesson.id }}" hidden
-                                 class="alert alert-danger p-2" role="alert">
-                                <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-
-        <div id="choose-role-modal-{{ course.id }}"
-             class="modal fade"
-             data-bs-backdrop="static"
-             data-bs-keyboard="false"
-             tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{% trans "Choose Role" %}</h5>
-                    </div>
-                    <div class="modal-body">
-                        <h5>{{ course.type }}</h5>
-                        <div>{% trans "Please tell us if you are a leader or follower in this course." %}</div>
-                        <div class="w-100 d-flex justify-content-center mt-4 mb-2">
-                            <div id="buttons-role-{{ course.id }}">
-                                <div class="d-flex gap-3">
-                                    <button class="btn btn-outline-info"
-                                            onclick="choose_role({{ course.id }}, 'l')">
-                                        {% trans "I am a leader" %}
-                                    </button>
-                                    <button class="btn btn-outline-info"
-                                            onclick="choose_role({{ course.id }}, 'f')">
-                                        {% trans "I am a follower" %}
-                                    </button>
-                                </div>
-                            </div>
-                            <button id="loading-role-{{ course.id }}"
-                                    class="btn btn-outline-secondary" hidden disabled>
-                                <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
-                            </button>
-                            <div id="error-role-{{ course.id }}" hidden
-                                 class="alert alert-danger p-2" role="alert">
-                                <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
-                            </div>
-                        </div>
-                    </div>
+                {# Something went wrong #}
+                <div id="error-{{ lesson.id }}" hidden
+                     class="alert alert-danger p-2" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
 
+{% if lessons|length == 0 %}
+    <div class="alert alert-secondary">
+        {% trans "No upcoming lessons" %}
+    </div>
+{% endif %}
+
+{% if lessons|length > 3 %}
+    <div class="my-3">
+        <a href="#"
+           id="show-all-upcoming-lessons"
+           onclick="show_all_lessons()">
+            {% trans "Show more lessons" %}
+        </a>
+    </div>
+{% endif %}
+
+{% for course in courses %}
+    <div id="choose-role-modal-{{ course.id }}"
+         class="modal fade"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{% trans "Choose Role" %}</h5>
+                </div>
+                <div class="modal-body">
+                    <h5>{{ course.type }}</h5>
+                    <div>{% trans "Please tell us if you are a leader or follower in this course." %}</div>
+                    <div class="w-100 d-flex justify-content-center mt-4 mb-2">
+                        <div id="buttons-role-{{ course.id }}">
+                            <div class="d-flex gap-3">
+                                <button class="btn btn-outline-info"
+                                        onclick="choose_role({{ course.id }}, 'l')">
+                                    {% trans "I am a leader" %}
+                                </button>
+                                <button class="btn btn-outline-info"
+                                        onclick="choose_role({{ course.id }}, 'f')">
+                                    {% trans "I am a follower" %}
+                                </button>
+                            </div>
+                        </div>
+                        <button id="loading-role-{{ course.id }}"
+                                class="btn btn-outline-secondary" hidden disabled>
+                            <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
+                        </button>
+                        <div id="error-role-{{ course.id }}" hidden
+                             class="alert alert-danger p-2" role="alert">
+                            <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
 <script type="text/javascript">
 
     let current_lesson_id = null;
     let current_state = null;
     const selected_role_for_course = [];
+
+    async function show_all_lessons() {
+        document.querySelector(`#show-all-upcoming-lessons`).hidden = true
+        for (const lesson of document.querySelectorAll(`.upcoming-lesson`)) {
+            lesson.hidden = false
+        }
+    }
 
     async function post_state(lesson_id, state, course_id, needs_to_choose_role) {
         if (needs_to_choose_role && !selected_role_for_course.find(id => id === course_id)) {
