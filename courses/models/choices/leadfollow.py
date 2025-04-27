@@ -12,6 +12,8 @@ class LeadFollow:
         (NO_PREFERENCE, _("no preference")),
     )
 
+    LEAD_OR_FOLLOW = [LEAD, FOLLOW]
+
     @staticmethod
     def partner(preference):
         if preference == LeadFollow.LEAD:

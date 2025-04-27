@@ -11,6 +11,7 @@ from django.template.defaultfilters import date
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+import courses.utils as utils
 from courses.models import (
     Weekday,
     OfferingType,
@@ -281,10 +282,7 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
 
 @register.simple_tag
 def role(user: User, course: Course) -> str:
-    for subscribe in course.subscriptions.all():
-        if subscribe.user_id == user.id:
-            return subscribe.assigned_role()
-    raise ValueError("User is not subscribed to course")
+    return utils.role(user.id, course)
 
 
 @register.simple_tag
@@ -299,6 +297,11 @@ def attendance_state(user: User, lesson: LessonOccurrence) -> str:
         if attendance.user_id == user.id:
             return attendance.state
     return Attendance.DEFAULT_STATE
+
+
+@register.filter(name="lookup")
+def lookup(value: dict | list, arg: object) -> object:
+    return value[arg]
 
 
 @register.filter(name="is_over_since")

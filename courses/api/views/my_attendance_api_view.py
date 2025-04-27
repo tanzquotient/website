@@ -28,13 +28,13 @@ class MyAttendanceApiView(APIView):
         lesson_occurrence = get_object_or_404(
             LessonOccurrence, pk=data["lesson_occurrence"]
         )
-
-        if Subscribe.objects.filter(
+        subscription = get_object_or_404(
+            Subscribe,
             user=user,
             course=lesson_occurrence.course,
             state__in=SubscribeState.ACCEPTED_STATES,
-            lead_follow=LeadFollow.NO_PREFERENCE,
-        ).exists():
+        )
+        if subscription.lead_follow == LeadFollow.NO_PREFERENCE:
             raise ValidationError(
                 detail="Make sure you have a role set for this course."
             )
@@ -45,7 +45,9 @@ class MyAttendanceApiView(APIView):
             ).delete()
         else:
             attendance, _ = Attendance.objects.get_or_create(
-                user=user, lesson_occurrence=lesson_occurrence
+                user=user,
+                lesson_occurrence=lesson_occurrence,
+                role=subscription.lead_follow,
             )
             attendance.state = state
             attendance.save()
