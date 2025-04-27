@@ -33,6 +33,7 @@ DEBUG = bool(environ["TQ_DEBUG"].lower() == "true")
 TESTING = "test" in sys.argv
 
 CMS_PERMISSION = True
+CMS_CONFIRM_VERSION4 = True
 
 # Application definition
 INSTALLED_APPS = [

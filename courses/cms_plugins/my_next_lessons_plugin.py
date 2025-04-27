@@ -3,11 +3,10 @@ from datetime import datetime
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from django.db.models import Min
 from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
-from courses.models import Course, SubscribeState
+from courses.models import SubscribeState, LessonOccurrence
 
 
 @plugin_pool.register_plugin
@@ -20,17 +19,22 @@ class MyNextLessonsPlugin(CMSPluginBase):
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
         now = datetime.now(tz=timezone("Europe/Zurich"))
-        courses = (
-            Course.objects.filter(
-                subscriptions__user=context["user"],
-                subscriptions__state__in=SubscribeState.ACCEPTED_STATES,
-                lesson_occurrences__start__gt=now,
+        lessons = (
+            LessonOccurrence.objects.filter(
+                course__subscriptions__user=context["user"],
+                course__subscriptions__state__in=SubscribeState.ACCEPTED_STATES,
+                start__gt=now,
             )
-            .prefetch_related("lesson_occurrences__attendances")
-            .annotate(start=Min("lesson_occurrences__start"))
+            .prefetch_related(
+                "attendances",
+                "course__type__translations",
+                "course__subscriptions",
+            )
             .order_by("start")
             .distinct()
         )
+        courses = {lesson.course for lesson in lessons}
         context["now"] = now
         context["courses"] = courses
+        context["lessons"] = lessons
         return context

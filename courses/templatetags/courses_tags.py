@@ -282,7 +282,7 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
 @register.simple_tag
 def role(user: User, course: Course) -> str:
     for subscribe in course.subscriptions.all():
-        if subscribe.user == user:
+        if subscribe.user_id == user.id:
             return subscribe.assigned_role()
     raise ValueError("User is not subscribed to course")
 
@@ -294,8 +294,11 @@ def has_assigned_role(user: User, course: Course) -> bool:
 
 @register.simple_tag
 def attendance_state(user: User, lesson: LessonOccurrence) -> str:
-    attendance = lesson.attendances.filter(user=user).first()
-    return attendance.state if attendance else Attendance.DEFAULT_STATE
+    attendance = lesson.attendances.all()
+    for attendance in attendance:
+        if attendance.user_id == user.id:
+            return attendance.state
+    return Attendance.DEFAULT_STATE
 
 
 @register.filter(name="is_over_since")
