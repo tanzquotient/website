@@ -12,7 +12,10 @@ class LeadFollow:
         (NO_PREFERENCE, _("no preference")),
     )
 
-    LEAD_OR_FOLLOW = [LEAD, FOLLOW]
+    LEAD_OR_FOLLOW_CHOICES = (
+        (LEAD, _("lead")),
+        (FOLLOW, _("follow")),
+    )
 
     @staticmethod
     def partner(preference):

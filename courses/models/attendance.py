@@ -10,7 +10,7 @@ class Attendance(Model):
 
     user = ForeignKey(to=User, related_name="attendances", on_delete=CASCADE)
     role = CharField(
-        max_length=1, blank=False, null=False, choices=LeadFollow.LEAD_OR_FOLLOW
+        max_length=1, blank=False, null=False, choices=LeadFollow.LEAD_OR_FOLLOW_CHOICES
     )
     lesson_occurrence = ForeignKey(
         to="LessonOccurrence", related_name="attendances", on_delete=CASCADE
