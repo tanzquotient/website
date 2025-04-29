@@ -304,6 +304,11 @@ def lookup(value: dict | list, arg: object) -> object:
     return value[arg]
 
 
+@register.filter(name="abs")
+def absolute(value: int | float) -> int | float:
+    return abs(value)
+
+
 @register.filter(name="is_over_since")
 def is_over_since(course: Course, days: int) -> bool:
     return course.is_over_since(days=days)

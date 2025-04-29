@@ -1,5 +1,6 @@
+from typing import Collection
+
 from courses.models import LessonOccurrence, AttendanceState, LeadFollow, Course
-from . import role
 
 
 def course_lead_follow_balance(course: Course) -> int:
@@ -22,23 +23,19 @@ def lesson_lead_follow_balance(lesson: LessonOccurrence) -> int:
     """
     course = lesson.course
     course_balance = course_lead_follow_balance(course)
-
-    absent = [
-        attendance.user_id
-        for attendance in lesson.attendances.all()
-        if attendance.state in AttendanceState.ABSENT_STATES
-    ]
-    absent_leaders = [u for u in absent if role(u, course) == LeadFollow.LEAD]
-    absent_followers = [u for u in absent if role(u, course) == LeadFollow.FOLLOW]
-    absent_balance = len(absent_leaders) - len(absent_followers)
-
-    replacements = [
-        attendance
-        for attendance in lesson.attendances.all()
-        if attendance.state in AttendanceState.REPLACEMENT_CONFIRMED
-    ]
-    replacement_leaders = [a for a in replacements if a.role == LeadFollow.LEAD]
-    replacement_followers = [a for a in replacements if a.role == LeadFollow.FOLLOW]
-    replacements_balance = len(replacement_leaders) - len(replacement_followers)
+    absent_balance = _balance_for(lesson, AttendanceState.ABSENT_STATES)
+    replacements_balance = _balance_for(lesson, [AttendanceState.REPLACEMENT_CONFIRMED])
 
     return course_balance - absent_balance + replacements_balance
+
+
+def _balance_for(lesson: LessonOccurrence, states: Collection[str]) -> int:
+    attendances = [
+        attendance
+        for attendance in lesson.attendances.all()
+        if attendance.state in states
+    ]
+    replacement_leaders = [a for a in attendances if a.role == LeadFollow.LEAD]
+    replacement_followers = [a for a in attendances if a.role == LeadFollow.FOLLOW]
+    replacements_balance = len(replacement_leaders) - len(replacement_followers)
+    return replacements_balance

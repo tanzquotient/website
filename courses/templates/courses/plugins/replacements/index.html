@@ -3,19 +3,62 @@
 
 <div class="d-flex flex-column gap-2 flex-lg-row gap-lg-4 flex-wrap">
     {% for lesson in lessons %}
-        <div class="mb-3">
-            <div class="fw-bold">{{ lesson.course.type.title }}
-                <span class="mx-2 badge text-bg-info" role="group">
-                {{ balances|lookup:lesson.id }} followers are needed
-            </span>
+        {% with balances|lookup:lesson.id as balance %}
+            <div>
+                <div class="fw-bold">
+                    {{ lesson.course.type.title }}
+                    {% if balance > 0 %}
+                        <!-- More leaders than followers -->
+                        <span class="mx-2 badge text-bg-follower" role="group">
+                        {% if balance == 1 %}
+                            {% trans "One follower is needed" %}
+                        {% else %}
+                            {{ balance }} {% trans "followers are needed" %}
+                        {% endif %}
+                    </span>
+                    {% else %}
+                        <!-- More followers than leaders -->
+                        <span class="mx-2 badge text-bg-leader" role="group">
+                            {% if balance == -1 %}
+                                {% trans "One leader is needed" %}
+                            {% else %}
+                                {{ balance|abs }} {% trans "leaders are needed" %}
+                            {% endif %}
+                    </span>
+                    {% endif %}
+                </div>
+                <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                <div>{{ lesson.course.room }}</div>
+                <div class="my-1 d-flex">
+                    {% if lesson.course_id in subscribed_courses %}
+                        <div class="alert alert-secondary py-1 px-2">
+                            <div>{% trans "You can not claim this spot." %}</div>
+                            <div class="small">
+                                <span class="fw-bold">{% trans "Reason" %}:</span>
+                                {% trans "You are subscribed to this course." %}
+                            </div>
+                        </div>
+                    {% elif lesson.course.type not in allowed_course_types %}
+                        <div class="alert alert-secondary py-1 px-2">
+                            <div>{% trans "You can not claim this spot." %}</div>
+                            <div class="small">
+                                <span class="fw-bold">{% trans "Reason" %}:</span>
+                                {% trans "Requirement not met." %}
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if  balance < 0 %}
+                            <button class="btn btn-sm btn-outline-leader">
+                                <i class="bi bi-person-check"></i> {% trans "Claim leader spot" %}
+                            </button>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-follower">
+                                <i class="bi bi-person-check"></i> {% trans "Claim follower spot" %}
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
-            <div>{% format_duration start=lesson.start end=lesson.end %}</div>
-            <div>{{ lesson.course.room }}</div>
-            <div class="my-1">
-                <button class="btn btn-sm btn-outline-info">
-                    <i class="bi bi-person-check"></i> {% trans "Claim spot" %}
-                </button>
-            </div>
-        </div>
+        {% endwith %}
     {% endfor %}
 </div>

@@ -1,12 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
-from courses.models import LessonOccurrence
+from courses.models import LessonOccurrence, Subscribe, SubscribeState, CourseType
 from courses.utils import lesson_lead_follow_balance
 
 
@@ -19,31 +20,50 @@ class ReplacementsPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
-        allowed_course_types = context["user"].skill.unlocked_course_types.all()
-        start_from = datetime.now(tz=timezone("Europe/Zurich"))
-        start_to = start_from.replace(hour=23, minute=59, second=59) + timedelta(
-            days=14
-        )
+        user: User = context["user"]
+        balances, lessons = self.lessons_and_balances()
+        context["lessons"] = lessons
+        context["balances"] = balances
+        context["allowed_course_types"] = self.allowed_course_types(user)
+        context["subscribed_courses"] = self.subscribed_courses(user)
+        return context
+
+    @staticmethod
+    def lessons_and_balances() -> tuple[dict[int, int], list[LessonOccurrence]]:
         lessons = (
             LessonOccurrence.objects.filter(
-                start__gte=start_from,
-                start__lt=start_to,
+                start__gte=datetime.now(tz=timezone("Europe/Zurich")),
                 course__type__couple_course=True,
-                course__type__in=allowed_course_types,
             )
-            .exclude(course__subscriptions__user=context["user"])
-            .prefetch_related("course__type__translations", "course__room")
+            .prefetch_related(
+                "course__type__translations",
+                "course__room",
+                "course__subscriptions",
+                "attendances",
+            )
             .distinct()
-        )
-        lessons = sorted(
-            lessons,
-            key=lambda l: (l.start.date(), l.course.type.title, l.start.time()),
         )
         balances = {
             l.id: balance
             for l in lessons
             if (balance := lesson_lead_follow_balance(l)) != 0
         }
-        context["lessons"] = [l for l in lessons if l.id in balances]
-        context["balances"] = balances
-        return context
+        sorted_lessons = sorted(
+            lessons,
+            key=lambda l: (l.start.date(), l.course.type.title, l.start.time()),
+        )
+        filtered_lessons = [l for l in sorted_lessons if l.id in balances]
+        return balances, filtered_lessons
+
+    @staticmethod
+    def allowed_course_types(user: User) -> set[CourseType]:
+        return set(user.skill.unlocked_course_types.all())
+
+    @staticmethod
+    def subscribed_courses(user: User) -> list[int]:
+        return [
+            s.course_id
+            for s in Subscribe.objects.filter(
+                user=user, state__in=SubscribeState.ACCEPTED_STATES
+            )
+        ]
