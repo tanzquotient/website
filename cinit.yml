@@ -59,6 +59,12 @@ programs:
       - SIP_TQ_PAYMENT_ACCOUNT_POST_NUMBER:
       - SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT:
       - SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY:
+      # OpenID-Connect
+      - SIP_AUTH_OIDC_AUTH_ENDPOINT:
+      - SIP_AUTH_OIDC_TOKEN_ENDPOINT:
+      - SIP_AUTH_OIDC_JWKS_URL:
+      - SIP_AUTH_WEBSITE_CLIENT_ID:
+      - SIP_AUTH_WEBSITE_CLIENT_SECRET:
 
   - name: pre-start
     path: /app/scripts/pre-start.sh

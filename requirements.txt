@@ -57,3 +57,7 @@ pytz==2025.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.1            # Superuser can impersonate other users
 python-dotenv==1.1.0            # Used to load environment variables from .env file
+
+# OIDC
+python-jose==3.4.0
+requests==2.32.3

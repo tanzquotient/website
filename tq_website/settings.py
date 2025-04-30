@@ -149,7 +149,7 @@ LOGOUT_URL = "/accounts/logout/"
 LOGIN_REDIRECT_URL = "/profile/courses"
 
 ACCOUNT_LOGIN_METHODS = {"username", "email"}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
@@ -489,6 +489,17 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+##################
+# OPENID-CONNECT #
+##################
+
+OIDC_CLIENT_ID = environ["TQ_OIDC_CLIENT_ID"]
+OIDC_CLIENT_SECRET = environ["TQ_OIDC_CLIENT_SECRET"]
+OIDC_AUTHORIZATION_ENDPOINT = environ["TQ_OIDC_AUTHORIZATION_ENDPOINT"]
+OIDC_TOKEN_ENDPOINT = environ["TQ_OIDC_TOKEN_ENDPOINT"]
+OIDC_JWKS_ENDPOINT = environ["TQ_OIDC_JWKS_ENDPOINT"]
+OIDC_REDIRECT_URI = "*" if DEBUG else "https://tanzquotient.org/profile/oauth"
+
 #################
 # Debug Toolbar #
 #################
@@ -606,7 +617,3 @@ if not DEBUG:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
     )
-
-# Increase fileds number limit for GET/POST requests
-# TODO: remove after migrating newsletter to celery task
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000

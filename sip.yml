@@ -11,6 +11,20 @@ s3:
 #smtp:
 #  - name: tq-mail
 
+auth:
+- name: website
+  accessType: confidential
+  clientProtocol: openid-connect
+  validRedirectURIs:
+   - https://tanzquotient.org/profile/oauth
+  scopes:
+    defaultClientScopes:
+      - home-organization
+  roles:
+   - name: admin
+     description: Administrator has maximum privileges.
+     
+
 ingress:
   - subdomain: www
     cname: tanzquotient.org

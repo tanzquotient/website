@@ -17,12 +17,14 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
-from .views import WellKnownRedirectView
+from .views import WellKnownRedirectView, openid_connect_login, openid_connect_callback
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),
     path("check/", courses_views.confirmation_check, name="confirmation_check"),
     path("duplicate-users/", courses_views.duplicate_users, name="duplicate_users"),
+    path("profile/oauth/", openid_connect_login, name="oidc_callback"),
+    path("profile/oauth/login/", openid_connect_callback, name="oidc_login"),
 ]
 
 if settings.DEBUG and not settings.TESTING:
@@ -56,6 +58,8 @@ urlpatterns += i18n_patterns(
         "profile/<int:user_id>/calendar.ical", courses_views.user_ical, name="user_ical"
     ),
     path("profile/edit", courses_views.ProfileView.as_view(), name="edit_profile"),
+    path("profile/oauth/login/", openid_connect_login, name="oidc_login"),
+    path("profile/oauth/", openid_connect_callback, name="oidc_callback"),
     path("profile/", courses_views.user_profile, name="profile"),
     path("survey/", include(survey.urls, namespace="survey")),
     path("events/", include(events.urls, namespace="events")),
