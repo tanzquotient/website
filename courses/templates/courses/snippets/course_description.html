@@ -1,15 +1,15 @@
 {% load i18n %}
 
-{% if course.description or course.type.description %}
+{% if course.get_description or course.type.get_description %}
     <h3>{% trans "Description" %}</h3>
-    {% if course.description %}
+    {% if course.get_description %}
         <div>
-            {{ course.description|safe }}
+            {{ course.get_description|safe }}
         </div>
     {% endif %}
-    {% if course.type.description %}
+    {% if course.type.get_description %}
         <div>
-            {{ course.type.description|safe }}
+            {{ course.type.get_description|safe }}
         </div>
     {% endif %}
 {% endif %}

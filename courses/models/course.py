@@ -181,7 +181,9 @@ class Course(TranslatableModel):
         super(Course, self).save(*args, **kwargs)
 
     def clean(self):
-        if self.early_signup and (not hasattr(self, "type") or not self.type.predecessors.exists()):
+        if self.early_signup and (
+            not hasattr(self, "type") or not self.type.predecessors.exists()
+        ):
             # disallow enabling early signup altogether
             raise ValidationError(
                 {
@@ -676,12 +678,17 @@ class Course(TranslatableModel):
 
     @cached_property
     def rooms(self) -> list[Room]:
-    # TODO: replace with query when updating Lesson model
-        return list(set(([self.room] if self.room else []) + [
-            l.room
-            for l in self.lesson_occurrences.all()
-            if l.room and l.room != self.room
-        ]))
+        # TODO: replace with query when updating Lesson model
+        return list(
+            set(
+                ([self.room] if self.room else [])
+                + [
+                    l.room
+                    for l in self.lesson_occurrences.all()
+                    if l.room and l.room != self.room
+                ]
+            )
+        )
 
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()
@@ -726,6 +733,11 @@ class Course(TranslatableModel):
             + TranslationUtils.get_text_with_language_fallback_or_empty(
                 self, "information_for_participants_teachers"
             )
+        )
+
+    def get_description(self) -> str:
+        return TranslationUtils.get_text_with_language_fallback_or_empty(
+            self, "description"
         )
 
     def is_over(self) -> bool:
