@@ -6,15 +6,21 @@ class LeadFollow:
     FOLLOW = "f"
     NO_PREFERENCE = "n"
 
+    NAMES = {
+        LEAD: _("lead"),
+        FOLLOW: _("follow"),
+        NO_PREFERENCE: _("no preference"),
+    }
+
     CHOICES = (
-        (LEAD, _("lead")),
-        (FOLLOW, _("follow")),
-        (NO_PREFERENCE, _("no preference")),
+        (LEAD, NAMES[LEAD]),
+        (FOLLOW, NAMES[FOLLOW]),
+        (NO_PREFERENCE, NAMES[NO_PREFERENCE]),
     )
 
     LEAD_OR_FOLLOW_CHOICES = (
-        (LEAD, _("lead")),
-        (FOLLOW, _("follow")),
+        (LEAD, NAMES[LEAD]),
+        (FOLLOW, NAMES[FOLLOW]),
     )
 
     @staticmethod

@@ -2,7 +2,7 @@ from django.urls import path
 
 from courses import admin_views
 from courses import views
-from courses.api.views import MyAttendanceApiView, ChooseRoleApiView
+from courses.api.views import MyAttendanceApiView, ChooseRoleApiView, ClaimSpotApiView
 
 app_name = "courses"
 urlpatterns = [
@@ -51,4 +51,5 @@ urlpatterns = [
     ),
     path("api/my-attendance/", MyAttendanceApiView.as_view(), name="my_attendance"),
     path("api/choose-role/", ChooseRoleApiView.as_view(), name="choose_role"),
+    path("api/claim-spot/", ClaimSpotApiView.as_view(), name="claim_spot"),
 ]
