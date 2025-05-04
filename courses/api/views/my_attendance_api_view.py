@@ -12,6 +12,7 @@ from ...models import (
     Subscribe,
     LeadFollow,
     SubscribeState,
+    AttendanceState,
 )
 
 
@@ -28,6 +29,23 @@ class MyAttendanceApiView(APIView):
         lesson_occurrence = get_object_or_404(
             LessonOccurrence, pk=data["lesson_occurrence"]
         )
+
+        # Special case: replacement cancels
+        if state == AttendanceState.ABSENT_EXCUSED and (
+            Attendance.objects.filter(
+                lesson_occurrence=lesson_occurrence,
+                user=user,
+                state__in=AttendanceState.REPLACEMENT_STATES,
+            ).exists()
+        ):
+            Attendance.objects.filter(
+                lesson_occurrence=lesson_occurrence,
+                user=user,
+            ).delete()
+            data["is_replacement"] = True
+            return Response(data=data)
+
+        # Regular case: participant attendance
         subscription = get_object_or_404(
             Subscribe,
             user=user,
