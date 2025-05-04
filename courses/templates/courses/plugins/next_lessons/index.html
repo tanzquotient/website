@@ -3,17 +3,26 @@
 
 <div class="d-flex flex-column gap-2 flex-lg-row gap-lg-4 flex-wrap">
     {% for lesson in lessons %}
-        {% role user=request.user course=lesson.course as role %}
-        <div class="upcoming-lesson" {% if forloop.counter > 3 %} hidden {% endif %}>
-            <div class="fw-bold">{{ lesson.course.type.title }}</div>
-            <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+        {% role user=request.user lesson=lesson as role %}
+        <div id="attendance-{{ lesson.id }}" class="upcoming-lesson"
+                {% if forloop.counter > 3 %} hidden {% endif %}>
             {% attendance_state user=request.user lesson=lesson as state %}
+            <div class="fw-bold">
+                {{ lesson.course.type.title }}
+                {% if state == "replacement_confirmed" %}
+                    <span class="badge text-bg-info" role="group">
+                        {% trans "Replacement" %}
+                     </span>
+                {% endif %}
+            </div>
+            <div>{% format_duration start=lesson.start end=lesson.end %}</div>
             <div class="my-1">
                 {# Buttons if present #}
                 <div id="buttons-present-{{ lesson.id }}"
                      class="btn-group"
                      role="group"
-                        {% if state != 'present' %} hidden {% endif %}>
+                        {% if state != 'present' and state != "replacement_confirmed" %}
+                     hidden {% endif %}>
                     <button class="btn btn-sm btn-success">
                         <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
                     </button>
@@ -165,6 +174,9 @@
         }
         if (data["state"] === "absent_excused") {
             buttonsAbsent.hidden = false
+        }
+        if (data["is_replacement"]) {
+            document.querySelector(`#attendance-${lesson_id}`).remove()
         }
     }
 

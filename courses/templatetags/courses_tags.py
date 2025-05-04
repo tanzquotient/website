@@ -281,8 +281,8 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
 
 
 @register.simple_tag
-def role(user: User, course: Course) -> str:
-    return utils.role(user.id, course)
+def role(user: User, lesson: LessonOccurrence) -> str:
+    return utils.role(user.id, lesson)
 
 
 @register.simple_tag

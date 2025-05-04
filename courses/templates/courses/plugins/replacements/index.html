@@ -113,7 +113,7 @@
         if (!response.ok) {
             error.hidden = false
             loading.hidden = true
-            errorInfo.innerText = await response.text()
+            errorInfo.innerText = (await response.json())["detail"]
             return
         }
         loading.hidden = true
