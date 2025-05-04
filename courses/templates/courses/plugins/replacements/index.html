@@ -46,19 +46,79 @@
                                 {% trans "Requirement not met." %}
                             </div>
                         </div>
+                    {% elif lesson in claimed_spots %}
+                        <div class="alert alert-success py-1 px-2">
+                            <div>{% trans "You signed up as replacement for this course." %}</div>
+                        </div>
+
                     {% else %}
-                        {% if  balance < 0 %}
-                            <button class="btn btn-sm btn-outline-leader">
+                        {% if balance < 0 %}
+                            <button class="btn btn-sm btn-outline-leader"
+                                    id="button-claim-{{ lesson.id }}"
+                                    onclick="claim_spot({{ lesson.id }}, 'l')">
                                 <i class="bi bi-person-check"></i> {% trans "Claim leader spot" %}
                             </button>
                         {% else %}
-                            <button class="btn btn-sm btn-outline-follower">
+                            <button class="btn btn-sm btn-outline-follower"
+                                    id="button-claim-{{ lesson.id }}"
+                                    onclick="claim_spot({{ lesson.id }}, 'f')">
                                 <i class="bi bi-person-check"></i> {% trans "Claim follower spot" %}
                             </button>
                         {% endif %}
+
+                        <button id="loading-{{ lesson.id }}"
+                                class="btn btn-sm btn-outline-secondary"
+                                hidden disabled>
+                            <span class="spinner-border spinner-border-sm"></span> {% trans "Claiming" %}
+                        </button>
+
+                        <div id="error-{{ lesson.id }}" hidden
+                             class="alert alert-danger p-2" role="alert">
+                            <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
+                            <p id="error-info-{{ lesson.id }}" class="small"></p>
+                        </div>
+
+                        <div id="success-{{ lesson.id }}" hidden
+                             class="alert alert-success p-2" role="alert">
+                            <i class="bi bi-check-circle-fill"></i> {% trans "Successfully claimed spot." %}
+                        </div>
                     {% endif %}
                 </div>
             </div>
         {% endwith %}
     {% endfor %}
 </div>
+
+
+<script type="text/javascript">
+
+    async function claim_spot(lesson_id, role) {
+        const claimButton = document.querySelector(`#button-claim-${lesson_id}`)
+        const loading = document.querySelector(`#loading-${lesson_id}`)
+        const success = document.querySelector(`#success-${lesson_id}`);
+        const error = document.querySelector(`#error-${lesson_id}`);
+        const errorInfo = document.querySelector(`#error-info-${lesson_id}`);
+        loading.hidden = false
+        claimButton.hidden = true
+        const formData = new FormData();
+        formData.append("lesson_occurrence", lesson_id);
+        formData.append("role", role);
+        const response = await fetch('{% url "courses:claim_spot" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        if (!response.ok) {
+            error.hidden = false
+            loading.hidden = true
+            errorInfo.innerText = await response.text()
+            return
+        }
+        loading.hidden = true
+        error.hidden = true
+        success.hidden = false
+        errorInfo.innerText = ""
+    }
+</script>

@@ -7,7 +7,13 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
-from courses.models import LessonOccurrence, Subscribe, SubscribeState, CourseType
+from courses.models import (
+    LessonOccurrence,
+    Subscribe,
+    SubscribeState,
+    CourseType,
+    AttendanceState,
+)
 from courses.utils import lesson_lead_follow_balance
 
 
@@ -26,6 +32,7 @@ class ReplacementsPlugin(CMSPluginBase):
         context["balances"] = balances
         context["allowed_course_types"] = self.allowed_course_types(user)
         context["subscribed_courses"] = self.subscribed_courses(user)
+        context["claimed_spots"] = self.claimed_spots(user, lessons)
         return context
 
     @staticmethod
@@ -67,3 +74,16 @@ class ReplacementsPlugin(CMSPluginBase):
                 user=user, state__in=SubscribeState.ACCEPTED_STATES
             )
         ]
+
+    @staticmethod
+    def claimed_spots(
+        user: User, lessons: list[LessonOccurrence]
+    ) -> list[LessonOccurrence]:
+        return [l for l in lessons if ReplacementsPlugin.is_replacement(user, l)]
+
+    @staticmethod
+    def is_replacement(user: User, lesson: LessonOccurrence) -> bool:
+        for a in lesson.attendances.all():
+            if a.user == user and a.state in AttendanceState.REPLACEMENT_STATES:
+                return True
+        return False
