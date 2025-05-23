@@ -35,6 +35,7 @@ def subscription_payment_view(request: HttpRequest, usi: str):
         }
         send_email(
             to=user.email,
+            reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
             template="voucher",
             context=email_context,
             attachments={"Voucher.pdf": voucher_for_remainder.pdf_file.file},

@@ -148,6 +148,7 @@ def email_vouchers(data: dict, vouchers: list[Voucher]):
         emails.append(
             dict(
                 to=voucher.sent_to.email,
+                reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
                 template="voucher",
                 context=email_context,
                 attachments={"Voucher.pdf": voucher.pdf_file.file},
