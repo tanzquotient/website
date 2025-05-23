@@ -24,6 +24,7 @@ class ReplacementsPlugin(CMSPluginBase):
     render_template = "courses/plugins/replacements/index.html"
     text_enabled = False
     allow_children = False
+    cache = False
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
         user: User = context["user"]

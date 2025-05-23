@@ -17,6 +17,7 @@ class MyNextLessonsPlugin(CMSPluginBase):
     render_template = "courses/plugins/next_lessons/index.html"
     text_enabled = False
     allow_children = False
+    cache = False
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
         now = datetime.now(tz=timezone("Europe/Zurich"))
