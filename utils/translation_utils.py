@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Callable
 
 from parler.utils.context import switch_language
 
@@ -22,6 +22,20 @@ class TranslationUtils:
     @staticmethod
     def get_text_with_language_fallback_or_empty(model, attribute: str) -> str:
         return TranslationUtils.get_text_with_language_fallback(model, attribute) or ""
+
+    @staticmethod
+    def is_field_translated_in_all_languages(
+        object, attribute: str, transform: Callable = lambda x: bool(x)
+    ):
+        for language in settings.LANGUAGES:
+            language_code = language[0]
+            if not transform(
+                object.safe_translation_getter(
+                    attribute, language_code=language_code, any_language=False
+                )
+            ):
+                return False
+        return True
 
     @staticmethod
     def copy_translations(old, new) -> None:

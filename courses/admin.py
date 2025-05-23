@@ -14,6 +14,7 @@ from reversion.models import Version
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
+from utils import HTMLUtils, TranslationUtils
 
 
 @admin.register(Offering)
@@ -176,6 +177,7 @@ class CourseAdmin(TranslatableAdmin):
         "num_lessons",
         "total_hours",
         "format_teachers",
+        "has_description_in_all_languages",
     )
     list_filter = ("offering", "subscription_type", "display", "active", "completed")
     readonly_fields = ["completed"]
@@ -287,6 +289,14 @@ class CourseAdmin(TranslatableAdmin):
     def num_lessons(course: Course) -> int:
         return course.lesson_occurrences.count()
 
+    @admin.display(boolean=True, description="Has description")
+    def has_description_in_all_languages(self, obj: Course) -> bool:
+        return TranslationUtils.is_field_translated_in_all_languages(
+            obj, "description", HTMLUtils.html_has_text
+        ) or TranslationUtils.is_field_translated_in_all_languages(
+            obj.type, "description", HTMLUtils.html_has_text
+        )
+
 
 @admin.register(CourseType)
 class CourseTypeAdmin(TranslatableAdmin):
@@ -295,8 +305,13 @@ class CourseTypeAdmin(TranslatableAdmin):
         "format_styles",
         "level",
         "couple_course",
+        "has_description_in_all_languages",
     )
-    list_filter = ("level", CourseTypeStyleFilter, "couple_course")
+    list_filter = (
+        "level",
+        CourseTypeStyleFilter,
+        "couple_course",
+    )
     search_fields = ["translations__title", "translations__subtitle"]
     filter_horizontal = ["predecessors", "styles"]
 
@@ -317,6 +332,12 @@ class CourseTypeAdmin(TranslatableAdmin):
     ]
 
     model = CourseType
+
+    @admin.display(boolean=True, description="Has description")
+    def has_description_in_all_languages(self, obj: CourseType) -> bool:
+        return TranslationUtils.is_field_translated_in_all_languages(
+            obj, "description", HTMLUtils.html_has_text
+        )
 
 
 @admin.register(Skill)
