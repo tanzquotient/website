@@ -19,9 +19,14 @@ def fence(value, s):
         return fence_helper(str(value), s)
 
 
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
+@register.filter(name="lookup")
+def lookup(value: dict | list, arg: object) -> object:
+    return value[arg]
+
+
+@register.filter(name="abs")
+def absolute(value: int | float) -> int | float:
+    return abs(value)
 
 
 @register.filter

@@ -14,7 +14,7 @@
                         {% endif %}
                     </h5>
                     {% for offering_type in offering_types %}
-                        {% with offerings=offerings_by_type|get_item:offering_type %}
+                        {% with offerings=offerings_by_type|lookup:offering_type %}
                             {% if offerings %}
                                 <h6 class="card-subtitle mt-2 mb-1">
                                     {% if offering_type == 'reg' %}

@@ -11,7 +11,7 @@
                     <p>
                         {% include "courses/snippets/user.html" with user=u only %}
                     <ul>
-                        {% for a in user_aliases|get_item:u.id %}
+                        {% for a in user_aliases|lookup:u.id %}
                             <li>
                                 <input type="checkbox" name="{{ u.id }}-{{ a.id }}" id="{{ a.id }}" value="yes"
                                        checked="checked">
