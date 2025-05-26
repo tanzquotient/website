@@ -5,6 +5,9 @@ Du bist derzeit auf Position {{waiting_list_position}}.
 
 Wir werden deine Anmeldung akzeptieren sobald genug Plätze frei werden und wir eine:n Partner:in finden.
 
+Nochmals alle Infos zum Kurs:
+{{course_info|safe}}
+
 Den Status deiner Anmeldung und deine Position auf der Warteliste kannst du jederzeit unter https://tanzquotient.org/profile/courses überprüfen.
 
 Liebe Grüsse
@@ -22,6 +25,10 @@ Unfortunately, the course is currently fully booked for your role.
 Hence, you have joined the waiting list and are currently in position {{waiting_list_position}}.
 
 We will accept your subscription if enough places in the course were to free up and if we can find a partner for you.
+
+Here's the course info:
+{{course_info|safe}}
+
 You can always monitor your position in the queue at https://tanzquotient.org/profile/courses.
 
 
