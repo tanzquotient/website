@@ -24,7 +24,14 @@
         <div class="mb-0">{{ item.partner.name }}</div>
     {% else %}
         <div class="mb-0">
-            {{ item.room | default:_("Currently unknown") }}
+            {% if item.room %}
+                {% include "courses/snippets/room_modal.html" with display_link=False room=item.room only %}
+                {% if item.rooms|length > 1 %}
+                <i>+ {% trans "others" %}</i>
+                {% endif %}
+            {% else %}
+                {% trans "Currently unknown" %}
+            {% endif %}
         </div>
     {% endif %}
 </a>
