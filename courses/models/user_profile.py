@@ -222,6 +222,7 @@ class UserProfile(Model):
             teaching
             for teaching in self.user.teaching_courses.all()
             if not teaching.course.is_external() and not teaching.course.cancelled
+            and teaching.course.is_over()
         }
 
     def is_board_member(self) -> bool:
