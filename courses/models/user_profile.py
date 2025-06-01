@@ -221,7 +221,8 @@ class UserProfile(Model):
         return {
             teaching
             for teaching in self.user.teaching_courses.all()
-            if not teaching.course.is_external() and not teaching.course.cancelled
+            if not teaching.course.is_external()
+            and not teaching.course.cancelled
             and teaching.course.is_over()
         }
 
