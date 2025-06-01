@@ -12,6 +12,7 @@ from courses.models import (
     LessonOccurrenceTeach,
     RoomCancellation,
     LessonDetails,
+    Teach,
 )
 
 
@@ -24,9 +25,12 @@ from courses.models import (
 @receiver(post_save, sender=PeriodCancellation)
 @receiver(post_save, sender=RoomCancellation)
 @receiver(post_save, sender=LessonDetails)
+@receiver(post_delete, sender=Course)
 @receiver(post_delete, sender=RegularLesson)
 @receiver(post_delete, sender=RegularLessonException)
 @receiver(post_delete, sender=IrregularLesson)
+@receiver(post_delete, sender=Offering)
+@receiver(post_delete, sender=Period)
 @receiver(post_delete, sender=PeriodCancellation)
 @receiver(post_delete, sender=RoomCancellation)
 @receiver(post_delete, sender=LessonDetails)
@@ -55,10 +59,20 @@ def update_lesson_occurrences(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=LessonOccurrenceTeach)
+@receiver(post_save, sender=Teach)
 @receiver(post_delete, sender=LessonOccurrenceTeach)
+@receiver(post_delete, sender=Teach)
 def update_hourly_wages(sender, instance, **kwargs):
-    for l in LessonOccurrenceTeach.objects.filter(
-        teacher=instance.teacher,
-        lesson_occurrence__start__gt=instance.lesson_occurrence.end,
-    ).all():
-        l.update_hourly_wage()
+    if sender == LessonOccurrenceTeach:
+        for l in LessonOccurrenceTeach.objects.filter(
+            teacher=instance.teacher,
+            lesson_occurrence__start__gt=instance.lesson_occurrence.end,
+        ).all():
+            l.update_hourly_wage()
+
+    elif sender == Teach:
+        for l in LessonOccurrenceTeach.objects.filter(
+            teacher=instance.teacher,
+            lesson_occurrence__course=instance.course,
+        ).all():
+            l.update_hourly_wage()

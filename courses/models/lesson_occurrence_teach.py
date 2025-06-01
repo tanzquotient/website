@@ -27,11 +27,18 @@ class LessonOccurrenceTeach(models.Model):
         # For external courses, teachers are not paid by us
         if self.lesson_occurrence.course.is_external():
             return Decimal(0)
-        # Compute the hourly wage
-        else:
-            return self.teacher.profile.get_hourly_wage(
-                until=self.lesson_occurrence.start
-            )
+        # If the teacher wage for the course is defined, use it
+        main_teach = self.lesson_occurrence.course.teaching.filter(teacher=self.teacher)
+        # Check if the teacher is not a replacement (if so, follow standard scheme)
+        if main_teach.exists():
+            course_hourly_wage = main_teach.get().hourly_wage
+            if course_hourly_wage is not None:
+                return course_hourly_wage  
+        # Else, compute the hourly wage based on hours taught
+        # or fixed hourly wage as per profile
+        return self.teacher.profile.get_hourly_wage(
+            until=self.lesson_occurrence.start
+        )
 
     def update_hourly_wage(self) -> None:
         self.hourly_wage = self.calculate_hourly_wage()
