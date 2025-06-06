@@ -23,6 +23,7 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.data import COUNTRIES
 from django_resized import ResizedImageField
 from djangocms_text.fields import HTMLField
+from django.db.models import F, ExpressionWrapper, DurationField, Sum
 
 from courses import managers
 from . import (
@@ -212,10 +213,22 @@ class UserProfile(Model):
     def total_hours_taught(self, until: datetime | str = "now") -> Decimal:
         if until == "now":
             until = timezone.localtime(timezone.now())
-        return sum(
-            [l.get_hours() for l in self.user.lesson_occurrences.filter(end__lt=until)],
-            Decimal(0),
+
+        total_duration = (
+            self.user.lesson_occurrences.filter(end__lt=until)
+            .annotate(
+                duration=ExpressionWrapper(
+                    F("end") - F("start"), output_field=DurationField()
+                )
+            )
+            .aggregate(total=Sum("duration"))["total"]
         )
+
+        if total_duration is None:
+            return Decimal(0)
+
+        hours = total_duration.total_seconds() / 3600
+        return Decimal(round(hours, 2))
 
     def courses_taught(self) -> set[Teach]:
         return {

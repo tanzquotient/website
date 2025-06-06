@@ -33,16 +33,15 @@ class LessonOccurrenceTeach(models.Model):
         if main_teach.exists():
             course_hourly_wage = main_teach.get().hourly_wage
             if course_hourly_wage is not None:
-                return course_hourly_wage  
+                return course_hourly_wage
         # Else, compute the hourly wage based on hours taught
         # or fixed hourly wage as per profile
-        return self.teacher.profile.get_hourly_wage(
-            until=self.lesson_occurrence.start
-        )
+        return self.teacher.profile.get_hourly_wage(until=self.lesson_occurrence.start)
 
     def update_hourly_wage(self) -> None:
-        self.hourly_wage = self.calculate_hourly_wage()
-        self.save()
+        LessonOccurrenceTeach.objects.filter(pk=self.pk).update(
+            hourly_wage=self.calculate_hourly_wage()
+        )
 
     def get_wage(self) -> Decimal:
         hours = self.lesson_occurrence.get_hours()
