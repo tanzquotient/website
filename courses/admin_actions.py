@@ -7,6 +7,7 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from reversion import revisions as reversion
 
 import courses.services.matching.change_matching
 import courses.services.matching.do_matching
@@ -293,9 +294,12 @@ def admit_from_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> N
     counter = 0
     for s in queryset:
         if s.state == SubscribeState.WAITING_LIST:
-            s.state = SubscribeState.NEW
-            s.save()
-            counter += 1
+            with reversion.create_revision():
+                s.state = SubscribeState.NEW
+                s.save()
+                counter += 1
+
+                reversion.set_comment("Subscription admitted from the waiting list")
         else:
             messages.add_message(
                 request, messages.WARNING, f"{s} is not on the waiting list. Skipped."
@@ -313,9 +317,12 @@ def move_to_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> None
     counter = 0
     for s in queryset:
         if s.state == SubscribeState.NEW:
-            s.state = SubscribeState.WAITING_LIST
-            s.save()
-            counter += 1
+            with reversion.create_revision():
+                s.state = SubscribeState.WAITING_LIST
+                s.save()
+                counter += 1
+
+                reversion.set_comment("Subscription moved to the waiting list")
         else:
             messages.add_message(
                 request,
@@ -483,7 +490,9 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
         zip_buffer = BytesIO()
         with zipfile.ZipFile(zip_buffer, "w") as zip_file:
             for voucher in queryset:
-                zip_file.writestr(f"Voucher_{voucher.key}.pdf", voucher.pdf_file.file.read())
+                zip_file.writestr(
+                    f"Voucher_{voucher.key}.pdf", voucher.pdf_file.file.read()
+                )
         zip_buffer.seek(0)
         response = HttpResponse(zip_buffer, content_type="application/zip")
         response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
