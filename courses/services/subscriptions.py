@@ -173,8 +173,11 @@ def unconfirm_subscriptions(
 ) -> None:
     for s in subscriptions.all():
         if s.state == models.SubscribeState.CONFIRMED:
-            s.state = models.SubscribeState.NEW
-            s.save()
+            with reversion.create_revision():
+                s.state = models.SubscribeState.NEW
+                s.save()
+
+                reversion.set_comment("Subscription unconfirmed")
 
 
 def reject_subscription(
@@ -182,21 +185,32 @@ def reject_subscription(
 ) -> None:
     """sends a rejection mail if subscription is rejected (by some other method)
     and no rejection mail was sent before"""
-    subscription.state = (
-        models.SubscribeState.TO_REIMBURSE
-        if subscription.state == models.SubscribeState.PAID
-        else models.SubscribeState.REJECTED
-    )
     if subscription.partner is not None:
         partner_subscription = subscription.get_partner_subscription()
-        partner_subscription.partner = None
-        partner_subscription.matching_state = MatchingState.TO_REMATCH
-        partner_subscription.save()
+        with reversion.create_revision():
+            partner_subscription.partner = None
+            partner_subscription.matching_state = MatchingState.TO_REMATCH
+            partner_subscription.save()
 
-        subscription.partner = None
-        subscription.matching_state = MatchingState.TO_REMATCH
+            reversion.set_comment(
+                "Subscription to rematch following rejection of partner"
+                f"with reason {reason}"
+            )
 
-    subscription.save()
+    with reversion.create_revision():
+        subscription.state = (
+            models.SubscribeState.TO_REIMBURSE
+            if subscription.state == models.SubscribeState.PAID
+            else models.SubscribeState.REJECTED
+        )
+        if subscription.partner is not None:
+            subscription.partner = None
+            subscription.matching_state = MatchingState.TO_REMATCH
+
+        subscription.save()
+
+        reversion.set_comment(f"Subscription rejected with reason {reason}")
+
     if not reason:
         reason = detect_rejection_reason(subscription)
     c = models.Rejection(subscription=subscription, reason=reason, mail_sent=False)
@@ -233,8 +247,11 @@ def unreject_subscriptions(
     unrejected_count = 0
     for subscription in subscriptions:
         if subscription.state == models.SubscribeState.REJECTED:
-            subscription.state = None
-            subscription.save()
+            with reversion.create_revision():
+                subscription.state = None
+                subscription.save()
+                reversion.set_comment("Subscription unrejected")
+
             unrejected_count += 1
     if unrejected_count:
         messages.add_message(

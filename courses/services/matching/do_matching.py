@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
+from reversion import revisions as reversion
 
 from courses import models as models
 from courses.managers import SubscribeQuerySet
@@ -133,13 +134,18 @@ def _match_for_course(
         )
         log.info("going to match '{}' with '{}'".format(subscribe_a, subscribe_b))
 
-        subscribe_a.partner = subscribe_b.user
-        subscribe_a.matching_state = models.MatchingState.MATCHED
-        subscribe_a.save()
+        with reversion.create_revision():
+            subscribe_a.partner = subscribe_b.user
+            subscribe_a.matching_state = models.MatchingState.MATCHED
+            subscribe_a.save()
 
-        subscribe_b.partner = subscribe_a.user
-        subscribe_b.matching_state = models.MatchingState.MATCHED
-        subscribe_b.save()
+            subscribe_b.partner = subscribe_a.user
+            subscribe_b.matching_state = models.MatchingState.MATCHED
+            subscribe_b.save()
+
+            reversion.set_comment(
+                f"Matched subscriptions {subscribe_a} and {subscribe_b}"
+            )
 
     match_count = len(a)
     log.info("match count = {}".format(match_count))

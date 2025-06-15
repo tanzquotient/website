@@ -11,11 +11,12 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet, Q, Case, When, Value, IntegerField
+from django.db.models import QuerySet
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+from reversion import revisions as reversion
 
 from courses import managers
 from courses.models import (
@@ -446,13 +447,18 @@ class Course(TranslatableModel):
         waiting_list: list[Subscribe] = self.subscriptions.waiting_list().order_by(
             "date"
         )
+
         for s in waiting_list:
             if (
                 not self.type.couple_course
                 or s.matching_state not in MatchingState.MATCHED_STATES
             ):
-                s.state = None
-                s.save()
+                s.state = s.assign_state()
+                if s.state != SubscribeState.WAITING_LIST:
+                    with reversion.create_revision():
+                        s.save()
+                        reversion.set_comment(f"Promoted from waiting list")
+
             else:
                 # check that both the current subscribe
                 # and the partner can leave the
@@ -461,11 +467,14 @@ class Course(TranslatableModel):
                     self.has_free_places_for_leaders
                     and self.has_free_places_for_followers
                 ):
-                    s.state = SubscribeState.NEW
-                    partner_s = s.get_partner_subscription()
-                    partner_s.state = SubscribeState.NEW
-                    s.save()
-                    partner_s.save()
+                    with reversion.create_revision():
+                        s.state = SubscribeState.NEW
+                        partner_s = s.get_partner_subscription()
+                        partner_s.state = SubscribeState.NEW
+                        s.save()
+                        partner_s.save()
+
+                        reversion.set_comment(f"Promoted from waiting list")
                 else:
                     break
 

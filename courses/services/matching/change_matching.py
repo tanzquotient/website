@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from reversion import revisions as reversion
 
 from courses import models as models
 
@@ -17,9 +18,12 @@ def correct_matching_state_to_couple(subscriptions, request=None):
                 s.matching_state == models.MatchingState.MATCHED
                 and partner_sub.matching_state in allowed_states
             ):
-                s.matching_state = models.MatchingState.COUPLE
-                s.save()
-                corrected_count += 1
+                with reversion.create_revision():
+                    s.matching_state = models.MatchingState.COUPLE
+                    s.save()
+                    corrected_count += 1
+
+                    reversion.set_comment("Matching state corrected to couple")
 
     if corrected_count:
         messages.add_message(
@@ -126,6 +130,9 @@ def breakup_couple(subscriptions, request):
 
 
 def _unmatch_person(subscription):
-    subscription.partner = None
-    subscription.matching_state = models.MatchingState.TO_REMATCH
-    subscription.save()
+    with reversion.create_revision():
+        subscription.partner = None
+        subscription.matching_state = models.MatchingState.TO_REMATCH
+        subscription.save()
+
+        reversion.set_comment("Subscription unmatched")
