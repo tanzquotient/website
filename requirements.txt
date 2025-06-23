@@ -27,7 +27,7 @@ celery==5.5.3                   # Task queue with focus on real-time processing,
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
 django-celery-beat==2.8.1       # Store periodic task schedules in the database
 django-celery-results==2.6.0    # Stores Celery task results
-django-redis==5.4.0             # Redis cache and session backend for Django
+django-redis==6.0.0             # Redis cache and session backend for Django
 
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
