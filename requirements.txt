@@ -49,11 +49,11 @@ minio==7.2.15                    # Perform bucket and object operations, used fo
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.30.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.32.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==6.1.2                  # For generating charts and graphs
+plotly==6.2.0                  # For generating charts and graphs
 pytz==2025.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.2            # Superuser can impersonate other users
-python-dotenv==1.1.0            # Used to load environment variables from .env file
+python-dotenv==1.1.1            # Used to load environment variables from .env file
