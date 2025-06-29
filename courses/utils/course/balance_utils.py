@@ -1,13 +1,23 @@
 from typing import Collection
 
-from courses.models import LessonOccurrence, AttendanceState, LeadFollow, Course
+from courses.models import (
+    LessonOccurrence,
+    AttendanceState,
+    LeadFollow,
+    Course,
+    SubscribeState,
+)
 
 
 def course_lead_follow_balance(course: Course) -> int:
     """
     balance = #leaders - #followers
     """
-    subscriptions = course.subscriptions.all()
+    subscriptions = [
+        s
+        for s in course.subscriptions.all()
+        if s.state in SubscribeState.ACCEPTED_STATES
+    ]
     single_leaders = [
         s for s in subscriptions if s.is_single_with_preference(LeadFollow.LEAD)
     ]

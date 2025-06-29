@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Iterable
 
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
@@ -14,7 +15,7 @@ from courses.models import (
     CourseType,
     AttendanceState,
 )
-from courses.utils import lesson_lead_follow_balance
+from courses.utils import lesson_lead_follow_balance, claiming_spot_window_open
 
 
 @plugin_pool.register_plugin
@@ -34,6 +35,7 @@ class ReplacementsPlugin(CMSPluginBase):
         context["allowed_course_types"] = self.allowed_course_types(user)
         context["subscribed_courses"] = self.subscribed_courses(user)
         context["claimed_spots"] = self.claimed_spots(user, lessons)
+        context["claim_spots_window_open"] = self.claim_spots_window_open(lessons)
         return context
 
     @staticmethod
@@ -88,3 +90,7 @@ class ReplacementsPlugin(CMSPluginBase):
             if a.user == user and a.state == AttendanceState.REPLACEMENT:
                 return True
         return False
+
+    @staticmethod
+    def claim_spots_window_open(lessons: Iterable[LessonOccurrence]) -> dict[int, bool]:
+        return {lesson.id: claiming_spot_window_open(lesson) for lesson in lessons}

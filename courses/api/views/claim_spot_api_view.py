@@ -15,7 +15,7 @@ from ...models import (
     SubscribeState,
     Subscribe,
 )
-from ...utils import lesson_lead_follow_balance
+from ...utils import lesson_lead_follow_balance, claiming_spot_window_open
 
 
 class ClaimSpotApiView(APIView):
@@ -31,6 +31,8 @@ class ClaimSpotApiView(APIView):
         lesson_occurrence = get_object_or_404(
             LessonOccurrence, pk=data["lesson_occurrence"]
         )
+        if not claiming_spot_window_open(lesson_occurrence):
+            raise ValidationError(detail="Window for claiming spots is closed.")
 
         # A spot can only be claimed as either a leader of follower
         role = data["role"]
