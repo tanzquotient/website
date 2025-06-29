@@ -1,66 +1,82 @@
 {% load courses_tags %}
+{% load basic_tags %}
 {% load i18n %}
 
 <div class="d-flex flex-column gap-2 flex-lg-row gap-lg-4 flex-wrap">
     {% for lesson in lessons %}
-        {% role user=request.user lesson=lesson as role %}
-        <div id="attendance-{{ lesson.id }}" class="upcoming-lesson"
-                {% if forloop.counter > 3 %} hidden {% endif %}>
-            {% attendance_state user=request.user lesson=lesson as state %}
-            <div class="fw-bold">
-                {{ lesson.course.type.title }}
-                {% if state == "replacement" %}
-                    <span class="badge text-bg-info" role="group">
+        {% with can_change_attendances|lookup:lesson.id as can_change %}
+            {% role user=request.user lesson=lesson as role %}
+            <div id="attendance-{{ lesson.id }}" class="upcoming-lesson"
+                    {% if forloop.counter > 3 %} hidden {% endif %}>
+                {% attendance_state user=request.user lesson=lesson as state %}
+                <div class="fw-bold">
+                    {{ lesson.course.type.title }}
+                    {% if state == "replacement" %}
+                        <span class="badge text-bg-info" role="group">
                         {% trans "Replacement" %}
                      </span>
-                {% endif %}
+                    {% endif %}
+                </div>
+                <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                <div class="my-1">
+                    {# Buttons if present #}
+                    <div id="buttons-present-{{ lesson.id }}"
+                         class="btn-group"
+                         role="group"
+                            {% if state != 'present' and state != "replacement" %}
+                         hidden {% endif %}>
+                        <button class="btn btn-sm btn-success"
+                                {% if not can_change %} disabled {% endif %}>
+                            <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning"
+                                {% if can_change %}
+                                onclick="post_state({{ lesson.id }}, 'absent_excused', {{ lesson.course_id }}, '{{ role }}' === 'n')"
+                                {% else %} disabled {% endif %}>
+                            {% trans "I can't come" %}
+                        </button>
+                    </div>
+
+                    {# Buttons if absent #}
+                    <div id="buttons-absent-{{ lesson.id }}"
+                         class="btn-group"
+                         role="group"
+                            {% if state != 'absent_excused' %}
+                         hidden {% endif %}>
+                        <button class="btn btn-sm btn-outline-success"
+                                {% if can_change %}
+                                onclick="post_state({{ lesson.id }}, 'present', {{ lesson.course_id }}, '{{ role }}' === 'n')"
+                                {% else %} disabled {% endif %}>
+                            {% trans "I will be there" %}
+                        </button>
+                        <button class="btn btn-sm btn-warning"
+                                {% if not can_change %} disabled {% endif %}>
+                            <i class="bi bi-x-circle-fill"></i> {% trans "I can't come" %}
+                        </button>
+                    </div>
+
+                    {# Buttons during loading #}
+                    <button id="loading-{{ lesson.id }}"
+                            class="btn btn-sm btn-outline-secondary"
+                            hidden disabled>
+                        <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
+                    </button>
+
+                    {# Hint: attendance can not be changed #}
+                    {% if not can_change %}
+                        <div class="alert alert-secondary py-0 px-1 mt-1" role="alert">
+                            <i class="bi bi-info-circle"></i> {% trans "You can not change your attendance anymore." %}
+                        </div>
+                    {% endif %}
+
+                    {# Something went wrong #}
+                    <div id="error-{{ lesson.id }}" hidden
+                         class="alert alert-danger p-2" role="alert">
+                        <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
+                    </div>
+                </div>
             </div>
-            <div>{% format_duration start=lesson.start end=lesson.end %}</div>
-            <div class="my-1">
-                {# Buttons if present #}
-                <div id="buttons-present-{{ lesson.id }}"
-                     class="btn-group"
-                     role="group"
-                        {% if state != 'present' and state != "replacement" %}
-                     hidden {% endif %}>
-                    <button class="btn btn-sm btn-success">
-                        <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
-                    </button>
-                    <button class="btn btn-sm btn-outline-warning"
-                            onclick="post_state({{ lesson.id }}, 'absent_excused', {{ lesson.course_id }}, '{{ role }}' === 'n')">
-                        {% trans "I can't come" %}
-                    </button>
-                </div>
-
-                {# Buttons if absent #}
-                <div id="buttons-absent-{{ lesson.id }}"
-                     class="btn-group"
-                     role="group"
-                        {% if state != 'absent_excused' %}
-                     hidden {% endif %}>
-                    <button class="btn btn-sm btn-outline-success"
-                            onclick="post_state({{ lesson.id }}, 'present', {{ lesson.course_id }}, '{{ role }}' === 'n')">
-                        {% trans "I will be there" %}
-                    </button>
-                    <button class="btn btn-sm btn-warning">
-                        <i class="bi bi-x-circle-fill"></i> {% trans "I can't come" %}
-                    </button>
-                </div>
-
-                {# Buttons during loading #}
-                <button id="loading-{{ lesson.id }}"
-                        class="btn btn-sm btn-outline-secondary"
-                        hidden disabled>
-                    <span class="spinner-border spinner-border-sm"></span> {% trans "Saving" %}
-                </button>
-
-                {# Something went wrong #}
-                <div id="error-{{ lesson.id }}" hidden
-                     class="alert alert-danger p-2" role="alert">
-                    <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
-                </div>
-            </div>
-        </div>
+        {% endwith %}
     {% endfor %}
 </div>
 

@@ -14,6 +14,7 @@ from ...models import (
     SubscribeState,
     AttendanceState,
 )
+from ...utils import change_attendance_window_open
 
 
 class MyAttendanceApiView(APIView):
@@ -29,6 +30,9 @@ class MyAttendanceApiView(APIView):
         lesson_occurrence = get_object_or_404(
             LessonOccurrence, pk=data["lesson_occurrence"]
         )
+
+        if not change_attendance_window_open(lesson_occurrence):
+            raise ValidationError(detail="You can not change your attendance anymore.")
 
         # Special case: replacement cancels
         if state == AttendanceState.ABSENT_EXCUSED and (
