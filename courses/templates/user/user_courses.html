@@ -1,4 +1,4 @@
-{% extends "account/base.html" %}
+{% extends "basis_no_header.html" %}
 {% load i18n %}
 {% load static %}
 
@@ -11,68 +11,70 @@
     {% trans "My Courses" %}
 {% endblock %}
 
-{% block content %}
-    {% if profile.is_teacher or profile.is_substitute_teacher %}
-        <h3 class="mb-3">{% trans "Teaching" %}</h3>
-        <div class="row g-3">
-            {% for course in profile.get_all_current_teaching_courses %}
-                <div class="col-xs-12 col-md-6 col-xl-4">
-                    {% include "user/snippets/course_as_teacher.html" with course=course only %}
+{% block main_content %}
+    <div class="container">
+        {% if profile.is_teacher or profile.is_substitute_teacher %}
+            <h3 class="mb-3">{% trans "Teaching" %}</h3>
+            <div class="row g-3">
+                {% for course in profile.get_all_current_teaching_courses %}
+                    <div class="col-xs-12 col-md-6 col-xl-4">
+                        {% include "user/snippets/course_as_teacher.html" with course=course only %}
+                    </div>
+                {% empty %}
+                    <div class="col-xs-12">
+                        <p>{% trans "There are currently no ongoing courses." %}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <p class="mt-2">
+                <a href="{% url 'payment:courses_as_teacher_list' %}">
+                    {% trans "Show all courses " %}
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </a>
+            </p>
+        {% endif %}
+
+        <h3 class="m-0">{% trans "My Courses" %}</h3>
+        {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
+        {% include "user/snippets/user_lessons.html" %}
+        {% include "user/snippets/open_surveys.html" with user=user only %}
+
+        <div class="d-flex flex-wrap justify-content-between">
+            <div class="mb-2 my-auto">
+                <a href="{% url "user_ical" user.id %}?token={{ token }}">
+                    {% trans "Add to calendar" %} <i class="bi bi-calendar-fill"></i>
+                </a>
+            </div>
+            {% if subscriptions %}
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-link" onclick="expandAll()">
+                        {% trans "Expand All" %}
+                    </button>
+                    <button class="btn btn-link" onclick="collapseAll()">
+                        {% trans "Collapse All" %}
+                    </button>
                 </div>
-            {% empty %}
-                <div class="col-xs-12">
-                    <p>{% trans "There are currently no ongoing courses." %}</p>
-                </div>
+            {% endif %}
+        </div>
+        <div class="accordion">
+            {% for subscription in subscriptions %}
+                {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
             {% endfor %}
         </div>
-        <p class="mt-2">
-            <a href="{% url 'payment:courses_as_teacher_list' %}">
-                {% trans "Show all courses " %}
+        {% if not subscriptions %}
+            <p>{% trans "No subscriptions" %}</p>
+        {% endif %}
+        <p>
+            <a href="{% url "courses:list" %}">
+                {% trans "Show available courses" %}
                 <i class="bi bi-arrow-right-circle-fill"></i>
             </a>
         </p>
-    {% endif %}
 
-    <h3 class="m-0">{% trans "My Courses" %}</h3>
-    {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
-    {% include "user/snippets/open_surveys.html" with user=user only %}
-
-    <div class="d-flex flex-wrap justify-content-between">
-        <div class="mb-2 my-auto">
-            <a href="{% url "user_ical" user.id %}?token={{ token }}">
-                {% trans "Add to calendar" %} <i class="bi bi-calendar-fill"></i>
-            </a>
-        </div>
-        {% if subscriptions %}
-            <div class="d-flex justify-content-end">
-                <button class="btn btn-link" onclick="expandAll()">
-                    {% trans "Expand All" %}
-                </button>
-                <button class="btn btn-link" onclick="collapseAll()">
-                    {% trans "Collapse All" %}
-                </button>
-            </div>
-        {% endif %}
-    </div>
-    <div class="accordion">
-        {% for subscription in subscriptions %}
-            {% include "user/snippets/subscription.html" with subscription=subscription payment_account=payment_account user=user %}
+        {% for subscription in user.subscriptions.waiting_list %}
+            {% include "courses/snippets/cancel_subscription_modal.html" with subscription=subscription only %}
         {% endfor %}
     </div>
-    {% if not subscriptions %}
-        <p>{% trans "No subscriptions" %}</p>
-    {% endif %}
-    <p>
-        <a href="{% url "courses:list" %}">
-            {% trans "Show available courses" %}
-            <i class="bi bi-arrow-right-circle-fill"></i>
-        </a>
-    </p>
-
-    {% for subscription in user.subscriptions.waiting_list %}
-        {% include "courses/snippets/cancel_subscription_modal.html" with subscription=subscription only %}
-    {% endfor %}
-
 {% endblock %}
 
 {% block scripts %}

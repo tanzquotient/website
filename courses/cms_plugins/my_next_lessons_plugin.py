@@ -23,8 +23,13 @@ class MyNextLessonsPlugin(CMSPluginBase):
     cache = False
 
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
-        now = datetime.now(tz=timezone("Europe/Zurich"))
         user = context["user"]
+        return self.create_context(user, initial_context=context)
+
+    @staticmethod
+    def create_context(user, initial_context: dict = None) -> dict:
+        context = initial_context or dict()
+        now = datetime.now(tz=timezone("Europe/Zurich"))
         if not user.is_authenticated:
             return context
         lessons = MyNextLessonsPlugin._get_lessons(now, user)
@@ -32,7 +37,9 @@ class MyNextLessonsPlugin(CMSPluginBase):
         context["now"] = now
         context["courses"] = courses
         context["lessons"] = lessons
-        context["can_change_attendances"] = self.can_change_attendances(lessons)
+        context["can_change_attendances"] = MyNextLessonsPlugin._can_change_attendances(
+            lessons
+        )
         return context
 
     @staticmethod
@@ -62,5 +69,5 @@ class MyNextLessonsPlugin(CMSPluginBase):
         return lessons
 
     @staticmethod
-    def can_change_attendances(lessons: Iterable[LessonOccurrence]) -> dict[int, bool]:
+    def _can_change_attendances(lessons: Iterable[LessonOccurrence]) -> dict[int, bool]:
         return {lesson.id: change_attendance_window_open(lesson) for lesson in lessons}

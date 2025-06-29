@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import courses.utils as utils
+from courses.cms_plugins import MyNextLessonsPlugin
 from courses.models import (
     Weekday,
     OfferingType,
@@ -95,6 +96,13 @@ def course_lessons_detailed(course: Course) -> dict:
         ]
 
     return dict(lines=lines)
+
+
+@register.inclusion_tag(filename="courses/plugins/next_lessons/index.html")
+def my_next_lessons_plugin(request: HttpRequest) -> dict:
+    context = MyNextLessonsPlugin.create_context(request.user)
+    context["request"] = request
+    return context
 
 
 @register.simple_tag

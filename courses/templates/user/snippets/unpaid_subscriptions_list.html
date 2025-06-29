@@ -3,7 +3,7 @@
 
 {% with unpaid_subscriptions=user.profile.unpaid_subscriptions overdue_subscriptions=user.profile.subscriptions_with_overdue_payment %}
     {% if unpaid_subscriptions|length or overdue_subscriptions|length %}
-        <div class="alert alert-{{ overdue_subscriptions|length|yesno:"danger,warning" }}">
+        <div class="my-2 alert alert-{{ overdue_subscriptions|length|yesno:"danger,warning" }}">
             <h5 class="alert-heading">
                 {% trans "Unpaid subscriptions" %}
             </h5>
@@ -16,8 +16,8 @@
                         <a href="{% url "courses:course_detail" subscription.course_id %}">
                             {{ subscription.course.type.title }}
                         </a>
-                         - {% trans "Go to" %} 
-                         <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
+                        - {% trans "Go to" %}
+                        <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
                             {% trans "Payment" %}
                             <i class="bi bi-arrow-right-circle-fill"></i>
                         </a>
@@ -29,7 +29,7 @@
                             <a href="{% url "courses:course_detail" subscription.course_id %}">
                                 {{ subscription.course.type.title }}
                             </a>
-                            - {% trans "Go to" %} 
+                            - {% trans "Go to" %}
                             <a href="{% url "payment:subscription_payment" usi=subscription.usi %}">
                                 {% trans "Payment" %}
                                 <i class="bi bi-arrow-right-circle-fill"></i>
