@@ -69,7 +69,7 @@ class ClaimSpotApiView(APIView):
             user=user,
             lesson_occurrence=lesson_occurrence,
             role=role,
-            state=AttendanceState.REPLACEMENT_CONFIRMED,
+            state=AttendanceState.REPLACEMENT,
         )
 
         return Response(data=data)

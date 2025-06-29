@@ -85,6 +85,6 @@ class ReplacementsPlugin(CMSPluginBase):
     @staticmethod
     def is_replacement(user: User, lesson: LessonOccurrence) -> bool:
         for a in lesson.attendances.all():
-            if a.user == user and a.state in AttendanceState.REPLACEMENT_STATES:
+            if a.user == user and a.state == AttendanceState.REPLACEMENT:
                 return True
         return False

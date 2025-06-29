@@ -24,7 +24,7 @@ def lesson_lead_follow_balance(lesson: LessonOccurrence) -> int:
     course = lesson.course
     course_balance = course_lead_follow_balance(course)
     absent_balance = _balance_for(lesson, AttendanceState.ABSENT_STATES)
-    replacements_balance = _balance_for(lesson, [AttendanceState.REPLACEMENT_CONFIRMED])
+    replacements_balance = _balance_for(lesson, [AttendanceState.REPLACEMENT])
 
     return course_balance - absent_balance + replacements_balance
 

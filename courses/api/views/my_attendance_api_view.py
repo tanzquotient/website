@@ -35,7 +35,7 @@ class MyAttendanceApiView(APIView):
             Attendance.objects.filter(
                 lesson_occurrence=lesson_occurrence,
                 user=user,
-                state__in=AttendanceState.REPLACEMENT_STATES,
+                state=AttendanceState.REPLACEMENT,
             ).exists()
         ):
             Attendance.objects.filter(

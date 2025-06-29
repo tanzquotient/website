@@ -30,7 +30,7 @@ class MyNextLessonsPlugin(CMSPluginBase):
                     )
                     | Q(
                         attendances__user=context["user"],
-                        attendances__state__in=AttendanceState.REPLACEMENT_STATES,
+                        attendances__state=AttendanceState.REPLACEMENT,
                     )
                 )
                 & Q(start__gt=now)

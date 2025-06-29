@@ -9,7 +9,7 @@
             {% attendance_state user=request.user lesson=lesson as state %}
             <div class="fw-bold">
                 {{ lesson.course.type.title }}
-                {% if state == "replacement_confirmed" %}
+                {% if state == "replacement" %}
                     <span class="badge text-bg-info" role="group">
                         {% trans "Replacement" %}
                      </span>
@@ -21,7 +21,7 @@
                 <div id="buttons-present-{{ lesson.id }}"
                      class="btn-group"
                      role="group"
-                        {% if state != 'present' and state != "replacement_confirmed" %}
+                        {% if state != 'present' and state != "replacement" %}
                      hidden {% endif %}>
                     <button class="btn btn-sm btn-success">
                         <i class="bi bi-check-circle-fill"></i> {% trans "I will be there" %}
