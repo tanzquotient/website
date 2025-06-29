@@ -1,6 +1,6 @@
 Hallo {{first_name}}
 
-Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich!
+Deine Teilnahme am Kurs {{course}} ist nun definitiv. Eine Abmeldung vom Kurs ist nun nicht mehr möglich! Falls du zu einzelnen Lektionen währen des Kurses nicht kommen kannst, trage deine Abwesenheit bitte spätestens am Tag vor der Lektion ein, indem du dich hier einloggst: https://tanzquotient.org/de/aushelfen/
 
 Du nimmst alleine an einem Partnerkurs teil. Sollte dir das falsch vorkommen, melde dich bitte bei uns!
 
@@ -27,7 +27,7 @@ _______________
 
 Hi {{first_name}},
 
-You are now officially registered for the course {{course}}. Deregistration from the course is no longer possible!
+You are now officially registered for the course {{course}}. Deregistration from the course is no longer possible! If you are unable to attend individual lessons during the course, please enter your absence on our website at the latest the day before the lesson by logging in here: https://tanzquotient.org/en/replacements/
 
 You are participating as a single in a partner course. If you think this is an error, please contact us!
 
