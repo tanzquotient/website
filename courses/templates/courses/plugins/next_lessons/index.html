@@ -3,6 +3,18 @@
 {% load i18n %}
 
 <div class="d-flex flex-column gap-2 flex-lg-row gap-lg-4 flex-wrap">
+    {% if not request.user.is_authenticated %}
+        <div class="alert alert-info">
+            {% trans "Log in to see your upcoming lessons and to tell us if you are attending or not." %}
+            <div class="mt-1">
+                <a class="btn btn-sm btn-info"
+                   href="{% url 'account_login' %}?next={{ request.path }}">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    {% trans "Log in" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
     {% for lesson in lessons %}
         {% with can_change_attendances|lookup:lesson.id as can_change %}
             {% role user=request.user lesson=lesson as role %}

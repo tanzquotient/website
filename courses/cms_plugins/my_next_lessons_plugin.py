@@ -25,6 +25,8 @@ class MyNextLessonsPlugin(CMSPluginBase):
     def render(self, context: dict, instance: CMSPlugin, placeholder: str) -> dict:
         now = datetime.now(tz=timezone("Europe/Zurich"))
         user = context["user"]
+        if not user.is_authenticated:
+            return context
         lessons = MyNextLessonsPlugin._get_lessons(now, user)
         courses = {lesson.course for lesson in lessons}
         context["now"] = now
