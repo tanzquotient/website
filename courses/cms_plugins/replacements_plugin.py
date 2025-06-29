@@ -32,10 +32,11 @@ class ReplacementsPlugin(CMSPluginBase):
         balances, lessons = self.lessons_and_balances()
         context["lessons"] = lessons
         context["balances"] = balances
-        context["allowed_course_types"] = self.allowed_course_types(user)
-        context["subscribed_courses"] = self.subscribed_courses(user)
-        context["claimed_spots"] = self.claimed_spots(user, lessons)
-        context["claim_spots_window_open"] = self.claim_spots_window_open(lessons)
+        if user.is_authenticated:
+            context["allowed_course_types"] = self.allowed_course_types(user)
+            context["subscribed_courses"] = self.subscribed_courses(user)
+            context["claimed_spots"] = self.claimed_spots(user, lessons)
+            context["claim_spots_window_open"] = self.claim_spots_window_open(lessons)
         return context
 
     @staticmethod

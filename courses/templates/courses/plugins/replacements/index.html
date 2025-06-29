@@ -35,7 +35,18 @@
                 <div>{% format_duration start=lesson.start end=lesson.end %}</div>
                 <div>{{ lesson.course.room }}</div>
                 <div class="my-1 d-flex">
-                    {% if lesson.course_id in subscribed_courses %}
+                    {% if not request.user.is_authenticated %}
+                        <div class="alert alert-secondary py-1 px-2 d-flex flex-row align-items-center gap-1">
+                            <div>{% trans "To see more info and to claim spots, you must log in." %}</div>
+                            <div>
+                                <a class="btn btn-sm btn-secondary text-nowrap"
+                                   href="{% url 'account_login' %}?next={{ request.path }}">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                    {% trans "Log in" %}
+                                </a>
+                            </div>
+                        </div>
+                    {% elif lesson.course_id in subscribed_courses %}
                         <div class="alert alert-secondary py-1 px-2">
                             <div class="fw-bold">
                                 <i class="bi bi-info-circle-fill"></i>
