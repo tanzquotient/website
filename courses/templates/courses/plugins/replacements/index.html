@@ -2,123 +2,207 @@
 {% load basic_tags %}
 {% load i18n %}
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
-    {% for lesson in lessons %}
-        {% with balances|lookup:lesson.id as balance %}
-            <div>
-                <div>
-                    {% if balance > 0 %}
-                        <!-- More leaders than followers -->
-                        <span class="badge text-bg-follower" role="group">
+<style>
+    .only-leaders .follower-spots,
+    .only-followers .leader-spots,
+    .only-eligible .not-eligible {
+        display: none;
+    }
+
+    .filter-icon {
+        display: none;
+    }
+
+    .only-eligible #only-eligible-filter .filter-icon,
+    .only-followers #only-followers-filter .filter-icon,
+    .only-leaders #only-leader-filter .filter-icon {
+        display: inline;
+    }
+</style>
+
+<div id="replacements-container">
+    <div class="my-3 d-flex flex-row gap-1 flex-wrap">
+        {% if request.user.is_authenticated %}
+            <div id="only-eligible-filter">
+                <input type="checkbox" class="btn-check" id="only-eligible"
+                       autocomplete="off">
+                <label class="btn btn-sm btn-outline-success rounded-4"
+                       for="only-eligible">
+                    <i class="filter-icon bi bi-check-circle-fill"></i>
+                    {% trans "Only eligible lessons" %}
+                </label>
+            </div>
+        {% endif %}
+        <div id="only-leader-filter">
+            <input type="checkbox" class="btn-check" id="only-leader"
+                   autocomplete="off">
+            <label class="btn btn-sm btn-outline-success rounded-4" for="only-leader">
+                <i class="filter-icon bi bi-check-circle-fill"></i>
+                {% trans "Only leader spots" %}
+            </label>
+        </div>
+        <div id="only-followers-filter">
+            <input type="checkbox" class="btn-check" id="only-follower"
+                   autocomplete="off">
+            <label class="btn btn-sm btn-outline-success rounded-4" for="only-follower">
+                <i class="filter-icon bi bi-check-circle-fill"></i>
+                {% trans "Only follower spots" %}
+            </label>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
+        {% for lesson in lessons %}
+            {% with balances|lookup:lesson.id as balance %}
+                <div class="{% if balance < 0 %} leader-spots {% else %} follower-spots {% endif %} {% if lesson.course_id not in subscribed_courses and lesson.course.type in allowed_course_types %} eligible {% else %} not-eligible {% endif %}">
+                    <div>
+                        {% if balance > 0 %}
+                            <!-- More leaders than followers -->
+                            <span class="badge text-bg-follower" role="group">
                             {% if balance == 1 %}
                                 {% trans "One follower is needed" %}
                             {% else %}
                                 {{ balance }} {% trans "followers are needed" %}
                             {% endif %}
                         </span>
-                    {% else %}
-                        <!-- More followers than leaders -->
-                        <span class="badge text-bg-leader" role="group">
+                        {% else %}
+                            <!-- More followers than leaders -->
+                            <span class="badge text-bg-leader" role="group">
                             {% if balance == -1 %}
                                 {% trans "One leader is needed" %}
                             {% else %}
                                 {{ balance|abs }} {% trans "leaders are needed" %}
                             {% endif %}
                         </span>
-                    {% endif %}
-                </div>
-                <div>
-                    <a href="{% url "courses:course_detail" course_id=lesson.course_id %}">
-                        {{ lesson.course.type.title }}
-                    </a>
-                </div>
-                <div>{% format_duration start=lesson.start end=lesson.end %}</div>
-                <div>{{ lesson.course.room }}</div>
-                <div class="my-1 d-flex">
-                    {% if not request.user.is_authenticated %}
-                        <div class="alert alert-secondary py-1 px-2 d-flex flex-row align-items-center gap-1">
-                            <div>{% trans "To see more info and to claim spots, you must log in." %}</div>
-                            <div>
-                                <a class="btn btn-sm btn-secondary text-nowrap"
-                                   href="{% url 'account_login' %}?next={{ request.path }}">
-                                    <i class="bi bi-box-arrow-in-right"></i>
-                                    {% trans "Log in" %}
-                                </a>
-                            </div>
-                        </div>
-                    {% elif lesson.course_id in subscribed_courses %}
-                        <div class="alert alert-secondary py-1 px-2">
-                            <div class="fw-bold">
-                                <i class="bi bi-info-circle-fill"></i>
-                                {% trans "You are a participant." %}
-                            </div>
-                            <div class="small">{% trans "You are signed up for this curse and can therefore not claim this spot." %}</div>
-                        </div>
-                    {% elif lesson.course.type not in allowed_course_types %}
-                        <div class="alert alert-secondary py-1 px-2">
-                            <div class="fw-bold">
-                                <i class="bi bi-x-circle-fill"></i>
-                                {% trans "Requirement not met" %}
-                            </div>
-                            <div class="small">{% trans "You can not claim this spot. You may check out our FAQ." %}</div>
-                        </div>
-                    {% elif lesson in claimed_spots %}
-                        <div class="alert alert-success py-1 px-2">
-                            <div class="fw-bold">
-                                <i class="bi bi-check-circle-fill"></i>
-                                {% trans "Spot claimed" %}
-                            </div>
-                            <div class="small">{% trans "You successfully signed up as replacement for this course." %}</div>
-                        </div>
-                    {% elif not claim_spots_window_open|lookup:lesson.id %}
-                        <div class="alert alert-info py-1 px-2">
-                            <div class="fw-bold">
-                                <i class="bi bi-check-circle-fill"></i>
-                                {% trans "Requirements met" %}
-                            </div>
-                            <div class="small">{% trans "Come back on the day of the lesson to claim a spot." %}</div>
-                        </div>
-                    {% else %}
-                        {% if balance < 0 %}
-                            <button class="btn btn-sm btn-outline-leader"
-                                    id="button-claim-{{ lesson.id }}"
-                                    onclick="claim_spot({{ lesson.id }}, 'l')">
-                                <i class="bi bi-person-check"></i> {% trans "Claim leader spot" %}
-                            </button>
-                        {% else %}
-                            <button class="btn btn-sm btn-outline-follower"
-                                    id="button-claim-{{ lesson.id }}"
-                                    onclick="claim_spot({{ lesson.id }}, 'f')">
-                                <i class="bi bi-person-check"></i> {% trans "Claim follower spot" %}
-                            </button>
                         {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url "courses:course_detail" course_id=lesson.course_id %}">
+                            {{ lesson.course.type.title }}
+                        </a>
+                    </div>
+                    <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                    <div>{{ lesson.course.room }}</div>
+                    <div class="my-1 d-flex">
+                        {% if not request.user.is_authenticated %}
+                            <div class="alert alert-secondary py-1 px-2 d-flex flex-row align-items-center gap-1">
+                                <div>{% trans "To see more info and to claim spots, you must log in." %}</div>
+                                <div>
+                                    <a class="btn btn-sm btn-secondary text-nowrap"
+                                       href="{% url 'account_login' %}?next={{ request.path }}">
+                                        <i class="bi bi-box-arrow-in-right"></i>
+                                        {% trans "Log in" %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% elif lesson.course_id in subscribed_courses %}
+                            <div class="alert alert-secondary py-1 px-2">
+                                <div class="fw-bold">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                    {% trans "You are a participant." %}
+                                </div>
+                                <div class="small">{% trans "You are signed up for this curse and can therefore not claim this spot." %}</div>
+                            </div>
+                        {% elif lesson.course.type not in allowed_course_types %}
+                            <div class="alert alert-secondary py-1 px-2">
+                                <div class="fw-bold">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                    {% trans "Requirement not met" %}
+                                </div>
+                                <div class="small">{% trans "You can not claim this spot. You may check out our FAQ." %}</div>
+                            </div>
+                        {% elif lesson in claimed_spots %}
+                            <div class="alert alert-success py-1 px-2">
+                                <div class="fw-bold">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {% trans "Spot claimed" %}
+                                </div>
+                                <div class="small">{% trans "You successfully signed up as replacement for this course." %}</div>
+                            </div>
+                        {% elif not claim_spots_window_open|lookup:lesson.id %}
+                            <div class="alert alert-info py-1 px-2">
+                                <div class="fw-bold">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    {% trans "Requirements met" %}
+                                </div>
+                                <div class="small">{% trans "Come back on the day of the lesson to claim a spot." %}</div>
+                            </div>
+                        {% else %}
+                            {% if balance < 0 %}
+                                <button class="btn btn-sm btn-outline-leader"
+                                        id="button-claim-{{ lesson.id }}"
+                                        onclick="claim_spot({{ lesson.id }}, 'l')">
+                                    <i class="bi bi-person-check"></i> {% trans "Claim leader spot" %}
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-outline-follower"
+                                        id="button-claim-{{ lesson.id }}"
+                                        onclick="claim_spot({{ lesson.id }}, 'f')">
+                                    <i class="bi bi-person-check"></i> {% trans "Claim follower spot" %}
+                                </button>
+                            {% endif %}
 
-                        <button id="loading-{{ lesson.id }}"
-                                class="btn btn-sm btn-outline-secondary"
-                                hidden disabled>
-                            <span class="spinner-border spinner-border-sm"></span> {% trans "Claiming" %}
-                        </button>
+                            <button id="loading-{{ lesson.id }}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    hidden disabled>
+                                <span class="spinner-border spinner-border-sm"></span> {% trans "Claiming" %}
+                            </button>
 
-                        <div id="error-{{ lesson.id }}" hidden
-                             class="alert alert-danger p-2" role="alert">
-                            <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
-                            <p id="error-info-{{ lesson.id }}" class="small"></p>
-                        </div>
+                            <div id="error-{{ lesson.id }}" hidden
+                                 class="alert alert-danger p-2" role="alert">
+                                <i class="bi bi-exclamation-circle-fill"></i> {% trans "Something went wrong. Please try again later." %}
+                                <p id="error-info-{{ lesson.id }}" class="small"></p>
+                            </div>
 
-                        <div id="success-{{ lesson.id }}" hidden
-                             class="alert alert-success p-2" role="alert">
-                            <i class="bi bi-check-circle-fill"></i> {% trans "Successfully claimed spot." %}
-                        </div>
-                    {% endif %}
+                            <div id="success-{{ lesson.id }}" hidden
+                                 class="alert alert-success p-2" role="alert">
+                                <i class="bi bi-check-circle-fill"></i> {% trans "Successfully claimed spot." %}
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endwith %}
-    {% endfor %}
+            {% endwith %}
+        {% endfor %}
+    </div>
 </div>
 
 
 <script type="text/javascript">
+    // Filter code
+    const container = document.getElementById('replacements-container');
+    const leaderCheckbox = document.getElementById('only-leader');
+    const followerCheckbox = document.getElementById('only-follower');
 
+    leaderCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            followerCheckbox.checked = false;
+            container.classList.add('only-leaders');
+            container.classList.remove('only-followers');
+        } else {
+            container.classList.remove('only-leaders');
+        }
+    });
+
+    followerCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            leaderCheckbox.checked = false;
+            container.classList.add('only-followers');
+            container.classList.remove('only-leaders');
+        } else {
+            container.classList.remove('only-followers');
+        }
+    });
+
+    {% if request.user.is_authenticated %}
+        document.getElementById('only-eligible').addEventListener('change', function () {
+            if (this.checked) {
+                container.classList.add('only-eligible');
+            } else {
+                container.classList.remove('only-eligible');
+            }
+        });
+    {% endif %}
+
+    // Claiming spot code
     async function claim_spot(lesson_id, role) {
         const claimButton = document.querySelector(`#button-claim-${lesson_id}`)
         const loading = document.querySelector(`#loading-${lesson_id}`)
