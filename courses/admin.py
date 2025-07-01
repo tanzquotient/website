@@ -1,7 +1,7 @@
 # Register your models here.
 from datetime import timedelta
 from decimal import Decimal
-from typing import Optional, override
+from typing import Optional
 
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.views.main import ChangeList
@@ -377,15 +377,12 @@ class AttendanceAdmin(ModelAdmin):
     ]
     list_filter = ["state", "role"]
 
-    @override
     def has_add_permission(self, request, obj=None) -> bool:
         return False
 
-    @override
     def has_change_permission(self, request, obj=...) -> bool:
         return False
 
-    @override
     def has_delete_permission(self, request, obj=None) -> bool:
         return False
 
