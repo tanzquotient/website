@@ -1,7 +1,7 @@
 # Register your models here.
 from datetime import timedelta
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, override
 
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.views.main import ChangeList
@@ -356,6 +356,43 @@ class SkillAdmin(ModelAdmin):
     @admin.display(description="Unlocked course types")
     def unlocked_course_types_count(skill: Skill) -> int:
         return skill.unlocked_course_types.count()
+
+
+@admin.register(Attendance)
+class AttendanceAdmin(ModelAdmin):
+    model = Attendance
+    list_display = [
+        "id",
+        "lesson_occurrence__start",
+        "user_name",
+        "state",
+        "role",
+        "lesson_occurrence__course",
+    ]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+        "lesson_occurrence__course",
+    ]
+    list_filter = ["state", "role"]
+
+    @override
+    def has_add_permission(self, request, obj=None) -> bool:
+        return False
+
+    @override
+    def has_change_permission(self, request, obj=...) -> bool:
+        return False
+
+    @override
+    def has_delete_permission(self, request, obj=None) -> bool:
+        return False
+
+    @staticmethod
+    @admin.display(description="User")
+    def user_name(attendance: Attendance) -> str:
+        return attendance.user.get_full_name()
 
 
 class SubscribeChangeList(ChangeList):

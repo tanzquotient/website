@@ -25,6 +25,7 @@ class Attendance(Model):
 
     class Meta:
         unique_together = (("lesson_occurrence", "user"),)
+        ordering = ["-lesson_occurrence__start", "state", "role"]
 
     def __str__(self) -> str:
         return (
