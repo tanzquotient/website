@@ -56,7 +56,9 @@ class MyAttendanceApiView(APIView):
             course=lesson_occurrence.course,
             state__in=SubscribeState.ACCEPTED_STATES,
         )
-        if subscription.lead_follow == LeadFollow.NO_PREFERENCE:
+
+        role = subscription.assigned_role()
+        if role == LeadFollow.NO_PREFERENCE:
             raise ValidationError(
                 detail="Make sure you have a role set for this course."
             )
@@ -69,7 +71,7 @@ class MyAttendanceApiView(APIView):
             attendance, _ = Attendance.objects.get_or_create(
                 user=user,
                 lesson_occurrence=lesson_occurrence,
-                role=subscription.lead_follow,
+                role=role,
             )
             attendance.state = state
             attendance.save()
