@@ -41,10 +41,10 @@ from .models import (
     RegularLessonException,
     Style,
     Subscribe,
-    LessonOccurrenceData,
     RejectionReason,
     MatchingState,
     UserProfile,
+    LessonOccurrence,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -186,12 +186,29 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
 
 
 def _lesson_to_ical_event(
-    course: Course, lesson_occurrence: LessonOccurrenceData, request: HttpRequest
+    course: Course,
+    lesson_occurrence: LessonOccurrence,
+    request: HttpRequest,
+    subscription: Subscribe = None,
 ):
     event = Event()
     event["dtstart"] = vDatetime(timezone.localtime(lesson_occurrence.start, pytz.UTC))
     event["dtend"] = vDatetime(timezone.localtime(lesson_occurrence.end, pytz.UTC))
-    event.add("summary", vText(course.type.title))
+
+    course_title = course.type.title
+    event_title = course_title
+    tentative = False
+    if subscription:
+        if subscription.state == SubscribeState.WAITING_LIST:
+            event_title = f"[{_('Waiting list')}] {course_title}"
+            tentative = True
+        elif subscription.state not in SubscribeState.ACCEPTED_STATES:
+            event_title = f"[{_('Tentative')}] {course_title}"
+            tentative = True
+
+    event.add("summary", vText(event_title))
+    if tentative:
+        event.add("status", vText("TENTATIVE"))
     event.add("location", vText(course.room))
     event.add(
         "description",
@@ -241,7 +258,7 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
     cal.add("version", "2.0")
     cal.add("prodid", f"-//Tanzquotient calendar for course {course_id}//mxm.dk//")
     cal.add("name", course.type.title)
-    for occurrence in course.get_lesson_occurrences():
+    for occurrence in course.lesson_occurrences.all():
         event = _lesson_to_ical_event(course, occurrence, request)
         cal.add_component(event)
 
@@ -537,17 +554,28 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     cal.add("prodid", f"-//Tanzquotient calendar for {user.get_full_name()}//mxm.dk//")
     cal.add("name", f"Tanzquotient - {user.get_full_name()} courses")
     cal.add("refresh-interval", vDuration(timedelta(hours=12)))
-    courses = [
-        s.course
-        for s in user.profile.subscriptions
-        if s.state in SubscribeState.ACCEPTED_STATES
+    prefetch = [
+        "course__translations",
+        "course__type__translations",
+        "course__room",
+        "course__lesson_occurrences",
+        "course__teaching__teacher__profile",
     ]
-    courses.extend(
-        [t.course for t in user.teaching_courses.all() if not t.course.cancelled]
-    )
+    subscriptions = Subscribe.objects.filter(user=user).prefetch_related(*prefetch)
+    courses_as_student = {
+        subscription.course: subscription
+        for subscription in subscriptions
+        if subscription.state not in SubscribeState.REJECTED_STATES
+    }
+    teachings = user.teaching_courses.prefetch_related(*prefetch).all()
+    courses_as_teacher = [t.course for t in teachings if not t.course.cancelled]
+    courses = courses_as_student.keys() | set(courses_as_teacher)
     for course in courses:
-        for occurrence in course.get_lesson_occurrences():
-            cal.add_component(_lesson_to_ical_event(course, occurrence, request))
+        subscription = courses_as_student.get(course, None)
+        for occurrence in course.lesson_occurrences.all():
+            cal.add_component(
+                _lesson_to_ical_event(course, occurrence, request, subscription)
+            )
 
     return HttpResponse(cal.to_ical(), content_type="text/calendar")
 

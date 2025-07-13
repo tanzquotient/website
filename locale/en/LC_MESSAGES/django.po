@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 21:05+0200\n"
+"POT-Creation-Date: 2025-07-13 14:16+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -130,8 +130,8 @@ msgid "My next lessons"
 msgstr "My next lessons"
 
 #: courses/cms_plugins/replacements_plugin.py:23
-msgid "My next lessons"
-msgstr "My next lessons"
+msgid "Replacements"
+msgstr "Replacements"
 
 #: courses/cms_toolbars.py:10 courses/templates/courses/list.html:6
 #: payment/services/offering_finance_teachers.py:219
@@ -244,6 +244,7 @@ msgstr "Free"
 #: courses/templates/courses/snippets/subscribe_form.html:98
 #: courses/templates/courses/snippets/subscribe_form.html:112
 #: courses/templates/courses/snippets/waiting_list_breakdown.html:7
+#: courses/views.py:203
 msgid "Waiting list"
 msgstr "Waiting list"
 
@@ -1056,7 +1057,7 @@ msgid ""
 msgstr ""
 "If you think there has been a mistake on our side, please contact us at:"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:8
+#: courses/templates/courses/plugins/next_lessons/index.html:7
 msgid ""
 "Log in to see your upcoming lessons and to tell us if you are attending or "
 "not."
@@ -1064,8 +1065,8 @@ msgstr ""
 "Log in to see your upcoming lessons and to tell us if you are attending or "
 "not."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:13
-#: courses/templates/courses/plugins/replacements/index.html:45
+#: courses/templates/courses/plugins/next_lessons/index.html:12
+#: courses/templates/courses/plugins/replacements/index.html:93
 #: courses/templates/courses/snippets/info_to_participants.html:35
 #: templates/menu/desktop_menu.html:24 templates/menu/mobile_user_menu.html:23
 msgid "Log in"
@@ -1086,109 +1087,122 @@ msgid "I can't come"
 msgstr "I can't come"
 
 #: courses/templates/courses/plugins/next_lessons/index.html:74
-#: courses/templates/courses/plugins/next_lessons/index.html:140
+#: courses/templates/courses/plugins/next_lessons/index.html:141
 msgid "Saving"
 msgstr "Saving"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:80
+#: courses/templates/courses/plugins/next_lessons/index.html:81
 msgid "You can not change your attendance anymore."
 msgstr "You can not change your attendance anymore."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:87
-#: courses/templates/courses/plugins/next_lessons/index.html:144
-#: courses/templates/courses/plugins/replacements/index.html:104
+#: courses/templates/courses/plugins/next_lessons/index.html:88
+#: courses/templates/courses/plugins/next_lessons/index.html:145
+#: courses/templates/courses/plugins/replacements/index.html:152
 msgid "Something went wrong. Please try again later."
 msgstr "Something went wrong. Please try again later."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:97
+#: courses/templates/courses/plugins/next_lessons/index.html:98
 msgid "No upcoming lessons"
 msgstr "No upcoming lessons"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:106
+#: courses/templates/courses/plugins/next_lessons/index.html:107
 msgid "Show more lessons"
 msgstr "Show more lessons"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:120
+#: courses/templates/courses/plugins/next_lessons/index.html:121
 msgid "Choose Role"
 msgstr "Choose Role"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:124
+#: courses/templates/courses/plugins/next_lessons/index.html:125
 msgid "Please tell us if you are a leader or follower in this course."
 msgstr "Please tell us if you are a leader or follower in this course."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:130
+#: courses/templates/courses/plugins/next_lessons/index.html:131
 msgid "I am a leader"
 msgstr "I am a leader"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:134
+#: courses/templates/courses/plugins/next_lessons/index.html:135
 msgid "I am a follower"
 msgstr "I am a follower"
 
-#: courses/templates/courses/plugins/replacements/index.html:14
+#: courses/templates/courses/plugins/replacements/index.html:32
+msgid "Only eligible lessons"
+msgstr "Only eligible lessons"
+
+#: courses/templates/courses/plugins/replacements/index.html:41
+msgid "Only leader spots"
+msgstr "Only leader spots"
+
+#: courses/templates/courses/plugins/replacements/index.html:49
+msgid "Only follower spots"
+msgstr "Only follower spots"
+
+#: courses/templates/courses/plugins/replacements/index.html:62
 msgid "One follower is needed"
 msgstr "One follower is needed"
 
-#: courses/templates/courses/plugins/replacements/index.html:16
+#: courses/templates/courses/plugins/replacements/index.html:64
 msgid "followers are needed"
 msgstr "followers are needed"
 
-#: courses/templates/courses/plugins/replacements/index.html:23
+#: courses/templates/courses/plugins/replacements/index.html:71
 msgid "One leader is needed"
 msgstr "One leader is needed"
 
-#: courses/templates/courses/plugins/replacements/index.html:25
+#: courses/templates/courses/plugins/replacements/index.html:73
 msgid "leaders are needed"
 msgstr "leaders are needed"
 
-#: courses/templates/courses/plugins/replacements/index.html:40
+#: courses/templates/courses/plugins/replacements/index.html:88
 msgid "To see more info and to claim spots, you must log in."
 msgstr "To see more info and to claim spots, you must log in."
 
-#: courses/templates/courses/plugins/replacements/index.html:53
+#: courses/templates/courses/plugins/replacements/index.html:101
 msgid "You are a participant."
 msgstr "You are a participant."
 
-#: courses/templates/courses/plugins/replacements/index.html:55
+#: courses/templates/courses/plugins/replacements/index.html:103
 msgid "You are signed up for this curse and can therefore not claim this spot."
-msgstr "You are signed up for this curse and can therefore not claim this spot."
+msgstr ""
+"You are signed up for this curse and can therefore not claim this spot."
 
-#: courses/templates/courses/plugins/replacements/index.html:61
+#: courses/templates/courses/plugins/replacements/index.html:109
 msgid "Requirement not met"
 msgstr "Requirement not met"
 
-#: courses/templates/courses/plugins/replacements/index.html:63
+#: courses/templates/courses/plugins/replacements/index.html:111
 msgid "You can not claim this spot. You may check out our FAQ."
 msgstr "You can not claim this spot. You may check out our FAQ."
 
-#: courses/templates/courses/plugins/replacements/index.html:69
+#: courses/templates/courses/plugins/replacements/index.html:117
 msgid "Spot claimed"
 msgstr "Spot claimed"
 
-#: courses/templates/courses/plugins/replacements/index.html:71
+#: courses/templates/courses/plugins/replacements/index.html:119
 msgid "You successfully signed up as replacement for this course."
 msgstr "You successfully signed up as replacement for this course."
 
-#: courses/templates/courses/plugins/replacements/index.html:77
+#: courses/templates/courses/plugins/replacements/index.html:125
 msgid "Requirements met"
 msgstr "Requirements met"
 
-#: courses/templates/courses/plugins/replacements/index.html:79
+#: courses/templates/courses/plugins/replacements/index.html:127
 msgid "Come back on the day of the lesson to claim a spot."
 msgstr "Come back on the day of the lesson to claim a spot."
 
-#: courses/templates/courses/plugins/replacements/index.html:86
+#: courses/templates/courses/plugins/replacements/index.html:134
 msgid "Claim leader spot"
 msgstr "Claim leader spot"
 
-#: courses/templates/courses/plugins/replacements/index.html:92
+#: courses/templates/courses/plugins/replacements/index.html:140
 msgid "Claim follower spot"
 msgstr "Claim follower spot"
 
-#: courses/templates/courses/plugins/replacements/index.html:99
+#: courses/templates/courses/plugins/replacements/index.html:147
 msgid "Claiming"
 msgstr "Claiming"
 
-#: courses/templates/courses/plugins/replacements/index.html:110
+#: courses/templates/courses/plugins/replacements/index.html:158
 msgid "Successfully claimed spot."
 msgstr "Successfully claimed spot."
 
@@ -1237,7 +1251,7 @@ msgid "with"
 msgstr "with"
 
 #: courses/templates/courses/snippets/course_comment.html:14
-#: courses/templates/courses/snippets/course_info.html:14 courses/views.py:206
+#: courses/templates/courses/snippets/course_info.html:14 courses/views.py:223
 #: payment/templates/finance/offering/common/tabs.html:18
 #: survey/templates/survey/components/survey_course_hint.html:16
 msgid "Teachers"
@@ -2255,24 +2269,28 @@ msgstr "This course could unfortunately not take place."
 msgid "Rejected subscription info"
 msgstr "Unfortunately, we had to reject your subscription."
 
-#: courses/views.py:414 templates/menu/desktop_user_menu.html:12
+#: courses/views.py:206
+msgid "Tentative"
+msgstr "Tentative"
+
+#: courses/views.py:431 templates/menu/desktop_user_menu.html:12
 #: templates/menu/mobile_admin_menu.html:17
 msgid "Teachers overview"
 msgstr "Teachers overview"
 
-#: courses/views.py:424
+#: courses/views.py:441
 msgid "By subscription status"
 msgstr "By subscription status"
 
-#: courses/views.py:427
+#: courses/views.py:444
 msgid "By affiliation"
 msgstr "By affiliation"
 
-#: courses/views.py:430
+#: courses/views.py:447
 msgid "By matching states"
 msgstr "By matching states"
 
-#: courses/views.py:433
+#: courses/views.py:450
 msgid "By lead and follow"
 msgstr "By lead and follow"
 

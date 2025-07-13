@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 21:05+0200\n"
+"POT-Creation-Date: 2025-07-13 14:15+0200\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -247,6 +247,7 @@ msgstr "Frei"
 #: courses/templates/courses/snippets/subscribe_form.html:98
 #: courses/templates/courses/snippets/subscribe_form.html:112
 #: courses/templates/courses/snippets/waiting_list_breakdown.html:7
+#: courses/views.py:203
 msgid "Waiting list"
 msgstr "Warteliste"
 
@@ -718,8 +719,10 @@ msgid ""
 "whether prerequisites are met, i.e for participating in an advanced course, "
 "or substituting for a lesson."
 msgstr ""
-"Kurstypen die diese Person freigeschalten hat. Bsp. eine Teilnahme von Ballroom 5 schaltet Ballroom 1-5 frei."
-"Diese Information kann zur Feststellung der Voraussetzungen für die Teilnahme an einem Kurs verwendet werden."
+"Kurstypen die diese Person freigeschalten hat. Bsp. eine Teilnahme von "
+"Ballroom 5 schaltet Ballroom 1-5 frei.Diese Information kann zur "
+"Feststellung der Voraussetzungen für die Teilnahme an einem Kurs verwendet "
+"werden."
 
 #: courses/models/subscribe.py:355
 msgid "leader"
@@ -1073,14 +1076,16 @@ msgstr ""
 "Falls du denkst, dass es sich hier um einen Fehler von uns handelt, "
 "kontaktiere uns unter:"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:8
+#: courses/templates/courses/plugins/next_lessons/index.html:7
 msgid ""
 "Log in to see your upcoming lessons and to tell us if you are attending or "
 "not."
-msgstr "Logge dich ein um deine kommenden Lektionen zu sehen und um Bescheid zu geben ob du kommen kannst oder nicht."
+msgstr ""
+"Logge dich ein um deine kommenden Lektionen zu sehen und um Bescheid zu "
+"geben ob du kommen kannst oder nicht."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:13
-#: courses/templates/courses/plugins/replacements/index.html:45
+#: courses/templates/courses/plugins/next_lessons/index.html:12
+#: courses/templates/courses/plugins/replacements/index.html:93
 #: courses/templates/courses/snippets/info_to_participants.html:35
 #: templates/menu/desktop_menu.html:24 templates/menu/mobile_user_menu.html:23
 msgid "Log in"
@@ -1101,109 +1106,123 @@ msgid "I can't come"
 msgstr "Ich komme nicht"
 
 #: courses/templates/courses/plugins/next_lessons/index.html:74
-#: courses/templates/courses/plugins/next_lessons/index.html:140
+#: courses/templates/courses/plugins/next_lessons/index.html:141
 msgid "Saving"
 msgstr "Speicher"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:80
+#: courses/templates/courses/plugins/next_lessons/index.html:81
 msgid "You can not change your attendance anymore."
 msgstr "Du kannst deine Anwesenheit nicht mehr ändern."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:87
-#: courses/templates/courses/plugins/next_lessons/index.html:144
-#: courses/templates/courses/plugins/replacements/index.html:104
+#: courses/templates/courses/plugins/next_lessons/index.html:88
+#: courses/templates/courses/plugins/next_lessons/index.html:145
+#: courses/templates/courses/plugins/replacements/index.html:152
 msgid "Something went wrong. Please try again later."
 msgstr "Etwas ist schief gelaufen. Probiere bitte später erneut."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:97
+#: courses/templates/courses/plugins/next_lessons/index.html:98
 msgid "No upcoming lessons"
 msgstr "Keine kommenden Lektionen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:106
+#: courses/templates/courses/plugins/next_lessons/index.html:107
 msgid "Show more lessons"
 msgstr "weitere Lektionen anzeigen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:120
+#: courses/templates/courses/plugins/next_lessons/index.html:121
 msgid "Choose Role"
 msgstr "Rolle wählen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:124
+#: courses/templates/courses/plugins/next_lessons/index.html:125
 msgid "Please tell us if you are a leader or follower in this course."
 msgstr "Bitte sag uns, ob du in diesem Kurs führst oder folgst."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:130
+#: courses/templates/courses/plugins/next_lessons/index.html:131
 msgid "I am a leader"
 msgstr "Ich führe"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:134
+#: courses/templates/courses/plugins/next_lessons/index.html:135
 msgid "I am a follower"
 msgstr "Ich folge"
 
-#: courses/templates/courses/plugins/replacements/index.html:14
+#: courses/templates/courses/plugins/replacements/index.html:32
+msgid "Only eligible lessons"
+msgstr "Nur berechtigte Lektionen"
+
+#: courses/templates/courses/plugins/replacements/index.html:41
+msgid "Only leader spots"
+msgstr "Nur Leader Plätze"
+
+#: courses/templates/courses/plugins/replacements/index.html:49
+msgid "Only follower spots"
+msgstr "Nur Follower Plätze"
+
+#: courses/templates/courses/plugins/replacements/index.html:62
 msgid "One follower is needed"
 msgstr "Ein Follower benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:16
+#: courses/templates/courses/plugins/replacements/index.html:64
 msgid "followers are needed"
 msgstr "Follower benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:23
+#: courses/templates/courses/plugins/replacements/index.html:71
 msgid "One leader is needed"
 msgstr "Leader benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:25
+#: courses/templates/courses/plugins/replacements/index.html:73
 msgid "leaders are needed"
 msgstr "Leader benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:40
+#: courses/templates/courses/plugins/replacements/index.html:88
 msgid "To see more info and to claim spots, you must log in."
-msgstr "Um weitere Informationen zu sehen und um auszuhelfen musst du dich einloggen."
+msgstr ""
+"Um weitere Informationen zu sehen und um auszuhelfen musst du dich einloggen."
 
-#: courses/templates/courses/plugins/replacements/index.html:53
+#: courses/templates/courses/plugins/replacements/index.html:101
 msgid "You are a participant."
 msgstr "Du nimmst teil"
 
-#: courses/templates/courses/plugins/replacements/index.html:55
+#: courses/templates/courses/plugins/replacements/index.html:103
 msgid "You are signed up for this curse and can therefore not claim this spot."
-msgstr "Du bist für diesen Kurs angemeldet und kannst deswegen nicht aushelfen."
+msgstr ""
+"Du bist für diesen Kurs angemeldet und kannst deswegen nicht aushelfen."
 
-#: courses/templates/courses/plugins/replacements/index.html:61
+#: courses/templates/courses/plugins/replacements/index.html:109
 msgid "Requirement not met"
 msgstr "Anforderungen nicht erfüllt"
 
-#: courses/templates/courses/plugins/replacements/index.html:63
+#: courses/templates/courses/plugins/replacements/index.html:111
 msgid "You can not claim this spot. You may check out our FAQ."
 msgstr "Du kannst nicht aushelfen. Schau dir ggf. die FAQ an."
 
-#: courses/templates/courses/plugins/replacements/index.html:69
+#: courses/templates/courses/plugins/replacements/index.html:117
 msgid "Spot claimed"
 msgstr "Aushilfe bestätigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:71
+#: courses/templates/courses/plugins/replacements/index.html:119
 msgid "You successfully signed up as replacement for this course."
 msgstr "Du hast dich erfolgreich als Aushilfe für den Kurs angemeldet."
 
-#: courses/templates/courses/plugins/replacements/index.html:77
+#: courses/templates/courses/plugins/replacements/index.html:125
 msgid "Requirements met"
 msgstr "Anforderungen erfüllt"
 
-#: courses/templates/courses/plugins/replacements/index.html:79
+#: courses/templates/courses/plugins/replacements/index.html:127
 msgid "Come back on the day of the lesson to claim a spot."
 msgstr "Besuche diese Seite am Tag der Lektion wieder um auszuhelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:86
+#: courses/templates/courses/plugins/replacements/index.html:134
 msgid "Claim leader spot"
 msgstr "Als Leader aushelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:92
+#: courses/templates/courses/plugins/replacements/index.html:140
 msgid "Claim follower spot"
 msgstr "Als Follower aushelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:99
+#: courses/templates/courses/plugins/replacements/index.html:147
 msgid "Claiming"
 msgstr "Aushilfe wird eingetragen"
 
-#: courses/templates/courses/plugins/replacements/index.html:110
+#: courses/templates/courses/plugins/replacements/index.html:158
 msgid "Successfully claimed spot."
 msgstr "Aushilfe erfolgreich bestätigt."
 
@@ -1251,7 +1270,7 @@ msgid "with"
 msgstr "mit"
 
 #: courses/templates/courses/snippets/course_comment.html:14
-#: courses/templates/courses/snippets/course_info.html:14 courses/views.py:206
+#: courses/templates/courses/snippets/course_info.html:14 courses/views.py:223
 #: payment/templates/finance/offering/common/tabs.html:18
 #: survey/templates/survey/components/survey_course_hint.html:16
 msgid "Teachers"
@@ -2281,24 +2300,28 @@ msgstr "Dieser Kurs konnte leider nicht stattfinden."
 msgid "Rejected subscription info"
 msgstr "Leider mussten wir die Anmeldung ablehnen."
 
-#: courses/views.py:414 templates/menu/desktop_user_menu.html:12
+#: courses/views.py:206
+msgid "Tentative"
+msgstr "Nicht bestätigt"
+
+#: courses/views.py:431 templates/menu/desktop_user_menu.html:12
 #: templates/menu/mobile_admin_menu.html:17
 msgid "Teachers overview"
 msgstr "Übersicht Lehrer:innen"
 
-#: courses/views.py:424
+#: courses/views.py:441
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:427
+#: courses/views.py:444
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:430
+#: courses/views.py:447
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:433
+#: courses/views.py:450
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
