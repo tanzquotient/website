@@ -21,8 +21,10 @@ class FinanceFile(Model):
         super().save(force_insert, force_update, using, update_fields)
         if self.type == FinanceFileType.ZKB_CSV and not self.processed:
             from payment.parser import ZkbCsvParser
+            from tq_website.tasks import match_payments
 
             ZkbCsvParser.parse_files_and_save_payments()
+            match_payments.apply_async(kwargs={"send_reminders": True})
 
     def __str__(self) -> str:
         return self.name
