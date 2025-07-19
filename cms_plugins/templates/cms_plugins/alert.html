@@ -1,6 +1,8 @@
-<div class="alert alert-{{ type }}" role="alert">
-    {% if title %}
-        <h5 class="alert-heading">{{ title }}</h5>
-    {% endif %}
-    {{ content }}
-</div>
+{% if title or content %}
+    <div class="alert alert-{{ type }}" role="alert">
+        {% if title %}
+            <h5 class="alert-heading">{{ title }}</h5>
+        {% endif %}
+        {{ content }}
+    </div>
+{% endif %}

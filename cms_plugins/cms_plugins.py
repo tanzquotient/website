@@ -199,3 +199,35 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
             }
         )
         return context
+
+
+@plugin_pool.register_plugin
+class MissingTeacherInformationAlert(CMSPluginBase):
+    name = _("Missing teacher information alert")
+    model = AlertPluginModel
+    render_template = "cms_plugins/alert.html"
+    text_enabled = True
+    allow_children = False
+
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'content', 'type'),
+            'description': _(
+                "Note: This alert will only be displayed if the user is a teacher and their profile has missing information."
+            ),
+        }),
+    )
+
+
+    def render(self, context, instance, placeholder):
+        current_user = context['request'].user
+
+        if not current_user.is_anonymous and current_user.profile.missing_values():
+            context.update(
+                {
+                    "title": instance.title,
+                    "content": instance.content,
+                    "type": instance.type,
+                }
+            )
+        return context
