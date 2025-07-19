@@ -9,10 +9,19 @@ from django.utils.translation import gettext as _
 import datetime
 
 
-def remind_of_payment(subscription: Subscribe) -> bool:
+def remind_of_payment(
+    subscription: Subscribe,
+    min_days_from_course_start: int = 0,
+    min_days_from_previous_reminder: int = 0,
+) -> bool:
     if (
         subscription.state == SubscribeState.CONFIRMED
-        and subscription.get_last_payment_reminder() != datetime.date.today()
+        and subscription.get_last_payment_reminder()
+        > datetime.date.today()
+        + datetime.timedelta(days=min_days_from_previous_reminder)
+        and subscription.course.has_started_for(
+            extra_time=datetime.timedelta(days=min_days_from_course_start)
+        )
     ):
         m = send_payment_reminder(subscription)
         if m:
@@ -23,14 +32,34 @@ def remind_of_payment(subscription: Subscribe) -> bool:
     return False
 
 
-def remind_of_payments(subscriptions: QuerySet, request: HttpRequest) -> None:
+def remind_of_payments(
+    subscriptions: QuerySet,
+    request: HttpRequest | None = None,
+    min_days_from_course_start: int = 0,
+    min_days_from_previous_reminder: int = 0,
+) -> None:
     sent = 0
     q = subscriptions.filter(state=SubscribeState.CONFIRMED)
     for s in q.all():
-        if remind_of_payment(s):
+        if remind_of_payment(
+            s,
+            min_days_from_course_start=min_days_from_course_start,
+            min_days_from_previous_reminder=min_days_from_previous_reminder,
+        ):
             sent += 1
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        _("{} of {} reminded successfully").format(sent, subscriptions.count()),
+    if request:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _("{} of {} reminded successfully").format(sent, subscriptions.count()),
+        )
+
+
+def remind_all_of_payments(
+    min_days_from_course_start: int = 0, min_days_from_previous_reminder: int = 0
+) -> None:
+    remind_of_payments(
+        Subscribe.objects.filter(state=SubscribeState.CONFIRMED),
+        min_days_from_course_start=min_days_from_course_start,
+        min_days_from_previous_reminder=min_days_from_previous_reminder,
     )
