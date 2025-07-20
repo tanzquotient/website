@@ -9,7 +9,9 @@ from django.contrib import messages
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView
 from django.contrib.auth import logout
+from django.db.models import Q
 from allauth.account.utils import perform_login
+from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.urls import reverse
@@ -157,16 +159,33 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             switch_data = SwitchData(
                 swiss_edu_person_unique_id=userinfo["swissEduPersonUniqueID"]
             )
-            user = User.objects.create(
-                username=find_unused_username_variant(userinfo["given_name"]),
-                first_name=userinfo["given_name"],
-                last_name=userinfo["family_name"],
-                email=userinfo["email_verified"],
+            email_query = Q()
+            for email in list(
+                set(
+                    [userinfo["email"]]
+                    + userinfo["swissEduIDLinkedAffiliationMail"]
+                    + userinfo["swissEduIDAssociatedMail"]
+                )
+            ):
+                email_query |= Q(email__iexact=email)
+            email_addresses = EmailAddress.objects.filter(verified=True).filter(
+                email_query
             )
-            profile = UserProfile.objects.create(user=user)
-            user.emailaddress_set.create(
-                email=userinfo["email_verified"], verified=True
-            )
+            users_with_email = User.objects.filter(pk__in=list(set(email_addresses.values_list("user", flat=True)))).distinct()
+            if users_with_email.count() == 1:
+                user = users_with_email.get()
+                profile = user.profile
+            else:
+                user = User.objects.create(
+                    username=find_unused_username_variant(userinfo["given_name"]),
+                    first_name=userinfo["given_name"],
+                    last_name=userinfo["family_name"],
+                    email=userinfo["email"],
+                )
+                profile = UserProfile.objects.create(user=user)
+                user.emailaddress_set.create(
+                    email=userinfo["email"], verified=True
+                )
             switch_data.user_profile = profile
 
     elif mode == "link":
@@ -197,7 +216,7 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
     switch_data.swiss_edu_id = userinfo["swissEduID"]
     switch_data.given_name = userinfo["given_name"]
     switch_data.family_name = userinfo["family_name"]
-    switch_data.email = userinfo["email_verified"]
+    switch_data.email = userinfo["email"]
     switch_data.save()
     switch_data.affiliation_emails.all().delete()
     switch_data.associated_emails.all().delete()
