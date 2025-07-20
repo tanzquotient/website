@@ -84,7 +84,7 @@ def update_user(user: User, user_data: dict) -> User:
 def find_unused_username_variant(name, ignore=None):
     un = name
     i = 1
-    while User.objects.exclude(username=ignore).filter(username=un).count() > 0:
+    while User.objects.exclude(username=ignore).filter(username=un).exists():
         un = name + str(i)
         i += 1
     return un

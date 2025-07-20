@@ -1,0 +1,40 @@
+{% load i18n %}
+
+{% comment %}TODO: remove conditional{% endcomment %}
+{% if user.is_staff %}
+    <p>
+        <strong> {% trans "Student status" %}</strong>
+        <br/>
+        {% if user.profile.is_student %}
+            <span class="badge bg-success">{% trans "Verified" %}</span>
+            <br/>
+            {% trans "Valid until" %}:
+            {{ user.profile.student_validity }}
+        {% else %}
+            <span class="badge bg-secondary">
+                {% if user.profile.student_validity %}
+                    {% trans "Expired" %}
+                {% else %}
+                    {% trans "Not verified" %}
+                {% endif %}
+            </span>
+            <br/>
+            {% if not user.profile.has_switch %}
+                <a href="{% url "oidc_login" %}?mode=link">
+                    {% trans "Connect your account to Switch edu-ID" %}
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </a>
+            {% endif %}
+        {% endif %}
+    </p>
+{% else %}
+    <p>
+        <strong> {% trans "Student status" %}</strong>
+        <br/>
+        {% trans "Student" %}: {{ user.profile.get_student_status }}
+        <br/>
+        {% if user.profile.legi %}
+            {% trans "Legi" %}: {{ user.profile.legi }}
+        {% endif %}
+    </p>
+{% endif %}

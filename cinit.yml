@@ -59,6 +59,12 @@ programs:
       - SIP_TQ_PAYMENT_ACCOUNT_POST_NUMBER:
       - SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT:
       - SIP_TQ_PAYMENT_ACCOUNT_RECIPIENT_ZIPCODE_CITY:
+      # OIDC
+      - SIP_TQ_OIDC_CLIENT_ID:
+      - SIP_TQ_OIDC_CLIENT_SECRET:
+      - SIP_TQ_OIDC_IDP_CONFIGURATION:
+      - SIP_TQ_OIDC_REDIRECT_URI:
+      - SIP_TQ_OIDC_SCOPES:
 
   - name: pre-start
     path: /app/scripts/pre-start.sh

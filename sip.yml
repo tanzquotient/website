@@ -110,3 +110,24 @@ env:
     secret:
       key: tq-mail-from-mail
       value: provided
+  # OIDC
+  - name: SIP_TQ_OIDC_CLIENT_ID
+    secret:
+      value: provided
+      key: tq-oidc-client-id
+  - name: SIP_TQ_OIDC_CLIENT_SECRET
+    secret:
+      value: provided
+      key: tq-oidc-client-secret
+  - name: SIP_TQ_OIDC_IDP_CONFIGURATION
+    secret:
+      value: provided
+      key: tq-oidc-idp-configuration
+  - name: SIP_TQ_OIDC_REDIRECT_URI
+    secret:
+      value: provided
+      key: tq-oidc-redirect-uri
+  - name: SIP_TQ_OIDC_SCOPES
+    secret:
+      value: provided
+      key: tq-oidc-scopes

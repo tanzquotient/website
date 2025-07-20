@@ -17,7 +17,7 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
-from .views import WellKnownRedirectView
+from .views import WellKnownRedirectView, oidc_login_view, oidc_callback_view
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),
@@ -49,6 +49,11 @@ urlpatterns += [
 
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
+    path(
+        "accounts/new_login",
+        TemplateView.as_view(template_name="account/new_login.html"),
+        name="new_login",
+    ),
     path("accounts/", include("allauth.urls")),
     path("password/", courses_views.change_password, name="change_password"),
     path("profile/courses", courses_views.user_courses, name="user_courses"),
@@ -56,6 +61,8 @@ urlpatterns += i18n_patterns(
         "profile/<int:user_id>/calendar.ical", courses_views.user_ical, name="user_ical"
     ),
     path("profile/edit", courses_views.ProfileView.as_view(), name="edit_profile"),
+    path("profile/auth/oidc_login", oidc_login_view, name="oidc_login"),
+    path("profile/auth/oidc_callback", oidc_callback_view, name="oidc_callback"),
     path("profile/", courses_views.user_profile, name="profile"),
     path("survey/", include(survey.urls, namespace="survey")),
     path("events/", include(events.urls, namespace="events")),

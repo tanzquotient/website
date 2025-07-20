@@ -56,6 +56,9 @@ class UserProfile(Model):
     gender = CharField(max_length=64, blank=True, null=True)
     address = OneToOneField(Address, blank=True, null=True, on_delete=SET_NULL)
     phone_number = CharField(max_length=255, blank=True, null=True)
+    student_validity = DateField(
+        blank=True, null=True, help_text="Last date of validity of student status."
+    )
     student_status = CharField(
         max_length=10,
         choices=StudentStatus.CHOICES,
@@ -166,7 +169,13 @@ class UserProfile(Model):
         return self.user.teaching_courses.exists()
 
     def is_student(self) -> bool:
-        return self.student_status in StudentStatus.STUDENTS and self.legi
+        if self.user.is_staff:
+            return (
+                self.student_validity
+                and self.student_validity >= timezone.localtime().date()
+            )
+        else:
+            return self.student_status in StudentStatus.STUDENTS and self.legi
 
     def is_board_member(self) -> bool:
         return self.user.functions.count() > 0
@@ -371,6 +380,13 @@ class UserProfile(Model):
         )
         courses.sort(key=Course.get_first_lesson_date)
         return courses
+
+    #################
+    # Switch edu-ID #
+    #################
+
+    def has_switch(self) -> bool:
+        return hasattr(self, "switch_data")
 
     class Meta:
         permissions = (("access_counterpayment", "Can access counter payment"),)

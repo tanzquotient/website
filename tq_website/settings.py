@@ -615,3 +615,13 @@ if not DEBUG:
 # Increase fileds number limit for GET/POST requests
 # TODO: remove after migrating newsletter to celery task
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
+
+########
+# OIDC #
+########
+
+OIDC_CLIENT_ID = environ["TQ_OIDC_CLIENT_ID"]
+OIDC_CLIENT_SECRET = environ["TQ_OIDC_CLIENT_SECRET"]
+OIDC_IDP_CONFIGURATION = environ["TQ_OIDC_IDP_CONFIGURATION"]
+OIDC_REDIRECT_URI = environ["TQ_OIDC_REDIRECT_URI"]
+OIDC_SCOPES = environ["TQ_OIDC_SCOPES"]

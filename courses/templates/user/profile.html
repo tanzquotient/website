@@ -110,15 +110,7 @@
             {% endif %}
         </div>
         <div class="col-12 col-sm-4">
-            <p>
-                <strong> {% trans "Student status" %}</strong>
-                <br/>
-                {% trans "Student" %}: {{ user.profile.get_student_status }}
-                <br/>
-                {% if user.profile.legi %}
-                    {% trans "Legi" %}: {{ user.profile.legi }}
-                {% endif %}
-            </p>
+            {% include "user/snippets/student_status.html" with user=user only %}
             {% if user.profile.is_teacher %}
                 <p>
                     <strong> {% trans "Teacher" %}</strong>

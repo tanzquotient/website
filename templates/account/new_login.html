@@ -1,0 +1,79 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount sekizai_tags %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block lead_title %}
+    {% trans "Sign In" %}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="text-center mb-3">
+
+        <a href="{% url "oidc_login" %}?mode=login{% if redirect_field_value %}&next={{ redirect_field_value }}{% endif %}" class="btn btn-success btn-lg mb-2">
+            {% trans "Sign in with Switch edu-ID" %}
+        </a>
+        <br/>
+        <s>&emsp;</s>
+        <i>or</i>
+        <s>&emsp;</s>
+        <br/>
+        <a href="#" class="btn btn-secondary btn-sm mt-2" id="pwd_login_btn" onclick="showPwdLogin()">
+            {% trans "Sign in with password" %}
+        </a>
+
+    </div>
+
+    <div class="my-3 d-none mx-auto" id="pwd_login_section" style="max-width: 400px;">
+        <form method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+            <div class="mb-2">
+                <label for="email" class="form-label mb-0">
+                    {%  trans "Email address" %}
+                </label>
+                <input type="email" name="login" class="form-control" id="email" autocomplete="email" required>
+            </div>
+
+            <div id="password_section" class="mb-1">
+                <label for="password" class="form-label mb-0">
+                    {%  trans "Password" %}
+                </label>
+                <input type="password" name="password" class="form-control" id="password" autocomplete="password">
+            </div>
+            <small class="form-text text-muted">
+                <a href="{% url 'account_reset_password' %}">
+                    {% trans "Forgot Password?" %}
+                </a>
+            </small>
+            <div class="mt-2 text-center">
+                <button class="btn btn-secondary btn-sm" type="submit">
+                    {% trans "Sign in with password" %}
+                </button>
+            </div>
+        </form>
+    </div>
+    <hr/>
+
+    <div class="text-center">
+        <a href="{{ signup_url }}?next={{ request.path }}">
+            {% trans "Create a new account (manually)" %}
+        </a>
+    </div>
+
+    {% addtoblock "js" %}
+        <script type="text/javascript">
+            function showPwdLogin(){
+                document.getElementById("pwd_login_btn").classList.add("d-none");
+                document.getElementById("pwd_login_section").classList.remove("d-none");
+            }
+        </script>
+    {% endaddtoblock %}
+
+{% endblock %}
+
