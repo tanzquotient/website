@@ -24,7 +24,10 @@ class FinanceFile(Model):
             from tq_website.tasks import match_payments
 
             ZkbCsvParser.parse_files_and_save_payments()
-            match_payments.apply_async(kwargs={"send_reminders": True})
+            # match payments immediately and after 2hrs to
+            # allow for manual matching in between
+            match_payments.apply_async(kwargs={"send_reminders": False})
+            match_payments.apply_async(kwargs={"send_reminders": True}, countdown=3600)
 
     def __str__(self) -> str:
         return self.name
