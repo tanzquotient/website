@@ -16,9 +16,9 @@ def remind_of_payment(
 ) -> bool:
     if (
         subscription.state == SubscribeState.CONFIRMED
-        and subscription.get_last_payment_reminder()
-        > datetime.date.today()
-        + datetime.timedelta(days=min_days_from_previous_reminder)
+        and (subscription.get_last_payment_reminder() or datetime.date.today())
+        < datetime.date.today()
+        - datetime.timedelta(days=min_days_from_previous_reminder)
         and subscription.course.has_started_for(
             extra_time=datetime.timedelta(days=min_days_from_course_start)
         )
