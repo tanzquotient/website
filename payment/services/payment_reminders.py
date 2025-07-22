@@ -14,11 +14,15 @@ def remind_of_payment(
     min_days_from_course_start: int = 0,
     min_days_from_previous_reminder: int = 0,
 ) -> bool:
+    last_payment_reminder = subscription.get_last_payment_reminder()
     if (
         subscription.state == SubscribeState.CONFIRMED
-        and (subscription.get_last_payment_reminder() or datetime.date.today())
-        < datetime.date.today()
-        - datetime.timedelta(days=min_days_from_previous_reminder)
+        and (
+            last_payment_reminder is None
+            or last_payment_reminder
+            < datetime.date.today()
+            - datetime.timedelta(days=min_days_from_previous_reminder)
+        )
         and subscription.course.has_started_for(
             extra_time=datetime.timedelta(days=min_days_from_course_start)
         )
