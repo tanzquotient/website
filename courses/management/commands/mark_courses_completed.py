@@ -2,7 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from courses.models import Course, LessonOccurrenceTeach
+from courses.models import Course
 
 logger = logging.getLogger(__name__)
 

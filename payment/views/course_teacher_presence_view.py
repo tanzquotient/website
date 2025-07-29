@@ -98,7 +98,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled, APIView):
                         )
 
                     [start, end] = key.split("_")
-                    lesson_occurrence, _ = LessonOccurrence.objects.get_or_create(
+                    lesson_occurrence = LessonOccurrence.objects.get(
                         course=Course.objects.get(id=int(self.kwargs["course"])),
                         start=datetime.fromisoformat(start),
                         end=datetime.fromisoformat(end),
