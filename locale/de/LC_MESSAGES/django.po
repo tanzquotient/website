@@ -1738,7 +1738,7 @@ msgid ""
 "Please tell your partner to check their student status in their profile, to "
 "make sure they can benefit from the reduced course fee."
 msgstr ""
-"Bitte sag auch deinem Partner/deiner Partnerin, das er/sie im Profil den "
+"Bitte sag auch deinem Partner/deiner Partnerin, dass er/sie im Profil den "
 "eingetragenen Studierendenstatus überprüfen soll, um vom reduzierten "
 "Kurspreis zu profitieren."
 
