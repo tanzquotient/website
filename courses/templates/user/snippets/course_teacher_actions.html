@@ -17,14 +17,6 @@
             {% trans "Details & edit" %}
         </a>
     {% endif %}
-    {% if request.user.is_staff %}
-        {% concat_all '/admin/courses/subscribe/?course=' course.id '&offering=' course.offering.id as subscription_admin_url %}
-        <a href="{{ subscription_admin_url }}" target="_blank"
-           class="btn btn-success btn-sm align-self-center">
-            <i class="bi bi-person-fill-gear"></i>
-            {% trans "Subscription Admin" %}
-        </a>
-    {% endif %}
     {% if course.get_confirmed_count > 0 %}
         {% url 'payment:course_participants' course=course.id as participants_url %}
         {% if request.get_full_path != participants_url %}
@@ -65,3 +57,20 @@
         {% endwith %}
     {% endif %}
 </div>
+{% if request.user.is_staff %}
+    <div class="fw-bold mt-2">{% trans "Admin area" %}</div>
+    <div class="d-flex flex-wrap gap-1">
+        {% concat_all '/admin/courses/course/' course.id '/change/' as course_admin_url %}
+        <a href="{{ course_admin_url }}" target="_blank"
+           class="btn btn-success btn-sm align-self-center">
+            <i class="bi bi-database-fill-gear"></i>
+            {% trans "Course Admin" %}
+        </a>
+        {% concat_all '/admin/courses/subscribe/?course=' course.id '&offering=' course.offering.id as subscription_admin_url %}
+        <a href="{{ subscription_admin_url }}" target="_blank"
+           class="btn btn-success btn-sm align-self-center">
+            <i class="bi bi-person-fill-gear"></i>
+            {% trans "Subscriptions" %}
+        </a>
+    </div>
+{% endif %}

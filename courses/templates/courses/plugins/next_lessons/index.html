@@ -21,8 +21,10 @@
                 <div id="attendance-{{ lesson.id }}" class="upcoming-lesson"
                         {% if forloop.counter > 3 %} hidden {% endif %}>
                     {% attendance_state user=request.user lesson=lesson as state %}
-                    <div class="fw-bold">
-                        {{ lesson.course.type.title }}
+                    <div>
+                        <a href="{% url "courses:course_detail" course_id=lesson.course_id %}">
+                            {{ lesson.course.type.title }}
+                        </a>
                         {% if state == "replacement" %}
                             <span class="badge text-bg-info" role="group">
                         {% trans "Replacement" %}
@@ -30,6 +32,7 @@
                         {% endif %}
                     </div>
                     <div>{% format_duration start=lesson.start end=lesson.end %}</div>
+                    <div>{{ lesson.room }}</div>
                     <div class="my-1">
                         {# Buttons if present #}
                         <div id="buttons-present-{{ lesson.id }}"
