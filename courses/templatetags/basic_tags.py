@@ -1,3 +1,4 @@
+from typing import Iterable, Any
 from uuid import uuid4
 
 from django import template
@@ -22,6 +23,11 @@ def fence(value, s):
 @register.filter(name="lookup")
 def lookup(value: dict | list, arg: object) -> object:
     return value[arg]
+
+
+@register.simple_tag
+def concat_all(*args: Iterable[Any]) -> str:
+    return "".join(map(str, args))
 
 
 @register.filter(name="abs")

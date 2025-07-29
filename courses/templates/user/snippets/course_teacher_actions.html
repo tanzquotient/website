@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load basic_tags %}
 
 <div class="d-flex flex-wrap gap-1">
     {% url 'courses:course_detail' course.id as view_url %}
@@ -14,6 +15,14 @@
            class="btn btn-success btn-sm align-self-center">
             <i class="bi bi-pencil-square"></i>
             {% trans "Details & edit" %}
+        </a>
+    {% endif %}
+    {% if request.user.is_staff %}
+        {% concat_all '/admin/courses/subscribe/?course=' course.id '&offering=' course.offering.id as subscription_admin_url %}
+        <a href="{{ subscription_admin_url }}" target="_blank"
+           class="btn btn-success btn-sm align-self-center">
+            <i class="bi bi-person-fill-gear"></i>
+            {% trans "Subscription Admin" %}
         </a>
     {% endif %}
     {% if course.get_confirmed_count > 0 %}
