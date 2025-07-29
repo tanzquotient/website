@@ -20,12 +20,12 @@
     }
 </style>
 
-<div id="replacements-container">
+<div id="replacements-container" class="only-eligible">
     <div class="my-3 d-flex flex-row gap-1 flex-wrap">
         {% if request.user.is_authenticated %}
             <div id="only-eligible-filter">
                 <input type="checkbox" class="btn-check" id="only-eligible"
-                       autocomplete="off">
+                       autocomplete="off" checked>
                 <label class="btn btn-sm btn-outline-success rounded-4"
                        for="only-eligible">
                     <i class="filter-icon bi bi-check-circle-fill"></i>
