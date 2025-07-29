@@ -25,7 +25,8 @@ class LessonOccurrence(models.Model):
     )
     room = models.ForeignKey(
         to=Room,
-        blank=False,
+        blank=True,
+        null=True,
         related_name="lesson_occurrences",
         on_delete=models.PROTECT,
     )

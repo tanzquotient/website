@@ -20,7 +20,7 @@
     }
 </style>
 
-<div id="replacements-container" class="only-eligible">
+<div id="replacements-container" {% if request.user.is_authenticated %} class="only-eligible" {% endif %}>
     <div class="my-3 d-flex flex-row gap-1 flex-wrap">
         {% if request.user.is_authenticated %}
             <div id="only-eligible-filter">

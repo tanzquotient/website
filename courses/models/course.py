@@ -772,12 +772,15 @@ class Course(TranslatableModel):
         occurrences = self.get_lesson_occurrences()
         for occurrence in occurrences:
             # create lesson occurrences if they don't exist
-            LessonOccurrence.objects.get_or_create(
+            lesson_occurrence, _ = LessonOccurrence.objects.get_or_create(
                 course=self,
                 start=occurrence.start,
                 end=occurrence.end,
-                room=occurrence.room or self.room,
             )
+            room = occurrence.room or self.room
+            if lesson_occurrence.room != room:
+                lesson_occurrence.room = room
+                lesson_occurrence.save()
 
         # delete extra lesson occurrences if they don't exist anymore
         # get all lesson occurrences for the course

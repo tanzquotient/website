@@ -36,7 +36,10 @@ class RegularLesson(models.Model):
             )
 
         def to_lesson_occurrence(
-            d: date, time_from: time | None = None, time_to: time | None = None, room: Room | None = None,
+            d: date,
+            time_from: time | None = None,
+            time_to: time | None = None,
+            room: Room | None = None,
         ) -> LessonOccurrenceData:
             return LessonOccurrenceData(
                 timezone("Europe/Zurich").localize(
@@ -63,7 +66,7 @@ class RegularLesson(models.Model):
                     )
                 )
             else:
-                if self.course.room.is_cancelled(lesson_date):
+                if self.course.room and self.course.room.is_cancelled(lesson_date):
                     continue
                 lesson_occurrences.append(to_lesson_occurrence(lesson_date))
 
