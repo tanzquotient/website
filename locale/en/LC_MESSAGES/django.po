@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-13 14:16+0200\n"
+"POT-Creation-Date: 2025-07-29 21:40+0200\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,6 +28,18 @@ msgstr "Row"
 #: cms_plugins/cms_plugins.py:127
 msgid "Upcoming events and courses"
 msgstr "Upcoming courses and events"
+
+#: cms_plugins/cms_plugins.py:206
+msgid "Missing teacher information alert"
+msgstr "Missing teacher information alert"
+
+#: cms_plugins/cms_plugins.py:216
+msgid ""
+"Note: This alert will only be displayed if the user is a teacher and their "
+"profile has missing information."
+msgstr ""
+"Note: This alert will only be displayed if the user is a teacher and their "
+"profile has missing information."
 
 #: courses/admin_forms/copy_course_form.py:10
 msgid "Offering to copy into"
@@ -262,16 +274,16 @@ msgstr "Sent"
 
 #: courses/filters.py:114
 #: courses/templates/courses/snippets/student_status_input.html:12
+#: courses/templates/user/profile.html:143
 #: courses/templates/user/profile.html:151
-#: courses/templates/user/profile.html:159
 #: payment/services/offering_finance_teachers.py:310
 msgid "Yes"
 msgstr "Yes"
 
 #: courses/filters.py:115
 #: courses/templates/courses/snippets/student_status_input.html:17
+#: courses/templates/user/profile.html:145
 #: courses/templates/user/profile.html:153
-#: courses/templates/user/profile.html:161
 #: payment/services/offering_finance_teachers.py:310
 msgid "No"
 msgstr "No"
@@ -434,7 +446,7 @@ msgstr "Hint: you can also enter HTML code"
 msgid "Select country"
 msgstr "Select country"
 
-#: courses/forms/user_edit_from.py:100 courses/models/user_profile.py:140
+#: courses/forms/user_edit_from.py:100 courses/models/user_profile.py:143
 msgid "This display name is already in use. Please choose a different one."
 msgstr "This display name is already in use. Please choose a different one."
 
@@ -581,6 +593,7 @@ msgid "We received one subscription so far."
 msgstr "We received one subscription so far."
 
 #: courses/models/course.py:577
+#, python-brace-format
 msgid "We received {} subscriptions so far."
 msgstr "We received {} subscriptions so far."
 
@@ -589,6 +602,7 @@ msgid "One couple"
 msgstr "One couple"
 
 #: courses/models/course.py:594
+#, python-brace-format
 msgid "{} couples"
 msgstr "{} couples"
 
@@ -597,6 +611,7 @@ msgid "One individual follower"
 msgstr "One individual follower"
 
 #: courses/models/course.py:600
+#, python-brace-format
 msgid "{} individual followers"
 msgstr "{} individual followers"
 
@@ -605,6 +620,7 @@ msgid "One individual leader"
 msgstr "One individual leader"
 
 #: courses/models/course.py:606
+#, python-brace-format
 msgid "{} individual leaders"
 msgstr "{} individual leaders"
 
@@ -613,10 +629,12 @@ msgid "One person with no lead or follow preference"
 msgstr "One person with no lead or follow preference"
 
 #: courses/models/course.py:612
+#, python-brace-format
 msgid "{} people with no lead or follow preference"
 msgstr "{} people with no lead or follow preference"
 
 #: courses/models/course.py:634
+#, python-brace-format
 msgid ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
@@ -625,6 +643,7 @@ msgstr ""
 "needed."
 
 #: courses/models/course.py:637
+#, python-brace-format
 msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
@@ -633,6 +652,7 @@ msgstr ""
 "needed."
 
 #: courses/models/course.py:640
+#, python-brace-format
 msgid "At least {} couples are needed."
 msgstr "At least {} couples are needed."
 
@@ -641,6 +661,7 @@ msgid "At least one more person is needed"
 msgstr "At least one more person is needed"
 
 #: courses/models/course.py:647
+#, python-brace-format
 msgid "At least {} more people are needed."
 msgstr "At least {} more people are needed."
 
@@ -731,7 +752,7 @@ msgstr "no preference, assigned as leader"
 msgid "no preference, assigned as follower"
 msgstr "no preference, assigned as follower"
 
-#: courses/models/user_profile.py:91
+#: courses/models/user_profile.py:94
 msgid ""
 "Profile picture. Only available to teachers and board members. Will be "
 "center cropped and rescaled to 512x512px upon upload."
@@ -782,42 +803,52 @@ msgid "free for students"
 msgstr "free for students"
 
 #: courses/services/general.py:58 courses/services/general.py:69
+#, python-brace-format
 msgid "otherwise {:g} CHF"
 msgstr "otherwise {:g} CHF"
 
 #: courses/services/general.py:67
+#, python-brace-format
 msgid "{:g} CHF for students"
 msgstr "{:g} CHF for students"
 
 #: courses/services/matching/change_matching.py:32
+#, python-brace-format
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr "{} subscriptions ({} couples) corrected successfully"
 
 #: courses/services/matching/change_matching.py:65
+#, python-brace-format
 msgid "{} couples unmatched successfully"
 msgstr "{} couples unmatched successfully"
 
 #: courses/services/matching/change_matching.py:71
+#, python-brace-format
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr "{} subscriptions can not be unmatched because already CONFIRMED"
 
 #: courses/services/matching/change_matching.py:80
+#, python-brace-format
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr "{} subscriptions can not be unmatched because invalid matching state"
 
 #: courses/services/matching/change_matching.py:112
+#, python-brace-format
 msgid "{} couples broken up successfully"
 msgstr "{} couples broken up successfully"
 
 #: courses/services/matching/change_matching.py:118
+#, python-brace-format
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr "{} couples can not be broken up because already CONFIRMED"
 
 #: courses/services/matching/change_matching.py:126
+#, python-brace-format
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr "{} couples can not be broken up because invalid matching state"
 
 #: courses/services/matching/do_matching.py:169
+#, python-brace-format
 msgid "{} couples matched successfully"
 msgstr "{} couples matched successfully"
 
@@ -834,22 +865,27 @@ msgid "Unknown month"
 msgstr "Unknown month"
 
 #: courses/services/subscriptions.py:165
+#, python-brace-format
 msgid "{} of {} confirmed successfully"
 msgstr "{} of {} confirmed successfully"
 
 #: courses/services/subscriptions.py:260
+#, python-brace-format
 msgid "{} unrejected successfully"
 msgstr "{} unrejected successfully"
 
 #: courses/services/subscriptions.py:269
+#, python-brace-format
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr "{} subscriptions were not confirmed because no partner set"
 
 #: courses/services/teachers.py:46
+#, python-brace-format
 msgid "{} of {} welcomed successfully"
 msgstr "{} of {} welcomed successfully"
 
 #: courses/services/teachers.py:63
+#, python-brace-format
 msgid "{} of {} teachers reset successfully"
 msgstr "{} of {} teachers reset successfully"
 
@@ -1171,8 +1207,11 @@ msgid "Requirement not met"
 msgstr "Requirement not met"
 
 #: courses/templates/courses/plugins/replacements/index.html:111
-msgid "You can not claim this spot. You may check out our FAQ."
-msgstr "You can not claim this spot. You may check out our FAQ."
+msgid ""
+"You can not claim this spot. In case this is a mistake, you may send us an "
+"email to get this course unlocked."
+msgstr "You can not claim this spot. In case this is a mistake, you may send us an "
+"email to get this course unlocked."
 
 #: courses/templates/courses/plugins/replacements/index.html:117
 msgid "Spot claimed"
@@ -1654,7 +1693,8 @@ msgstr ""
 
 #: courses/templates/courses/snippets/subscribe_form.html:140
 #: courses/templates/courses/snippets/subscribe_form.html:172
-#: courses/templates/user/profile.html:114
+#: courses/templates/user/snippets/student_status.html:7
+#: courses/templates/user/snippets/student_status.html:33
 msgid "Student status"
 msgstr "Student status"
 
@@ -1813,22 +1853,22 @@ msgid "Some inputs are invalid"
 msgstr "Some inputs are invalid"
 
 #: courses/templates/courses/snippets/user_modal.html:34
-#: courses/templates/user/profile.html:124
+#: courses/templates/user/profile.html:116
 msgid "Teacher"
 msgstr "Teacher"
 
 #: courses/templates/courses/snippets/user_modal.html:38
-#: courses/templates/user/profile.html:127
+#: courses/templates/user/profile.html:119
 msgid "Teaching for Tanzquotient since"
 msgstr "Teaching for Tanzquotient since"
 
 #: courses/templates/courses/snippets/user_modal.html:41
-#: courses/templates/user/profile.html:130
+#: courses/templates/user/profile.html:122
 msgid "Courses taught for Tanzquotient"
 msgstr "Courses taught for Tanzquotient"
 
 #: courses/templates/courses/snippets/user_modal.html:44
-#: courses/templates/user/profile.html:137
+#: courses/templates/user/profile.html:129
 #: payment/templates/finance/offering/unpaid/index.html:54
 msgid "Board member"
 msgstr "Board member"
@@ -1965,31 +2005,23 @@ msgstr "Bank account"
 msgid "Bank"
 msgstr "Bank"
 
-#: courses/templates/user/profile.html:116
-msgid "Student"
-msgstr "Student"
-
-#: courses/templates/user/profile.html:119
-msgid "Legi"
-msgstr "Legi"
-
-#: courses/templates/user/profile.html:135
+#: courses/templates/user/profile.html:127
 msgid "Functions"
 msgstr "Functions"
 
-#: courses/templates/user/profile.html:147
+#: courses/templates/user/profile.html:139
 msgid "Preferences"
 msgstr "Preferences"
 
-#: courses/templates/user/profile.html:149
+#: courses/templates/user/profile.html:141
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: courses/templates/user/profile.html:157
+#: courses/templates/user/profile.html:149
 msgid "Get involved"
 msgstr "Get involved"
 
-#: courses/templates/user/profile.html:169
+#: courses/templates/user/profile.html:161
 msgid "About me"
 msgstr "About me"
 
@@ -2070,6 +2102,35 @@ msgstr "Download Participants"
 #: courses/templates/user/snippets/participants_download.html:10
 msgid "Contacts (.vcard)"
 msgstr "Contacts (vCard)"
+
+#: courses/templates/user/snippets/student_status.html:10
+#: templates/account/email.html:29
+msgid "Verified"
+msgstr "Verified"
+
+#: courses/templates/user/snippets/student_status.html:12
+msgid "Valid until"
+msgstr "Valid until"
+
+#: courses/templates/user/snippets/student_status.html:17
+msgid "Expired"
+msgstr "Expired"
+
+#: courses/templates/user/snippets/student_status.html:19
+msgid "Not verified"
+msgstr "Not verified"
+
+#: courses/templates/user/snippets/student_status.html:25
+msgid "Connect your account to Switch edu-ID"
+msgstr "Connect your account to Switch edu-ID"
+
+#: courses/templates/user/snippets/student_status.html:35
+msgid "Student"
+msgstr "Student"
+
+#: courses/templates/user/snippets/student_status.html:38
+msgid "Legi"
+msgstr "Legi"
 
 #: courses/templates/user/snippets/subscription.html:37
 msgid "More Info"
@@ -2717,6 +2778,7 @@ msgid "E-mail"
 msgstr "E-mail"
 
 #: payment/services/payment_reminders.py:35
+#, python-brace-format
 msgid "{} of {} reminded successfully"
 msgstr "{} of {} reminded successfully"
 
@@ -3389,10 +3451,6 @@ msgstr "E-mail Addresses"
 msgid "The following e-mail addresses are associated with your account:"
 msgstr "The following e-mail addresses are associated with your account:"
 
-#: templates/account/email.html:29
-msgid "Verified"
-msgstr "Verified"
-
 #: templates/account/email.html:31
 msgid "Unverified"
 msgstr "Unverified"
@@ -3434,15 +3492,17 @@ msgid "Do you really want to remove the selected e-mail address?"
 msgstr "Do you really want to remove the selected e-mail address?"
 
 #: templates/account/login.html:6 templates/account/login.html:12
-#: templates/account/login.html:29
+#: templates/account/login.html:29 templates/account/new_login.html:6
+#: templates/account/new_login.html:8
 msgid "Sign In"
 msgstr "Sign In"
 
-#: templates/account/login.html:18 templates/account/password_reset.html:26
+#: templates/account/login.html:18 templates/account/new_login.html:38
+#: templates/account/password_reset.html:26
 msgid "Email address"
 msgstr "Email address"
 
-#: templates/account/login.html:22
+#: templates/account/login.html:22 templates/account/new_login.html:45
 msgid "Password"
 msgstr "Password"
 
@@ -3454,9 +3514,21 @@ msgstr "or"
 msgid "create a new account"
 msgstr "create a new account"
 
-#: templates/account/login.html:37
+#: templates/account/login.html:37 templates/account/new_login.html:51
 msgid "Forgot Password?"
 msgstr "Forgot Password?"
+
+#: templates/account/new_login.html:17
+msgid "Sign in with Switch edu-ID"
+msgstr "Sign in with Switch edu-ID"
+
+#: templates/account/new_login.html:25 templates/account/new_login.html:56
+msgid "Sign in with password"
+msgstr "Sign in with password"
+
+#: templates/account/new_login.html:65
+msgid "Create a new account (manually)"
+msgstr "Create a new account (manually)"
 
 #: templates/account/password_reset.html:6
 #: templates/account/password_reset.html:11
@@ -3682,9 +3754,16 @@ msgstr "Side content"
 msgid "Title"
 msgstr "Title"
 
+#: tq_website/views.py:76
+msgid "Switch edu-ID is already linked to your account."
+msgstr "Switch edu-ID is already linked to your account."
+
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "The IBAN is invalid."
+
+#~ msgid "You can not claim this spot. You may check out our FAQ."
+#~ msgstr "You can not claim this spot. You may check out our FAQ."
 
 #~ msgid "Raum"
 #~ msgstr "Room"
