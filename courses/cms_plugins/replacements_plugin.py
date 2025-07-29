@@ -51,6 +51,7 @@ class ReplacementsPlugin(CMSPluginBase):
                 "course__room",
                 "course__subscriptions",
                 "attendances__user",
+                "room",
             )
             .distinct()
         )

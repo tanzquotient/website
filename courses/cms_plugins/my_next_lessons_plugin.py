@@ -62,6 +62,7 @@ class MyNextLessonsPlugin(CMSPluginBase):
                 "attendances",
                 "course__type__translations",
                 "course__subscriptions",
+                "room",
             )
             .order_by("start")
             .distinct()
