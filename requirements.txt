@@ -2,7 +2,7 @@
 Django==5.2.4
 
 # Django Extensions
-django-debug-toolbar==5.2.0     # For developement. Gives additional insights into e.g. database queries
+django-debug-toolbar==6.0.0     # For developement. Gives additional insights into e.g. database queries
 django-parler==2.3              # For simple translatable models
 django-post-office==3.10.0       # Send and manage emails asynchronously, database based email templates
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
