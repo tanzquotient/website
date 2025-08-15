@@ -4,6 +4,7 @@ from django.db import transaction
 
 from courses.models import UserProfile
 from email_system.models import GeneratedIndividualEmail, GroupEmail
+from email_system.services.send_email import HEADER_REPLY_TO
 from groups.definitions import GroupDefinitions
 from utils import TranslationUtils
 from . import send_all_emails
@@ -67,14 +68,14 @@ def send_group_email(group_email: GroupEmail) -> None:
 
             headers = {}
             if group_email.reply_to is not None:
-                headers["Reply-to"] = group_email.reply_to.email_address
+                headers[HEADER_REPLY_TO] = group_email.reply_to.email_address
 
             if unsubscribe_context is not None:
                 unsubscribe_code, _ = UnsubscribeCode.objects.get_or_create(user=user)
                 unsubscribe_url = unsubscribe_code.get_unsubscribe_url(
                     unsubscribe_context
                 )
-                headers["List-unsubscribe"] = "<{}>".format(unsubscribe_url)
+                headers["List-Unsubscribe"] = "<{}>".format(unsubscribe_url)
                 html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(
                     unsubscribe_url
                 )
