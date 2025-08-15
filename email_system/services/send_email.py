@@ -9,6 +9,7 @@ from tq_website import settings
 
 log = logging.getLogger("tq")
 
+HEADER_REPLY_TO = "Reply-To"
 
 def send_email(
     to: Union[str, Iterable[str]],
@@ -22,16 +23,22 @@ def send_email(
     html_message: Optional[str] = None,
     attachments: Optional[dict] = None,
 ) -> Optional[Email]:
+    # https://stackoverflow.com/questions/26320899/why-is-the-empty-dictionary-a-dangerous-default-value-in-python
+    if headers is None:
+        headers =  dict()
+
+    if reply_to:
+        headers[HEADER_REPLY_TO] = reply_to
+    elif HEADER_REPLY_TO not in headers:
+         headers[HEADER_REPLY_TO] = settings.EMAIL_ADDRESS_CONTACT
+
     email = dict(
         recipients=to if isinstance(to, list) else [to],
         template=template,
         context=context,
         sender=sender or settings.DEFAULT_FROM_EMAIL,
         subject=subject,
-        headers=headers
-        or {
-            "Reply-to": reply_to or settings.EMAIL_ADDRESS_CONTACT,
-        },
+        headers=headers,
         message=message,
         html_message=html_message,
         attachments=attachments,
