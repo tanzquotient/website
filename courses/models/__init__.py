@@ -27,6 +27,7 @@ from .user_profile import UserProfile
 from .lesson_occurrence_teach import LessonOccurrenceTeach
 from .attendance import Attendance
 from .skill import Skill
+from .skill_dance_level import SkillDanceLevel
 from .switch_data import SwitchData
 from .switch_data_affiliation import SwitchDataAffiliation
 from .switch_data_affiliation_email import SwitchDataAffiliationEmail

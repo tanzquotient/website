@@ -15,6 +15,7 @@ class Skill(Model):
     unlocked_course_types = ManyToManyField(
         "CourseType",
         related_name="skills",
+        blank=True,
         help_text=_(
             "Course types which this user has unlocked. "
             "For example, participating Ballroom 5 unlocks Ballroom 1-5. "

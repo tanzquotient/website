@@ -7,7 +7,7 @@ from courses.models import (
     Skill,
     SubscribeState,
 )
-from courses.utils.skill import skill_utils
+from courses.utils.skill import skill_utils, recompute_dance_levels_for_user
 
 
 @receiver(post_save, sender=User)
@@ -21,7 +21,10 @@ def update_skill_on_subscribe(instance: Subscribe, **kwargs) -> None:
     if instance.state not in SubscribeState.ACCEPTED_STATES:
         return
 
-    skill, _ = Skill.objects.get_or_create(user=instance.user)
+    user = instance.user
+    recompute_dance_levels_for_user(user)
+
+    skill, _ = Skill.objects.get_or_create(user=user)
     unlocked_skills = skill.unlocked_course_types.all()
     for course_type in skill_utils.transitive_predecessors(instance.course.type):
         if course_type not in unlocked_skills:

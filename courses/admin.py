@@ -340,6 +340,11 @@ class CourseTypeAdmin(TranslatableAdmin):
         )
 
 
+class SkillDanceLevelInline(admin.TabularInline):
+    model = SkillDanceLevel
+    extra = 0
+
+
 @admin.register(Skill)
 class SkillAdmin(ModelAdmin):
     model = Skill
@@ -351,6 +356,9 @@ class SkillAdmin(ModelAdmin):
     ]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     filter_horizontal = ["unlocked_course_types"]
+    readonly_fields = ["user"]
+    fields = ["user", "unlocked_course_types"]
+    inlines = [SkillDanceLevelInline]
 
     @staticmethod
     @admin.display(description="Unlocked course types")
