@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import OneToOneField, CASCADE, ManyToManyField, Model
-from django.utils.translation import gettext_lazy as _
+from django.db.models import OneToOneField, CASCADE, Model
 
 
 class Skill(Model):
@@ -12,20 +11,9 @@ class Skill(Model):
     """
 
     user = OneToOneField(User, related_name="skill", on_delete=CASCADE)
-    unlocked_course_types = ManyToManyField(
-        "CourseType",
-        related_name="skills",
-        blank=True,
-        help_text=_(
-            "Course types which this user has unlocked. "
-            "For example, participating Ballroom 5 unlocks Ballroom 1-5. "
-            "This information can be used for checking whether prerequisites are met, "
-            "i.e for participating in an advanced course, or substituting for a lesson."
-        ),
-    )
 
     def __str__(self) -> str:
-        return (
-            f"{self.user.get_full_name()} has "
-            f"{self.unlocked_course_types.count()} unlocked course types"
-        )
+        return f"{self.user.get_full_name()} knows {self.dance_levels.count()} dances"
+
+    class Meta:
+        ordering = ["user__first_name", "user__last_name"]

@@ -352,18 +352,23 @@ class SkillAdmin(ModelAdmin):
         "user__email",
         "user__first_name",
         "user__last_name",
-        "unlocked_course_types_count",
+        "num_known_dances",
     ]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
-    filter_horizontal = ["unlocked_course_types"]
     readonly_fields = ["user"]
-    fields = ["user", "unlocked_course_types"]
     inlines = [SkillDanceLevelInline]
 
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Skill]:
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("dance_levels__style", "user")
+        )
+
     @staticmethod
-    @admin.display(description="Unlocked course types")
-    def unlocked_course_types_count(skill: Skill) -> int:
-        return skill.unlocked_course_types.count()
+    @admin.display(description="Number of known dances")
+    def num_known_dances(skill: Skill) -> int:
+        return skill.dance_levels.count()
 
 
 @admin.register(Attendance)
