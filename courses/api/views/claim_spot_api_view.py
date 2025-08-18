@@ -16,6 +16,7 @@ from ...models import (
     Subscribe,
 )
 from ...utils import lesson_lead_follow_balance, claiming_spot_window_open
+from ...utils.skill import has_required_level
 
 
 class ClaimSpotApiView(APIView):
@@ -57,7 +58,7 @@ class ClaimSpotApiView(APIView):
             raise ValidationError(detail="You are a participant of this course.")
 
         # Check if the user is allowed to claim the spot
-        if course.type not in user.skill.unlocked_course_types.all():
+        if not has_required_level(user, course.type):
             raise ValidationError(detail="Requirements not met.")
 
         # Check if the balance improves if a spot is claimed with this role

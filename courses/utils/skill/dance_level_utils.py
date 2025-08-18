@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 
 from . import StyleLevel
-from ...models import SubscribeState, Style, SkillDanceLevel
+from ...models import SubscribeState, Style, SkillDanceLevel, CourseType
 
 
 def recompute_dance_levels_for_user(user: User) -> None:
@@ -28,6 +28,40 @@ def calculate_dance_levels_for_user(user: User) -> list[StyleLevel]:
         + get_dance_levels_from_participating(user)
         + get_dance_levels_from_teaching(user)
     )
+
+
+def has_required_level(user: User, course_type: CourseType) -> bool:
+    dance_levels = get_saved_dance_levels(user)
+    course_level = course_type.level or 1
+    for style in course_type.styles.all():
+        if not _has_level(style, course_level, dance_levels):
+            return False
+
+    return True
+
+
+def _has_level(style: Style, level: int, dance_levels: list[StyleLevel]) -> bool:
+    level_for_style = _get_level_for_style(style, dance_levels)
+    if level_for_style >= level:
+        return True  # Level for style is high enough
+
+    # Maybe the user is still eligible, based on the style's children.
+    # E.g., if someone has Standard level 5, and the course requires Waltz level 4,
+    # they are eligible.
+
+    child_styles = _style_children(style)
+    if not child_styles:
+        return False  # level not sufficient, and no children => cannot be eligible
+
+    # Eligible if level for each child style is sufficient.
+    return all(_has_level(child, level, dance_levels) for child in child_styles)
+
+
+def _get_level_for_style(style: Style, dance_levels: list[StyleLevel]) -> int:
+    for dance_level in dance_levels:
+        if dance_level.style == style:
+            return dance_level.level
+    return 0
 
 
 def get_dance_levels_from_teaching(user: User) -> list[StyleLevel]:
@@ -85,7 +119,12 @@ def combine_dance_levels(dance_levels: Iterable[StyleLevel]) -> list[StyleLevel]
 @cache
 def _style_descendants(style: Style) -> list[Style]:
     descendants = [style]
-    for child in style.children.all():
+    for child in _style_children(style):
         for descendant in _style_descendants(child):
             descendants.append(descendant)
     return descendants
+
+
+@cache
+def _style_children(style: Style) -> list[Style]:
+    return list(style.children.all())

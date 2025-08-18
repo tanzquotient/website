@@ -16,6 +16,7 @@ from courses.models import (
     AttendanceState,
 )
 from courses.utils import lesson_lead_follow_balance, claiming_spot_window_open
+from courses.utils.skill import has_required_level
 
 
 @plugin_pool.register_plugin
@@ -33,7 +34,7 @@ class ReplacementsPlugin(CMSPluginBase):
         context["lessons"] = lessons
         context["balances"] = balances
         if user.is_authenticated:
-            context["allowed_course_types"] = self.allowed_course_types(user)
+            context["allowed_course_types"] = self.allowed_course_types(user, lessons)
             context["subscribed_courses"] = self.subscribed_courses(user)
             context["claimed_spots"] = self.claimed_spots(user, lessons)
             context["claim_spots_window_open"] = self.claim_spots_window_open(lessons)
@@ -68,8 +69,11 @@ class ReplacementsPlugin(CMSPluginBase):
         return balances, filtered_lessons
 
     @staticmethod
-    def allowed_course_types(user: User) -> set[CourseType]:
-        return set(user.skill.unlocked_course_types.all())
+    def allowed_course_types(
+        user: User, lessons: Iterable[LessonOccurrence]
+    ) -> set[CourseType]:
+        lesson_course_types = {l.course.type for l in lessons}
+        return {t for t in lesson_course_types if has_required_level(user, t)}
 
     @staticmethod
     def subscribed_courses(user: User) -> list[int]:
