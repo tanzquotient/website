@@ -365,6 +365,12 @@ class SkillAdmin(ModelAdmin):
             .prefetch_related("dance_levels__style", "user")
         )
 
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return False
+
+    def has_delete_permission(self, request: HttpRequest, obj: Skill = ...) -> bool:
+        return False
+
     @staticmethod
     @admin.display(description="Number of known dances")
     def num_known_dances(skill: Skill) -> int:
