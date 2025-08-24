@@ -20,6 +20,7 @@ def export_surveys(
     offering: Optional[Offering] = None,
     course: Optional[Course] = None,
     export_format: str = None,
+    anonymize: bool = True,
 ) -> HttpResponse:
     export_data = {}
     export_format = export_format or "excel"
@@ -60,11 +61,19 @@ def export_surveys(
             answers = instance.answers.order_by("-id")
             row = [
                 (
-                    f"{instance.user.first_name} {instance.user.last_name}"
-                    if instance.user
-                    else ""
+                    "anonymized"
+                    if anonymize
+                    else (
+                        f"{instance.user.first_name} {instance.user.last_name}"
+                        if instance.user
+                        else ""
+                    )
                 ),
-                f"{instance.user.email}" if instance.user else "",
+                (
+                    "anonymized"
+                    if anonymize
+                    else f"{instance.user.email}" if instance.user else ""
+                ),
                 course_name,
             ]
             for question in questions:

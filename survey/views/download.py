@@ -24,4 +24,12 @@ def download(request: HttpRequest, survey_id: int) -> HttpResponse:
     if "format" in request.GET and request.GET["format"]:
         export_format = request.GET["format"]
 
-    return export_surveys([survey], offering, course, export_format)
+    return export_surveys(
+        [survey],
+        offering,
+        course,
+        export_format,
+        anonymize=not request.user.has_perms(
+            ["survey.view_survey_instance", "survey.view_answer"]
+        ),
+    )
