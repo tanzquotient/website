@@ -8,15 +8,15 @@ django-post-office==3.10.1       # Send and manage emails asynchronously, databa
 django-reversion==5.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==7.6.1         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.11.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.11.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
 django-cms==5.0.2               # Open source content management system based on the Django
-djangocms-text==0.9.2           # Text plugin for django CMS
+djangocms-text==0.9.3           # Text plugin for django CMS
 djangocms-versioning==2.4.0     # Core package of django CMS, is used to e.g. hava page histories
-djangocms-alias==2.0.4          # Core package of django CMS used for aliases
+djangocms-alias==2.0.5          # Core package of django CMS used for aliases
 
 # Rest framework
 djangorestframework==3.16.1     # Toolkit for building Web APIs
@@ -49,7 +49,7 @@ minio==7.2.16                    # Perform bucket and object operations, used fo
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.35.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.35.2              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==6.3.0                  # For generating charts and graphs
@@ -57,4 +57,4 @@ pytz==2025.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.4            # Superuser can impersonate other users
 python-dotenv==1.1.1            # Used to load environment variables from .env file
-requests==2.32.4                # Used for OIDC requests
+requests==2.32.5                # Used for OIDC requests
