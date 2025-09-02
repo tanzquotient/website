@@ -6,7 +6,12 @@ from django.contrib.auth.models import User
 from django.db import transaction
 
 from . import StyleLevel
-from ...models import SubscribeState, Style, SkillDanceLevel, CourseType
+from ...models import (
+    SubscribeState,
+    Style,
+    SkillDanceLevel,
+    LessonOccurrence,
+)
 
 
 def recompute_dance_levels_for_user(user: User) -> None:
@@ -30,17 +35,46 @@ def calculate_dance_levels_for_user(user: User) -> list[StyleLevel]:
     )
 
 
-def has_required_level(user: User, course_type: CourseType) -> bool:
+def eligible_lessons(
+    user: User, lessons: Iterable[LessonOccurrence]
+) -> list[LessonOccurrence]:
     dance_levels = get_saved_dance_levels(user)
-    course_level = course_type.level or 1
-    for style in course_type.styles.all():
-        if not _has_level(style, course_level, dance_levels):
+    return [l for l in lessons if _is_eligible_for_lesson(dance_levels, l)]
+
+
+def is_eligible_for_lesson(user: User, lesson: LessonOccurrence) -> bool:
+    dance_levels = get_saved_dance_levels(user)
+    return _is_eligible_for_lesson(dance_levels, lesson)
+
+
+def _is_eligible_for_lesson(
+    user_dance_levels: list[StyleLevel], lesson: LessonOccurrence
+) -> bool:
+    course_type = lesson.course.type
+    required_level = course_type.level or 1
+    if lesson.id == lesson.course.first_lesson.id:
+        required_level -= 1
+
+    styles = course_type.styles.all()
+    return _has_required_level(user_dance_levels, styles, required_level)
+
+
+def _has_required_level(
+    user_dance_levels: list[StyleLevel],
+    styles: Iterable[Style],
+    course_level: int,
+) -> bool:
+    for style in styles:
+        if not _has_level(style, course_level, user_dance_levels):
             return False
 
     return True
 
 
 def _has_level(style: Style, level: int, dance_levels: list[StyleLevel]) -> bool:
+    if level == 0:
+        return True
+
     level_for_style = _get_level_for_style(style, dance_levels)
     if level_for_style >= level:
         return True  # Level for style is high enough

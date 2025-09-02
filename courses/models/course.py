@@ -865,9 +865,14 @@ class Course(TranslatableModel):
         else:
             return None
 
-    def get_first_lesson_start(self) -> Optional[datetime]:
+    @cached_property
+    def first_lesson(self) -> Optional[LessonOccurrence]:
         occurrences = list(self.lesson_occurrences.all())
-        return occurrences[0].start if occurrences else None
+        return occurrences[0] if occurrences else None
+
+    def get_first_lesson_start(self) -> Optional[datetime]:
+        first_lesson = self.first_lesson
+        return first_lesson.start if first_lesson else None
 
     def get_first_lesson_date(self) -> date:
         start = self.get_first_lesson_start()

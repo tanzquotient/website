@@ -4,5 +4,6 @@ from .dance_level_utils import (
     get_saved_dance_levels,
     get_dance_levels_from_participating,
     recompute_dance_levels_for_user,
-    has_required_level,
+    eligible_lessons,
+    is_eligible_for_lesson,
 )

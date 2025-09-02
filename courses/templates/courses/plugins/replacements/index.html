@@ -53,7 +53,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
         {% for lesson in lessons %}
             {% with balances|lookup:lesson.id as balance %}
-                <div class="{% if balance < 0 %} leader-spots {% else %} follower-spots {% endif %} {% if lesson.course_id not in subscribed_courses and lesson.course.type in allowed_course_types %} eligible {% else %} not-eligible {% endif %}">
+                <div class="{% if balance < 0 %} leader-spots {% else %} follower-spots {% endif %} {% if lesson.course_id not in subscribed_courses and lesson.id in allowed_lessons_ids %} eligible {% else %} not-eligible {% endif %}">
                     <div>
                         {% if balance > 0 %}
                             <!-- More leaders than followers -->
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="small">{% trans "You are signed up for this curse and can therefore not claim this spot." %}</div>
                             </div>
-                        {% elif lesson.course.type not in allowed_course_types %}
+                        {% elif lesson.id not in allowed_lessons_ids %}
                             <div class="alert alert-secondary py-1 px-2">
                                 <div class="fw-bold">
                                     <i class="bi bi-x-circle-fill"></i>
