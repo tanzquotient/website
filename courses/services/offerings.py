@@ -136,7 +136,7 @@ def get_sections(offering, course_filter=None):
         log.error(message)
         raise Http404(message)
 
-    return offering_sections
+    return [s for s in offering_sections if s.get("courses")]
 
 
 def get_current_active_offering():
