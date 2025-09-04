@@ -392,7 +392,7 @@ class AttendanceAdmin(ModelAdmin):
         "user__first_name",
         "user__last_name",
         "user__email",
-        "lesson_occurrence__course",
+        "lesson_occurrence__course__name",
     ]
     list_filter = ["state", "role"]
 
