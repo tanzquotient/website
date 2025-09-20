@@ -157,10 +157,10 @@ class Course(TranslatableModel):
 
     # Pricing
     price_with_legi = models.DecimalField(
-        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(35)
+        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(40)
     )
     price_without_legi = models.DecimalField(
-        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(70)
+        blank=True, null=True, decimal_places=2, max_digits=6, default=Decimal(80)
     )
     price_special = models.CharField(max_length=255, blank=True, null=True)
     price_special.help_text = "Set this only if you want a different price schema."
