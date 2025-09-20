@@ -108,6 +108,9 @@ class Subscribe(Model):
         )
 
     def is_active(self) -> bool:
+        return self.state not in SubscribeState.REJECTED_STATES
+
+    def is_admitted(self) -> bool:
         return self.state not in SubscribeState.REJECTED_STATES + [
             SubscribeState.WAITING_LIST
         ]

@@ -19,7 +19,7 @@
     {# Regular case: subscription in general possible #}
 
     {# if the user is subscribed, inform them #}
-    {% if course.id in user.profile.get_active_subscribed_course_ids %}
+    {% if course.id in user.profile.get_admitted_subscribed_course_ids %}
         <span class="badge rounded-pill bg-info">{% trans "Subscription received" %}</span>
         {% include "courses/snippets/participants_info.html" %}
 

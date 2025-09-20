@@ -205,8 +205,8 @@ class UserProfile(Model):
     def get_subscribed_courses(self) -> Iterable[Course]:
         return [s.course for s in self.subscriptions]
 
-    def get_active_subscribed_course_ids(self) -> list[int]:
-        return [s.course_id for s in self.subscriptions if s.is_active()]
+    def get_admitted_subscribed_course_ids(self) -> list[int]:
+        return [s.course_id for s in self.subscriptions if s.is_admitted()]
 
     def get_waiting_list_course_ids(self) -> list[int]:
         return [

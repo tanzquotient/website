@@ -13,11 +13,7 @@ def course_lead_follow_balance(course: Course) -> int:
     """
     balance = #leaders - #followers
     """
-    subscriptions = [
-        s
-        for s in course.subscriptions.all()
-        if s.state in SubscribeState.ACCEPTED_STATES
-    ]
+    subscriptions = [s for s in course.subscriptions.accepted()]
     single_leaders = [
         s for s in subscriptions if s.is_single_with_preference(LeadFollow.LEAD)
     ]

@@ -19,7 +19,7 @@
 
     {# if the staff user would not be able to subscribe #}
     {# without being staff, inform them #}
-    {% if user.is_staff and course.id not in user.profile.get_active_subscribed_course_ids and course.id not in user.profile.get_waiting_list_course_ids %}
+    {% if user.is_staff and course.id not in user.profile.get_admitted_subscribed_course_ids and course.id not in user.profile.get_waiting_list_course_ids %}
         {% if not course.is_subscription_allowed %}
             <div class="alert alert-info">
                 {% trans "Registration is not (yet) allowed for regular users. But since you have admin rights you may register." %}
@@ -32,7 +32,7 @@
     {% endif %}
 
 {# if the user is subscribed, inform them #}
-    {% if course.id in user.profile.get_active_subscribed_course_ids %}
+    {% if course.id in user.profile.get_admitted_subscribed_course_ids %}
         <div class="mt-2 alert alert-info" role="alert">
             <h5 class="alert-heading">{% trans "Subscription received" %}</h5>
             <hr>

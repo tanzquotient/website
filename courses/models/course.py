@@ -206,7 +206,7 @@ class Course(TranslatableModel):
         return {
             subscription.user_id
             for subscription in self.subscriptions.all()
-            if subscription.is_active()
+            if subscription.is_admitted()
         }
 
     def waiting_list_user_ids(self) -> set[int]:
