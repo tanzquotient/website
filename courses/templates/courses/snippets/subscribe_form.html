@@ -42,7 +42,7 @@
             </label>
 
             <input type="radio"
-                   class="couple_lead_selector btn-check"
+                   class="couple_lead_selector btn-check d-block btn-check{% if form.single_or_couple.value == 'c' %} active{% endif %}"
                    name="single_or_couple" value="c" id="couple"
                    data-bs-toggle="pill" data-bs-target="#couple-tab" role="tab"
                     {% if form.single_or_couple.value == 'c' %} checked {% endif %} />
