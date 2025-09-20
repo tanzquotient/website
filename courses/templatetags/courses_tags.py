@@ -440,3 +440,21 @@ def rejection_reason_info(reason: RejectionReason) -> str:
     if reason == RejectionReason.COURSE_CANCELLED:
         return _("This course could unfortunately not take place.")
     return _("Rejected subscription info")
+
+
+@register.inclusion_tag(
+    filename="courses/snippets/lead_follow_selector.html", takes_context=True
+)
+def lead_follow_selector(
+    context: dict, show_waiting_list: bool, course: Course
+) -> dict:
+    context.update(dict(
+        leaders_waiting_list=show_waiting_list
+        and not course.has_free_places_for_leaders,
+        no_preference_waiting_list=show_waiting_list
+        and not course.has_free_places_for_leaders
+        and not course.has_free_places_for_followers,
+        followers_waiting_list=show_waiting_list
+        and not course.has_free_places_for_followers,
+    ))
+    return context

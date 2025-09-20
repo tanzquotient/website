@@ -1,0 +1,62 @@
+{% load i18n %}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-8">
+        <div class="nav btn-group d-flex flex-nowrap" role="group"
+                aria-describedby="lead_follow_help">
+            <input type="radio" class="couple_lead_selector btn-check"
+                    name="lead_follow_{{ id_suffix }}" value="l" id="lead_{{ id_suffix }}"
+                    {% if form.lead_follow.value == 'l' %}
+                    checked {% endif %}/>
+            <label class="btn btn-outline-{{ leaders_waiting_list|yesno:"warning,success" }}"
+                    for="lead_{{ id_suffix }}">
+                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
+                    <span>{% trans "Lead" %}</span>
+                    {% if leaders_waiting_list %}
+                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
+                    {% endif %}
+                </span>
+            </label>
+
+            <input type="radio" class="couple_lead_selector btn-check"
+                    name="lead_follow_{{ id_suffix }}" value="n" id="no_preference_{{ id_suffix }}"
+                    {% if form.lead_follow.value == 'n' %}
+                    checked {% endif %}/>
+            <label
+                    class="btn btn-outline-{{ no_preference_waiting_list|yesno:"warning,success" }}" for="no_preference_{{ id_suffix }}">
+                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
+                    <span>{% trans "No preference" %}</span>
+                    {% if no_preference_waiting_list %}
+                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
+                    {% endif %}
+                </span>
+            </label>
+
+            <input type="radio" class="couple_lead_selector btn-check"
+                    name="lead_follow_{{ id_suffix }}" value="f" id="follow_{{ id_suffix }}"
+                    {% if form.lead_follow.value == 'f' %}
+                    checked {% endif %}/>
+            <label class="btn btn-outline-{{ followers_waiting_list|yesno:"warning,success" }}"
+                    for="follow_{{ id_suffix }}">
+                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
+                    <span>{% trans "Follow" %}</span>
+                    {% if followers_waiting_list %}
+                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
+                    {% endif %}
+                </span>
+            </label>
+        </div>
+        {% if form.single_or_couple.value == id_suffix %}
+            {% for error in form.lead_follow.errors %}
+                <div class="invalid-feedback d-inline">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div id="lead_follow_help" class="form-text">
+    <div>
+        {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
+    </div>
+</div>

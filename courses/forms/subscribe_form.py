@@ -37,16 +37,14 @@ class SubscribeForm(forms.Form):
 
         # Special validation for couple courses
         if self.course.type.couple_course:
-            # Special validation for single subscription to couple course
-            if single_or_couple == SingleCouple.SINGLE:
-                # Users needs to explicitly specify preference, do not assume "no preference" if "lead_follow" is empty
-                if not cleaned_data.get("lead_follow"):
-                    error = ValidationError(
-                        message=_("This field is required."),
-                        code="lead follow preference empty",
-                    )
-                    self.add_error("lead_follow", error)
-                    return cleaned_data
+            # Users needs to explicitly specify preference, do not assume "no preference" if "lead_follow" is empty
+            if not cleaned_data.get(f"lead_follow"):
+                error = ValidationError(
+                    message=_("This field is required."),
+                    code="lead follow preference empty",
+                )
+                self.add_error(f"lead_follow", error)
+                return cleaned_data
 
             # Special validation for couple subscription to couple course
             if single_or_couple == SingleCouple.COUPLE:

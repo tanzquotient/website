@@ -1,24 +1,27 @@
 {% load i18n %}
 {% load static %}
+{% load courses_tags %}
+{% load sekizai_tags %}
 
-<style>
-
-    .couple_lead_selector:checked + label .waiting-list-badge {
-        background-color: var(--bs-dark);
-        color: var(--bs-warning);
-    }
-
-    .couple_lead_selector:not(:checked) + label .waiting-list-badge {
-        background-color: var(--bs-warning);
-        color: var(--bs-dark);
-    }
-
-</style>
-
-<form action="{% url 'courses:subscribe' course.id %}" method="post">
+<form action="{% url 'courses:subscribe' course.id %}" method="post" id="subscribeForm">
     {% csrf_token %}
 
     {% if course.type.couple_course %}
+        {% addtoblock "css" %}
+            <style>
+
+                .couple_lead_selector:checked + label .waiting-list-badge {
+                    background-color: var(--bs-dark);
+                    color: var(--bs-warning);
+                }
+
+                .couple_lead_selector:not(:checked) + label .waiting-list-badge {
+                    background-color: var(--bs-warning);
+                    color: var(--bs-dark);
+                }
+
+            </style>
+        {% endaddtoblock %}
         <div class="nav btn-group d-flex flex-nowrap" id="pills-tab" role="group">
 
             <input type="radio"
@@ -67,64 +70,12 @@
                 <div>
                     <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12 col-xl-8">
-                        <div class="nav btn-group d-flex flex-nowrap" role="group"
-                             aria-describedby="lead_follow_help">
-                            <input type="radio" class="couple_lead_selector btn-check"
-                                   name="lead_follow" value="l" id="lead"
-                                    {% if form.lead_follow.value == 'l' %}
-                                   checked {% endif %}/>
-                            <label class="btn btn-outline-{{ course.has_free_places_for_leaders|yesno:"success,warning" }}"
-                                   for="lead">
-                                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
-                                    <span>{% trans "Lead" %}</span>
-                                    {% if not course.has_free_places_for_leaders %}
-                                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
-                                    {% endif %}
-                                </span>
-                            </label>
-
-                            <input type="radio" class="couple_lead_selector btn-check"
-                                   name="lead_follow" value="n" id="no_preference"
-                                    {% if form.lead_follow.value == 'n' %}
-                                   checked {% endif %}/>
-                            <label
-                                    class="btn btn-outline-{% if not course.has_free_places_for_leaders and not course.has_free_places_for_followers %}warning
-                                    {% else %}success{% endif %}" for="no_preference">
-                                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
-                                    <span>{% trans "No preference" %}</span>
-                                    {% if not course.has_free_places_for_leaders and not course.has_free_places_for_followers %}
-                                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
-                                    {% endif %}
-                                </span>
-                            </label>
-
-                            <input type="radio" class="couple_lead_selector btn-check"
-                                   name="lead_follow" value="f" id="follow"
-                                    {% if form.lead_follow.value == 'f' %}
-                                   checked {% endif %}/>
-                            <label class="btn btn-outline-{{ course.has_free_places_for_followers|yesno:"success,warning" }}"
-                                   for="follow">
-                                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
-                                    <span>{% trans "Follow" %}</span>
-                                    {% if not course.has_free_places_for_followers %}
-                                        <span class="badge my-0 waiting-list-badge d-block">{% trans "Waiting list" %}</span>
-                                    {% endif %}
-                                </span>
-                            </label>
-                        </div>
-                        {% for error in form.lead_follow.errors %}
-                            <div class="invalid-feedback d-inline">
-                                {{ error }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+                
+                {% with id_suffix='s' %}
+                    {% lead_follow_selector course=course show_waiting_list=True %}
+                {% endwith %}
+                
                 <div id="lead_follow_help" class="form-text">
-                    <div>
-                        {% trans "The leader is responsible for guiding the couple, the guided partner is referred to as the follower. In an old-fashioned setup gentlemen are leading and ladies are following." %}
-                    </div>
                     <div class="alert alert-info my-2 p-2 d-flex align-items-center"
                          role="alert">
                         <div class="me-2">
@@ -144,6 +95,12 @@
             <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-3"
                  id="couple-tab" role="tabpanel" aria-labelledby="couple">
                 <div>
+                    <label class="form-label"><strong>{% trans "Within your couple, will you lead or follow?" %}</strong></label>
+                </div>
+                {% with id_suffix='c' %}
+                    {% lead_follow_selector course=course show_waiting_list=False %}
+                {% endwith %}
+                <div class="mt-3">
                     <label for="partner_email"
                            class="form-label"><strong>{% trans "Email address of your partner" %}</strong></label>
                     <input type="email"
@@ -180,6 +137,18 @@
             </div>
 
         </div>
+        <input type="hidden" id="lead_follow" name="lead_follow">
+        {% addtoblock "js" %}
+            <script>
+                document.getElementById("subscribeForm").addEventListener("submit", function (e) {
+                    const lead_follow = document.getElementById("lead_follow");
+                    const single_or_couple = document.querySelector('input[name="single_or_couple"]:checked');
+                    lead_follow.value = single_or_couple.value === 'c' ?
+                        document.querySelector('input[name="lead_follow_c"]:checked').value :
+                        document.querySelector('input[name="lead_follow_s"]:checked').value;
+                });
+            </script>
+        {% endaddtoblock %}
     {% else %}
         <input type="hidden" id="single_or_couple" name="single_or_couple" value="s">
     {% endif %}
@@ -217,8 +186,6 @@
             <label><strong>{% trans "General terms and conditions" %}</strong></label>
         </div>
         <a href="
-
-
                 {% if LANGUAGE_CODE == "de" %}{% static "elements/AGB_DE.pdf" %}{% else %}{% static "elements/GTC_EN.pdf" %}{% endif %}">
             <i class="bi bi-arrow-right-circle-fill"></i>
             {% trans "View the general terms and conditions" %}
