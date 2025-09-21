@@ -69,7 +69,18 @@ def course_sort_key(course: Course) -> tuple:
 
 def get_sections(offering, course_filter=None):
     offering_sections = []
-    course_set = offering.course_set
+    course_set = offering.course_set.prefetch_related(
+        "regular_lessons",
+        "regular_lessons__exceptions",
+        "irregular_lessons",
+        "lesson_occurrences",
+        "lesson_occurrences__room",
+        "lesson_occurrences__room__cancellations",
+        "type__translations",
+        "room",
+        "room__cancellations",
+        "subscriptions",
+    )
 
     if not course_filter:
         course_filter = lambda c: True
