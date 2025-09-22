@@ -347,21 +347,23 @@ class Course(TranslatableModel):
     def active_subscriptions_count(self) -> int:
         return self.subscriptions.active().count()
 
-    def matched_subscriptions_count(self) -> int:
+    def matched_subscriptions_count(self, admitted_only: bool = False) -> int:
         return len(
             {
                 subscription
                 for subscription in self.subscriptions.all()
                 if subscription.is_matched()
+                and (not admitted_only or subscription.is_admitted())
             }
         )
 
-    def single_subscriptions_with_preference_count(self, lead_or_follow) -> int:
+    def single_subscriptions_with_preference_count(self, lead_or_follow, admitted_only: bool = False) -> int:
         return len(
             {
                 s
                 for s in self.subscriptions.all()
                 if s.is_single_with_preference(lead_or_follow)
+                and (not admitted_only or s.is_admitted())
             }
         )
 
@@ -385,14 +387,14 @@ class Course(TranslatableModel):
     def get_confirmed_count(self) -> int:
         return self.subscriptions.accepted().count()
 
-    def get_matched_and_individual_counts(self) -> tuple[int, int, int, int]:
-        matched_count = self.matched_subscriptions_count()
-        leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD)
+    def get_matched_and_individual_counts(self, admitted_only: bool = False) -> tuple[int, int, int, int]:
+        matched_count = self.matched_subscriptions_count(admitted_only)
+        leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD, admitted_only)
         follows_count = self.single_subscriptions_with_preference_count(
-            LeadFollow.FOLLOW
+            LeadFollow.FOLLOW, admitted_only
         )
         no_preference_count = self.single_subscriptions_with_preference_count(
-            LeadFollow.NO_PREFERENCE
+            LeadFollow.NO_PREFERENCE, admitted_only
         )
 
         return matched_count, leads_count, follows_count, no_preference_count
@@ -563,7 +565,7 @@ class Course(TranslatableModel):
                 leads_count,
                 follows_count,
                 no_preference_count,
-            ) = self.get_matched_and_individual_counts()
+            ) = self.get_matched_and_individual_counts(admitted_only=True)
             if (
                 matched_count // 2 + leads_count + follows_count + no_preference_count
                 == 1
@@ -585,7 +587,7 @@ class Course(TranslatableModel):
             leads_count,
             follows_count,
             no_preference_count,
-        ) = self.get_matched_and_individual_counts()
+        ) = self.get_matched_and_individual_counts(admitted_only=True)
         texts = []
         if matched_count:
             texts.append(
