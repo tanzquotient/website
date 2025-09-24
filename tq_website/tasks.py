@@ -31,7 +31,7 @@ def match_payments(send_reminders: bool = False) -> None:
     PaymentProcessor().process_payments()
     if send_reminders:
         remind_all_of_payments(
-            min_days_from_course_start=7, min_days_from_previous_reminder=7
+            min_days_from_course_start=14, min_days_from_previous_reminder=7
         )
 
 
