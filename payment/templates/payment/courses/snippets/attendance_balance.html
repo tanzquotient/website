@@ -1,0 +1,26 @@
+{% load i18n attendance_tags basic_tags %}
+
+{% with lesson|attendance_balance as balance %}
+    {% if balance == 0 %}
+        <span class="badge text-bg-success">
+            {% trans "balanced" %}
+        </span>
+    {% elif balance > 0 %}
+        <span class="badge text-bg-warning">
+        {% if balance == 1 %}
+            {% trans "one leader too much" %}
+        {% else %}
+            {{ balance }} {% trans "leaders too much" %}
+        {% endif %}
+        </span>
+    {% else %}
+        <span class="badge text-bg-warning">
+           {% if balance == -1 %}
+               {% trans "one follower too much" %}
+           {% else %}
+               {{ balance|abs }}
+               {% trans "followers too much" %}
+           {% endif %}
+        </span>
+    {% endif %}
+{% endwith %}

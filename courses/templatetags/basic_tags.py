@@ -1,3 +1,4 @@
+from numbers import Number
 from typing import Iterable, Any
 from uuid import uuid4
 
@@ -33,6 +34,11 @@ def concat_all(*args: Iterable[Any]) -> str:
 @register.filter(name="abs")
 def absolute(value: int | float) -> int | float:
     return abs(value)
+
+
+@register.filter(name="minus")
+def minus(a: int | float, b: int | float) -> int | float:
+    return a - b
 
 
 @register.filter

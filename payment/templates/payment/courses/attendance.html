@@ -1,0 +1,27 @@
+{% extends "basis_no_header.html" %}
+{% load i18n attendance_tags basic_tags %}
+
+
+{% block title %}
+    {{ course.type.title }}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="container">
+        {% include "payment/courses/snippets/course_info.html" %}
+        <h3 class="mt-4">{% trans "Attendance" %}</h3>
+        {% for lesson in course.lesson_occurrences.all %}
+            <div class="mt-2">
+                <div class="fw-bold">
+                    {{ lesson.start|date:"l, j F Y, H:i" }}
+                    - {{ lesson.end|date:"H:i" }}</div>
+                <div>
+                    {% include "payment/courses/snippets/attendance_stats.html" %}
+                    {% include "payment/courses/snippets/attendance_balance.html" %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock main_content %}

@@ -1,0 +1,15 @@
+{% load i18n attendance_tags basic_tags %}
+
+{% with course|attendance_total as total %}
+    {% with  lesson|attendance_absent as absent %}
+        {{ total|minus:absent }}/{{ total }}
+    {% endwith %}
+{% endwith %}
+{% with lesson|attendance_extra as extra %}
+    {% if extra == 1 %}
+        + {% trans "one replacement" %}
+    {% elif extra > 1 %}
+        + {{ lesson|attendance_extra }} {% trans "replacements" %}
+    {% endif %}
+{% endwith %}
+{% trans "present" %}

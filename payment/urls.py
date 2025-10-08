@@ -1,7 +1,30 @@
 from django.urls import path, register_converter
 
 from .converters import UsiPathConverter
-from .views import *
+from .views import (
+    CounterPaymentDetailView,
+    CounterPaymentIndexView,
+    subscription_payment_view,
+    subscription_qr_bill_export_pdf,
+    CoursesAsTeacherList,
+    CoursePaymentDetailView,
+    CourseAttendanceView,
+    CourseTeacherPresenceView,
+    CourseParticipantsView,
+    search_teacher,
+    CoursePaymentExportVCard,
+    CoursePaymentExportExcel,
+    CoursePaymentConfirm,
+    OfferingFinanceIndexView,
+    OfferingFinanceUnpaidView,
+    OfferingFinanceCourses,
+    OfferingFinanceTeachers,
+    offering_finance_revenue,
+    offering_finance_teachers_export,
+    AccountFinanceIndexView,
+    AccountFinanceDetailView,
+    CoursePaymentExportCsv,
+)
 
 register_converter(UsiPathConverter, "usi")
 
@@ -35,6 +58,11 @@ urlpatterns = [
         "auth/courses/<int:course>/teacher-presence",
         CourseTeacherPresenceView.as_view(),
         name="course_teacher_presence",
+    ),
+    path(
+        "auth/courses/<int:course>/attendance",
+        CourseAttendanceView.as_view(),
+        name="course_attendance",
     ),
     path(
         "auth/courses/<int:course>/participants",

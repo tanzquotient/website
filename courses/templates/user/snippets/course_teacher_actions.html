@@ -28,6 +28,14 @@
         {% endif %}
     {% endif %}
     {% if not course.cancelled %}
+        {% url 'payment:course_attendance' course=course.id as attendance_url %}
+        {% if request.get_full_path != attendance_url %}
+            <a href="{{ attendance_url }}"
+               class="btn btn-success btn-sm align-self-center">
+                <i class="bi bi-check2-square"></i>
+                {% trans "Attendance" %}
+            </a>
+        {% endif %}
         {% url 'payment:course_teacher_presence' course=course.id as presence_url %}
         {% if request.get_full_path != presence_url %}
             <a href="{{ presence_url }}"
