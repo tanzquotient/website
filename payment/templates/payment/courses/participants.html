@@ -24,11 +24,17 @@
                             <div><a href="mailto:{{ subscription.user.email }}"
                                     class="">{{ subscription.user.email }}</a></div>
                             {% if subscription.user.profile.phone_number %}
-                                <div>{{ subscription.user.profile.phone_number }}</div>
+                                <div>
+                                    <a href="tel:{{ subscription.user.profile.phone_number }}">
+                                        {{ subscription.user.profile.phone_number }}
+                                    </a>
+                                </div>
                             {% endif %}
                             {% if course.type.couple_course %}
                                 <div class="mt-1">{% trans "Lead/Follow" %}: {{ subscription.get_assigned_role_str }}</div>
-                                <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
+                                {% if subscription.partner %}
+                                    <div>{% trans "Partner" %}: {{ subscription.get_partner_name }}</div>
+                                {% endif %}
                             {% endif %}
                         </div>
                     {% endfor %}
@@ -54,10 +60,20 @@
                             <td>{{ subscription.user.get_full_name }}</td>
                             <td><a href="mailto:{{ subscription.user.email }}"
                                    class="">{{ subscription.user.email }}</a></td>
-                            <td>{{ subscription.user.profile.phone_number }}</td>
+                            <td>
+                                {% if subscription.user.profile.phone_number %}
+                                     <a href="tel:{{ subscription.user.profile.phone_number }}">
+                                        {{ subscription.user.profile.phone_number }}
+                                    </a>
+                                {% endif %}
+                            </td>
                             {% if course.type.couple_course %}
                                 <td>{{ subscription.get_assigned_role_str }}</td>
-                                <td>{{ subscription.get_partner_name }}</td>
+                                <td>
+                                    {% if subscription.partner %}
+                                        {{ subscription.get_partner_name }}
+                                    {% endif %}
+                                </td>
                             {% endif %}
                         </tr>
                     {% endfor %}
