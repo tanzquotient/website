@@ -8,18 +8,18 @@
     {% elif balance > 0 %}
         <span class="badge text-bg-warning">
         {% if balance == 1 %}
-            {% trans "one leader too much" %}
+            {% trans "one leader too many" %}
         {% else %}
-            {{ balance }} {% trans "leaders too much" %}
+            {{ balance }} {% trans "leaders too many" %}
         {% endif %}
         </span>
     {% else %}
         <span class="badge text-bg-warning">
            {% if balance == -1 %}
-               {% trans "one follower too much" %}
+               {% trans "one follower too many" %}
            {% else %}
                {{ balance|abs }}
-               {% trans "followers too much" %}
+               {% trans "followers too many" %}
            {% endif %}
         </span>
     {% endif %}
