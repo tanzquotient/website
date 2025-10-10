@@ -16,3 +16,4 @@ from .teacher_presence_enabled import TeacherPresenceEnabled
 from .course_teacher_presence_view import CourseTeacherPresenceView
 from .search_teacher import search_teacher
 from .course_attendance_view import CourseAttendanceView
+from .lesson_attendance_view import LessonAttendanceView

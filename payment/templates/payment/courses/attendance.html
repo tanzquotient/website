@@ -10,7 +10,7 @@
 
     <div class="container">
         {% include "payment/courses/snippets/course_info.html" %}
-        <h3 class="mt-4">{% trans "Attendance" %}</h3>
+        <h3 class="mt-4">{% trans "Attendance Overview" %}</h3>
         {% for lesson in course.lesson_occurrences.all %}
             <div class="mt-2">
                 <div class="fw-bold">
@@ -19,6 +19,7 @@
                 <div>
                     {% include "payment/courses/snippets/attendance_stats.html" %}
                     {% include "payment/courses/snippets/attendance_balance.html" %}
+                    {% include "payment/courses/snippets/attendance_lesson_link.html" %}
                 </div>
             </div>
         {% endfor %}

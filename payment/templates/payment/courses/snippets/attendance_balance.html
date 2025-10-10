@@ -1,20 +1,21 @@
 {% load i18n attendance_tags basic_tags %}
 
-{% with lesson|attendance_balance as balance %}
-    {% if balance == 0 %}
-        <span class="badge text-bg-success">
+{% if course.type.couple_course %}
+    {% with lesson|attendance_balance as balance %}
+        {% if balance == 0 %}
+            <span class="badge text-bg-success">
             {% trans "balanced" %}
         </span>
-    {% elif balance > 0 %}
-        <span class="badge text-bg-warning">
+        {% elif balance > 0 %}
+            <span class="badge text-bg-warning">
         {% if balance == 1 %}
             {% trans "one leader too many" %}
         {% else %}
             {{ balance }} {% trans "leaders too many" %}
         {% endif %}
         </span>
-    {% else %}
-        <span class="badge text-bg-warning">
+        {% else %}
+            <span class="badge text-bg-warning">
            {% if balance == -1 %}
                {% trans "one follower too many" %}
            {% else %}
@@ -22,5 +23,6 @@
                {% trans "followers too many" %}
            {% endif %}
         </span>
-    {% endif %}
-{% endwith %}
+        {% endif %}
+    {% endwith %}
+{% endif %}

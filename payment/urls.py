@@ -24,6 +24,7 @@ from .views import (
     AccountFinanceIndexView,
     AccountFinanceDetailView,
     CoursePaymentExportCsv,
+    LessonAttendanceView,
 )
 
 register_converter(UsiPathConverter, "usi")
@@ -63,6 +64,11 @@ urlpatterns = [
         "auth/courses/<int:course>/attendance",
         CourseAttendanceView.as_view(),
         name="course_attendance",
+    ),
+    path(
+        "auth/lesson/<int:lesson>/attendance",
+        LessonAttendanceView.as_view(),
+        name="lesson_attendance",
     ),
     path(
         "auth/courses/<int:course>/participants",

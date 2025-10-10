@@ -1,0 +1,105 @@
+{% extends "basis_no_header.html" %}
+{% load i18n attendance_tags basic_tags %}
+
+
+{% block title %}
+    {{ lesson.course.type.title }}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="container">
+        {% include "payment/courses/snippets/course_info.html" %}
+
+        <h3 class="mt-4 mb-0">{% trans "Lesson Attendance" %}</h3>
+        <div class="fs-6 mb-1">
+            {{ lesson.start|date:"l, j F Y, H:i" }} - {{ lesson.end|date:"H:i" }}
+        </div>
+        <div>
+            {% include "payment/courses/snippets/attendance_balance.html" %}
+        </div>
+        <div class="fw-bold fs-5 mt-3 mb-2">
+            {% trans "Present" %}
+            <span class="badge rounded-pill text-bg-success">{{ present|length }}</span>
+        </div>
+        <div class="d-flex flex-column flex-lg-row gap-3 ">
+            {% if course.type.couple_course %}
+                <div>
+                    <div class="fw-bold">
+                        {% trans "Leaders" %}
+                        <span class="badge rounded-pill text-bg-success">{{ present_leaders|length }}</span>
+                    </div>
+                    {% for user in present_leaders %}
+                        <div>
+                            {{ user.get_full_name }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <div class="fw-bold">
+                        {% trans "Followers" %}
+                        <span class="badge rounded-pill text-bg-success">{{ present_followers|length }}</span>
+                    </div>
+                    {% for user in present_followers %}
+                        <div>
+                            {{ user.get_full_name }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <div class="fw-bold">
+                        {% trans "Lead/Follow preference unknown" %}
+                        <span class="badge rounded-pill text-bg-success">{{ present_no_preference|length }}</span>
+                    </div>
+                    {% for user in present_no_preference %}
+                        <div>
+                            {{ user.get_full_name }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    {% for user in present %}
+                        <div>
+                            {{ user.get_full_name }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% if replacements %}
+            <div class="fw-bold fs-5 mt-3 mb-2">
+                {% trans "Replacements" %}
+                <span class="badge rounded-pill text-bg-info">{{ replacements|length }}</span>
+            </div>
+             {% for attendance in replacements %}
+                    <div>
+                        {{ attendance.user.get_full_name }}
+                        {% if  attendance.role == 'l' %}
+                            <span class="badge text-bg-leader">{% trans "Leader" %}</span>
+                        {% elif attendance.role == 'f' %}
+                            <span class="badge text-bg-follower">{% trans "Follower" %}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+        {% endif %}
+
+        {% if absent %}
+            <div class="fw-bold fs-5 mt-3 mb-2">
+                {% trans "Absent" %}
+                <span class="badge rounded-pill text-bg-warning">{{ absent|length }}</span>
+            </div>
+            {% for attendance in absent %}
+                <div>
+                    {{ attendance.user.get_full_name }}
+                    {% if  attendance.role == 'l' %}
+                        <span class="badge text-bg-leader">{% trans "Leader" %}</span>
+                    {% elif attendance.role == 'f' %}
+                        <span class="badge text-bg-follower">{% trans "Follower" %}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock main_content %}

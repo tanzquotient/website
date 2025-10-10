@@ -27,7 +27,7 @@
             </a>
         {% endif %}
     {% endif %}
-    {% if not course.cancelled %}
+    {% if not course.cancelled and course.get_confirmed_count > 0 %}
         {% url 'payment:course_attendance' course=course.id as attendance_url %}
         {% if request.get_full_path != attendance_url %}
             <a href="{{ attendance_url }}"
