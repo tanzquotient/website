@@ -1,10 +1,46 @@
 # Dockerfile for the tanzquotient website
 ARG AUTHORS="Thore Göbel <thgoebel@ethz.ch>, Daniel Sparber <daniel@sparber.io>"
 
-# Base image
-FROM eu.gcr.io/vseth-public/base:foxtrott AS base-image
-# @Copyright    VSETH - Verband der Studierenden an der ETH Zürich
-# Maybe we use our own base image at some point, vseth has no debian 13 image yet.
+# Base image (copied and adaped from https://eu.gcr.io/vseth-public/base)
+# @Copyright VSETH - Verband der Studierenden an der ETH Zürich
+FROM debian:trixie-slim AS base-image
+ARG AUTHORS
+LABEL org.opencontainers.image.authors="${AUTHORS}"
+
+ARG DEBIAN_FRONTEND='noninteractive'
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    locales \
+    openssl \
+    procps \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*  && \
+    sed --in-place '/en_US.UTF-8/s/^# //' /etc/locale.gen && \
+    dpkg-reconfigure locales
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US
+
+RUN ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime && \
+    dpkg-reconfigure tzdata
+
+ENV IMAGE_APP_USERNAME=app-user
+ENV IMAGE_APP_GROUPNAME=app-user
+ENV IMAGE_APP_UID=1000
+ENV IMAGE_APP_GID=1000
+
+RUN groupadd "$IMAGE_APP_GROUPNAME" --gid "$IMAGE_APP_GID" && \
+    useradd "$IMAGE_APP_USERNAME" \
+        --uid "$IMAGE_APP_UID" \
+        --gid "$IMAGE_APP_GID" \
+        --home-dir /app \
+        --create-home && \
+    rm -rf /app/.bash* /app/.profile
+
+
 
 # Builder Image
 FROM base-image AS builder
@@ -56,9 +92,6 @@ RUN apt update \
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy cinit file
-COPY cinit.yml /etc/cinit.d/tq-website.yml
-
 # Setup app directory
 RUN mkdir -p /app
 WORKDIR /app
@@ -70,11 +103,8 @@ COPY . .
 RUN pwd && ls && chmod +x scripts/generate_env_sip.sh && \
     chmod +x scripts/pre-start.sh && \
     chmod +x scripts/generate_env.py && \
-    chmod +x scripts/post-start.sh
-
-# Install requirements
-RUN python3 -m pip install --upgrade pip --break-system-packages
-RUN python3 -m pip install -r requirements.txt --break-system-packages
+    chmod +x scripts/post-start.sh && \
+    chmod +x docker-entrypoint.sh
 
 # Make sure log directory and files exist
 RUN mkdir -p logs && \
@@ -89,3 +119,4 @@ RUN echo "[default]\nregion=europe-west-2" > ~/.aws/config
 # Change permissions on the code so the app-user can access it
 RUN chown -R app-user:app-user .
 
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
