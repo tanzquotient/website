@@ -64,10 +64,32 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Copy the code into the container
-COPY . .
+COPY \
+  cms_plugins \
+  courses \
+  email_system \
+  email_templates \
+  events \
+  faq \
+  groups \
+  locale \
+  manage.py \
+  organisation \
+  partners \
+  payment \
+  scripts \
+  static \
+  survey \
+  templates \
+  tq_website \
+  utils \
+  /app/
 
 # Ensure the scripts are executable
-RUN chmod +x scripts/generate_env_sip.sh && chmod +x scripts/pre-start.sh && chmod +x scripts/generate_env.py && chmod +x scripts/post-start.sh
+RUN chmod +x scripts/generate_env_sip.sh && \
+    chmod +x scripts/pre-start.sh && \
+    chmod +x scripts/generate_env.py && \
+    chmod +x scripts/post-start.sh
 
 # Install requirements
 RUN python3 -m pip install --upgrade pip --break-system-packages
