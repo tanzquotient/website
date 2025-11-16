@@ -11,7 +11,7 @@ celery --app=tq_website worker --loglevel=info &
 celery --app=tq_website beat --loglevel=info --scheduler=django &
 
 # 3) Start the main process
-gunicorn --bind=0.0.0.0:8080 --workers=4 --timeout=30 tq_website.wsgi:application
+exec gunicorn --bind=0.0.0.0:8080 --workers=4 --timeout=30 tq_website.wsgi:application
 
 
 

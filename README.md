@@ -16,7 +16,7 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 1. Make sure [Docker][docker] is installed.
 1. Clone this repo: `git clone <repo-url>`
-1. Create a python environment using python `>= 3.9`.
+1. Create a python environment using python `>= 3.14`.
    You can for example set it up with a [venv](https://docs.python.org/3/library/venv.html).
    1. `python3 -m venv venv`
    1. `source venv/bin/activate`
