@@ -220,10 +220,9 @@ def reject_subscription(
 
     if (
         send_email
-        and models.Rejection.objects.filter(
+        and not models.Rejection.objects.filter(
             subscription=subscription, mail_sent=True
-        ).count()
-        == 0
+        ).exists()
     ):
         # if ensures that no mail was ever sent due to a rejection to this user
 
