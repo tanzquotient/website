@@ -71,10 +71,14 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
 
 def _build_subscription_context(subscription: Subscribe) -> dict:
     payment_url = (
-        "https://"
-        + settings.DEPLOYMENT_DOMAIN
-        + reverse("payment:subscription_payment", kwargs={"usi": subscription.usi})
-    ) if not subscription.open_amount().is_zero() else None
+        (
+            "https://"
+            + settings.DEPLOYMENT_DOMAIN
+            + reverse("payment:subscription_payment", kwargs={"usi": subscription.usi})
+        )
+        if not subscription.open_amount().is_zero()
+        else None
+    )
     return {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -284,3 +288,19 @@ def create_course_info(course: Course) -> str:
     if course.format_prices():
         s += f'{_("Costs")}: {course.format_prices()}\n'
     return s.strip("\n")
+
+
+def send_move_to_waiting_list(subscription: Subscribe) -> Optional[Email]:
+    context = {
+        "first_name": subscription.user.first_name,
+        "course": subscription.course.type.title,
+    }
+
+    template = "move_to_waiting_list"
+
+    return send_email(
+        to=subscription.user.email,
+        reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+        template=template,
+        context=context,
+    )

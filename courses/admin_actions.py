@@ -15,7 +15,13 @@ from courses.models import *
 from email_system.services import send_email
 from tq_website import settings
 from . import services
-from .admin_forms import CopyCourseForm, SendCourseEmailForm, RejectForm, EmailListForm
+from .admin_forms import (
+    CopyCourseForm,
+    SendCourseEmailForm,
+    RejectForm,
+    EmailListForm,
+    MoveToWaitingListForm,
+)
 from .emailcenter import create_course_info
 from .forms import CreateSendVoucherForm, SendVoucherEmailForm
 
@@ -314,25 +320,25 @@ def admit_from_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> N
 
 @admin.action(description="Move selected subscription(s) to waiting list")
 def move_to_waiting_list(modeladmin, request, queryset: list[Subscribe]) -> None:
-    counter = 0
-    for s in queryset:
-        if s.state == SubscribeState.NEW:
-            with reversion.create_revision():
-                s.state = SubscribeState.WAITING_LIST
-                s.save()
-                counter += 1
-
-                reversion.set_comment("Subscription moved to the waiting list")
-        else:
-            messages.add_message(
-                request,
-                messages.WARNING,
-                f"{s} is not in state {SubscribeState.NEW}. Skipped.",
+    form = None
+    if "go" in request.POST:
+        form = MoveToWaitingListForm(request.POST)
+        if form.is_valid():
+            send_email = form.cleaned_data["send_email"]
+            services.subscriptions.move_subscriptions_to_waiting_list(
+                queryset, send_email, request
             )
-    if counter:
-        messages.add_message(
-            request, messages.SUCCESS, f"{counter} subscribes moved to the waiting list"
-        )
+            return HttpResponseRedirect(request.get_full_path())
+
+    if not form:
+        selected_action = map(str, queryset.values_list("id", flat=True))
+        form = MoveToWaitingListForm(initial={"_selected_action": selected_action})
+
+    context = {
+        "form": form,
+        "action": "move_to_waiting_list",
+    }
+    return render(request, "courses/auth/action_move_to_waiting_list.html", context)
 
 
 @admin.action(description="Send an email to subscriptions of the selected course(s)")

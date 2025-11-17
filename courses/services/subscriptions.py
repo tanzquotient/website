@@ -15,6 +15,7 @@ from courses.emailcenter import (
     send_participation_confirmation,
     detect_rejection_reason,
     send_rejection,
+    send_move_to_waiting_list,
 )
 from courses.models import (
     Subscribe,
@@ -257,6 +258,47 @@ def unreject_subscriptions(
             request,
             messages.SUCCESS,
             _("{} unrejected successfully").format(unrejected_count),
+        )
+
+
+@transaction.atomic
+def move_subscription_to_waiting_list(
+    subscription: Subscribe, send_email: bool = False, request: HttpRequest = None
+) -> bool:
+    if subscription.state == SubscribeState.NEW:
+        with reversion.create_revision():
+            subscription.state = SubscribeState.WAITING_LIST
+            subscription.save()
+            reversion.set_comment("Subscription moved to the waiting list")
+
+        if send_email:
+            send_move_to_waiting_list(subscription)
+
+        return True
+
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f"{subscription} is not in state {SubscribeState.NEW}. Skipped.",
+    )
+    return False
+
+
+@transaction.atomic
+def move_subscriptions_to_waiting_list(
+    subscriptions: QuerySet[Subscribe],
+    send_email: bool = False,
+    request: HttpRequest = None,
+) -> None:
+    counter = 0
+    for s in subscriptions:
+        if move_subscription_to_waiting_list(s, send_email, request):
+            counter += 1
+    if counter:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f"{counter} subscribes moved to the waiting list",
         )
 
 

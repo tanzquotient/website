@@ -1,0 +1,27 @@
+Hallo {{first_name}}
+
+Leider konnten wir dich im Kurs {{course}} diesmal nicht unterbringen. Deshalb mussten wir dich vorerst auf die Warteliste setzen. Sollte sich bei den Anmeldungen noch etwas ändern, lassen wir es dich wissen und nehmen dich wenn möglich gerne noch in den Kurs auf.
+
+Falls das nicht klappt, bekommst du in den nächsten Tagen eine Absage.
+
+Wenn du kein Interesse mehr am Kurs hast oder nicht mehr verfügbar bist, gib uns bitte so bald wie möglich Bescheid, damit wir dich entsprechend abmelden können.
+
+Liebe Grüße
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen wende dich an anmeldungen@tanzquotient.org
+
+_______________
+
+Hi {{first_name}},
+
+Unfortunately we couldn't accommodate you in {{course}}. For this reason we had to put you on the waiting list for now. Should there be a change in sign-ups we will let you know and if possible admit you in the course.
+
+If not, you will receive a cancellation message in the coming days.
+
+Should you no longer be interested in the course or no longer available, please let us know as soon as possible so that we can deregister you accordingly.
+
+Your Tanzquotient
+tanzquotient.org
+If you have any questions concerning the course, feel free to contact us: anmeldungen@tanzquotient.org
