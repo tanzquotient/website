@@ -22,17 +22,15 @@
                         {% if forloop.counter > 3 %} hidden {% endif %}>
                     {% attendance_state user=request.user lesson=lesson as state %}
                     <div>
-                        <a href="{% url "courses:course_detail" course_id=lesson.course_id %}">
-                            {{ lesson.course.type.title }}
-                        </a>
-                        {% if state == "replacement" %}
-                            <span class="badge text-bg-info" role="group">
-                        {% trans "Replacement" %}
-                     </span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        {% include "payment/courses/snippets/attendance_balance.html" with course=lesson.course %}
+                        <a href="{% url "courses:course_detail" course_id=lesson.course_id %}">{{ lesson.course.type.title }}</a>
+                        <span class="ms-1">
+                            {% if state == "replacement" %}
+                                <span class="badge text-bg-info" role="group">
+                                    {% trans "Replacement" %}
+                                </span>
+                            {% endif %}
+                            {% include "payment/courses/snippets/attendance_balance.html" with course=lesson.course %}
+                        </span>
                     </div>
                     <div>{% format_duration start=lesson.start end=lesson.end %}</div>
                     <div>{{ lesson.room }}</div>
@@ -213,6 +211,7 @@
             if (data["is_replacement"]) {
                 document.querySelector(`#attendance-${lesson_id}`).remove()
             }
+            globalThis.location.reload()
         }
 
         async function choose_role(course_id, role) {
