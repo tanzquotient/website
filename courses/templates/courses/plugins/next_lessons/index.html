@@ -32,7 +32,7 @@
                         {% endif %}
                     </div>
                     <div>
-                        {% include "payment/courses/snippets/attendance_balance.html" %}
+                        {% include "payment/courses/snippets/attendance_balance.html" with course=lesson.course %}
                     </div>
                     <div>{% format_duration start=lesson.start end=lesson.end %}</div>
                     <div>{{ lesson.room }}</div>
