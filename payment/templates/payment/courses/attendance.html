@@ -12,8 +12,11 @@
         {% include "payment/courses/snippets/course_info.html" %}
         <h3 class="mt-4">{% trans "Attendance Overview" %}</h3>
         {% for lesson in course.lesson_occurrences.all %}
-            <div class="mt-2">
+            <div class="mt-2  {% if lesson.end < now %} text-muted {% endif %}">
                 <div class="fw-bold">
+                    {% if lesson.end.date == now.date %}
+                        <span class="badge text-bg-info">{% trans "Today" %}</span>
+                     {% endif %}
                     {{ lesson.start|date:"l, j F Y, H:i" }}
                     - {{ lesson.end|date:"H:i" }}</div>
                 <div>
