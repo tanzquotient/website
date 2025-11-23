@@ -19,7 +19,10 @@ def subscription_payment_view(request: HttpRequest, usi: str):
     voucher_applied = False
 
     # Apply voucher
-    user = request.user or subscription.user
+    if request.user and not request.user.is_anonymous():
+        user = request.user
+    else:
+        user = subscription.user
     if voucher_form.is_valid():
         voucher = Voucher.objects.get(key=voucher_form.cleaned_data["voucher_code"])
         _, voucher_for_remainder = voucher.apply_to(subscription, user)
