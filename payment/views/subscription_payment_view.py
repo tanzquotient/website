@@ -19,7 +19,7 @@ def subscription_payment_view(request: HttpRequest, usi: str):
     voucher_applied = False
 
     # Apply voucher
-    if request.user and not request.user.is_anonymous():
+    if request.user and not request.user.is_anonymous:
         user = request.user
     else:
         user = subscription.user
