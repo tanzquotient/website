@@ -12,12 +12,23 @@
         {% include "payment/courses/snippets/course_info.html" %}
 
         <h3 class="mt-4 mb-0">{% trans "Lesson Attendance" %}</h3>
-        <div class="fs-6 mb-1">
-            {{ lesson.start|date:"l, j F Y, H:i" }} - {{ lesson.end|date:"H:i" }}
-        </div>
-        <div>
+        <div class="fs-6">
+            {{ lesson.start|date:"D, j M Y, H:i" }} - {{ lesson.end|date:"H:i" }}
             {% include "payment/courses/snippets/attendance_balance.html" %}
         </div>
+        <div>
+            <a href="{% url "payment:course_attendance" course=lesson.course_id %}">
+                <i class="bi bi-arrow-left-circle"></i> {% trans "Back to all lessons" %}
+            </a>
+        </div>
+        {% if show_check_button %}
+            <div class="my-3">
+                <a class="btn btn-success"
+                   href="{% url "payment:lesson_attendance_check" lesson.id %}">
+                    <i class="bi bi-check-circle"></i> {% trans "Check Attendance" %}
+                </a>
+            </div>
+        {% endif %}
         <div class="fw-bold fs-5 mt-3 mb-2">
             {% trans "Present" %}
             <span class="badge rounded-pill text-bg-success">{{ present|length }}</span>
@@ -46,17 +57,19 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div>
-                    <div class="fw-bold">
-                        {% trans "Lead/Follow preference unknown" %}
-                        <span class="badge rounded-pill text-bg-success">{{ present_no_preference|length }}</span>
-                    </div>
-                    {% for user in present_no_preference %}
-                        <div>
-                            {{ user.get_full_name }}
+                {% if present_no_preference|length > 0 %}
+                    <div>
+                        <div class="fw-bold">
+                            {% trans "Lead/Follow preference unknown" %}
+                            <span class="badge rounded-pill text-bg-success">{{ present_no_preference|length }}</span>
                         </div>
-                    {% endfor %}
-                </div>
+                        {% for user in present_no_preference %}
+                            <div>
+                                {{ user.get_full_name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% else %}
                 <div>
                     {% for user in present %}
@@ -73,16 +86,16 @@
                 {% trans "Replacements" %}
                 <span class="badge rounded-pill text-bg-info">{{ replacements|length }}</span>
             </div>
-             {% for attendance in replacements %}
-                    <div>
-                        {{ attendance.user.get_full_name }}
-                        {% if  attendance.role == 'l' %}
-                            <span class="badge text-bg-leader">{% trans "Leader" %}</span>
-                        {% elif attendance.role == 'f' %}
-                            <span class="badge text-bg-follower">{% trans "Follower" %}</span>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+            {% for attendance in replacements %}
+                <div>
+                    {{ attendance.user.get_full_name }}
+                    {% if  attendance.role == 'l' %}
+                        <span class="badge text-bg-leader">{% trans "Leader" %}</span>
+                    {% elif attendance.role == 'f' %}
+                        <span class="badge text-bg-follower">{% trans "Follower" %}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
         {% endif %}
 
         {% if absent %}

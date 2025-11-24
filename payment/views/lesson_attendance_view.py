@@ -1,4 +1,6 @@
+from datetime import datetime
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
@@ -53,6 +55,9 @@ class LessonAttendanceView(TemplateView, TeacherOfCourseOnly):
             for attendance in attendances
             if attendance.state == AttendanceState.REPLACEMENT
         ]
+        context["show_check_button"] = (
+            lesson.start.date() == datetime.now(tz=ZoneInfo("Europe/Zurich")).date()
+        )
         return context
 
     @staticmethod

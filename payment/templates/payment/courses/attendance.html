@@ -12,17 +12,25 @@
         {% include "payment/courses/snippets/course_info.html" %}
         <h3 class="mt-4">{% trans "Attendance Overview" %}</h3>
         {% for lesson in course.lesson_occurrences.all %}
-            <div class="mt-2  {% if lesson.end < now %} text-muted {% endif %}">
+            <div class="mt-3  {% if lesson.end < now %} text-muted {% endif %}">
                 <div class="fw-bold">
                     {% if lesson.end.date == now.date %}
                         <span class="badge text-bg-info">{% trans "Today" %}</span>
-                     {% endif %}
-                    {{ lesson.start|date:"l, j F Y, H:i" }}
-                    - {{ lesson.end|date:"H:i" }}</div>
+                    {% endif %}
+                    {{ lesson.start|date:"D, j M Y, H:i" }}
+                    - {{ lesson.end|date:"H:i" }}
+                    {% include "payment/courses/snippets/attendance_balance.html" %}
+                </div>
                 <div>
                     {% include "payment/courses/snippets/attendance_stats.html" %}
-                    {% include "payment/courses/snippets/attendance_balance.html" %}
-                    {% include "payment/courses/snippets/attendance_lesson_link.html" %}
+                    {% if lesson.end.date == now.date %}
+                        <div class="mt-2">
+                            <a class="btn btn-sm btn-success"
+                               href="{% url "payment:lesson_attendance_check" lesson.id %}">
+                                <i class="bi bi-check-circle"></i> {% trans "Check Attendance" %}
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
