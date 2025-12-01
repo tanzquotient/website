@@ -4,7 +4,7 @@ Leider konnten wir dich im Kurs {{course}} diesmal nicht unterbringen. Deshalb m
 
 Falls das nicht klappt, bekommst du in den nächsten Tagen eine Absage.
 
-Wenn du kein Interesse mehr am Kurs hast oder nicht mehr verfügbar bist, gib uns bitte so bald wie möglich Bescheid, damit wir dich entsprechend abmelden können.
+Wenn du kein Interesse mehr am Kurs hast oder nicht mehr verfügbar bist, melde dich bitte so bald wie möglich ab.
 
 Liebe Grüße
 
@@ -20,7 +20,7 @@ Unfortunately we couldn't accommodate you in {{course}}. For this reason we had 
 
 If not, you will receive a cancellation message in the coming days.
 
-Should you no longer be interested in the course or no longer available, please let us know as soon as possible so that we can deregister you accordingly.
+Should you no longer be interested in the course or no longer available, please deregister as soon as possible.
 
 Your Tanzquotient
 tanzquotient.org

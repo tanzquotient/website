@@ -292,6 +292,13 @@ def move_subscriptions_to_waiting_list(
 ) -> None:
     counter = 0
     for s in subscriptions:
+        if s.is_matched() and s.get_partner_subscription() not in subscriptions:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                f"The subscription for the partner of {s} was not provided. Skipped.",
+            )
+            continue
         if move_subscription_to_waiting_list(s, send_email, request):
             counter += 1
     if counter:
