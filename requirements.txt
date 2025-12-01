@@ -6,7 +6,7 @@ django-debug-toolbar==6.1.0     # For developement. Gives additional insights in
 django-parler==2.3              # For simple translatable models
 django-post-office==3.10.1       # Send and manage emails asynchronously, database based email templates
 django-reversion==6.0.0         # Version control for model instances, e.g. used for subscriptions
-django-countries==8.1.1         # Country choices for use with forms and fields for models
+django-countries==8.2.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-allauth==65.13.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
@@ -23,7 +23,7 @@ djangorestframework==3.16.1     # Toolkit for building Web APIs
 django-parler-rest==2.2         # Adding translation support to django-rest-framework
 
 # Tasks
-celery==5.5.3                   # Task queue with focus on real-time processing, while also supporting task scheduling
+celery==5.6.0                   # Task queue with focus on real-time processing, while also supporting task scheduling
 django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
 django-celery-beat==2.8.1       # Store periodic task schedules in the database
 django-celery-results==2.6.0    # Stores Celery task results
@@ -38,12 +38,12 @@ qrbill==1.2.0                   # For generating swiss payment QR codes, that ca
 django-resized==1.0.3           # Used to resize images on save of ImageField
 
 # Database
-psycopg[binary]==3.2.13          # Driver for PostgreSQL
+psycopg[binary]==3.3.0          # Driver for PostgreSQL
 
 # Storage
 django-storages==1.14.6         # Provide a variety of storage backends, used for storing objects on Minio
-boto3~=1.41.2                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
-minio==7.2.19                    # Perform bucket and object operations, used for initializing Minio
+boto3~=1.42.0                  # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+minio==7.2.20                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
 gunicorn==23.0.0                # Used to serve django for production
