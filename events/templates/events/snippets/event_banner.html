@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% if event.cancelled %}
+{% if event.is_cancelled %}
     <span class="banner">
         <i class="bi bi-ban"></i>
         {% trans "Cancelled" %}

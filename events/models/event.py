@@ -172,6 +172,11 @@ class Event(TranslatableModel):
     def detail_url(self) -> str:
         return reverse("events:detail", kwargs={"event_id": self.id})
 
+    def is_cancelled(self) -> str:
+        return self.cancelled or (
+            self.room is not None and self.room.is_cancelled(self.date)
+        )
+
     def __str__(self) -> str:
         return f"{self.get_name()} ({self.date.strftime('%d.%m.%Y')})"
 

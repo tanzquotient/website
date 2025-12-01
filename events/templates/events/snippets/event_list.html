@@ -21,16 +21,21 @@
                 <tr class="{% if event.special %}emphasize{% endif %}">
                     {% if not hide_event_title %}
                         <td>
-                            <a href="{% url 'events:detail' event.id %}">
-                                <p>
-                                    {% if event.cancelled %}
-                                        <i class="bi bi-ban"></i> {% trans "Cancelled" %}:
-                                    {% elif event.special %}
-                                        <i class="bi bi-star-fill"></i>
-                                    {% endif %}
-                                    {{ event.get_name }}
-                                </p>
-                            </a>
+                            <p>
+                                {% if event.is_cancelled %}
+                                    <span class="text-uppercase badge text-bg-danger">
+                                        {% trans "Cancelled" %}
+                                    </span>
+                                {% elif event.special %}
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                {% endif %}
+                                <a href="{% url 'events:detail' event.id %}">
+                                    
+                                        
+                                        {{ event.get_name }}
+                                    
+                                </a>
+                            </p>
                         </td>
                     {% endif %}
                     <td>{{ event.format_duration }}</td>

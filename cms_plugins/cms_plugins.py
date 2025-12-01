@@ -159,7 +159,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     "special": event.special,
                     "format_prices": event.format_prices(),
                     "room": event.room,
-                    "cancelled": event.cancelled,
+                    "cancelled": event.is_cancelled(),
                     "event": event,
                     "detail_url": reverse(
                         "events:detail", kwargs={"event_id": event.id}
