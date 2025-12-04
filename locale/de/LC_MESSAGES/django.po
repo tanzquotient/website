@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 16:50+0200\n"
+"POT-Creation-Date: 2025-12-04 22:48+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,6 +44,16 @@ msgstr ""
 #: courses/admin_forms/copy_course_form.py:10
 msgid "Offering to copy into"
 msgstr "Angebot zu kopieren in"
+
+#: courses/admin_forms/move_to_waiting_list_form.py:9
+msgid "Notify via email?"
+msgstr ""
+
+#: courses/admin_forms/move_to_waiting_list_form.py:11
+msgid ""
+"Whether the user(s) should be informed that they have been moved to the "
+"waiting list via email."
+msgstr ""
 
 #: courses/admin_forms/reject_form.py:10
 msgid "Select Reason"
@@ -145,6 +155,7 @@ msgid "My next lessons"
 msgstr "Meine nächsten Lektionen"
 
 #: courses/cms_plugins/replacements_plugin.py:23
+#: payment/templates/payment/lesson/attendance.html:86
 msgid "Replacements"
 msgstr "Aushelfen"
 
@@ -210,13 +221,13 @@ msgstr "Doppelte Benutzer:innen zusammenführen"
 msgid "Check confirmations"
 msgstr "Überprüfe Bestätigungen"
 
-#: courses/emailcenter.py:283
+#: courses/emailcenter.py:287
 #: courses/templates/courses/snippets/lesson_components/lessons.html:33
 #: courses/templatetags/courses_tags.py:64
 msgid "Cancellations"
 msgstr "Ausfälle"
 
-#: courses/emailcenter.py:285
+#: courses/emailcenter.py:289
 #: courses/templates/courses/snippets/course_info.html:39
 #: courses/templates/user/snippets/subscription.html:72
 #: events/templates/events/snippets/event_info.html:13
@@ -297,6 +308,7 @@ msgid "Style"
 msgstr "Stil"
 
 #: courses/filters.py:173
+#: courses/templates/courses/plugins/replacements/index.html:194
 #: courses/templates/courses/snippets/course_comment.html:20
 #: courses/templates/courses/snippets/course_info.html:25
 msgid "Room"
@@ -604,7 +616,6 @@ msgid "We received one subscription so far."
 msgstr "Wir haben bis jetzt eine Anmeldungen erhalten."
 
 #: courses/models/course.py:579
-#, python-brace-format
 msgid "We received {} subscriptions so far."
 msgstr "Wir haben bis jetzt {} Anmeldungen erhalten."
 
@@ -613,7 +624,6 @@ msgid "One couple"
 msgstr "Ein Paar"
 
 #: courses/models/course.py:596
-#, python-brace-format
 msgid "{} couples"
 msgstr "{} Paare"
 
@@ -622,7 +632,6 @@ msgid "One individual follower"
 msgstr "Eine Person, die geführt werden möchte"
 
 #: courses/models/course.py:602
-#, python-brace-format
 msgid "{} individual followers"
 msgstr "{} Personen, die geführt werden möchten"
 
@@ -631,7 +640,6 @@ msgid "One individual leader"
 msgstr "Eine Person, die führen möchte"
 
 #: courses/models/course.py:608
-#, python-brace-format
 msgid "{} individual leaders"
 msgstr "{} Personen, die führen möchten"
 
@@ -640,12 +648,10 @@ msgid "One person with no lead or follow preference"
 msgstr "Eine Person ohne Präferenz bezüglich Führen"
 
 #: courses/models/course.py:614
-#, python-brace-format
 msgid "{} people with no lead or follow preference"
 msgstr "{} Personen ohne Präferenz bezüglich Führen"
 
 #: courses/models/course.py:636
-#, python-brace-format
 msgid ""
 "With this one couple is possible in total, but at least {} couples are "
 "needed."
@@ -654,7 +660,6 @@ msgstr ""
 "benötigt."
 
 #: courses/models/course.py:639
-#, python-brace-format
 msgid ""
 "With this {} couples are possible in total, but at least {} couples are "
 "needed."
@@ -663,7 +668,6 @@ msgstr ""
 "benötigt."
 
 #: courses/models/course.py:642
-#, python-brace-format
 msgid "At least {} couples are needed."
 msgstr "Es werden mindestens {} Paare benötigt."
 
@@ -672,7 +676,6 @@ msgid "At least one more person is needed"
 msgstr "Es wird noch eine weitere Person benötigt."
 
 #: courses/models/course.py:649
-#, python-brace-format
 msgid "At least {} more people are needed."
 msgstr "Es werden noch {} Personen benötigt."
 
@@ -736,10 +739,12 @@ msgid "Shown only to participants who are confirmed for a course in this room."
 msgstr "Wird nur Teilnehmenden eines Kurses in diesem Raum angezeigt."
 
 #: courses/models/subscribe.py:358
+#: courses/templates/courses/plugins/replacements/index.html:263
 msgid "leader"
 msgstr "führen"
 
 #: courses/models/subscribe.py:359
+#: courses/templates/courses/plugins/replacements/index.html:263
 msgid "follower"
 msgstr "geführt werden"
 
@@ -802,58 +807,48 @@ msgid "free for students"
 msgstr "Kostenlos für Studierende"
 
 #: courses/services/general.py:58 courses/services/general.py:69
-#, python-brace-format
 msgid "otherwise {:g} CHF"
 msgstr "sonst {:g} CHF"
 
 #: courses/services/general.py:67
-#, python-brace-format
 msgid "{:g} CHF for students"
 msgstr "{:g} CHF für Studierende"
 
 #: courses/services/matching/change_matching.py:32
-#, python-brace-format
 msgid "{} subscriptions ({} couples) corrected successfully"
 msgstr "{} Einschreibungen ({} Paare) erfolgreich korrigiert"
 
 #: courses/services/matching/change_matching.py:65
-#, python-brace-format
 msgid "{} couples unmatched successfully"
 msgstr "{} Paarzuordnungen erfolgreich aufgehoben"
 
 #: courses/services/matching/change_matching.py:71
-#, python-brace-format
 msgid "{} subscriptions can not be unmatched because already CONFIRMED"
 msgstr ""
 "{} Einschreibungen können nicht auseinandergenommen werden, da sie BESTÄTIGT "
 "sind"
 
 #: courses/services/matching/change_matching.py:80
-#, python-brace-format
 msgid "{} subscriptions can not be unmatched because invalid matching state"
 msgstr ""
 "{} Einschreibungen können nicht auseinandergenommen werden, da sie in einem "
 "ungültigen Zustand sind"
 
 #: courses/services/matching/change_matching.py:112
-#, python-brace-format
 msgid "{} couples broken up successfully"
 msgstr "{} Paare erfolgreich getrennt"
 
 #: courses/services/matching/change_matching.py:118
-#, python-brace-format
 msgid "{} couples can not be broken up because already CONFIRMED"
 msgstr "{} Paare können nicht getrennt werden, da sie BESTÄTIGT sind"
 
 #: courses/services/matching/change_matching.py:126
-#, python-brace-format
 msgid "{} couples can not be broken up because invalid matching state"
 msgstr ""
 "{} Paare können nicht getrennt werden, da sie in einem ungültigen Zustand "
 "sind"
 
 #: courses/services/matching/do_matching.py:169
-#, python-brace-format
 msgid "{} couples matched successfully"
 msgstr "{} Paare erfolgreich zugeordnet"
 
@@ -869,29 +864,24 @@ msgstr "Ungültiger Wochentag"
 msgid "Unknown month"
 msgstr "Unbekannter Monat"
 
-#: courses/services/subscriptions.py:165
-#, python-brace-format
+#: courses/services/subscriptions.py:166
 msgid "{} of {} confirmed successfully"
 msgstr "{} von {} erfolgreich bestätigt"
 
 #: courses/services/subscriptions.py:260
-#, python-brace-format
 msgid "{} unrejected successfully"
 msgstr "{} Abweisung erfolgreich rückgängig gemacht"
 
-#: courses/services/subscriptions.py:269
-#, python-brace-format
+#: courses/services/subscriptions.py:317
 msgid "{} subscriptions were not confirmed because no partner set"
 msgstr ""
 "{} Anmeldung wurden nicht bestätigt, da kein:e Partner:in gesetzt wurde"
 
 #: courses/services/teachers.py:46
-#, python-brace-format
 msgid "{} of {} welcomed successfully"
 msgstr "{} von {} erfolgreich begrüsst"
 
 #: courses/services/teachers.py:63
-#, python-brace-format
 msgid "{} of {} teachers reset successfully"
 msgstr "{} von {} Lehrern erfolgreich zurückgesetzt"
 
@@ -900,6 +890,12 @@ msgstr "{} von {} Lehrern erfolgreich zurückgesetzt"
 #: events/templates/events/archive.html:6
 msgid "Archive"
 msgstr "Archiv"
+
+#: courses/templates/courses/auth/action_move_to_waiting_list.html:11
+#, fuzzy
+#| msgid "Email options"
+msgid "Email notification"
+msgstr "Emailoptionen"
 
 #: courses/templates/courses/auth/action_send_course_email.html:11
 #: courses/templates/courses/snippets/user_contact.html:2
@@ -1050,8 +1046,8 @@ msgstr "Deine Rolle"
 #: courses/templates/courses/course_subscribe_status.html:62
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:10
 #: courses/templates/user/snippets/subscription.html:60
-#: payment/templates/payment/courses/participants.html:31
-#: payment/templates/payment/courses/participants.html:47
+#: payment/templates/payment/courses/participants.html:36
+#: payment/templates/payment/courses/participants.html:53
 msgid "Partner"
 msgstr "Partner:in"
 
@@ -1111,112 +1107,113 @@ msgstr ""
 "geben ob du kommen kannst oder nicht."
 
 #: courses/templates/courses/plugins/next_lessons/index.html:12
-#: courses/templates/courses/plugins/replacements/index.html:93
+#: courses/templates/courses/plugins/replacements/index.html:96
 #: courses/templates/courses/snippets/info_to_participants.html:35
 #: templates/menu/desktop_menu.html:24 templates/menu/mobile_user_menu.html:23
 msgid "Log in"
 msgstr "Anmelden"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:30
+#: courses/templates/courses/plugins/next_lessons/index.html:29
+#: payment/templates/payment/lesson/attendance_check.html:44
 msgid "Replacement"
 msgstr "Aushilfe"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:45
-#: courses/templates/courses/plugins/next_lessons/index.html:65
+#: courses/templates/courses/plugins/next_lessons/index.html:46
+#: courses/templates/courses/plugins/next_lessons/index.html:66
 msgid "I will be there"
 msgstr "Ich komme"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:51
-#: courses/templates/courses/plugins/next_lessons/index.html:69
+#: courses/templates/courses/plugins/next_lessons/index.html:52
+#: courses/templates/courses/plugins/next_lessons/index.html:70
 msgid "I can't come"
 msgstr "Ich komme nicht"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:77
-#: courses/templates/courses/plugins/next_lessons/index.html:144
+#: courses/templates/courses/plugins/next_lessons/index.html:78
+#: courses/templates/courses/plugins/next_lessons/index.html:145
 msgid "Saving"
 msgstr "Speicher"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:84
+#: courses/templates/courses/plugins/next_lessons/index.html:85
 msgid "You can not change your attendance anymore."
 msgstr "Du kannst deine Anwesenheit nicht mehr ändern."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:91
-#: courses/templates/courses/plugins/next_lessons/index.html:148
-#: courses/templates/courses/plugins/replacements/index.html:152
+#: courses/templates/courses/plugins/next_lessons/index.html:92
+#: courses/templates/courses/plugins/next_lessons/index.html:149
+#: courses/templates/courses/plugins/replacements/index.html:161
 msgid "Something went wrong. Please try again later."
 msgstr "Etwas ist schief gelaufen. Probiere bitte später erneut."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:101
+#: courses/templates/courses/plugins/next_lessons/index.html:102
 msgid "No upcoming lessons"
 msgstr "Keine kommenden Lektionen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:110
+#: courses/templates/courses/plugins/next_lessons/index.html:111
 msgid "Show more lessons"
 msgstr "weitere Lektionen anzeigen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:124
+#: courses/templates/courses/plugins/next_lessons/index.html:125
 msgid "Choose Role"
 msgstr "Rolle wählen"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:128
+#: courses/templates/courses/plugins/next_lessons/index.html:129
 msgid "Please tell us if you are a leader or follower in this course."
 msgstr "Bitte sag uns, ob du in diesem Kurs führst oder folgst."
 
-#: courses/templates/courses/plugins/next_lessons/index.html:134
+#: courses/templates/courses/plugins/next_lessons/index.html:135
 msgid "I am a leader"
 msgstr "Ich führe"
 
-#: courses/templates/courses/plugins/next_lessons/index.html:138
+#: courses/templates/courses/plugins/next_lessons/index.html:139
 msgid "I am a follower"
 msgstr "Ich folge"
 
-#: courses/templates/courses/plugins/replacements/index.html:32
+#: courses/templates/courses/plugins/replacements/index.html:33
 msgid "Only eligible lessons"
 msgstr "Nur berechtigte Lektionen"
 
-#: courses/templates/courses/plugins/replacements/index.html:41
+#: courses/templates/courses/plugins/replacements/index.html:42
 msgid "Only leader spots"
 msgstr "Nur Leader Plätze"
 
-#: courses/templates/courses/plugins/replacements/index.html:49
+#: courses/templates/courses/plugins/replacements/index.html:50
 msgid "Only follower spots"
 msgstr "Nur Follower Plätze"
 
-#: courses/templates/courses/plugins/replacements/index.html:62
+#: courses/templates/courses/plugins/replacements/index.html:63
 msgid "One follower is needed"
 msgstr "Ein Follower benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:64
+#: courses/templates/courses/plugins/replacements/index.html:65
 msgid "followers are needed"
 msgstr "Follower benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:71
+#: courses/templates/courses/plugins/replacements/index.html:72
 msgid "One leader is needed"
 msgstr "Leader benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:73
+#: courses/templates/courses/plugins/replacements/index.html:74
 msgid "leaders are needed"
 msgstr "Leader benötigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:88
+#: courses/templates/courses/plugins/replacements/index.html:91
 msgid "To see more info and to claim spots, you must log in."
 msgstr ""
 "Um weitere Informationen zu sehen und um auszuhelfen musst du dich einloggen."
 
-#: courses/templates/courses/plugins/replacements/index.html:101
+#: courses/templates/courses/plugins/replacements/index.html:104
 msgid "You are a participant."
 msgstr "Du nimmst teil"
 
-#: courses/templates/courses/plugins/replacements/index.html:103
+#: courses/templates/courses/plugins/replacements/index.html:106
 msgid "You are signed up for this curse and can therefore not claim this spot."
 msgstr ""
 "Du bist für diesen Kurs angemeldet und kannst deswegen nicht aushelfen."
 
-#: courses/templates/courses/plugins/replacements/index.html:109
+#: courses/templates/courses/plugins/replacements/index.html:112
 msgid "Requirement not met"
 msgstr "Anforderungen nicht erfüllt"
 
-#: courses/templates/courses/plugins/replacements/index.html:111
+#: courses/templates/courses/plugins/replacements/index.html:114
 msgid ""
 "You can not claim this spot. In case this is a mistake, you may send us an "
 "email to get this course unlocked."
@@ -1224,37 +1221,83 @@ msgstr ""
 "Du kannst leider nicht aushelfen. Sende uns eine Email falls du denkst, dass "
 "es sich hier um einen Fehler handelt."
 
-#: courses/templates/courses/plugins/replacements/index.html:117
+#: courses/templates/courses/plugins/replacements/index.html:120
 msgid "Spot claimed"
 msgstr "Aushilfe bestätigt"
 
-#: courses/templates/courses/plugins/replacements/index.html:119
+#: courses/templates/courses/plugins/replacements/index.html:122
 msgid "You successfully signed up as replacement for this course."
 msgstr "Du hast dich erfolgreich als Aushilfe für den Kurs angemeldet."
 
-#: courses/templates/courses/plugins/replacements/index.html:125
+#: courses/templates/courses/plugins/replacements/index.html:128
 msgid "Requirements met"
 msgstr "Anforderungen erfüllt"
 
-#: courses/templates/courses/plugins/replacements/index.html:127
+#: courses/templates/courses/plugins/replacements/index.html:130
 msgid "Come back on the day of the lesson to claim a spot."
 msgstr "Besuche diese Seite am Tag der Lektion wieder um auszuhelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:134
+#: courses/templates/courses/plugins/replacements/index.html:140
 msgid "Claim leader spot"
 msgstr "Als Leader aushelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:140
+#: courses/templates/courses/plugins/replacements/index.html:149
 msgid "Claim follower spot"
 msgstr "Als Follower aushelfen"
 
-#: courses/templates/courses/plugins/replacements/index.html:147
+#: courses/templates/courses/plugins/replacements/index.html:156
 msgid "Claiming"
 msgstr "Aushilfe wird eingetragen"
 
-#: courses/templates/courses/plugins/replacements/index.html:158
+#: courses/templates/courses/plugins/replacements/index.html:167
 msgid "Successfully claimed spot."
 msgstr "Aushilfe erfolgreich bestätigt."
+
+#: courses/templates/courses/plugins/replacements/index.html:181
+#, fuzzy
+#| msgid "Claim leader spot"
+msgid "Claim a spot"
+msgstr "Als Leader aushelfen"
+
+#: courses/templates/courses/plugins/replacements/index.html:186
+#, fuzzy
+#| msgid "Are you sure you want to mark the following subscription as paid?"
+msgid "Are you sure you want to claim this spot?"
+msgstr ""
+"Bist du dir sicher, dass du die Kursanmeldung als bezahlt markieren möchtest?"
+
+#: courses/templates/courses/plugins/replacements/index.html:188
+#: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:6
+#: payment/services/offering_finance_teachers.py:57
+#: payment/templates/finance/offering/courses/index.html:12
+#: payment/templates/finance/offering/unpaid/index.html:12
+#: payment/templates/payment/counter/details.html:22
+#: payment/templates/payment/courses/confirm.html:20
+#: payment/templates/payment/subscription/index.html:41
+msgid "Course"
+msgstr "Kurs"
+
+#: courses/templates/courses/plugins/replacements/index.html:191
+#, fuzzy
+#| msgid "Date & Time"
+msgid "Date and time"
+msgstr "Datum & Uhrzeit"
+
+#: courses/templates/courses/plugins/replacements/index.html:197
+msgid "Role:"
+msgstr ""
+
+#: courses/templates/courses/plugins/replacements/index.html:204
+#: payment/templates/finance/offering/unpaid/index.html:96
+#: survey/templates/survey/components/question_result_free_form_answer.html:97
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: courses/templates/courses/plugins/replacements/index.html:209
+#, fuzzy
+#| msgid "Claiming"
+msgid "Claim"
+msgstr "Aushilfe wird eingetragen"
 
 #: courses/templates/courses/snippets/address_input.html:3
 #: courses/templates/user/profile.html:93
@@ -1413,7 +1456,7 @@ msgstr "Mehr anzeigen"
 #: courses/templates/user/snippets/course_as_teacher.html:7
 #: events/templates/events/snippets/event_banner.html:6
 #: events/templates/events/snippets/event_list.html:27
-#: events/templates/events/snippets/event_title.html:4
+#: events/templates/events/snippets/event_title.html:5
 msgid "Cancelled"
 msgstr "Abgesagt"
 
@@ -1555,16 +1598,6 @@ msgstr "weitere"
 #: courses/templates/courses/snippets/offering_components/offering_list_course_entry_row.html:30
 msgid "Currently unknown"
 msgstr "Zur Zeit unbekannt"
-
-#: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:6
-#: payment/services/offering_finance_teachers.py:57
-#: payment/templates/finance/offering/courses/index.html:12
-#: payment/templates/finance/offering/unpaid/index.html:12
-#: payment/templates/payment/counter/details.html:22
-#: payment/templates/payment/courses/confirm.html:20
-#: payment/templates/payment/subscription/index.html:41
-msgid "Course"
-msgstr "Kurs"
 
 #: courses/templates/courses/snippets/offering_components/offering_list_course_table.html:12
 #: courses/templates/user/snippets/course_as_teacher.html:23
@@ -2072,7 +2105,6 @@ msgid "Participants"
 msgstr "Teilnehmende"
 
 #: courses/templates/user/snippets/course_teacher_actions.html:36
-#: payment/templates/payment/courses/attendance.html:13
 msgid "Attendance"
 msgstr "Anwesenheit"
 
@@ -2589,7 +2621,7 @@ msgstr "Ort"
 
 #: events/templates/events/snippets/event_extended_info.html:29
 #: events/templates/events/snippets/event_info.html:8
-#: events/templates/events/snippets/event_list.html:41
+#: events/templates/events/snippets/event_list.html:46
 #: events/templates/events/snippets/event_list_entry.html:4
 msgid "Venue not yet set"
 msgstr "Ort noch nicht festgelegt"
@@ -2611,7 +2643,7 @@ msgstr "Kostenlos"
 #: partners/models/partner.py:35
 #: payment/templates/payment/counter/details.html:16
 #: payment/templates/payment/courses/confirm.html:16
-#: payment/templates/payment/courses/participants.html:42
+#: payment/templates/payment/courses/participants.html:48
 msgid "Name"
 msgstr "Name"
 
@@ -2821,7 +2853,6 @@ msgid "E-mail"
 msgstr "Email"
 
 #: payment/services/payment_reminders.py:58
-#, python-brace-format
 msgid "{} of {} reminded successfully"
 msgstr "{} von {} erfolgreich erinnert"
 
@@ -2992,11 +3023,6 @@ msgid "Are you sure you want to mark the following subscription as paid?"
 msgstr ""
 "Bist du dir sicher, dass du die Kursanmeldung als bezahlt markieren möchtest?"
 
-#: payment/templates/finance/offering/unpaid/index.html:96
-#: survey/templates/survey/components/question_result_free_form_answer.html:97
-msgid "Cancel"
-msgstr "Abbrechen"
-
 #: payment/templates/finance/offering/unpaid/index.html:104
 msgid "Manually mark as paid"
 msgstr "Manuell als bezahlt markieren"
@@ -3031,6 +3057,23 @@ msgstr "Eindeutige Kursnummer (USI)"
 msgid "Submit"
 msgstr "Absenden"
 
+#: payment/templates/payment/courses/attendance.html:13
+#, fuzzy
+#| msgid "Attendance"
+msgid "Attendance Overview"
+msgstr "Anwesenheit"
+
+#: payment/templates/payment/courses/attendance.html:18
+msgid "Today"
+msgstr ""
+
+#: payment/templates/payment/courses/attendance.html:30
+#: payment/templates/payment/lesson/attendance.html:28
+#, fuzzy
+#| msgid "Attendance"
+msgid "Check Attendance"
+msgstr "Anwesenheit"
+
 #: payment/templates/payment/courses/course.html:17
 msgid "German"
 msgstr "Deutsch"
@@ -3049,36 +3092,36 @@ msgstr "Alle Kurse"
 msgid "Participants will show up here, once they have been confirmed."
 msgstr "Teilnehmende werden hier angezeigt sobald sie bestätigt wurden."
 
-#: payment/templates/payment/courses/participants.html:30
-#: payment/templates/payment/courses/participants.html:46
+#: payment/templates/payment/courses/participants.html:34
+#: payment/templates/payment/courses/participants.html:52
 msgid "Lead/Follow"
 msgstr "Führen oder geführt werden"
 
-#: payment/templates/payment/courses/participants.html:43
+#: payment/templates/payment/courses/participants.html:49
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: payment/templates/payment/courses/participants.html:44
+#: payment/templates/payment/courses/participants.html:50
 msgid "Mobile"
 msgstr "Handynummer"
 
-#: payment/templates/payment/courses/snippets/attendance_balance.html:6
+#: payment/templates/payment/courses/snippets/attendance_balance.html:7
 msgid "balanced"
 msgstr "ausgeglichen"
 
-#: payment/templates/payment/courses/snippets/attendance_balance.html:11
+#: payment/templates/payment/courses/snippets/attendance_balance.html:12
 msgid "one leader too many"
 msgstr "ein Leader zu viel"
 
-#: payment/templates/payment/courses/snippets/attendance_balance.html:13
+#: payment/templates/payment/courses/snippets/attendance_balance.html:14
 msgid "leaders too many"
 msgstr "Leaders zu viel"
 
-#: payment/templates/payment/courses/snippets/attendance_balance.html:19
+#: payment/templates/payment/courses/snippets/attendance_balance.html:20
 msgid "one follower too many"
 msgstr "ein Follower zu viel"
 
-#: payment/templates/payment/courses/snippets/attendance_balance.html:22
+#: payment/templates/payment/courses/snippets/attendance_balance.html:23
 msgid "followers too many"
 msgstr "Followers zu viel"
 
@@ -3089,6 +3132,12 @@ msgstr "ein Ersatz"
 #: payment/templates/payment/courses/snippets/attendance_stats.html:12
 msgid "replacements"
 msgstr "Ersatz"
+
+#: payment/templates/payment/courses/snippets/attendance_stats.html:17
+#, fuzzy
+#| msgid "Show details"
+msgid "Show Details"
+msgstr "Details anzeigen"
 
 #: payment/templates/payment/courses/snippets/course_description.html:5
 msgid "Course description"
@@ -3183,6 +3232,94 @@ msgstr "Alle Präsenzerfassungen für dieses Angebot anzeigen"
 #: payment/templates/payment/courses/snippets/teacher_presence_form.html:150
 msgid "Searching"
 msgstr "Suchen"
+
+#: payment/templates/payment/lesson/attendance.html:14
+#, fuzzy
+#| msgid "Attendance"
+msgid "Lesson Attendance"
+msgstr "Anwesenheit"
+
+#: payment/templates/payment/lesson/attendance.html:21
+msgid "Back to all lessons"
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance.html:33
+#: payment/templates/payment/lesson/attendance_check.html:60
+#, fuzzy
+#| msgid "present"
+msgid "Present"
+msgstr "anwesend"
+
+#: payment/templates/payment/lesson/attendance.html:40
+#, fuzzy
+#| msgid "leader"
+msgid "Leaders"
+msgstr "führen"
+
+#: payment/templates/payment/lesson/attendance.html:51
+#, fuzzy
+#| msgid "follower"
+msgid "Followers"
+msgstr "geführt werden"
+
+#: payment/templates/payment/lesson/attendance.html:63
+msgid "Lead/Follow preference unknown"
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance.html:93
+#: payment/templates/payment/lesson/attendance.html:110
+#, fuzzy
+#| msgid "leader"
+msgid "Leader"
+msgstr "führen"
+
+#: payment/templates/payment/lesson/attendance.html:95
+#: payment/templates/payment/lesson/attendance.html:112
+#, fuzzy
+#| msgid "follower"
+msgid "Follower"
+msgstr "geführt werden"
+
+#: payment/templates/payment/lesson/attendance.html:103
+#: payment/templates/payment/lesson/attendance_check.html:71
+#, fuzzy
+#| msgid "present"
+msgid "Absent"
+msgstr "anwesend"
+
+#: payment/templates/payment/lesson/attendance_check.html:11
+#, fuzzy
+#| msgid "Attendance"
+msgid "Attendance Check"
+msgstr "Anwesenheit"
+
+#: payment/templates/payment/lesson/attendance_check.html:20
+#, fuzzy
+#| msgid "Back to profile"
+msgid "Back to overview"
+msgstr "Zurück zum Profil"
+
+#: payment/templates/payment/lesson/attendance_check.html:26
+msgid "Attendance check currently not open"
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance_check.html:29
+msgid "You can only check attendance during the lesson (± 15 min)."
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance_check.html:32
+msgid "Reload the page once the lesson starts."
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance_check.html:47
+msgid "Excused"
+msgstr ""
+
+#: payment/templates/payment/lesson/attendance_check.html:80
+#, fuzzy
+#| msgid "Attendance"
+msgid "Save attendance"
+msgstr "Anwesenheit"
 
 #: payment/templates/payment/subscription/index.html:8
 msgid "Payment Status"
