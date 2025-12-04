@@ -209,7 +209,7 @@ def _lesson_to_ical_event(
     event.add("summary", vText(event_title))
     if tentative:
         event.add("status", vText("TENTATIVE"))
-    event.add("location", vText(course.room))
+    event.add("location", vText(lesson_occurrence.room or course.room))
     event.add(
         "description",
         "\n\n".join(
