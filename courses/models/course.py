@@ -357,7 +357,9 @@ class Course(TranslatableModel):
             }
         )
 
-    def single_subscriptions_with_preference_count(self, lead_or_follow, admitted_only: bool = False) -> int:
+    def single_subscriptions_with_preference_count(
+        self, lead_or_follow, admitted_only: bool = False
+    ) -> int:
         return len(
             {
                 s
@@ -387,9 +389,13 @@ class Course(TranslatableModel):
     def get_confirmed_count(self) -> int:
         return self.subscriptions.accepted().count()
 
-    def get_matched_and_individual_counts(self, admitted_only: bool = False) -> tuple[int, int, int, int]:
+    def get_matched_and_individual_counts(
+        self, admitted_only: bool = False
+    ) -> tuple[int, int, int, int]:
         matched_count = self.matched_subscriptions_count(admitted_only)
-        leads_count = self.single_subscriptions_with_preference_count(LeadFollow.LEAD, admitted_only)
+        leads_count = self.single_subscriptions_with_preference_count(
+            LeadFollow.LEAD, admitted_only
+        )
         follows_count = self.single_subscriptions_with_preference_count(
             LeadFollow.FOLLOW, admitted_only
         )
@@ -823,6 +829,23 @@ class Course(TranslatableModel):
             for e in self.get_all_regular_lesson_exceptions()
             if not e.is_cancellation and not e.is_cancelled()
         ]
+
+    def get_next_lesson_occurrence_by_date(
+        self, lesson_date: date | None = None
+    ) -> Optional["LessonOccurrenceData"]:
+        if lesson_date is None:
+            lesson_date = date.today()
+        lesson_occurrences = self.get_lesson_occurrences()
+        upcoming_occurrences = [
+            occurrence
+            for occurrence in lesson_occurrences
+            if occurrence.start.date() >= lesson_date
+        ]
+        upcoming_occurrences.sort(key=lambda x: x.start)
+        if upcoming_occurrences:
+            return upcoming_occurrences[0]
+        else:
+            return None
 
     def get_lessons_as_strings(self) -> Iterable[str]:
         return map(str, self.get_lessons())
