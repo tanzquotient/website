@@ -1,0 +1,36 @@
+{% load i18n sekizai_tags %}
+
+<div class="text-center">
+    {% if access_code.display_format == "plain" %}
+        <code>
+            {{ access_code.code }}
+        </code>
+    {% elif access_code.display_format == "qr" %}
+        <div id="room_access_code" class="col-12 text-center"></div>
+    {% endif %}
+</div>
+
+{% if access_code.display_format == "qr" %}
+    {% addtoblock "css" %}
+        <style>
+            #room_access_code > img {
+                margin: auto;
+            }
+        </style>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+        <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+        <script>
+            const qrcode_container = document.getElementById('room_access_code');
+
+            const qrcode = new QRCode(qrcode_container, {
+                text: "{{ access_code.code }}",
+                width: 256,
+                height: 256,
+                colorDark : '#000',
+                colorLight : '#fff',
+                correctLevel : QRCode.CorrectLevel.M
+            });
+        </script>
+    {% endaddtoblock %}
+{% endif %}
