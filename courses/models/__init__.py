@@ -7,6 +7,7 @@ from .bank_account import BankAccount
 from .price_reduction import PriceReduction
 from .subscribe import Subscribe
 from .style import Style
+from .room_access_code import RoomAccessCode
 from .room import Room
 from .lesson_occurrence_data import LessonOccurrenceData
 from .room_cancellation import RoomCancellation

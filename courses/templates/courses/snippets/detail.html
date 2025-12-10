@@ -28,6 +28,13 @@
         <div>
             {% include "courses/snippets/course_detail_teacher_tools.html" %}
         </div>
+        {% with next_lesson_occurrence=course.get_next_lesson_occurrence_by_date %}
+            {% if next_lesson_occurrence and next_lesson_occurrence.room %}
+                <div>
+                    {% include "courses/snippets/room_access_code_wrapper.html" with room=next_lesson_occurrence.room course=course %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <div>
             {% include "courses/snippets/info_to_participants.html" %}
         </div>

@@ -140,6 +140,16 @@ class RoomCancellationInline(admin.TabularInline):
             .filter(date__gte=timezone.now().date() - timedelta(days=90))
         )
 
+class RoomAccessCodeInline(admin.TabularInline):
+    model = RoomAccessCode
+    extra = 2
+
+    def get_queryset(self, request):
+        return (
+            super(RoomAccessCodeInline, self)
+            .get_queryset(request)
+            .filter(valid_until__gte=timezone.now().date() - timedelta(days=90))
+        )
 
 @admin.register(LessonDetails)
 class MemberAdmin(admin.ModelAdmin):
@@ -673,7 +683,7 @@ class StyleAdmin(TranslatableAdmin):
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
     search_fields = ["name"]
-    inlines = (RoomCancellationInline,)
+    inlines = (RoomCancellationInline, RoomAccessCodeInline)
 
 
 @admin.register(RoomCancellation)

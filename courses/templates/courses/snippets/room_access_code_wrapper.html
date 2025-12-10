@@ -1,0 +1,44 @@
+{% load i18n %}
+
+{% comment "TODO check date" %}{% endcomment %}
+{% with access_code=room.get_access_code %}
+    {% if access_code %}
+        {% comment "TODO fix if" %}{% endcomment %}
+        {% if access_code.visibility == "public" or access_code.visibility == "participants" and user in course.participants or access_code.visibility == "teachers" and user in course.get_teachers or access_code.visibility == "staff" and user.is_staff %}
+            <h3>{% trans "Room access code" %}</h3>
+            {% if access_code.visibility == "teachers" and user in course.get_teachers or access_code.visibility == "teachers" and user.is_staff or access_code.visibility == "staff" and user.is_staff %}
+                <div class="alert alert-info">
+                    {% if access_code.visibility == "teachers" %}
+                        {% trans "The access code to the room is currently set to only be visible to staff and teachers of this course." %}
+                    {% elif access_code.visibility == "staff" %}
+                        {% trans "The access code to the room is currently set to only be visible to staff." %}
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <a href="{% url 'admin:courses_room_change' access_code.room.pk %}">
+                            {% trans "Go to the room admin page." %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <p>
+                {% trans "Please use this code to enter the room:" %}
+            </p>
+            {% include "courses/snippets/room_access_code.html" with access_code=access_code %}
+        {% endif %}
+    {% elif user.is_staff or user in course.get_teachers %}
+        <h3>{% trans "Room access code" %}</h3>
+        <div class="alert alert-info">
+            {% trans "No room access code is provided for the next lesson of this course." %}
+            <hr/>
+            <i>
+                {% trans "You are seeing this message because you are a staff member or a teacher of this course." %}
+                {% trans "You may ignore this if the room does not require an access code." %}
+            </i>
+            {% if user.is_staff %}
+                <a href="{% url 'admin:courses_room_change' room.pk %}">
+                            {% trans "Go to the room admin page." %}
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endwith %}
