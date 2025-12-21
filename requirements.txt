@@ -32,7 +32,7 @@ django-redis==6.0.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.6.0                   # Used for creating vouchers from SVG tremplate
-reportlab==4.4.6                # For generating PDFs and graphics
+reportlab==4.4.7                # For generating PDFs and graphics
 pyyaml==6.0.3                   # Used for generating environment variable file
 qrbill==1.2.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
@@ -49,7 +49,7 @@ minio==7.2.20                    # Perform bucket and object operations, used fo
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.47.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.48.0              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==6.5.0                  # For generating charts and graphs
