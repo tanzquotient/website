@@ -3,5 +3,5 @@ Canonical: https://tanzquotient.org/.well-known/security.txt
 Contact: mailto:informatik@tanzquotient.org
 Contact: https://tanzquotient.org/about/
 
-Expires: 2025-12-31T23:00:00.000Z
+Expires: 2026-12-31T23:00:00.000Z
 Preferred-Languages: en
