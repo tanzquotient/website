@@ -224,7 +224,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="voucher",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("percentage__isnull", True),
                     models.Q(("percentage__gte", 0), ("percentage__lte", 100)),
                     _connector="OR",
@@ -235,7 +235,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="voucher",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("amount__isnull", True), ("amount__gte", 0), _connector="OR"
                 ),
                 name="amount is null or non-negative",
@@ -244,7 +244,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="voucher",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     models.Q(
                         ("amount__isnull", False),
                         ("amount__gt", 0),
