@@ -31,10 +31,8 @@ class PriceReduction(Model):
     class Meta:
         ordering = ["-created_at"]
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ) -> None:
-        super().save(force_insert, force_update, using, update_fields)
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
         if self.subscription.open_amount().is_zero() and not self.subscription.paid():
             self.subscription.mark_as_paid(PaymentMethod.PRICE_REDUCTION)
 
