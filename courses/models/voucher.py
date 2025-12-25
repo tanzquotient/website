@@ -108,20 +108,14 @@ class Voucher(Model):
         ]
         ordering = ["-issued", "-expires"]
 
-    def save(
-        self,
-        force_insert: bool = False,
-        force_update: bool = False,
-        using=None,
-        update_fields=None,
-    ) -> None:
+    def save(self, *args, **kwargs) -> None:
         if not self.issued:
             self.issued = datetime.date.today()
         from payment.utils import generate_voucher_pdf
 
         pdf_file = generate_voucher_pdf(voucher=self)
         self.pdf_file.save(pdf_file.name, pdf_file, save=False)
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(*args, **kwargs)
 
     def apply_to(
         self, subscription: Subscribe, user: User
