@@ -255,7 +255,7 @@ class CourseAdmin(TranslatableAdmin):
     @staticmethod
     @admin.display(description="Lessons")
     def format_lessons_for_admin(course: Course) -> str:
-        return format_html_join("<br/>", "{}", (l for l in course.get_lessons_as_strings()))
+        return format_html_join("<br/>", "{}", ((l,) for l in course.get_lessons_as_strings()))
 
     @staticmethod
     @admin.display(description="E", boolean=True)
