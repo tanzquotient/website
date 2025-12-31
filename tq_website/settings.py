@@ -363,7 +363,8 @@ POST_OFFICE = {
     "BACKENDS": {
         # using djcelery's email backend as a backend for post office
         "default": (
-            EMAIL_BACKEND if DEBUG else "djcelery_email.backends.CeleryEmailBackend"
+            # EMAIL_BACKEND if DEBUG else "djcelery_email.backends.CeleryEmailBackend"
+            EMAIL_BACKEND if DEBUG else "django.core.mail.backends.smtp.EmailBackend"
         ),
     },
     "CELERY_ENABLED": not DEBUG,
