@@ -6,7 +6,7 @@ from typing import Optional
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.views.main import ChangeList
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import format_html_join, mark_safe
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
 from reversion.admin import VersionAdmin
@@ -255,7 +255,11 @@ class CourseAdmin(TranslatableAdmin):
     @staticmethod
     @admin.display(description="Lessons")
     def format_lessons_for_admin(course: Course) -> str:
-        return format_html("<br/>".join(course.get_lessons_as_strings()))
+        return format_html_join(
+            mark_safe("<br/>"),
+            "{}",
+            ((l,) for l in course.get_lessons_as_strings()),
+        )
 
     @staticmethod
     @admin.display(description="E", boolean=True)
