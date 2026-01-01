@@ -15,10 +15,8 @@ class FinanceFile(Model):
     processed = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ) -> None:
-        super().save(force_insert, force_update, using, update_fields)
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
         if self.type == FinanceFileType.ZKB_CSV and not self.processed:
             from payment.parser import ZkbCsvParser
             from tq_website.tasks import match_payments
