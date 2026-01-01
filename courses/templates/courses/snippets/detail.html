@@ -31,7 +31,7 @@
         {% with next_lesson_occurrence=course.get_next_lesson_occurrence_by_date %}
             {% if next_lesson_occurrence and next_lesson_occurrence.room %}
                 <div>
-                    {% include "courses/snippets/room_access_code_wrapper.html" with room=next_lesson_occurrence.room course=course %}
+                    {% include "courses/snippets/room_access_code_wrapper.html" with room=next_lesson_occurrence.room course=course code_date=next_lesson_occurrence.start.date %}
                 </div>
             {% endif %}
         {% endwith %}

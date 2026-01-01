@@ -24,6 +24,8 @@ from courses.models import (
     RejectionReason,
     LessonOccurrence,
     Attendance,
+    Room,
+    RoomAccessCode,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -448,13 +450,60 @@ def rejection_reason_info(reason: RejectionReason) -> str:
 def lead_follow_selector(
     context: dict, show_waiting_list: bool, course: Course
 ) -> dict:
-    context.update(dict(
-        leaders_waiting_list=show_waiting_list
-        and not course.has_free_places_for_leaders,
-        no_preference_waiting_list=show_waiting_list
-        and not course.has_free_places_for_leaders
-        and not course.has_free_places_for_followers,
-        followers_waiting_list=show_waiting_list
-        and not course.has_free_places_for_followers,
-    ))
+    context.update(
+        dict(
+            leaders_waiting_list=show_waiting_list
+            and not course.has_free_places_for_leaders,
+            no_preference_waiting_list=show_waiting_list
+            and not course.has_free_places_for_leaders
+            and not course.has_free_places_for_followers,
+            followers_waiting_list=show_waiting_list
+            and not course.has_free_places_for_followers,
+        )
+    )
     return context
+
+
+@register.simple_tag
+def get_room_access_code(
+    room: Room, code_date: dt.date | None = None
+) -> RoomAccessCode | None:
+    return room.get_access_code(code_date)
+
+
+@register.simple_tag
+def can_view_room_access_code(
+    access_code: RoomAccessCode | None, user: User, course: Course
+) -> bool:
+    """Return True if `user` is allowed to view `access_code` for `course`."""
+    if not access_code:
+        return False
+    visibility = access_code.visibility
+
+    if user.is_staff or visibility == RoomAccessCode.Visibility.PUBLIC:
+        return True
+
+    if visibility == RoomAccessCode.Visibility.TEACHERS:
+        return user in course.get_teachers()
+
+    if visibility == RoomAccessCode.Visibility.PARTICIPANTS:
+        return user in course.participants()
+
+    return False
+
+
+@register.simple_tag
+def show_restricted_room_access_code_alert(
+    access_code: RoomAccessCode | None, user: User, course: Course
+) -> bool:
+    if not access_code:
+        return False
+    visibility = access_code.visibility
+
+    if visibility == RoomAccessCode.Visibility.TEACHERS:
+        return user.is_staff or user in course.get_teachers()
+
+    if visibility == RoomAccessCode.Visibility.STAFF:
+        return user.is_staff
+
+    return False
