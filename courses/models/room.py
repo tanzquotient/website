@@ -90,7 +90,7 @@ class Room(TranslatableModel):
         qs: models.QuerySet[RoomAccessCode] = self.access_codes.filter(
             valid_from__lte=code_date, valid_until__gte=code_date
         )
-        return qs.get() if qs.exists() else None
+        return qs.first()
 
     def __str__(self) -> str:
         return self.name
