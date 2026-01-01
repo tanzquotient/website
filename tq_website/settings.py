@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     "reversion",
     "django_celery_beat",
     "django_celery_results",
-    "djcelery_email",
     "post_office",
     "allauth",
     "allauth.account",
@@ -361,19 +360,14 @@ if DEBUG:
 
 POST_OFFICE = {
     "BACKENDS": {
-        # using djcelery's email backend as a backend for post office
+        # backend used by post_office
         "default": (
-            # EMAIL_BACKEND if DEBUG else "djcelery_email.backends.CeleryEmailBackend"
             EMAIL_BACKEND if DEBUG else "django.core.mail.backends.smtp.EmailBackend"
         ),
     },
     "CELERY_ENABLED": not DEBUG,
     "DEFAULT_PRIORITY": "now" if DEBUG else "medium",
     "MAX_RETRIES": 5,
-}
-
-CELERY_EMAIL_TASK_CONFIG = {
-    "rate_limit": "10/s",  # * CELERY_EMAIL_CHUNK_SIZE (default: 10)
 }
 
 ###########

@@ -24,7 +24,6 @@ django-parler-rest==2.2         # Adding translation support to django-rest-fram
 
 # Tasks
 celery==5.6.0                   # Task queue with focus on real-time processing, while also supporting task scheduling
-django-celery-email==3.0.0      # Email backend that uses a Celery queue for out-of-band sending of the messages
 # https://github.com/celery/django-celery-beat/issues/977
 # django-celery-beat==2.8.1       # Store periodic task schedules in the database
 git+https://github.com/celery/django-celery-beat@bd429063cbb227c00905e7693c38895e44ff8e47       # Store periodic task schedules in the database

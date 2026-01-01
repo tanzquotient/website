@@ -1,5 +1,4 @@
 from celery import shared_task
-from django.conf import settings
 from post_office.mail import send_queued_mail_until_done
 
 from groups.services import update_groups
@@ -12,11 +11,7 @@ from email_system.services import send_scheduled_group_emails
 from photologue.models import Photo, PhotoSizeCache
 
 
-@shared_task(
-    name="post_office_send_queued_emails",
-    ignore_result=True,
-    **settings.CELERY_EMAIL_TASK_CONFIG
-)
+@shared_task(name="post_office_send_queued_emails", ignore_result=True)
 def send_queued_emails() -> None:
     send_queued_mail_until_done()
 

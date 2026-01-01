@@ -9,7 +9,6 @@ drop table if exists cmsplugin_filer_link_filerlinkplugin;
 alter table django_celery_beat_periodictask modify total_run_count int not null;
 alter table django_celery_beat_periodictask modify priority int;
 alter table django_celery_beat_periodictask modify expire_seconds int;
-alter table djcelery_periodictask modify total_run_count int not null;
 alter table easy_thumbnails_thumbnaildimensions modify width int;
 alter table easy_thumbnails_thumbnaildimensions modify height int;
 alter table filer_folder modify lft int not null;
