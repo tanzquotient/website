@@ -31,6 +31,8 @@ class RoomAccessCode(models.Model):
     visibility = models.CharField(max_length=12, choices=Visibility.choices)
 
     def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+
         if self.valid_from and self.valid_until and self.valid_from > self.valid_until:
             error_message = "Valid from date cannot be after valid until date."
             raise ValidationError(
@@ -39,7 +41,6 @@ class RoomAccessCode(models.Model):
                     "valid_until": error_message,
                 }
             )
-
         overlap_condition = Q(valid_from__lte=self.valid_until) & Q(
             valid_until__gte=self.valid_from
         )
