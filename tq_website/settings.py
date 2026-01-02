@@ -368,6 +368,13 @@ POST_OFFICE = {
     "CELERY_ENABLED": not DEBUG,
     "DEFAULT_PRIORITY": "now" if DEBUG else "medium",
     "MAX_RETRIES": 5,
+    "BATCH_SIZE": 10,
+    "BATCH_DELIVERY_TIMEOUT": 1800,  # 30 min
+    "THREADS_PER_PROCESS": 1,
+}
+
+CELERY_EMAIL_TASK_CONFIG = {
+    "rate_limit": "10/s",  # * BATCH_SIZE
 }
 
 ###########
