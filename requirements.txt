@@ -16,7 +16,7 @@ django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue
 django-cms==5.0.5               # Open source content management system based on the Django
 djangocms-text==0.9.3           # Text plugin for django CMS
 djangocms-versioning==2.5.0     # Core package of django CMS, is used to e.g. hava page histories
-djangocms-alias==2.0.5          # Core package of django CMS used for aliases
+djangocms-alias==3.0.3          # Core package of django CMS used for aliases
 
 # Rest framework
 djangorestframework==3.16.1     # Toolkit for building Web APIs
