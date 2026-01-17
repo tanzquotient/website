@@ -8,7 +8,7 @@ django-post-office==3.11.0       # Send and manage emails asynchronously, databa
 django-reversion==6.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==8.2.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.13.1          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.14.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
@@ -33,7 +33,7 @@ django-redis==6.0.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.6.0                   # Used for creating vouchers from SVG tremplate
-reportlab==4.4.7                # For generating PDFs and graphics
+reportlab==4.4.9                # For generating PDFs and graphics
 pyyaml==6.0.3                   # Used for generating environment variable file
 qrbill==1.2.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
@@ -50,10 +50,10 @@ minio==7.2.20                    # Perform bucket and object operations, used fo
 gunicorn==23.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.48.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.49.0              # Used for logging exceptions to Sentry.io
 
 # Utils
-plotly==6.5.0                  # For generating charts and graphs
+plotly==6.5.2                  # For generating charts and graphs
 pytz==2025.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.6            # Superuser can impersonate other users
