@@ -1,0 +1,57 @@
+{% load i18n sekizai_tags %}
+
+{% if user.is_staff or user in course.get_teachers %}
+    {% if room.get_instructions %}
+        <div class="card mb-3 mt-3">
+            {% addtoblock "css" %}
+            <style>
+                .rotate-icon {
+                    transition: transform .18s ease-in-out;
+                }
+
+                a[aria-expanded="true"] .rotate-icon {
+                    transform: rotate(90deg);
+                }
+
+                .room-instructions-toggle {
+                    text-decoration: none !important;
+                    color: inherit !important;
+                    cursor: pointer;
+                }
+            </style>
+            {% endaddtoblock %}
+
+            <div class="card-header p-2">
+                <h4 class="mb-0">
+                    <a class="room-instructions-toggle d-inline-flex align-items-center"
+                       data-bs-toggle="collapse"
+                       href="#room_instructions_{{ room.pk }}"
+                       aria-expanded="false"
+                       aria-controls="room_instructions_{{ room.pk }}">
+                        <i class="bi bi-caret-right-fill rotate-icon me-2" aria-hidden="true"></i>
+                        {% trans "Room instructions" %}
+                    </a>
+                </h4>
+            </div>
+
+            <div class="collapse" id="room_instructions_{{ room.pk }}">
+                <div class="card-body">
+                    <div class="alert alert-info" role="alert">
+                        {% if user.is_staff %}
+                            {% trans "These instructions are visible only to staff and teachers of this course. You are seeing them because you are staff." %}
+                            {% if perms.courses.change_room %}
+                                <a href="{% url 'admin:courses_room_change' room.pk %}">
+                                    {% trans "Go to the room admin page." %}
+                                </a>
+                            {% endif %}
+                        {% elif user in course.get_teachers %}
+                            {% trans "These instructions are visible only to staff and teachers of this course. You are seeing them because you are a teacher." %}
+                        {% endif %}
+                    </div>
+
+                    {{ room.get_instructions|safe }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

@@ -33,6 +33,9 @@
                 <div>
                     {% include "courses/snippets/room_access_code_wrapper.html" with room=next_lesson_occurrence.room course=course code_date=next_lesson_occurrence.start.date %}
                 </div>
+                <div>
+                    {% include "courses/snippets/room_instructions.html" with room=next_lesson_occurrence.room course=course %}
+                </div>
             {% endif %}
         {% endwith %}
         <div>
