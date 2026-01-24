@@ -16,15 +16,7 @@
         <div class="mt-3">
             <strong>{% trans "Venue" %}</strong>
         </div>
-        <div>
-            {{ event.room }}
-        </div>
-        {% if event.room.address %}
-            <div>{{ event.room.address }}</div>
-        {% endif %}
-        {% if event.room.url %}
-            <div>{% include "snippets/map_link.html" with url=event.room.url only %}</div>
-        {% endif %}
+        {% include "courses/snippets/room_modal.html" with display_link=True disable_modals=disable_modals room=event.room only %}
     {% else %}
         {% trans "Venue not yet set" %}
     {% endif %}
