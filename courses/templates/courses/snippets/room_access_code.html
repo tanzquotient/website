@@ -1,8 +1,8 @@
 {% load i18n sekizai_tags %}
 
-<div class="text-center">
+<div class="text-center mt-2">
     {% if access_code.display_format == "plain" %}
-        <code>
+        <code class="fs-3">
             {{ access_code.code }}
         </code>
     {% elif access_code.display_format == "qr" %}
