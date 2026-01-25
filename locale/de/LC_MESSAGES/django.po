@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tanzquotient Website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 22:48+0100\n"
+"POT-Creation-Date: 2026-01-25 16:52+0100\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -229,7 +229,7 @@ msgstr "Ausfälle"
 
 #: courses/emailcenter.py:289
 #: courses/templates/courses/snippets/course_info.html:39
-#: courses/templates/user/snippets/subscription.html:72
+#: courses/templates/user/snippets/subscription.html:70
 #: events/templates/events/snippets/event_info.html:13
 msgid "Costs"
 msgstr "Kosten"
@@ -289,16 +289,16 @@ msgstr "Verschickt"
 
 #: courses/filters.py:114
 #: courses/templates/courses/snippets/student_status_input.html:12
-#: courses/templates/user/profile.html:143
-#: courses/templates/user/profile.html:151
+#: courses/templates/user/profile.html:155
+#: courses/templates/user/profile.html:163
 #: payment/services/offering_finance_teachers.py:310
 msgid "Yes"
 msgstr "Ja"
 
 #: courses/filters.py:115
 #: courses/templates/courses/snippets/student_status_input.html:17
-#: courses/templates/user/profile.html:145
-#: courses/templates/user/profile.html:153
+#: courses/templates/user/profile.html:157
+#: courses/templates/user/profile.html:165
 #: payment/services/offering_finance_teachers.py:310
 msgid "No"
 msgstr "Nein"
@@ -375,38 +375,39 @@ msgid "Display name"
 msgstr "Anzeigename"
 
 #: courses/forms/user_edit_from.py:24
-msgid "Telephone number (Mobile)"
+#, fuzzy
+#| msgid "Telephone number (Mobile)"
+msgid "Telephone number (mobile)"
 msgstr "Telefonnummer (Mobil)"
 
 #: courses/forms/user_edit_from.py:26
 msgid ""
-"Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
-"Teilen von Kursinhalten weitergegeben!"
+"Your phone number is used for internal purposes and may be shared with "
+"teachers and, for couple courses, with your assigned partner. You may opt "
+"out of sharing with your partner using the option below."
 msgstr ""
-"Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für das "
-"Teilen von Kursinhalten weitergegeben!"
 
-#: courses/forms/user_edit_from.py:32
+#: courses/forms/user_edit_from.py:33
 msgid "Are you a student?"
 msgstr "Studierst du?"
 
-#: courses/forms/user_edit_from.py:33
+#: courses/forms/user_edit_from.py:34
 msgid "As a student you will profit from reduced course fees"
 msgstr "Falls ja, kannst du Kurse zu ermässigten Preisen besuchen."
 
-#: courses/forms/user_edit_from.py:36
+#: courses/forms/user_edit_from.py:37
 msgid "University"
 msgstr "Universität"
 
-#: courses/forms/user_edit_from.py:38
+#: courses/forms/user_edit_from.py:39
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: courses/forms/user_edit_from.py:43
+#: courses/forms/user_edit_from.py:44
 msgid "Height (cm)"
 msgstr "Größe"
 
-#: courses/forms/user_edit_from.py:45
+#: courses/forms/user_edit_from.py:46
 msgid ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
@@ -414,65 +415,76 @@ msgstr ""
 "Die Körpergrösse (in cm) kann bei Einzelanmeldungen angegeben werden zum "
 "finden eines ähnlich grossen Partners."
 
-#: courses/forms/user_edit_from.py:50
+#: courses/forms/user_edit_from.py:51
 msgid "Student card number"
 msgstr "Legi-Nummer"
 
-#: courses/forms/user_edit_from.py:52
+#: courses/forms/user_edit_from.py:53
 msgid "Subscribe to newsletter"
 msgstr "Newsletter abonnieren"
 
-#: courses/forms/user_edit_from.py:55
+#: courses/forms/user_edit_from.py:56
 msgid "I'd like to help Tanzquotient from time to time (Events etc.)"
 msgstr ""
 "Ich würde gern Teil der Tanzquotient Familie werden oder ab und zu aushelfen "
 "(z.B. bei Veranstaltungen)"
 
-#: courses/forms/user_edit_from.py:57
+#: courses/forms/user_edit_from.py:60
+msgid "Share personal data with partner in couple courses"
+msgstr ""
+
+#: courses/forms/user_edit_from.py:63
+msgid ""
+"If you agree, your full name, phone number (if provided) and email address "
+"will be shared with your partner in couple courses. Otherwise, only your "
+"first name and initial of your last name will be shared."
+msgstr ""
+
+#: courses/forms/user_edit_from.py:68
 msgid "Street"
 msgstr "Strasse"
 
-#: courses/forms/user_edit_from.py:58
+#: courses/forms/user_edit_from.py:69
 msgid "Postal code"
 msgstr "PLZ"
 
-#: courses/forms/user_edit_from.py:59
+#: courses/forms/user_edit_from.py:70
 msgid "City"
 msgstr "Ort"
 
-#: courses/forms/user_edit_from.py:63
+#: courses/forms/user_edit_from.py:74
 msgid "Choose Year"
 msgstr "Wähle Jahr"
 
-#: courses/forms/user_edit_from.py:63
+#: courses/forms/user_edit_from.py:74
 msgid "Choose Month"
 msgstr "Wähle Monat"
 
-#: courses/forms/user_edit_from.py:63
+#: courses/forms/user_edit_from.py:74
 msgid "Choose Day"
 msgstr "Wähle Tag"
 
-#: courses/forms/user_edit_from.py:70
+#: courses/forms/user_edit_from.py:81
 msgid ""
 "This image will be center cropped and rescaled to 512x512px upon upload."
 msgstr ""
 "Das Bild wird beim Upload mittig auf ein Quadrat zugeschnitten und auf "
 "512x512px skaliert."
 
-#: courses/forms/user_edit_from.py:74
+#: courses/forms/user_edit_from.py:85
 msgid "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 msgstr "Tipp: Hier kann auch HTML Code zum Formatieren eingegeben werden!"
 
-#: courses/forms/user_edit_from.py:77 courses/forms/user_edit_from.py:87
+#: courses/forms/user_edit_from.py:88 courses/forms/user_edit_from.py:98
 msgid "Select country"
 msgstr "Land auswählen"
 
-#: courses/forms/user_edit_from.py:100 courses/models/user_profile.py:143
+#: courses/forms/user_edit_from.py:111 courses/models/user_profile.py:149
 msgid "This display name is already in use. Please choose a different one."
 msgstr ""
 "Dieser Anzeigename wird bereits verwendet. Wähle bitte einen anderen aus."
 
-#: courses/forms/user_edit_from.py:108 courses/forms/user_edit_from.py:112
+#: courses/forms/user_edit_from.py:119 courses/forms/user_edit_from.py:123
 msgid "This field is required if you are a student."
 msgstr "Pflichtfeld für Studierende"
 
@@ -529,7 +541,7 @@ msgstr "führen"
 msgid "follow"
 msgstr "folgen"
 
-#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:355
+#: courses/models/choices/leadfollow.py:12 courses/models/subscribe.py:378
 msgid "no preference"
 msgstr "keine Präferenz"
 
@@ -738,25 +750,31 @@ msgstr ""
 msgid "Shown only to participants who are confirmed for a course in this room."
 msgstr "Wird nur Teilnehmenden eines Kurses in diesem Raum angezeigt."
 
-#: courses/models/subscribe.py:358
+#: courses/models/subscribe.py:381
 #: courses/templates/courses/plugins/replacements/index.html:263
 msgid "leader"
 msgstr "führen"
 
-#: courses/models/subscribe.py:359
+#: courses/models/subscribe.py:382
 #: courses/templates/courses/plugins/replacements/index.html:263
 msgid "follower"
 msgstr "geführt werden"
 
-#: courses/models/subscribe.py:362
+#: courses/models/subscribe.py:385
 msgid "no preference, assigned as leader"
 msgstr "keine Präferenz, zum führen eingeteilt"
 
-#: courses/models/subscribe.py:363
+#: courses/models/subscribe.py:386
 msgid "no preference, assigned as follower"
 msgstr "keine Präferenz, zum geführt werden eingeteilt"
 
-#: courses/models/user_profile.py:94
+#: courses/models/user_profile.py:78
+msgid ""
+"If True, the user agrees to share personal data with the partner in couple "
+"courses."
+msgstr ""
+
+#: courses/models/user_profile.py:100
 msgid ""
 "Profile picture. Only available to teachers and board members. Will be "
 "center cropped and rescaled to 512x512px upon upload."
@@ -993,6 +1011,24 @@ msgstr "Vorschau"
 msgid "Sign Up"
 msgstr "Registrieren"
 
+#: courses/templates/courses/course_subscribe_form.html:39
+msgid ""
+"You currently agree to share your contact details. If your partner also "
+"agrees, we will share with them your full name, email and phone number (if "
+"provided) when this subscription is confirmed."
+msgstr ""
+
+#: courses/templates/courses/course_subscribe_form.html:41
+msgid ""
+"You currently do not agree to share your contact details. For this "
+"subscription, your partner will only see your first name and initials of "
+"your last name."
+msgstr ""
+
+#: courses/templates/courses/course_subscribe_form.html:45
+msgid "You may change this in your user profile."
+msgstr ""
+
 #: courses/templates/courses/course_subscribe_status.html:10
 msgid "Subscription"
 msgstr "Anmeldung"
@@ -1051,12 +1087,12 @@ msgstr "Deine Rolle"
 msgid "Partner"
 msgstr "Partner:in"
 
-#: courses/templates/courses/course_subscribe_status.html:75
+#: courses/templates/courses/course_subscribe_status.html:73
 #: courses/templates/courses/subscription_cancellation_confirmation.html:50
 msgid "Show all my courses"
 msgstr "Zeige alle meine Kurse"
 
-#: courses/templates/courses/course_subscribe_status.html:82
+#: courses/templates/courses/course_subscribe_status.html:80
 #: courses/templates/courses/subscription_cancellation_confirmation.html:57
 msgid "Go back to the course list"
 msgstr "Zurück zur Kursliste"
@@ -1300,7 +1336,7 @@ msgid "Claim"
 msgstr "Aushilfe wird eingetragen"
 
 #: courses/templates/courses/snippets/address_input.html:3
-#: courses/templates/user/profile.html:93
+#: courses/templates/user/profile.html:105
 #: payment/services/offering_finance_teachers.py:421
 msgid "Address"
 msgstr "Adresse"
@@ -1907,22 +1943,22 @@ msgid "Some inputs are invalid"
 msgstr "Einige Eingaben sind ungültig"
 
 #: courses/templates/courses/snippets/user_modal.html:34
-#: courses/templates/user/profile.html:116
+#: courses/templates/user/profile.html:128
 msgid "Teacher"
 msgstr "Lehrer:in"
 
 #: courses/templates/courses/snippets/user_modal.html:38
-#: courses/templates/user/profile.html:119
+#: courses/templates/user/profile.html:131
 msgid "Teaching for Tanzquotient since"
 msgstr "Unterrichtet im Tanzquotient seit"
 
 #: courses/templates/courses/snippets/user_modal.html:41
-#: courses/templates/user/profile.html:122
+#: courses/templates/user/profile.html:134
 msgid "Courses taught for Tanzquotient"
 msgstr "Für den Tanzquotient unterrichtete Kurse"
 
 #: courses/templates/courses/snippets/user_modal.html:44
-#: courses/templates/user/profile.html:129
+#: courses/templates/user/profile.html:141
 #: payment/templates/finance/offering/unpaid/index.html:54
 msgid "Board member"
 msgstr "Vorstand"
@@ -1940,7 +1976,7 @@ msgstr "Über"
 msgid "No info available"
 msgstr "Keine Informationen verfügbar"
 
-#: courses/templates/courses/snippets/user_profile_form.html:50
+#: courses/templates/courses/snippets/user_profile_form.html:51
 msgid "Add salary Payment Info (only required for teachers and helpers)"
 msgstr "Zahlungsdaten eingeben (Nur für Lehrer:innen und Helfer:innen nötig)"
 
@@ -1985,7 +2021,7 @@ msgid "We have sent them a confirmation email as well."
 msgstr "Wir deine:r Partner:in ebenfalls eine Bestätigung gesendet."
 
 #: courses/templates/payment/account/info.html:4
-#: courses/templates/user/profile.html:106
+#: courses/templates/user/profile.html:118
 #: payment/services/offering_finance_teachers.py:428
 msgid "IBAN"
 msgstr "IBAN"
@@ -2051,32 +2087,44 @@ msgstr "AHV Nummer"
 msgid "Zemis number"
 msgstr "ZEMIS Nummer"
 
-#: courses/templates/user/profile.html:104
+#: courses/templates/user/profile.html:92
+msgid ""
+"You agreed to share your contact details (full name, email and phone number) "
+"with your partner in couple courses."
+msgstr ""
+
+#: courses/templates/user/profile.html:96
+msgid ""
+"You have opted out of sharing full contact details with your partner; only "
+"first name and initial will be shared."
+msgstr ""
+
+#: courses/templates/user/profile.html:116
 msgid "Bank account"
 msgstr "Kontonummer"
 
-#: courses/templates/user/profile.html:108
+#: courses/templates/user/profile.html:120
 #: payment/services/offering_finance_teachers.py:429
 msgid "Bank"
 msgstr "Bank"
 
-#: courses/templates/user/profile.html:127
+#: courses/templates/user/profile.html:139
 msgid "Functions"
 msgstr "Funktionen"
 
-#: courses/templates/user/profile.html:139
+#: courses/templates/user/profile.html:151
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: courses/templates/user/profile.html:141
+#: courses/templates/user/profile.html:153
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: courses/templates/user/profile.html:149
+#: courses/templates/user/profile.html:161
 msgid "Get involved"
 msgstr "Get involved"
 
-#: courses/templates/user/profile.html:161
+#: courses/templates/user/profile.html:173
 msgid "About me"
 msgstr "Über mich"
 
@@ -2209,17 +2257,17 @@ msgstr "Mehr Infos"
 msgid "Course details"
 msgstr "Kursdetails"
 
-#: courses/templates/user/snippets/subscription.html:77
+#: courses/templates/user/snippets/subscription.html:75
 msgid "free of charge"
 msgstr "kostenlos"
 
-#: courses/templates/user/snippets/subscription.html:85
+#: courses/templates/user/snippets/subscription.html:83
 #: courses/templates/user/snippets/subscription_status_badge.html:10
 #: payment/templates/payment/subscription/snippets/payment_state_alert.html:10
 msgid "Overdue payment"
 msgstr "Zahlung überfällig"
 
-#: courses/templates/user/snippets/subscription.html:88
+#: courses/templates/user/snippets/subscription.html:86
 msgid ""
 "You will not be able to sign up for any courses as long as this course is "
 "unpaid."
@@ -2227,17 +2275,17 @@ msgstr ""
 "Du kannst dich für keine Kurse anmelden, solange dieser Kurs nicht bezahlt "
 "wird."
 
-#: courses/templates/user/snippets/subscription.html:91
+#: courses/templates/user/snippets/subscription.html:89
 msgid "Unpaid"
 msgstr "Nicht bezahlt"
 
-#: courses/templates/user/snippets/subscription.html:95
+#: courses/templates/user/snippets/subscription.html:93
 msgid "To see the payment details, pay with the QR-bill and apply vouchers:"
 msgstr ""
 "Klicke hier für Zahlungsdetails, QR-Rechnung und zum Einlösen von "
 "Gutscheinen:"
 
-#: courses/templates/user/snippets/subscription.html:97
+#: courses/templates/user/snippets/subscription.html:95
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:21
 #: courses/templates/user/snippets/unpaid_subscriptions_list.html:34
 #: payment/cms_toolbars.py:10
@@ -2245,7 +2293,7 @@ msgstr ""
 msgid "Payment"
 msgstr "Bezahlung"
 
-#: courses/templates/user/snippets/subscription.html:104
+#: courses/templates/user/snippets/subscription.html:102
 msgid "State"
 msgstr "Status"
 
@@ -2407,24 +2455,24 @@ msgstr "Leider mussten wir die Anmeldung ablehnen."
 msgid "Tentative"
 msgstr "Nicht bestätigt"
 
-#: courses/views.py:431 templates/menu/desktop_user_menu.html:12
+#: courses/views.py:437 templates/menu/desktop_user_menu.html:12
 #: templates/menu/mobile_admin_menu.html:17
 msgid "Teachers overview"
 msgstr "Übersicht Lehrer:innen"
 
-#: courses/views.py:441
+#: courses/views.py:447
 msgid "By subscription status"
 msgstr "Nach Anmeldungsstatus"
 
-#: courses/views.py:444
+#: courses/views.py:450
 msgid "By affiliation"
 msgstr "Nach Zugehörigkeit"
 
-#: courses/views.py:447
+#: courses/views.py:453
 msgid "By matching states"
 msgstr "Nach Matching Status"
 
-#: courses/views.py:450
+#: courses/views.py:456
 msgid "By lead and follow"
 msgstr "Nach Lead und Follow Angaben"
 
@@ -2619,19 +2667,19 @@ msgstr "Mehr"
 msgid "Venue"
 msgstr "Ort"
 
-#: events/templates/events/snippets/event_extended_info.html:29
+#: events/templates/events/snippets/event_extended_info.html:21
 #: events/templates/events/snippets/event_info.html:8
 #: events/templates/events/snippets/event_list.html:46
 #: events/templates/events/snippets/event_list_entry.html:4
 msgid "Venue not yet set"
 msgstr "Ort noch nicht festgelegt"
 
-#: events/templates/events/snippets/event_extended_info.html:34
+#: events/templates/events/snippets/event_extended_info.html:26
 #: events/templates/events/snippets/event_list.html:14
 msgid "Entry fee"
 msgstr "Eintritt"
 
-#: events/templates/events/snippets/event_extended_info.html:43
+#: events/templates/events/snippets/event_extended_info.html:35
 msgid "Organized by"
 msgstr "Organisiert von"
 
@@ -3078,8 +3126,8 @@ msgstr "Anwesenheit"
 msgid "German"
 msgstr "Deutsch"
 
-#: payment/templates/payment/courses/course.html:21 tq_website/settings.py:274
-#: tq_website/settings.py:291
+#: payment/templates/payment/courses/course.html:21 tq_website/settings.py:273
+#: tq_website/settings.py:290
 msgid "English"
 msgstr "Englisch"
 
@@ -3800,15 +3848,15 @@ msgstr "Du hast schon ein Konto?"
 msgid "Login"
 msgstr "Anmelden"
 
-#: templates/account/signup.html:47
+#: templates/account/signup.html:48
 msgid "By creating an account you accept the"
 msgstr "Mit dem Erstellen eines Accounts akzeptiertest du die"
 
-#: templates/account/signup.html:47
+#: templates/account/signup.html:48
 msgid "VSETH Privacy Policy"
 msgstr "VSETH Privacy Policy"
 
-#: templates/account/signup.html:56
+#: templates/account/signup.html:57
 msgid "Create Account"
 msgstr "Konto erstellen"
 
@@ -3948,19 +3996,19 @@ msgstr "Vorstandsposten"
 msgid "FAQ - Question groups"
 msgstr "FAQ - Question groups"
 
-#: tq_website/settings.py:273 tq_website/settings.py:281
+#: tq_website/settings.py:272 tq_website/settings.py:280
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: tq_website/settings.py:313
+#: tq_website/settings.py:312
 msgid "Main content"
 msgstr "Hauptinhalt"
 
-#: tq_website/settings.py:317
+#: tq_website/settings.py:316
 msgid "Side content"
 msgstr "Seiteninhalt"
 
-#: tq_website/settings.py:321
+#: tq_website/settings.py:320
 msgid "Title"
 msgstr "Titel"
 
@@ -3971,6 +4019,13 @@ msgstr "Die Switch edu-ID ist bereits mit deinem Konto verbunden."
 #: utils/iban_validator.py:27
 msgid "The IBAN is invalid."
 msgstr "Die IBAN is inkorrekt."
+
+#~ msgid ""
+#~ "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für "
+#~ "das Teilen von Kursinhalten weitergegeben!"
+#~ msgstr ""
+#~ "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern für "
+#~ "das Teilen von Kursinhalten weitergegeben!"
 
 #~ msgid ""
 #~ "Course types which this user has unlocked. For example, participating "
