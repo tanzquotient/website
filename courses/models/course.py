@@ -98,6 +98,10 @@ class Course(TranslatableModel):
     completed = models.BooleanField(
         default=False, help_text="If true, will disable teachers presence editing."
     )
+    couples_only = models.BooleanField(
+        default=False,
+        help_text=("If enabled, users may only sign up with a partner."),
+    )
 
     # Optional - apply to all course types
     room = models.ForeignKey(
@@ -192,6 +196,18 @@ class Course(TranslatableModel):
                         "Early sign-up cannot be enabled for this "
                         "course as no predecessors are set for its type, "
                         "or its type hasn't been selected."
+                    )
+                }
+            )
+
+        # `couples_only` is only meaningful for course types that are couple courses
+        if self.couples_only and (
+            not hasattr(self, "type") or not self.type.couple_course
+        ):
+            raise ValidationError(
+                {
+                    "couples_only": _(
+                        "A course can be marked 'couples only' only if its course type is a couple course."
                     )
                 }
             )

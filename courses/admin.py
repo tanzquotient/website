@@ -179,6 +179,7 @@ class CourseAdmin(TranslatableAdmin):
         "is_cancelled",
         "is_evaluated",
         "are_teachers_welcomed",
+        "is_couples_only",
         "subscription_type",
         "offering",
         "get_period",
@@ -189,7 +190,14 @@ class CourseAdmin(TranslatableAdmin):
         "format_teachers",
         "has_description_in_all_languages",
     )
-    list_filter = ("offering", "subscription_type", "display", "active", "completed")
+    list_filter = (
+        "offering",
+        "subscription_type",
+        "display",
+        "active",
+        "completed",
+        "couples_only",
+    )
     readonly_fields = ["completed"]
     search_fields = [
         "name",
@@ -212,6 +220,7 @@ class CourseAdmin(TranslatableAdmin):
                 "fields": [
                     "name",
                     "type",
+                    "couples_only",
                     "subscription_type",
                     "min_subscribers",
                     "max_subscribers",
@@ -279,6 +288,11 @@ class CourseAdmin(TranslatableAdmin):
     @admin.display(description="C", boolean=True)
     def is_cancelled(course: Course) -> bool:
         return course.cancelled
+
+    @staticmethod
+    @admin.display(description="CO", boolean=True)
+    def is_couples_only(course: Course) -> bool:
+        return course.couples_only
 
     @staticmethod
     @admin.display(description="T", boolean=True)

@@ -23,76 +23,83 @@
             </style>
         {% endaddtoblock %}
         <div class="nav btn-group d-flex flex-nowrap" id="pills-tab" role="group">
-
-            <input type="radio"
-                   class="couple_lead_selector d-block btn-check{% if form.single_or_couple.value != 'c' %} active{% endif %}"
-                   name="single_or_couple" value="s" id="single"
-                   data-bs-toggle="pill" data-bs-target="#single-tab" role="tab"
-                   aria-selected="{% if form.single_or_couple.value != 'c' %}true{% else %}false{% endif %}"
+            {% if course.couples_only %}
+                <div class="alert alert-info w-100 m-0 p-2" role="alert">
+                    {% trans "This course is for couples only — you must sign up together with a partner." %}
+                </div>
+                <input type="radio" id="single_or_couple" name="single_or_couple" value="c" checked class="d-none" />
+            {% else %}
+                <input type="radio"
+                    class="couple_lead_selector d-block btn-check{% if form.single_or_couple.value != 'c' %} active{% endif %}"
+                    name="single_or_couple" value="s" id="single"
+                    data-bs-toggle="pill" data-bs-target="#single-tab" role="tab"
+                    aria-selected="{% if form.single_or_couple.value != 'c' %}true{% else %}false{% endif %}"
                     {% if form.single_or_couple.value != 'c' %} checked {% endif %} />
-            <label class="btn btn-outline-{{ course.get_free_places_count|yesno:"success,warning" }}"
-                   for="single">
-                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
-                    <span>
-                        {% trans "Without partner" %}
+                <label class="btn btn-outline-{{ course.get_free_places_count|yesno:"success,warning" }}"
+                    for="single">
+                    <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
+                        <span>
+                            {% trans "Without partner" %}
+                        </span>
+                        {% if not course.get_free_places_count %}
+                            <span class="badge waiting-list-badge">
+                                {% trans "Waiting list" %}
+                            </span>
+                        {% endif %}
                     </span>
-                    {% if not course.get_free_places_count %}
-                        <span class="badge waiting-list-badge">
-                              {% trans "Waiting list" %}
-                        </span>
-                    {% endif %}
-                </span>
-            </label>
+                </label>
 
-            <input type="radio"
-                   class="couple_lead_selector btn-check d-block btn-check{% if form.single_or_couple.value == 'c' %} active{% endif %}"
-                   name="single_or_couple" value="c" id="couple"
-                   data-bs-toggle="pill" data-bs-target="#couple-tab" role="tab"
+                <input type="radio"
+                    class="couple_lead_selector btn-check d-block btn-check{% if form.single_or_couple.value == 'c' %} active{% endif %}"
+                    name="single_or_couple" value="c" id="couple"
+                    data-bs-toggle="pill" data-bs-target="#couple-tab" role="tab"
                     {% if form.single_or_couple.value == 'c' %} checked {% endif %} />
-            <label class="btn btn-outline-{% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %}warning
-            {% else %}success{% endif %}" for="couple">
-                <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
-                    {% trans "With partner" %}
-                    {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %}
-                        <span
-                                class="badge waiting-list-badge">
-                              {% trans "Waiting list" %}
-                        </span>
-                    {% endif %}
-                </span>
-            </label>
-
+                <label class="btn btn-outline-{% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %}warning
+                {% else %}success{% endif %}" for="couple">
+                    <span class="d-flex align-items-baseline justify-content-center gap-1 flex-wrap">
+                        {% trans "With partner" %}
+                        {% if not course.has_free_places_for_leaders or not course.has_free_places_for_followers or course.get_free_places_count < 2 %}
+                            <span
+                                    class="badge waiting-list-badge">
+                                {% trans "Waiting list" %}
+                            </span>
+                        {% endif %}
+                    </span>
+                </label>
+            {% endif %}
         </div>
 
         <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-3"
-                 id="single-tab" role="tabpanel" aria-labelledby="single">
-                <div>
-                    <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
-                </div>
-                
-                {% with id_suffix='s' %}
-                    {% lead_follow_selector course=course show_waiting_list=True %}
-                {% endwith %}
-                
-                <div id="lead_follow_help" class="form-text">
-                    <div class="alert alert-info my-2 p-2 d-flex align-items-center"
-                         role="alert">
-                        <div class="me-2">
-                            <i class="bi bi-info-circle-fill"></i>
-                        </div>
-                        <div>
-                            {% trans "Please note, that we will assign partners based on lead / follow preferences, not based on gender." %}
-                            {% trans "If you indicate no preference, we will assign you a fixed role based on the number of leaders and followers signed up for this course." %}
+            {% if not course.couples_only %}
+                <div class="tab-pane fade {% if form.single_or_couple.value != 'c' %} show active {% endif %}  mt-3"
+                     id="single-tab" role="tabpanel" aria-labelledby="single">
+                    <div>
+                        <label class="form-label"><strong>{% trans "Do you want to lead or follow?" %}</strong></label>
+                    </div>
+                    
+                    {% with id_suffix='s' %}
+                        {% lead_follow_selector course=course show_waiting_list=True %}
+                    {% endwith %}
+                    
+                    <div id="lead_follow_help" class="form-text">
+                        <div class="alert alert-info my-2 p-2 d-flex align-items-center"
+                            role="alert">
+                            <div class="me-2">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </div>
+                            <div>
+                                {% trans "Please note, that we will assign partners based on lead / follow preferences, not based on gender." %}
+                                {% trans "If you indicate no preference, we will assign you a fixed role based on the number of leaders and followers signed up for this course." %}
+                            </div>
                         </div>
                     </div>
+                    <div class="mt-3">
+                        <label class="form-label"><strong>{% trans "Student status" %}</strong></label>
+                        {% include "courses/snippets/student_status_alert.html" %}
+                    </div>
                 </div>
-                <div class="mt-3">
-                    <label class="form-label"><strong>{% trans "Student status" %}</strong></label>
-                    {% include "courses/snippets/student_status_alert.html" %}
-                </div>
-            </div>
-            <div class="tab-pane fade {% if form.single_or_couple.value == 'c' %} show active {% endif %}  mt-3"
+            {% endif %}
+            <div class="tab-pane fade {% if form.single_or_couple.value == 'c' or course.couples_only %} show active {% endif %}  mt-3"
                  id="couple-tab" role="tabpanel" aria-labelledby="couple">
                 <div>
                     <label class="form-label"><strong>{% trans "Within your couple, will you lead or follow?" %}</strong></label>
