@@ -1,4 +1,5 @@
 from .choices import *
+from .teacher_welcome import TeacherWelcome
 from .teach import Teach
 from .offering import Offering
 from .address import Address
@@ -20,7 +21,6 @@ from .rejection import Rejection
 from .course import Course
 from .period_cancellation import PeriodCancellation
 from .confirmation import Confirmation
-from .teacher_welcome import TeacherWelcome
 from .voucher import Voucher
 from .voucher_purpose import VoucherPurpose
 from .user_profile import UserProfile

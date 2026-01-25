@@ -243,7 +243,6 @@ class CourseAdmin(TranslatableAdmin):
         disable_early_signup,
         cancel,
         welcome_teachers,
-        welcome_teachers_reset_flag,
         copy_courses,
         export_confirmed_subscriptions_csv,
         export_confirmed_subscriptions_csv_google,

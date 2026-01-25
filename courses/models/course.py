@@ -919,7 +919,10 @@ class Course(TranslatableModel):
             return None
 
     def get_teachers_welcomed(self) -> bool:
-        return self.teaching.filter(welcomed=True).count() > 0
+        teaches = list(self.teaching.all())
+        if not teaches:
+            return False
+        return all(t.welcomed for t in teaches)
 
     get_teachers_welcomed.short_description = "Teachers welcomed"
     get_teachers_welcomed.boolean = True
@@ -955,7 +958,6 @@ class Course(TranslatableModel):
         # copy teachers
         for teach in old.teaching.all():
             teach.pk = None
-            teach.welcomed = False
             teach.course = self
             teach.save()
 

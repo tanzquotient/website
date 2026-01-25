@@ -17,12 +17,9 @@ log = logging.getLogger("tq")
 
 def welcome_teacher(teach):
     if not teach.welcomed:
-        teach.welcomed = True
-        teach.save()
-
         m = send_teacher_welcome(teach)
         if m:
-            # log that we sent the confirmation
+            # log that we enqueued/sent the confirmation; TeacherWelcome records the mail
             c = models.TeacherWelcome(teach=teach, mail=m)
             c.save()
             return True
@@ -43,24 +40,10 @@ def welcome_teachers(courses, request):
     messages.add_message(
         request,
         messages.SUCCESS,
-        _("{} of {} welcomed successfully").format(count, total),
-    )
-
-
-def welcome_teachers_reset_flag(courses, request):
-    count = 0
-    total = 0
-    for course in courses:
-        for teach in course.teaching.all():
-            if teach.welcomed:
-                count += 1
-                teach.welcomed = False
-                teach.save()
-            total += 1
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        _("{} of {} teachers reset successfully").format(count, total),
+        _(
+            "{} of {} welcome emails dispatched. Please allow "
+            "a few minutes for all emails to be sent."
+        ).format(count, total),
     )
 
 
@@ -100,8 +83,10 @@ def send_presence_reminder() -> None:
                 "teacher_presence_url": (
                     "https://"
                     + settings.DEPLOYMENT_DOMAIN
-                    + reverse("payment:course_teacher_presence", kwargs={"course": course.id})
-                )
+                    + reverse(
+                        "payment:course_teacher_presence", kwargs={"course": course.id}
+                    )
+                ),
             }
             log.info(
                 f"Will send presence form reminder to {main_teacher.username} for course {course.type.title} in offering {course.offering.name}"

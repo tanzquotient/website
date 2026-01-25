@@ -209,10 +209,6 @@ def welcome_teachers(modeladmin, request, queryset):
     services.teachers.welcome_teachers(queryset, request)
 
 
-def welcome_teachers_reset_flag(modeladmin, request, queryset):
-    services.teachers.welcome_teachers_reset_flag(queryset, request)
-
-
 @admin.action(description="Export confirmed subscriptions of selected courses as CSV")
 def export_confirmed_subscriptions_csv(modeladmin, request, queryset):
     ids = []
