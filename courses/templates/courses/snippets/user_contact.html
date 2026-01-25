@@ -2,5 +2,10 @@
 {% trans "Email" %}: <a href="mailto:{{user.email}}">{{ user.email }}</a>
 {% if user.profile and user.profile.phone_number %}
     <br/>
-    {% trans "Phone" %}: <span style="white-space: nowrap"><a href="tel:{{ user.profile.phone_number }}">{{ user.profile.phone_number }}</a></span>
+    {% trans "Phone" %}:
+    <span style="white-space: nowrap">
+        <a href="tel:{{ user.profile.phone_number }}">
+            {{ user.profile.phone_number }}
+        </a>
+    </span>
 {% endif %}

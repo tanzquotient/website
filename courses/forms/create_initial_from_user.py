@@ -20,6 +20,7 @@ def create_initial_from_user(user: User, initial: dict = None) -> dict:
     data["legi"] = user.profile.legi
     data["newsletter"] = user.profile.newsletter
     data["get_involved"] = user.profile.get_involved
+    data["personal_data_sharing"] = user.profile.personal_data_sharing
     data["picture"] = user.profile.picture
     data["about_me"] = user.profile.about_me
     if user.profile.address:

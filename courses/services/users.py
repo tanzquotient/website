@@ -34,6 +34,7 @@ def update_user(user: User, user_data: dict) -> User:
     set_if_given("body_height")
     set_if_given("newsletter")
     set_if_given("get_involved")
+    set_if_given("personal_data_sharing")
 
     if not user_data["picture"]:
         profile.picture = None
