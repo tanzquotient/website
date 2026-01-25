@@ -39,7 +39,6 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
             context.update(
                 {
                     "partner_first_name": subscription.partner.first_name,
-                    "partner_last_name": subscription.partner.last_name,
                 }
             )
         elif subscription.course.type.couple_course:
@@ -53,7 +52,6 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
             context.update(
                 {
                     "partner_first_name": subscription.partner.first_name,
-                    "partner_last_name": subscription.partner.last_name,
                 }
             )
         elif subscription.course.type.couple_course:
@@ -113,8 +111,6 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
         template = "participation_confirmation_with_partner"
         context.update(
             {
-                "partner_first_name": subscription.partner.first_name,
-                "partner_last_name": subscription.partner.last_name,
                 "partner_info": create_partner_info(subscription),
             }
         )
