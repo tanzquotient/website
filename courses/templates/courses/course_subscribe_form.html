@@ -30,6 +30,22 @@
             </div>
             <div class="col-xs-12 col-md-8 col-lg-9">
                 <h4>{% trans "Sign Up" %}</h4>
+                <div class="alert alert-info my-2 p-2 d-flex align-items-center" role="alert">
+                    <div class="me-2">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </div>
+                    <div>
+                        {% if user.profile.personal_data_sharing %}
+                            {% trans "You currently agree to share your contact details. If your partner also agrees, we will share with them your full name, email and phone number (if provided) when this subscription is confirmed." %}
+                        {% else %}
+                            {% trans "You currently do not agree to share your contact details. For this subscription, your partner will only see your first name and initials of your last name." %}
+                        {% endif %}
+                        <a href="{% url 'edit_profile' %}">
+                            <i class="bi bi-arrow-right-circle-fill"></i>
+                            {% trans "You may change this in your user profile." %}
+                        </a>
+                    </div>
+                </div>
                 {% include "courses/snippets/subscribe_form.html" %}
             </div>
         </div>

@@ -59,9 +59,7 @@
                             <div class="col-xs-12">
                                 <strong>{% trans "Partner" %}</strong>
                                 <div class="mb-2">
-                                    {{ subscription.partner.get_full_name }}
-                                    <br/>
-                                    {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                                    {% include "courses/snippets/partner_info.html" with subscription=subscription only %}
                                 </div>
                             </div>
                         {% endif %}

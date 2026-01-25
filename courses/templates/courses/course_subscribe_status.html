@@ -61,9 +61,7 @@
                             <p>
                                 <strong>{% trans "Partner" %}</strong>
                                 <br/>
-                                {{ subscription.partner.get_full_name }}
-                                <br/>
-                                {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+                                {% include "courses/snippets/partner_info.html" with subscription=subscription only %}
                             </p>
                         {% endif %}
                     {% endif %}
