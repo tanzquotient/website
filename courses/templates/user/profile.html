@@ -85,6 +85,18 @@
                 <strong> {% trans "Contact" %}</strong>
                 <br/>
                 {% include "courses/snippets/user_contact.html" with user=user only %}
+                {% if user.profile %}
+                    <br/><i class="bi bi-info-circle-fill me-1"></i>
+                    {% if user.profile.personal_data_sharing %}
+                        <span class="text-muted small mt-0">
+                            {% trans "You agreed to share your contact details (full name, email and phone number) with your partner in couple courses." %}
+                        </span>
+                    {% else %}
+                        <span class="text-muted small mt-0">
+                            {% trans "You have opted out of sharing full contact details with your partner; only first name and initial will be shared." %}
+                        </span>
+                    {% endif %}
+                {% endif %}
             </p>
         </div>
         <div class="col-12 col-sm-4">

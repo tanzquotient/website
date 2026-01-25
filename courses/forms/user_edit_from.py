@@ -21,10 +21,11 @@ class UserEditForm(forms.Form):
         required=False, max_length=30, label=_("Display name")
     )
     phone_number = forms.CharField(max_length=255, required=False)
-    phone_number.label = _("Telephone number (Mobile)")
+    phone_number.label = _("Telephone number (mobile)")
     phone_number.help_text = _(
-        "Deine Nummer wird nur für interne Zwecke verwendet und den Lehrern "
-        "für das Teilen von Kursinhalten weitergegeben!"
+        "Your phone number is used for internal purposes and may be shared "
+        "with teachers and, for couple courses, with your assigned partner. "
+        "You may opt out of sharing with your partner using the option below."
     )
     student_status = forms.BooleanField(
         required=False,
@@ -53,6 +54,16 @@ class UserEditForm(forms.Form):
     get_involved = forms.BooleanField(required=False)
     get_involved.label = _(
         "I'd like to help Tanzquotient from time to time (Events etc.)"
+    )
+    personal_data_sharing = forms.BooleanField(required=False)
+    personal_data_sharing.label = _(
+        "Share personal data with partner in couple courses"
+    )
+    personal_data_sharing.help_text = _(
+        "If you agree, your full name, phone number (if provided) and "
+        "email address will be shared with your partner in couple courses. "
+        "Otherwise, only your first name and initial of "
+        "your last name will be shared."
     )
     street = forms.CharField(max_length=255, required=False, label=_("Street"))
     plz = forms.IntegerField(required=False, label=_("Postal code"))

@@ -73,6 +73,12 @@ class UserProfile(Model):
     get_involved.help_text = (
         "If this user is interested to get involved with our organisation."
     )
+    personal_data_sharing = BooleanField(
+        help_text=_(
+            "If True, the user agrees to share personal data with the partner "
+            "in couple courses."
+        ),
+    )
 
     display_name = CharField(
         max_length=30,
