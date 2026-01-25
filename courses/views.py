@@ -300,15 +300,21 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
 
     # Render sign up form
 
-    past_partners = sorted(
-        list(
-            {
-                (subscribe.partner.get_full_name(), subscribe.partner.email)
-                for subscribe in request.user.subscriptions.all()
-                if subscribe.partner
-            }
-        )
+    # Only include past partners who currently have profile-level sharing
+    # enabled and whose partner-subscription (at the time) had
+    # `personal_data_sharing` enabled as well.
+    partners_set = set()
+    qs = request.user.subscriptions.select_related("partner__profile").filter(
+        partner__isnull=False, partner__profile__personal_data_sharing=True
     )
+    for subscribe in qs.all():
+        partner = subscribe.partner
+        partner_sub = subscribe.get_partner_subscription()
+        if not partner_sub.personal_data_sharing:
+            continue
+        partners_set.add((partner.get_full_name(), partner.email))
+
+    past_partners = sorted(list(partners_set))
 
     context = {
         "course": course,

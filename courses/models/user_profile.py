@@ -394,6 +394,13 @@ class UserProfile(Model):
     def has_switch(self) -> bool:
         return hasattr(self, "switch_data")
 
+    def get_first_name_and_initials_last_name(self) -> str:
+        first = self.user.first_name
+        last = self.user.last_name
+        parts = [p for p in last.replace("-", " ").split()]
+        initials = " ".join([p[0].upper() + "." for p in parts])
+        return f"{first} {initials}"
+
     class Meta:
         permissions = (("access_counterpayment", "Can access counter payment"),)
 

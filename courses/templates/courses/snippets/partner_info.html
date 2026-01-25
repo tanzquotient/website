@@ -1,0 +1,9 @@
+{% load i18n %}
+
+{% if subscription.share_partner_personal_data %}
+    {{ subscription.partner.get_full_name }}
+    <br/>
+    {% include "courses/snippets/user_contact.html" with user=subscription.partner only %}
+{% else %}
+    {{ subscription.partner.profile.get_first_name_and_initials_last_name }}
+{% endif %}

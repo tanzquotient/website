@@ -115,7 +115,7 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
             {
                 "partner_first_name": subscription.partner.first_name,
                 "partner_last_name": subscription.partner.last_name,
-                "partner_info": create_user_info(subscription.partner),
+                "partner_info": create_partner_info(subscription),
             }
         )
     elif subscription.course.type.couple_course:
@@ -269,13 +269,19 @@ def detect_rejection_reason(subscription: Subscribe) -> str:
     return reason
 
 
-def create_user_info(user: User) -> str:
-    s = "{}\n".format(user.get_full_name())
-    if user.email:
-        s += user.email + "\n"
-    if user.profile.phone_number:
-        s += user.profile.phone_number + "\n"
-    return s.strip("\n")
+def create_partner_info(subscription: Subscribe) -> str:
+    user = subscription.partner
+    lines = []
+    if subscription.share_partner_personal_data():
+        lines.append(user.get_full_name())
+        if user.email:
+            lines.append(user.email)
+        if user.profile.phone_number:
+            lines.append(user.profile.phone_number)
+    else:
+            lines.append(user.profile.get_first_name_and_initials_last_name())
+
+    return "\n".join(lines)
 
 
 def create_course_info(course: Course) -> str:

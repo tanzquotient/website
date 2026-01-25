@@ -15,6 +15,7 @@ from django.db.models import (
     CharField,
     DateTimeField,
     DecimalField,
+    BooleanField,
 )
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion
@@ -92,6 +93,12 @@ class Subscribe(Model):
     )
     paymentmethod = CharField(
         max_length=30, choices=PaymentMethod.CHOICES, blank=True, null=True
+    )
+    personal_data_sharing = BooleanField(
+        help_text=(
+            "If True, the subscriber agreed to share personal "
+            "data at the time of this subscription."
+        ),
     )
 
     # Objects
@@ -349,6 +356,22 @@ class Subscribe(Model):
             return None
         return f"{self.partner.first_name} {self.partner.last_name}"
 
+    def share_partner_personal_data(self) -> bool:
+        if not self.partner:
+            return False
+        partner_sub = self.get_partner_subscription()
+        if not partner_sub:
+            return False
+        # for personal data sharing, both users need to be
+        # currently opted in, and need to have been opted in
+        # at the time of subscription
+        return (
+            self.user.profile.personal_data_sharing
+            and self.partner.profile.personal_data_sharing
+            and self.personal_data_sharing
+            and partner_sub.personal_data_sharing
+        )
+
     def get_assigned_role_str(self) -> str:
         role = self.assigned_role()
         if role == LeadFollow.NO_PREFERENCE:
@@ -402,6 +425,8 @@ class Subscribe(Model):
             )
 
     def save(self, *args, **kwargs) -> None:
+        if getattr(self, "_state", None) and getattr(self._state, "adding", False):
+            self.personal_data_sharing = self.user.profile.personal_data_sharing
         self.derive_matching_state()
         if not self.usi:
             self.usi = self.generate_usi()
