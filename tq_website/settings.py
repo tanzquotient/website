@@ -377,6 +377,8 @@ CELERY_EMAIL_TASK_CONFIG = {
     "rate_limit": "10/s",  # * BATCH_SIZE
 }
 
+EMAILS_RATE_LIMIT = 1  # batches per second
+
 ###########
 # Logging #
 ###########
