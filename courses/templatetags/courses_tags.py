@@ -465,10 +465,12 @@ def lead_follow_selector(
 
 
 @register.simple_tag
-def get_room_access_code(
-    room: Room, code_date: dt.date | None = None
-) -> RoomAccessCode | None:
-    return room.get_access_code(code_date)
+def get_room_access_codes(
+    room: Room, user: User, course: Course, code_date: dt.date | None = None
+) -> QuerySet:
+    qs = room.get_access_codes(code_date)
+    viewable_pks = [ac.pk for ac in qs if can_view_room_access_code(ac, user, course)]
+    return qs.filter(pk__in=viewable_pks)
 
 
 @register.simple_tag

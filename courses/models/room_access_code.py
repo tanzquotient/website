@@ -41,8 +41,11 @@ class RoomAccessCode(models.Model):
                     "valid_until": error_message,
                 }
             )
-        overlap_condition = Q(valid_from__lte=self.valid_until) & Q(
-            valid_until__gte=self.valid_from
+
+        overlap_condition = (
+            Q(valid_from__lte=self.valid_until)
+            & Q(valid_until__gte=self.valid_from)
+            & Q(visibility=self.visibility)
         )
 
         conflicting_codes = RoomAccessCode.objects.filter(room=self.room).filter(
@@ -55,12 +58,13 @@ class RoomAccessCode(models.Model):
         if conflicting_codes.exists():
             error_message = (
                 "An existing access code is already valid "
-                "during this period for this room."
+                "during this period for this room with the same visibility."
             )
 
             raise ValidationError(
                 {
                     "valid_from": error_message,
                     "valid_until": error_message,
+                    "visibility": error_message,
                 }
             )

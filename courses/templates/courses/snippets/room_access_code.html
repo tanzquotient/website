@@ -6,14 +6,14 @@
             {{ access_code.code }}
         </code>
     {% elif access_code.display_format == "qr" %}
-        <div id="room_access_code" class="col-12 text-center"></div>
+        <div id="room_access_code_{{ access_code.pk }}" class="col-12 text-center"></div>
     {% endif %}
 </div>
 
 {% if access_code.display_format == "qr" %}
     {% addtoblock "css" %}
         <style>
-            #room_access_code > img {
+            #room_access_code_{{ access_code.pk }} > img {
                 margin: auto;
             }
         </style>
@@ -21,16 +21,17 @@
     {% addtoblock "js" %}
         <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
         <script>
-            const qrcode_container = document.getElementById('room_access_code');
-
-            const qrcode = new QRCode(qrcode_container, {
-                text: "{{ access_code.code }}",
-                width: 256,
-                height: 256,
-                colorDark : '#000',
-                colorLight : '#fff',
-                correctLevel : QRCode.CorrectLevel.M
-            });
+            new QRCode(
+                document.getElementById('room_access_code_{{ access_code.pk }}'),
+                {
+                    text: "{{ access_code.code }}",
+                    width: 256,
+                    height: 256,
+                    colorDark : '#000',
+                    colorLight : '#fff',
+                    correctLevel : QRCode.CorrectLevel.M
+                }
+            );
         </script>
     {% endaddtoblock %}
 {% endif %}

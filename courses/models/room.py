@@ -84,13 +84,13 @@ class Room(TranslatableModel):
     def is_cancelled(self, query_date: date) -> bool:
         return any((query_date == c.date for c in self.cancellations.all()))
 
-    def get_access_code(self, code_date: date | None = None) -> RoomAccessCode | None:
+    def get_access_codes(self, code_date: date | None = None) -> models.QuerySet[RoomAccessCode]:
         if code_date is None:
             code_date = date.today()
         qs: models.QuerySet[RoomAccessCode] = self.access_codes.filter(
             valid_from__lte=code_date, valid_until__gte=code_date
         )
-        return qs.first()
+        return qs
 
     def __str__(self) -> str:
         return self.name

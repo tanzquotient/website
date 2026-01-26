@@ -1,9 +1,8 @@
 {% load i18n courses_tags %}
 
-{% get_room_access_code room code_date as access_code %}
-{% can_view_room_access_code access_code user course as can_view %}
+{% get_room_access_codes room user course code_date as access_codes %}
 
-{% if not access_code %}
+{% if not access_codes %}
     {% if user.is_staff or user in course.get_teachers %}
         <h3>{% trans "Room access code" %}</h3>
         <div class="alert alert-info">
@@ -21,15 +20,21 @@
         </div>
     {% endif %}
 {% else %}
-    {% if can_view %}
+    <h3>
+        {% if access_codes|length == 1 %}
+            {% trans "Room access code" %}
+        {% else %}
+            {% trans "Room access codes" %}
+        {% endif %}
+    </h3>
+    {% for access_code in access_codes %}
         {% show_restricted_room_access_code_alert access_code user course as show_alert %}
-        <h3>{% trans "Room access code" %}</h3>
         {% if show_alert %}
             <div class="alert alert-info">
                 {% if access_code.visibility == access_code.Visibility.TEACHERS %}
-                    {% trans "The access code to the room is currently set to only be visible to staff and teachers of this course." %}
+                    {% trans "The following access code to the room is currently set to only be visible to staff and teachers of this course." %}
                 {% elif access_code.visibility == access_code.Visibility.STAFF %}
-                    {% trans "The access code to the room is currently set to only be visible to staff." %}
+                    {% trans "The following access code to the room is currently set to only be visible to staff." %}
                 {% endif %}
                 {% if perms.courses.change_room %}
                     <a href="{% url 'admin:courses_room_change' access_code.room.pk %}">
@@ -42,5 +47,5 @@
             {% trans "Please use this code to enter the room:" %}
         </p>
         {% include "courses/snippets/room_access_code.html" with access_code=access_code %}
-    {% endif %}
+    {% endfor %}
 {% endif %}
