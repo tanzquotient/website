@@ -120,41 +120,52 @@ class Voucher(Model):
     def apply_to(
         self, subscription: Subscribe, user: User
     ) -> tuple[bool, Optional[Voucher]]:
-        # Make sure that subscription.price_to_pay has been computed
-        subscription.generate_price_to_pay()
+        with transaction.atomic():
+            locked_voucher = Voucher.objects.select_for_update().get(pk=self.pk)
+            if locked_voucher.used:
+                subscription.generate_price_to_pay()
+                return subscription.paid(), None
 
-        reduction_amount = self.get_reduction_amount(
-            base_value=subscription.price_to_pay
-        )
-        open_amount_before = subscription.open_amount()
+            locked_subscription = Subscribe.objects.select_for_update().get(
+                pk=subscription.pk
+            )
 
-        voucher_for_remainder = None
-        if open_amount_before < reduction_amount:  # reduction more than open amount
-            remainder = reduction_amount - open_amount_before
-            reduction_amount = open_amount_before
-            with transaction.atomic(), reversion.create_revision():
-                comment = (
-                    f"Automatically generated due to remaining value after applying"
-                    f" voucher {self.key} for {subscription}"
-                )
-                voucher_for_remainder = Voucher.objects.create(
-                    amount=remainder,
-                    purpose=self.purpose,
-                    expires=self.expires,
-                    sent_to=user,
-                    comment=comment,
-                )
-                reversion.set_user(user)
-                reversion.set_comment(comment)
+            locked_subscription.generate_price_to_pay()
 
-        if reduction_amount > 0:
-            subscription.apply_price_reduction(reduction_amount, self, user)
+            reduction_amount = locked_voucher.get_reduction_amount(
+                base_value=locked_subscription.get_price_to_pay()
+            )
+            open_amount_before = locked_subscription.open_amount()
 
-        self.mark_as_used(
-            subscription, user, comment=f"Used to pay subscription {subscription.usi}."
-        )
+            voucher_for_remainder = None
+            if open_amount_before < reduction_amount:
+                remainder = reduction_amount - open_amount_before
+                reduction_amount = open_amount_before
+                with reversion.create_revision():
+                    comment = (
+                        f"Automatically generated due to remaining value after applying"
+                        f" voucher {locked_voucher.key} for {locked_subscription}"
+                    )
+                    voucher_for_remainder = Voucher.objects.create(
+                        amount=remainder,
+                        purpose=locked_voucher.purpose,
+                        expires=locked_voucher.expires,
+                        sent_to=user,
+                        comment=comment,
+                    )
+                    reversion.set_user(user)
+                    reversion.set_comment(comment)
 
-        return subscription.paid(), voucher_for_remainder
+            if reduction_amount > 0:
+                locked_subscription.apply_price_reduction(reduction_amount, locked_voucher, user)
+
+            locked_voucher.mark_as_used(
+                locked_subscription,
+                user,
+                comment=f"Used to pay subscription {locked_subscription.usi}.",
+            )
+
+            return locked_subscription.paid(), voucher_for_remainder
 
     def get_reduction_amount(self, base_value: Decimal) -> Decimal:
         if self.percentage:  # This is a percentage voucher
