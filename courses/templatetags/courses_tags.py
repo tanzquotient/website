@@ -487,7 +487,7 @@ def can_view_room_access_code(
         return user in course.get_teachers()
 
     if visibility == RoomAccessCode.Visibility.PARTICIPANTS:
-        return user in course.participants()
+        return user in course.participants() or user in course.get_teachers()
 
     return False
 
