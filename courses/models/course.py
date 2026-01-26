@@ -182,13 +182,10 @@ class Course(TranslatableModel):
     def save(self, *args, **kwargs):
         if self.subscription_type == CourseSubscriptionType.EXTERNAL or self.cancelled:
             self.completed = True
-        self.clean()
         super(Course, self).save(*args, **kwargs)
 
     def clean(self):
-        if self.early_signup and (
-            not hasattr(self, "type") or not self.type.predecessors.exists()
-        ):
+        if self.early_signup and not self.type.predecessors.exists():
             # disallow enabling early signup altogether
             raise ValidationError(
                 {
@@ -201,13 +198,12 @@ class Course(TranslatableModel):
             )
 
         # `couples_only` is only meaningful for course types that are couple courses
-        if self.couples_only and (
-            not hasattr(self, "type") or not self.type.couple_course
-        ):
+        if self.couples_only and not self.type.couple_course:
             raise ValidationError(
                 {
                     "couples_only": _(
-                        "A course can be marked 'couples only' only if its course type is a couple course."
+                        "A course can be marked 'couples only' only if its "
+                        "course type is a couple course."
                     )
                 }
             )
