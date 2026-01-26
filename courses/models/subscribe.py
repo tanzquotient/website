@@ -16,6 +16,7 @@ from django.db.models import (
     DateTimeField,
     DecimalField,
 )
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion
 from reversion.models import Version
@@ -96,6 +97,11 @@ class Subscribe(Model):
 
     # Objects
     objects = managers.SubscribeQuerySet.as_manager()
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["user", "course"], name="unique_user_course")
+        ]
 
     def generate_usi(self) -> str:
         if self.usi:
