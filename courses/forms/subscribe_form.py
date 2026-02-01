@@ -28,8 +28,10 @@ class SubscribeForm(forms.Form):
         if self.course.couples_only:
             if single_or_couple != SingleCouple.COUPLE:
                 error = ValidationError(
-                    message=_("This course requires signing up with a partner."),
-                    code="couples only",
+                    message=_(
+                        "You must sign up together with a partner."
+                    ),
+                    code="partner required",
                 )
                 self.add_error("single_or_couple", error)
                 return cleaned_data
@@ -109,7 +111,9 @@ class SubscribeForm(forms.Form):
 
                 if not self.course.user_can_subscribe(partner, self.user.is_staff):
                     error = ValidationError(
-                        message=_("The partner you entered is already signed up or cannot subscribe to this course."),
+                        message=_(
+                            "The partner you entered is already signed up or cannot subscribe to this course."
+                        ),
                         code="partner already signed up",
                     )
                     self.add_error("partner_email", error)

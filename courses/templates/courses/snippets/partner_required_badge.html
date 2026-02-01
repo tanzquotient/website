@@ -1,0 +1,4 @@
+{% load i18n %}
+{% if course.partner_required_at_signup %}
+    <span class="badge rounded-pill bg-info">{% trans 'Partner required' %}</span>
+{% endif %}

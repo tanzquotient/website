@@ -98,7 +98,7 @@ class Course(TranslatableModel):
     completed = models.BooleanField(
         default=False, help_text="If true, will disable teachers presence editing."
     )
-    couples_only = models.BooleanField(
+    partner_required_at_signup = models.BooleanField(
         default=False,
         help_text=("If enabled, users may only sign up with a partner."),
     )
@@ -198,12 +198,12 @@ class Course(TranslatableModel):
             )
 
         # `couples_only` is only meaningful for course types that are couple courses
-        if self.couples_only and not self.type.couple_course:
+        if self.partner_required_at_signup and not self.type.couple_course:
             raise ValidationError(
                 {
-                    "couples_only": _(
-                        "A course can be marked 'couples only' only if its "
-                        "course type is a couple course."
+                    "partner_required_at_signup": _(
+                        "A course can be marked 'partner required at signup' "
+                        "only if its course type is a couple course."
                     )
                 }
             )

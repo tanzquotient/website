@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load courses_tags %}
 
-{% include "courses/snippets/couples_only_badge.html" %}
+{% include "courses/snippets/partner_required_badge.html" %}
 {% if not course.has_free_places %}
     {% if not is_detail_page %}
         <span class="badge rounded-pill bg-secondary">
