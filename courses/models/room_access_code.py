@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 class RoomAccessCode(models.Model):
@@ -19,28 +19,32 @@ class RoomAccessCode(models.Model):
         to="courses.Room",
         on_delete=models.CASCADE,
         related_name="access_codes",
+        null=False,
+        blank=False,
     )
     valid_from = models.DateField(
-        help_text="From when the access code is valid (inclusive)"
+        help_text="From when the access code is valid (inclusive)",
+        null=False,
+        blank=False,
     )
     valid_until = models.DateField(
-        help_text="Until when the access code is valid (inclusive)"
+        help_text="Until when the access code is valid (inclusive)",
+        null=False,
+        blank=False,
     )
-    code = models.CharField(max_length=1000)
-    display_format = models.CharField(max_length=5, choices=DisplayFormat.choices)
-    visibility = models.CharField(max_length=12, choices=Visibility.choices)
+    code = models.CharField(max_length=1000, null=False, blank=False)
+    display_format = models.CharField(
+        max_length=5, choices=DisplayFormat.choices, null=False, blank=False
+    )
+    visibility = models.CharField(
+        max_length=12, choices=Visibility.choices, null=False, blank=False
+    )
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
 
-        if self.valid_from and self.valid_until and self.valid_from > self.valid_until:
-            error_message = "Valid from date cannot be after valid until date."
-            raise ValidationError(
-                {
-                    "valid_from": error_message,
-                    "valid_until": error_message,
-                }
-            )
+        if not self.valid_from or not self.valid_until or not self.visibility:
+            return
 
         overlap_condition = (
             Q(valid_from__lte=self.valid_until)
@@ -68,3 +72,12 @@ class RoomAccessCode(models.Model):
                     "visibility": error_message,
                 }
             )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(valid_until__gte=F("valid_from")),
+                name="roomaccesscode_valid_until_gte_valid_from",
+                violation_error_message=('"Valid from" cannot be after "valid until".'),
+            )
+        ]
