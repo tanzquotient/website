@@ -25,12 +25,10 @@ class SubscribeForm(forms.Form):
         partner_email = cleaned_data.get("partner_email")
 
         # If this course is couples-only, require coupling
-        if self.course.couples_only:
+        if self.course.partner_required_at_signup:
             if single_or_couple != SingleCouple.COUPLE:
                 error = ValidationError(
-                    message=_(
-                        "You must sign up together with a partner."
-                    ),
+                    message=_("You must sign up together with a partner."),
                     code="partner required",
                 )
                 self.add_error("single_or_couple", error)

@@ -197,7 +197,8 @@ class Course(TranslatableModel):
                 }
             )
 
-        # `couples_only` is only meaningful for course types that are couple courses
+        # `partner_required_at_signup` is only meaningful for course
+        # types that are couple courses
         if self.partner_required_at_signup and not self.type.couple_course:
             raise ValidationError(
                 {
