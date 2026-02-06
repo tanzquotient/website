@@ -237,8 +237,8 @@ class Subscribe(Model):
 
         return (
             self.course.offering.is_over()
-            and self.course.has_started_for(datetime.timedelta(days=7))
-            and self.is_to_pay_for(datetime.timedelta(days=7))
+            and self.course.has_started_for(datetime.timedelta(weeks=8))
+            and self.is_to_pay_for(datetime.timedelta(weeks=8))
         )
 
     def mark_as_paid(self, payment_method, user=None) -> bool:
