@@ -1,5 +1,5 @@
 {% extends "account/base.html" %}
-{% load i18n %}
+{% load i18n courses_tags %}
 
 {% block head_title %}
     {% trans "Profile" %}
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-4">
+        <div class="col-12 col-md-4">
             {% if user.profile.body_height or user.profile.birthdate or user.profile.nationality or user.profile.residence_permit or user.profile.ahv_number or user.profile.zemis_number %}
 
                 <p>
@@ -86,8 +86,12 @@
                 <br/>
                 {% include "courses/snippets/user_contact.html" with user=user only %}
             </p>
+            <div class="mt-4">
+                {% get_vouchers_for_user user as vouchers %}
+                {% include "courses/snippets/vouchers_card.html" with vouchers=vouchers only %}
+            </div>
         </div>
-        <div class="col-12 col-sm-4">
+        <div class="col-12 col-md-4">
             {% if user.profile.address %}
                 <p>
                     <strong> {% trans "Address" %}</strong>
@@ -109,7 +113,7 @@
                 </p>
             {% endif %}
         </div>
-        <div class="col-12 col-sm-4">
+        <div class="col-12 col-md-4">
             {% include "user/snippets/student_status.html" with user=user only %}
             {% if user.profile.is_teacher %}
                 <p>

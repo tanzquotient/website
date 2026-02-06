@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load qrbill_tags %}
 {% load sekizai_tags %}
+{% load courses_tags %}
 
 {% addtoblock "css" %}
     <style>
@@ -12,26 +13,27 @@
 
 <h2 class="my-3">{% trans "Payment options" %}</h2>
 
+{% get_vouchers_for_user user as available_vouchers %}
 <div class="accordion" id="paymentOptionsAccordion">
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#voucherCollapse" aria-expanded="true" aria-controls="voucherCollapse">
+      <button class="accordion-button {% if not available_vouchers %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#voucherCollapse" aria-expanded="{% if available_vouchers %}true{% else %}false{% endif %}" aria-controls="voucherCollapse">
         <i class="bi bi-ticket-fill"></i></i>&nbsp;{% trans "Voucher" %}
       </button>
     </h2>
-    <div id="voucherCollapse" class="accordion-collapse collapse" data-bs-parent="#paymentOptionsAccordion">
-      <div class="accordion-body">
-          {% include "payment/subscription/snippets/voucher_form.html" %}
+    <div id="voucherCollapse" class="accordion-collapse collapse {% if available_vouchers %}show{% endif %}" data-bs-parent="#paymentOptionsAccordion">
+        <div class="accordion-body">
+        {% include "payment/subscription/snippets/voucher_form.html" with vouchers=available_vouchers %}
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#qrBillCollapse" aria-expanded="false" aria-controls="qrBillCollapse">
+      <button class="accordion-button {% if available_vouchers %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#qrBillCollapse" aria-expanded="{% if available_vouchers %}false{% else %}true{% endif %}" aria-controls="qrBillCollapse">
         <i class="bi bi-qr-code-scan"></i>&nbsp;{% trans "QR-bill" %}
       </button>
     </h2>
-    <div id="qrBillCollapse" class="accordion-collapse collapse show" data-bs-parent="#paymentOptionsAccordion">
+    <div id="qrBillCollapse" class="accordion-collapse collapse {% if not available_vouchers %}show{% endif %}" data-bs-parent="#paymentOptionsAccordion">
       <div class="accordion-body">
           <p>
               {% trans "Please scan/open the QR-bill below with your home banking app to fill in the payment details automatically." %}

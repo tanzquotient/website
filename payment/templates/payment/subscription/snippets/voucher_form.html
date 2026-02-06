@@ -1,13 +1,46 @@
 {% load i18n %}
 
-<form method="post">
+<form method="post" id="voucherRedeemForm">
     {% csrf_token %}
-    <div class="row gy-2 gx-3">
+
+    {% if vouchers %}
+        <div class="alert alert-info" role="alert">
+            {% trans "Below are the vouchers we have emailed you directly." %}
+            {% trans "However, please note that TQ vouchers are transferable." %}
+            {% trans "If you have a voucher that is not listed below, enter its code manually." %}
+        </div>
+        <div class="row gy-3 mb-3">
+            {% for v in vouchers %}
+                <div class="col-lg-3 col-12">
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ v.key }}</strong>
+                                <div class="small text-muted">{{ v.value_string }}</div>
+                                <div class="small text-muted">
+                                    {% if v.expires %}
+                                        {% trans "Expires" %} {{ v.expires|date:'d. N Y' }}
+                                    {% else %}
+                                        {% trans "No expiry" %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-outline-success" onclick="redeemVoucher('{{ v.key|escapejs }}')">{% trans "Redeem" %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row gy-2 gx-3 align-items-center">
         <div class="col-auto">
-            <input class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}"
-                    type="text" maxlength="6" minlength="6" required name="voucher_code"
+            <input id="voucher_code_manual" class="form-control form-control-sm {% if voucher_form.voucher_code.errors %} is-invalid {% endif %}"
+                    type="text" maxlength="8" minlength="6" name="voucher_code"
                     placeholder="{% trans "Voucher code" %}"
-                    aria-label="Voucher code">
+                    aria-label="{% trans "Voucher code" %}">
             {% for error in voucher_form.voucher_code.errors %}
                 <div class="invalid-feedback">
                     {{ error }}
@@ -20,4 +53,14 @@
             </button>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function redeemVoucher(key) {
+            const input = document.getElementById('voucher_code_manual');
+            if (!input) return;
+            input.value = key;
+            document.getElementById('voucherRedeemForm').submit();
+        }
+    </script>
+
 </form>

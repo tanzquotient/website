@@ -26,6 +26,7 @@ from courses.models import (
     Attendance,
     Room,
     RoomAccessCode,
+    Voucher,
 )
 from courses.services import get_offerings_by_year
 from survey.models import SurveyInstance, Answer
@@ -288,6 +289,17 @@ def get_open_surveys(user: User) -> tuple[SurveyInstance]:
             expire_date_query, user=user, is_completed=False, course__isnull=False
         ).all()
     )
+
+
+@register.simple_tag
+def get_vouchers_for_user(user: User):
+    if not user or getattr(user, "is_anonymous", False):
+        return Voucher.objects.none()
+
+    today = dt.date.today()
+    return Voucher.objects.filter(sent_to=user, used=False).filter(
+        Q(expires__isnull=True) | Q(expires__gte=today)
+    ).order_by("expires")
 
 
 @register.simple_tag
