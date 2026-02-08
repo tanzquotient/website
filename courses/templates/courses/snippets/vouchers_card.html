@@ -2,11 +2,11 @@
 <div class="card mb-3">
   <div class="card-header">{% trans "Your vouchers" %}</div>
   <div class="card-body">
+    <div class="alert alert-info mb-0" role="alert">
+      {% trans "Below are the vouchers we have emailed you directly." %}
+      {% trans "However, please note that TQ vouchers are transferable." %}
+    </div>
     {% if vouchers %}
-      <div class="alert alert-info mb-0" role="alert">
-          {% trans "Below are the vouchers we have emailed you directly." %}
-          {% trans "However, please note that TQ vouchers are transferable." %}
-      </div>
       <ul class="list-group list-group-flush">
         {% for v in vouchers %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
