@@ -47,7 +47,7 @@ boto3~=1.42.9                  # Driver for S3 and S3 compatiables storage backe
 minio==7.2.20                    # Perform bucket and object operations, used for initializing Minio
 
 # Webserver
-gunicorn==23.0.0                # Used to serve django for production
+gunicorn==25.0.3                # Used to serve django for production
 
 # Logging
 sentry_sdk==2.52.0              # Used for logging exceptions to Sentry.io
