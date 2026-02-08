@@ -8,7 +8,7 @@ django-post-office==3.11.0       # Send and manage emails asynchronously, databa
 django-reversion==6.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==8.2.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.14.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.14.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
