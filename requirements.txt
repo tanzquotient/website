@@ -8,14 +8,14 @@ django-post-office==3.11.0       # Send and manage emails asynchronously, databa
 django-reversion==6.1.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==8.2.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
-django-allauth==65.14.0          # Authentication, registration, account management, 3rd party account authentication
+django-allauth==65.14.1          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
 django-cms==5.0.5               # Open source content management system based on the Django
 djangocms-text==0.9.3           # Text plugin for django CMS
-djangocms-versioning==2.5.0     # Core package of django CMS, is used to e.g. hava page histories
+djangocms-versioning==2.5.1     # Core package of django CMS, is used to e.g. hava page histories
 djangocms-alias==3.0.3          # Core package of django CMS used for aliases
 
 # Rest framework
@@ -33,7 +33,7 @@ django-redis==6.0.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.6.0                   # Used for creating vouchers from SVG tremplate
-reportlab==4.4.9                # For generating PDFs and graphics
+reportlab==4.4.10                # For generating PDFs and graphics
 pyyaml==6.0.3                   # Used for generating environment variable file
 qrbill==1.2.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
