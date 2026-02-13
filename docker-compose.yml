@@ -4,7 +4,7 @@ services:
 
   # Database (Postgres)
   postgres:
-    image: postgres:16
+    image: postgres:14
     container_name: tq-postgres
     environment:
       POSTGRES_USER: ${TQ_DB_USER}
