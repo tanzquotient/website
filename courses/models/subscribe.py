@@ -130,6 +130,9 @@ class Subscribe(Model):
             and self.matching_state in MatchingState.TO_MATCH_STATES
             and self.lead_follow == lead_or_follow
         )
+    
+    def is_waiting_list(self) -> bool:
+        return self.state == SubscribeState.WAITING_LIST
 
     def get_offering(self) -> Offering:
         return self.course.offering

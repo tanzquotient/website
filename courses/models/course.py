@@ -297,6 +297,8 @@ class Course(TranslatableModel):
         return self.has_free_places_for(LeadFollow.FOLLOW)
 
     def has_free_places_for(self, lead_or_follow) -> bool:
+        course_subscriptions = list(self.subscriptions.all())
+
         if self.max_subscribers is None:
             return True
 
@@ -308,22 +310,22 @@ class Course(TranslatableModel):
             return self.has_free_places()
 
         matched_subscribes_per_preference = (
-            self.subscriptions.active().matched().count() / 2
+            len([s for s in course_subscriptions if s.is_active() and s.is_matched()]) / 2
         )
-        single_subscribes_lead = (
-            self.subscriptions.admitted()
-            .single_with_preference(LeadFollow.LEAD)
-            .count()
+        single_subscribes_lead = len(
+            [s
+            for s in course_subscriptions
+            if s.is_admitted() and s.is_single_with_preference(LeadFollow.LEAD)]
         )
-        single_subscribes_follow = (
-            self.subscriptions.admitted()
-            .single_with_preference(LeadFollow.FOLLOW)
-            .count()
+        single_subscribes_follow = len(
+            [s
+            for s in course_subscriptions
+            if s.is_admitted() and s.is_single_with_preference(LeadFollow.FOLLOW)]
         )
-        single_subscribes_no_preference = (
-            self.subscriptions.admitted()
-            .single_with_preference(LeadFollow.NO_PREFERENCE)
-            .count()
+        single_subscribes_no_preference = len(
+            [s
+            for s in course_subscriptions
+            if s.is_admitted() and s.is_single_with_preference(LeadFollow.NO_PREFERENCE)]
         )
         while single_subscribes_no_preference > 1 or (
             single_subscribes_no_preference > 0
@@ -387,16 +389,18 @@ class Course(TranslatableModel):
         # No maximum => free places is not defined
         if self.max_subscribers is None:
             return None
+        
+        admitted_subscriptions_count = len([s for s in self.subscriptions.all() if s.is_admitted()])
+        matched_waiting_list_count = len([s for s in self.subscriptions.all() if s.is_matched() and s.is_waiting_list()])
 
         total_count = (
             self.max_subscribers
             # users admitted
-            - self.subscriptions.admitted().count()
+            - admitted_subscriptions_count
             # couples that might be blocking the queue
-            - self.subscriptions.waiting_list().matched().count() // 2
+            - matched_waiting_list_count // 2
         )
         total_count = int(max(total_count, 0))
-
         return total_count
 
     def get_confirmed_count(self) -> int:
