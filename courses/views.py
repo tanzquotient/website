@@ -82,9 +82,11 @@ def course_list_context(
 
     offerings = services.get_offerings_to_display(show_preview).prefetch_related(
         "period__cancellations",
+        "course_set",
         "course_set__type",
         "course_set__type__translations",
         "course_set__period__cancellations",
+        "course_set__room",
         "course_set__room__cancellations",
         "course_set__regular_lessons",
         "course_set__room__address",
@@ -167,6 +169,7 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
                 "irregular_lessons",
                 "teaching__teacher__functions",
                 "teaching__teacher__profile",
+                "teaching__teacher__teaching_courses__course__lesson_occurrences",
                 "teaching__teacher__teaching_courses__course__irregular_lessons",
                 "teaching__teacher__teaching_courses__course__regular_lessons",
                 "teaching__teacher__teaching_courses__course__period",
