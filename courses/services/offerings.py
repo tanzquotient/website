@@ -69,15 +69,14 @@ def course_sort_key(course: Course) -> tuple:
 
 def get_sections(offering, course_filter=None):
     offering_sections = []
-    course_set = offering.course_set.prefetch_related(
-        "regular_lessons",
-        "regular_lessons__exceptions",
-        "irregular_lessons",
-        "lesson_occurrences",
-        "lesson_occurrences__room",
+    course_set = offering.course_set.select_related(
+        "type", "room", "period"
+    ).prefetch_related(
+        "regular_lessons__exceptions__lesson_details__room__cancellations",
+        "irregular_lessons__lesson_details__room__cancellations",
         "lesson_occurrences__room__cancellations",
+        "period__cancellations",
         "type__translations",
-        "room",
         "room__cancellations",
         "subscriptions",
     )
