@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     "sekizai",  # for javascript and css management
     "djangocms_versioning",
     "djangocms_alias",
-    "djangocms_admin_style",
-    # You must add 'djangocms_admin_style' in the list before 'django.contrib.admin'.
     "django.contrib.messages",
     # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     "django.contrib.humanize",
