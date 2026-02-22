@@ -87,28 +87,28 @@ def task_delete_user_and_courses_calendar_cache(
     if sender == Course.__name__:
         course = Course.objects.get(pk=pk)
         _add_users_from_course(course)
-        courses.add(course)
+        courses.add(course.pk)
     elif sender == CourseType.__name__:
         course_type = CourseType.objects.get(pk=pk)
         courses_with_type = course_type.courses.all()
         for course in courses_with_type:
-            courses.add(course)
+            courses.add(course.pk)
             _add_users_from_course(course)
     elif sender == Subscribe.__name__:
         subscribe = Subscribe.objects.get(pk=pk)
-        users.add(subscribe.user)
+        users.add(subscribe.user.pk)
     elif sender == Teach.__name__:
         teach = Teach.objects.get(pk=pk)
         _add_users_from_course(teach.course)
-        courses.add(teach.course)
+        courses.add(teach.course.pk)
     elif sender == LessonOccurrence.__name__:
         lesson_occurrence = LessonOccurrence.objects.get(pk=pk)
         _add_users_from_course(lesson_occurrence.course)
-        courses.add(lesson_occurrence.course)
+        courses.add(lesson_occurrence.course.pk)
 
     for user in users:
         req = RequestFactory().get(
-            reverse("user_ical", kwargs={"user_id": user.pk}),
+            reverse("user_ical", kwargs={"user_id": user}),
             {"token": _user_specific_token(user)},
         )
         key = get_cache_key(req)
@@ -116,7 +116,7 @@ def task_delete_user_and_courses_calendar_cache(
 
     for course in courses:
         req = RequestFactory().get(
-            reverse("course_ical", kwargs={"course_id": course.pk}),
+            reverse("course_ical", kwargs={"course_id": course}),
         )
         key = get_cache_key(req)
         cache.delete(key)
