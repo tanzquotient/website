@@ -13,5 +13,5 @@ def update_waiting_lists(sender, instance: Subscribe, **kwargs):
 def trigger_calendar_cache_delete_from_course(sender, instance: Course, **kwargs):
     task_delete_user_and_courses_calendar_cache.delay(
         pk=instance.pk,
-        sender=sender,
+        sender=sender.__name__,
     )

@@ -71,10 +71,10 @@ def task_pre_cache_photologue_image_sizes() -> None:
             image.create_size(photosize, recreate=False)
 
 
-@shared_task(name="delete_user_calendar_cache", ignore_result=True)
+@shared_task(name="delete_user_and_courses_calendar_cache", ignore_result=True)
 def task_delete_user_and_courses_calendar_cache(
-    pk,
-    sender,
+    pk: int,
+    sender: str,
     **kwargs,
 ) -> None:
     users = set()
@@ -84,24 +84,24 @@ def task_delete_user_and_courses_calendar_cache(
         users.update(course.subscriptions.all().values_list("user", flat=True))
         users.update(course.teaching.all().values_list("teacher", flat=True))
 
-    if sender == Course:
+    if sender == Course.__name__:
         course = Course.objects.get(pk=pk)
         _add_users_from_course(course)
         courses.add(course)
-    elif sender == CourseType:
+    elif sender == CourseType.__name__:
         course_type = CourseType.objects.get(pk=pk)
         courses_with_type = course_type.courses.all()
         for course in courses_with_type:
             courses.add(course)
             _add_users_from_course(course)
-    elif sender == Subscribe:
+    elif sender == Subscribe.__name__:
         subscribe = Subscribe.objects.get(pk=pk)
         users.add(subscribe.user)
-    elif sender == Teach:
+    elif sender == Teach.__name__:
         teach = Teach.objects.get(pk=pk)
         _add_users_from_course(teach.course)
         courses.add(teach.course)
-    elif sender == LessonOccurrence:
+    elif sender == LessonOccurrence.__name__:
         lesson_occurrence = LessonOccurrence.objects.get(pk=pk)
         _add_users_from_course(lesson_occurrence.course)
         courses.add(lesson_occurrence.course)

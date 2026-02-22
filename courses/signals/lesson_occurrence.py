@@ -85,5 +85,5 @@ def update_hourly_wages(sender, instance, **kwargs):
 def trigger_calendar_cache_delete_from_lesson_occurrence(sender, instance, **kwargs):
     task_delete_user_and_courses_calendar_cache.delay(
         pk=instance.pk,
-        sender=sender,
+        sender=sender.__name__,
     )

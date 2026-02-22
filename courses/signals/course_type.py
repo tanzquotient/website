@@ -8,5 +8,5 @@ from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 def trigger_calendar_cache_delete_from_course_type(sender, instance: CourseType, **kwargs):
     task_delete_user_and_courses_calendar_cache.delay(
         pk=instance.pk,
-        sender=sender,
+        sender=sender.__name__,
     )
