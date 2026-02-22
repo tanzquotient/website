@@ -21,6 +21,12 @@ log = logging.getLogger("tq")
 # For convenience, the templates are also stored in git in the email_templates/ directory.
 # See the email_templates/README.md for details.
 
+def _course_url_from_subscription(subscription: Subscribe) -> str:
+    current_site = "https://" + settings.DEPLOYMENT_DOMAIN
+    return current_site + reverse(
+        "courses:course_detail", kwargs={"course_id": subscription.course.id}
+    )
+
 
 def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
     context = {
@@ -28,6 +34,7 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
         "last_name": subscription.user.last_name,
         "course": subscription.course.type.title,
         "course_info": create_course_info(subscription.course),
+        "course_url": _course_url_from_subscription(subscription),
     }
 
     if subscription.state == SubscribeState.WAITING_LIST:
@@ -84,6 +91,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
         "last_name": subscription.user.last_name,
         "course": subscription.course.type.title,
         "course_info": create_course_info(subscription.course),
+        "course_url": _course_url_from_subscription(subscription),
         "payment_url": payment_url,
         "course_type_participant_info_en": subscription.course.type.safe_translation_getter(
             "information_for_participants", language_code="en"
@@ -294,6 +302,7 @@ def send_move_to_waiting_list(subscription: Subscribe) -> Optional[Email]:
     context = {
         "first_name": subscription.user.first_name,
         "course": subscription.course.type.title,
+        "course_url": _course_url_from_subscription(subscription),
     }
 
     template = "move_to_waiting_list"

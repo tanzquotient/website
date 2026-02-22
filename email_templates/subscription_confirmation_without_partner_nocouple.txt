@@ -13,6 +13,8 @@ Falls der Kurs überbucht ist (was wir nicht hoffen) werden wir dir eine Email m
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
+Alle aktuellen Informationen zu diesem Kurs findest du hier: {{course_url}}.
+
 Den Status deiner Anmeldung kannst du jederzeit unter https://tanzquotient.org/profile/courses überprüfen.
 
 Liebe Grüsse
@@ -36,6 +38,8 @@ If the course is overbooked (which we do not hope) we will send you a cancellati
 
 Here's the course info:
 {{course_info|safe}}
+
+You will find all up-to-date information regarding this course here: {{course_url}}.
 
 You can always view your current subscription status at https://tanzquotient.org/profile/courses
 

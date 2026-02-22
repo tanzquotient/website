@@ -6,6 +6,8 @@ Falls das nicht klappt, bekommst du in den nächsten Tagen eine Absage.
 
 Wenn du kein Interesse mehr am Kurs hast oder nicht mehr verfügbar bist, melde dich bitte so bald wie möglich ab.
 
+Alle aktuellen Informationen zu diesem Kurs findest du hier: {{course_url}}.
+
 Liebe Grüße
 
 Dein Tanzquotient
@@ -21,6 +23,8 @@ Unfortunately we couldn't accommodate you in {{course}}. For this reason we had 
 If not, you will receive a cancellation message in the coming days.
 
 Should you no longer be interested in the course or no longer available, please deregister as soon as possible.
+
+You will find all up-to-date information regarding this course here: {{course_url}}.
 
 Your Tanzquotient
 tanzquotient.org

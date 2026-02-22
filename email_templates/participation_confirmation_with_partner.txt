@@ -8,6 +8,9 @@ Diese Person kann dein:e erste:r Tanzpartner:in sein. In den meisten Kursen roti
 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
+
+Alle aktuellen Informationen zu diesem Kurs findest du hier: {{course_url}}.
+
 {% if payment_url %}
 Bitte zahle die Kursgebühr vor Kursbeginn oder innerhalb einer Woche.
 Die Zahlungsdetails und die Zahlungsmöglichkeiten findest du in deinem Tanzquotient-Profil:
@@ -37,6 +40,9 @@ This person can be your first dance partner. In most courses we will then rotate
 
 A summary of the course details:
 {{course_info|safe}}
+
+You will find all up-to-date information regarding this course here: {{course_url}}.
+
 {% if payment_url %}
 Please transfer the course price before the course starts or within one week.
 You can find the payment details and payment options in your Tanzquotient profile:

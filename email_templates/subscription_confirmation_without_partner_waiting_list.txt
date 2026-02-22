@@ -8,6 +8,8 @@ Wir werden deine Anmeldung akzeptieren sobald genug Plätze frei werden und wir 
 Nochmals alle Infos zum Kurs:
 {{course_info|safe}}
 
+Alle aktuellen Informationen zu diesem Kurs findest du hier: {{course_url}}.
+
 Den Status deiner Anmeldung und deine Position auf der Warteliste kannst du jederzeit unter https://tanzquotient.org/profile/courses überprüfen.
 
 Liebe Grüsse
@@ -29,8 +31,9 @@ We will accept your subscription if enough places in the course were to free up 
 Here's the course info:
 {{course_info|safe}}
 
-You can always monitor your position in the queue at https://tanzquotient.org/profile/courses.
+You will find all up-to-date information regarding this course here: {{course_url}}.
 
+You can always monitor your position in the queue at https://tanzquotient.org/profile/courses.
 
 Best regards,
 
