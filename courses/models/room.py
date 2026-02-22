@@ -12,7 +12,7 @@ from . import Address, RoomAccessCode
 
 class Room(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    address = models.ForeignKey(
+    address = models.OneToOneField(
         to=Address,
         related_name="rooms",
         blank=True,

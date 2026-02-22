@@ -56,7 +56,7 @@ class UserProfile(Model):
     legi = CharField(max_length=16, blank=True, null=True)
     gender = CharField(max_length=64, blank=True, null=True)
     
-    address = ForeignKey(
+    address = OneToOneField(
         to=Address,
         related_name="user_profiles",
         blank=True,

@@ -15,6 +15,64 @@ from reversion.models import Version
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
 from utils import HTMLUtils, TranslationUtils
+from django import forms
+from django_countries.fields import CountryField
+
+from .models import Address, Room
+
+
+class RoomAdminForm(forms.ModelForm):
+    address_street = forms.CharField(required=False, label="Street")
+    address_plz = forms.IntegerField(required=False, label="PLZ")
+    address_city = forms.CharField(required=False, label="City")
+    address_country = CountryField().formfield(required=False, label="Country")
+
+    class Meta:
+        model = Room
+        fields = "__all__"
+        exclude = ("address_new",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        addr = None
+        if self.instance and getattr(self.instance, "address", None):
+            addr = self.instance.address
+        # populate initial address fields if present
+        if addr:
+            self.fields["address_street"].initial = addr.street
+            self.fields["address_plz"].initial = addr.plz
+            self.fields["address_city"].initial = addr.city
+            self.fields["address_country"].initial = getattr(addr, "country", None)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        street = self.cleaned_data.get("address_street")
+        plz = self.cleaned_data.get("address_plz")
+        city = self.cleaned_data.get("address_city")
+        country = self.cleaned_data.get("address_country")
+
+        if street or plz or city or country:
+            # update existing address or create a new one
+            addr = getattr(instance, "address", None)
+            if addr is None:
+                addr = Address()
+            if street:
+                addr.street = street
+            if plz is not None:
+                addr.plz = plz
+            if city:
+                addr.city = city
+            if country:
+                addr.country = country
+            addr.save()
+            instance.address = addr
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
 
 
 @admin.register(Offering)
@@ -140,6 +198,7 @@ class RoomCancellationInline(admin.TabularInline):
             .filter(date__gte=timezone.now().date() - timedelta(days=90))
         )
 
+
 class RoomAccessCodeInline(admin.TabularInline):
     model = RoomAccessCode
     extra = 2
@@ -150,6 +209,7 @@ class RoomAccessCodeInline(admin.TabularInline):
             .get_queryset(request)
             .filter(valid_until__gte=timezone.now().date() - timedelta(days=90))
         )
+
 
 @admin.register(LessonDetails)
 class MemberAdmin(admin.ModelAdmin):
@@ -696,12 +756,29 @@ class StyleAdmin(TranslatableAdmin):
 
 @admin.register(Room)
 class RoomAdmin(TranslatableAdmin):
+    fieldsets = [
+        (
+            "Information",
+            {
+                "fields": [
+                    "name",
+                    "address_street",
+                    "address_plz",
+                    "address_city",
+                    "address_country",
+                    "url",
+                    "contact_info",
+                ]
+            },
+        )
+    ]
+    form = RoomAdminForm
     search_fields = ["name"]
     inlines = (RoomCancellationInline, RoomAccessCodeInline)
 
 
 @admin.register(RoomCancellation)
-class RoomAdmin(admin.ModelAdmin):
+class RoomCancellationAdmin(admin.ModelAdmin):
     list_display = ["__str__", "date", "room"]
     search_fields = ["name", "room"]
     list_filter = ["date", RoomCancellationFilter]
@@ -855,4 +932,4 @@ class BankAccountAdmin(admin.ModelAdmin):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    readonly_fields = ["bank_account"]
+    readonly_fields = ["address", "bank_account"]
