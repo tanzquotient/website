@@ -254,7 +254,7 @@ def _lesson_to_ical_event(
 
     return event
 
-
+@cache_page(60 * 60 * 24)
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
     course: Course = get_object_or_404(Course.objects, id=course_id)
     cal = Calendar()
@@ -545,6 +545,7 @@ def _user_specific_token(user: User) -> str:
     return hashlib.sha256(str_to_hash.encode()).hexdigest()
 
 
+@cache_page(60 * 60 * 24)
 def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     user = get_object_or_404(User, pk=user_id)
 

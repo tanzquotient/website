@@ -13,7 +13,9 @@ from courses.models import (
     RoomCancellation,
     LessonDetails,
     Teach,
+    LessonOccurrence,
 )
+from tq_website.tasks import task_delete_user_calendar_cache
 
 
 @receiver(post_save, sender=Course)
@@ -76,3 +78,12 @@ def update_hourly_wages(sender, instance, **kwargs):
             lesson_occurrence__course=instance.course,
         ).all():
             l.update_hourly_wage()
+
+
+@receiver(post_save, sender=LessonOccurrence)
+@receiver(post_delete, sender=LessonOccurrence)
+def trigger_calendar_cache_delete_from_lesson_occurrence(sender, instance, **kwargs):
+    task_delete_user_calendar_cache.delay(
+        pk=instance.pk,
+        sender=sender,
+    )
