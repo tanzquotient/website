@@ -10,6 +10,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from django.views.generic import TemplateView
 from photologue.views import GalleryListView
+from django.views.decorators.cache import cache_page
 
 import courses.urls
 import courses.views as courses_views
@@ -58,7 +59,7 @@ urlpatterns += i18n_patterns(
     path("password/", courses_views.change_password, name="change_password"),
     path("profile/courses", courses_views.user_courses, name="user_courses"),
     path(
-        "profile/<int:user_id>/calendar.ical", courses_views.user_ical, name="user_ical"
+        "profile/<int:user_id>/calendar.ical", cache_page(60 * 60)(courses_views.user_ical), name="user_ical"
     ),
     path("profile/edit", courses_views.ProfileView.as_view(), name="edit_profile"),
     path("profile/auth/oidc_login", oidc_login_view, name="oidc_login"),
