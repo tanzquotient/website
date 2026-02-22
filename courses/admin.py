@@ -741,6 +741,7 @@ class VoucherAdmin(VersionAdmin):
         VoucherYearUsedListFilter,
     )
     search_fields = [
+        "key",
         "subscription__user__first_name",
         "subscription__user__last_name",
         "subscription__user__username",
