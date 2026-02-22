@@ -1,9 +1,5 @@
 from celery import shared_task
-from django.test.client import RequestFactory
-from django.utils.cache import get_cache_key
 from django.core.cache import cache
-from django.urls import reverse
-from django.contrib.auth import get_user_model
 
 from groups.services import update_groups
 from survey.services import send_course_surveys
@@ -14,7 +10,6 @@ from courses.services.teachers import send_presence_reminder
 from email_system.services import send_scheduled_group_emails, send_queued_emails
 from photologue.models import Photo, PhotoSizeCache
 from courses.models import Course, Subscribe, CourseType, Teach, LessonOccurrence
-from courses.views import _user_specific_token
 
 
 @shared_task(
@@ -79,7 +74,6 @@ def task_delete_user_and_courses_calendar_cache(
 ) -> None:
     users = set()
     courses = set()
-    User = get_user_model()
 
     def _add_users_from_course(course: Course):
         users.update(course.subscriptions.all().values_list("user", flat=True))
@@ -108,16 +102,9 @@ def task_delete_user_and_courses_calendar_cache(
         courses.add(lesson_occurrence.course.pk)
 
     for user in users:
-        req = RequestFactory().get(
-            reverse("user_ical", kwargs={"user_id": user}),
-            {"token": _user_specific_token(User.objects.get(pk=user))},
-        )
-        key = get_cache_key(req)
-        cache.delete(key)
+        cache_key = f"user_ical_{user}"
+        cache.delete(cache_key)
 
     for course in courses:
-        req = RequestFactory().get(
-            reverse("course_ical", kwargs={"course_id": course}),
-        )
-        key = get_cache_key(req)
-        cache.delete(key)
+        cache_key = f"course_ical_{course}"
+        cache.delete(cache_key)

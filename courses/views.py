@@ -20,6 +20,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
+from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.edit import FormView
@@ -254,8 +255,13 @@ def _lesson_to_ical_event(
 
     return event
 
-@cache_page(60 * 60 * 24)
+
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
+    cache_key = f"course_ical_{course_id}"
+    response = cache.get(cache_key)
+    if response:
+        return response
+
     course: Course = get_object_or_404(Course.objects, id=course_id)
     cal = Calendar()
     cal.add("version", "2.0")
@@ -265,7 +271,9 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
         event = _lesson_to_ical_event(course, occurrence, request)
         cal.add_component(event)
 
-    return HttpResponse(cal.to_ical(), content_type="text/calendar")
+    response = HttpResponse(cal.to_ical(), content_type="text/calendar")
+    cache.set(cache_key, response, 60 * 60 * 24)
+    return response
 
 
 @login_required
@@ -545,13 +553,17 @@ def _user_specific_token(user: User) -> str:
     return hashlib.sha256(str_to_hash.encode()).hexdigest()
 
 
-@cache_page(60 * 60 * 24)
 def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     user = get_object_or_404(User, pk=user_id)
 
     security_token = request.GET.get("token", "")
     if security_token != _user_specific_token(user):
         raise PermissionDenied()
+    
+    cache_key = f"user_ical_{user_id}"
+    response = cache.get(cache_key)
+    if response:
+        return response
 
     cal = Calendar()
     cal.add("version", "2.0")
@@ -581,7 +593,9 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
                 _lesson_to_ical_event(course, occurrence, request, subscription)
             )
 
-    return HttpResponse(cal.to_ical(), content_type="text/calendar")
+    response = HttpResponse(cal.to_ical(), content_type="text/calendar")
+    cache.set(cache_key, response, 60 * 60 * 24)
+    return response
 
 
 @login_required
