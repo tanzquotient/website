@@ -22,8 +22,11 @@ from courses.views import _user_specific_token
     name="custom_post_office_send_queued_emails",
     ignores_result=True,
 )
-@shared_task(name="post_office.tasks.send_queued_mail", ignore_result=True)
 def custom_send_queued_emails() -> None:
+    send_queued_emails()
+
+@shared_task(name="post_office.tasks.send_queued_mail", ignore_result=True)
+def post_office_override_send_queued_emails() -> None:
     send_queued_emails()
 
 
