@@ -855,4 +855,4 @@ class BankAccountAdmin(admin.ModelAdmin):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    readonly_fields = ["address", "bank_account"]
+    readonly_fields = ["bank_account"]

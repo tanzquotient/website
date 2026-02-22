@@ -6,7 +6,7 @@ from typing import Optional, Iterable
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db.models import CASCADE, SET_NULL
+from django.db.models import CASCADE, SET_NULL, PROTECT
 from django.db.models import (
     Model,
     IntegerField,
@@ -15,6 +15,7 @@ from django.db.models import (
     DecimalField,
     OneToOneField,
     CharField,
+    ForeignKey,
 )
 from django.dispatch import receiver
 from django.utils import timezone
@@ -54,7 +55,14 @@ class UserProfile(Model):
 
     legi = CharField(max_length=16, blank=True, null=True)
     gender = CharField(max_length=64, blank=True, null=True)
-    address = OneToOneField(Address, blank=True, null=True, on_delete=SET_NULL)
+    
+    address = ForeignKey(
+        to=Address,
+        related_name="user_profiles",
+        blank=True,
+        null=True,
+        on_delete=PROTECT,
+    )
     phone_number = CharField(max_length=255, blank=True, null=True)
     student_validity = DateField(
         blank=True, null=True, help_text="Last date of validity of student status."

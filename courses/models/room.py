@@ -12,8 +12,12 @@ from . import Address, RoomAccessCode
 
 class Room(TranslatableModel):
     name = models.CharField(max_length=30, unique=True, blank=False)
-    address = models.OneToOneField(
-        Address, blank=True, null=True, on_delete=models.PROTECT
+    address = models.ForeignKey(
+        to=Address,
+        related_name="rooms",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
     url = models.URLField(max_length=500, blank=True, null=True)
     url.help_text = "The url to Google Maps (see https://support.google.com/maps/answer/144361?p=newmaps_shorturl&rd=1)"
@@ -84,7 +88,9 @@ class Room(TranslatableModel):
     def is_cancelled(self, query_date: date) -> bool:
         return any((query_date == c.date for c in self.cancellations.all()))
 
-    def get_access_codes(self, code_date: date | None = None) -> models.QuerySet[RoomAccessCode]:
+    def get_access_codes(
+        self, code_date: date | None = None
+    ) -> models.QuerySet[RoomAccessCode]:
         if code_date is None:
             code_date = date.today()
         qs: models.QuerySet[RoomAccessCode] = self.access_codes.filter(

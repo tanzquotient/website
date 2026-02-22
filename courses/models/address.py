@@ -17,3 +17,6 @@ class Address(models.Model):
 
     def __str__(self) -> str:
         return f"{self.street}, {self.plz} {self.city}{f', {self.country}' if self.country != 'CH' else ''}"
+    
+    class Meta:
+        verbose_name_plural = "Addresses"
