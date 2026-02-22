@@ -14,7 +14,12 @@ class EventFeed(ICalFeed):
     timezone = "UTC"
 
     def items(self) -> QuerySet[Event]:
-        return Event.objects.filter(cancelled=False).all()
+        events = (
+            Event.objects.filter(cancelled=False)
+            .prefetch_related("category", "room__cancellations")
+            .all()
+        )
+        return list(filter(lambda event: not event.is_cancelled(), events))
 
     def item_title(self, item: Event) -> str:
         return item.safe_translation_getter("name", any_language=True) or "Untitled"
