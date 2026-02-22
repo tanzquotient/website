@@ -12,28 +12,11 @@ from email_system.services import send_scheduled_group_emails, send_queued_email
 from photologue.models import Photo, PhotoSizeCache
 
 
-# @shared_task(
-#     name="post_office_send_queued_emails",
-#     ignores_result=True,
-#     **settings.CELERY_EMAIL_TASK_CONFIG,
-# )
-# def send_queued_emails() -> None:
-#     send_queued_mail_until_done()
-
-
-# @shared_task(
-#     name="post_office.tasks.send_queued_mail",
-#     ignore_result=True,
-#     **settings.CELERY_EMAIL_TASK_CONFIG,
-# )
-# def send_queued_mail_override(*args, **kwargs) -> None:
-#     send_queued_mail_until_done()
-
-
 @shared_task(
     name="custom_post_office_send_queued_emails",
     ignores_result=True,
 )
+@shared_task(name="post_office.tasks.send_queued_mail", ignore_result=True)
 def custom_send_queued_emails() -> None:
     send_queued_emails()
 
