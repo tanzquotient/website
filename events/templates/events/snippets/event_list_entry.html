@@ -5,7 +5,7 @@
 
 <a href="{{ item.detail_url }}" class="list-group-item list-group-item-action">
     <strong>
-        {{ item.name }}
+        {{ item.get_name }}
     </strong>
     {% include "events/snippets/event_banner.html" with event=item only %}
     {% include "events/snippets/event_info.html" with event=item only %}

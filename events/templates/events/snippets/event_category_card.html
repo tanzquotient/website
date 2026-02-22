@@ -4,11 +4,11 @@
 {% with modal_id="modal-"|append_uuid %}
     <div class="card quick-link mb-4 banner-container">
         {% if category.image %}
-            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.get_name }}">
         {% endif %}
         <div class="card-body">
-            <h5 class="card-title">{{ category.name }}</h5>
-            {% if category.teaser %}
+            <h5 class="card-title">{{ category.get_name }}</h5>
+            {% if category.get_teaser %}
                 <div>
                     {{ category.teaser }}
                 </div>

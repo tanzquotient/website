@@ -46,6 +46,12 @@ class EventCategory(TranslatableModel):
     def get_name(self) -> str:
         return TranslationUtils.get_text_with_language_fallback(self, "name")
 
+    def get_teaser(self) -> str:
+        return TranslationUtils.get_text_with_language_fallback(self, "teaser")
+
+    def get_description(self) -> str:
+        return TranslationUtils.get_text_with_language_fallback(self, "description")
+
     def __str__(self) -> str:
         return self.get_name()
 
