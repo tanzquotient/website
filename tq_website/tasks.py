@@ -1,10 +1,9 @@
 from celery import shared_task
-from django.conf import settings
-from post_office.mail import send_queued_mail_until_done
 from django.test.client import RequestFactory
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from groups.services import update_groups
 from survey.services import send_course_surveys
@@ -24,6 +23,7 @@ from courses.views import _user_specific_token
 )
 def custom_send_queued_emails() -> None:
     send_queued_emails()
+
 
 @shared_task(name="post_office.tasks.send_queued_mail", ignore_result=True)
 def post_office_override_send_queued_emails() -> None:
@@ -79,6 +79,7 @@ def task_delete_user_and_courses_calendar_cache(
 ) -> None:
     users = set()
     courses = set()
+    User = get_user_model()
 
     def _add_users_from_course(course: Course):
         users.update(course.subscriptions.all().values_list("user", flat=True))
@@ -109,7 +110,7 @@ def task_delete_user_and_courses_calendar_cache(
     for user in users:
         req = RequestFactory().get(
             reverse("user_ical", kwargs={"user_id": user}),
-            {"token": _user_specific_token(user)},
+            {"token": _user_specific_token(User.objects.get(pk=user))},
         )
         key = get_cache_key(req)
         cache.delete(key)
