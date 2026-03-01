@@ -13,7 +13,7 @@ django-photologue==3.18         # Gallery application
 django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
 
 # Django CMS
-django-cms==5.0.5               # Open source content management system based on the Django
+django-cms==5.0.6               # Open source content management system based on the Django
 djangocms-text==0.9.3           # Text plugin for django CMS
 djangocms-versioning==2.5.1     # Core package of django CMS, is used to e.g. hava page histories
 djangocms-alias==3.0.3          # Core package of django CMS used for aliases
@@ -57,5 +57,5 @@ plotly==6.5.2                  # For generating charts and graphs
 pytz==2025.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.6            # Superuser can impersonate other users
-python-dotenv==1.2.1            # Used to load environment variables from .env file
+python-dotenv==1.2.2            # Used to load environment variables from .env file
 requests==2.32.5                # Used for OIDC requests
