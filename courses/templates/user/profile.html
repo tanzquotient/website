@@ -119,11 +119,7 @@
                 <p>
                     <strong> {% trans "Teacher" %}</strong>
                     <br/>
-                    {% if  user.profile.teaching_since %}
-                        {% trans "Teaching for Tanzquotient since" %}: {{ user.profile.teaching_since.year }}
-                        <br/>
-                    {% endif %}
-                    {% trans "Courses taught for Tanzquotient" %}: {{ user.profile.courses_taught_count }}
+                    {% include "courses/snippets/teaching_since.html" with user=user only %}
                 </p>
             {% endif %}
             {% if  user.profile.is_board_member %}

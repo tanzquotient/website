@@ -1,10 +1,12 @@
 {% load i18n %}
 {% load courses_tags %}
+{% load cache %}
 
-
-<h3 class="my-3">{% trans "Reviews" %}</h3>
-{% include "courses/snippets/course_review_button.html" with course=course user=user only %}
-<h4>{% trans "Reviews for " %}{{ course.type }}</h4>
-{% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' %}
-<h4>{% trans "Reviews the teachers got for other courses" %}</h4>
-{% include "courses/snippets/course_reviews_section.html" with text_reviews=teachers_reviews type='teachers' show_course_type=True %}
+{% cache 86400 course_reviews course.id %}
+    <h3 class="my-3">{% trans "Reviews" %}</h3>
+    {% include "courses/snippets/course_review_button.html" with course=course user=user only %}
+    <h4>{% trans "Reviews for " %}{{ course.type }}</h4>
+    {% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' %}
+    <h4>{% trans "Reviews the teachers got for other courses" %}</h4>
+    {% include "courses/snippets/course_reviews_section.html" with text_reviews=teachers_reviews type='teachers' show_course_type=True %}
+{% endcache %}

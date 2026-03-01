@@ -29,17 +29,12 @@
                         {% endif %}
                         <div>
                             {% if user.profile.is_teacher or user.profile.is_board_member %}
-                                {% if user.profile.is_teacher %}
-                                    <h4>
-                                        {% trans "Teacher" %}
-                                    </h4>
-                                    {% with user.profile.teaching_since as teaching_since %}
-                                        {% if teaching_since %}
-                                            <p>{% trans "Teaching for Tanzquotient since" %}: {{ teaching_since.year }}</p>
-                                        {% endif %}
-                                    {% endwith %}
-                                    <p>{% trans "Courses taught for Tanzquotient" %}: {{ user.profile.courses_taught_count }}</p>
-                                {% endif %}
+                                    {% if user.profile.is_teacher %}
+                                                <h4>
+                                                    {% trans "Teacher" %}
+                                                </h4>
+                                                {% include "courses/snippets/teaching_since.html" with user=user only %}
+                                            {% endif %}
                                 {% if user.profile.is_board_member %}
                                     <h4 class="mb-2">{% trans "Board member" %}</h4>
                                     {% for function in user.functions.all %}

@@ -37,6 +37,7 @@ from . import (
     CourseType,
     Course,
     Teach,
+    LessonOccurrence,
 )
 
 
@@ -55,7 +56,7 @@ class UserProfile(Model):
 
     legi = CharField(max_length=16, blank=True, null=True)
     gender = CharField(max_length=64, blank=True, null=True)
-    
+
     address = OneToOneField(
         to=Address,
         related_name="user_profiles",
@@ -303,19 +304,20 @@ class UserProfile(Model):
         if not self.is_teacher():
             return None
 
-        earliest_course = None
-        for teaching in self.courses_taught():
-            course_start = teaching.course.get_first_lesson_date()
-            if not course_start:
-                continue
-            if (
-                not earliest_course
-                or course_start < earliest_course.get_first_lesson_date()
-            ):
-                earliest_course = teaching.course
+        taught = self.courses_taught()
+        course_ids = [t.course_id for t in taught]
+        if not course_ids:
+            return None
 
-        if earliest_course:
-            return earliest_course.get_first_lesson_date()
+        first_lesson_occurrence = (
+            LessonOccurrence.objects.filter(course_id__in=course_ids)
+            .order_by("start")
+            .first()
+        )
+        if first_lesson_occurrence:
+            return first_lesson_occurrence.start.date()
+
+        return None
 
     def courses_taught_count(self) -> int:
         return len(self.courses_taught())

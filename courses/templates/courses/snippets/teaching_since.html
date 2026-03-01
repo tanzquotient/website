@@ -1,0 +1,8 @@
+{% load i18n cache %}
+{% cache 86400 user_teaching_since user.id %}
+    {% if user.profile.teaching_since %}
+        {% trans "Teaching for Tanzquotient since" %}: {{ user.profile.teaching_since.year }}
+        <br/>
+    {% endif %}
+    {% trans "Courses taught for Tanzquotient" %}: {{ user.profile.courses_taught_count }}
+{% endcache %}
