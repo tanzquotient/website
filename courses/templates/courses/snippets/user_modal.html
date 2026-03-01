@@ -33,7 +33,7 @@
                                                 <h4>
                                                     {% trans "Teacher" %}
                                                 </h4>
-                                                {% include "courses/snippets/teaching_since.html" with user=user request=request only %}
+                                                {% include "courses/snippets/teaching_since.html" with user=user only %}
                                             {% endif %}
                                 {% if user.profile.is_board_member %}
                                     <h4 class="mb-2">{% trans "Board member" %}</h4>

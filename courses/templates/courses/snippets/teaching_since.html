@@ -1,5 +1,8 @@
 {% load i18n cache %}
-{% cache 86400 user_teaching_since user.id request.LANGUAGE_CODE %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% cache 86400 user_teaching_since user.id LANGUAGE_CODE %}
     {% if user.profile.teaching_since %}
         {% trans "Teaching for Tanzquotient since" %}: {{ user.profile.teaching_since.year }}
         <br/>

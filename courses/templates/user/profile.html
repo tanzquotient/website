@@ -119,7 +119,7 @@
                 <p>
                     <strong> {% trans "Teacher" %}</strong>
                     <br/>
-                    {% include "courses/snippets/teaching_since.html" with user=user request=request only %}
+                    {% include "courses/snippets/teaching_since.html" with user=user only %}
                 </p>
             {% endif %}
             {% if  user.profile.is_board_member %}
