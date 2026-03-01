@@ -300,6 +300,7 @@ class UserProfile(Model):
 
         return False
 
+    @cached_property
     def teaching_since(self) -> Optional[date]:
         if not self.is_teacher():
             return None
