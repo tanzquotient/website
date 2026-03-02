@@ -768,6 +768,10 @@ class RoomAdmin(TranslatableAdmin):
                     "address_country",
                     "url",
                     "contact_info",
+                    "description",
+                    "instructions",
+                    "disclaimer",
+                    "information_for_participants",
                 ]
             },
         )
