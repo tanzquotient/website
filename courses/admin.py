@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.html import format_html_join, mark_safe
 from parler.admin import TranslatableAdmin
 from parler.widgets import SortedSelect
+from parler.forms import TranslatableModelForm
 from reversion.admin import VersionAdmin
 from reversion.models import Version
 
@@ -21,7 +22,7 @@ from django_countries.fields import CountryField
 from .models import Address, Room
 
 
-class RoomAdminForm(forms.ModelForm):
+class RoomAdminForm(TranslatableModelForm):
     address_street = forms.CharField(required=False, label="Street")
     address_plz = forms.IntegerField(required=False, label="PLZ")
     address_city = forms.CharField(required=False, label="City")
@@ -30,7 +31,6 @@ class RoomAdminForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = "__all__"
-        exclude = ("address_new",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
