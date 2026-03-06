@@ -23,8 +23,16 @@ def toggle_event_registration(schedule_id, event_id, action):
     except Exception:
         enable = str(action) == "enable"
 
-    event.registration_enabled = enable
-    event.save(update_fields=["registration_enabled"])
+    try:
+        with revisions.create_revision():
+            event.registration_enabled = enable
+            event.save(update_fields=["registration_enabled"])
+            revisions.set_comment(
+                f"Scheduled toggle by schedule {schedule_id}: set registration_enabled to {enable} for event {event_id}"
+            )
+    except Exception:
+        event.registration_enabled = enable
+        event.save(update_fields=["registration_enabled"])
 
     try:
         schedule = EventRegistrationSchedule.objects.get(pk=schedule_id)

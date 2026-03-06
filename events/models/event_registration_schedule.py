@@ -79,4 +79,8 @@ class EventRegistrationSchedule(models.Model):
         PeriodicTask.objects.filter(name=task_name).delete()
 
     def __str__(self):
-        return f"{self.get_action_display()} at {self.run_at} for {self.event_id}"
+        run_at = timezone.make_aware(self.run_at, timezone.get_current_timezone())
+        run_at_local = timezone.localtime(run_at)
+        run_at_str = run_at_local.strftime("%d.%m.%Y %H:%M")
+
+        return f"{self.get_action_display()} at {run_at_str} for {self.event}"
