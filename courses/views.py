@@ -19,7 +19,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -74,6 +74,10 @@ def course_list(
 def course_list_context(
     subscription_type="all", style_name="all", show_preview=False
 ) -> dict:
+    cache_key = f"course_list_context:{subscription_type}:{style_name}:{'preview' if show_preview else 'normal'}:{get_language()}"
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
     filter_styles = Style.objects.filter(filter_enabled=True)
 
     def matches_filter(c: Course) -> bool:
@@ -129,6 +133,7 @@ def course_list_context(
             "subscription_type": subscription_type,
         },
     }
+    cache.set(cache_key, context, 5 * 60)
     return context
 
 
@@ -559,7 +564,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     security_token = request.GET.get("token", "")
     if security_token != _user_specific_token(user):
         raise PermissionDenied()
-    
+
     cache_key = f"user_ical_{user_id}"
     response = cache.get(cache_key)
     if response:
