@@ -4,7 +4,8 @@ from collections import Counter
 from numbers import Number
 from typing import Iterable
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, get_language
+from django.core.cache import cache
 
 from courses.models import Subscribe, SubscribeState, CourseType
 from utils import TranslationUtils
@@ -14,6 +15,10 @@ log = logging.getLogger("tq")
 
 def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType, int]]:
     """returns similar courses that the user did before in the system"""
+    cache_key = f"calculate_relevant_experience:{self.pk}:{get_language()}"
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
 
     relevant_exp = [
         related_style.id
@@ -35,11 +40,14 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType,
         ]
     )
 
-    return sorted(
+    result = sorted(
         relevant_courses.items(),
         key=lambda item: (item[0].level or 0, item[1]),
         reverse=True,
     )
+
+    cache.set(cache_key, result, 60 * 60 * 24)
+    return result
 
 
 def format_prices(
