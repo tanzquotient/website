@@ -3,7 +3,21 @@ from parler.admin import TranslatableAdmin
 
 from events.admin_actions import *
 from events.filters.event_date_filter import EventDateFilter
-from events.models import Event, EventCategory, EventRegistration
+from events.models import (
+    Event,
+    EventCategory,
+    EventRegistration,
+    EventRegistrationSchedule,
+)
+
+
+class RegistrationScheduleInline(admin.TabularInline):
+    model = EventRegistrationSchedule
+    extra = 0
+    fields = ("action", "run_at", "executed")
+    readonly_fields = ("executed",)
+    verbose_name = "Schedule opening or closing registration"
+    show_change_link = False
 
 
 @admin.register(Event)
@@ -25,6 +39,8 @@ class EventAdmin(TranslatableAdmin):
     )
 
     model = Event
+
+    inlines = [RegistrationScheduleInline]
 
     actions = [copy_event, export_registrations_csv, export_registrations_excel]
 
