@@ -1,0 +1,41 @@
+English version below
+---
+
+Hallo {{first_name}}
+
+uns ist aufgefallen, dass du bei deiner letzten Lektion ({{course_name_de}}, {{date}}) als abwesend markiert wurdest. Wir möchten sicherstellen, dass du unser Online-System für Absenzen und Ersatzplätze kennst.
+
+Wenn du im Voraus weisst, dass du eine Lektion nicht besuchen kannst, kannst du deine Absenz ganz einfach auf der TQ-Website eintragen. Dadurch wird dein Platz für jemand anderen freigegeben, was für alle fairer ist: für andere Teilnehmende, Lehrpersonen und diejenigen, die gerne nachrücken möchten.
+
+So trägst du eine Absenz ein:
+
+1. Gehe zu «Meine Kurse»: {{my_courses_url}}
+2. Wähle das Datum der Lektion aus und markiere dich als abwesend
+
+Danke, dass du mithilfst, den Betrieb reibungslos zu gestalten. Bei Fragen kannst du dich jederzeit bei uns melden.
+
+
+Dein Tanzquotient
+tanzquotient.org
+Bei Fragen antworte einfach auf diese Mail
+
+_______________
+
+
+Hi {{first_name}},
+
+We noticed you were marked as absent from your recent lesson ({{course_name_de}}, {{date}}). We just want to make sure you know about our online absence and replacement system.
+
+If you know ahead of time that you won’t be able to attend a lesson, you can easily record your absence on the TQ website. This also opens up your spot for someone else to take as a replacement, which helps keep classes balanced and fair for other participants, teachers, and those hoping to join.
+
+How to record an absence:
+    
+1. Go to My Courses: {{my_courses_url}}
+2. Select the lesson date you’ll miss and mark yourself as absent
+
+Thanks for helping us keep things running smoothly. If you have any questions, feel free to reach out.
+
+
+Your Tanzquotient
+tanzquotient.org
+If you have questions please just answer to this email

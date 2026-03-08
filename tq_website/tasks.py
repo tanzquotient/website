@@ -7,6 +7,7 @@ from payment.payment_processor import PaymentProcessor
 from payment.parser import ZkbCsvParser
 from payment.services import remind_all_of_payments
 from courses.services.teachers import send_presence_reminder
+from courses.services.attendance import send_unexcused_absences_emails
 from email_system.services import send_scheduled_group_emails, send_queued_emails
 from photologue.models import Photo, PhotoSizeCache
 from courses.models import Course, Subscribe, CourseType, Teach, LessonOccurrence
@@ -47,6 +48,11 @@ def task_update_groups() -> None:
 @shared_task(name="send_course_surveys", ignore_result=True)
 def task_send_course_surveys() -> None:
     send_course_surveys()
+
+
+@shared_task(name="send_unexcused_absences_emails", ignore_result=True)
+def task_send_unexcused_absences_emails() -> None:
+    send_unexcused_absences_emails()
 
 
 @shared_task(name="send_course_presence_reminder", ignore_result=True)
