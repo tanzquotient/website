@@ -87,6 +87,7 @@ class UserProfile(Model):
             "If True, the user agrees to share personal data with the partner "
             "in couple courses."
         ),
+        default=False,
     )
 
     display_name = CharField(
