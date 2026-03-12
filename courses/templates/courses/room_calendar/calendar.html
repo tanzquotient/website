@@ -1,0 +1,109 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Calendar - {{ room.name }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>{{ room.name }} - Weekly Occupancy</h1>
+        
+        <div id="calendar" class="bs-calendar">
+            <!-- Calendar will be rendered here -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ThomasDev-de/bs-calendar@2.0.11/dist/bs-calendar.min.js"></script>
+
+    <script>
+        // Use provided `occupancy_data` if available, otherwise use
+        // a small set of fictitious events for development/testing.
+        {% if occupancy_data %}
+        const occupancy = {{ occupancy_data|safe }};
+        {% else %}
+        const occupancy = [
+            {
+                id: 1,
+                title: 'Yoga Class',
+                start: moment().startOf('week').add(1, 'days').add(9, 'hours').toISOString(),
+                end: moment().startOf('week').add(1, 'days').add(10, 'hours').toISOString(),
+                color: 'primary'
+            },
+            {
+                id: 2,
+                title: 'Pilates',
+                start: moment().startOf('week').add(2, 'days').add(11, 'hours').toISOString(),
+                end: moment().startOf('week').add(2, 'days').add(12, 'hours').toISOString(),
+                color: 'success'
+            },
+            {
+                id: 3,
+                title: 'Workshop',
+                start: moment().startOf('week').add(3, 'days').add(14, 'hours').toISOString(),
+                end: moment().startOf('week').add(3, 'days').add(16, 'hours').toISOString(),
+                color: 'warning'
+            }
+        ];
+        {% endif %}
+
+        // Convert occupancy entries into the format bs-calendar expects
+        const appointments = occupancy.map(e => ({
+            id: e.id || null,
+            title: e.title,
+            start: moment(e.start).format('YYYY-MM-DD HH:mm:ss'),
+            end: moment(e.end).format('YYYY-MM-DD HH:mm:ss'),
+            color: e.color
+        }));
+
+        $(function () {
+            $('#calendar').bsCalendar({
+                startView: 'week',
+                views: ['week'],
+                startDate: moment().startOf('week').toDate(),
+                showAddButton: false,
+                locale: 'en-GB',
+                url: function (requestData) {
+                    // Query the server for room usage for the requested period.
+                    const params = new URLSearchParams();
+                    params.append('room_id', '{{ room.id }}');
+                    if (requestData.fromDate) params.append('fromDate', requestData.fromDate);
+                    if (requestData.toDate) params.append('toDate', requestData.toDate);
+                    const url = `/courses/api/room-usage/?${params.toString()}`;
+                    return fetch(url, { credentials: 'same-origin' })
+                        .then(resp => {
+                            if (!resp.ok) {
+                                console.error('room-usage API error', resp.status, resp.statusText);
+                                return appointments;
+                            }
+                            return resp.json().then(data => {
+                                if (!Array.isArray(data)) return appointments;
+                                const typeToColor = { 'course': 'primary', 'event': 'success' };
+                                return data.map(item => ({
+                                    id: item.id,
+                                    title: item.title,
+                                    start: item.start,
+                                    end: item.end,
+                                    location: item.location,
+                                    color: typeToColor[item.type] || 'primary',
+                                    type: item.type,
+                                }));
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Error fetching room usage', err);
+                            return appointments;
+                        });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
