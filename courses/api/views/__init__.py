@@ -1,3 +1,4 @@
 from .my_attendance_api_view import MyAttendanceApiView
 from .choose_role_api_view import ChooseRoleApiView
 from .claim_spot_api_view import ClaimSpotApiView
+from .room_usage_api_view import RoomUsageApiView

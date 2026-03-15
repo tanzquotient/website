@@ -1,0 +1,325 @@
+{% load static sekizai_tags i18n %}
+
+<div id="calendar" class="bs-calendar"></div>
+
+{% addtoblock "css" %}
+    <style>
+        .appointment-title {
+            font-size: 0.85rem;
+            /* allow wrapping and preserve newlines */
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            /* Use webkit line-clamp with a CSS variable set by JS */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: var(--lines, 2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+        }
+        .appointment-container {
+            box-sizing: border-box;
+            height: 100% !important;
+            display: flex;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            width: 100%;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+        }
+        .bs-calendar.bs-calendar-wrapper {
+            overflow: visible !important;
+        }
+        .bs-calendar .wc-calendar-view-container {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+    </style>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ThomasDev-de/bs-calendar@2.0.11/dist/bs-calendar.min.js"></script>
+
+    <script>
+        $(function () {
+            function escapeHtml(str) {
+                if (str === null || str === undefined) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function formatAppointment(appointment) {
+                const title = escapeHtml(appointment && (appointment.title || appointment.name) || '');
+                return `<div class="appointment-container px-1 py-1"><div class="appointment-title text-center lh-sm">${title}</div></div>`;
+            }
+
+            function applyLineClamps() {
+                const els = document.querySelectorAll('.appointment-title');
+                els.forEach(el => {
+                    try {
+                        const computed = window.getComputedStyle(el);
+                        let lineHeight = parseFloat(computed.lineHeight);
+                        if (!lineHeight || isNaN(lineHeight)) {
+                            const fontSize = parseFloat(computed.fontSize) || 14;
+                            lineHeight = fontSize * 1.1;
+                        }
+
+                        // Find nearest visible container height. Try parentElement up to 3 levels.
+                        let container = el.parentElement;
+                        for (let i = 0; i < 4 && container; i++) {
+                            if (container.clientHeight > 0) break;
+                            container = container.parentElement;
+                        }
+                        const availableHeight = (container && container.clientHeight) || el.clientHeight || (lineHeight * 2);
+                        let maxLines = Math.floor(availableHeight / lineHeight);
+                        if (maxLines < 1) maxLines = 1;
+                        el.style.setProperty('--lines', String(maxLines));
+                        el.style.maxHeight = (maxLines * lineHeight) + 'px';
+                    } catch (e) {
+                        // ignore
+                    }
+                });
+            }
+
+            $('#calendar').bsCalendar({
+                startView: 'week',
+                startWeekOnSunday: false,
+                startDate: moment().startOf('week').toDate(),
+                showAddButton: false,
+                navigateOnWheel: false,
+                locale: 'en-GB',
+                search: 0,
+                holidays: {
+                    country: 'CH',
+                    language: 'DE',
+                    federalState: 'ZH',
+                },
+                formatter: {
+                    holiday(holiday, view) {
+                        return holiday.name || holiday.localName || holiday.description || '';
+                    },
+                    day(appointment, extras) {
+                        return formatAppointment(appointment);
+                    },
+                    week(appointment, extras) {
+                        return formatAppointment(appointment);
+                    },
+                    month(appointment, extras) {
+                        return formatAppointment(appointment);
+                    }
+                },
+                onAfterLoad: function(appointments) {
+                    if (Array.isArray(appointments)) {
+                        appointments.forEach(a => {
+                            a.editable = false;
+                            a.deleteable = false;
+                        });
+                    }
+                    // Apply line clamps after rendering
+                    setTimeout(function() { requestAnimationFrame(applyLineClamps); }, 0);
+                },
+                url: function (requestData) {
+                    // Parse `room_id` from query string. Accept repeated params or comma-separated lists.
+                    const urlParams = new URLSearchParams(window.location.search);
+                    function parseRoomIds() {
+                        let ids = urlParams.getAll('room_id') || [];
+                        if (ids.length === 0) {
+                            const single = urlParams.get('room_id');
+                            if (single) ids = single.split(',');
+                        } else {
+                            ids = ids.flatMap(s => s.split(','));
+                        }
+                        return ids.map(s => s.trim()).filter(Boolean);
+                    }
+
+                    const selectedRoomIds = parseRoomIds();
+                    const titleEl = document.getElementById('calendar-title');
+                    if (titleEl) {
+                        if (selectedRoomIds.length === 1) {
+                            titleEl.textContent = `Room ${selectedRoomIds[0]} - Weekly Occupancy`;
+                        } else if (selectedRoomIds.length > 1) {
+                            titleEl.textContent = `Rooms ${selectedRoomIds.join(', ')} - Weekly Occupancy`;
+                        } else {
+                            titleEl.textContent = 'Room Calendar - Weekly Occupancy';
+                        }
+                    }
+
+                    
+
+                    if (selectedRoomIds.length === 0) {
+                        // No room specified — return empty appointment list.
+                        return Promise.resolve([]);
+                    }
+
+                    const params = new URLSearchParams();
+                    selectedRoomIds.forEach(id => params.append('room_id', id));
+                    if (requestData.fromDate) params.append('fromDate', requestData.fromDate);
+                    if (requestData.toDate) params.append('toDate', requestData.toDate);
+                    const url = `/courses/api/room-usage/?${params.toString()}`;
+
+                    const fetchEvents = fetch(url, { credentials: 'same-origin' })
+                        .then(resp => {
+                            if (!resp.ok) {
+                                return [];
+                            }
+                            return resp.json().then(data => {
+                                if (!Array.isArray(data)) return [];
+                                const typeToColor = { 'course': 'primary', 'event': 'success' };
+                                return data.map(item => ({
+                                    id: item.id,
+                                    title: item.title,
+                                    start: item.start,
+                                    end: item.end,
+                                    location: item.location,
+                                    color: typeToColor[item.type] || 'primary',
+                                    editable: false,
+                                    deleteable: false,
+                                    type: item.type,
+                                }));
+                            });
+                        })
+                        .catch(err => {
+                            return [];
+                        });
+
+                    // Fetch holidays via bs-calendar utils (if available) and merge them
+                    const fromDate = requestData.fromDate || moment().startOf('year').format('YYYY-MM-DD');
+                    const toDate = requestData.toDate || moment().endOf('year').format('YYYY-MM-DD');
+                    let fetchHolidays = Promise.resolve([]);
+                    try {
+                        const openHolidayApi = window.$ && window.$.bsCalendar && window.$.bsCalendar.utils && window.$.bsCalendar.utils.openHolidayApi;
+                        if (openHolidayApi && typeof openHolidayApi.getPublicHolidays === 'function') {
+                            try {
+                                // Try calling the 5-argument variant first (country, state, language, from, to)
+                                const result = openHolidayApi.getPublicHolidays('CH', 'ZH', 'DE', fromDate, toDate);
+                                fetchHolidays = (result && typeof result.then === 'function') ? result : Promise.resolve(result || []);
+                            } catch (err5) {
+                                try {
+                                    // Fallback to a 4-argument variant (country, language, from, to)
+                                    const result2 = openHolidayApi.getPublicHolidays('CH', 'DE', fromDate, toDate);
+                                    fetchHolidays = (result2 && typeof result2.then === 'function') ? result2 : Promise.resolve(result2 || []);
+                                } catch (err4) {
+                                    fetchHolidays = Promise.resolve([]);
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        fetchHolidays = Promise.resolve([]);
+                    }
+
+                    return Promise.all([fetchEvents, fetchHolidays]).then(([events, holidaysRaw]) => {
+
+                        function normalizeHoliday(h) {
+                            if (!h) return null;
+                            if (typeof h === 'string') {
+                                const m = moment(h);
+                                if (m.isValid()) return { start: m.format('YYYY-MM-DD'), end: m.format('YYYY-MM-DD'), name: h };
+                                return null;
+                            }
+                            const startCandidates = ['date', 'start', 'from', 'localDate', 'date_local', 'dateFrom', 'startDate', 'start_date', 'date_start', 'dateISO', 'dateString', 'day', 'DTSTART', 'dtstart'];
+                            const endCandidates = ['date_to', 'end', 'to', 'dateTo', 'endDate', 'end_date', 'DTEND', 'dtend'];
+                            let start = null;
+                            for (const c of startCandidates) {
+                                if (h[c]) { start = h[c]; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                                    start = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                                    if (start) break;
+                                }
+                            }
+                            if (!start && (h.DTSTART || h.dtstart)) start = h.DTSTART || h.dtstart;
+                            if (start && typeof start === 'object') {
+                                if (start.value) start = start.value;
+                                else if (start.date) start = start.date;
+                            }
+                            if (!start) return null;
+                            const ms = moment(start);
+                            if (!ms.isValid()) return null;
+                            const startFmt = ms.format('YYYY-MM-DD');
+                            let end = null;
+                            for (const c of endCandidates) {
+                                if (h[c]) { end = h[c]; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                                    end = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                                    if (end) break;
+                                }
+                            }
+                            if (!end) end = startFmt;
+                            if (typeof end === 'object' && end.value) end = end.value;
+                            const me = moment(end);
+                            const endFmt = me && me.isValid() ? me.format('YYYY-MM-DD') : startFmt;
+                            // Extract readable name (handles array of localized names used by OpenHolidays API)
+                            let holidayName = null;
+                            const rawName = h.name || h.localName || h.local_name || h.title || h.holiday || (h.properties && (h.properties.summary && h.properties.summary.value));
+                            if (Array.isArray(rawName)) {
+                                // Prefer German if present, otherwise use browser locale, otherwise first
+                                const prefer = 'DE';
+                                let found = rawName.find(n => n && (n.language && n.language.toUpperCase() === prefer));
+                                if (!found && typeof navigator !== 'undefined' && navigator.language) {
+                                    const navLang = navigator.language.split('-')[0].toUpperCase();
+                                    found = rawName.find(n => n && n.language && n.language.toUpperCase() === navLang);
+                                }
+                                if (!found) found = rawName[0];
+                                if (found) holidayName = found.text || found.name || (typeof found === 'string' ? found : null);
+                            } else if (rawName && typeof rawName === 'object' && rawName.text) {
+                                holidayName = rawName.text;
+                            } else if (typeof rawName === 'string') {
+                                holidayName = rawName;
+                            } else if (h.description && typeof h.description === 'string') {
+                                holidayName = h.description;
+                            }
+
+                            // Detect half-day indicators (explicit temporalScope from OpenHolidays or other heuristics)
+                            let halfDay = false;
+                            if (h.temporalScope && typeof h.temporalScope === 'string' && /half/i.test(h.temporalScope)) halfDay = true;
+                            const halfCandidates = ['halfDay', 'half_day', 'isHalfDay', 'half', 'is_half_day', 'halfDayFlag'];
+                            for (const c of halfCandidates) {
+                                if (h[c]) { halfDay = true; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) { halfDay = true; break; }
+                            }
+                            if (!halfDay && h.type && typeof h.type === 'string' && h.type.toLowerCase().includes('half')) halfDay = true;
+
+                            return { start: startFmt, end: endFmt, name: holidayName, halfDay: halfDay };
+                        }
+
+                        const holidays = (holidaysRaw || []).flatMap((h, idx) => {
+                            const norm = normalizeHoliday(h);
+                            if (!norm || !norm.start) return [];
+                            const title = (norm.name || 'Holiday') + (norm.halfDay ? ' (1/2 day)' : '');
+                            return [{
+                                id: `holiday-${norm.start}-${idx}`,
+                                title: title,
+                                start: `${norm.start} 00:00:00`,
+                                end: `${norm.end} 23:59:59`,
+                                color: 'warning',
+                                type: 'holiday',
+                                location: null,
+                                allDay: true,
+                                editable: false,
+                                deleteable: false,
+                            }];
+                        });
+                        return events.concat(holidays);
+                    }).catch(err => {
+                        return [];
+                    });
+                }
+            });
+            // Recompute clamps on calendar navigation and resize
+            $('#calendar').on('after-load.bs.calendar navigate-forward.bs.calendar navigate-back.bs.calendar view.bs.calendar', function() {
+                requestAnimationFrame(applyLineClamps);
+            });
+            window.addEventListener('resize', function() { requestAnimationFrame(applyLineClamps); });
+        });
+    </script>
+
+{% endaddtoblock %}

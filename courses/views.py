@@ -45,6 +45,7 @@ from .models import (
     RejectionReason,
     MatchingState,
     UserProfile,
+    Room,
     LessonOccurrence,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
@@ -192,6 +193,12 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
         "user": request.user,
     }
     return render(request, "courses/course_detail.html", context)
+
+
+@staff_member_required
+def room_calendar(request: HttpRequest) -> HttpResponse:
+    context = {}
+    return render(request, "courses/room_calendar/calendar.html", context)
 
 
 def _lesson_to_ical_event(
