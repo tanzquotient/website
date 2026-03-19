@@ -326,7 +326,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
     for subscribe in qs.all():
         partner = subscribe.partner
         partner_sub = subscribe.get_partner_subscription()
-        if not partner_sub.personal_data_sharing:
+        if partner_sub is None or not partner_sub.personal_data_sharing:
             continue
         partners_set.add((partner.get_full_name(), partner.email))
 
