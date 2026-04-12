@@ -23,6 +23,13 @@
         </a>
     </li>
 {% endif %}
+{% if perms.courses.view_room and perms.courses.view_course and perms.events.view_event %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'courses:room_calendar' %}">
+            {% trans "Room calendar" %}
+        </a>
+    </li>
+{% endif %}
 {% if not user.is_staff and user.profile.is_teacher %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'survey:overview_as_teacher' %}">

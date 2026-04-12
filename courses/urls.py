@@ -2,7 +2,13 @@ from django.urls import path
 
 from courses import admin_views
 from courses import views
-from courses.api.views import MyAttendanceApiView, ChooseRoleApiView, ClaimSpotApiView
+from courses.api.views import (
+    MyAttendanceApiView,
+    ChooseRoleApiView,
+    ClaimSpotApiView,
+    RoomUsageApiView,
+    SearchRoomApiView,
+)
 
 app_name = "courses"
 urlpatterns = [
@@ -15,6 +21,7 @@ urlpatterns = [
     path("archive/", views.archive, name="archive"),
     path("<int:course_id>/detail/", views.course_detail, name="course_detail"),
     path("<int:course_id>/calendar/", views.course_ical, name="course_ical"),
+    path("auth/room/calendar/", views.room_calendar, name="room_calendar"),
     path("<int:course_id>/subscribe/", views.subscribe_form, name="subscribe"),
     path(
         "subscribe/<int:subscription_id>/cancel",
@@ -52,4 +59,6 @@ urlpatterns = [
     path("api/my-attendance/", MyAttendanceApiView.as_view(), name="my_attendance"),
     path("api/choose-role/", ChooseRoleApiView.as_view(), name="choose_role"),
     path("api/claim-spot/", ClaimSpotApiView.as_view(), name="claim_spot"),
+    path("api/room-usage/", RoomUsageApiView.as_view(), name="room_usage"),
+    path("api/search-room/", SearchRoomApiView.as_view(), name="search_room"),
 ]

@@ -1,0 +1,680 @@
+{% load static sekizai_tags i18n %}
+
+<div class="mb-3 d-flex align-items-center gap-2">
+    <label for="room-search-input" class="form-label mb-0 me-2">Room</label>
+    <div class="position-relative" style="min-width:260px;">
+        <input id="room-search-input" class="form-control form-control-sm" placeholder="Search room..." autocomplete="off" />
+        <ul id="room-search-results" class="list-group position-absolute w-100" style="z-index:1050; display:none; max-height:200px; overflow:auto;"></ul>
+    </div>
+    <button id="room-search-clear" type="button" class="btn btn-outline-secondary btn-sm">Clear</button>
+</div>
+<!-- Templates mirroring teacher_presence_form search result structure -->
+<template id="room-search-result">
+    <li class="search-result"><a href="#" class="dropdown-item">Room Name</a></li>
+</template>
+<template id="room-searching">
+    <li class="searching"><span class="dropdown-item fst-italic">Searching...</span></li>
+</template>
+
+<div id="calendar" class="bs-calendar"></div>
+
+{% addtoblock "css" %}
+    <style>
+        .appointment-title {
+            font-size: 0.85rem;
+            /* allow wrapping and preserve newlines */
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            /* Use webkit line-clamp with a CSS variable set by JS */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: var(--lines, 2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+        }
+        .appointment-container {
+            box-sizing: border-box;
+            height: 100% !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            width: 100%;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+        }
+        /* appointment-actions no longer used */
+        /* legacy fallback popup removed */
+        .appointment-extra {
+            margin-top: 0.5rem;
+        }
+        .appointment-extra .btn {
+            margin-top: 0px;
+        }
+        .bs-calendar.bs-calendar-wrapper {
+            overflow: visible !important;
+        }
+        .bs-calendar .wc-calendar-view-container {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        /* Keep default cursor in week/day views (avoid add-appointment cursor) */
+        .bs-calendar .wc-week-view,
+        .bs-calendar .wc-day-view,
+        .bs-calendar .wc-week,
+        .bs-calendar .wc-day,
+        .bs-calendar .wc-calendar-view-container {
+            cursor: default !important;
+        }
+        /* Stronger overrides for various grid/cell classes some calendar versions use */
+        .bs-calendar .wc-grid,
+        .bs-calendar .wc-grid *,
+        .bs-calendar .wc-day-grid,
+        .bs-calendar .wc-time-grid,
+        .bs-calendar .wc-column,
+        .bs-calendar .wc-cell {
+            cursor: default !important;
+        }
+        /* bs-calendar sets `cursor: copy` on time-slot rows ([data-day-hour]).
+           Override that to default so the grid doesn't look like an "add" action. */
+        .bs-calendar [data-day-hour],
+        .bs-calendar .wc-day-view-time-slots [data-day-hour],
+        .bs-calendar .wc-day-view-time-slots > div,
+        .bs-calendar [data-week-day] {
+            cursor: default !important;
+        }
+        /* Appointments themselves should indicate clickability */
+        .appointment-container,
+        .bs-calendar .wc-event,
+        .bs-calendar .wc-appointment {
+            cursor: pointer !important;
+        }
+        /* Ensure links inside info windows keep normal pointer behavior */
+        .bs-calendar .wc-info a,
+        .bs-calendar .wc-popup a,
+        .bs-calendar .appointment-extra a {
+            cursor: pointer !important;
+        }
+        /* Room search results dropdown styling */
+        #room-search-results {
+            background: var(--bs-body-bg, #ffffff);
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.12);
+            padding: 0.5rem 0.25rem;
+            margin-top: 0.25rem;
+            max-height: 200px;
+            overflow: auto;
+            z-index: 1050;
+        }
+        #room-search-results .list-group-item {
+            background: transparent;
+            border: none;
+            padding: 0.6rem 1.25rem;
+        }
+    </style>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ThomasDev-de/bs-calendar@2.0.11/dist/bs-calendar.min.js"></script>
+
+    <script>
+        $(function () {
+            function escapeHtml(str) {
+                if (str === null || str === undefined) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            // Room search will query the server-side API on demand.
+
+            function showRoomResults(items) {
+                const ul = document.getElementById('room-search-results');
+                if (!ul) return;
+                ul.innerHTML = '';
+                if (!items || items.length === 0) { ul.style.display = 'none'; return; }
+                const resultTpl = document.getElementById('room-search-result');
+                items.forEach(r => {
+                    try {
+                        const clone = resultTpl.content.cloneNode(true);
+                        const a = clone.querySelector('a');
+                        a.textContent = r.name;
+                        // avoid default anchor navigation
+                        a.setAttribute('href', 'javascript:void(0)');
+                        // annotate the list item/anchor with the room id; we'll use delegated handling
+                        const li = clone.querySelector('li') || document.createElement('li');
+                        li.dataset.roomId = String(r.id);
+                        const anchorInClone = clone.querySelector('a');
+                        if (anchorInClone) {
+                            anchorInClone.dataset.roomId = String(r.id);
+                            anchorInClone.dataset.roomName = String(r.name || '');
+                        }
+                        ul.appendChild(clone);
+                    } catch (e) {
+                        // fallback: skip item
+                    }
+                });
+                ul.style.display = 'block';
+            }
+
+
+            function formatAppointment(appointment) {
+                    const title = escapeHtml(appointment && (appointment.title || appointment.name) || '');
+                    // Attach URLs as data attributes; tooltip will render buttons on click
+                    // Use only server-provided URLs; do not construct client-side fallbacks
+                    const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
+                    const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
+                    const type = (appointment && (appointment.type || appointment.typeName)) || '';
+
+                    const dataAttrs = `data-public-url="${escapeHtml(publicUrl)}" data-admin-url="${escapeHtml(adminUrl)}" data-type="${escapeHtml(type)}"`;
+                    return `<div class="appointment-container px-1 py-1" ${dataAttrs}><div class="appointment-title text-center lh-sm">${title}</div></div>`;
+            }
+
+            function applyLineClamps() {
+                const els = document.querySelectorAll('.appointment-title');
+                els.forEach(el => {
+                    try {
+                        const computed = window.getComputedStyle(el);
+                        let lineHeight = parseFloat(computed.lineHeight);
+                        if (!lineHeight || isNaN(lineHeight)) {
+                            const fontSize = parseFloat(computed.fontSize) || 14;
+                            lineHeight = fontSize * 1.1;
+                        }
+
+                        // Find nearest visible container height. Try parentElement up to 3 levels.
+                        let container = el.parentElement;
+                        for (let i = 0; i < 4 && container; i++) {
+                            if (container.clientHeight > 0) break;
+                            container = container.parentElement;
+                        }
+                        const availableHeight = (container && container.clientHeight) || el.clientHeight || (lineHeight * 2);
+                        let maxLines = Math.floor(availableHeight / lineHeight);
+                        if (maxLines < 1) maxLines = 1;
+                        el.style.setProperty('--lines', String(maxLines));
+                        el.style.maxHeight = (maxLines * lineHeight) + 'px';
+                    } catch (e) {
+                        // ignore
+                    }
+                });
+            }
+
+            $('#calendar').bsCalendar({
+                startView: 'week',
+                startWeekOnSunday: false,
+                startDate: moment().startOf('week').toDate(),
+                showAddButton: false,
+                navigateOnWheel: false,
+                locale: 'en-GB',
+                search: 0,
+                holidays: {
+                    country: 'CH',
+                    language: 'DE',
+                    federalState: 'ZH',
+                },
+                formatter: {
+                    holiday(holiday, view) {
+                        return holiday.name || holiday.localName || holiday.description || '';
+                    },
+                    day(appointment, extras) {
+                        return formatAppointment(appointment);
+                    },
+                    week(appointment, extras) {
+                        return formatAppointment(appointment);
+                    },
+                    month(appointment, extras) {
+                        return formatAppointment(appointment);
+                    }
+                    ,
+                    // Render the info window content. Using an async function per library docs.
+                    window: async function(appointment, extras) {
+                        return new Promise((resolve) => {
+                            try {
+                                const title = escapeHtml(appointment && (appointment.title || appointment.name) || '');
+                                const desc = escapeHtml((appointment && (appointment.description || '')) || '');
+                                const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
+                                const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
+                                const publicLabel = (appointment && appointment.type === 'event') ? 'Event page' : 'Course page';
+                                const publicBtn = publicUrl ? `<a href="${escapeHtml(publicUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success me-1">${escapeHtml(publicLabel)}</a>` : '';
+                                const adminBtn = adminUrl ? `<a href="${escapeHtml(adminUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success">Admin page</a>` : '';
+                                const buttons = (publicBtn || adminBtn) ? `<div class="d-flex appointment-extra mt-2">${publicBtn}${adminBtn}</div>` : '';
+                                // Build a small details block with start/end and room
+                                let details = '';
+                                try {
+                                    const s = appointment && appointment.start ? moment(appointment.start).format('LLL') : '';
+                                    const e = appointment && appointment.end ? moment(appointment.end).format('LLL') : '';
+                                    const room = appointment && (appointment.location || appointment.room) ? escapeHtml(appointment.location || appointment.room) : '';
+                                    const parts = [];
+                                    if (s) parts.push(`<strong>Start:</strong> ${escapeHtml(s)}`);
+                                    if (e) parts.push(`<strong>End:</strong> ${escapeHtml(e)}`);
+                                    if (room) parts.push(`<strong>Room:</strong> ${room}`);
+                                    if (parts.length) details = `<p class="mb-1">${parts.join('<br>')}</p>`;
+                                } catch (e) { details = ''; }
+
+                                const html = [`<h3>${title}</h3>`, details, desc ? `<p>${desc}</p>` : '', buttons].join('');
+                                resolve(html);
+                            } catch (e) {
+                                resolve('');
+                            }
+                        });
+                    }
+                },
+                onAfterLoad: function(appointments) {
+                    if (Array.isArray(appointments)) {
+                        appointments.forEach(a => {
+                            a.editable = false;
+                            a.deleteable = false;
+                        });
+                    }
+                    // Apply line clamps after rendering
+                    setTimeout(function() { requestAnimationFrame(applyLineClamps); }, 0);
+                },
+                url: function (requestData) {
+                    // Determine `room_id` from bsCalendar requestData (when using refresh with queryParams)
+                    // Fallback to parsing the window.location search when requestData has no room_id.
+                    function parseRoomIdsFromRequest(rd) {
+                        if (!rd) return [];
+                        // bsCalendar may pass room_id as a single value or array
+                        if (rd.room_id !== undefined && rd.room_id !== null) {
+                            if (Array.isArray(rd.room_id)) return rd.room_id.map(String);
+                            return String(rd.room_id).split(',').map(s => s.trim()).filter(Boolean);
+                        }
+                        // some callers might use roomIds
+                        if (rd.roomIds !== undefined && rd.roomIds !== null) {
+                            if (Array.isArray(rd.roomIds)) return rd.roomIds.map(String);
+                            return String(rd.roomIds).split(',').map(s => s.trim()).filter(Boolean);
+                        }
+                        return [];
+                    }
+
+                    function parseRoomIdsFromLocation() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        let ids = urlParams.getAll('room_id') || [];
+                        if (ids.length === 0) {
+                            const single = urlParams.get('room_id');
+                            if (single) ids = single.split(',');
+                        } else {
+                            ids = ids.flatMap(s => s.split(','));
+                        }
+                        return ids.map(s => s.trim()).filter(Boolean);
+                    }
+
+                    const selectedRoomIds = parseRoomIdsFromRequest(requestData).length ? parseRoomIdsFromRequest(requestData) : parseRoomIdsFromLocation();
+                    const titleEl = document.getElementById('calendar-title');
+                    if (titleEl) {
+                        if (selectedRoomIds.length === 1) {
+                            titleEl.textContent = `Room ${selectedRoomIds[0]} - Weekly Occupancy`;
+                        } else if (selectedRoomIds.length > 1) {
+                            titleEl.textContent = `Rooms ${selectedRoomIds.join(', ')} - Weekly Occupancy`;
+                        } else {
+                            titleEl.textContent = 'Room Calendar - Weekly Occupancy';
+                        }
+                    }
+
+                    
+
+                    // If no rooms selected, still fetch holidays but return empty events list.
+                    let fetchEvents;
+                    if (selectedRoomIds.length === 0) {
+                        fetchEvents = Promise.resolve([]);
+                    } else {
+                        const params = new URLSearchParams();
+                        selectedRoomIds.forEach(id => params.append('room_id', id));
+                        if (requestData.fromDate) params.append('fromDate', requestData.fromDate);
+                        if (requestData.toDate) params.append('toDate', requestData.toDate);
+                        const url = `/courses/api/room-usage/?${params.toString()}`;
+
+                        fetchEvents = fetch(url, { credentials: 'same-origin' })
+                            .then(resp => {
+                                if (!resp.ok) {
+                                    return [];
+                                }
+                                return resp.json().then(data => {
+                                    if (!Array.isArray(data)) return [];
+                                    const typeToColor = { 'course': 'primary', 'event': 'success' };
+                                    return data.map(item => ({
+                                        id: item.id,
+                                        title: item.title,
+                                        start: item.start,
+                                        end: item.end,
+                                        location: item.location,
+                                        color: typeToColor[item.type] || 'primary',
+                                        editable: false,
+                                        deleteable: false,
+                                        type: item.type,
+                                        // Use URLs provided by the server; do not construct client-side fallbacks
+                                        public_url: item.public_url || item.publicUrl || '',
+                                        admin_url: item.admin_url || item.adminUrl || '',
+                                    }));
+                                });
+                            })
+                            .catch(err => {
+                                return [];
+                            });
+                    }
+
+                    // Fetch holidays via bs-calendar utils (if available) and merge them
+                    const fromDate = requestData.fromDate || moment().startOf('year').format('YYYY-MM-DD');
+                    const toDate = requestData.toDate || moment().endOf('year').format('YYYY-MM-DD');
+                    let fetchHolidays = Promise.resolve([]);
+                    try {
+                        const openHolidayApi = window.$ && window.$.bsCalendar && window.$.bsCalendar.utils && window.$.bsCalendar.utils.openHolidayApi;
+                        if (openHolidayApi && typeof openHolidayApi.getPublicHolidays === 'function') {
+                            try {
+                                // Try calling the 5-argument variant first (country, state, language, from, to)
+                                const result = openHolidayApi.getPublicHolidays('CH', 'ZH', 'DE', fromDate, toDate);
+                                fetchHolidays = (result && typeof result.then === 'function') ? result : Promise.resolve(result || []);
+                            } catch (err5) {
+                                try {
+                                    // Fallback to a 4-argument variant (country, language, from, to)
+                                    const result2 = openHolidayApi.getPublicHolidays('CH', 'DE', fromDate, toDate);
+                                    fetchHolidays = (result2 && typeof result2.then === 'function') ? result2 : Promise.resolve(result2 || []);
+                                } catch (err4) {
+                                    fetchHolidays = Promise.resolve([]);
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        fetchHolidays = Promise.resolve([]);
+                    }
+
+                    return Promise.all([fetchEvents, fetchHolidays]).then(([events, holidaysRaw]) => {
+
+                        function normalizeHoliday(h) {
+                            if (!h) return null;
+                            if (typeof h === 'string') {
+                                const m = moment(h);
+                                if (m.isValid()) return { start: m.format('YYYY-MM-DD'), end: m.format('YYYY-MM-DD'), name: h };
+                                return null;
+                            }
+                            const startCandidates = ['date', 'start', 'from', 'localDate', 'date_local', 'dateFrom', 'startDate', 'start_date', 'date_start', 'dateISO', 'dateString', 'day', 'DTSTART', 'dtstart'];
+                            const endCandidates = ['date_to', 'end', 'to', 'dateTo', 'endDate', 'end_date', 'DTEND', 'dtend'];
+                            let start = null;
+                            for (const c of startCandidates) {
+                                if (h[c]) { start = h[c]; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                                    start = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                                    if (start) break;
+                                }
+                            }
+                            if (!start && (h.DTSTART || h.dtstart)) start = h.DTSTART || h.dtstart;
+                            if (start && typeof start === 'object') {
+                                if (start.value) start = start.value;
+                                else if (start.date) start = start.date;
+                            }
+                            if (!start) return null;
+                            const ms = moment(start);
+                            if (!ms.isValid()) return null;
+                            const startFmt = ms.format('YYYY-MM-DD');
+                            let end = null;
+                            for (const c of endCandidates) {
+                                if (h[c]) { end = h[c]; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                                    end = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                                    if (end) break;
+                                }
+                            }
+                            if (!end) end = startFmt;
+                            if (typeof end === 'object' && end.value) end = end.value;
+                            const me = moment(end);
+                            const endFmt = me && me.isValid() ? me.format('YYYY-MM-DD') : startFmt;
+                            // Extract readable name (handles array of localized names used by OpenHolidays API)
+                            let holidayName = null;
+                            const rawName = h.name || h.localName || h.local_name || h.title || h.holiday || (h.properties && (h.properties.summary && h.properties.summary.value));
+                            if (Array.isArray(rawName)) {
+                                // Prefer German if present, otherwise use browser locale, otherwise first
+                                const prefer = 'DE';
+                                let found = rawName.find(n => n && (n.language && n.language.toUpperCase() === prefer));
+                                if (!found && typeof navigator !== 'undefined' && navigator.language) {
+                                    const navLang = navigator.language.split('-')[0].toUpperCase();
+                                    found = rawName.find(n => n && n.language && n.language.toUpperCase() === navLang);
+                                }
+                                if (!found) found = rawName[0];
+                                if (found) holidayName = found.text || found.name || (typeof found === 'string' ? found : null);
+                            } else if (rawName && typeof rawName === 'object' && rawName.text) {
+                                holidayName = rawName.text;
+                            } else if (typeof rawName === 'string') {
+                                holidayName = rawName;
+                            } else if (h.description && typeof h.description === 'string') {
+                                holidayName = h.description;
+                            }
+
+                            // Detect half-day indicators (explicit temporalScope from OpenHolidays or other heuristics)
+                            let halfDay = false;
+                            if (h.temporalScope && typeof h.temporalScope === 'string' && /half/i.test(h.temporalScope)) halfDay = true;
+                            const halfCandidates = ['halfDay', 'half_day', 'isHalfDay', 'half', 'is_half_day', 'halfDayFlag'];
+                            for (const c of halfCandidates) {
+                                if (h[c]) { halfDay = true; break; }
+                                if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) { halfDay = true; break; }
+                            }
+                            if (!halfDay && h.type && typeof h.type === 'string' && h.type.toLowerCase().includes('half')) halfDay = true;
+
+                            return { start: startFmt, end: endFmt, name: holidayName, halfDay: halfDay };
+                        }
+
+                        const holidays = (holidaysRaw || []).flatMap((h, idx) => {
+                            const norm = normalizeHoliday(h);
+                            if (!norm || !norm.start) return [];
+                            const title = (norm.name || 'Holiday') + (norm.halfDay ? ' (1/2 day)' : '');
+                            return [{
+                                id: `holiday-${norm.start}-${idx}`,
+                                title: title,
+                                start: `${norm.start} 00:00:00`,
+                                end: `${norm.end} 23:59:59`,
+                                color: 'warning',
+                                type: 'holiday',
+                                location: null,
+                                allDay: true,
+                                editable: false,
+                                deleteable: false,
+                            }];
+                        });
+                        return events.concat(holidays);
+                    }).catch(err => {
+                        return [];
+                    });
+                }
+            });
+            // Recompute clamps on calendar navigation and resize
+            $('#calendar').on('after-load.bs.calendar navigate-forward.bs.calendar navigate-back.bs.calendar view.bs.calendar', function() {
+                requestAnimationFrame(applyLineClamps);
+            });
+            window.addEventListener('resize', function() { requestAnimationFrame(applyLineClamps); });
+
+            // Wire up room search input (mirrors teacher_presence_form behavior)
+            (function() {
+                const input = document.getElementById('room-search-input');
+                const clearBtn = document.getElementById('room-search-clear');
+                const resultsEl = document.getElementById('room-search-results');
+                const searchingTpl = document.getElementById('room-searching');
+
+                function doSearch(q) {
+                    if (!resultsEl) return;
+                    resultsEl.querySelectorAll('.searching').forEach(n => n.remove());
+                    resultsEl.querySelectorAll('.search-result').forEach(n => n.remove());
+                    if (!q) { resultsEl.style.display = 'none'; return; }
+                    // show searching
+                    if (searchingTpl) resultsEl.appendChild(searchingTpl.content.cloneNode(true));
+                    const qq = q.trim();
+                    // remove searching node(s)
+                    resultsEl.querySelectorAll('.searching').forEach(n => n.remove());
+                    fetch(`/courses/api/search-room/?q=${encodeURIComponent(qq)}&limit=20`, { credentials: 'same-origin' })
+                        .then(resp => {
+                            if (!resp.ok) return [];
+                            return resp.json();
+                        })
+                        .then(data => {
+                            const mapped = Array.isArray(data) ? data.map(r => ({ id: r.value, name: r.text })) : [];
+                            showRoomResults(mapped);
+                        })
+                        .catch(() => { showRoomResults([]); });
+                }
+
+                if (input) {
+                    input.addEventListener('input', function() { doSearch(this.value.trim()); });
+                    input.addEventListener('focus', function() { if (this.value.trim()) doSearch(this.value.trim()); });
+                }
+                document.addEventListener('click', function(e) {
+                    if (!resultsEl) return;
+                    if (!resultsEl.contains(e.target) && e.target !== input) resultsEl.style.display = 'none';
+                });
+                // Delegated click handler to avoid anchor navigation and page reloads
+                if (resultsEl) {
+                    resultsEl.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const li = e.target.closest('li');
+                        if (!li) return;
+                        const a = li.querySelector('a');
+                        const id = li.dataset.roomId || (a && a.dataset.roomId);
+                        const name = (li.dataset.roomName || (a && a.dataset.roomName) || (a && a.textContent) || '').trim();
+                        if (!id) return;
+                        try {
+                            const cal = document.getElementById('calendar');
+                            if (cal) cal.setAttribute('data-selected-room-id', id);
+                            const titleEl = document.getElementById('calendar-title');
+                            if (titleEl) titleEl.textContent = `Room ${id} - Weekly Occupancy`;
+                            // copy the clicked name into the input so selection is clear
+                            if (input) input.value = name;
+                            $('#calendar').bsCalendar('refresh', { queryParams: function() { return { room_id: id }; } });
+                            // update URL without reloading
+                            try {
+                                const params = new URLSearchParams(window.location.search);
+                                params.set('room_id', String(id));
+                                const newUrl = window.location.pathname + '?' + params.toString();
+                                history.replaceState(null, '', newUrl);
+                            } catch (h) {
+                                // ignore history errors
+                            }
+                            resultsEl.style.display = 'none';
+                        } catch (err) {
+                            const params = new URLSearchParams(window.location.search);
+                            params.set('room_id', String(id));
+                            window.location.search = params.toString();
+                        }
+                    });
+                }
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        try {
+                            const titleEl = document.getElementById('calendar-title');
+                            if (titleEl) titleEl.textContent = 'Room Calendar - Weekly Occupancy';
+                            // clear the input and remove room_id from URL without reloading BEFORE refreshing
+                            if (input) input.value = '';
+                            try {
+                                const params = new URLSearchParams(window.location.search);
+                                params.delete('room_id');
+                                const newQuery = params.toString();
+                                const newUrl = newQuery ? (window.location.pathname + '?' + newQuery) : window.location.pathname;
+                                history.replaceState(null, '', newUrl);
+                            } catch (h) {
+                                // ignore history errors
+                            }
+                            $('#calendar').bsCalendar('refresh', { queryParams: function() { return {}; } });
+                            if (resultsEl) resultsEl.style.display = 'none';
+                        } catch (e) {
+                            const params = new URLSearchParams(window.location.search);
+                            params.delete('room_id');
+                            window.location.search = params.toString();
+                        }
+                    });
+                }
+            })();
+
+            // Track appended nodes so we can remove them later
+            const appendedNodes = new Map();
+
+            function removeAppended() {
+                appendedNodes.forEach((node, key) => {
+                    try { node.remove(); } catch (e) {}
+                });
+                appendedNodes.clear();
+                document.querySelectorAll('[data-appointment-extra]').forEach(function(node) { node.removeAttribute('data-appointment-extra'); });
+            }
+
+            function buildButtonsHtmlFromAppointment(appointment) {
+                const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
+                const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
+                const type = (appointment && (appointment.type || appointment.typeName)) || '';
+                const publicLabel = (type === 'event') ? 'Event page' : 'Course page';
+                const publicBtn = publicUrl ? `<a href="${escapeHtml(publicUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success" role="button">${escapeHtml(publicLabel)}</a>` : '';
+                const adminBtn = adminUrl ? `<a href="${escapeHtml(adminUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success" role="button">Admin page</a>` : '';
+                return `<div class="d-flex appointment-extra" style="gap:0.25rem; margin-top:0.5rem;">${publicBtn}${adminBtn}</div>`;
+            }
+
+            // Use bs-calendar's show-info / hide-info events to append our buttons
+            // Global event logger (debug)
+            // no-op: removed debug event logger
+
+            // Handle different show-info event names; some plugin versions emit
+            // `show-info.bs.calendar` or `show-info-window.bs.calendar` etc.
+            const SHOW_EVENTS = ['show-info.bs.calendar', 'show-info-window.bs.calendar', 'show-info-window', 'show-info'];
+            SHOW_EVENTS.forEach(function(evName) {
+                $('#calendar').on(evName, function(event /*, appointment, extras */) {
+                    removeAppended();
+                    // allow the calendar to render its info window first then attach
+                    setTimeout(function() {
+                        // Find visible info-like containers
+                        const candidates = ['.wc-info-window', '.wc-info', '.wc-popup', '.popover', '.bs-calendar .wc-info', '.bs-calendar .wc-popup', '[role="dialog"]'];
+                        let appendedAny = false;
+                        candidates.forEach(function(sel) {
+                            const els = Array.from(document.querySelectorAll(sel));
+                            els.forEach(function(el) {
+                                try {
+                                    const r = el.getBoundingClientRect();
+                                    if (r.width === 0 && r.height === 0) return;
+                                    // try to extract a title from the info element
+                                    const titleEl = el.querySelector('h3') || el.querySelector('h4') || el.querySelector('.title') || el.querySelector('.wc-info-title') || el;
+                                    const titleText = (titleEl && titleEl.textContent) ? titleEl.textContent.trim() : '';
+                                    if (!titleText) return;
+                                    // find matching appointment container by title
+                                    const apEls = Array.from(document.querySelectorAll('.appointment-container .appointment-title'));
+                                    let matchedAp = null;
+                                    for (const apEl of apEls) {
+                                        const t = (apEl.textContent || '').trim();
+                                        if (t && (t === titleText || t.indexOf(titleText) !== -1 || titleText.indexOf(t) !== -1)) { matchedAp = apEl.closest('.appointment-container'); break; }
+                                    }
+                                    if (!matchedAp) return;
+                                    const publicUrl = matchedAp.getAttribute('data-public-url') || '';
+                                    const adminUrl = matchedAp.getAttribute('data-admin-url') || '';
+                                    if (!publicUrl && !adminUrl) return;
+                                    const wrapper = document.createElement('div');
+                                    wrapper.className = 'appointment-extra-wrapper';
+                                    const atype = matchedAp.getAttribute('data-type') || '';
+                                    wrapper.innerHTML = buildButtonsHtmlFromAppointment({ public_url: publicUrl, admin_url: adminUrl, type: atype });
+                                    el.appendChild(wrapper);
+                                    el.setAttribute('data-appointment-extra', '1');
+                                    appendedNodes.set(el, wrapper);
+                                    appendedAny = true;
+                                } catch (e) { /* ignore per-element errors */ }
+                            });
+                        });
+                        // appendedAny indicates whether we attached buttons to any native info windows
+                    }, 50);
+                });
+            });
+
+            // Also remove appended buttons when info window hides
+            ['hide-info.bs.calendar', 'hide-info-window.bs.calendar', 'hide-info'].forEach(function(evName) {
+                $('#calendar').on(evName, function() { removeAppended(); });
+            });
+
+            // hide on navigation/resizing/escape
+            $('#calendar').on('after-load.bs.calendar navigate-forward.bs.calendar navigate-back.bs.calendar view.bs.calendar', removeAppended);
+            window.addEventListener('resize', removeAppended);
+            window.addEventListener('scroll', removeAppended, true);
+            window.addEventListener('keydown', function(e) { if (e.key === 'Escape') removeAppended(); });
+        });
+    </script>
+
+{% endaddtoblock %}

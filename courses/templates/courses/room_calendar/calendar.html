@@ -1,0 +1,12 @@
+{% extends "basis.html" %}
+{% load static sekizai_tags i18n %}
+
+{% block lead_title %}
+    {% trans "Room Calendar" %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        {% include "courses/room_calendar/snippets/calendar.html" %}
+    </div>
+{% endblock main_content %}

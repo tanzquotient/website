@@ -45,6 +45,7 @@ from .models import (
     RejectionReason,
     MatchingState,
     UserProfile,
+    Room,
     LessonOccurrence,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
@@ -192,6 +193,20 @@ def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
         "user": request.user,
     }
     return render(request, "courses/course_detail.html", context)
+
+
+@staff_member_required
+def room_calendar(request: HttpRequest) -> HttpResponse:
+    context = {}
+    user = request.user
+    if not (
+        user.has_perm("courses.view_room")
+        and user.has_perm("courses.view_course")
+        and user.has_perm("events.view_event")
+    ):
+        raise PermissionDenied
+
+    return render(request, "courses/room_calendar/calendar.html", context)
 
 
 def _lesson_to_ical_event(
