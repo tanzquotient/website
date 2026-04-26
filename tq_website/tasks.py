@@ -67,8 +67,9 @@ def task_send_scheduled_group_emails() -> None:
 
 @shared_task(name="pre_cache_photologue_image_sizes", ignore_result=True)
 def task_pre_cache_photologue_image_sizes() -> None:
-    for image in Photo.objects.all():
-        for photosize in PhotoSizeCache().sizes.values():
+    photosizes = list(PhotoSizeCache().sizes.values())
+    for image in Photo.objects.iterator(chunk_size=50):
+        for photosize in photosizes:
             image.create_size(photosize, recreate=False)
 
 

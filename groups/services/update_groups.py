@@ -29,7 +29,7 @@ def update_groups(queryset=None):
 
         group = group.get()
         group.user_set.clear()
-        for profile in UserProfile.objects.all():
+        for profile in UserProfile.objects.select_related("user").iterator(chunk_size=500):
             user = profile.user
             if group_definition.matches(user):
                 group.user_set.add(user)

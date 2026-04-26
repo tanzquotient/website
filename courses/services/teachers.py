@@ -48,27 +48,25 @@ def welcome_teachers(courses, request):
 
 
 def send_presence_reminder() -> None:
+    yesterday = date.today() - timedelta(days=1)
+    last_week = date.today() - timedelta(days=7)
 
-    # look for courses that ended yesterday
-    courses: list[models.Course] = list(
+    courses_yesterday = []
+    courses_last_week = []
+
+    course_qs = (
         models.Course.objects.exclude(cancelled=True)
         .exclude(subscription_type=choices.CourseSubscriptionType.EXTERNAL)
-        .all()
     )
-    courses_yesterday = [
-        course
-        for course in courses
-        if course.get_last_lesson_date() == date.today() - timedelta(days=1)
-    ]
-
-    # look for courses that ended 7 days ago and for which some lesson occurrence
-    # is lacking presence data
-    courses_last_week = [
-        course
-        for course in courses
-        if (course.get_last_lesson_date() == date.today() - timedelta(days=7))
-        and course.lesson_occurrences.filter(teachers=None).exists()
-    ]
+    for course in course_qs.iterator(chunk_size=200):
+        last_lesson = course.get_last_lesson_date()
+        if last_lesson == yesterday:
+            courses_yesterday.append(course)
+        elif (
+            last_lesson == last_week
+            and course.lesson_occurrences.filter(teachers=None).exists()
+        ):
+            courses_last_week.append(course)
 
     courses = courses_yesterday + courses_last_week
 

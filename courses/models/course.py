@@ -909,8 +909,7 @@ class Course(TranslatableModel):
 
     @cached_property
     def first_lesson(self) -> Optional[LessonOccurrence]:
-        occurrences = list(self.lesson_occurrences.all())
-        return occurrences[0] if occurrences else None
+        return self.lesson_occurrences.order_by("start").first()
 
     def get_first_lesson_start(self) -> Optional[datetime]:
         first_lesson = self.first_lesson
@@ -921,8 +920,8 @@ class Course(TranslatableModel):
         return start.date() if start else self.get_period().date_from
 
     def get_last_lesson_end(self) -> Optional[datetime]:
-        occurrences = list(self.lesson_occurrences.all())
-        return occurrences[-1].end if occurrences else None
+        last = self.lesson_occurrences.order_by("-end").values_list("end", flat=True).first()
+        return last
 
     def get_last_lesson_date(self) -> date:
         end = self.get_last_lesson_end()

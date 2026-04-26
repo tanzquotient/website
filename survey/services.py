@@ -117,7 +117,9 @@ def get_or_create_survey_instance(survey: Survey, user: User) -> SurveyInstance:
 
 def send_course_surveys() -> None:
     email_template = EmailTemplate.objects.get(name="survey_invitation")
+    BATCH_SIZE = 100
     emails = []
+    total_sent = 0
 
     # get all offerings with a survey assigned
     offerings = Offering.objects.select_for_update().filter(
@@ -137,22 +139,21 @@ def send_course_surveys() -> None:
                 if not course.is_over():
                     continue
 
-                survey_instances_for_course = SurveyInstance.objects.filter(
-                    course=course,
-                    survey=offering.survey,
+                already_invited_user_ids = set(
+                    SurveyInstance.objects.filter(
+                        course=course,
+                        survey=offering.survey,
+                    ).values_list("user_id", flat=True)
                 )
 
-                users_already_invited: list[User] = [
-                    survey_instance_for_course.user
-                    for survey_instance_for_course in survey_instances_for_course
-                ]
-                recipients: list[User] = [
-                    p.user
-                    for p in course.participatory().all()
-                    if p.user not in users_already_invited
-                ]
+                recipients = (
+                    User.objects.filter(
+                        pk__in=course.participatory().values_list("user_id", flat=True)
+                    )
+                    .exclude(pk__in=already_invited_user_ids)
+                )
 
-                for recipient in recipients:
+                for recipient in recipients.iterator(chunk_size=200):
                     # create a survey instance
                     survey_instance = SurveyInstance.objects.create(
                         survey=offering.survey,
@@ -188,5 +189,12 @@ def send_course_surveys() -> None:
                         )
                     )
 
-        log.info(f"Sending {len(emails)} emails")
-        send_all_emails(emails)
+                    if len(emails) >= BATCH_SIZE:
+                        send_all_emails(emails)
+                        total_sent += len(emails)
+                        emails = []
+
+        if emails:
+            send_all_emails(emails)
+            total_sent += len(emails)
+        log.info(f"Sent {total_sent} survey emails")

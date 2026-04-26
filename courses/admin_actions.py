@@ -1,10 +1,11 @@
-from io import BytesIO
+import shutil
+import tempfile
 import zipfile
 
 from django.contrib import admin
 from django.contrib import messages
 from django.db.models import QuerySet
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import FileResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from reversion import revisions as reversion
@@ -488,15 +489,17 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
         response["Content-Disposition"] = (
             f"attachment; filename=Voucher_{voucher.key}.pdf"
         )
-    else:
-        zip_buffer = BytesIO()
-        with zipfile.ZipFile(zip_buffer, "w") as zip_file:
-            for voucher in queryset:
-                zip_file.writestr(
-                    f"Voucher_{voucher.key}.pdf", voucher.pdf_file.file.read()
-                )
-        zip_buffer.seek(0)
-        response = HttpResponse(zip_buffer, content_type="application/zip")
-        response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
+        return response
 
+    # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
+    spooled = tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
+    with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for voucher in queryset.iterator(chunk_size=50):
+            with voucher.pdf_file.file.open("rb") as src, zip_file.open(
+                f"Voucher_{voucher.key}.pdf", "w"
+            ) as dst:
+                shutil.copyfileobj(src, dst, length=64 * 1024)
+    spooled.seek(0)
+    response = FileResponse(spooled, content_type="application/zip")
+    response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
     return response

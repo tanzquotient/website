@@ -12,7 +12,8 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.syndication.views import add_domain
 from django.core.exceptions import PermissionDenied
-from django.db.models import Prefetch
+from django.db.models import Count, Prefetch
+from django.db.models.functions import TruncDate
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
@@ -411,49 +412,33 @@ def duplicate_users(request: HttpRequest) -> HttpResponse:
 
 def offering_time_chart_dict(offering: Offering) -> dict:
     traces = []
-    for c in offering.course_set.reverse().all():
-        trace = dict()
-        trace["name"] = c.name
-        values = dict()
-        for s in c.subscriptions.all():
-            key = str(s.date.date())
-            values[key] = values.get(key, 0) + 1
+    for c in offering.course_set.reverse():
+        rows = (
+            c.subscriptions
+            .annotate(d=TruncDate("date"))
+            .values("d")
+            .annotate(count=Count("id"))
+            .order_by("d")
+        )
+        traces.append({
+            "name": c.name,
+            "x": [str(r["d"]) for r in rows],
+            "y": [r["count"] for r in rows],
+        })
 
-        tuples = [(x, y) for x, y in values.items()]
-
-        trace["x"] = [x for x, _ in tuples]
-        trace["y"] = [y for _, y in tuples]
-
-        traces.append(trace)
-
-    trace_total = dict()
-    trace_total["x"] = []
-    trace_total["y"] = []
-    counter = 0
-    last = None
-
-    for s in (
-        Subscribe.objects.filter(course__offering__id=offering.id)
-        .order_by("date")
-        .all()
-    ):
-        if last is None:
-            last = s.date.date()
-        if s.date.date() == last:
-            counter += 1
-        else:
-            # save temp
-            print("add counter {}".format(counter))
-            trace_total["x"].append(str(last))
-            trace_total["y"].append(counter)
-            counter += 1
-            last = s.date.date()
-    if last is not None:
-        trace_total["x"].append(str(last))
-        trace_total["y"].append(counter)
-
-    print(trace_total["x"])
-    print(trace_total["y"])
+    daily_counts = (
+        Subscribe.objects.filter(course__offering_id=offering.id)
+        .annotate(d=TruncDate("date"))
+        .values("d")
+        .annotate(count=Count("id"))
+        .order_by("d")
+    )
+    trace_total = {"x": [], "y": []}
+    cumulative = 0
+    for row in daily_counts:
+        cumulative += row["count"]
+        trace_total["x"].append(str(row["d"]))
+        trace_total["y"].append(cumulative)
 
     return {
         "traces": traces,

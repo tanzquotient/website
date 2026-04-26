@@ -3,7 +3,7 @@ from time import sleep
 
 from post_office import mail
 from post_office.lockfile import FileLock, FileLocked, default_lockfile
-from post_office.settings import get_log_level
+from post_office.settings import get_batch_size, get_log_level
 from django.db import connection
 
 from tq_website import settings
@@ -21,7 +21,7 @@ def send_queued_emails() -> None:
             batch_count = 0
             while True:
                 try:
-                    queued_emails = list(mail.get_queued())
+                    queued_emails = list(mail.get_queued()[:get_batch_size()])
                     mail.attach_templates(queued_emails)
                     if queued_emails:
                         total_sent, total_failed, total_requeued = mail._send_bulk(

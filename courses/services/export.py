@@ -86,8 +86,10 @@ def export_subscriptions(
     )
 
 
-def export_summary(export_format="csv", offerings=models.Offering.objects.all()):
+def export_summary(export_format="csv", offerings=None):
     """exports a summary of all offerings with room usage, course/subscription numbers"""
+    if offerings is None:
+        offerings = models.Offering.objects.all()
 
     offering_ids = [o.pk for o in offerings]
     subscriptions = models.Subscribe.objects.accepted().filter(
@@ -121,8 +123,10 @@ def export_summary(export_format="csv", offerings=models.Offering.objects.all())
 
 
 def export_teacher_payment_information(
-    export_format: str = "csv", offerings=models.Offering.objects.all()
+    export_format: str = "csv", offerings=None
 ):
+    if offerings is None:
+        offerings = models.Offering.objects.all()
     from payment import services
 
     export_name, data = services.offering_finance_teachers(offerings, use_html=False)

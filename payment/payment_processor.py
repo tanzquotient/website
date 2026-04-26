@@ -40,9 +40,7 @@ class PaymentProcessor:
             state=State.NEW, credit_debit=CreditDebit.DEBIT
         ).all()
 
-        for payment in new_payments:
-            payment.type = Type.IRRELEVANT
-            payment.save()
+        new_payments.update(type=Type.IRRELEVANT)
 
     @staticmethod
     def match_payments(queryset=Payment.objects) -> None:
@@ -164,7 +162,7 @@ class PaymentProcessor:
 
     @staticmethod
     def mark_subscriptions_as_paid(queryset=Payment.objects) -> None:
-        for payment in queryset.all():
+        for payment in queryset.prefetch_related("subscriptions"):
             for s in payment.subscriptions.all():
                 if s.open_amount().is_zero():
                     s.mark_as_paid(PaymentMethod.ONLINE)
@@ -174,9 +172,7 @@ class PaymentProcessor:
         """Mark matched payments as PROCESSED and sets ONLINE as payment method"""
         matched_payments = queryset.filter(state=State.MATCHED).all()
 
-        for payment in matched_payments:
-            payment.state = State.PROCESSED
-            payment.save()
+        matched_payments.update(state=State.PROCESSED)
 
     @staticmethod
     def check_balance(payments: QuerySet) -> None:
