@@ -8,7 +8,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.permissions import BasePermission
 
-from courses.models import LessonOccurrence, Room
+from courses.models import LessonOccurrence, Room, RoomCancellation
 from events.models import Event
 from django.db.models import Q
 from django.urls import reverse
@@ -232,6 +232,46 @@ class RoomUsageApiView(APIView):
                         "courses:course_detail", args=[occ.course.id]
                     ),
                     "admin_url": f"/admin/courses/course/{occ.course.id}/change/",
+                }
+            )
+
+        # Room cancellations - flag whole-day closures for the requested rooms
+        cancellations_qs = (
+            RoomCancellation.objects.select_related("room")
+            .filter(
+                room__in=room_ids_int,
+                date__gte=start_date,
+                date__lte=end_date,
+            )
+            .order_by("date")
+        )
+
+        for cancellation in cancellations_qs:
+            cancel_start = timezone.make_aware(
+                datetime.combine(cancellation.date, time.min),
+                timezone.get_current_timezone(),
+            )
+            cancel_end = timezone.make_aware(
+                datetime.combine(cancellation.date, time.max),
+                timezone.get_current_timezone(),
+            )
+            label = cancellation.name or "Room cancelled"
+            results.append(
+                {
+                    "id": f"cancellation-{cancellation.id}",
+                    "title": label,
+                    "start": timezone.localtime(cancel_start).strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),
+                    "end": timezone.localtime(cancel_end).strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),
+                    "type": "room_cancellation",
+                    "location": cancellation.room.name if cancellation.room else None,
+                    "public_url": "",
+                    "admin_url": (
+                        f"/admin/courses/roomcancellation/{cancellation.id}/change/"
+                    ),
                 }
             )
 
