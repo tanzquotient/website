@@ -209,6 +209,49 @@
                 });
             }
 
+            // Tracks the most recently applied hourSlots range so we can short-circuit
+            // the refetch loop that bsCalendar's updateOptions otherwise triggers.
+            let lastHourSlots = { start: 0, end: 24 };
+            function adjustHourSlots(appointments) {
+                let minStart = null;
+                let maxEnd = null;
+                if (Array.isArray(appointments)) {
+                    appointments.forEach(a => {
+                        if (!a || a.allDay || a.type === 'holiday') return;
+                        const s = moment(a.start);
+                        const e = moment(a.end);
+                        if (!s.isValid() || !e.isValid()) return;
+                        if (!s.isSame(e, 'day')) {
+                            minStart = 0;
+                            maxEnd = 24;
+                            return;
+                        }
+                        const startHour = s.hour();
+                        const endHour = e.hour() + ((e.minute() > 0 || e.second() > 0) ? 1 : 0);
+                        if (minStart === null || startHour < minStart) minStart = startHour;
+                        if (maxEnd === null || endHour > maxEnd) maxEnd = endHour;
+                    });
+                }
+                let newStart, newEnd;
+                if (minStart === null || maxEnd === null) {
+                    newStart = 0;
+                    newEnd = 24;
+                } else {
+                    newStart = Math.max(0, minStart);
+                    newEnd = Math.min(24, maxEnd);
+                    if (newEnd <= newStart) newEnd = Math.min(24, newStart + 1);
+                }
+                if (lastHourSlots.start === newStart && lastHourSlots.end === newEnd) return;
+                lastHourSlots = { start: newStart, end: newEnd };
+                setTimeout(function() {
+                    try {
+                        $('#calendar').bsCalendar('updateOptions', {
+                            hourSlots: { start: newStart, end: newEnd }
+                        });
+                    } catch (e) { /* ignore */ }
+                }, 0);
+            }
+
             $('#calendar').bsCalendar({
                 startView: 'week',
                 startWeekOnSunday: false,
@@ -244,7 +287,8 @@
                                 const desc = escapeHtml((appointment && (appointment.description || '')) || '');
                                 const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
                                 const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
-                                const publicLabel = (appointment && appointment.type === 'event') ? 'Event page' : 'Course page';
+                                const apptType = appointment && appointment.type;
+                                const publicLabel = apptType === 'event' ? 'Event page' : (apptType === 'room_cancellation' ? 'Details' : 'Course page');
                                 const publicBtn = publicUrl ? `<a href="${escapeHtml(publicUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success me-1">${escapeHtml(publicLabel)}</a>` : '';
                                 const adminBtn = adminUrl ? `<a href="${escapeHtml(adminUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success">Admin page</a>` : '';
                                 const buttons = (publicBtn || adminBtn) ? `<div class="d-flex appointment-extra mt-2">${publicBtn}${adminBtn}</div>` : '';
@@ -278,6 +322,7 @@
                     }
                     // Apply line clamps after rendering
                     setTimeout(function() { requestAnimationFrame(applyLineClamps); }, 0);
+                    adjustHourSlots(appointments);
                 },
                 url: function (requestData) {
                     // Determine `room_id` from bsCalendar requestData (when using refresh with queryParams)
@@ -341,21 +386,25 @@
                                 }
                                 return resp.json().then(data => {
                                     if (!Array.isArray(data)) return [];
-                                    const typeToColor = { 'course': 'primary', 'event': 'success' };
-                                    return data.map(item => ({
-                                        id: item.id,
-                                        title: item.title,
-                                        start: item.start,
-                                        end: item.end,
-                                        location: item.location,
-                                        color: typeToColor[item.type] || 'primary',
-                                        editable: false,
-                                        deleteable: false,
-                                        type: item.type,
-                                        // Use URLs provided by the server; do not construct client-side fallbacks
-                                        public_url: item.public_url || item.publicUrl || '',
-                                        admin_url: item.admin_url || item.adminUrl || '',
-                                    }));
+                                    const typeToColor = { 'course': 'primary', 'event': 'success', 'room_cancellation': 'danger' };
+                                    return data.map(item => {
+                                        const isCancellation = item.type === 'room_cancellation';
+                                        return {
+                                            id: item.id,
+                                            title: isCancellation ? `Cancelled: ${item.title}` : item.title,
+                                            start: item.start,
+                                            end: item.end,
+                                            location: item.location,
+                                            color: typeToColor[item.type] || 'primary',
+                                            allDay: isCancellation,
+                                            editable: false,
+                                            deleteable: false,
+                                            type: item.type,
+                                            // Use URLs provided by the server; do not construct client-side fallbacks
+                                            public_url: item.public_url || item.publicUrl || '',
+                                            admin_url: item.admin_url || item.adminUrl || '',
+                                        };
+                                    });
                                 });
                             })
                             .catch(err => {
@@ -606,7 +655,7 @@
                 const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
                 const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
                 const type = (appointment && (appointment.type || appointment.typeName)) || '';
-                const publicLabel = (type === 'event') ? 'Event page' : 'Course page';
+                const publicLabel = type === 'event' ? 'Event page' : (type === 'room_cancellation' ? 'Details' : 'Course page');
                 const publicBtn = publicUrl ? `<a href="${escapeHtml(publicUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success" role="button">${escapeHtml(publicLabel)}</a>` : '';
                 const adminBtn = adminUrl ? `<a href="${escapeHtml(adminUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success" role="button">Admin page</a>` : '';
                 return `<div class="d-flex appointment-extra" style="gap:0.25rem; margin-top:0.5rem;">${publicBtn}${adminBtn}</div>`;
