@@ -5,8 +5,14 @@ from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 
 @receiver(post_save, sender=CourseType)
 @receiver(post_delete, sender=CourseType)
-def trigger_calendar_cache_delete_from_course_type(sender, instance: CourseType, **kwargs):
+def trigger_calendar_cache_delete_from_course_type(_sender, instance: CourseType, **kwargs):
+    user_ids = []
+    course_ids = []
+    for course in instance.courses.all():
+        user_ids += list(course.subscriptions.values_list("user", flat=True))
+        user_ids += list(course.teaching.values_list("teacher", flat=True))
+        course_ids.append(course.pk)
     task_delete_user_and_courses_calendar_cache.delay(
-        pk=instance.pk,
-        sender=sender.__name__,
+        user_ids=user_ids,
+        course_ids=course_ids,
     )

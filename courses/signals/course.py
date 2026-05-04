@@ -10,8 +10,10 @@ def update_waiting_lists(sender, instance: Subscribe, **kwargs):
 
 @receiver(post_save, sender=Course)
 @receiver(post_delete, sender=Course)
-def trigger_calendar_cache_delete_from_course(sender, instance: Course, **kwargs):
+def trigger_calendar_cache_delete_from_course(_sender, instance: Course, **kwargs):
+    user_ids = list(instance.subscriptions.values_list("user", flat=True))
+    user_ids += list(instance.teaching.values_list("teacher", flat=True))
     task_delete_user_and_courses_calendar_cache.delay(
-        pk=instance.pk,
-        sender=sender.__name__,
+        user_ids=user_ids,
+        course_ids=[instance.pk],
     )

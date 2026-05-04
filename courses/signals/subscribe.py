@@ -5,8 +5,8 @@ from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 
 @receiver(post_save, sender=Subscribe)
 @receiver(post_delete, sender=Subscribe)
-def trigger_calendar_cache_delete_from_subscribe(sender, instance: Subscribe, **kwargs):
+def trigger_calendar_cache_delete_from_subscribe(_sender, instance: Subscribe, **kwargs):
     task_delete_user_and_courses_calendar_cache.delay(
-        pk=instance.pk,
-        sender=sender.__name__,
+        user_ids=[instance.user_id],
+        course_ids=[],
     )

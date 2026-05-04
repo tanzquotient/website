@@ -10,7 +10,6 @@ from courses.services.teachers import send_presence_reminder
 from courses.services.attendance import send_unexcused_absences_emails
 from email_system.services import send_scheduled_group_emails, send_queued_emails
 from photologue.models import Photo, PhotoSizeCache
-from courses.models import Course, Subscribe, CourseType, Teach, LessonOccurrence
 
 
 @shared_task(
@@ -75,43 +74,10 @@ def task_pre_cache_photologue_image_sizes() -> None:
 
 @shared_task(name="delete_user_and_courses_calendar_cache", ignore_result=True)
 def task_delete_user_and_courses_calendar_cache(
-    pk: int,
-    sender: str,
-    **kwargs,
+    user_ids: list[int],
+    course_ids: list[int],
 ) -> None:
-    users = set()
-    courses = set()
-
-    def _add_users_from_course(course: Course):
-        users.update(course.subscriptions.all().values_list("user", flat=True))
-        users.update(course.teaching.all().values_list("teacher", flat=True))
-
-    if sender == Course.__name__:
-        course = Course.objects.get(pk=pk)
-        _add_users_from_course(course)
-        courses.add(course.pk)
-    elif sender == CourseType.__name__:
-        course_type = CourseType.objects.get(pk=pk)
-        courses_with_type = course_type.courses.all()
-        for course in courses_with_type:
-            courses.add(course.pk)
-            _add_users_from_course(course)
-    elif sender == Subscribe.__name__:
-        subscribe = Subscribe.objects.get(pk=pk)
-        users.add(subscribe.user.pk)
-    elif sender == Teach.__name__:
-        teach = Teach.objects.get(pk=pk)
-        _add_users_from_course(teach.course)
-        courses.add(teach.course.pk)
-    elif sender == LessonOccurrence.__name__:
-        lesson_occurrence = LessonOccurrence.objects.get(pk=pk)
-        _add_users_from_course(lesson_occurrence.course)
-        courses.add(lesson_occurrence.course.pk)
-
-    for user in users:
-        cache_key = f"user_ical_{user}"
-        cache.delete(cache_key)
-
-    for course in courses:
-        cache_key = f"course_ical_{course}"
-        cache.delete(cache_key)
+    for user_id in user_ids:
+        cache.delete(f"user_ical_{user_id}")
+    for course_id in course_ids:
+        cache.delete(f"course_ical_{course_id}")

@@ -82,8 +82,10 @@ def update_hourly_wages(sender, instance, **kwargs):
 
 @receiver(post_save, sender=LessonOccurrence)
 @receiver(post_delete, sender=LessonOccurrence)
-def trigger_calendar_cache_delete_from_lesson_occurrence(sender, instance, **kwargs):
+def trigger_calendar_cache_delete_from_lesson_occurrence(_sender, instance, **kwargs):
+    user_ids = list(instance.course.subscriptions.values_list("user", flat=True))
+    user_ids += list(instance.course.teaching.values_list("teacher", flat=True))
     task_delete_user_and_courses_calendar_cache.delay(
-        pk=instance.pk,
-        sender=sender.__name__,
+        user_ids=user_ids,
+        course_ids=[instance.course_id],
     )
