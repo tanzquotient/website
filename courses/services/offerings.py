@@ -79,6 +79,7 @@ def get_sections(offering, course_filter=None):
         "type__translations",
         "room__cancellations",
         "subscriptions",
+        "teaching__teacher__profile",
     )
 
     if not course_filter:

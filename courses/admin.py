@@ -330,6 +330,13 @@ class CourseAdmin(TranslatableAdmin):
         send_course_email,
     ]
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("teaching__teacher__profile")
+        )
+
     @staticmethod
     @admin.display(description="Lessons")
     def format_lessons_for_admin(course: Course) -> str:
