@@ -38,7 +38,7 @@ def send_unexcused_absences_emails() -> None:
     ).select_related("user", "lesson_occurrence__course")
 
     for attendance in attendances:
-        user = attendance.users
+        user = attendance.user
         occ = attendance.lesson_occurrence
         course = occ.course
         start = occ.start
