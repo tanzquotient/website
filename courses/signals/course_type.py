@@ -5,7 +5,7 @@ from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 
 @receiver(post_save, sender=CourseType)
 @receiver(post_delete, sender=CourseType)
-def trigger_calendar_cache_delete_from_course_type(_sender, instance: CourseType, **kwargs):
+def trigger_calendar_cache_delete_from_course_type(sender, instance: CourseType, **kwargs):
     user_ids = []
     course_ids = []
     for course in instance.courses.all():
