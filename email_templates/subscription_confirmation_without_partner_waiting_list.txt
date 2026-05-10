@@ -3,6 +3,8 @@ Hallo {{first_name}}
 Du wurdest soeben für den Kurs {{course}} auf die Warteliste gesetzt, da der Kurs schon ausgebucht ist.
 Du bist derzeit auf Position {{waiting_list_position}}.
 
+Deine Rolle: {{role_de}}
+
 Wir werden deine Anmeldung akzeptieren sobald genug Plätze frei werden und wir eine:n Partner:in finden.
 
 Nochmals alle Infos zum Kurs:
@@ -25,6 +27,8 @@ Hi {{first_name}},
 We have received your subscription request for the course {{course}}.
 Unfortunately, the course is currently fully booked for your role.
 Hence, you have joined the waiting list and are currently in position {{waiting_list_position}}.
+
+Your role: {{role_en}}
 
 We will accept your subscription if enough places in the course were to free up and if we can find a partner for you.
 

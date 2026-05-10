@@ -17,6 +17,15 @@ from payment import payment_processor
 log = logging.getLogger("tq")
 
 
+def _get_role_context(subscription: Subscribe) -> dict:
+    from django.utils import translation as django_translation
+    with django_translation.override("de"):
+        role_de = subscription.get_assigned_role_str()
+    with django_translation.override("en"):
+        role_en = subscription.get_assigned_role_str()
+    return {"role_de": role_de, "role_en": role_en}
+
+
 # Note: the email templates used for rendering are stored in the database.
 # For convenience, the templates are also stored in git in the email_templates/ directory.
 # See the email_templates/README.md for details.
@@ -36,6 +45,9 @@ def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
         "course_info": create_course_info(subscription.course),
         "course_url": _course_url_from_subscription(subscription),
     }
+
+    if subscription.course.type.couple_course:
+        context.update(_get_role_context(subscription))
 
     if subscription.state == SubscribeState.WAITING_LIST:
         context.update(
@@ -91,6 +103,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
         "course_info": create_course_info(subscription.course),
         "course_url": _course_url_from_subscription(subscription),
         "payment_url": payment_url,
+        **_get_role_context(subscription),
         "course_type_participant_info_en": subscription.course.type.safe_translation_getter(
             "information_for_participants", language_code="en"
         ),

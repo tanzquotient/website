@@ -2,6 +2,8 @@ Hallo {{first_name}}
 
 Du wurdest soeben für den Kurs {{course}} zusammen mit {{partner_first_name}} angemeldet.
 
+Deine Rolle: {{role_de}}
+
 Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv.
 Du erhältst nochmal eine Mail sobald wir deine Anmeldung bestätigt haben.
 Die Bestätigung kann erst einige Tage vor Kursbeginn eintreffen.
@@ -28,6 +30,8 @@ _______________
 Hi {{first_name}},
 
 Thank you for registering for the course {{course}}. You and {{partner_first_name}} have enrolled.
+
+Your role: {{role_en}}
 
 You will receive an second email from us confirming whether you have been granted a place in this course.
 You may receive this email only some days before the start of the course.

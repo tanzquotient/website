@@ -2,6 +2,8 @@ Hallo {{first_name}}
 
 Du wurdest soeben für den Kurs {{course}} angemeldet.
 
+Deine Rolle: {{role_de}}
+
 Das System hat deine Anmeldung aufgenommen, sie ist aber noch nicht definitiv.
 Da du dich alleine angemeldet hast, versuchen wir für dich eine:n Partner:in zu finden.
 Falls wir jemanden finden erhältst du eine definitive Teilnahmebestätigung und ihre/seine Kontaktdaten.
@@ -29,6 +31,8 @@ _______________
 Hi {{first_name}},
 
 Thank you for registering for the course {{course}}.
+
+Your role: {{role_en}}
 
 You will receive a second email from us confirming whether you have been granted a place in this course.
 As you have enrolled as a single, we will try to find a partner for you. If we find someone, you will receive your partner's contact details together with the enrollment confirmation for the course in a separate email.
