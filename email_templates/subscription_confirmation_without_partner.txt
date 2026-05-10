@@ -30,8 +30,8 @@ Hi {{first_name}},
 
 Thank you for registering for the course {{course}}.
 
-As you have enrolled as a single, we will try to find a partner for you.
-If we find someone, you will receive your partner's contact details together with a second enrollment confirmation for the course.
+You will receive a second email from us confirming whether you have been granted a place in this course.
+As you have enrolled as a single, we will try to find a partner for you. If we find someone, you will receive your partner's contact details together with the enrollment confirmation for the course in a separate email.
 You may receive this email only some days before the start of the course. 
 
 If you do not want to participate in this course please contact us NOW.
