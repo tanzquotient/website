@@ -52,9 +52,18 @@ def deactivate(modeladmin, request, queryset):
 @admin.action(description="Enable early sign-up")
 def enable_early_signup(modeladmin, request, queryset):
     # need to loop in order to call custom save() method
+    skipped = 0
     for instance in queryset:
+        if not instance.type.predecessors.exists():
+            skipped += 1
+            continue
         instance.early_signup = True
         instance.save()
+    if skipped:
+        messages.warning(
+            request,
+            f"{skipped} course(s) skipped: their course type has no predecessors configured.",
+        )
 
 
 @admin.action(description="Disable early sign-up")
