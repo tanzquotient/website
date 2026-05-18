@@ -85,7 +85,7 @@
                     {{ event.get_description|safe }}
                 </div>
             {% endif %}
-            {% if event.category and event.category.get_description %}
+            {% if event.category and event.category.get_description and event.show_category_description %}
                 <div>
                     {{ event.category.get_description|safe }}
                 </div>

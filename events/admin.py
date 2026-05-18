@@ -55,6 +55,7 @@ class EventAdmin(TranslatableAdmin):
                     "cancelled",
                     "registration_enabled",
                     "max_participants",
+                    "show_category_description",
                 ]
             },
         ),

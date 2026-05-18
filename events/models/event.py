@@ -80,6 +80,10 @@ class Event(TranslatableModel):
         default=False,
         help_text="Gives participants of the event the possibility to register",
     )
+    show_category_description = BooleanField(
+        default=True,
+        help_text="If the category description should be shown on the event detail page.",
+    )
     max_participants = IntegerField(
         blank=True,
         null=True,
