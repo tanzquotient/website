@@ -3,9 +3,9 @@ Django==6.0.5
 
 # Django Extensions
 django-debug-toolbar==6.3.0     # For developement. Gives additional insights into e.g. database queries
-django-parler==2.3              # For simple translatable models
+django-parler==2.4              # For simple translatable models
 django-post-office==3.11.2       # Send and manage emails asynchronously, database based email templates
-django-reversion==6.1.0         # Version control for model instances, e.g. used for subscriptions
+django-reversion==6.2.0         # Version control for model instances, e.g. used for subscriptions
 django-countries==8.2.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-allauth==65.16.1          # Authentication, registration, account management, 3rd party account authentication
@@ -16,7 +16,7 @@ django-sortedm2m==4.0.0         # Fix transitive dependency of django-photologue
 django-cms==5.0.7               # Open source content management system based on the Django
 djangocms-text==0.9.7           # Text plugin for django CMS
 djangocms-versioning==2.5.1     # Core package of django CMS, is used to e.g. hava page histories
-djangocms-alias==3.0.3          # Core package of django CMS used for aliases
+djangocms-alias==3.1.0          # Core package of django CMS used for aliases
 
 # Rest framework
 djangorestframework==3.17.1     # Toolkit for building Web APIs
@@ -33,7 +33,7 @@ django-redis==6.0.0             # Redis cache and session backend for Django
 # Files and encoding
 openpyxl==3.1.5                 # For Microsoft Excel Files
 svglib==1.6.0                   # Used for creating vouchers from SVG tremplate
-reportlab==4.5.0                # For generating PDFs and graphics
+reportlab==4.5.1                # For generating PDFs and graphics
 pyyaml==6.0.3                   # Used for generating environment variable file
 qrbill==1.2.0                   # For generating swiss payment QR codes, that can be scanne by banking apps
 django-resized==1.0.3           # Used to resize images on save of ImageField
@@ -50,7 +50,7 @@ minio==7.2.20                    # Perform bucket and object operations, used fo
 gunicorn==26.0.0                # Used to serve django for production
 
 # Logging
-sentry_sdk==2.59.0              # Used for logging exceptions to Sentry.io
+sentry_sdk==2.60.0              # Used for logging exceptions to Sentry.io
 
 # Utils
 plotly==6.7.0                  # For generating charts and graphs
@@ -58,4 +58,4 @@ pytz==2026.2                    # timezone calculations
 shortuuid==1.0.13               # For generating short and unique ID's and codes
 django-hijack==3.7.8            # Superuser can impersonate other users
 python-dotenv==1.2.2            # Used to load environment variables from .env file
-requests==2.33.1                # Used for OIDC requests
+requests==2.34.2                # Used for OIDC requests
