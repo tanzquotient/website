@@ -84,7 +84,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
         grace_period = timedelta(minutes=15)
         if now + grace_period < lesson.start:
             return False  # Too early
-        if now - timedelta(minutes=30) > lesson.end:
+        if now - timedelta(hours=5) > lesson.end:
             return False  # Too late
         return True
 
