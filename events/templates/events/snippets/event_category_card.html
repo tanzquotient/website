@@ -19,6 +19,9 @@
             {% for event in category.get_next_events %}
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'events:detail' event.id %}">
+                        {% if event.is_cancelled %}
+                            <span class="text-uppercase badge text-bg-danger">{% trans "Cancelled" %}</span>
+                        {% endif %}
                         <div>{{ event.format_duration }}</div>
                     </a>
                     <i class="bi bi-chevron-right"></i>

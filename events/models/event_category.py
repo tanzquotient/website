@@ -36,7 +36,7 @@ class EventCategory(TranslatableModel):
 
     def get_events(self) -> QuerySet[Event]:
         return (
-            Event.displayed_events.future().filter(category=self, cancelled=False).all()
+            Event.displayed_events.future().filter(category=self).all()
         )
 
     def get_next_events(self) -> Iterable[Event]:
