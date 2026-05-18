@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo
 
@@ -55,8 +55,10 @@ class LessonAttendanceView(TemplateView, TeacherOfCourseOnly):
             for attendance in attendances
             if attendance.state == AttendanceState.REPLACEMENT
         ]
+        now = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         context["show_check_button"] = (
-            lesson.start.date() == datetime.now(tz=ZoneInfo("Europe/Zurich")).date()
+            now + timedelta(minutes=15) >= lesson.start
+            and now - timedelta(hours=5) <= lesson.end
         )
         return context
 
