@@ -615,6 +615,7 @@ class SubscribeAdmin(VersionAdmin):
         send_vouchers_for_subscriptions,
         admit_from_waiting_list,
         move_to_waiting_list,
+        switch_out_partner,
     ]
 
     raw_id_fields = ("user", "partner", "course")

@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>This action requires additional information:</p>
+
+{% if confirmed_sub.state == "payed" %}
+<p style="color: #c00; font-weight: bold;">
+    &#9888; Warning: {{ confirmed_sub.user }} has already <strong>paid</strong>.
+    Rejecting them will set their subscription to TO_REIMBURSE — make sure to arrange a refund manually.
+</p>
+{% endif %}
+{% if new_sub.state == "waiting_list" %}
+<p style="color: #c00; font-weight: bold;">
+    &#9888; Warning: {{ new_sub.user }} is currently on the <strong>waiting list</strong>.
+    They will be admitted (moved to NEW) as part of this action.
+</p>
+{% endif %}
+
+<p>The following change will be made:</p>
+<ul>
+    <li><strong>{{ confirmed_sub.user }}</strong> ({{ confirmed_sub.get_lead_follow_display }}, {{ confirmed_sub.state }}) will be <strong>rejected</strong> and removed as partner of {{ partner_sub.user }}.</li>
+    <li><strong>{{ new_sub.user }}</strong> ({{ new_sub.get_lead_follow_display }}, {{ new_sub.state }}) will be <strong>matched with {{ partner_sub.user }}</strong>{% if confirmed_sub.state == "confirmed" or confirmed_sub.state == "payed" %} and confirmed{% endif %}.</li>
+    <li><strong>{{ partner_sub.user }}</strong> ({{ partner_sub.get_lead_follow_display }}, {{ partner_sub.state }}) keeps their current state with their new partner.</li>
+</ul>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form }}
+
+    <br/>
+    <input type="hidden" name="action" value="switch_out_partner" />
+    <input type="submit" name="switch_out" value="{% trans "Switch out" %}" />
+</form>
+
+{% endblock %}

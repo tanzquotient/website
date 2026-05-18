@@ -12,6 +12,7 @@ from reversion import revisions as reversion
 
 import courses.services.matching.change_matching
 import courses.services.matching.do_matching
+import courses.services.matching.switch_out
 from courses.models import *
 from email_system.services import send_email
 from tq_website import settings
@@ -22,6 +23,7 @@ from .admin_forms import (
     RejectForm,
     EmailListForm,
     MoveToWaitingListForm,
+    SwitchOutForm,
 )
 from .emailcenter import create_course_info
 from .forms import CreateSendVoucherForm, SendVoucherEmailForm
@@ -203,6 +205,89 @@ def breakup_couple(modeladmin, request, queryset):
 def correct_matching_state_to_couple(modeladmin, request, queryset):
     courses.services.matching.change_matching.correct_matching_state_to_couple(
         queryset, request
+    )
+
+
+@admin.action(
+    description="Switch out partners (select 2 users to switch)"
+)
+def switch_out_partner(modeladmin, request, queryset):
+    if queryset.count() != 2:
+        messages.error(
+            request,
+            "Select exactly 2 subscriptions: one confirmed+matched and one new/waiting+unmatched.",
+        )
+        return
+
+    confirmed_sub = None
+    new_sub = None
+    for s in queryset.select_related("course", "course__type"):
+        if s.state in (
+            SubscribeState.NEW,
+            SubscribeState.CONFIRMED,
+            SubscribeState.PAID,
+        ) and s.matching_state in MatchingState.MATCHED_STATES:
+            confirmed_sub = s
+        elif s.state in (
+            SubscribeState.NEW,
+            SubscribeState.WAITING_LIST,
+        ) and s.matching_state not in MatchingState.MATCHED_STATES:
+            new_sub = s
+
+    if not confirmed_sub or not new_sub:
+        messages.error(
+            request,
+            "Could not identify the two roles: one subscription must be matched (NEW/CONFIRMED/PAID), "
+            "the other must be unmatched (NEW/WAITING_LIST).",
+        )
+        return
+
+    if confirmed_sub.course_id != new_sub.course_id:
+        messages.error(request, "Both subscriptions must be for the same course.")
+        return
+
+    partner_sub = confirmed_sub.get_partner_subscription()
+    if not partner_sub:
+        messages.error(request, "The confirmed subscription has no partner.")
+        return
+
+    if not LeadFollow.is_compatible(new_sub.lead_follow, partner_sub.lead_follow):
+        messages.error(
+            request,
+            f"Incompatible roles: {new_sub.user} ({new_sub.get_lead_follow_display()}) "
+            f"and {partner_sub.user} ({partner_sub.get_lead_follow_display()}) cannot be matched.",
+        )
+        return
+
+    if "switch_out" in request.POST:
+        form = SwitchOutForm(request.POST)
+        if form.is_valid():
+            courses.services.matching.switch_out.switch_out_partner(
+                confirmed_sub,
+                new_sub,
+                partner_sub,
+                reason=form.cleaned_data["reason"],
+                send_email=form.cleaned_data["send_email"],
+            )
+            return HttpResponseRedirect(request.get_full_path())
+    else:
+        form = SwitchOutForm(
+            initial={
+                "_selected_action": list(
+                    map(str, queryset.values_list("id", flat=True))
+                )
+            }
+        )
+
+    return render(
+        request,
+        "courses/auth/action_switch_out.html",
+        {
+            "confirmed_sub": confirmed_sub,
+            "new_sub": new_sub,
+            "partner_sub": partner_sub,
+            "form": form,
+        },
     )
 
 
