@@ -13,7 +13,7 @@ def change_attendance_deadline(lesson_occurrence: LessonOccurrence) -> datetime:
 
 def claiming_spot_window_open(lesson_occurrence: LessonOccurrence) -> bool:
     lesson_date = lesson_occurrence.start.date()
-    claiming_window_start = datetime.combine(lesson_date, time(hour=3), tzinfo=TIMEZONE)
+    claiming_window_start = TIMEZONE.localize(datetime.combine(lesson_date, time(hour=3), tzinfo=TIMEZONE))
     return datetime.now(tz=TIMEZONE) > claiming_window_start
 
 
