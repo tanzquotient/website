@@ -28,7 +28,7 @@ dependencies = [
     "celery==5.6.3", # Task queue with focus on real-time processing, while also supporting task scheduling
     "django-celery-beat==2.9.0", # Store periodic task schedules in the database
     "django-celery-results==2.6.0", # Stores Celery task results
-    "django-redis==6.0.0", # Redis cache and session backend for Django
+    "django-redis==7.0.0", # Redis cache and session backend for Django
     # Files and encoding
     "openpyxl==3.1.5", # For Microsoft Excel Files
     "svglib==1.6.0", # Used for creating vouchers from SVG tremplate
