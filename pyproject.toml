@@ -1,0 +1,63 @@
+[project]
+name = "tq_website"
+version = "1.0.0"
+description = "Website of Tanzquotient"
+readme = "README.md"
+requires-python = "==3.14.*"
+dependencies = [
+    # Django
+    "Django==6.0.6",
+    # Django Extensions
+    "django-parler==2.4", # For simple translatable models
+    "django-post-office==3.11.2", # Send and manage emails asynchronously, database based email templates
+    "django-reversion==6.3.0", # Version control for model instances, e.g. used for subscriptions
+    "django-countries==9.0.0", # Country choices for use with forms and fields for models
+    "django-ical==1.9.2", # Simple library for creating iCal feeds
+    "django-allauth==65.18.0", # Authentication, registration, account management, 3rd party account authentication
+    "django-photologue==3.18", # Gallery application
+    "django-sortedm2m==4.0.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
+    # Django CMS
+    "django-cms==5.0.8", # Open source content management system based on the Django
+    "djangocms-text==0.9.9", # Text plugin for django CMS
+    "djangocms-versioning==2.5.1", # Core package of django CMS, is used to e.g. hava page histories
+    "djangocms-alias==3.1.1", # Core package of django CMS used for aliases
+    # Rest framework
+    "djangorestframework==3.17.1", # Toolkit for building Web APIs
+    "django-parler-rest==2.2", # Adding translation support to django-rest-framework
+    # Tasks
+    "celery==5.6.3", # Task queue with focus on real-time processing, while also supporting task scheduling
+    "django-celery-beat==2.9.0", # Store periodic task schedules in the database
+    "django-celery-results==2.6.0", # Stores Celery task results
+    "django-redis==6.0.0", # Redis cache and session backend for Django
+    # Files and encoding
+    "openpyxl==3.1.5", # For Microsoft Excel Files
+    "svglib==1.6.0", # Used for creating vouchers from SVG tremplate
+    "reportlab==4.5.1", # For generating PDFs and graphics
+    "pyyaml==6.0.3", # Used for generating environment variable file
+    "qrbill==1.2.0", # For generating swiss payment QR codes, that can be scanne by banking apps
+    "django-resized==1.0.3", # Used to resize images on save of ImageField
+    # Database
+    "psycopg[binary]==3.3.4", # Driver for PostgreSQL
+    # Storage
+    "django-storages==1.14.6", # Provide a variety of storage backends, used for storing objects on Minio
+    "boto3~=1.43.1", # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
+    "minio==7.2.20", # Perform bucket and object operations, used for initializing Minio
+    # Webserver
+    "gunicorn==26.0.0", # Used to serve django for production
+    # Logging
+    "sentry_sdk==2.62.0", # Used for logging exceptions to Sentry.io
+    # Utils
+    "plotly==6.8.0", # For generating charts and graphs
+    "pytz==2026.2", # timezone calculations
+    "shortuuid==1.0.13", # For generating short and unique ID's and codes
+    "django-hijack==3.7.8", # Superuser can impersonate other users
+    "python-dotenv==1.2.2", # Used to load environment variables from .env file
+    "requests==2.34.2", # Used for OIDC requests
+]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar==6.3.0", # For development. Gives additional insights into e.g. database queries
+    "black==26.5.1", # Code formatting
+    "locust~=2.44.0", # Loadtesting
+]

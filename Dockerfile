@@ -59,13 +59,27 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create python venv and install dependencies
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-COPY requirements.txt /app/requirements.txt
+WORKDIR /app
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r /app/requirements.txt
+COPY --from=ghcr.io/astral-sh/uv:0.11.19 /uv /uvx /bin/
+
+ENV UV_NO_DEV=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=0 \
+    UV_LINK_MODE=copy
+
+COPY pyproject.toml pyproject.toml
+COPY uv.lock uv.lock
+
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-editable
+
+COPY . .
+
+# Install project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-editable
 
 # ===========================
 # App Image
@@ -75,8 +89,8 @@ ARG AUTHORS
 LABEL org.opencontainers.image.authors="${AUTHORS}"
 
 # Copy python venv from build
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
 
 # Setup app directory
 WORKDIR /app

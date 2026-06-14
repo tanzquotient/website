@@ -12,18 +12,16 @@ The repository contains the needed configurations to deploy to [SIP][sip].
 
 ## Local Setup
 
-⚠️ Windows (including WSL) is no supported. Please use Linux or MacOS. ⚠️
+⚠️ This guide is only tested for Linux and MacOS. You can probably use Windows, but we
+never tested it and can therefore not support you. ⚠️
 
-1. Make sure [Docker][docker] is installed.
-1. Clone this repo: `git clone <repo-url>`
-1. Create a python environment using python `>= 3.14`.
-   You can for example set it up with a [venv](https://docs.python.org/3/library/venv.html).
-   1. `python3 -m venv venv`
-   1. `source venv/bin/activate`
-1. Initialize the project: `./scripts/initialize_project.sh` (this will install the requirements and start the Docker containers)
-1. Run the project: `python manage.py runserver` (from within your venv!)
-1. Find the website at [localhost:8000][local_instance]
-1. Import a database dump (see below)
+1. Make sure [uv][uv] and [Docker Compose][docker-compose] are installed.
+2. Clone this repo: `git clone <repo-url>`
+3. Initialize the project: `./scripts/initialize_project.sh` (this will install the
+   dependencies and start the Docker containers)
+4. Run the project: `python manage.py runserver` (from within the venv created by uv!)
+5. Find the website at [localhost:8000][local_instance]
+6. Import a database dump (see below)
 
 When you are done developing, stop the containers again: `docker compose down`.
 
@@ -90,7 +88,8 @@ docker exec -i tq-postgres pg_restore --no-privileges --no-owner --format=c --sc
 python manage.py migrate
 ```
 
-Maybe required if the database name in the prod dump differs from your local database name:
+Maybe required if the database name in the prod dump differs from your local database
+name:
 Rename the database to the local name:
 
 ```postgresql
@@ -101,13 +100,16 @@ ALTER DATABASE tq_prod_website_tq_website RENAME TO tq_website;
 ## Documentation
 
 - Not-quite-up-to-date: [ReadTheDocs](https://tq-website.readthedocs.io/en/latest/)
-- IT and developer documentation: [Tanzquotient Wiki](https://wiki.vseth.ethz.ch/display/0519TAN/How+To%3A+IT)
+- IT and developer
+  documentation: [Tanzquotient Wiki](https://wiki.vseth.ethz.ch/display/0519TAN/How+To%3A+IT)
   (requires you to be added to the TQ team by the IT board member)
 - General VSETH docs about SIP: https://dev.vseth.ethz.ch/
 
 [github]: https://github.com/tanzquotient/tq_website
 
 [eth-gitlab]: https://gitlab.ethz.ch/vseth/0500-kom/0519-tq/website
+
+[uv]: https://docs.astral.sh/uv/
 
 [docker]: https://docs.docker.com/engine/install/
 

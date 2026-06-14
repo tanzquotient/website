@@ -2,8 +2,8 @@
 
 set -eux
 
-# Install python requirements
-pip install -r requirements.txt
+# Install python and dependencies, including dev dependencies
+uv sync --dev
 
 # Generate environment
 python scripts/generate_env_override.py

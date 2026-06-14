@@ -10,7 +10,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from django.views.generic import TemplateView
 from photologue.views import GalleryListView
-from django.views.decorators.cache import cache_page
 
 import courses.urls
 import courses.views as courses_views
