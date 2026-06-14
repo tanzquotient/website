@@ -6,7 +6,7 @@ django-debug-toolbar==6.3.0     # For developement. Gives additional insights in
 django-parler==2.4              # For simple translatable models
 django-post-office==3.11.2       # Send and manage emails asynchronously, database based email templates
 django-reversion==6.2.0         # Version control for model instances, e.g. used for subscriptions
-django-countries==8.2.0         # Country choices for use with forms and fields for models
+django-countries==9.0.0         # Country choices for use with forms and fields for models
 django-ical==1.9.2              # Simple library for creating iCal feeds
 django-allauth==65.18.0          # Authentication, registration, account management, 3rd party account authentication
 django-photologue==3.18         # Gallery application
