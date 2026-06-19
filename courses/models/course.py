@@ -893,7 +893,7 @@ class Course(TranslatableModel):
             period = self.get_period()
             return period.date_from <= cancelled_date <= period.date_to
 
-        return sorted([d for d in dates if is_applicable(d)])
+        return sorted([d for d in dates if is_applicable(d) and d not in irregular_dates])
 
     def format_cancellations(self) -> str:
         dates = [d.strftime("%d.%m.%Y") for d in self.get_cancellation_dates()]
