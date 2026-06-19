@@ -251,8 +251,8 @@
                                 // Build a small details block with start/end and room
                                 let details = '';
                                 try {
-                                    const s = appointment && appointment.start ? moment(appointment.start).format('LLL') : '';
-                                    const e = appointment && appointment.end ? moment(appointment.end).format('LLL') : '';
+                                    const s = appointment && appointment.start ? moment(appointment.start).format('ddd, D. MMMM, HH:mm') : '';
+                                    const e = appointment && appointment.end ? moment(appointment.end).format('ddd, D. MMMM, HH:mm') : '';
                                     const room = appointment && (appointment.location || appointment.room) ? escapeHtml(appointment.location || appointment.room) : '';
                                     const parts = [];
                                     if (s) parts.push(`<strong>Start:</strong> ${escapeHtml(s)}`);
