@@ -81,10 +81,9 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
     @staticmethod
     def check_period_open(lesson: LessonOccurrence) -> bool:
         now = datetime.now(tz=ZoneInfo("Europe/Zurich"))
-        grace_period = timedelta(minutes=15)
-        if now + grace_period < lesson.start:
+        if now + timedelta(minutes=15) < lesson.start:
             return False  # Too early
-        if now - timedelta(hours=5) > lesson.end:
+        if now - timedelta(minutes=30) > lesson.end:
             return False  # Too late
         return True
 
@@ -137,12 +136,8 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
             )
             return
 
-        if (
-            is_present and existing_attendance.state == AttendanceState.PRESENT
-        ) or (
-            not is_present and existing_attendance.state in AttendanceState.ABSENT_STATES
-        ):
-            return
+        if is_present == (existing_attendance.state in AttendanceState.PRESENT_STATES):
+            return  # Nothing to do, state already correctly represented
 
         # Update existing attendance
         existing_attendance.state = (
