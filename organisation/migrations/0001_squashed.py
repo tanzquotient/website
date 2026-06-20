@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
         ("organisation", "0004_function_users"),
         ("organisation", "0005_remove_function_user"),
         ("organisation", "0002_alter_function_options_remove_function_active_and_more"),
-        ("organisation", "0003_alter_functiontranslation_master"),
     ]
 
     dependencies = [
