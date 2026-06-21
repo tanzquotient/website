@@ -46,7 +46,7 @@ dependencies = [
     # Webserver
     "gunicorn==26.0.0", # Used to serve django for production
     # Logging
-    "sentry_sdk==2.62.0", # Used for logging exceptions to Sentry.io
+    "sentry_sdk==2.63.0", # Used for logging exceptions to Sentry.io
     # Utils
     "plotly==6.8.0", # For generating charts and graphs
     "pytz==2026.2", # timezone calculations
