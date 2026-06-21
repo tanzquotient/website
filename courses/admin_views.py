@@ -25,8 +25,9 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
             expires_flag = form.cleaned_data["expires_flag"]
             expires = form.cleaned_data["expires"]
             comment = form.cleaned_data.get("voucher_comment") or ""
+            recipients = list(form.cleaned_data.get("recipients") or [])
 
-            for _ in range(0, number_of_vouchers):
+            for i in range(number_of_vouchers):
                 with reversion.create_revision():
                     Voucher.objects.create(
                         purpose=purpose,
@@ -34,6 +35,7 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
                         percentage=percentage,
                         expires=expires if expires_flag else None,
                         comment=comment,
+                        sent_to=recipients[i] if recipients else None,
                     )
                     if request.user:
                         reversion.set_user(request.user)

@@ -1,5 +1,17 @@
 {% extends "admin/base_site.html" %}
 
+{% load static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static "admin/css/forms.css" %}">
+<link rel="stylesheet" href="{% static "admin/css/widgets.css" %}">
+{% endblock %}
+
+{% block extrahead %}{{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 
 <p>This action requires additional information:</p>
@@ -15,10 +27,10 @@
     <input type="submit" value="Generate" id="generate-btn" />
 </form>
 <script>
-  document.getElementById('generate-btn').addEventListener('click', function () {
-    this.disabled = true;
-    this.value = 'Generating…';
-    this.form.submit();
+  document.querySelector('form').addEventListener('submit', function () {
+    const btn = document.getElementById('generate-btn');
+    btn.disabled = true;
+    btn.value = 'Generating…';
   });
 </script>
 
