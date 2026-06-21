@@ -2,6 +2,34 @@
 
 from django.db import migrations, models
 
+_TRANSLATION_TABLES = [
+    "organisation_function_translation",
+]
+
+_NEW_CONSTRAINT_NAMES = [
+    "organisation_function_translation_uniq_lang",
+]
+
+_DROP_OLD_UNIQUE_CONSTRAINTS_SQL = """
+DO $$
+DECLARE r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT c.conname, t.relname
+        FROM pg_constraint c
+        JOIN pg_class t ON c.conrelid = t.oid
+        WHERE t.relname IN ({tables})
+          AND c.contype = 'u'
+          AND c.conname NOT IN ({new_names})
+    ) LOOP
+        EXECUTE format('ALTER TABLE %%I DROP CONSTRAINT %%I', r.relname, r.conname);
+    END LOOP;
+END $$;
+""".format(
+    tables=", ".join(f"'{t}'" for t in _TRANSLATION_TABLES),
+    new_names=", ".join(f"'{n}'" for n in _NEW_CONSTRAINT_NAMES),
+)
+
 
 class Migration(migrations.Migration):
 
@@ -10,9 +38,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name="functiontranslation",
-            unique_together=set(),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.AlterUniqueTogether(
+                    name="functiontranslation",
+                    unique_together=set(),
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql=_DROP_OLD_UNIQUE_CONSTRAINTS_SQL,
+                    reverse_sql=migrations.RunSQL.noop,
+                ),
+            ],
         ),
         migrations.AddConstraint(
             model_name="functiontranslation",

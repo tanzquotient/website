@@ -2,6 +2,46 @@
 
 from django.db import migrations, models
 
+_TRANSLATION_TABLES = [
+    "courses_course_translation",
+    "courses_coursetype_translation",
+    "courses_offering_translation",
+    "courses_room_translation",
+    "courses_style_translation",
+]
+
+_NEW_CONSTRAINT_NAMES = [
+    "courses_course_translation_uniq_lang",
+    "courses_coursetype_translation_uniq_lang",
+    "courses_offering_translation_uniq_lang",
+    "courses_room_translation_uniq_lang",
+    "courses_style_translation_uniq_lang",
+]
+
+# Drops any existing unique constraint on the translation tables whose name is
+# NOT one of the new canonical names. This handles databases where the old
+# constraint was created with an auto-generated name (e.g. "idx_100420_…") as
+# well as databases where no such constraint exists at all.
+_DROP_OLD_UNIQUE_CONSTRAINTS_SQL = """
+DO $$
+DECLARE r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT c.conname, t.relname
+        FROM pg_constraint c
+        JOIN pg_class t ON c.conrelid = t.oid
+        WHERE t.relname IN ({tables})
+          AND c.contype = 'u'
+          AND c.conname NOT IN ({new_names})
+    ) LOOP
+        EXECUTE format('ALTER TABLE %%I DROP CONSTRAINT %%I', r.relname, r.conname);
+    END LOOP;
+END $$;
+""".format(
+    tables=", ".join(f"'{t}'" for t in _TRANSLATION_TABLES),
+    new_names=", ".join(f"'{n}'" for n in _NEW_CONSTRAINT_NAMES),
+)
+
 
 class Migration(migrations.Migration):
 
@@ -10,25 +50,35 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name="coursetranslation",
-            unique_together=set(),
-        ),
-        migrations.AlterUniqueTogether(
-            name="coursetypetranslation",
-            unique_together=set(),
-        ),
-        migrations.AlterUniqueTogether(
-            name="offeringtranslation",
-            unique_together=set(),
-        ),
-        migrations.AlterUniqueTogether(
-            name="roomtranslation",
-            unique_together=set(),
-        ),
-        migrations.AlterUniqueTogether(
-            name="styletranslation",
-            unique_together=set(),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.AlterUniqueTogether(
+                    name="coursetranslation",
+                    unique_together=set(),
+                ),
+                migrations.AlterUniqueTogether(
+                    name="coursetypetranslation",
+                    unique_together=set(),
+                ),
+                migrations.AlterUniqueTogether(
+                    name="offeringtranslation",
+                    unique_together=set(),
+                ),
+                migrations.AlterUniqueTogether(
+                    name="roomtranslation",
+                    unique_together=set(),
+                ),
+                migrations.AlterUniqueTogether(
+                    name="styletranslation",
+                    unique_together=set(),
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql=_DROP_OLD_UNIQUE_CONSTRAINTS_SQL,
+                    reverse_sql=migrations.RunSQL.noop,
+                ),
+            ],
         ),
         migrations.AddConstraint(
             model_name="coursetranslation",
