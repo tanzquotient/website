@@ -4,6 +4,8 @@ import zipfile
 
 from django.contrib import admin
 from django.contrib import messages
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.db.models import QuerySet
 from django.http import FileResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -350,6 +352,32 @@ def export_teacher_payment_information_excel(modeladmin, request, queryset):
     )
 
 
+def _build_voucher_email_preview(first_name, voucher_key, voucher_url):
+    """Return (preview_html, None) with real values substituted, or None on error."""
+    try:
+        from post_office.models import EmailTemplate
+        tmpl = EmailTemplate.objects.get(name="voucher")
+        html = tmpl.html_content or ""
+        return mark_safe(
+            html
+            .replace("{{ first_name }}", escape(first_name))
+            .replace("{{ voucher_key }}", escape(voucher_key))
+            .replace("{{ voucher_url }}", escape(voucher_url))
+            .replace(
+                "{{ custom_msg_de }}",
+                '<span id="preview-msg-de" class="email-preview-highlight">'
+                "[Ihre deutsche Nachricht hier]</span>",
+            )
+            .replace(
+                "{{ custom_msg_en }}",
+                '<span id="preview-msg-en" class="email-preview-highlight">'
+                "[Your English message here]</span>",
+            )
+        )
+    except Exception:
+        return None
+
+
 @admin.action(description="Mark selected vouchers as used")
 def mark_voucher_as_used(modeladmin, request, queryset):
     # mark vouchers as used
@@ -379,9 +407,22 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
             }
         )
 
+    first_sub = queryset.first()
+    first_user = first_sub.user if first_sub else None
+    email_preview_html = _build_voucher_email_preview(
+        first_name=first_user.first_name if first_user else "—",
+        voucher_key="(generated on send)",
+        voucher_url="#",
+    )
+    preview_hint = (
+        f"Preview based on {first_user.get_full_name()}" if first_user else None
+    )
+
     context = {
         "form": form,
         "action": "send_vouchers_for_subscriptions",
+        "email_preview_html": email_preview_html,
+        "preview_hint": preview_hint,
     }
     return render(request, "courses/auth/action_send_voucher.html", context)
 
@@ -567,10 +608,28 @@ def email_vouchers(modeladmin, request, queryset):
             }
         )
 
+    first_v = queryset.filter(sent_to__isnull=False).first()
+    if first_v is None:
+        first_v = queryset.first()
+    first_user = first_v.sent_to if first_v else None
+    voucher_url = first_v.pdf_file.url if first_v and first_v.pdf_file else "#"
+    email_preview_html = _build_voucher_email_preview(
+        first_name=first_user.first_name if first_user else "—",
+        voucher_key=first_v.key if first_v else "—",
+        voucher_url=voucher_url,
+    )
+    preview_hint = (
+        f"Preview based on {first_user.get_full_name()} – voucher {first_v.key}"
+        if first_user
+        else None
+    )
+
     context = {
         "form": form,
         "action": "email_vouchers",
         "vouchers_without_user": [voucher.key for voucher in vouchers_without_users],
+        "email_preview_html": email_preview_html,
+        "preview_hint": preview_hint,
     }
     return render(request, "courses/auth/action_send_email_voucher.html", context)
 

@@ -1,0 +1,41 @@
+{% load i18n %}
+{% if email_preview_html %}
+<style>
+  .email-preview-box {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 1.5em;
+    background: var(--darkened-bg);
+    color: var(--body-fg);
+    max-width: 600px;
+  }
+  .email-preview-box a { color: var(--link-fg); }
+  .email-preview-highlight {
+    background: #fff3cd;
+    color: #000;
+    padding: 2px 4px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .email-preview-highlight { background: #5c4500; color: #ffe082; }
+  }
+</style>
+<hr>
+<h2>{% trans "Email preview" %}</h2>
+{% if preview_hint %}<p><em>{{ preview_hint }}</em></p>{% endif %}
+<p><em>{% trans "The highlighted fields update as you type." %}</em></p>
+<div class="email-preview-box">
+    {{ email_preview_html }}
+</div>
+<script>
+  function syncPreview(inputName, previewId, fallback) {
+    const input = document.querySelector('[name="' + inputName + '"]');
+    const span = document.getElementById(previewId);
+    if (!input || !span) return;
+    input.addEventListener('input', function () {
+      span.textContent = this.value || fallback;
+    });
+  }
+  syncPreview('custom_email_message_de', 'preview-msg-de', '[Ihre deutsche Nachricht hier]');
+  syncPreview('custom_email_message_en', 'preview-msg-en', '[Your English message here]');
+</script>
+{% endif %}
