@@ -84,7 +84,6 @@ class OfferingAdmin(TranslatableAdmin):
         "active",
         "early_signup",
         "preview",
-        "opens_soon",
         "survey",
     )
 
@@ -121,7 +120,6 @@ class OfferingAdmin(TranslatableAdmin):
                     "early_signup",
                     "early_signup_max_days",
                     "preview",
-                    "opens_soon",
                     "group_into_sections",
                     "limit_courses_per_section",
                     "order",
@@ -236,6 +234,7 @@ class CourseAdmin(TranslatableAdmin):
         "is_displayed",
         "is_active",
         "is_early_signup_enabled",
+        "opens_soon",
         "is_cancelled",
         "is_evaluated",
         "are_teachers_welcomed",
@@ -255,6 +254,7 @@ class CourseAdmin(TranslatableAdmin):
         "subscription_type",
         "display",
         "active",
+        "opens_soon",
         "completed",
         "partner_required_at_signup",
     )
@@ -308,6 +308,7 @@ class CourseAdmin(TranslatableAdmin):
                     "cancelled",
                     "completed",
                     "early_signup",
+                    "opens_soon",
                 ]
             },
         ),
@@ -355,6 +356,11 @@ class CourseAdmin(TranslatableAdmin):
     @admin.display(description="C", boolean=True)
     def is_cancelled(course: Course) -> bool:
         return course.cancelled
+
+    @staticmethod
+    @admin.display(description="OS", boolean=True)
+    def opens_soon(course: Course) -> bool:
+        return course.opens_soon
 
     @staticmethod
     @admin.display(description="PR", boolean=True)

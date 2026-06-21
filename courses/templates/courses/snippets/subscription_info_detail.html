@@ -119,7 +119,7 @@
         {% endif %}
         {% include "courses/snippets/participants_info.html" with is_detail_page=True %}
 
-    {% elif course.offering.opens_soon %}
+    {% elif course.opens_soon %}
         <em>{% trans "Registration opens soon" %}</em>
     {% elif course.subscription_closed %}
         <em>{% trans "Registration closed" %}</em>

@@ -87,6 +87,11 @@ class Course(TranslatableModel):
             )
         ),
     )
+    opens_soon = models.BooleanField(
+        default=False,
+        help_text="If set to true, the sign up page says "
+        '"opens soon" instead of "closed"',
+    )
     cancelled = models.BooleanField(
         default=False, help_text="Indicates if this course is cancelled"
     )

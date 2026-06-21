@@ -67,11 +67,6 @@ class Offering(TranslatableModel):
         default=False,
         help_text="Defines if the offering should be displayed as preview",
     )
-    opens_soon = models.BooleanField(
-        default=False,
-        help_text="If set to true, the sign up page says "
-        '"opens soon" instead of "closed"',
-    )
     group_into_sections = models.BooleanField(
         default=True,
         help_text="If true, a separate section for each month / day of week is "

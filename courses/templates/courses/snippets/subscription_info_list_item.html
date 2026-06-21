@@ -37,7 +37,7 @@
         <span class="badge rounded-pill bg-secondary">{% trans "early sign-up" %}</span>
         {% include "courses/snippets/participants_info.html" %}
 
-    {% elif course.offering.opens_soon %}
+    {% elif course.opens_soon %}
         <em>{% trans "Registration opens soon" %}</em>
     {% elif course.subscription_closed %}
         <em>{% trans "Registration closed" %}</em>
