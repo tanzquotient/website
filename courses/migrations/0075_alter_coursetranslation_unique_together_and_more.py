@@ -34,7 +34,7 @@ BEGIN
           AND c.contype = 'u'
           AND c.conname NOT IN ({new_names})
     ) LOOP
-        EXECUTE format('ALTER TABLE %%I DROP CONSTRAINT %%I', r.relname, r.conname);
+        EXECUTE 'ALTER TABLE ' || quote_ident(r.relname) || ' DROP CONSTRAINT ' || quote_ident(r.conname);
     END LOOP;
 END $$;
 """.format(
