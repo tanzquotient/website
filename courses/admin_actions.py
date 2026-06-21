@@ -26,7 +26,7 @@ from .admin_forms import (
     SwitchOutForm,
 )
 from .emailcenter import create_course_info
-from .forms import CreateSendVoucherForm, SendVoucherEmailForm
+from .forms import CreateSendVoucherForm, SendVoucherEmailForm, DownloadVouchersForm
 
 
 @admin.action(description="Set displayed")
@@ -580,20 +580,47 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
     if queryset.count() == 1:
         voucher = queryset.first()
         response = HttpResponse(voucher.pdf_file.file, content_type="application/pdf")
-        response["Content-Disposition"] = (
-            f"attachment; filename=Voucher_{voucher.key}.pdf"
-        )
+        response["Content-Disposition"] = f"attachment; filename=Voucher_{voucher.key}.pdf"
         return response
 
-    # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
-    spooled = tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
-    with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
+    if "download" in request.POST:
+        fmt = request.POST.get("format", "pdf")
+
+        if fmt == "zip":
+            # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
+            spooled = tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
+            with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                for voucher in queryset.iterator(chunk_size=50):
+                    with voucher.pdf_file.file.open("rb") as src, zip_file.open(
+                        f"Voucher_{voucher.key}.pdf", "w"
+                    ) as dst:
+                        shutil.copyfileobj(src, dst, length=64 * 1024)
+            spooled.seek(0)
+            response = FileResponse(spooled, content_type="application/zip")
+            response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
+            return response
+
+        # fmt == "pdf": merge all pages into a single PDF
+        from io import BytesIO
+        from pypdf import PdfWriter, PdfReader
+
+        writer = PdfWriter()
         for voucher in queryset.iterator(chunk_size=50):
-            with voucher.pdf_file.file.open("rb") as src, zip_file.open(
-                f"Voucher_{voucher.key}.pdf", "w"
-            ) as dst:
-                shutil.copyfileobj(src, dst, length=64 * 1024)
-    spooled.seek(0)
-    response = FileResponse(spooled, content_type="application/zip")
-    response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
-    return response
+            with voucher.pdf_file.open("rb") as src:
+                writer.append(PdfReader(src))
+        buf = BytesIO()
+        writer.write(buf)
+        buf.seek(0)
+        response = FileResponse(buf, content_type="application/pdf")
+        response["Content-Disposition"] = 'attachment; filename="vouchers.pdf"'
+        return response
+
+    # First call: show intermediate form so the user can choose ZIP vs single PDF
+    form = DownloadVouchersForm(
+        initial={"_selected_action": list(queryset.values_list("id", flat=True))}
+    )
+    return render(request, "courses/auth/action_download_vouchers.html", {
+        "form": form,
+        "action": "download_vouchers",
+        "count": queryset.count(),
+    })

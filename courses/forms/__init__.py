@@ -6,3 +6,4 @@ from .voucher_generation_form import VoucherGenerationForm
 from .send_voucher_form import CreateSendVoucherForm
 from .voucher_email_form import VoucherEmailForm
 from .send_voucher_email_form import SendVoucherEmailForm
+from .download_vouchers_form import DownloadVouchersForm

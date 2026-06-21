@@ -1,4 +1,6 @@
 import reversion
+from datetime import date
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -22,6 +24,7 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
             purpose = form.cleaned_data["purpose"]
             expires_flag = form.cleaned_data["expires_flag"]
             expires = form.cleaned_data["expires"]
+            comment = form.cleaned_data.get("voucher_comment") or ""
 
             for _ in range(0, number_of_vouchers):
                 with reversion.create_revision():
@@ -30,6 +33,7 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
                         amount=amount,
                         percentage=percentage,
                         expires=expires if expires_flag else None,
+                        comment=comment,
                     )
                     if request.user:
                         reversion.set_user(request.user)
@@ -38,7 +42,15 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
                             f"{number_of_vouchers} vouchers"
                         )
 
-            return HttpResponseRedirect(reverse("admin:courses_voucher_changelist"))
+            base_url = reverse("admin:courses_voucher_changelist")
+            redirect_url = f"{base_url}?issued_when=today"
+            if comment:
+                redirect_url += f"&q={comment}"
+            messages.info(request, (
+                "Filtering for generated vouchers, "
+                f"based on issue date and comment."
+            ))
+            return HttpResponseRedirect(redirect_url)
 
     if not form:
         form = VoucherGenerationForm()

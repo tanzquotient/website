@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.contrib.admin.filters import SimpleListFilter
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -120,6 +122,31 @@ class VoucherSentFilter(admin.SimpleListFilter):
             return queryset.exclude(sent_to=None)
         if self.value() == "0":
             return queryset.filter(sent_to=None)
+
+
+class VoucherIssuedDateFilter(SimpleListFilter):
+    title = "Issued"
+    parameter_name = "issued_when"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("today", "Today"),
+            ("week", "This week"),
+            ("month", "This month"),
+            ("year", "This year"),
+        ]
+
+    def queryset(self, request, queryset):
+        today = date.today()
+        if self.value() == "today":
+            return queryset.filter(issued=today)
+        if self.value() == "week":
+            return queryset.filter(issued__gte=today - timedelta(days=today.weekday()))
+        if self.value() == "month":
+            return queryset.filter(issued__year=today.year, issued__month=today.month)
+        if self.value() == "year":
+            return queryset.filter(issued__year=today.year)
+        return queryset
 
 
 # Class to filter vouchers by issuer -- not working yet

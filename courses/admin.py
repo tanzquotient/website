@@ -831,12 +831,14 @@ class VoucherAdmin(VersionAdmin):
         "used",
         VoucherSentFilter,
         "purpose",
+        VoucherIssuedDateFilter,
         VoucherOfferingListFilter,
         VoucherCourseListFilter,
         VoucherYearUsedListFilter,
     )
     search_fields = [
         "key",
+        "comment",
         "subscription__user__first_name",
         "subscription__user__last_name",
         "subscription__user__username",

@@ -11,7 +11,15 @@
     </p>
 
     <input type="hidden" name="action" value="voucher_generation" />
-    <input type="submit" name="generate" value="Generate" />
+    <input type="hidden" name="generate" value="1" />
+    <input type="submit" value="Generate" id="generate-btn" />
 </form>
+<script>
+  document.getElementById('generate-btn').addEventListener('click', function () {
+    this.disabled = true;
+    this.value = 'Generating…';
+    this.form.submit();
+  });
+</script>
 
 {% endblock %}
