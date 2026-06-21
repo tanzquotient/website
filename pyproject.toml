@@ -57,7 +57,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "django-debug-toolbar==6.3.0", # For development. Gives additional insights into e.g. database queries
+    "django-debug-toolbar==7.0.0", # For development. Gives additional insights into e.g. database queries
     "black==26.5.1", # Code formatting
     "locust~=2.44.0", # Loadtesting
 ]
