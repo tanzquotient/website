@@ -8,6 +8,7 @@
 
 import argparse
 import os
+
 import yaml
 
 # Location to store output file in

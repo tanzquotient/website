@@ -1,7 +1,7 @@
-from post_office.models import STATUS
-
 from django.contrib.auth.models import User
 from django.db import models
+from post_office.models import STATUS
+
 from courses.models import TeacherWelcome
 
 

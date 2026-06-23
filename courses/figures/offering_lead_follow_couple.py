@@ -3,8 +3,8 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, Subscribe, MatchingState, LeadFollow
-from utils.plots import stacked_bar_chart, DataSeries
+from courses.models import LeadFollow, MatchingState, Offering, Subscribe
+from utils.plots import DataSeries, stacked_bar_chart
 
 
 def offering_lead_follow_couple(offering_type: str) -> Figure:

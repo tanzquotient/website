@@ -1,5 +1,5 @@
 from cms.models import User
-from django.db.models import EmailField, ManyToManyField, CharField
+from django.db.models import CharField, EmailField, ManyToManyField
 from parler.models import TranslatableModel, TranslatedFields
 
 

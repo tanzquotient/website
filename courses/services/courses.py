@@ -1,17 +1,17 @@
 from datetime import datetime
-from typing import Iterable, Any, Optional
+from typing import Any, Iterable, Optional
 
 import reversion
 from django.contrib.auth.models import User
 from post_office.models import EmailTemplate
 
 from courses import models as models
-from courses.models import Voucher, Course
+from courses.models import Course, Voucher
 from courses.services import get_subsequent_offering
 from courses.services.general import log
 from email_system.services import send_all_emails
 from payment.utils.generate_voucher_pdf import generate_voucher_pdfs
-from survey.models import SurveyInstance, Survey
+from survey.models import Survey, SurveyInstance
 from tq_website import settings
 
 

@@ -6,17 +6,17 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from ..serializers import ClaimSpotSerializer
 from ...models import (
     Attendance,
-    LessonOccurrence,
-    LeadFollow,
     AttendanceState,
-    SubscribeState,
+    LeadFollow,
+    LessonOccurrence,
     Subscribe,
+    SubscribeState,
 )
-from ...utils import lesson_lead_follow_balance, claiming_spot_window_open
+from ...utils import claiming_spot_window_open, lesson_lead_follow_balance
 from ...utils.skill import is_eligible_for_lesson
+from ..serializers import ClaimSpotSerializer
 
 
 class ClaimSpotApiView(APIView):

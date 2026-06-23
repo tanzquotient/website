@@ -1,7 +1,7 @@
+from cms.toolbar_base import CMSToolbar
+from cms.toolbar_pool import toolbar_pool
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from cms.toolbar_pool import toolbar_pool
-from cms.toolbar_base import CMSToolbar
 
 
 @toolbar_pool.register

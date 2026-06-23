@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, timedelta, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from numbers import Number
-from typing import Optional, Union, Iterable
+from typing import Iterable, Optional, Union
 
 from django.conf import settings
 from django.contrib import admin
@@ -20,26 +20,26 @@ from reversion import revisions as reversion
 
 from courses import managers
 from courses.models import (
-    Weekday,
     CourseSubscriptionType,
+    IrregularLesson,
     LeadFollow,
-    Subscribe,
+    LessonOccurrence,
+    LessonOccurrenceData,
+    MatchingState,
     Period,
     RegularLesson,
-    IrregularLesson,
     RegularLessonException,
-    LessonOccurrenceData,
-    LessonOccurrence,
-    SubscribeState,
-    MatchingState,
     Rejection,
     RejectionReason,
     Room,
+    Subscribe,
+    SubscribeState,
+    Weekday,
 )
 from partners.models import Partner
 from survey.models import Survey
 from utils import TranslationUtils
-from utils.helpers import optional_min, optional_max
+from utils.helpers import optional_max, optional_min
 
 
 class Course(TranslatableModel):

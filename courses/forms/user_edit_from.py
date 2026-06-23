@@ -6,7 +6,7 @@ from django_countries.data import COUNTRIES
 from django_countries.fields import LazyTypedChoiceField
 from djangocms_text.widgets import TextEditorWidget
 
-from courses.models import StudentStatus, Residence, UserProfile
+from courses.models import Residence, StudentStatus, UserProfile
 from utils.iban_validator import validate_iban
 
 

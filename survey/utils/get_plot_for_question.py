@@ -1,10 +1,10 @@
 from collections import Counter
-from typing import Optional, Iterable
+from typing import Iterable, Optional
 
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import Offering, Course
-from survey.models import Question, Answer
+from courses.models import Course, Offering
+from survey.models import Answer, Question
 from survey.models.types import QuestionType
 from utils.plots import bar_chart, pie_chart, plot_figure
 

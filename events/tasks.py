@@ -1,7 +1,8 @@
+import logging
+
 from celery import shared_task
 from django_celery_beat.models import PeriodicTask
 from reversion import revisions
-import logging
 
 from events.models import Event, EventRegistrationSchedule
 

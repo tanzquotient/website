@@ -3,9 +3,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView
-from django.views.generic.edit import ProcessFormView, FormMixin
+from django.views.generic.edit import FormMixin, ProcessFormView
 
-from courses.models import Offering, Subscribe, SubscribeState, PaymentMethod
+from courses.models import Offering, PaymentMethod, Subscribe, SubscribeState
 from payment.services import remind_of_payment
 
 

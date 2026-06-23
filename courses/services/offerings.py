@@ -10,10 +10,10 @@ from django.utils.translation import gettext as _
 from courses import models as models
 from courses.managers import CourseManager
 from courses.models import (
+    Course,
     Offering,
     OfferingType,
     Weekday,
-    Course,
 )
 from courses.services.general import log
 

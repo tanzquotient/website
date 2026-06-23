@@ -2,10 +2,10 @@ from collections import defaultdict
 
 import reversion
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
-from reversion.models import Version
 from django.core.cache import cache
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from reversion.models import Version
 
 from ..models import Answer
 

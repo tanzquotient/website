@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 

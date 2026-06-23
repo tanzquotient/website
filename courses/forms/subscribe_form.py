@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import LeadFollow, SingleCouple, Course
+from courses.models import Course, LeadFollow, SingleCouple
 
 
 class SubscribeForm(forms.Form):

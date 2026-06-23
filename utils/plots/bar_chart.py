@@ -1,6 +1,6 @@
 from typing import Any
 
-from plotly.graph_objs import Figure, Bar, Layout
+from plotly.graph_objs import Bar, Figure, Layout
 
 
 def bar_chart(values: list[Any], labels: list[str]) -> Figure:

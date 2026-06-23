@@ -1,9 +1,9 @@
-from django.conf import settings
-from django.utils import timezone
-from django.urls import reverse
 import logging
 from datetime import datetime, time, timedelta
 
+from django.conf import settings
+from django.urls import reverse
+from django.utils import timezone
 from post_office.models import EmailTemplate
 
 from courses.models import Attendance, AttendanceState

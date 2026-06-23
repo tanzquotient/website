@@ -4,8 +4,8 @@ from django import forms
 from django.forms.widgets import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
-from ..models import VoucherPurpose, Voucher
-from ..utils import validate_amount_and_percentage, validate_amount, validate_percentage
+from ..models import Voucher, VoucherPurpose
+from ..utils import validate_amount, validate_amount_and_percentage, validate_percentage
 
 
 class VoucherForm(forms.Form):

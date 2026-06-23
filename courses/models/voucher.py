@@ -7,16 +7,16 @@ from typing import Optional
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import (
-    Model,
+    PROTECT,
+    BooleanField,
+    CharField,
+    CheckConstraint,
+    DateField,
+    FileField,
     ForeignKey,
     IntegerField,
-    CharField,
-    DateField,
-    BooleanField,
-    FileField,
-    CheckConstraint,
+    Model,
     Q,
-    PROTECT,
 )
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion

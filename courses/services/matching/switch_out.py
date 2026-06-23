@@ -1,7 +1,7 @@
 from django.db import transaction
 from reversion import revisions as reversion
 
-from courses.models import MatchingState, SubscribeState, Subscribe
+from courses.models import MatchingState, Subscribe, SubscribeState
 from courses.services.matching.change_matching import _unmatch_person
 from courses.services.subscriptions import confirm_subscription, reject_subscription
 

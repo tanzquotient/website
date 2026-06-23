@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 from django.db.models import (
+    PROTECT,
+    BooleanField,
     CharField,
     ForeignKey,
-    BooleanField,
     PositiveSmallIntegerField,
     TextField,
-    PROTECT,
 )
 from parler.models import TranslatableModel, TranslatedFields
 
 from utils import TranslationUtils
+
 from .types import QuestionType
 
 

@@ -1,10 +1,10 @@
+from datetime import datetime
+
 from django.contrib import admin
 from django.http import HttpResponse
-
 from django.utils import timezone
-from survey.models import Answer, SurveyInstance
 
-from datetime import datetime
+from survey.models import Answer, SurveyInstance
 
 from . import services
 

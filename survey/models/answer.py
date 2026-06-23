@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import reversion
 from django.db.models import (
-    Model,
-    TextField,
-    ForeignKey,
-    BooleanField,
     CASCADE,
     PROTECT,
+    BooleanField,
+    ForeignKey,
+    Model,
+    TextField,
 )
 
 

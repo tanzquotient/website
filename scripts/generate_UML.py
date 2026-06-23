@@ -6,8 +6,8 @@ limited with respect to output folder and package selection. This script
 overcomes these limitations."
 """
 
-import os
 import argparse
+import os
 import subprocess
 
 if __name__ == "__main__":

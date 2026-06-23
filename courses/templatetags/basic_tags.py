@@ -1,4 +1,4 @@
-from typing import Iterable, Any
+from typing import Any, Iterable
 from uuid import uuid4
 
 from django import template

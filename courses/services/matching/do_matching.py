@@ -8,7 +8,7 @@ from reversion import revisions as reversion
 
 from courses import models as models
 from courses.managers import SubscribeQuerySet
-from courses.models import LeadFollow, Subscribe, Course
+from courses.models import Course, LeadFollow, Subscribe
 
 log = logging.getLogger("matching")
 

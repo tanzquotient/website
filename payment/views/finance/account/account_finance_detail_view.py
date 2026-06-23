@@ -6,10 +6,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Sum
 from django.urls import reverse
 from django.views.generic import TemplateView
-from django.views.generic.edit import ProcessFormView, FormMixin
+from django.views.generic.edit import FormMixin, ProcessFormView
 
 from payment.models import Payment
-from payment.models.choices import Type, CreditDebit
+from payment.models.choices import CreditDebit, Type
 
 log = logging.getLogger("tq")
 

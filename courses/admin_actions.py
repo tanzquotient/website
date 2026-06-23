@@ -2,14 +2,13 @@ import shutil
 import tempfile
 import zipfile
 
-from django.contrib import admin
-from django.contrib import messages
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
+from django.contrib import admin, messages
 from django.db.models import QuerySet
-from django.http import FileResponse, HttpResponseRedirect, HttpResponse
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from reversion import revisions as reversion
 
 import courses.services.matching.change_matching
@@ -18,17 +17,18 @@ import courses.services.matching.switch_out
 from courses.models import *
 from email_system.services import send_email
 from tq_website import settings
+
 from . import services
 from .admin_forms import (
     CopyCourseForm,
-    SendCourseEmailForm,
-    RejectForm,
     EmailListForm,
     MoveToWaitingListForm,
+    RejectForm,
+    SendCourseEmailForm,
     SwitchOutForm,
 )
 from .emailcenter import create_course_info
-from .forms import CreateSendVoucherForm, SendVoucherEmailForm, DownloadVouchersForm
+from .forms import CreateSendVoucherForm, DownloadVouchersForm, SendVoucherEmailForm
 
 
 @admin.action(description="Set displayed")
@@ -670,7 +670,8 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
 
         # fmt == "pdf": merge all pages into a single PDF
         from io import BytesIO
-        from pypdf import PdfWriter, PdfReader
+
+        from pypdf import PdfReader, PdfWriter
 
         writer = PdfWriter()
         for voucher in queryset.iterator(chunk_size=50):

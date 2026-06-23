@@ -4,8 +4,8 @@ from datetime import datetime
 from decimal import Decimal
 from io import StringIO
 
-from payment.models import Payment, FinanceFile
-from payment.models.choices import FinanceFileType, CreditDebit
+from payment.models import FinanceFile, Payment
+from payment.models.choices import CreditDebit, FinanceFileType
 
 
 class ZkbCsvParser:

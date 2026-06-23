@@ -17,7 +17,8 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
-from .views import WellKnownRedirectView, oidc_login_view, oidc_callback_view
+
+from .views import WellKnownRedirectView, oidc_callback_view, oidc_login_view
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),

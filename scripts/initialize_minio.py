@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-import os
 import json
-
-from minio import Minio
-from minio.error import MinioException
+import os
 
 from dotenv import load_dotenv
+from minio import Minio
+from minio.error import MinioException
 
 load_dotenv()
 

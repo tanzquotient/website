@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import ForeignKey, CharField, Model, CASCADE
+from django.db.models import CASCADE, CharField, ForeignKey, Model
 
 from . import LeadFollow
 from .choices import AttendanceState

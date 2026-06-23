@@ -1,6 +1,6 @@
-from .role_utils import role
 from .balance_utils import (
-    lesson_lead_follow_balance,
-    course_accepted_subscriptions,
     attendances_by_state,
+    course_accepted_subscriptions,
+    lesson_lead_follow_balance,
 )
+from .role_utils import role

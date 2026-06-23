@@ -1,10 +1,10 @@
 from django import template
 
-from courses.models import LessonOccurrence, Course, AttendanceState
+from courses.models import AttendanceState, Course, LessonOccurrence
 from courses.utils import (
-    lesson_lead_follow_balance,
-    course_accepted_subscriptions,
     attendances_by_state,
+    course_accepted_subscriptions,
+    lesson_lead_follow_balance,
 )
 
 register = template.Library()

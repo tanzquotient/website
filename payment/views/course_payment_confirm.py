@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import FormView
 
-from courses.models import Subscribe, PaymentMethod
+from courses.models import PaymentMethod, Subscribe
+
 from . import TeacherOfCourseOnly
 
 

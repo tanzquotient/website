@@ -2,8 +2,8 @@ from django.urls import reverse
 from django.utils.html import escape
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, Subscribe, MatchingState
-from utils.plots import stacked_bar_chart, DataSeries
+from courses.models import MatchingState, Offering, Subscribe
+from utils.plots import DataSeries, stacked_bar_chart
 
 
 def offering_matching_status(offering_type: str) -> Figure:

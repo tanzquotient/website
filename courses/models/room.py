@@ -7,6 +7,7 @@ from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
 from utils import TranslationUtils
+
 from . import Address, RoomAccessCode
 
 

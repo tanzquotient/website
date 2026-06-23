@@ -1,15 +1,15 @@
 from typing import Iterable
 
 from django.db.models import (
-    CharField,
     BooleanField,
-    QuerySet,
+    CharField,
     PositiveSmallIntegerField,
+    QuerySet,
 )
+from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
-from django_resized import ResizedImageField
-from django.utils.translation import gettext_lazy as _
 
 from events.models import Event
 from utils import TranslationUtils

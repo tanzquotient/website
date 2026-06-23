@@ -1,4 +1,4 @@
-from plotly.graph_objs import Figure, Bar, Layout
+from plotly.graph_objs import Bar, Figure, Layout
 from plotly.graph_objs.layout import Legend, XAxis, YAxis
 
 from . import DataSeries

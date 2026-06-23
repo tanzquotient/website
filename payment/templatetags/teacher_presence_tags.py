@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
 
-from courses.models import LessonOccurrence, Course, LessonOccurrenceData
+from courses.models import Course, LessonOccurrence, LessonOccurrenceData
 
 register = template.Library()
 

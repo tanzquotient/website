@@ -5,13 +5,13 @@ from typing import Iterable
 from django.contrib.auth.models import User
 from django.db import transaction
 
-from . import StyleLevel
 from ...models import (
-    SubscribeState,
-    Style,
-    SkillDanceLevel,
     LessonOccurrence,
+    SkillDanceLevel,
+    Style,
+    SubscribeState,
 )
+from . import StyleLevel
 
 
 def recompute_dance_levels_for_user(user: User) -> None:

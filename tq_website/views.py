@@ -1,29 +1,29 @@
-import uuid
-import json
-import requests
 import datetime
+import json
+import uuid
 from urllib.parse import urlencode
 
+import requests
+from allauth.account.models import EmailAddress
+from allauth.account.utils import perform_login
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.views.generic import RedirectView
 from django.contrib.auth import logout
-from django.db.models import Q
-from allauth.account.utils import perform_login
-from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.db.models import Q
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseBadRequest,
-    HttpResponseRedirect,
     HttpResponseForbidden,
+    HttpResponseRedirect,
     HttpResponseServerError,
 )
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import RedirectView
 
 from courses.models import (
     SwitchData,

@@ -1,13 +1,14 @@
-from django.utils import timezone
 from django.db import transaction
+from django.utils import timezone
 
 from courses.models import UserProfile
 from email_system.models import GeneratedIndividualEmail, GroupEmail
 from email_system.services.send_email import HEADER_REPLY_TO
 from groups.definitions import GroupDefinitions
 from utils import TranslationUtils
-from . import send_all_emails
+
 from ..models import UnsubscribeCode
+from . import send_all_emails
 
 
 def _get_language(user) -> str:

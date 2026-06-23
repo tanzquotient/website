@@ -1,5 +1,6 @@
-from django.db import migrations
 from datetime import timedelta
+
+from django.db import migrations
 
 
 def resize(apps, schema_editor):

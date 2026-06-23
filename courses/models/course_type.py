@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
+
 from utils import TranslationUtils
 
 from ..managers import CourseTypeManager

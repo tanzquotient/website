@@ -1,9 +1,10 @@
-from django.db import models
-from django.db.models import ForeignKey, CharField, DateTimeField, BooleanField
-from django.utils import timezone
-from reversion import revisions as reversion
-from django_celery_beat.models import ClockedSchedule, PeriodicTask
 import json
+
+from django.db import models
+from django.db.models import BooleanField, CharField, DateTimeField, ForeignKey
+from django.utils import timezone
+from django_celery_beat.models import ClockedSchedule, PeriodicTask
+from reversion import revisions as reversion
 
 
 @reversion.register()

@@ -1,5 +1,6 @@
-from django.db import models
 from datetime import datetime, timedelta
+
+from django.db import models
 
 
 class DisplayedEventManager(models.Manager):

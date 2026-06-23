@@ -2,12 +2,12 @@ import logging
 import re
 from typing import Optional
 
-from django.db.models import QuerySet
 from django.db import transaction
+from django.db.models import QuerySet
 
-from courses.models import Subscribe, PaymentMethod, SubscribeState
+from courses.models import PaymentMethod, Subscribe, SubscribeState
 from payment.models import Payment, SubscriptionPayment
-from payment.models.choices import State, CreditDebit, Type
+from payment.models.choices import CreditDebit, State, Type
 
 log = logging.getLogger("payment")
 

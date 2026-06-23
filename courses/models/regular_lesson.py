@@ -1,12 +1,12 @@
 import operator
-from datetime import datetime, timedelta, date, time
+from datetime import date, datetime, time, timedelta
 from functools import reduce
 from typing import Iterable
 
 from django.db import models
 from pytz import timezone
 
-from . import Weekday, LessonOccurrenceData, Room
+from . import LessonOccurrenceData, Room, Weekday
 
 
 class RegularLesson(models.Model):

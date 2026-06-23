@@ -9,12 +9,12 @@ from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
 from courses.models import (
+    AttendanceState,
     LessonOccurrence,
     Subscribe,
     SubscribeState,
-    AttendanceState,
 )
-from courses.utils import lesson_lead_follow_balance, claiming_spot_window_open
+from courses.utils import claiming_spot_window_open, lesson_lead_follow_balance
 from courses.utils.skill import eligible_lessons
 
 

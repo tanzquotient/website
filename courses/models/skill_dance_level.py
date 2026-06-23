@@ -1,5 +1,5 @@
 from django.core.validators import MinValueValidator
-from django.db.models import CASCADE, Model, ForeignKey, IntegerField
+from django.db.models import CASCADE, ForeignKey, IntegerField, Model
 
 
 class SkillDanceLevel(Model):

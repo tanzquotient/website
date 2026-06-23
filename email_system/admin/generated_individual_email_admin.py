@@ -1,9 +1,9 @@
 from typing import Any
+
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.http.request import HttpRequest
 from django.utils import timezone
-
 from post_office.models import Email
 
 from email_system.models import GeneratedIndividualEmail

@@ -1,4 +1,4 @@
-from django.db.models import BooleanField, CharField, FileField, DateTimeField, Model
+from django.db.models import BooleanField, CharField, DateTimeField, FileField, Model
 
 from payment.models.choices import FinanceFileType
 from tq_website.storages import FinanceStorage

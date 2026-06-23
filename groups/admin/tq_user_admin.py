@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from hijack.contrib.admin import HijackUserAdminMixin
 
-from courses.admin import UserProfileInline, SubscribeInlineForUser
+from courses.admin import SubscribeInlineForUser, UserProfileInline
 from courses.admin_actions import make_inactive
 
 

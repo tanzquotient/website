@@ -1,9 +1,9 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from courses.models import Offering, CourseSubscriptionType, LessonOccurrenceTeach
+from courses.models import CourseSubscriptionType, LessonOccurrenceTeach, Offering
 from utils import export
 
 

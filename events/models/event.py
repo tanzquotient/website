@@ -1,30 +1,30 @@
+from datetime import datetime
 from typing import Optional
 
 from django.db.models import (
-    TimeField,
+    SET_NULL,
     BooleanField,
+    CharField,
     DateField,
     DecimalField,
     ForeignKey,
-    CharField,
     IntegerField,
-    SET_NULL,
+    TimeField,
 )
 from django.template.defaultfilters import date as format_date
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django_resized import ResizedImageField
 from djangocms_text.fields import HTMLField
 from parler.managers import TranslatableManager
 from parler.models import TranslatableModel, TranslatedFields
-from django_resized import ResizedImageField
-
-from datetime import datetime
 
 from courses.models import Room
 from courses.services import format_prices
 from utils import TranslationUtils
-from . import EventRegistration
+
 from .. import managers
+from . import EventRegistration
 
 
 class Event(TranslatableModel):

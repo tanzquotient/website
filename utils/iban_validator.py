@@ -1,7 +1,8 @@
-from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 import string
 from itertools import chain
+
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 # Method found here: https://codereview.stackexchange.com/questions/135366/python-iban-validation#:~:text=Validating%20the%20IBAN,-Description%20(from%20wiki&text=An%20IBAN%20is%20validated%20by,correct%20as%20per%20the%20country.

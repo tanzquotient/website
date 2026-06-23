@@ -1,12 +1,14 @@
+import datetime
+
+from django.contrib import messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.translation import gettext as _
 
 from courses.emailcenter import *
-from courses.models import SubscribeState, Subscribe
+from courses.models import Subscribe, SubscribeState
+
 from ..models import PaymentReminder
-from django.contrib import messages
-from django.utils.translation import gettext as _
-import datetime
 
 
 def remind_of_payment(

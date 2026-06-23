@@ -1,11 +1,10 @@
 from django.urls import path
 
-from courses import admin_views
-from courses import views
+from courses import admin_views, views
 from courses.api.views import (
-    MyAttendanceApiView,
     ChooseRoleApiView,
     ClaimSpotApiView,
+    MyAttendanceApiView,
     RoomUsageApiView,
     SearchRoomApiView,
 )

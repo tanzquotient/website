@@ -1,15 +1,15 @@
 from celery import shared_task
 from django.core.cache import cache
-
-from groups.services import update_groups
-from survey.services import send_course_surveys
-from payment.payment_processor import PaymentProcessor
-from payment.parser import ZkbCsvParser
-from payment.services import remind_all_of_payments
-from courses.services.teachers import send_presence_reminder
-from courses.services.attendance import send_unexcused_absences_emails
-from email_system.services import send_scheduled_group_emails, send_queued_emails
 from photologue.models import Photo, PhotoSizeCache
+
+from courses.services.attendance import send_unexcused_absences_emails
+from courses.services.teachers import send_presence_reminder
+from email_system.services import send_queued_emails, send_scheduled_group_emails
+from groups.services import update_groups
+from payment.parser import ZkbCsvParser
+from payment.payment_processor import PaymentProcessor
+from payment.services import remind_all_of_payments
+from survey.services import send_course_surveys
 
 
 @shared_task(

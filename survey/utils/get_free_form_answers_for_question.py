@@ -1,7 +1,7 @@
 from typing import Iterable
 
-from courses.models import Offering, Course
-from survey.models import Question, Answer
+from courses.models import Course, Offering
+from survey.models import Answer, Question
 from survey.models.types import QuestionType
 
 

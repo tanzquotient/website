@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.models import Group
 
 from courses.models import UserProfile
+
 from ..definitions import GroupDefinitions
 
 log = logging.getLogger("update_groups")

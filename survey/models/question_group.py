@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 from django.db.models import (
+    SET_NULL,
     CharField,
     ForeignKey,
     PositiveSmallIntegerField,
     TextField,
-    SET_NULL,
 )
 from parler.models import TranslatableModel, TranslatedFields
 
-from . import Survey
 from utils import TranslationUtils
+
+from . import Survey
 
 
 class QuestionGroup(TranslatableModel):

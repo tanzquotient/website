@@ -4,10 +4,11 @@ from collections import Counter
 from numbers import Number
 from typing import Iterable
 
-from django.utils.translation import gettext as _, get_language
 from django.core.cache import cache
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 
-from courses.models import Subscribe, SubscribeState, CourseType
+from courses.models import CourseType, Subscribe, SubscribeState
 from utils import TranslationUtils
 
 log = logging.getLogger("tq")

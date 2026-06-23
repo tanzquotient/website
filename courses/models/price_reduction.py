@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from django.db.models import (
-    Model,
-    ForeignKey,
-    DecimalField,
+    CASCADE,
+    PROTECT,
     CharField,
     DateTimeField,
-    PROTECT,
-    CASCADE,
+    DecimalField,
+    ForeignKey,
+    Model,
 )
 
 from courses.models import PaymentMethod

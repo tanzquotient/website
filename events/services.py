@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
-from utils import export
 from events.models import Event
+from utils import export
 
 
 def export_registrations(event_ids, export_format):

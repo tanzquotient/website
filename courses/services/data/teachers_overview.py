@@ -1,6 +1,8 @@
-from django.utils.translation import gettext_lazy as _
-from courses.models import LessonOccurrence
 from decimal import Decimal
+
+from django.utils.translation import gettext_lazy as _
+
+from courses.models import LessonOccurrence
 
 
 def get_teachers_overview_data() -> list[list]:

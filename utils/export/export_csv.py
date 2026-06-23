@@ -3,7 +3,7 @@ from io import StringIO
 
 from django.http import HttpResponse
 
-from . import export_zip, clean_filename
+from . import clean_filename, export_zip
 
 
 def write_csv(data, file):

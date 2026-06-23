@@ -3,8 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from courses.models import (
-    Subscribe,
     Skill,
+    Subscribe,
     SubscribeState,
 )
 from courses.utils.skill import recompute_dance_levels_for_user

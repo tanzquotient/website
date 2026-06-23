@@ -1,7 +1,7 @@
 import shortuuid
 from django import template
-from django.urls import reverse
 from django.conf import settings
+from django.urls import reverse
 
 register = template.Library()
 

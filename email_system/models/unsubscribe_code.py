@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db.models import ForeignKey, DateTimeField, CharField, Model, CASCADE
+from django.db.models import CASCADE, CharField, DateTimeField, ForeignKey, Model
 from django.urls import reverse
 
 

@@ -5,25 +5,25 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from django.utils.translation import gettext as _
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from reversion import revisions as reversion
 
 from courses import models as models
 from courses.emailcenter import (
-    send_subscription_confirmation,
-    send_participation_confirmation,
     detect_rejection_reason,
-    send_rejection,
     send_move_to_waiting_list,
+    send_participation_confirmation,
+    send_rejection,
+    send_subscription_confirmation,
 )
 from courses.models import (
-    Subscribe,
-    LeadFollow,
-    SingleCouple,
-    MatchingState,
-    SubscribeState,
     Course,
+    LeadFollow,
+    MatchingState,
+    SingleCouple,
+    Subscribe,
+    SubscribeState,
 )
 from courses.services.general import log
 

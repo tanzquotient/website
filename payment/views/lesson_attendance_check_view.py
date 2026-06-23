@@ -1,21 +1,21 @@
 from dataclasses import dataclass
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView
 
 from courses.models import (
+    Attendance,
+    AttendanceState,
+    LeadFollow,
     LessonOccurrence,
     Subscribe,
     SubscribeState,
-    AttendanceState,
-    Attendance,
-    LeadFollow,
 )
 from payment.views import TeacherOfCourseOnly
 

@@ -5,7 +5,7 @@ import pytz
 from django import template
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db.models import QuerySet, Q, Count
+from django.db.models import Count, Q, QuerySet
 from django.http import HttpRequest
 from django.template.defaultfilters import date
 from django.utils import timezone
@@ -14,22 +14,22 @@ from django.utils.translation import gettext_lazy as _
 import courses.utils as utils
 from courses.cms_plugins import MyNextLessonsPlugin
 from courses.models import (
-    Weekday,
-    OfferingType,
-    Course,
-    Subscribe,
-    SubscribeState,
-    LeadFollow,
-    MatchingState,
-    RejectionReason,
-    LessonOccurrence,
     Attendance,
+    Course,
+    LeadFollow,
+    LessonOccurrence,
+    MatchingState,
+    OfferingType,
+    RejectionReason,
     Room,
     RoomAccessCode,
+    Subscribe,
+    SubscribeState,
     Voucher,
+    Weekday,
 )
 from courses.services import get_offerings_by_year
-from survey.models import SurveyInstance, Answer
+from survey.models import Answer, SurveyInstance
 from survey.models.types import QuestionType
 
 register = template.Library()

@@ -2,15 +2,15 @@ import logging
 from typing import Iterable, Optional
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.db import transaction
+from django.http import HttpResponse
+from post_office.models import EmailTemplate
 
 from courses.models import Course, Offering
-from utils import export
-from survey.models import Survey, SurveyInstance
 from email_system.services import send_all_emails
-from post_office.models import EmailTemplate
+from survey.models import Survey, SurveyInstance
 from tq_website import settings
+from utils import export
 
 log = logging.getLogger("tq")
 

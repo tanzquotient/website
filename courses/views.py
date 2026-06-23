@@ -11,17 +11,18 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.syndication.views import add_domain
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch
 from django.db.models.functions import TruncDate
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
-from django.utils.translation import gettext_lazy as _, get_language
-from django.core.cache import cache
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic.edit import FormView
@@ -33,20 +34,21 @@ from courses.utils import find_duplicate_users, merge_duplicate_users
 from tq_website import settings
 from utils.plots import plot_figure
 from utils.tables.table_view_or_export import table_view_or_export
+
 from . import figures, services
 from .forms.subscribe_form import SubscribeForm
 from .models import (
     Course,
     IrregularLesson,
+    LessonOccurrence,
+    MatchingState,
     Offering,
     OfferingType,
     RegularLessonException,
+    RejectionReason,
     Style,
     Subscribe,
-    RejectionReason,
-    MatchingState,
     UserProfile,
-    LessonOccurrence,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter

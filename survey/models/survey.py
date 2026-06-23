@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.db.models import TextField, CharField, BooleanField
+from django.db.models import BooleanField, CharField, TextField
 from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 

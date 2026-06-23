@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from courses.models import *
 
 # Create your tests here.

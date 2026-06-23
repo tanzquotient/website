@@ -1,9 +1,10 @@
 from django import template
 from django.contrib.auth.models import User
 
-from courses.models import Offering, Course
-from ..models import Question, Survey, Answer
-from ..utils import get_plot_for_question, get_free_form_answers_for_question
+from courses.models import Course, Offering
+
+from ..models import Answer, Question, Survey
+from ..utils import get_free_form_answers_for_question, get_plot_for_question
 
 register = template.Library()
 

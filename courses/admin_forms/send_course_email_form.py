@@ -3,9 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from djangocms_text.widgets import TextEditorWidget
 from post_office.models import EmailTemplate
 
-
-from survey.models import Survey
 from courses.models.choices import SubscribeState
+from survey.models import Survey
 
 
 class SendCourseEmailForm(forms.Form):

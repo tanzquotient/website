@@ -1,19 +1,20 @@
-from django.db.models.signals import post_save, post_delete
 from django.db.models import Q
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+
 from courses.models import (
-    RegularLesson,
-    IrregularLesson,
     Course,
-    RegularLessonException,
+    IrregularLesson,
+    LessonDetails,
+    LessonOccurrence,
+    LessonOccurrenceTeach,
     Offering,
     Period,
     PeriodCancellation,
-    LessonOccurrenceTeach,
+    RegularLesson,
+    RegularLessonException,
     RoomCancellation,
-    LessonDetails,
     Teach,
-    LessonOccurrence,
 )
 from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 

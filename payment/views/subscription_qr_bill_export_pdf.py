@@ -1,6 +1,6 @@
 from tempfile import TemporaryFile
 
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 
 from courses.models import Subscribe

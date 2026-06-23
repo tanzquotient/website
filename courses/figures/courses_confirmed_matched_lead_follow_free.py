@@ -1,8 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, LeadFollow
-from utils.plots import stacked_bar_chart, DataSeries
+from courses.models import LeadFollow, Offering
+from utils.plots import DataSeries, stacked_bar_chart
 
 
 def courses_confirmed_matched_lead_follow_free(offering: Offering) -> Figure:

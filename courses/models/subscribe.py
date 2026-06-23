@@ -8,29 +8,30 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import (
-    Model,
-    ForeignKey,
     PROTECT,
-    TextField,
+    BooleanField,
     CharField,
     DateTimeField,
     DecimalField,
-    BooleanField,
+    ForeignKey,
+    Model,
+    TextField,
+    UniqueConstraint,
 )
-from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions as reversion
 from reversion.models import Version
 
 from courses import managers
 from utils import CodeGenerator
+
 from . import (
-    MatchingState,
-    SubscribeState,
-    PaymentMethod,
     LeadFollow,
+    MatchingState,
     Offering,
+    PaymentMethod,
     PriceReduction,
+    SubscribeState,
 )
 
 

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models import OneToOneField, CASCADE, Model
+from django.db.models import CASCADE, Model, OneToOneField
 
 
 class Skill(Model):

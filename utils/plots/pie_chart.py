@@ -1,6 +1,6 @@
 from typing import Any
 
-from plotly.graph_objs import Figure, Pie, Layout
+from plotly.graph_objs import Figure, Layout, Pie
 
 
 def pie_chart(values: list[Any], labels: list[Any]) -> Figure:

@@ -1,8 +1,9 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 
-from courses.models import Offering, Course
+from courses.models import Course, Offering
+
 from ..models import Survey
 from ..services import export_surveys
 

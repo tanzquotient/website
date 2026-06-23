@@ -1,18 +1,19 @@
 from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import (
-    Model,
-    DateTimeField,
-    BooleanField,
-    ForeignKey,
-    CharField,
     PROTECT,
     SET_NULL,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    Model,
 )
 from django.urls import reverse
-from post_office.models import EmailTemplate
 from django.utils import timezone
+from post_office.models import EmailTemplate
 
 from utils import CodeGenerator
 

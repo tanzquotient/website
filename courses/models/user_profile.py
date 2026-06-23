@@ -1,20 +1,26 @@
 import uuid
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Optional, Iterable
+from typing import Iterable, Optional
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db.models import CASCADE, SET_NULL, PROTECT
 from django.db.models import (
-    Model,
-    IntegerField,
+    CASCADE,
+    PROTECT,
+    SET_NULL,
     BooleanField,
+    CharField,
     DateField,
     DecimalField,
+    DurationField,
+    ExpressionWrapper,
+    F,
+    IntegerField,
+    Model,
     OneToOneField,
-    CharField,
+    Sum,
 )
 from django.dispatch import receiver
 from django.utils import timezone
@@ -23,20 +29,20 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.data import COUNTRIES
 from django_resized import ResizedImageField
 from djangocms_text.fields import HTMLField
-from django.db.models import F, ExpressionWrapper, DurationField, Sum
 
 from courses import managers
+
 from . import (
     Address,
     BankAccount,
-    StudentStatus,
+    Course,
+    CourseType,
+    LessonOccurrence,
     Residence,
+    StudentStatus,
     Subscribe,
     SubscribeState,
-    CourseType,
-    Course,
     Teach,
-    LessonOccurrence,
 )
 
 

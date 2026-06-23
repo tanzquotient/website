@@ -2,8 +2,8 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 
-from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
 from . import OfferingType

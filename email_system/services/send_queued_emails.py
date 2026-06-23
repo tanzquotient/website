@@ -1,10 +1,10 @@
 import logging
 from time import sleep
 
+from django.db import connection
 from post_office import mail
 from post_office.lockfile import FileLock, FileLocked, default_lockfile
 from post_office.settings import get_batch_size, get_log_level
-from django.db import connection
 
 from tq_website import settings
 

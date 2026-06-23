@@ -1,16 +1,15 @@
-from datetime import date, timedelta
 import logging
+from datetime import date, timedelta
 
 from django.contrib import messages
-from django.utils.translation import gettext as _
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from courses import models as models
-from courses.models import choices as choices
 from courses.emailcenter import send_teacher_welcome
-
-from tq_website import settings
+from courses.models import choices as choices
 from email_system.services import send_all_emails
+from tq_website import settings
 
 log = logging.getLogger("tq")
 

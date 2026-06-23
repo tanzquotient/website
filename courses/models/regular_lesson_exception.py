@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import CASCADE
 
-from courses.models import Weekday, Room
+from courses.models import Room, Weekday
 
 
 class RegularLessonException(models.Model):

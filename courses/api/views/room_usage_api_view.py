@@ -1,17 +1,17 @@
 from datetime import datetime, time, timedelta
 
+from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.dateparse import parse_datetime, parse_date
+from django.utils.dateparse import parse_date, parse_datetime
+from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
-from rest_framework.permissions import BasePermission
 
 from courses.models import LessonOccurrence, Room
 from events.models import Event
-from django.db.models import Q
-from django.urls import reverse
 
 
 class RoomUsageApiView(APIView):

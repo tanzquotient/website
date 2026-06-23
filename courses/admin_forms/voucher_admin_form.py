@@ -2,8 +2,8 @@ from django.forms import ModelForm
 
 from courses.models import Voucher
 from courses.utils import (
-    validate_amount_and_percentage,
     validate_amount,
+    validate_amount_and_percentage,
     validate_percentage,
 )
 

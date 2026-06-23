@@ -1,13 +1,13 @@
 from typing import Collection
 
 from courses.models import (
-    LessonOccurrence,
+    Attendance,
     AttendanceState,
-    LeadFollow,
     Course,
+    LeadFollow,
+    LessonOccurrence,
     Subscribe,
     SubscribeState,
-    Attendance,
 )
 
 

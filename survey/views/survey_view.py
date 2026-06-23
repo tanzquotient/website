@@ -6,10 +6,10 @@ from typing import Optional
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from ..models import Survey, Answer, SurveyInstance
-from ..services import get_or_create_survey_instance
 from tq_website import settings
 
+from ..models import Answer, Survey, SurveyInstance
+from ..services import get_or_create_survey_instance
 
 log = logging.getLogger("tq")
 

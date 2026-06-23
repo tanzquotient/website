@@ -13,7 +13,6 @@ from djangocms_text.fields import HTMLField
 
 import courses.models.voucher
 
-
 # Functions from the following migrations need manual copying.
 # Move them and any dependencies into this file, then update the
 # RunPython operations to refer to the local versions:

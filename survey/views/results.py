@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, render
 
-from courses.models import Offering, Course
-from .changed_answers import show_or_hide_answer_on_post
+from courses.models import Course, Offering
+
 from ..models import Survey
+from .changed_answers import show_or_hide_answer_on_post
 
 
 @login_required

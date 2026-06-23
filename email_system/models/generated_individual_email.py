@@ -1,7 +1,8 @@
-from django.db.models import SET_NULL, PROTECT, ForeignKey, OneToOneField, Model
-from post_office.models import Email
-from . import GroupEmail
+from django.db.models import PROTECT, SET_NULL, ForeignKey, Model, OneToOneField
 from django.utils.translation import gettext_lazy as _
+from post_office.models import Email
+
+from . import GroupEmail
 
 
 class GeneratedIndividualEmail(Model):

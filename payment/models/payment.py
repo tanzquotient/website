@@ -1,9 +1,9 @@
 from django.db import models
 
-from .choices import *
-from . import FinanceFile
-
 from courses.models import Subscribe
+
+from . import FinanceFile
+from .choices import *
 
 
 class Payment(models.Model):

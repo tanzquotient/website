@@ -9,7 +9,7 @@ from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
-from ..models import SubscribeState, LessonOccurrence, AttendanceState
+from ..models import AttendanceState, LessonOccurrence, SubscribeState
 from ..utils import change_attendance_window_open
 
 

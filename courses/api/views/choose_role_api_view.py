@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
-from ..serializers import ChooseRoleSerializer
 from ...models import Course, LeadFollow, Subscribe, SubscribeState
+from ..serializers import ChooseRoleSerializer
 
 
 class ChooseRoleApiView(APIView):

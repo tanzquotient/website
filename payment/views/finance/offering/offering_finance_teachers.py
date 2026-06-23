@@ -1,11 +1,12 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView
-from django.http import HttpRequest, HttpResponse
-from django.db.models import Q
 import json
 
-from courses.models import Offering, Course, LessonOccurrenceTeach
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import Q
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
+
+from courses.models import Course, LessonOccurrenceTeach, Offering
 
 
 class OfferingFinanceTeachers(PermissionRequiredMixin, TemplateView):

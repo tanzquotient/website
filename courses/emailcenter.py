@@ -1,6 +1,6 @@
 import logging
-from typing import Optional
 from tempfile import TemporaryFile
+from typing import Optional
 
 from django.conf import settings
 from django.urls import reverse
@@ -8,10 +8,10 @@ from django.utils.translation import gettext_lazy as _
 from post_office.models import Email
 
 import courses.models
-from courses.models import Subscribe, Teach, Course, SubscribeState
+from courses.models import Course, Subscribe, SubscribeState, Teach
 from email_system.services import send_email
-from payment.utils import create_qrbill_for_subscription, to_pdf
 from payment import payment_processor
+from payment.utils import create_qrbill_for_subscription, to_pdf
 
 log = logging.getLogger("tq")
 

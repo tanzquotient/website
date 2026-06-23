@@ -4,13 +4,14 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from parler.admin import (
     TranslatableAdmin,
-    TranslatableTabularInline,
     TranslatableStackedInline,
+    TranslatableTabularInline,
 )
 from reversion.admin import VersionAdmin
 
-from courses.filters import SubscribeOfferingListFilter, SubscribeCourseListFilter
+from courses.filters import SubscribeCourseListFilter, SubscribeOfferingListFilter
 from survey.models import *
+
 from .admin_actions import *
 
 

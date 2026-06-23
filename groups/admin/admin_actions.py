@@ -1,5 +1,5 @@
-from groups.services import update_groups as service_update_groups
 from groups.services import duplicate_groups as service_duplicate_groups
+from groups.services import update_groups as service_update_groups
 
 
 def update_groups(admin, request, queryset):

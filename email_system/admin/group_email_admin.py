@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.utils import timezone
 from parler.admin import TranslatableAdmin
+from post_office.models import STATUS as EmailStatus
 
 from email_system.admin.admin_actions import (
     copy_emails_admin_action,
 )
 from email_system.models import GroupEmail
-from post_office.models import STATUS as EmailStatus
 
 
 @admin.register(GroupEmail)

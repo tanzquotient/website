@@ -8,7 +8,7 @@ from xml.etree import ElementTree as ET
 from django.db import DatabaseError
 
 from payment.models import FinanceFile, Payment
-from payment.models.choices import CreditDebit, State, FinanceFileType
+from payment.models.choices import CreditDebit, FinanceFileType, State
 
 log = logging.getLogger("payment")
 
