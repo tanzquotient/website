@@ -157,7 +157,9 @@ class Voucher(Model):
                     reversion.set_comment(comment)
 
             if reduction_amount > 0:
-                locked_subscription.apply_price_reduction(reduction_amount, locked_voucher, user)
+                locked_subscription.apply_price_reduction(
+                    reduction_amount, locked_voucher, user
+                )
 
             locked_voucher.mark_as_used(
                 locked_subscription,

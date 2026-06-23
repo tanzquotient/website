@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("survey", "0005_survey_instance_default_expiration_date"),
     ]

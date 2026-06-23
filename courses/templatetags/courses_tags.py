@@ -297,9 +297,11 @@ def get_vouchers_for_user(user: User):
         return Voucher.objects.none()
 
     today = dt.date.today()
-    return Voucher.objects.filter(sent_to=user, used=False).filter(
-        Q(expires__isnull=True) | Q(expires__gte=today)
-    ).order_by("expires")
+    return (
+        Voucher.objects.filter(sent_to=user, used=False)
+        .filter(Q(expires__isnull=True) | Q(expires__gte=today))
+        .order_by("expires")
+    )
 
 
 @register.simple_tag
@@ -382,7 +384,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
     composition.append(
         _("One couple")
         if n_couples == 1
-        else f"{n_couples} {_('couples')}" if n_couples > 0 else None
+        else f"{n_couples} {_('couples')}"
+        if n_couples > 0
+        else None
     )
 
     # individuals
@@ -392,7 +396,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual leader")
                 if n == 1
-                else f"{n} {_('individual leaders')}" if n > 0 else None
+                else f"{n} {_('individual leaders')}"
+                if n > 0
+                else None
             ),
         ),
         (
@@ -400,7 +406,9 @@ def get_waiting_list_composition(course: Course) -> list | None:
             lambda n: (
                 _("One individual follower")
                 if n == 1
-                else f"{n} {_('individual followers')}" if n > 0 else None
+                else f"{n} {_('individual followers')}"
+                if n > 0
+                else None
             ),
         ),
         (

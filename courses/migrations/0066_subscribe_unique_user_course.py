@@ -5,15 +5,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0065_roomaccesscode'),
+        ("courses", "0065_roomaccesscode"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='subscribe',
-            constraint=models.UniqueConstraint(fields=('user', 'course'), name='unique_user_course'),
+            model_name="subscribe",
+            constraint=models.UniqueConstraint(
+                fields=("user", "course"), name="unique_user_course"
+            ),
         ),
     ]

@@ -13,7 +13,13 @@ from post_office.models import STATUS as EmailStatus
 class GroupEmailAdmin(TranslatableAdmin):
     model = GroupEmail
 
-    list_display = ["subject", "target_group", "schedule_send", "dispatched_at", "status"]
+    list_display = [
+        "subject",
+        "target_group",
+        "schedule_send",
+        "dispatched_at",
+        "status",
+    ]
     list_filter = ["target_group"]
     search_fields = ["target_group__name"]
     actions = [copy_emails_admin_action]

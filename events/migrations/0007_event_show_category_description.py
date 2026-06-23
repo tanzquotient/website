@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('events', '0006_eventregistrationschedule'),
+        ("events", "0006_eventregistrationschedule"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='show_category_description',
-            field=models.BooleanField(default=True, help_text='If the category description should be shown on the event detail page.'),
+            model_name="event",
+            name="show_category_description",
+            field=models.BooleanField(
+                default=True,
+                help_text="If the category description should be shown on the event detail page.",
+            ),
         ),
     ]

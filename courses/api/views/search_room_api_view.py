@@ -11,13 +11,13 @@ class SearchRoomApiView(APIView):
         """Allow only users who have both `courses.view_room` and `courses.view_course`."""
 
         def has_permission(self, request, view):
-            user = getattr(request, 'user', None)
+            user = getattr(request, "user", None)
             if not user or not user.is_authenticated:
                 return False
             return (
-                user.has_perm('courses.view_room')
-                and user.has_perm('courses.view_course')
-                and user.has_perm('events.view_event')
+                user.has_perm("courses.view_room")
+                and user.has_perm("courses.view_course")
+                and user.has_perm("events.view_event")
             )
 
     permission_classes = [_CanViewRoomsAndCourses]

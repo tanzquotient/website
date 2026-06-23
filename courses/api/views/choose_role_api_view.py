@@ -10,7 +10,6 @@ from ...models import Course, LeadFollow, Subscribe, SubscribeState
 
 
 class ChooseRoleApiView(APIView):
-
     def post(self, request: Request) -> Response:
         serializer = ChooseRoleSerializer(data=request.data)
         if not serializer.is_valid():

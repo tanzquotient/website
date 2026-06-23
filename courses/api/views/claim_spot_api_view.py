@@ -20,7 +20,6 @@ from ...utils.skill import is_eligible_for_lesson
 
 
 class ClaimSpotApiView(APIView):
-
     @transaction.atomic
     def post(self, request: Request) -> Response:
         serializer = ClaimSpotSerializer(data=request.data)

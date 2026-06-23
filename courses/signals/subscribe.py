@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from courses.models import Subscribe
 from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 
+
 @receiver(post_save, sender=Subscribe)
 @receiver(post_delete, sender=Subscribe)
 def trigger_calendar_cache_delete_from_subscribe(sender, instance: Subscribe, **kwargs):

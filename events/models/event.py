@@ -135,7 +135,7 @@ class Event(TranslatableModel):
             if self.time_from and self.time_to:
                 return f"{date_from_formatted}, {time_from_formatted} - {time_to_formatted}"
             if self.time_from:
-                return f'{date_from_formatted}, {_("from")} {time_from_formatted}'
+                return f"{date_from_formatted}, {_('from')} {time_from_formatted}"
             return date_from_formatted
 
         if self.time_from and self.time_to:

@@ -54,9 +54,8 @@ def send_presence_reminder() -> None:
     courses_yesterday = []
     courses_last_week = []
 
-    course_qs = (
-        models.Course.objects.exclude(cancelled=True)
-        .exclude(subscription_type=choices.CourseSubscriptionType.EXTERNAL)
+    course_qs = models.Course.objects.exclude(cancelled=True).exclude(
+        subscription_type=choices.CourseSubscriptionType.EXTERNAL
     )
     for course in course_qs.iterator(chunk_size=200):
         last_lesson = course.get_last_lesson_date()

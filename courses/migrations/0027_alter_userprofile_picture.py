@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0026_alter_offering_name_alter_offeringtranslation_title"),
     ]

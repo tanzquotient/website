@@ -72,7 +72,9 @@ def export_surveys(
                 (
                     "anonymized"
                     if anonymize
-                    else f"{instance.user.email}" if instance.user else ""
+                    else f"{instance.user.email}"
+                    if instance.user
+                    else ""
                 ),
                 course_name,
             ]
@@ -134,7 +136,6 @@ def send_course_surveys() -> None:
                 cancelled=False,
             )
             for course in courses:
-
                 # check if the course is over
                 if not course.is_over():
                     continue
@@ -146,12 +147,9 @@ def send_course_surveys() -> None:
                     ).values_list("user_id", flat=True)
                 )
 
-                recipients = (
-                    User.objects.filter(
-                        pk__in=course.participatory().values_list("user_id", flat=True)
-                    )
-                    .exclude(pk__in=already_invited_user_ids)
-                )
+                recipients = User.objects.filter(
+                    pk__in=course.participatory().values_list("user_id", flat=True)
+                ).exclude(pk__in=already_invited_user_ids)
 
                 for recipient in recipients.iterator(chunk_size=200):
                     # create a survey instance

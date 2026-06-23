@@ -135,7 +135,6 @@ def email_vouchers(data: dict, vouchers: list[Voucher]):
     emails = []
 
     for voucher in vouchers:
-
         email_context = {
             "first_name": voucher.sent_to.first_name,
             "last_name": voucher.sent_to.last_name,

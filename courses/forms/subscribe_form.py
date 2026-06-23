@@ -58,7 +58,6 @@ class SubscribeForm(forms.Form):
 
             # Special validation for couple subscription to couple course
             if single_or_couple == SingleCouple.COUPLE:
-
                 if not partner_email:
                     error = ValidationError(
                         message=_(

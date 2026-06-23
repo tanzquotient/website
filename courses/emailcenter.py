@@ -18,6 +18,7 @@ log = logging.getLogger("tq")
 
 def _get_role_context(subscription: Subscribe) -> dict:
     from django.utils import translation as django_translation
+
     with django_translation.override("de"):
         role_de = subscription.get_assigned_role_str()
     with django_translation.override("en"):
@@ -28,6 +29,7 @@ def _get_role_context(subscription: Subscribe) -> dict:
 # Note: the email templates used for rendering are stored in the database.
 # For convenience, the templates are also stored in git in the email_templates/ directory.
 # See the email_templates/README.md for details.
+
 
 def _course_url_from_subscription(subscription: Subscribe) -> str:
     current_site = "https://" + settings.DEPLOYMENT_DOMAIN
@@ -295,7 +297,7 @@ def create_partner_info(subscription: Subscribe) -> str:
         if user.profile.phone_number:
             lines.append(user.profile.phone_number)
     else:
-            lines.append(user.profile.get_first_name_and_initials_last_name())
+        lines.append(user.profile.get_first_name_and_initials_last_name())
 
     return "\n".join(lines)
 
@@ -306,9 +308,9 @@ def create_course_info(course: Course) -> str:
         s += f"{course.room}\n"
     s += f"{course.get_period()}\n"
     if course.format_cancellations():
-        s += f'{_("Cancellations")}: {course.format_cancellations()}\n'
+        s += f"{_('Cancellations')}: {course.format_cancellations()}\n"
     if course.format_prices():
-        s += f'{_("Costs")}: {course.format_prices()}\n'
+        s += f"{_('Costs')}: {course.format_prices()}\n"
     return s.strip("\n")
 
 

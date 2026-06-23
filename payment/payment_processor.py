@@ -101,7 +101,9 @@ class PaymentProcessor:
                     continue
 
                 # Prevent duplicate (Payment,Subscribe) pairs in SubscriptionPayment
-                if SubscriptionPayment.objects.filter(payment=payment, subscription=matched_subscription).exists():
+                if SubscriptionPayment.objects.filter(
+                    payment=payment, subscription=matched_subscription
+                ).exists():
                     log.warning(
                         f"Attempted insertion of duplicate ({payment},{matched_subscription}) pair in SubscriptionPayment."
                     )

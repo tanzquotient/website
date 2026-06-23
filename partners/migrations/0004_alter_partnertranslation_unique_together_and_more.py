@@ -32,7 +32,6 @@ END $$;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("partners", "0003_resize_partner_image"),
     ]

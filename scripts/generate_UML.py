@@ -5,6 +5,7 @@ This script is a wrapper for the pyreverse command line tool. pyreverse is quite
 limited with respect to output folder and package selection. This script
 overcomes these limitations."
 """
+
 import os
 import argparse
 import subprocess

@@ -3,13 +3,13 @@ from django.contrib.auth import get_user_model
 
 
 class Command(BaseCommand):
-    help = 'Grant super user permissions to a user specified by their email'
+    help = "Grant super user permissions to a user specified by their email"
 
     def add_arguments(self, parser):
-        parser.add_argument('email', type=str, help='Email of the user')
+        parser.add_argument("email", type=str, help="Email of the user")
 
     def handle(self, *args, **options):
-        email = options['email']
+        email = options["email"]
         User = get_user_model()
 
         try:
@@ -17,6 +17,12 @@ class Command(BaseCommand):
             user.is_superuser = True
             user.is_staff = True
             user.save()
-            self.stdout.write(self.style.SUCCESS(f"Superuser permissions granted to user with email: {email}"))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Superuser permissions granted to user with email: {email}"
+                )
+            )
         except User.DoesNotExist:
-            self.stdout.write(self.style.ERROR(f"User with email {email} does not exist"))
+            self.stdout.write(
+                self.style.ERROR(f"User with email {email} does not exist")
+            )

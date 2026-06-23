@@ -32,7 +32,7 @@ class QuestionGroupInline(TranslatableStackedInline):
             mark_safe(
                 f"""
         <div><strong><a href="{url}" target="_blank">&#x1F589; Edit Questions</a></strong></div>
-        <div><strong>Currently:</strong> {', '.join([q.text for q in instance.question_set.all()]) or "---"}</div>
+        <div><strong>Currently:</strong> {", ".join([q.text for q in instance.question_set.all()]) or "---"}</div>
         """
             )
             if instance.pk

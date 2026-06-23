@@ -24,25 +24,36 @@ def revert_copy_addresses(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0068_course_partner_required_at_signup'),
+        ("courses", "0068_course_partner_required_at_signup"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='address',
-            options={'verbose_name_plural': 'Addresses'},
+            name="address",
+            options={"verbose_name_plural": "Addresses"},
         ),
         migrations.AddField(
-            model_name='room',
-            name='address_new',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='rooms', to='courses.address'),
+            model_name="room",
+            name="address_new",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="rooms",
+                to="courses.address",
+            ),
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='address_new',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='user_profiles', to='courses.address'),
+            model_name="userprofile",
+            name="address_new",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="user_profiles",
+                to="courses.address",
+            ),
         ),
         migrations.RunPython(copy_addresses, revert_copy_addresses),
     ]

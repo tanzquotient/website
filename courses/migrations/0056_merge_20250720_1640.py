@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0054_switchdata_userprofile_student_validity_and_more"),
         ("courses", "0055_alter_attendance_options"),

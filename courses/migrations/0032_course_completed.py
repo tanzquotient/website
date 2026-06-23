@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0030_remove_teach_hourly_wage_lessonoccurrence_and_more"),
     ]

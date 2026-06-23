@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0067_roomaccesscode_roomaccesscode_valid_until_gte_valid_from'),
+        ("courses", "0067_roomaccesscode_roomaccesscode_valid_until_gte_valid_from"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='partner_required_at_signup',
-            field=models.BooleanField(default=False, help_text='If enabled, users may only sign up with a partner.'),
+            model_name="course",
+            name="partner_required_at_signup",
+            field=models.BooleanField(
+                default=False,
+                help_text="If enabled, users may only sign up with a partner.",
+            ),
         ),
     ]

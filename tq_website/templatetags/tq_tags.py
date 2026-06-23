@@ -1,4 +1,3 @@
-
 import shortuuid
 from django import template
 from django.urls import reverse

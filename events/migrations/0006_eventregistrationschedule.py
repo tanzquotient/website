@@ -5,20 +5,55 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('events', '0005_resize_event_image'),
+        ("events", "0005_resize_event_image"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EventRegistrationSchedule',
+            name="EventRegistrationSchedule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('action', models.CharField(choices=[('enable', 'Enable registration'), ('disable', 'Disable registration')], help_text="Choose 'Enable registration' to open registrations or 'Disable registration' to close them at the scheduled time.", max_length=10)),
-                ('run_at', models.DateTimeField(help_text='Date and time when the chosen action will be executed (timezone-aware).')),
-                ('executed', models.BooleanField(default=False, help_text='Automatically marked when the scheduled task executed successfully.')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='registration_schedules', to='events.event')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "action",
+                    models.CharField(
+                        choices=[
+                            ("enable", "Enable registration"),
+                            ("disable", "Disable registration"),
+                        ],
+                        help_text="Choose 'Enable registration' to open registrations or 'Disable registration' to close them at the scheduled time.",
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "run_at",
+                    models.DateTimeField(
+                        help_text="Date and time when the chosen action will be executed (timezone-aware)."
+                    ),
+                ),
+                (
+                    "executed",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Automatically marked when the scheduled task executed successfully.",
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="registration_schedules",
+                        to="events.event",
+                    ),
+                ),
             ],
         ),
     ]

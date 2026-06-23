@@ -8,7 +8,6 @@ def migrate_opens_soon(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0075_alter_coursetranslation_unique_together_and_more"),
     ]

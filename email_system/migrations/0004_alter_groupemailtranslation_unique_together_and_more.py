@@ -34,7 +34,6 @@ END $$;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("email_system", "0003_groupemail_schedule_send"),
     ]

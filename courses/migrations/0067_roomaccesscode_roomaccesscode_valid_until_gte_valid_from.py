@@ -4,14 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0066_subscribe_unique_user_course'),
+        ("courses", "0066_subscribe_unique_user_course"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='roomaccesscode',
-            constraint=models.CheckConstraint(condition=models.Q(('valid_until__gte', models.F('valid_from'))), name='roomaccesscode_valid_until_gte_valid_from', violation_error_message='"Valid from" cannot be after "valid until".'),
+            model_name="roomaccesscode",
+            constraint=models.CheckConstraint(
+                condition=models.Q(("valid_until__gte", models.F("valid_from"))),
+                name="roomaccesscode_valid_until_gte_valid_from",
+                violation_error_message='"Valid from" cannot be after "valid until".',
+            ),
         ),
     ]

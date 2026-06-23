@@ -413,17 +413,18 @@ def offering_time_chart_dict(offering: Offering) -> dict:
     traces = []
     for c in offering.course_set.reverse():
         rows = (
-            c.subscriptions
-            .annotate(d=TruncDate("date"))
+            c.subscriptions.annotate(d=TruncDate("date"))
             .values("d")
             .annotate(count=Count("id"))
             .order_by("d")
         )
-        traces.append({
-            "name": c.name,
-            "x": [str(r["d"]) for r in rows],
-            "y": [r["count"] for r in rows],
-        })
+        traces.append(
+            {
+                "name": c.name,
+                "x": [str(r["d"]) for r in rows],
+                "y": [r["count"] for r in rows],
+            }
+        )
 
     daily_counts = (
         Subscribe.objects.filter(course__offering_id=offering.id)

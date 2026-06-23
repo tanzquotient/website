@@ -28,7 +28,7 @@ def offering_finance_teachers(
     :param offerings: offerings to include in summary
     :return: response or ``None`` if format not supported
     """
-    export_name = f'Salaries - {(offerings[0].name if len(offerings) == 1 else "Multiple Offerings")}'
+    export_name = f"Salaries - {(offerings[0].name if len(offerings) == 1 else 'Multiple Offerings')}"
 
     courses = _courses(offerings, use_html=use_html)
     teachings_tentative = _teachings(offerings, use_html=use_html, only_completed=False)

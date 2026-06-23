@@ -32,7 +32,6 @@ END $$;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("faq", "0002_squashed"),
     ]

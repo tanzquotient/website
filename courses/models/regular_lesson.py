@@ -78,5 +78,5 @@ class RegularLesson(models.Model):
     def __str__(self) -> str:
         return (
             f"{Weekday.WEEKDAYS_TRANSLATIONS[self.weekday]}, "
-            f'{self.time_from.strftime("%H:%M")} - {self.time_to.strftime("%H:%M")}'
+            f"{self.time_from.strftime('%H:%M')} - {self.time_to.strftime('%H:%M')}"
         )

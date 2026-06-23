@@ -4,22 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0072_alter_room_address_alter_userprofile_address'),
+        ("courses", "0072_alter_room_address_alter_userprofile_address"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='subscribe',
-            name='personal_data_sharing',
-            field=models.BooleanField(default=True, help_text='If True, the subscriber agreed to share personal data at the time of this subscription.'),
+            model_name="subscribe",
+            name="personal_data_sharing",
+            field=models.BooleanField(
+                default=True,
+                help_text="If True, the subscriber agreed to share personal data at the time of this subscription.",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='userprofile',
-            name='personal_data_sharing',
-            field=models.BooleanField(default=True, help_text='If True, the user agrees to share personal data with the partner in couple courses.'),
+            model_name="userprofile",
+            name="personal_data_sharing",
+            field=models.BooleanField(
+                default=True,
+                help_text="If True, the user agrees to share personal data with the partner in couple courses.",
+            ),
             preserve_default=False,
         ),
     ]

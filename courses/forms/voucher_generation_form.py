@@ -23,7 +23,9 @@ class VoucherGenerationForm(VoucherForm):
         queryset=User.objects.all(),
         required=False,
         widget=FilteredSelectMultiple("users", is_stacked=False),
-        help_text=_("If set, each voucher will be assigned to one recipient. Count must equal number of vouchers."),
+        help_text=_(
+            "If set, each voucher will be assigned to one recipient. Count must equal number of vouchers."
+        ),
     )
 
     def clean(self):
@@ -32,6 +34,8 @@ class VoucherGenerationForm(VoucherForm):
         n = cleaned_data.get("number_of_vouchers")
         if recipients and n is not None and len(recipients) != n:
             raise forms.ValidationError(
-                _(f"Number of recipients ({len(recipients)}) must match number of vouchers ({n}).")
+                _(
+                    f"Number of recipients ({len(recipients)}) must match number of vouchers ({n})."
+                )
             )
         return cleaned_data

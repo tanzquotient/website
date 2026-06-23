@@ -47,10 +47,10 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
             redirect_url = f"{base_url}?issued_when=today"
             if comment:
                 redirect_url += f"&q={comment}"
-            messages.info(request, (
-                "Filtering for generated vouchers, "
-                "based on issue date and comment."
-            ))
+            messages.info(
+                request,
+                ("Filtering for generated vouchers, based on issue date and comment."),
+            )
             return HttpResponseRedirect(redirect_url)
 
     if not form:

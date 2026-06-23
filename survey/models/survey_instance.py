@@ -48,7 +48,9 @@ class SurveyInstance(Model):
     )
     date = DateTimeField(blank=False, null=False, auto_now_add=True)
     last_update = DateTimeField(blank=True, null=True, auto_now=True)
-    url_expire_date = DateTimeField(blank=False, help_text="If left empty, will default to 90 days after creation.")
+    url_expire_date = DateTimeField(
+        blank=False, help_text="If left empty, will default to 90 days after creation."
+    )
     url_key = CharField(
         unique=True,
         default=CodeGenerator.short_uuid,
@@ -60,7 +62,9 @@ class SurveyInstance(Model):
 
     def save(self, *args, **kwargs):
         if not self.url_expire_date:
-            self.url_expire_date = (self.date or timezone.localdate()) + timedelta(days=90)
+            self.url_expire_date = (self.date or timezone.localdate()) + timedelta(
+                days=90
+            )
         super().save(*args, **kwargs)
 
     def has_answers(self) -> bool:

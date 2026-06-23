@@ -26,7 +26,6 @@ def get_data(offering: Offering):
     for course in offering.course_set.exclude(
         subscription_type=CourseSubscriptionType.EXTERNAL
     ).all():
-
         wages = sum(
             l.get_wage()
             for l in LessonOccurrenceTeach.objects.filter(

@@ -18,7 +18,6 @@ from ...utils import change_attendance_window_open
 
 
 class MyAttendanceApiView(APIView):
-
     def post(self, request: Request) -> Response:
         serializer = MyAttendanceSerializer(data=request.data)
         if not serializer.is_valid():

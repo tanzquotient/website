@@ -21,7 +21,7 @@ def send_queued_emails() -> None:
             batch_count = 0
             while True:
                 try:
-                    queued_emails = list(mail.get_queued()[:get_batch_size()])
+                    queued_emails = list(mail.get_queued()[: get_batch_size()])
                     mail.attach_templates(queued_emails)
                     if queued_emails:
                         total_sent, total_failed, total_requeued = mail._send_bulk(

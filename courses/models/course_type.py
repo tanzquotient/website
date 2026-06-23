@@ -55,7 +55,7 @@ class CourseType(TranslatableModel):
 
     def format_styles(self) -> str:
         return ", ".join(map(str, self.styles.all()))
-    
+
     def get_description(self) -> str:
         return TranslationUtils.get_text_with_language_fallback_or_empty(
             self, "description"

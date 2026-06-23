@@ -9,7 +9,6 @@ def resize(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("partners", "0002_alter_partner_image"),
     ]

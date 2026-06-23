@@ -210,17 +210,19 @@ class MissingTeacherInformationAlert(CMSPluginBase):
     allow_children = False
 
     fieldsets = (
-        (None, {
-            'fields': ('title', 'content', 'type'),
-            'description': _(
-                "Note: This alert will only be displayed if the user is a teacher and their profile has missing information."
-            ),
-        }),
+        (
+            None,
+            {
+                "fields": ("title", "content", "type"),
+                "description": _(
+                    "Note: This alert will only be displayed if the user is a teacher and their profile has missing information."
+                ),
+            },
+        ),
     )
 
-
     def render(self, context, instance, placeholder):
-        current_user = context['request'].user
+        current_user = context["request"].user
 
         if not current_user.is_anonymous and current_user.profile.missing_values():
             context.update(

@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0020_alter_voucher_comment"),
         ("courses", "0020_coursetranslation_information_for_participants"),

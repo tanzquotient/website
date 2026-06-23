@@ -5,20 +5,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0071_rename_address_new_room_address_and_more'),
+        ("courses", "0071_rename_address_new_room_address_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='room',
-            name='address',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='rooms', to='courses.address'),
+            model_name="room",
+            name="address",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="rooms",
+                to="courses.address",
+            ),
         ),
         migrations.AlterField(
-            model_name='userprofile',
-            name='address',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='user_profiles', to='courses.address'),
+            model_name="userprofile",
+            name="address",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="user_profiles",
+                to="courses.address",
+            ),
         ),
     ]

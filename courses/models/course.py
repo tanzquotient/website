@@ -315,22 +315,30 @@ class Course(TranslatableModel):
             return self.has_free_places()
 
         matched_subscribes_per_preference = (
-            len([s for s in course_subscriptions if s.is_active() and s.is_matched()]) / 2
+            len([s for s in course_subscriptions if s.is_active() and s.is_matched()])
+            / 2
         )
         single_subscribes_lead = len(
-            [s
-            for s in course_subscriptions
-            if s.is_admitted() and s.is_single_with_preference(LeadFollow.LEAD)]
+            [
+                s
+                for s in course_subscriptions
+                if s.is_admitted() and s.is_single_with_preference(LeadFollow.LEAD)
+            ]
         )
         single_subscribes_follow = len(
-            [s
-            for s in course_subscriptions
-            if s.is_admitted() and s.is_single_with_preference(LeadFollow.FOLLOW)]
+            [
+                s
+                for s in course_subscriptions
+                if s.is_admitted() and s.is_single_with_preference(LeadFollow.FOLLOW)
+            ]
         )
         single_subscribes_no_preference = len(
-            [s
-            for s in course_subscriptions
-            if s.is_admitted() and s.is_single_with_preference(LeadFollow.NO_PREFERENCE)]
+            [
+                s
+                for s in course_subscriptions
+                if s.is_admitted()
+                and s.is_single_with_preference(LeadFollow.NO_PREFERENCE)
+            ]
         )
         while single_subscribes_no_preference > 1 or (
             single_subscribes_no_preference > 0
@@ -394,9 +402,17 @@ class Course(TranslatableModel):
         # No maximum => free places is not defined
         if self.max_subscribers is None:
             return None
-        
-        admitted_subscriptions_count = len([s for s in self.subscriptions.all() if s.is_admitted()])
-        matched_waiting_list_count = len([s for s in self.subscriptions.all() if s.is_matched() and s.is_waiting_list()])
+
+        admitted_subscriptions_count = len(
+            [s for s in self.subscriptions.all() if s.is_admitted()]
+        )
+        matched_waiting_list_count = len(
+            [
+                s
+                for s in self.subscriptions.all()
+                if s.is_matched() and s.is_waiting_list()
+            ]
+        )
 
         total_count = (
             self.max_subscribers
@@ -898,7 +914,9 @@ class Course(TranslatableModel):
             period = self.get_period()
             return period.date_from <= cancelled_date <= period.date_to
 
-        return sorted([d for d in dates if is_applicable(d) and d not in irregular_dates])
+        return sorted(
+            [d for d in dates if is_applicable(d) and d not in irregular_dates]
+        )
 
     def format_cancellations(self) -> str:
         dates = [d.strftime("%d.%m.%Y") for d in self.get_cancellation_dates()]

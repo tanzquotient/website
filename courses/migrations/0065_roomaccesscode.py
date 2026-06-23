@@ -5,22 +5,62 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0064_remove_teach_welcomed'),
+        ("courses", "0064_remove_teach_welcomed"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RoomAccessCode',
+            name="RoomAccessCode",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('valid_from', models.DateField(help_text='From when the access code is valid (inclusive)')),
-                ('valid_until', models.DateField(help_text='Until when the access code is valid (inclusive)')),
-                ('code', models.CharField(max_length=1000)),
-                ('display_format', models.CharField(choices=[('plain', 'Plain'), ('qr', 'Qr Code')], max_length=5)),
-                ('visibility', models.CharField(choices=[('public', 'Public'), ('participants', 'Participants'), ('teachers', 'Teachers'), ('staff', 'Staff')], max_length=12)),
-                ('room', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='access_codes', to='courses.room')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "valid_from",
+                    models.DateField(
+                        help_text="From when the access code is valid (inclusive)"
+                    ),
+                ),
+                (
+                    "valid_until",
+                    models.DateField(
+                        help_text="Until when the access code is valid (inclusive)"
+                    ),
+                ),
+                ("code", models.CharField(max_length=1000)),
+                (
+                    "display_format",
+                    models.CharField(
+                        choices=[("plain", "Plain"), ("qr", "Qr Code")], max_length=5
+                    ),
+                ),
+                (
+                    "visibility",
+                    models.CharField(
+                        choices=[
+                            ("public", "Public"),
+                            ("participants", "Participants"),
+                            ("teachers", "Teachers"),
+                            ("staff", "Staff"),
+                        ],
+                        max_length=12,
+                    ),
+                ),
+                (
+                    "room",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="access_codes",
+                        to="courses.room",
+                    ),
+                ),
             ],
         ),
     ]

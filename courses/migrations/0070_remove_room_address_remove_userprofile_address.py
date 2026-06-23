@@ -4,18 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0069_alter_address_options_room_address_new_and_more'),
+        ("courses", "0069_alter_address_options_room_address_new_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='room',
-            name='address',
+            model_name="room",
+            name="address",
         ),
         migrations.RemoveField(
-            model_name='userprofile',
-            name='address',
+            model_name="userprofile",
+            name="address",
         ),
     ]

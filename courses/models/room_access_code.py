@@ -4,7 +4,6 @@ from django.db.models import Q, F
 
 
 class RoomAccessCode(models.Model):
-
     class DisplayFormat(models.TextChoices):
         PLAIN = "plain"
         QR_CODE = "qr"

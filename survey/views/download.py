@@ -1,4 +1,3 @@
-
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404

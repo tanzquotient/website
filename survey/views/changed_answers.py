@@ -20,7 +20,7 @@ def show_or_hide_answer_on_post(request: HttpRequest) -> None:
             with reversion.create_revision():
                 answer.hide_from_public_reviews = hide
                 answer.save()
-                
+
                 # delete all course reviews cache
                 if cache.__class__.__name__ == "RedisCache":
                     cache.delete_many(keys=cache.keys("*course_reviews*"))

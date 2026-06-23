@@ -15,7 +15,6 @@ def resize(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("survey", "0004_remove_surveyinstance_invitation_sent"),
     ]

@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0015_alter_rejection_reason'),
+        ("courses", "0015_alter_rejection_reason"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='voucher',
-            name='comment',
-            field=models.CharField(blank=True, help_text='Optional description of the purpose of the voucher.', max_length=100, null=True),
+            model_name="voucher",
+            name="comment",
+            field=models.CharField(
+                blank=True,
+                help_text="Optional description of the purpose of the voucher.",
+                max_length=100,
+                null=True,
+            ),
         ),
     ]

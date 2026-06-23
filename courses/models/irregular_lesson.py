@@ -68,7 +68,7 @@ class IrregularLesson(models.Model):
     def format_duration(self) -> str:
         return (
             f"{self.date}, "
-            f'{self.time_from.strftime("%H:%M")} - {self.time_to.strftime("%H:%M")}'
+            f"{self.time_from.strftime('%H:%M')} - {self.time_to.strftime('%H:%M')}"
         )
 
     def __str__(self) -> str:

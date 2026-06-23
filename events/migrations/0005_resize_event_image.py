@@ -11,7 +11,6 @@ def resize(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("events", "0004_alter_event_image_alter_eventcategory_image"),
     ]

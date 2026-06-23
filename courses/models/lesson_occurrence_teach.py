@@ -4,9 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
 class LessonOccurrenceTeach(models.Model):
-
     lesson_occurrence = models.ForeignKey(
         to="LessonOccurrence", on_delete=models.CASCADE
     )

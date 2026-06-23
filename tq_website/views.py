@@ -170,7 +170,9 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             email_addresses = EmailAddress.objects.filter(verified=True).filter(
                 email_query
             )
-            users_with_email = User.objects.filter(pk__in=list(set(email_addresses.values_list("user", flat=True)))).distinct()
+            users_with_email = User.objects.filter(
+                pk__in=list(set(email_addresses.values_list("user", flat=True)))
+            ).distinct()
             if users_with_email.count() == 1:
                 user = users_with_email.get()
                 profile = user.profile
@@ -182,9 +184,7 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
                     email=userinfo["email"],
                 )
                 profile = UserProfile.objects.create(user=user)
-                user.emailaddress_set.create(
-                    email=userinfo["email"], verified=True
-                )
+                user.emailaddress_set.create(email=userinfo["email"], verified=True)
             switch_data.user_profile = profile
 
     elif mode == "link":

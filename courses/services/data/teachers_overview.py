@@ -41,5 +41,5 @@ def get_teachers_overview_data() -> list[list]:
             ]
         )
 
-    sorted_rows = sorted(rows, key=lambda r: (r[-1]), reverse=True)
+    sorted_rows = sorted(rows, key=lambda r: r[-1], reverse=True)
     return [header] + sorted_rows

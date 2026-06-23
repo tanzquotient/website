@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0024_coursetypetranslation_information_for_participants"),
     ]
@@ -52,6 +51,5 @@ class Migration(migrations.Migration):
                 "unique_together": {("language_code", "master")},
             },
             bases=(parler.models.TranslatableModel, models.Model),
-
         ),
     ]

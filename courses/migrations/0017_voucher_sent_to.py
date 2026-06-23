@@ -6,16 +6,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('courses', '0016_voucher_comment'),
+        ("courses", "0016_voucher_comment"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='voucher',
-            name='sent_to',
-            field=models.ForeignKey(blank=True, help_text='User that the voucher was sent to.', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='voucher_send_to', to=settings.AUTH_USER_MODEL),
+            model_name="voucher",
+            name="sent_to",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="User that the voucher was sent to.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="voucher_send_to",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

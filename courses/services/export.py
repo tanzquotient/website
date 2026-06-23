@@ -122,9 +122,7 @@ def export_summary(export_format="csv", offerings=None):
     return export(export_format, title=filename, data=export_data)
 
 
-def export_teacher_payment_information(
-    export_format: str = "csv", offerings=None
-):
+def export_teacher_payment_information(export_format: str = "csv", offerings=None):
     if offerings is None:
         offerings = models.Offering.objects.all()
     from payment import services

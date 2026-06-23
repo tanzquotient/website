@@ -14,9 +14,7 @@ class ManagingCommitteePlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         users = (
-            User.objects.filter(
-                functions__isnull=False
-            )
+            User.objects.filter(functions__isnull=False)
             .distinct()
             .prefetch_related(
                 "profile",

@@ -219,9 +219,7 @@ def correct_matching_state_to_couple(modeladmin, request, queryset):
     )
 
 
-@admin.action(
-    description="Switch out partners (select 2 users to switch)"
-)
+@admin.action(description="Switch out partners (select 2 users to switch)")
 def switch_out_partner(modeladmin, request, queryset):
     if queryset.count() != 2:
         messages.error(
@@ -233,16 +231,24 @@ def switch_out_partner(modeladmin, request, queryset):
     confirmed_sub = None
     new_sub = None
     for s in queryset.select_related("course", "course__type"):
-        if s.state in (
-            SubscribeState.NEW,
-            SubscribeState.CONFIRMED,
-            SubscribeState.PAID,
-        ) and s.matching_state in MatchingState.MATCHED_STATES:
+        if (
+            s.state
+            in (
+                SubscribeState.NEW,
+                SubscribeState.CONFIRMED,
+                SubscribeState.PAID,
+            )
+            and s.matching_state in MatchingState.MATCHED_STATES
+        ):
             confirmed_sub = s
-        elif s.state in (
-            SubscribeState.NEW,
-            SubscribeState.WAITING_LIST,
-        ) and s.matching_state not in MatchingState.MATCHED_STATES:
+        elif (
+            s.state
+            in (
+                SubscribeState.NEW,
+                SubscribeState.WAITING_LIST,
+            )
+            and s.matching_state not in MatchingState.MATCHED_STATES
+        ):
             new_sub = s
 
     if not confirmed_sub or not new_sub:
@@ -356,11 +362,11 @@ def _build_voucher_email_preview(first_name, voucher_key, voucher_url):
     """Return (preview_html, None) with real values substituted, or None on error."""
     try:
         from post_office.models import EmailTemplate
+
         tmpl = EmailTemplate.objects.get(name="voucher")
         html = tmpl.html_content or ""
         return mark_safe(
-            html
-            .replace("{{ first_name }}", escape(first_name))
+            html.replace("{{ first_name }}", escape(first_name))
             .replace("{{ voucher_key }}", escape(voucher_key))
             .replace("{{ voucher_url }}", escape(voucher_url))
             .replace(
@@ -639,7 +645,9 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
     if queryset.count() == 1:
         voucher = queryset.first()
         response = HttpResponse(voucher.pdf_file.file, content_type="application/pdf")
-        response["Content-Disposition"] = f"attachment; filename=Voucher_{voucher.key}.pdf"
+        response["Content-Disposition"] = (
+            f"attachment; filename=Voucher_{voucher.key}.pdf"
+        )
         return response
 
     if "download" in request.POST:
@@ -650,9 +658,10 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
             spooled = tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
             with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
                 for voucher in queryset.iterator(chunk_size=50):
-                    with voucher.pdf_file.file.open("rb") as src, zip_file.open(
-                        f"Voucher_{voucher.key}.pdf", "w"
-                    ) as dst:
+                    with (
+                        voucher.pdf_file.file.open("rb") as src,
+                        zip_file.open(f"Voucher_{voucher.key}.pdf", "w") as dst,
+                    ):
                         shutil.copyfileobj(src, dst, length=64 * 1024)
             spooled.seek(0)
             response = FileResponse(spooled, content_type="application/zip")
@@ -678,8 +687,12 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
     form = DownloadVouchersForm(
         initial={"_selected_action": list(queryset.values_list("id", flat=True))}
     )
-    return render(request, "courses/auth/action_download_vouchers.html", {
-        "form": form,
-        "action": "download_vouchers",
-        "count": queryset.count(),
-    })
+    return render(
+        request,
+        "courses/auth/action_download_vouchers.html",
+        {
+            "form": form,
+            "action": "download_vouchers",
+            "count": queryset.count(),
+        },
+    )

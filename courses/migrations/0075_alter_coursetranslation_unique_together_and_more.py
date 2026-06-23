@@ -44,7 +44,6 @@ END $$;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0074_alter_userprofile_personal_data_sharing"),
     ]

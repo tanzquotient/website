@@ -34,7 +34,6 @@ END $$;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("events", "0007_event_show_category_description"),
     ]

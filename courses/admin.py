@@ -333,9 +333,7 @@ class CourseAdmin(TranslatableAdmin):
 
     def get_queryset(self, request):
         return (
-            super()
-            .get_queryset(request)
-            .prefetch_related("teaching__teacher__profile")
+            super().get_queryset(request).prefetch_related("teaching__teacher__profile")
         )
 
     @staticmethod

@@ -46,9 +46,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
         absent = [
             a.user for a in attendances if a.state in AttendanceState.ABSENT_STATES
         ]
-        present = [
-            a.user for a in attendances if a.state == AttendanceState.PRESENT
-        ]
+        present = [a.user for a in attendances if a.state == AttendanceState.PRESENT]
         replacements = [
             a.user for a in attendances if a.state == AttendanceState.REPLACEMENT
         ]
