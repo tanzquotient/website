@@ -31,7 +31,7 @@ dependencies = [
     "django-redis==7.0.0", # Redis cache and session backend for Django
     # Files and encoding
     "openpyxl==3.1.5", # For Microsoft Excel Files
-    "svglib==1.6.0", # Used for creating vouchers from SVG tremplate
+    "svglib==2.0.2", # Used for creating vouchers from SVG tremplate
     "reportlab==5.0.0", # For generating PDFs and graphics
     "pypdf>=4.0", # For merging multiple voucher PDFs into a single file
     "pyyaml==6.0.3", # Used for generating environment variable file
