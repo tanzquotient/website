@@ -487,7 +487,7 @@ class Course(TranslatableModel):
                 if s.state != SubscribeState.WAITING_LIST:
                     with reversion.create_revision():
                         s.save()
-                        reversion.set_comment(f"Promoted from waiting list")
+                        reversion.set_comment("Promoted from waiting list")
 
             else:
                 # check that both the current subscribe
@@ -504,7 +504,7 @@ class Course(TranslatableModel):
                         s.save()
                         partner_s.save()
 
-                        reversion.set_comment(f"Promoted from waiting list")
+                        reversion.set_comment("Promoted from waiting list")
                 else:
                     break
 

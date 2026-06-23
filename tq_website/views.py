@@ -13,7 +13,6 @@ from django.db.models import Q
 from allauth.account.utils import perform_login
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
-from django.conf import settings
 from django.urls import reverse
 from django.http import (
     HttpRequest,

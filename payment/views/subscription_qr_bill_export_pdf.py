@@ -1,7 +1,7 @@
 from tempfile import TemporaryFile
 
 from django.http import HttpRequest, HttpResponse, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 
 from courses.models import Subscribe
 from payment.utils import create_qrbill_for_subscription, to_pdf

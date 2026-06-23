@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from courses.models import CourseSubscriptionType, Course, Style
+from courses.models import Course, Style
 
 
 def _course_filter_style(

@@ -1,9 +1,7 @@
-from django.urls import reverse
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from plotly.graph_objs import Figure
 
-from courses.models import Offering, Subscribe, MatchingState, LeadFollow
+from courses.models import Offering, LeadFollow
 from utils.plots import stacked_bar_chart, DataSeries
 
 

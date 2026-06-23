@@ -2,10 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-import datetime
 
 from events.models import Event, EventCategory
 from events.models.event_registration import EventRegistration

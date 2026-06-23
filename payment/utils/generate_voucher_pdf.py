@@ -6,7 +6,6 @@ from tempfile import gettempdir
 from typing import Iterable, Optional
 
 from django.conf import settings
-from django.contrib import admin
 from django.core.files.base import ContentFile
 from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg

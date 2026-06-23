@@ -1,4 +1,3 @@
-from decimal import Decimal
 from post_office.models import STATUS
 
 from django.contrib.auth.models import User

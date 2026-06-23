@@ -15,7 +15,6 @@ from django.db.models import (
     DecimalField,
     OneToOneField,
     CharField,
-    ForeignKey,
 )
 from django.dispatch import receiver
 from django.utils import timezone

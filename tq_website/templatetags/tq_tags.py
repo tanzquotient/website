@@ -1,4 +1,3 @@
-import uuid
 
 import shortuuid
 from django import template

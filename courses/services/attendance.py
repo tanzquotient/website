@@ -8,7 +8,6 @@ from post_office.models import EmailTemplate
 
 from courses.models import Attendance, AttendanceState
 from email_system.services import send_all_emails
-from utils import TranslationUtils
 
 log = logging.getLogger("tq")
 

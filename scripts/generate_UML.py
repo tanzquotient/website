@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
         # check for each file if it is to exclude
         for filename in filenames:
-            if filename[-3:] == ".py" and not filename in EXCLUDE_FILES:
+            if filename[-3:] == ".py" and filename not in EXCLUDE_FILES:
                 files_to_analyse.append(os.path.join(dirpath, filename))
 
     # group the files by folder

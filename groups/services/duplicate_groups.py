@@ -1,7 +1,6 @@
 import logging
 
 from django.contrib.auth.models import Group
-from copy import deepcopy
 
 log = logging.getLogger("tq")
 

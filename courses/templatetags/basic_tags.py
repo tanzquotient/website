@@ -1,4 +1,3 @@
-from numbers import Number
 from typing import Iterable, Any
 from uuid import uuid4
 

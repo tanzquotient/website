@@ -1,5 +1,4 @@
 import reversion
-from datetime import date
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
@@ -50,7 +49,7 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
                 redirect_url += f"&q={comment}"
             messages.info(request, (
                 "Filtering for generated vouchers, "
-                f"based on issue date and comment."
+                "based on issue date and comment."
             ))
             return HttpResponseRedirect(redirect_url)
 

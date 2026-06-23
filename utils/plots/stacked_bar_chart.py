@@ -1,5 +1,5 @@
 from plotly.graph_objs import Figure, Bar, Layout
-from plotly.graph_objs.layout import Legend, XAxis, YAxis, Hoverlabel
+from plotly.graph_objs.layout import Legend, XAxis, YAxis
 
 from . import DataSeries
 

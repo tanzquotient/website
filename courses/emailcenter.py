@@ -3,7 +3,6 @@ from typing import Optional
 from tempfile import TemporaryFile
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from post_office.models import Email

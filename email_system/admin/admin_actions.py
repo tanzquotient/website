@@ -1,8 +1,6 @@
-from django.contrib import messages, admin
-from django.db import transaction
-from django.contrib.messages import WARNING
+from django.contrib import admin
 
-from email_system.services import send_group_email, copy_group_email
+from email_system.services import copy_group_email
 
 
 @admin.action(description="Copy selected emails")

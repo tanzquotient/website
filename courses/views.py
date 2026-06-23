@@ -46,7 +46,6 @@ from .models import (
     RejectionReason,
     MatchingState,
     UserProfile,
-    Room,
     LessonOccurrence,
 )
 from .services.data.teachers_overview import get_teachers_overview_data

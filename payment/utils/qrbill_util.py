@@ -1,10 +1,9 @@
-from io import StringIO, BytesIO
+from io import StringIO
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPDF
 from tempfile import TemporaryFile
 
 from qrbill import QRBill
-from qrbill.bill import StructuredAddress
 
 import qrcode
 

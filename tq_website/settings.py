@@ -13,7 +13,6 @@ import sys
 from os import environ
 
 import sentry_sdk
-from django.core.files.storage import Storage, FileSystemStorage
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration

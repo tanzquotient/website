@@ -27,7 +27,7 @@ class AccountFinanceDetailView(
                 return None
             try:
                 return int(s)
-            except ValueError as e:
+            except ValueError:
                 return None
 
         year = to_int(self.request.GET.get("year"))

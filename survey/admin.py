@@ -27,7 +27,7 @@ class QuestionGroupInline(TranslatableStackedInline):
 
     @staticmethod
     def questions(instance) -> str:
-        url = reverse(f"admin:survey_questiongroup_change", args=[instance.pk])
+        url = reverse("admin:survey_questiongroup_change", args=[instance.pk])
         return (
             mark_safe(
                 f"""
@@ -63,7 +63,7 @@ class QuestionInline(TranslatableStackedInline):
 
     @staticmethod
     def choices(instance) -> str:
-        url = reverse(f"admin:survey_question_change", args=[instance.pk])
+        url = reverse("admin:survey_question_change", args=[instance.pk])
         return mark_safe(
             f"""
         <div><strong><a href="{url}" target="_blank">&#x1F589; Edit Choices</a></strong></div>

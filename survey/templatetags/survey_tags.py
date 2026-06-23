@@ -1,6 +1,5 @@
 from django import template
 from django.contrib.auth.models import User
-from reversion.models import Version
 
 from courses.models import Offering, Course
 from ..models import Question, Survey, Answer

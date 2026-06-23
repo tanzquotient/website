@@ -1,4 +1,3 @@
-from collections import Counter
 from typing import Iterable
 
 from courses.models import Offering, Course

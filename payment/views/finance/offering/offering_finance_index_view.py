@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import TemplateView
 
-from courses.models import Offering
 
 
 class OfferingFinanceIndexView(PermissionRequiredMixin, TemplateView):
