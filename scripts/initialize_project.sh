@@ -5,6 +5,9 @@ set -eux
 # Install python and dependencies, including dev dependencies
 uv sync --dev
 
+# Install pre commit hook (format and lint)
+pre-commit install
+
 # Generate environment
 python scripts/generate_env_override.py
 python scripts/generate_env.py
