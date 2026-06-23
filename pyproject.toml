@@ -61,4 +61,13 @@ dev = [
     "django-debug-toolbar==7.0.0", # For development. Gives additional insights into e.g. database queries
     "black==26.5.1", # Code formatting
     "locust~=2.44.0", # Loadtesting
+    "ruff==0.15.18",
+    "pre-commit>=4.6.0",
+]
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # import sorting
 ]
