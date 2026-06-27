@@ -15,11 +15,13 @@ class VoucherForm(forms.Form):
     amount = forms.IntegerField(label=_("Value of the voucher in CHF."), required=False)
     purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
     expires_flag = forms.BooleanField(
-        label=_("Set expire date?"), initial=False, required=False
+        label=_("Set expire date?"), initial=True, required=False
     )
     expires = forms.DateField(
         widget=SelectDateWidget,
-        initial=datetime.date.today() + datetime.timedelta(days=365),
+        initial=lambda: datetime.date.today().replace(
+            year=datetime.date.today().year + 5
+        ),
     )
     custom_email_message_en = forms.CharField(
         required=False,

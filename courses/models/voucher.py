@@ -25,6 +25,11 @@ from courses.models import Subscribe
 from utils import CodeGenerator
 
 
+def default_expiry() -> datetime.date:
+    today = datetime.date.today()
+    return today.replace(year=today.year + 5)
+
+
 def generate_key() -> str:
     voucher_key = CodeGenerator.short_uuid_without_ambiguous_characters()
     return (
@@ -51,7 +56,10 @@ class Voucher(Model):
     )
     issued = DateField(auto_now_add=True)
     expires = DateField(
-        blank=True, null=True, help_text=_("If not set, the voucher will not expire.")
+        blank=True,
+        null=True,
+        default=default_expiry,
+        help_text=_("If not set, the voucher will not expire."),
     )
     used = BooleanField(default=False)
     pdf_file = FileField(
