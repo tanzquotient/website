@@ -1,8 +1,19 @@
 {% load i18n %}
 
-{% if course.room and course.room.get_disclaimer %}
-    <h3>{% trans "Room notice" %}</h3>
-    <div>
-        {{ course.room.get_disclaimer|safe }}
-    </div>
-{% endif %}
+{% with rooms=course.rooms_with_disclaimer %}
+    {% if rooms %}
+        {% if rooms|length == 1 %}
+            <h3>{% trans "Room notice" %}: {{ rooms.0.name }}</h3>
+        {% else %}
+            <h3>{% trans "Room notices" %}</h3>
+        {% endif %}
+        {% for room in rooms %}
+            {% if rooms|length > 1 %}
+                <h4>{{ room.name }}</h4>
+            {% endif %}
+            <div>
+                {{ room.get_disclaimer|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}

@@ -749,6 +749,10 @@ class Course(TranslatableModel):
             )
         )
 
+    @cached_property
+    def rooms_with_disclaimer(self) -> list[Room]:
+        return [r for r in self.rooms if r.get_disclaimer()]
+
     def subscription_closed(self) -> bool:
         return self.is_regular() and not self.is_subscription_allowed()
 
