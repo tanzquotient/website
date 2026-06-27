@@ -80,6 +80,11 @@
 
                 </div>
             {% endif %}
+            {% if event.room %}
+                <div class="mb-3">
+                    {% include "courses/snippets/room_access_code_wrapper.html" with room=event.room course_or_event=event occurrence_type="event" code_date=event.date %}
+                </div>
+            {% endif %}
             {% if event.get_description %}
                 <div>
                     {{ event.get_description|safe }}

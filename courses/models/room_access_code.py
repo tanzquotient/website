@@ -11,7 +11,7 @@ class RoomAccessCode(models.Model):
     class Visibility(models.TextChoices):
         PUBLIC = "public"
         PARTICIPANTS = "participants"
-        TEACHERS = "teachers"
+        TEACHERS_DJS = "teachers_djs"
         STAFF = "staff"
 
     room = models.ForeignKey(

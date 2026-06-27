@@ -486,29 +486,31 @@ def lead_follow_selector(
 
 @register.simple_tag
 def get_room_access_codes(
-    room: Room, user: User, course: Course, code_date: dt.date | None = None
+    room: Room, user: User, course_or_event, code_date: dt.date | None = None
 ) -> QuerySet:
     qs = room.get_access_codes(code_date)
-    viewable_pks = [ac.pk for ac in qs if can_view_room_access_code(ac, user, course)]
+    viewable_pks = [
+        ac.pk for ac in qs if can_view_room_access_code(ac, user, course_or_event)
+    ]
     return qs.filter(pk__in=viewable_pks)
 
 
 @register.simple_tag
 def requires_reveal_logging(access_code: RoomAccessCode | None) -> bool:
-    """Return True if viewing this code must be logged (TEACHERS or STAFF visibility)."""
+    """Return True if viewing this code must be logged (TEACHERS_DJS or STAFF visibility)."""
     if not access_code:
         return False
     return access_code.visibility in {
-        RoomAccessCode.Visibility.TEACHERS,
+        RoomAccessCode.Visibility.TEACHERS_DJS,
         RoomAccessCode.Visibility.STAFF,
     }
 
 
 @register.simple_tag
 def can_view_room_access_code(
-    access_code: RoomAccessCode | None, user: User, course: Course
+    access_code: RoomAccessCode | None, user: User, course_or_event
 ) -> bool:
-    """Return True if `user` is allowed to view `access_code` for `course`."""
+    """Return True if `user` is allowed to view `access_code`. Works for courses and events."""
     if not access_code:
         return False
     visibility = access_code.visibility
@@ -516,25 +518,28 @@ def can_view_room_access_code(
     if user.is_staff or visibility == RoomAccessCode.Visibility.PUBLIC:
         return True
 
-    if visibility == RoomAccessCode.Visibility.TEACHERS:
-        return user in course.get_teachers()
+    if visibility == RoomAccessCode.Visibility.TEACHERS_DJS:
+        return user in course_or_event.get_teachers_djs()
 
     if visibility == RoomAccessCode.Visibility.PARTICIPANTS:
-        return user in course.participants() or user in course.get_teachers()
+        return (
+            user in course_or_event.get_participants()
+            or user in course_or_event.get_teachers_djs()
+        )
 
     return False
 
 
 @register.simple_tag
 def show_restricted_room_access_code_alert(
-    access_code: RoomAccessCode | None, user: User, course: Course
+    access_code: RoomAccessCode | None, user: User, course_or_event
 ) -> bool:
     if not access_code:
         return False
     visibility = access_code.visibility
 
-    if visibility == RoomAccessCode.Visibility.TEACHERS:
-        return user.is_staff or user in course.get_teachers()
+    if visibility == RoomAccessCode.Visibility.TEACHERS_DJS:
+        return user.is_staff or user in course_or_event.get_teachers_djs()
 
     if visibility == RoomAccessCode.Visibility.STAFF:
         return user.is_staff

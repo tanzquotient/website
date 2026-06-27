@@ -748,7 +748,7 @@ def cancel_subscription_from_waiting_list(
 
 
 _LOGGED_VISIBILITIES = {
-    RoomAccessCode.Visibility.TEACHERS,
+    RoomAccessCode.Visibility.TEACHERS_DJS,
     RoomAccessCode.Visibility.STAFF,
 }
 
@@ -760,12 +760,10 @@ def reveal_room_access_code(request: HttpRequest, pk: int) -> JsonResponse:
 
     try:
         body = json.loads(request.body)
-        course_id = int(body["course_id"])
-    except json.JSONDecodeError, KeyError, ValueError:
+    except json.JSONDecodeError, ValueError:
         return JsonResponse({"error": "Invalid request body"}, status=400)
 
     access_code = get_object_or_404(RoomAccessCode, pk=pk)
-    course = get_object_or_404(Course, pk=course_id)
 
     if access_code.visibility not in _LOGGED_VISIBILITIES:
         return JsonResponse(
@@ -774,7 +772,19 @@ def reveal_room_access_code(request: HttpRequest, pk: int) -> JsonResponse:
 
     from .templatetags.courses_tags import can_view_room_access_code
 
-    if not can_view_room_access_code(access_code, request.user, course):
+    course_id = body.get("course_id")
+    event_id = body.get("event_id")
+
+    if course_id is not None:
+        course_or_event = get_object_or_404(Course, pk=int(course_id))
+    elif event_id is not None:
+        from events.models import Event
+
+        course_or_event = get_object_or_404(Event, pk=int(event_id))
+    else:
+        return JsonResponse({"error": "Missing course_id or event_id"}, status=400)
+
+    if not can_view_room_access_code(access_code, request.user, course_or_event):
         return JsonResponse({"error": "Permission denied"}, status=403)
 
     RoomAccessCodeView.objects.create(user=request.user, access_code=access_code)
