@@ -100,7 +100,6 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
 
 def create_send_vouchers(data, recipients, user):
     amount = data["amount"]
-    percentage = data["percentage"]
     purpose = data["purpose"]
     expires_flag = data["expires_flag"]
     expires = data["expires"]
@@ -112,7 +111,6 @@ def create_send_vouchers(data, recipients, user):
         with reversion.create_revision():
             voucher = Voucher.objects.create(
                 purpose=purpose,
-                percentage=percentage,
                 amount=amount,
                 expires=expires if expires_flag else None,
                 sent_to=recipient,

@@ -45,9 +45,6 @@ class Voucher(Model):
     amount = IntegerField(
         blank=True, null=True, help_text=_("Value of the voucher in CHF.")
     )
-    percentage = IntegerField(
-        blank=True, null=True, help_text=_("Reduction in percent (0-100).")
-    )
     key = CharField(
         max_length=8,
         unique=True,
@@ -90,28 +87,8 @@ class Voucher(Model):
     class Meta:
         constraints = [
             CheckConstraint(
-                name="percentage is null or between 0 and 100",
-                condition=(
-                    Q(percentage__isnull=True)
-                    | (Q(percentage__gte=0) & Q(percentage__lte=100))
-                ),
-            ),
-            CheckConstraint(
-                name="amount is null or non-negative",
-                condition=(Q(amount__isnull=True) | Q(amount__gte=0)),
-            ),
-            CheckConstraint(
-                name="either amount or percentage set (not both",
-                condition=(
-                    Q(amount__isnull=False)
-                    & Q(amount__gt=0)
-                    & (Q(percentage__isnull=True) | Q(percentage=0))
-                )
-                | (
-                    Q(percentage__isnull=False)
-                    & Q(percentage__gt=0)
-                    & (Q(amount__isnull=True) | Q(amount=0))
-                ),
+                name="amount is non-null and positive",
+                condition=Q(amount__isnull=False) & Q(amount__gt=0),
             ),
         ]
         ordering = ["-issued", "-expires"]
@@ -178,9 +155,6 @@ class Voucher(Model):
             return locked_subscription.paid(), voucher_for_remainder
 
     def get_reduction_amount(self, base_value: Decimal) -> Decimal:
-        if self.percentage:  # This is a percentage voucher
-            return base_value * Decimal(self.percentage) / Decimal(100)
-
         return Decimal(self.amount)
 
     def mark_as_used(
@@ -198,9 +172,7 @@ class Voucher(Model):
             reversion.set_comment("Marked as used. " + (comment or ""))
 
     def value_string(self) -> str:
-        if self.amount:
-            return f"{self.amount} CHF"
-        return f"{self.percentage}%"
+        return f"{self.amount} CHF"
 
     def __str__(self) -> str:
         return f"{self.key}: {self.value_string()}, issued on {self.issued}"

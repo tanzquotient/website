@@ -18,7 +18,6 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
 
         if form.is_valid():
             number_of_vouchers = form.cleaned_data["number_of_vouchers"]
-            percentage = form.cleaned_data.get("percentage")
             amount = form.cleaned_data.get("amount")
             purpose = form.cleaned_data["purpose"]
             expires_flag = form.cleaned_data["expires_flag"]
@@ -31,7 +30,6 @@ def voucher_generation_view(request: HttpRequest) -> HttpResponse:
                     Voucher.objects.create(
                         purpose=purpose,
                         amount=amount,
-                        percentage=percentage,
                         expires=expires if expires_flag else None,
                         comment=comment,
                         sent_to=recipients[i] if recipients else None,

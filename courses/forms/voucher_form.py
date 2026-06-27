@@ -5,14 +5,11 @@ from django.forms.widgets import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
 from ..models import Voucher, VoucherPurpose
-from ..utils import validate_amount, validate_amount_and_percentage, validate_percentage
+from ..utils import validate_amount
 
 
 class VoucherForm(forms.Form):
-    percentage = forms.IntegerField(
-        label=_("Reduction in percent (0-100)."), required=False
-    )
-    amount = forms.IntegerField(label=_("Value of the voucher in CHF."), required=False)
+    amount = forms.IntegerField(label=_("Value of the voucher in CHF."))
     purpose = forms.ModelChoiceField(queryset=VoucherPurpose.objects)
     expires_flag = forms.BooleanField(
         label=_("Set expire date?"), initial=True, required=False
@@ -39,12 +36,5 @@ class VoucherForm(forms.Form):
         label=_("Internal comment for the voucher."),
     )
 
-    def clean(self) -> dict:
-        cleaned_data = super().clean()
-        return validate_amount_and_percentage(cleaned_data)
-
     def clean_amount(self) -> int:
         return validate_amount(self.cleaned_data)
-
-    def clean_percentage(self) -> int:
-        return validate_percentage(self.cleaned_data)

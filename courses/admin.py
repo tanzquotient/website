@@ -819,7 +819,6 @@ class VoucherAdmin(VersionAdmin):
         "key",
         "purpose",
         "comment_shortened",
-        "percentage",
         "amount",
         "redeemed_amount",
         "issued",
@@ -876,11 +875,6 @@ class VoucherAdmin(VersionAdmin):
             return voucher.comment
 
     comment_shortened.short_description = "comment"
-
-    @staticmethod
-    def percentage(voucher: Voucher) -> Optional[str]:
-        if voucher.percentage:
-            return voucher.percentage
 
     @staticmethod
     def amount(voucher: Voucher) -> Optional[str]:
