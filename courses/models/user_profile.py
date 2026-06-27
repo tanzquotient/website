@@ -1,5 +1,5 @@
 import uuid
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from typing import Iterable, Optional
 
@@ -410,6 +410,12 @@ class UserProfile(Model):
 
     def has_switch(self) -> bool:
         return hasattr(self, "switch_data")
+
+    def student_validity_expiring_soon(self) -> bool:
+        if not self.student_validity:
+            return False
+        today = timezone.localtime().date()
+        return today <= self.student_validity <= today + timedelta(days=30)
 
     def get_first_name_and_initials_last_name(self) -> str:
         first = self.user.first_name
