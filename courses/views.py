@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import os
 from datetime import timedelta
@@ -15,7 +16,7 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch
 from django.db.models.functions import TruncDate
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -46,6 +47,8 @@ from .models import (
     OfferingType,
     RegularLessonException,
     RejectionReason,
+    RoomAccessCode,
+    RoomAccessCodeView,
     Style,
     Subscribe,
     UserProfile,
@@ -741,4 +744,41 @@ def cancel_subscription_from_waiting_list(
             "course": subscribe.course,
             "couple": len(subscriptions_to_reject) > 1,
         },
+    )
+
+
+_LOGGED_VISIBILITIES = {
+    RoomAccessCode.Visibility.TEACHERS,
+    RoomAccessCode.Visibility.STAFF,
+}
+
+
+@login_required
+def reveal_room_access_code(request: HttpRequest, pk: int) -> JsonResponse:
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    try:
+        body = json.loads(request.body)
+        course_id = int(body["course_id"])
+    except json.JSONDecodeError, KeyError, ValueError:
+        return JsonResponse({"error": "Invalid request body"}, status=400)
+
+    access_code = get_object_or_404(RoomAccessCode, pk=pk)
+    course = get_object_or_404(Course, pk=course_id)
+
+    if access_code.visibility not in _LOGGED_VISIBILITIES:
+        return JsonResponse(
+            {"error": "Code does not require reveal logging"}, status=400
+        )
+
+    from .templatetags.courses_tags import can_view_room_access_code
+
+    if not can_view_room_access_code(access_code, request.user, course):
+        return JsonResponse({"error": "Permission denied"}, status=403)
+
+    RoomAccessCodeView.objects.create(user=request.user, access_code=access_code)
+
+    return JsonResponse(
+        {"code": access_code.code, "display_format": access_code.display_format}
     )

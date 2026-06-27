@@ -200,6 +200,7 @@ class RoomCancellationInline(admin.TabularInline):
 class RoomAccessCodeInline(admin.TabularInline):
     model = RoomAccessCode
     extra = 2
+    readonly_fields = ["reveal_log_link"]
 
     def get_queryset(self, request):
         return (
@@ -207,6 +208,35 @@ class RoomAccessCodeInline(admin.TabularInline):
             .get_queryset(request)
             .filter(valid_until__gte=timezone.now().date() - timedelta(days=90))
         )
+
+    def reveal_log_link(self, obj):
+        if not obj.pk:
+            return "—"
+        url = (
+            reverse("admin:courses_roomaccesscodeview_changelist")
+            + f"?access_code__id__exact={obj.pk}"
+        )
+        count = obj.views.count()
+        return mark_safe(f'<a href="{url}">{count} reveal(s)</a>')
+
+    reveal_log_link.short_description = "Reveal log"
+
+
+@admin.register(RoomAccessCodeView)
+class RoomAccessCodeViewAdmin(admin.ModelAdmin):
+    list_display = ["viewed_at", "user", "access_code"]
+    list_filter = ["access_code"]
+    readonly_fields = ["user", "access_code", "viewed_at"]
+    ordering = ["-viewed_at"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(LessonDetails)

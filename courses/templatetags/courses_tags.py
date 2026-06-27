@@ -494,6 +494,17 @@ def get_room_access_codes(
 
 
 @register.simple_tag
+def requires_reveal_logging(access_code: RoomAccessCode | None) -> bool:
+    """Return True if viewing this code must be logged (TEACHERS or STAFF visibility)."""
+    if not access_code:
+        return False
+    return access_code.visibility in {
+        RoomAccessCode.Visibility.TEACHERS,
+        RoomAccessCode.Visibility.STAFF,
+    }
+
+
+@register.simple_tag
 def can_view_room_access_code(
     access_code: RoomAccessCode | None, user: User, course: Course
 ) -> bool:

@@ -1,4 +1,4 @@
-{% load i18n courses_tags %}
+{% load i18n courses_tags sekizai_tags %}
 
 {% get_room_access_codes room user course code_date as access_codes %}
 
@@ -46,6 +46,64 @@
         <p>
             {% trans "Please use this code to enter the room or pick up the key:" %}
         </p>
-        {% include "courses/snippets/room_access_code.html" with access_code=access_code %}
+        {% requires_reveal_logging access_code as logged %}
+        {% if logged %}
+            <div class="text-center mt-2" id="reveal-container-{{ access_code.pk }}">
+                <p class="text-muted small">
+                    <i class="fas fa-eye-slash"></i>
+                    {% trans "Revealing this code is logged." %}
+                </p>
+                <button class="btn btn-outline-secondary"
+                        onclick="revealRoomCode({{ access_code.pk }}, {{ course.pk }}, this)">
+                    {% trans "Reveal code" %}
+                </button>
+            </div>
+        {% else %}
+            {% include "courses/snippets/room_access_code.html" with access_code=access_code %}
+        {% endif %}
     {% endfor %}
+    {% addtoblock "js" %}
+        <script>
+            async function revealRoomCode(codePk, coursePk, btn) {
+                btn.disabled = true;
+                let resp;
+                try {
+                    resp = await fetch(`/courses/api/room-access-code/${codePk}/reveal/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                        },
+                        body: JSON.stringify({course_id: coursePk}),
+                    });
+                } catch (e) {
+                    btn.disabled = false;
+                    return;
+                }
+                if (!resp.ok) { btn.disabled = false; return; }
+                const {code, display_format} = await resp.json();
+                const container = document.getElementById(`reveal-container-${codePk}`);
+                if (display_format === 'plain') {
+                    container.innerHTML = `<code class="fs-3">${code}</code>`;
+                } else {
+                    container.innerHTML = `<div id="qr-${codePk}"></div>`;
+                    loadQRCodeLib(() => new QRCode(
+                        document.getElementById(`qr-${codePk}`),
+                        {text: code, width: 256, height: 256, colorDark: '#000', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.M}
+                    ));
+                }
+            }
+            function loadQRCodeLib(cb) {
+                if (window.QRCode) { cb(); return; }
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js';
+                s.onload = cb;
+                document.head.appendChild(s);
+            }
+            function getCsrfToken() {
+                const cookie = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('csrftoken='));
+                return cookie ? cookie.split('=')[1] : '';
+            }
+        </script>
+    {% endaddtoblock %}
 {% endif %}
