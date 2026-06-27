@@ -90,6 +90,38 @@ class CoursePayment(admin.ModelAdmin):
     search_fields = ["payment__name", "course__name"]
 
 
+@admin.register(PayrexxGateway)
+class PayrexxGatewayAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "subscription",
+        "payment_method",
+        "gross_amount",
+        "status",
+        "created_at",
+        "gateway_id",
+        "payrexx_transaction_id",
+    ]
+    list_filter = ["status", "payment_method"]
+    search_fields = [
+        "subscription__usi",
+        "subscription__user__email",
+        "subscription__user__first_name",
+        "subscription__user__last_name",
+        "gateway_id",
+        "payrexx_transaction_id",
+    ]
+    raw_id_fields = ["subscription", "payment"]
+    readonly_fields = [
+        "gateway_id",
+        "link",
+        "gross_amount",
+        "created_at",
+        "payrexx_transaction_id",
+        "payment",
+    ]
+
+
 @admin.register(PaymentReminder)
 class PaymentReminderAdmin(admin.ModelAdmin):
     list_display = ("subscription", "date")

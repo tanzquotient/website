@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 import os
 import sys
+from decimal import Decimal
 from os import environ
 
 import sentry_sdk
@@ -581,6 +582,17 @@ DATABASES = {
 }
 
 GOOGLE_ANALYTICS_PROPERTY_ID = environ["TQ_GOOGLE_ANALYTICS_PROPERTY_ID"]
+
+# Payrexx card / TWINT payments
+PAYREXX = {
+    "instance": environ.get("TQ_PAYREXX_INSTANCE", ""),
+    "api_key": environ.get("TQ_PAYREXX_API_KEY", ""),
+    "webhook_signing_key": environ.get("TQ_PAYREXX_WEBHOOK_SIGNING_KEY", ""),
+    "card_fee_rate": Decimal("0.0165"),
+    "card_fee_flat": Decimal("0.18"),
+    "twint_fee_rate": Decimal("0.0125"),
+    "twint_fee_flat": Decimal("0.18"),
+}
 
 # Main Bank Account
 PAYMENT_ACCOUNT = {

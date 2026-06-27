@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from courses.models import Subscribe, Voucher
 from email_system.services import send_email
 from payment.forms import VoucherForm
+from payment.services.payrexx import compute_gross
 from tq_website import settings
 
 
@@ -44,12 +45,20 @@ def subscription_payment_view(request: HttpRequest, usi: str):
             attachments={"Voucher.pdf": voucher_for_remainder.pdf_file.file},
         )
 
+    net = subscription.open_amount()
+    card_gross = compute_gross(subscription, "card")
+    twint_gross = compute_gross(subscription, "twint")
+
     context = dict(
         subscription=subscription,
         voucher_form=voucher_form,
         voucher_for_remainder=voucher_for_remainder,
         voucher_applied=voucher_applied,
         payment_account=settings.PAYMENT_ACCOUNT["default"],
+        payrexx_card_amount=card_gross,
+        payrexx_card_fee=card_gross - net,
+        payrexx_twint_amount=twint_gross,
+        payrexx_twint_fee=twint_gross - net,
     )
 
     return render(request, "payment/subscription/index.html", context)

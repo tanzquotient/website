@@ -297,7 +297,14 @@ class CourseAdmin(TranslatableAdmin):
         ("Where?", {"fields": ["room"]}),
         (
             "Billing",
-            {"fields": ["price_with_legi", "price_without_legi", "price_special"]},
+            {
+                "fields": [
+                    "price_with_legi",
+                    "price_without_legi",
+                    "price_special",
+                    "payrexx_enabled",
+                ]
+            },
         ),
         (
             "Admin",

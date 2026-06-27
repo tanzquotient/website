@@ -41,7 +41,7 @@ class Payment(models.Model):
     subscriptions = models.ManyToManyField(
         Subscribe, blank=True, through="SubscriptionPayment"
     )
-    filename = models.CharField(max_length=300)
+    filename = models.CharField(max_length=300, blank=True, default="")
     file = models.ForeignKey(
         to=FinanceFile,
         related_name="payments",

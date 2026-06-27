@@ -175,6 +175,10 @@ class Course(TranslatableModel):
     )
     price_special = models.CharField(max_length=255, blank=True, null=True)
     price_special.help_text = "Set this only if you want a different price schema."
+    payrexx_enabled = models.BooleanField(
+        default=False,
+        help_text="If enabled, participants can pay for this course via Payrexx (TWINT or card).",
+    )
 
     # Relations
     subscribers = models.ManyToManyField(

@@ -23,6 +23,8 @@ from .views import (
     OfferingFinanceUnpaidView,
     offering_finance_revenue,
     offering_finance_teachers_export,
+    payrexx_gateway_view,
+    payrexx_webhook_view,
     search_teacher,
     subscription_payment_view,
     subscription_qr_bill_export_pdf,
@@ -48,6 +50,12 @@ urlpatterns = [
         subscription_qr_bill_export_pdf,
         name="subscription_qr_bill_export_pdf",
     ),
+    path(
+        "payment/<usi:usi>/payrexx/<str:method>/",
+        payrexx_gateway_view,
+        name="payrexx_gateway",
+    ),
+    path("payment/webhook/payrexx/", payrexx_webhook_view, name="payrexx_webhook"),
     path(
         "auth/courses/", CoursesAsTeacherList.as_view(), name="courses_as_teacher_list"
     ),

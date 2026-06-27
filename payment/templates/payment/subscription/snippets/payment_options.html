@@ -27,6 +27,61 @@
       </div>
     </div>
   </div>
+  {% if subscription.course.payrexx_enabled and subscription.open_amount %}
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payrexxCollapse" aria-expanded="false" aria-controls="payrexxCollapse">
+        <span class="badge text-bg-success me-2">NEW</span><i class="bi bi-credit-card-fill"></i>&nbsp;{% trans "Card / TWINT" %}
+      </button>
+    </h2>
+    <div id="payrexxCollapse" class="accordion-collapse collapse" data-bs-parent="#paymentOptionsAccordion">
+      <div class="accordion-body">
+        <div class="row g-3">
+          {# TWINT — lower fee #}
+          <div class="col-12 col-sm-6">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><i class="bi bi-phone-fill"></i>&nbsp;{% trans "TWINT" %}</h5>
+                <p class="card-text text-muted small flex-grow-1">
+                  {% blocktrans with fee=payrexx_twint_fee total=payrexx_twint_amount %}
+                    Processing fee: CHF {{ fee }}. Total charged: CHF {{ total }}.
+                  {% endblocktrans %}
+                </p>
+                <form method="post" action="{% url 'payment:payrexx_gateway' subscription.usi 'twint' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-phone-fill"></i>
+                    {% blocktrans with total=payrexx_twint_amount %}Pay CHF {{ total }}{% endblocktrans %}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {# Card — Visa / Mastercard #}
+          <div class="col-12 col-sm-6">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><i class="bi bi-credit-card-fill"></i>&nbsp;{% trans "Card (Visa / Mastercard)" %}</h5>
+                <p class="card-text text-muted small flex-grow-1">
+                  {% blocktrans with fee=payrexx_card_fee total=payrexx_card_amount %}
+                    Processing fee: CHF {{ fee }}. Total charged: CHF {{ total }}.
+                  {% endblocktrans %}
+                </p>
+                <form method="post" action="{% url 'payment:payrexx_gateway' subscription.usi 'card' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-credit-card"></i>
+                    {% blocktrans with total=payrexx_card_amount %}Pay CHF {{ total }}{% endblocktrans %}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
   <div class="accordion-item">
     <h2 class="accordion-header">
       <button class="accordion-button {% if available_vouchers %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#qrBillCollapse" aria-expanded="{% if available_vouchers %}false{% else %}true{% endif %}" aria-controls="qrBillCollapse">
@@ -50,7 +105,7 @@
             </a>
             <a class="btn btn-success mt-3 mx-1 d-none" id="shareBtn">
               <i class="bi bi-share-fill"></i> {% trans "Share" %}
-            </a> 
+            </a>
           </div>
       </div>
     </div>

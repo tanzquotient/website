@@ -12,6 +12,8 @@ from .courses_as_teacher_list import CoursesAsTeacherList
 from .finance import *
 from .lesson_attendance_check_view import LessonAttendanceCheckView
 from .lesson_attendance_view import LessonAttendanceView
+from .payrexx_gateway_view import payrexx_gateway_view
+from .payrexx_webhook_view import payrexx_webhook_view
 from .search_teacher import search_teacher
 from .subscription_payment_view import subscription_payment_view
 from .subscription_qr_bill_export_pdf import subscription_qr_bill_export_pdf
