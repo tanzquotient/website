@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from django.conf import settings
 from django.db.models import (
     SET_NULL,
     BooleanField,
@@ -9,6 +10,7 @@ from django.db.models import (
     DecimalField,
     ForeignKey,
     IntegerField,
+    ManyToManyField,
     TimeField,
 )
 from django.template.defaultfilters import date as format_date
@@ -88,6 +90,12 @@ class Event(TranslatableModel):
         blank=True,
         null=True,
         help_text="Defines how many people can register. Leave empty for unlimited number.",
+    )
+    teachers_djs = ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name="dj_or_teacher_events",
+        help_text="Teachers, DJs, or other people who need restricted room access code visibility.",
     )
 
     translations = TranslatedFields(
@@ -169,6 +177,12 @@ class Event(TranslatableModel):
             and not user.is_anonymous
             and EventRegistration.objects.filter(user=user, event=self).exists()
         )
+
+    def get_teachers_djs(self) -> list:
+        return list(self.teachers_djs.all())
+
+    def get_participants(self) -> set:
+        return {r.user for r in self.registrations.all()}
 
     def registration_possible(self) -> bool:
         return self.registration_enabled and not self.fully_booked()

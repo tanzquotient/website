@@ -1,15 +1,19 @@
 {% load i18n courses_tags sekizai_tags %}
 
-{% get_room_access_codes room user course code_date as access_codes %}
+{% get_room_access_codes room user course_or_event code_date as access_codes %}
 
 {% if not access_codes %}
-    {% if user.is_staff or user in course.get_teachers %}
-        <h3>{% trans "Room access code" %}</h3>
+    {% if user.is_staff or user in course_or_event.get_teachers_djs %}
+        <h3>{% trans "Room access code" %}: {{ room.name }}</h3>
         <div class="alert alert-info">
-            {% trans "No room access code is provided for the next lesson of this course." %}
+            {% if occurrence_type == "course" %}
+                {% trans "No room access code is provided for the next lesson of this course." %}
+            {% else %}
+                {% trans "No room access code is provided for this event." %}
+            {% endif %}
             <hr/>
             <i>
-                {% trans "You are seeing this message because you are a staff member or a teacher of this course." %}
+                {% trans "You are seeing this message because you are a staff member, teacher, or DJ." %}
                 {% trans "You may ignore this if the room does not require an access code." %}
             </i>
             {% if perms.courses.change_room %}
@@ -26,13 +30,14 @@
         {% else %}
             {% trans "Room access codes" %}
         {% endif %}
+       : {{ room.name }}
     </h3>
     {% for access_code in access_codes %}
-        {% show_restricted_room_access_code_alert access_code user course as show_alert %}
+        {% show_restricted_room_access_code_alert access_code user course_or_event as show_alert %}
         {% if show_alert %}
             <div class="alert alert-info">
-                {% if access_code.visibility == access_code.Visibility.TEACHERS %}
-                    {% trans "The following access code to the room is currently set to only be visible to staff and teachers of this course." %}
+                {% if access_code.visibility == access_code.Visibility.TEACHERS_DJS %}
+                    {% trans "The following access code to the room is currently set to only be visible to staff, teachers, and DJs." %}
                 {% elif access_code.visibility == access_code.Visibility.STAFF %}
                     {% trans "The following access code to the room is currently set to only be visible to staff." %}
                 {% endif %}
@@ -54,7 +59,7 @@
                     {% trans "Revealing this code is logged." %}
                 </p>
                 <button class="btn btn-outline-secondary"
-                        onclick="revealRoomCode({{ access_code.pk }}, {{ course.pk }}, this)">
+                        onclick="revealRoomCode({{ access_code.pk }}, '{% if occurrence_type == "course" %}course_id{% else %}event_id{% endif %}', {{ course_or_event.pk }}, this)">
                     {% trans "Reveal code" %}
                 </button>
             </div>
@@ -64,8 +69,9 @@
     {% endfor %}
     {% addtoblock "js" %}
         <script>
-            async function revealRoomCode(codePk, coursePk, btn) {
+            async function revealRoomCode(codePk, contextKey, contextId, btn) {
                 btn.disabled = true;
+                const payload = {[contextKey]: contextId};
                 let resp;
                 try {
                     resp = await fetch(`/courses/api/room-access-code/${codePk}/reveal/`, {
@@ -74,7 +80,7 @@
                             'Content-Type': 'application/json',
                             'X-CSRFToken': getCsrfToken(),
                         },
-                        body: JSON.stringify({course_id: coursePk}),
+                        body: JSON.stringify(payload),
                     });
                 } catch (e) {
                     btn.disabled = false;

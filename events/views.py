@@ -11,7 +11,11 @@ from events.models.event_registration import EventRegistration
 def detail(request, event_id):
     template_name = "events/event_detail.html"
     event = get_object_or_404(Event, pk=event_id)
-    context = {"event": event, "user_registered": event.is_registered(request.user)}
+    context = {
+        "event": event,
+        "user": request.user,
+        "user_registered": event.is_registered(request.user),
+    }
     return render(request, template_name, context)
 
 
@@ -79,6 +83,7 @@ def registration_confirmation(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     context = {
         "event": event,
+        "user": request.user,
         "user_registered": event.is_registered(request.user),
         "is_registration_confirmation": True,
     }
@@ -90,6 +95,7 @@ def registration_removed(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     context = {
         "event": event,
+        "user": request.user,
         "user_registered": event.is_registered(request.user),
         "is_registration_removed": True,
     }
