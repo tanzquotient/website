@@ -62,6 +62,18 @@ env:
     secret:
       key: tq-payment-account-recipient-zipcode-city
       create: provided
+  - name: SIP_TQ_PAYREXX_INSTANCE
+    secret:
+      key: tq-payrexx-instance
+      create: provided
+  - name: SIP_TQ_PAYREXX_API_KEY
+    secret:
+      key: tq-payrexx-api-key
+      create: provided
+  - name: SIP_TQ_PAYREXX_WEBHOOK_SIGNING_KEY
+    secret:
+      key: tq-payrexx-webhook-signing-key
+      create: provided
   - name: SIP_TQ_REDIS_URL
     secret:
       key: tq-redis-url
