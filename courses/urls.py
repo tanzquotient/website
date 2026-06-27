@@ -60,4 +60,9 @@ urlpatterns = [
     path("api/claim-spot/", ClaimSpotApiView.as_view(), name="claim_spot"),
     path("api/room-usage/", RoomUsageApiView.as_view(), name="room_usage"),
     path("api/search-room/", SearchRoomApiView.as_view(), name="search_room"),
+    path(
+        "api/room-access-code/<int:pk>/reveal/",
+        views.reveal_room_access_code,
+        name="reveal_room_access_code",
+    ),
 ]

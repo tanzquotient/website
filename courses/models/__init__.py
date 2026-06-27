@@ -19,6 +19,7 @@ from .regular_lesson_exception import RegularLessonException
 from .rejection import Rejection
 from .room import Room
 from .room_access_code import RoomAccessCode
+from .room_access_code_view import RoomAccessCodeView
 from .room_cancellation import RoomCancellation
 from .skill import Skill
 from .skill_dance_level import SkillDanceLevel
