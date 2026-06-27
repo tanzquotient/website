@@ -12,7 +12,7 @@ from utils import TranslationUtils
 
 
 class Room(TranslatableModel):
-    name = models.CharField(max_length=30, unique=True, blank=False)
+    name = models.CharField(max_length=128, unique=True, blank=False)
     address = models.OneToOneField(
         to=Address,
         related_name="rooms",
