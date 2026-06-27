@@ -1,0 +1,75 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Switch edu-ID" %}{% endblock %}
+{% block lead_title %}{% trans "Switch edu-ID" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+        {% if mode == "already_linked" %}
+            <div class="alert alert-info">
+                <h4 class="alert-heading">
+                    <i class="bi bi-info-circle-fill"></i>
+                    {% trans "Signed in to a different account" %}
+                </h4>
+                <p class="mb-0">
+                    {% trans "This Switch edu-ID is already linked to a different account. You have been signed out of your previous session and signed in as that user." %}
+                </p>
+            </div>
+
+        {% elif mode == "link" %}
+            <div class="alert alert-success">
+                <h4 class="alert-heading">
+                    <i class="bi bi-check-circle-fill"></i>
+                    {% trans "Account linked successfully" %}
+                </h4>
+                <p class="mb-0">{% trans "Your account is now connected to Switch edu-ID." %}</p>
+                {% if is_student %}
+                    <hr>
+                    <p class="mb-0">
+                        <i class="bi bi-mortarboard-fill"></i>
+                        {% blocktrans with date=student_validity %}
+                            Student status verified and valid until {{ date }}.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
+            </div>
+
+        {% elif mode == "renew" %}
+            {% if is_student %}
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">
+                        <i class="bi bi-check-circle-fill"></i>
+                        {% trans "Student status renewed" %}
+                    </h4>
+                    <p class="mb-0">
+                        {% blocktrans with date=student_validity %}
+                            Your student status has been verified and is valid until {{ date }}.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <h4 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        {% trans "No student affiliation found" %}
+                    </h4>
+                    <p class="mb-0">
+                        {% trans "Your Switch edu-ID account does not currently carry an active student affiliation. Your student status could not be renewed." %}
+                    </p>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="{{ redirect_url }}" class="btn btn-primary">
+                {% trans "Continue" %}
+                <i class="bi bi-arrow-right-circle-fill"></i>
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

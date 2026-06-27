@@ -10,6 +10,13 @@
             <br/>
             {% trans "Valid until" %}:
             {{ user.profile.student_validity }}
+            {% if user.profile.student_validity_expiring_soon %}
+                <br/>
+                <a href="{% url "oidc_login" %}?mode=renew" class="btn btn-sm btn-warning mt-1">
+                    {% trans "Renew" %}
+                    <i class="bi bi-arrow-clockwise"></i>
+                </a>
+            {% endif %}
         {% else %}
             <span class="badge bg-secondary">
                 {% if user.profile.student_validity %}
