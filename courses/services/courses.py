@@ -142,6 +142,7 @@ def email_vouchers(data: dict, vouchers: list[Voucher]):
             "voucher_url": voucher.pdf_file.url,
             "custom_msg_en": custom_msg_en,
             "custom_msg_de": custom_msg_de,
+            "voucher_expires": voucher.expires,
         }
 
         emails.append(

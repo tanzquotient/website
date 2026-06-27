@@ -1,3 +1,4 @@
+{% load i18n %}
 <p>Hallo {{ first_name }}</p>
 
 <p>anbei ein Gutschein für einen Tanzkurs beim Tanzquotient.</p>
@@ -7,6 +8,8 @@
 <p>Du kannst den Gutschein, nach Anmeldung für einen Kurs, unter <a href="https://tanzquotient.org/profile/courses">Meine Kurse</a> einlösen.</p>
 
 <p>Gutschein Code: <strong>{{ voucher_key }}</strong></p>
+
+{% if voucher_expires %}<p>Der Gutschein ist gültig bis {{ voucher_expires|date:"j. F Y" }}.</p>{% endif %}
 
 <p>Liebe Grüsse, <br/>
 Dein Tanzquotient <br/>
@@ -25,6 +28,8 @@ Dein Tanzquotient <br/>
 <p>You can redeem te voucher online. After signing up for a course, go to <a href="https://tanzquotient.org/profile/courses">My Courses</a> and enter your code.</p>
 
 <p>Voucher code: <strong>{{ voucher_key }}</strong></p>
+
+{% if voucher_expires %}<p>The voucher is valid until {% language "en" %}{{ voucher_expires|date:"F j, Y" }}{% endlanguage %}.</p>{% endif %}
 
 <p>Best regards, <br/>
 Your Tanzquotient <br/>
