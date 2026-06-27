@@ -399,9 +399,8 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
         form = CreateSendVoucherForm(data=request.POST)
 
         if form.is_valid():
-            recipients = [subscription.user for subscription in queryset]
             services.courses.create_send_vouchers(
-                data=form.cleaned_data, recipients=recipients, user=request.user
+                data=form.cleaned_data, subscriptions=list(queryset), user=request.user
             )
             return HttpResponseRedirect(request.get_full_path())
 

@@ -1,3 +1,4 @@
+import math
 from datetime import datetime
 from typing import Any, Iterable, Optional
 
@@ -98,8 +99,9 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
     send_all_emails(emails)
 
 
-def create_send_vouchers(data, recipients, user):
-    amount = data["amount"]
+def create_send_vouchers(data, subscriptions, user):
+    percentage = data.get("percentage")
+    amount = data.get("amount")
     purpose = data["purpose"]
     expires_flag = data["expires_flag"]
     expires = data["expires"]
@@ -107,11 +109,17 @@ def create_send_vouchers(data, recipients, user):
 
     vouchers_to_send = []
 
-    for recipient in recipients:
+    for subscription in subscriptions:
+        recipient = subscription.user
+        voucher_amount = (
+            math.ceil(percentage * subscription.get_price_to_pay() / 100)
+            if percentage
+            else amount
+        )
         with reversion.create_revision():
             voucher = Voucher.objects.create(
                 purpose=purpose,
-                amount=amount,
+                amount=voucher_amount,
                 expires=expires if expires_flag else None,
                 sent_to=recipient,
                 comment=voucher_comment,
