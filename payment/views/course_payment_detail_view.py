@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from courses.models import Course
-from payment.views import TeacherOfCourseOnly
+from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 
 
 class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):

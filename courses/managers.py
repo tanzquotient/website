@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import QuerySet
 from parler.managers import TranslatableManager
 
-from courses.models import LeadFollow, MatchingState, SubscribeState, Weekday
+from courses.models.choices import LeadFollow, MatchingState, SubscribeState, Weekday
 
 
 class UserProfileManager(models.Manager):

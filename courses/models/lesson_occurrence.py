@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from courses import managers
-from courses.models import Room
+from courses.models.room import Room
 
 
 class LessonOccurrence(models.Model):

@@ -17,7 +17,7 @@ from courses.models import (
     Subscribe,
     SubscribeState,
 )
-from payment.views import TeacherOfCourseOnly
+from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 
 
 @dataclass(kw_only=True, frozen=True)

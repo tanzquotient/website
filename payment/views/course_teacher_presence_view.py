@@ -17,7 +17,7 @@ from courses.models import (
     LessonOccurrence,
     LessonOccurrenceTeach,
 )
-from payment.views import TeacherPresenceEnabled
+from payment.views.teacher_presence_enabled import TeacherPresenceEnabled
 
 
 class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled, APIView):

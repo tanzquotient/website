@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from numbers import Number
-from typing import Iterable, Optional, Union
+from typing import TYPE_CHECKING, Iterable, Optional, Union
 
 from django.conf import settings
 from django.contrib import admin
@@ -19,25 +19,27 @@ from parler.models import TranslatableModel, TranslatedFields
 from reversion import revisions as reversion
 
 from courses import managers
-from courses.models import (
+from courses.models.choices import (
     CourseSubscriptionType,
-    IrregularLesson,
     LeadFollow,
-    LessonOccurrence,
-    LessonOccurrenceData,
     MatchingState,
-    Period,
-    RegularLesson,
-    RegularLessonException,
-    Rejection,
     RejectionReason,
-    Room,
-    Subscribe,
     SubscribeState,
     Weekday,
 )
+
+if TYPE_CHECKING:
+    from courses.models import (
+        IrregularLesson,
+        LessonOccurrenceData,
+        Period,
+        RegularLesson,
+        RegularLessonException,
+        Room,
+        Subscribe,
+    )
+    from survey.models import Survey
 from partners.models import Partner
-from survey.models import Survey
 from utils import TranslationUtils
 from utils.helpers import optional_max, optional_min
 
@@ -557,6 +559,8 @@ class Course(TranslatableModel):
         rejection_exists = self.subscriptions.filter(
             user=user, state__in=SubscribeState.REJECTED_STATES
         ).exists()
+        from courses.models import Rejection
+
         user_cancelled = Rejection.objects.filter(
             subscription__course=self,
             subscription__user=user,
@@ -815,6 +819,8 @@ class Course(TranslatableModel):
         return [l for l in self.irregular_lessons.all() if not l.is_cancelled()]
 
     def update_lesson_occurrences(self) -> None:
+        from courses.models import LessonOccurrence
+
         occurrences = self.get_lesson_occurrences()
         for occurrence in occurrences:
             # create lesson occurrences if they don't exist

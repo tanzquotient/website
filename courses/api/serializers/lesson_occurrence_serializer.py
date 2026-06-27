@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer
 
 from courses.models import LessonOccurrence
 
-from . import UserSerializer
+from .user_serializer import UserSerializer
 
 
 class LessonOccurrenceSerializer(ModelSerializer):

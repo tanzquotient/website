@@ -1,11 +1,9 @@
 from django.db import models
 
-from . import UserProfile
-
 
 class SwitchData(models.Model):
     user_profile = models.OneToOneField(
-        UserProfile,
+        "UserProfile",
         primary_key=True,
         related_name="switch_data",
         on_delete=models.CASCADE,

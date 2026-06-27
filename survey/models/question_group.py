@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from django.db.models import (
     SET_NULL,
     CharField,
@@ -11,7 +13,8 @@ from parler.models import TranslatableModel, TranslatedFields
 
 from utils import TranslationUtils
 
-from . import Survey
+if TYPE_CHECKING:
+    from . import Survey
 
 
 class QuestionGroup(TranslatableModel):

@@ -1,6 +1,6 @@
 from django import forms
 
-from . import VoucherForm
+from .voucher_form import VoucherForm
 
 
 class CreateSendVoucherForm(VoucherForm):

@@ -3,8 +3,8 @@ import logging
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 
-from courses.forms import UserEditForm
-from courses.services import update_user
+from courses.forms.user_edit_from import UserEditForm
+from courses.services.users import update_user
 
 log = logging.getLogger("tq")
 

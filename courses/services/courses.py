@@ -7,8 +7,8 @@ from post_office.models import EmailTemplate
 
 from courses import models as models
 from courses.models import Course, Voucher
-from courses.services import get_subsequent_offering
 from courses.services.general import log
+from courses.services.offerings import get_subsequent_offering
 from email_system.services import send_all_emails
 from payment.utils.generate_voucher_pdf import generate_voucher_pdfs
 from survey.models import Survey, SurveyInstance

@@ -6,7 +6,9 @@ from typing import Iterable
 from django.db import models
 from pytz import timezone
 
-from . import LessonOccurrenceData, Room, Weekday
+from courses.models.choices import Weekday
+from courses.models.lesson_occurrence_data import LessonOccurrenceData
+from courses.models.room import Room
 
 
 class RegularLesson(models.Model):

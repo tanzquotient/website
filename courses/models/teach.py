@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from post_office.models import STATUS
 
-from courses.models import TeacherWelcome
+from courses.models.teacher_welcome import TeacherWelcome
 
 
 class Teach(models.Model):

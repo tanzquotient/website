@@ -24,7 +24,7 @@ from courses.services import format_prices
 from utils import TranslationUtils
 
 from .. import managers
-from . import EventRegistration
+from .event_registration import EventRegistration
 
 
 class Event(TranslatableModel):

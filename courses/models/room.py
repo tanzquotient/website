@@ -6,9 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
 
+from courses.models.address import Address
+from courses.models.room_access_code import RoomAccessCode
 from utils import TranslationUtils
-
-from . import Address, RoomAccessCode
 
 
 class Room(TranslatableModel):

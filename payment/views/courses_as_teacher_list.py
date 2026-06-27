@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 
 from courses.models import Offering
-from payment.views import TeacherOnly
+from payment.views.teacher_only import TeacherOnly
 
 
 class CoursesAsTeacherList(TemplateView, TeacherOnly):

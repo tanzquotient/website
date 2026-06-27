@@ -6,7 +6,7 @@ from pytz import timezone
 from courses.models import (
     Course,
 )
-from payment.views import TeacherOfCourseOnly
+from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 
 
 class CourseAttendanceView(TemplateView, TeacherOfCourseOnly):

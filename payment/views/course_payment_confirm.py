@@ -6,7 +6,7 @@ from django.views.generic import FormView
 
 from courses.models import PaymentMethod, Subscribe
 
-from . import TeacherOfCourseOnly
+from .teachers_of_course_only import TeacherOfCourseOnly
 
 
 class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):

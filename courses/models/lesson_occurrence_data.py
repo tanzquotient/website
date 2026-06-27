@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from courses.models import Room
+from courses.models.room import Room
 
 
 @dataclass(frozen=True, order=True)

@@ -2,8 +2,6 @@ from django.db import models
 
 from courses.models import Course
 
-from . import Payment
-
 
 class CoursePayment(models.Model):
     """
@@ -11,7 +9,7 @@ class CoursePayment(models.Model):
     """
 
     payment = models.ForeignKey(
-        Payment, related_name="course_payments", on_delete=models.PROTECT
+        "Payment", related_name="course_payments", on_delete=models.PROTECT
     )
     course = models.ForeignKey(
         Course, related_name="course_payments", on_delete=models.PROTECT

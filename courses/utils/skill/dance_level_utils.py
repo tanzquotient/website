@@ -11,7 +11,7 @@ from ...models import (
     Style,
     SubscribeState,
 )
-from . import StyleLevel
+from .style_level import StyleLevel
 
 
 def recompute_dance_levels_for_user(user: User) -> None:
