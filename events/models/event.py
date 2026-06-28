@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, time
 from typing import Optional
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.db.models import (
@@ -94,7 +95,7 @@ class Event(TranslatableModel):
     responsible = ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name="events",
+        related_name="resposible_for_events",
         help_text="One or more people resposible for this event "
         "(e.g. organzier, teachers, DJ,...). Is used for room access code visibility.",
     )
@@ -194,6 +195,22 @@ class Event(TranslatableModel):
     def is_cancelled(self) -> str:
         return self.cancelled or (
             self.room is not None and self.room.is_cancelled(self.date)
+        )
+
+    @property
+    def start(self) -> datetime:
+        return datetime.combine(
+            date=self.date,
+            time=self.time_from or time(),
+            tzinfo=ZoneInfo("Europe/Zurich"),
+        )
+
+    @property
+    def end(self) -> datetime:
+        return datetime.combine(
+            date=self.date_to or self.date,
+            time=self.time_to or time(hour=23, minute=59, second=59),
+            tzinfo=ZoneInfo("Europe/Zurich"),
         )
 
     def __str__(self) -> str:
