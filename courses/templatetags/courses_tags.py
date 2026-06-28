@@ -497,11 +497,11 @@ def get_room_access_codes(
 
 @register.simple_tag
 def requires_reveal_logging(access_code: RoomAccessCode | None) -> bool:
-    """Return True if viewing this code must be logged (TEACHERS_DJS or STAFF visibility)."""
+    """Return True if viewing this code must be logged (RESPONSIBLE or STAFF visibility)."""
     if not access_code:
         return False
     return access_code.visibility in {
-        RoomAccessCode.Visibility.TEACHERS_DJS,
+        RoomAccessCode.Visibility.RESPONSIBLE,
         RoomAccessCode.Visibility.STAFF,
     }
 
@@ -518,13 +518,13 @@ def can_view_room_access_code(
     if user.is_staff or visibility == RoomAccessCode.Visibility.PUBLIC:
         return True
 
-    if visibility == RoomAccessCode.Visibility.TEACHERS_DJS:
-        return user in course_or_event.get_teachers_djs()
+    if visibility == RoomAccessCode.Visibility.RESPONSIBLE:
+        return user in course_or_event.get_responsible()
 
     if visibility == RoomAccessCode.Visibility.PARTICIPANTS:
         return (
             user in course_or_event.get_participants()
-            or user in course_or_event.get_teachers_djs()
+            or user in course_or_event.get_responsible()
         )
 
     return False
@@ -538,8 +538,8 @@ def show_restricted_room_access_code_alert(
         return False
     visibility = access_code.visibility
 
-    if visibility == RoomAccessCode.Visibility.TEACHERS_DJS:
-        return user.is_staff or user in course_or_event.get_teachers_djs()
+    if visibility == RoomAccessCode.Visibility.RESPONSIBLE:
+        return user.is_staff or user in course_or_event.get_responsible()
 
     if visibility == RoomAccessCode.Visibility.STAFF:
         return user.is_staff

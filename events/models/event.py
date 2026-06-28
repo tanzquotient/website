@@ -91,11 +91,12 @@ class Event(TranslatableModel):
         null=True,
         help_text="Defines how many people can register. Leave empty for unlimited number.",
     )
-    teachers_djs = ManyToManyField(
+    responsible = ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name="dj_or_teacher_events",
-        help_text="Teachers, DJs, or other people who need restricted room access code visibility.",
+        related_name="events",
+        help_text="One or more people resposible for this event "
+        "(e.g. organzier, teachers, DJ,...). Is used for room access code visibility.",
     )
 
     translations = TranslatedFields(
@@ -178,8 +179,8 @@ class Event(TranslatableModel):
             and EventRegistration.objects.filter(user=user, event=self).exists()
         )
 
-    def get_teachers_djs(self) -> list:
-        return list(self.teachers_djs.all())
+    def get_responsible(self) -> list:
+        return list(self.responsible.all())
 
     def get_participants(self) -> set:
         return {r.user for r in self.registrations.all()}

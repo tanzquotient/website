@@ -3,16 +3,16 @@
 from django.db import migrations, models
 
 
-def rename_teachers_to_teachers_djs(apps, schema_editor):
+def rename_teachers_to_responsible(apps, schema_editor):
     RoomAccessCode = apps.get_model("courses", "RoomAccessCode")
     RoomAccessCode.objects.filter(visibility="teachers").update(
-        visibility="teachers_djs"
+        visibility="responsible"
     )
 
 
-def rename_teachers_djs_to_teachers(apps, schema_editor):
+def rename_responsible_to_teachers(apps, schema_editor):
     RoomAccessCode = apps.get_model("courses", "RoomAccessCode")
-    RoomAccessCode.objects.filter(visibility="teachers_djs").update(
+    RoomAccessCode.objects.filter(visibility="responsible").update(
         visibility="teachers"
     )
 
@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            rename_teachers_to_teachers_djs,
-            reverse_code=rename_teachers_djs_to_teachers,
+            rename_teachers_to_responsible,
+            reverse_code=rename_responsible_to_teachers,
         ),
         migrations.AlterField(
             model_name="roomaccesscode",
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 choices=[
                     ("public", "Public"),
                     ("participants", "Participants"),
-                    ("teachers_djs", "Teachers Djs"),
+                    ("responsible", "People responsible for course/event"),
                     ("staff", "Staff"),
                 ],
                 max_length=12,

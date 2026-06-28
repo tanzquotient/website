@@ -3,7 +3,7 @@
 {% get_room_access_codes room user course_or_event code_date as access_codes %}
 
 {% if not access_codes %}
-    {% if user.is_staff or user in course_or_event.get_teachers_djs %}
+    {% if user.is_staff or user in course_or_event.get_responsible %}
         <h3>{% trans "Room access code" %}: {{ room.name }}</h3>
         <div class="alert alert-info">
             {% if occurrence_type == "course" %}
@@ -36,8 +36,8 @@
         {% show_restricted_room_access_code_alert access_code user course_or_event as show_alert %}
         {% if show_alert %}
             <div class="alert alert-info">
-                {% if access_code.visibility == access_code.Visibility.TEACHERS_DJS %}
-                    {% trans "The following access code to the room is currently set to only be visible to staff, teachers, and DJs." %}
+                {% if access_code.visibility == access_code.Visibility.RESPONSIBLE %}
+                    {% trans "The following access code to the room is currently set to only be visible to staff and people responsible for the course/event (teachers, DJs,...)" %}
                 {% elif access_code.visibility == access_code.Visibility.STAFF %}
                     {% trans "The following access code to the room is currently set to only be visible to staff." %}
                 {% endif %}

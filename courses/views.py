@@ -748,7 +748,7 @@ def cancel_subscription_from_waiting_list(
 
 
 _LOGGED_VISIBILITIES = {
-    RoomAccessCode.Visibility.TEACHERS_DJS,
+    RoomAccessCode.Visibility.RESPONSIBLE,
     RoomAccessCode.Visibility.STAFF,
 }
 

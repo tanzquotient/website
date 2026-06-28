@@ -271,7 +271,7 @@ class Course(TranslatableModel):
     def get_teachers(self) -> list[User]:
         return [t.teacher for t in self.teaching.all()]
 
-    def get_teachers_djs(self) -> list[User]:
+    def get_responsible(self) -> list[User]:
         return self.get_teachers()
 
     def get_participants(self) -> set[User]:
