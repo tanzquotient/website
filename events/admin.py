@@ -61,14 +61,14 @@ class EventAdmin(TranslatableAdmin):
         ),
         ("Date & Time", {"fields": ["date", "time_from", "date_to", "time_to"]}),
         ("Location", {"fields": ["room"]}),
-        ("Teachers / DJs", {"fields": ["teachers_djs"]}),
+        ("Responsible", {"fields": ["responsible"]}),
         (
             "Price schema",
             {"fields": ["price_with_legi", "price_without_legi", "price_special"]},
         ),
     ]
 
-    filter_horizontal = ["teachers_djs"]
+    filter_horizontal = ["responsible"]
 
 
 @admin.register(EventCategory)

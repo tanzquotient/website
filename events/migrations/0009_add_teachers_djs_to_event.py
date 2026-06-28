@@ -13,11 +13,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="event",
-            name="teachers_djs",
+            name="responsible",
             field=models.ManyToManyField(
                 blank=True,
-                help_text="Teachers, DJs, or other people who need restricted room access code visibility.",
-                related_name="dj_or_teacher_events",
+                help_text="One or more people resposible for this event "
+                "(e.g. organzier, teachers, DJ,...). Is used for room access code visibility.",
+                related_name="events",
                 to=settings.AUTH_USER_MODEL,
             ),
         ),

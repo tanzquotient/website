@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q
+from django.utils.translation import gettext_lazy as _
 
 
 class RoomAccessCode(models.Model):
@@ -9,10 +10,13 @@ class RoomAccessCode(models.Model):
         QR_CODE = "qr"
 
     class Visibility(models.TextChoices):
-        PUBLIC = "public"
-        PARTICIPANTS = "participants"
-        TEACHERS_DJS = "teachers_djs"
-        STAFF = "staff"
+        PUBLIC = "public", _("Public")
+        PARTICIPANTS = "participants", _("Participants")
+        RESPONSIBLE = (
+            "responsible",
+            _("People responsible (teachers, DJs, organizers,...)"),
+        )
+        STAFF = "staff", _("Staff")
 
     room = models.ForeignKey(
         to="courses.Room",
