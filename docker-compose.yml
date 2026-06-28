@@ -4,7 +4,7 @@ services:
 
   # Database (Postgres)
   postgres:
-    image: postgres:14
+    image: postgres:14@sha256:3e7dd0bfd7bfb4fc1278d1a354da44375dfe924bed8eaf83ae14967d84dede5b
     container_name: tq-postgres
     environment:
       POSTGRES_USER: ${TQ_DB_USER}
@@ -19,7 +19,7 @@ services:
   # S3 storage
   minio:
     container_name: tq-data
-    image: minio/minio
+    image: minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
     volumes:
       - data-volume:/data
     ports:
