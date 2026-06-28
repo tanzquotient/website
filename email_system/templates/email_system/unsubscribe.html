@@ -12,10 +12,18 @@
 
 {% block main_content %}
     <div class="container">
-        {% if success %}
-            <div class="alert alert-success">{% trans "Successfully unsubscribed!" %}</div>
+        {% if done %}
+            {% if success %}
+                <div class="alert alert-success">{% trans "Successfully unsubscribed!" %}</div>
+            {% else %}
+                <div class="alert alert-danger">{% trans "Invalid unsubscribe URL. Please send us an email to unsubscribe." %}</div>
+            {% endif %}
         {% else %}
-            <div class="alert alert-danger">{% trans "Invalide unsubscribe url. Please send us an email to unsubscribe." %}</div>
+            <p>{% trans "Click the button below to unsubscribe." %}</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="confirm" value="1" class="btn btn-danger">{% trans "Unsubscribe" %}</button>
+            </form>
         {% endif %}
     </div>
 {% endblock main_content %}
