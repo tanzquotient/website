@@ -46,3 +46,4 @@ class LessonOccurrenceTeach(models.Model):
 
     class Meta:
         unique_together = (("lesson_occurrence", "teacher"),)
+        verbose_name_plural = "lesson occurrence teaches"

@@ -55,3 +55,4 @@ class EventCategory(TranslatableModel):
 
     class Meta:
         ordering = ["position"]
+        verbose_name_plural = _("event categories")

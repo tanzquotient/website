@@ -20,6 +20,9 @@ class Teach(models.Model):
         help_text="Leave empty (not 0!) to follow TQ standard wage scheme",
     )
 
+    class Meta:
+        verbose_name_plural = "teaches"
+
     def __str__(self) -> str:
         return f"{self.teacher} teaches {self.course}"
 
