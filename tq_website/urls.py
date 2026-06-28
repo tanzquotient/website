@@ -69,6 +69,11 @@ urlpatterns += i18n_patterns(
     path("events/", include(events.urls, namespace="events")),
     path("courses/", include(courses.urls, namespace="courses")),
     path("emails/", include(email_system.urls, namespace="email_system")),
+    path(
+        "newsletter/",
+        TemplateView.as_view(template_name="newsletter/newsletter.html"),
+        name="newsletter",
+    ),
     path("photos/gallery/", GalleryListView.as_view(paginate_by=5), name="photos"),
     path("photos/", include(photologue.urls, namespace="photos")),
     path("hijack/", include("hijack.urls")),
