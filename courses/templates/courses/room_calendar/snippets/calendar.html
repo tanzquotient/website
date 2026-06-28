@@ -209,6 +209,20 @@
                 });
             }
 
+            // Shareable URL state: sync view + start date to/from query string
+            const _initParams = new URLSearchParams(window.location.search);
+            let _calView = _initParams.get('view') || 'week';
+            let _calDate = _initParams.get('date') || null;
+
+            function syncCalendarUrl() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('view', _calView);
+                    if (_calDate) params.set('date', _calDate); else params.delete('date');
+                    history.replaceState(null, '', window.location.pathname + '?' + params.toString());
+                } catch (e) {}
+            }
+
             // Tracks the most recently applied hourSlots range so we can short-circuit
             // the refetch loop that bsCalendar's updateOptions otherwise triggers.
             let lastHourSlots = { start: 0, end: 24 };
@@ -253,9 +267,9 @@
             }
 
             $('#calendar').bsCalendar({
-                startView: 'week',
+                startView: _calView,
                 startWeekOnSunday: false,
-                startDate: moment().startOf('week').toDate(),
+                startDate: _calDate ? moment(_calDate).toDate() : moment().startOf('week').toDate(),
                 showAddButton: false,
                 navigateOnWheel: false,
                 locale: 'en-GB',
@@ -355,6 +369,7 @@
                     }
 
                     const selectedRoomIds = parseRoomIdsFromRequest(requestData).length ? parseRoomIdsFromRequest(requestData) : parseRoomIdsFromLocation();
+                    if (requestData.fromDate) { _calDate = requestData.fromDate; syncCalendarUrl(); }
                     const titleEl = document.getElementById('calendar-title');
                     if (titleEl) {
                         if (selectedRoomIds.length === 1) {
@@ -537,6 +552,11 @@
             // Recompute clamps on calendar navigation and resize
             $('#calendar').on('after-load.bs.calendar navigate-forward.bs.calendar navigate-back.bs.calendar view.bs.calendar', function() {
                 requestAnimationFrame(applyLineClamps);
+            });
+            // Track view changes for shareable URL
+            $('#calendar').on('view.bs.calendar', function(e, viewName) {
+                const v = viewName || (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.view);
+                if (v) { _calView = v; syncCalendarUrl(); }
             });
             window.addEventListener('resize', function() { requestAnimationFrame(applyLineClamps); });
 
