@@ -391,7 +391,7 @@
                                         const isCancellation = item.type === 'room_cancellation';
                                         return {
                                             id: item.id,
-                                            title: isCancellation ? `Cancelled: ${item.title}` : item.title,
+                                            title: isCancellation ? (item.title ? `Cancelled: ${item.title}` : 'Cancelled') : item.title,
                                             start: item.start,
                                             end: item.end,
                                             location: item.location,

@@ -255,7 +255,7 @@ class RoomUsageApiView(APIView):
                 datetime.combine(cancellation.date, time.max),
                 timezone.get_current_timezone(),
             )
-            label = cancellation.name or "Room cancelled"
+            label = cancellation.name or ""
             results.append(
                 {
                     "id": f"cancellation-{cancellation.id}",
@@ -263,9 +263,7 @@ class RoomUsageApiView(APIView):
                     "start": timezone.localtime(cancel_start).strftime(
                         "%Y-%m-%d %H:%M:%S"
                     ),
-                    "end": timezone.localtime(cancel_end).strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    ),
+                    "end": timezone.localtime(cancel_end).strftime("%Y-%m-%d %H:%M:%S"),
                     "type": "room_cancellation",
                     "location": cancellation.room.name if cancellation.room else None,
                     "public_url": "",
