@@ -23,6 +23,14 @@ class SearchRoomApiView(APIView):
     permission_classes = [_CanViewRoomsAndCourses]
 
     def get(self, request: Request) -> Response:
+        room_id = (request.query_params.get("id") or "").strip()
+        if room_id:
+            try:
+                room = Room.objects.get(pk=int(room_id))
+                return Response([{"value": room.id, "text": room.name}])
+            except Room.DoesNotExist, ValueError:
+                return Response([], status=200)
+
         q = (request.query_params.get("q") or "").strip()
         try:
             limit = int(request.query_params.get("limit", "20").strip())

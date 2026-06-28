@@ -658,6 +658,18 @@
                         }
                     });
                 }
+                // Pre-populate search field if room_id is already in the URL
+                const _initRoomId = _initParams.get('room_id');
+                if (_initRoomId && input) {
+                    fetch(`/courses/api/search-room/?id=${encodeURIComponent(_initRoomId)}`, { credentials: 'same-origin' })
+                        .then(r => r.ok ? r.json() : [])
+                        .then(data => {
+                            if (Array.isArray(data) && data.length > 0) {
+                                input.value = data[0].text || '';
+                            }
+                        })
+                        .catch(() => {});
+                }
             })();
 
             // Track appended nodes so we can remove them later
