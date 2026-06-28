@@ -23,7 +23,14 @@ class GroupEmailAdmin(TranslatableAdmin):
     list_filter = ["target_group"]
     search_fields = ["target_group__name"]
     actions = [copy_emails_admin_action]
-    fields = ["target_group", "reply_to", "schedule_send", "subject", "message"]
+    fields = [
+        "target_group",
+        "reply_to",
+        "schedule_send",
+        "include_unsubscribe",
+        "subject",
+        "message",
+    ]
 
     def has_change_permission(self, request, obj: GroupEmail | None = None):
         if obj is not None:

@@ -1,5 +1,11 @@
 from django.contrib.auth.models import Group
-from django.db.models import SET_NULL, CharField, DateTimeField, ForeignKey
+from django.db.models import (
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+)
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
 from parler.models import TranslatableModel, TranslatedFields
@@ -23,6 +29,14 @@ class GroupEmail(TranslatableModel):
         on_delete=SET_NULL,
         blank=True,
         null=True,
+    )
+    include_unsubscribe = BooleanField(
+        verbose_name=_("Include unsubscribe"),
+        default=False,
+        help_text=_(
+            "Add List-Unsubscribe headers and an unsubscribe link to the email. "
+            "REQUIRED for marketing/newsletter emails."
+        ),
     )
     schedule_send = DateTimeField(
         blank=True,
