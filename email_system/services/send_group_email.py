@@ -34,12 +34,13 @@ def send_scheduled_group_emails() -> str:
 
 def send_group_email(group_email: GroupEmail) -> None:
     unsubscribe_context = None
-    if group_email.target_group.name == GroupDefinitions.NEWSLETTER.name:
-        unsubscribe_context = GroupDefinitions.NEWSLETTER.name
-    elif group_email.target_group.name == GroupDefinitions.GET_INVOLVED.name:
-        unsubscribe_context = GroupDefinitions.GET_INVOLVED.name
-    elif group_email.target_group.name == GroupDefinitions.TEST.name:
-        unsubscribe_context = GroupDefinitions.TEST.name
+    if group_email.include_unsubscribe:
+        if group_email.target_group.name == GroupDefinitions.NEWSLETTER.name:
+            unsubscribe_context = GroupDefinitions.NEWSLETTER.name
+        elif group_email.target_group.name == GroupDefinitions.GET_INVOLVED.name:
+            unsubscribe_context = GroupDefinitions.GET_INVOLVED.name
+        elif group_email.target_group.name == GroupDefinitions.TEST.name:
+            unsubscribe_context = GroupDefinitions.TEST.name
 
     BATCH_SIZE = 100
     user_qs = group_email.target_group.user_set.all()
