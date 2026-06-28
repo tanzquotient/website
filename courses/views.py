@@ -2,9 +2,8 @@ import hashlib
 import json
 import logging
 import os
-from datetime import timedelta
+from datetime import timedelta, timezone
 
-import pytz
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -19,7 +18,6 @@ from django.db.models.functions import TruncDate
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.utils.translation import get_language
@@ -32,6 +30,7 @@ from icalendar import Calendar, Event, vDatetime, vDuration, vText
 from courses.forms import UserEditForm, create_initial_from_user
 from courses.models.choices import SubscribeState
 from courses.utils import find_duplicate_users, merge_duplicate_users
+from events.models import Event as EventModel
 from tq_website import settings
 from utils.plots import plot_figure
 from utils.tables.table_view_or_export import table_view_or_export
@@ -221,8 +220,8 @@ def _lesson_to_ical_event(
     subscription: Subscribe = None,
 ):
     event = Event()
-    event["dtstart"] = vDatetime(timezone.localtime(lesson_occurrence.start, pytz.UTC))
-    event["dtend"] = vDatetime(timezone.localtime(lesson_occurrence.end, pytz.UTC))
+    event["dtstart"] = vDatetime(lesson_occurrence.start.astimezone(timezone.utc))
+    event["dtend"] = vDatetime(lesson_occurrence.end.astimezone(timezone.utc))
 
     course_title = course.type.title
     event_title = course_title
@@ -279,6 +278,25 @@ def _lesson_to_ical_event(
     #         event.add('attendee', attendee, encode=0)
 
     return event
+
+
+def _event_to_ical_event(event: EventModel, request: HttpRequest) -> Event:
+    calendar_event = Event()
+    calendar_event["dtstart"] = vDatetime(event.start.astimezone(timezone.utc))
+    calendar_event["dtend"] = vDatetime(event.end.astimezone(timezone.utc))
+
+    calendar_event.add("summary", vText(event.name))
+    if event.room:
+        calendar_event.add("location", vText(event.room.name))
+    calendar_event.add(
+        "url",
+        add_domain(
+            get_current_site(request),
+            reverse("events:detail", kwargs=dict(event_id=event.id)),
+            request.is_secure(),
+        ),
+    )
+    return calendar_event
 
 
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
@@ -608,6 +626,9 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
             cal.add_component(
                 _lesson_to_ical_event(course, occurrence, request, subscription)
             )
+    events = user.resposible_for_events.all()
+    for event in events:
+        cal.add_component(_event_to_ical_event(event, request))
 
     response = HttpResponse(cal.to_ical(), content_type="text/calendar")
     cache.set(cache_key, response, 60 * 60 * 24)
