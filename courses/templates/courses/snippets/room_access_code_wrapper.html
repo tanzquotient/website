@@ -59,7 +59,7 @@
                     {% trans "Revealing this code is logged." %}
                 </p>
                 <button class="btn btn-outline-secondary"
-                        onclick="revealRoomCode({{ access_code.pk }}, '{% if occurrence_type == "course" %}course_id{% else %}event_id{% endif %}', {{ course_or_event.pk }}, this)">
+                        onclick="revealRoomCode('{% url "courses:reveal_room_access_code" access_code.pk %}', '{% if occurrence_type == "course" %}course_id{% else %}event_id{% endif %}', {{ course_or_event.pk }}, this)">
                     {% trans "Reveal code" %}
                 </button>
             </div>
@@ -69,12 +69,13 @@
     {% endfor %}
     {% addtoblock "js" %}
         <script>
-            async function revealRoomCode(codePk, contextKey, contextId, btn) {
+            async function revealRoomCode(revealUrl, contextKey, contextId, btn) {
+                const codePk = revealUrl.match(/\/(\d+)\//)[1];
                 btn.disabled = true;
                 const payload = {[contextKey]: contextId};
                 let resp;
                 try {
-                    resp = await fetch(`/courses/api/room-access-code/${codePk}/reveal/`, {
+                    resp = await fetch(revealUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
