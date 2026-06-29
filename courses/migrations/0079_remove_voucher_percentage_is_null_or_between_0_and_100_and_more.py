@@ -56,7 +56,7 @@ def convert_percentage_vouchers(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("courses", "0076_move_opens_soon_to_course"),
+        ("courses", "0078_alter_lessonoccurrenceteach_options_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
