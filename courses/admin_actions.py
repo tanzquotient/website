@@ -7,7 +7,6 @@ from django.db.models import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from reversion import revisions as reversion
 
@@ -358,28 +357,39 @@ def export_teacher_payment_information_excel(modeladmin, request, queryset):
     )
 
 
-def _build_voucher_email_preview(first_name, voucher_key, voucher_url):
-    """Return (preview_html, None) with real values substituted, or None on error."""
-    try:
-        from post_office.models import EmailTemplate
+def _build_voucher_email_preview(
+    first_name, voucher_key, voucher_url, voucher_expires=None
+):
+    """Return preview HTML with real values substituted, or None on error."""
+    import datetime
 
+    from django.template import Context, Template
+    from post_office.models import EmailTemplate
+
+    if voucher_expires is None:
+        today = datetime.date.today()
+        voucher_expires = today.replace(year=today.year + 5)
+
+    try:
         tmpl = EmailTemplate.objects.get(name="voucher")
-        html = tmpl.html_content or ""
-        return mark_safe(
-            html.replace("{{ first_name }}", escape(first_name))
-            .replace("{{ voucher_key }}", escape(voucher_key))
-            .replace("{{ voucher_url }}", escape(voucher_url))
-            .replace(
-                "{{ custom_msg_de }}",
-                '<span id="preview-msg-de" class="email-preview-highlight">'
-                "[Ihre deutsche Nachricht hier]</span>",
-            )
-            .replace(
-                "{{ custom_msg_en }}",
-                '<span id="preview-msg-en" class="email-preview-highlight">'
-                "[Your English message here]</span>",
-            )
+        template = Template(tmpl.html_content or "")
+        context = Context(
+            {
+                "first_name": first_name,
+                "voucher_key": voucher_key,
+                "voucher_url": voucher_url,
+                "voucher_expires": voucher_expires,
+                "custom_msg_de": mark_safe(
+                    '<span id="preview-msg-de" class="email-preview-highlight">'
+                    "[Ihre deutsche Nachricht hier]</span>"
+                ),
+                "custom_msg_en": mark_safe(
+                    '<span id="preview-msg-en" class="email-preview-highlight">'
+                    "[Your English message here]</span>"
+                ),
+            }
         )
+        return mark_safe(template.render(context))
     except Exception:
         return None
 
@@ -622,6 +632,7 @@ def email_vouchers(modeladmin, request, queryset):
         first_name=first_user.first_name if first_user else "—",
         voucher_key=first_v.key if first_v else "—",
         voucher_url=voucher_url,
+        voucher_expires=first_v.expires if first_v else None,
     )
     preview_hint = (
         f"Preview based on {first_user.get_full_name()} – voucher {first_v.key}"
