@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("events", "0008_alter_eventcategorytranslation_unique_together_and_more"),
+        ("events", "0009_alter_eventcategory_options"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

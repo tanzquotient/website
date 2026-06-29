@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("courses", "0078_rename_visibility_teachers_to_teachers_djs"),
+        ("courses", "0083_rename_visibility_teachers_to_teachers_djs"),
     ]
 
     operations = [

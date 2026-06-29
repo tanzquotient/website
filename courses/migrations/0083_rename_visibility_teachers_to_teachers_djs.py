@@ -19,7 +19,7 @@ def rename_responsible_to_teachers(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("courses", "0077_roomaccesscodeview"),
+        ("courses", "0082_roomaccesscodeview"),
     ]
 
     operations = [

@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("events", "0009_add_teachers_djs_to_event"),
+        ("events", "0010_add_teachers_djs_to_event"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

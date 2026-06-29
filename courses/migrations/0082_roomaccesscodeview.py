@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("courses", "0076_move_opens_soon_to_course"),
+        ("courses", "0081_remove_voucher_percentage"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
