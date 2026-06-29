@@ -21,6 +21,11 @@ urlpatterns = [
     path("<int:course_id>/detail/", views.course_detail, name="course_detail"),
     path("<int:course_id>/calendar/", views.course_ical, name="course_ical"),
     path("auth/room/calendar/", views.room_calendar, name="room_calendar"),
+    path(
+        "auth/room/calendar/multi/",
+        views.room_calendar_multi,
+        name="room_calendar_multi",
+    ),
     path("<int:course_id>/subscribe/", views.subscribe_form, name="subscribe"),
     path(
         "subscribe/<int:subscription_id>/cancel",

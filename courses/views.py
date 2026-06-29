@@ -211,6 +211,19 @@ def room_calendar(request: HttpRequest) -> HttpResponse:
     return render(request, "courses/room_calendar/calendar.html", context)
 
 
+@staff_member_required
+def room_calendar_multi(request: HttpRequest) -> HttpResponse:
+    user = request.user
+    if not (
+        user.has_perm("courses.view_room")
+        and user.has_perm("courses.view_course")
+        and user.has_perm("events.view_event")
+    ):
+        raise PermissionDenied
+
+    return render(request, "courses/room_calendar/multi_calendar.html", {})
+
+
 def _lesson_to_ical_event(
     course: Course,
     lesson_occurrence: LessonOccurrence,

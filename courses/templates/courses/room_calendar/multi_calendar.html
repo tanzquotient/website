@@ -1,0 +1,733 @@
+{% extends "basis.html" %}
+{% load static sekizai_tags i18n %}
+
+{% block lead_title %}Multi-Room Calendar{% endblock %}
+
+{% block main_content %}
+<div class="container-fluid">
+
+    {# Date navigation bar #}
+    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+        <button id="mc-prev" class="btn btn-outline-secondary btn-sm" title="Previous day">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <button id="mc-today" class="btn btn-outline-secondary btn-sm">Today</button>
+        <span id="mc-date-label" class="fw-semibold fs-5 px-1"></span>
+        <button id="mc-next" class="btn btn-outline-secondary btn-sm" title="Next day">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+
+    {# Room search #}
+    <div class="mb-3 d-flex align-items-center gap-2">
+        <label for="mc-room-search-input" class="form-label mb-0 me-2">Add room</label>
+        <div class="position-relative" style="min-width:260px;">
+            <input id="mc-room-search-input" class="form-control form-control-sm" placeholder="Search room..." autocomplete="off" />
+            <ul id="mc-room-search-results" class="list-group position-absolute w-100" style="z-index:1050; display:none; max-height:200px; overflow:auto;"></ul>
+        </div>
+    </div>
+    <template id="mc-room-search-result">
+        <li class="search-result"><a href="javascript:void(0)" class="dropdown-item">Room Name</a></li>
+    </template>
+    <template id="mc-room-searching">
+        <li class="searching"><span class="dropdown-item fst-italic">Searching...</span></li>
+    </template>
+
+    {# Calendar columns #}
+    <div id="multi-cal-row" class="d-flex flex-nowrap gap-0" style="overflow-x: auto;">
+        <div id="mc-empty-hint" class="text-muted fst-italic py-4 px-2">
+            Use the search above to add rooms.
+        </div>
+    </div>
+
+</div>
+
+{% addtoblock "css" %}
+<style>
+    /*
+     * bsCalendar DOM structure (confirmed from source):
+     *   calDiv (.bs-calendar + .position-relative + .overflow-hidden  ← added by plugin)
+     *   └── innerWrapper (.d-flex.flex-column.h-100.w-100 ...)
+     *       ├── topNav (first child — the floating toolbar, #wrapperTopNavId)   ← HIDE
+     *       └── .wc-calendar-container (.d-flex.flex-fill ...)
+     *           ├── sidebar (first child, #wrapperSideNavId)                    ← HIDE
+     *           └── viewWrapper (second child, .overflow-hidden .bg-body-tertiary ...)
+     *               └── .wc-calendar-view-container
+     *                   └── ... → .wc-day-week-view → .wc-day-view-time-slots
+     *                             → [data-day-hour] → .wc-time-label (abs, top:0, translate -50%)
+     */
+
+    /* 1. Outer wrapper: bsCalendar adds .overflow-hidden (Bootstrap: overflow:hidden !important)
+          and .h-100 to innerWrapper. Fix both.
+          Note: bsCalendar does NOT add .bs-calendar-wrapper — that compound selector was wrong. */
+    #multi-cal-row .bs-calendar {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+    /* innerWrapper gets h-100 (height:100%); with height:auto parent set explicitly to auto. */
+    #multi-cal-row .bs-calendar > div {
+        height: auto !important;
+    }
+
+    /* 2. Hide topNav (first child of innerWrapper = first child of calDiv's only child).
+          We also hide it via JS for belt-and-suspenders (plugin injects styles dynamically). */
+    #multi-cal-row .bs-calendar > div > div:first-child {
+        display: none !important;
+    }
+
+    /* 3. Hide sidebar (first child of .wc-calendar-container).
+          IMPORTANT: cannot use :not(.wc-calendar-view-container) because viewWrapper (second
+          child) also lacks that class — .wc-calendar-view-container is INSIDE viewWrapper. */
+    #multi-cal-row .bs-calendar .wc-calendar-container > div:first-child {
+        display: none !important;
+    }
+
+    /* 4. viewWrapper (second/last child of .wc-calendar-container) also has .overflow-hidden.
+          Also strip its huge p-3/p-lg-4 padding — too wide for narrow columns. */
+    #multi-cal-row .bs-calendar .wc-calendar-container > div:last-child {
+        overflow: visible !important;
+        height: auto !important;
+        padding: 0 !important;
+    }
+
+    /* 5. Remove outerContainer's px-1/px-lg-5 horizontal padding (it creates huge side margins
+          in narrow 320px columns) and ensure overflow visible throughout. */
+    #multi-cal-row .bs-calendar .wc-calendar-view-container > .position-relative {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        overflow: visible !important;
+    }
+    #multi-cal-row .bs-calendar .wc-calendar-container,
+    #multi-cal-row .bs-calendar .wc-calendar-view-container,
+    #multi-cal-row .bs-calendar .wc-calendar-view-container > div,
+    #multi-cal-row .bs-calendar .wc-calendar-view-container > div > div,
+    #multi-cal-row .bs-calendar .wc-day-week-view,
+    #multi-cal-row .bs-calendar .wc-day-view-time-slots,
+    #multi-cal-row .bs-calendar [data-day-hour] {
+        overflow: visible !important;
+    }
+    /* Time labels: z-index and color handled here; overflow and positioning fixed in JS. */
+    #multi-cal-row .bs-calendar .wc-time-label {
+        z-index: 5 !important;
+        color: var(--bs-body-color) !important;
+    }
+    /* Hide the day header (date/weekday label above the time grid) — redundant here */
+    #multi-cal-row .bs-calendar .wc-day-header {
+        display: none !important;
+    }
+    /* Hide time labels in all but the first room column */
+    #multi-cal-row .room-col:not(:first-child) .wc-time-label {
+        visibility: hidden;
+    }
+    /* Suppress "add appointment" cursor on time-slot grid cells */
+    #multi-cal-row .bs-calendar .wc-week-view,
+    #multi-cal-row .bs-calendar .wc-day-view,
+    #multi-cal-row .bs-calendar .wc-grid,
+    #multi-cal-row .bs-calendar .wc-grid *,
+    #multi-cal-row .bs-calendar .wc-day-grid,
+    #multi-cal-row .bs-calendar .wc-time-grid,
+    #multi-cal-row .bs-calendar .wc-column,
+    #multi-cal-row .bs-calendar .wc-cell,
+    #multi-cal-row .bs-calendar [data-day-hour],
+    #multi-cal-row .bs-calendar .wc-day-view-time-slots [data-day-hour],
+    #multi-cal-row .bs-calendar .wc-day-view-time-slots > div,
+    #multi-cal-row .bs-calendar [data-week-day] {
+        cursor: default !important;
+    }
+    #multi-cal-row .appointment-container,
+    #multi-cal-row .bs-calendar .wc-event,
+    #multi-cal-row .bs-calendar .wc-appointment {
+        cursor: pointer !important;
+    }
+    /* Room column layout */
+    .room-col {
+        flex: 0 0 320px;
+        min-width: 0;
+        border-left: 1px solid #dee2e6;
+    }
+    .room-col:first-child {
+        border-left: none;
+    }
+    /* Room chip header */
+    .room-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.6rem;
+        background: var(--bs-body-bg, #fff);
+        border-bottom: 2px solid var(--bs-primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+        position: sticky;
+        top: 0;
+        z-index: 15;
+    }
+    /* Appointment styling (same as existing calendar) */
+    .appointment-title {
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--lines, 2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.1;
+    }
+    .appointment-container {
+        box-sizing: border-box;
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100%;
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+    }
+    /* Room search results dropdown */
+    #mc-room-search-results {
+        background: var(--bs-body-bg, #ffffff);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.12);
+        padding: 0.5rem 0.25rem;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ThomasDev-de/bs-calendar@2.0.11/dist/bs-calendar.min.js"></script>
+<script>
+$(function () {
+
+    /* ── Helpers (identical to existing calendar) ── */
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function formatAppointment(appointment) {
+        const title = escapeHtml(appointment && (appointment.title || appointment.name) || '');
+        const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
+        const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
+        const type = (appointment && (appointment.type || appointment.typeName)) || '';
+        const dataAttrs = `data-public-url="${escapeHtml(publicUrl)}" data-admin-url="${escapeHtml(adminUrl)}" data-type="${escapeHtml(type)}"`;
+        return `<div class="appointment-container px-1 py-1" ${dataAttrs}><div class="appointment-title text-center lh-sm">${title}</div></div>`;
+    }
+
+    function applyLineClamps() {
+        document.querySelectorAll('.appointment-title').forEach(function(el) {
+            try {
+                const computed = window.getComputedStyle(el);
+                let lineHeight = parseFloat(computed.lineHeight);
+                if (!lineHeight || isNaN(lineHeight)) {
+                    const fontSize = parseFloat(computed.fontSize) || 14;
+                    lineHeight = fontSize * 1.1;
+                }
+                let container = el.parentElement;
+                for (let i = 0; i < 4 && container; i++) {
+                    if (container.clientHeight > 0) break;
+                    container = container.parentElement;
+                }
+                const availableHeight = (container && container.clientHeight) || el.clientHeight || (lineHeight * 2);
+                let maxLines = Math.floor(availableHeight / lineHeight);
+                if (maxLines < 1) maxLines = 1;
+                el.style.setProperty('--lines', String(maxLines));
+                el.style.maxHeight = (maxLines * lineHeight) + 'px';
+            } catch (e) {}
+        });
+    }
+
+    /* ── State ── */
+
+    const _initParams = new URLSearchParams(window.location.search);
+    const STATE = {
+        date: _initParams.get('date') || moment().format('YYYY-MM-DD'),
+        rooms: [],          // [{id, name}] in order
+        instances: {},      // {roomId: jQuery div}
+        eventsCache: {},    // {roomId: [events]}
+        lastHourSlots: { start: 8, end: 22 },
+    };
+
+    /* ── URL sync ── */
+
+    function syncUrl() {
+        try {
+            const params = new URLSearchParams();
+            params.set('date', STATE.date);
+            STATE.rooms.forEach(r => params.append('room_id', String(r.id)));
+            history.replaceState(null, '', window.location.pathname + '?' + params.toString());
+        } catch (e) {}
+    }
+
+    /* ── Date label ── */
+
+    function updateDateLabel() {
+        const el = document.getElementById('mc-date-label');
+        if (el) el.textContent = moment(STATE.date).format('dddd, D MMMM YYYY');
+    }
+
+    /* ── Hour slot synchronization ── */
+
+    function syncHourSlots() {
+        let minStart = null, maxEnd = null;
+        Object.values(STATE.eventsCache).forEach(function(events) {
+            if (!Array.isArray(events)) return;
+            events.forEach(function(a) {
+                if (!a || a.allDay || a.type === 'holiday') return;
+                const s = moment(a.start), e = moment(a.end);
+                if (!s.isValid() || !e.isValid()) return;
+                const startHour = s.hour();
+                const endHour = e.hour() + ((e.minute() > 0 || e.second() > 0) ? 1 : 0);
+                if (minStart === null || startHour < minStart) minStart = startHour;
+                if (maxEnd === null || endHour > maxEnd) maxEnd = endHour;
+            });
+        });
+        let newStart = (minStart !== null) ? Math.max(0, minStart) : 8;
+        let newEnd = (maxEnd !== null) ? Math.min(24, maxEnd) : 22;
+        if (newEnd <= newStart) newEnd = Math.min(24, newStart + 1);
+        if (STATE.lastHourSlots.start === newStart && STATE.lastHourSlots.end === newEnd) return;
+        STATE.lastHourSlots = { start: newStart, end: newEnd };
+        Object.values(STATE.instances).forEach(function(inst) {
+            try {
+                inst.bsCalendar('updateOptions', { hourSlots: { start: newStart, end: newEnd } });
+                /* updateOptions rebuilds the time grid — reapply overflow fix after render */
+                setTimeout(function() { fixCalendarOverflow(inst[0]); }, 0);
+            } catch (e) {}
+        });
+    }
+
+    /* ── Holiday normalization (identical to existing calendar) ── */
+
+    function normalizeHoliday(h) {
+        if (!h) return null;
+        if (typeof h === 'string') {
+            const m = moment(h);
+            if (m.isValid()) return { start: m.format('YYYY-MM-DD'), end: m.format('YYYY-MM-DD'), name: h };
+            return null;
+        }
+        const startCandidates = ['date', 'start', 'from', 'localDate', 'date_local', 'dateFrom', 'startDate', 'start_date', 'date_start', 'dateISO', 'dateString', 'day', 'DTSTART', 'dtstart'];
+        const endCandidates = ['date_to', 'end', 'to', 'dateTo', 'endDate', 'end_date', 'DTEND', 'dtend'];
+        let start = null;
+        for (const c of startCandidates) {
+            if (h[c]) { start = h[c]; break; }
+            if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                start = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                if (start) break;
+            }
+        }
+        if (!start && (h.DTSTART || h.dtstart)) start = h.DTSTART || h.dtstart;
+        if (start && typeof start === 'object') {
+            if (start.value) start = start.value;
+            else if (start.date) start = start.date;
+        }
+        if (!start) return null;
+        const ms = moment(start);
+        if (!ms.isValid()) return null;
+        const startFmt = ms.format('YYYY-MM-DD');
+        let end = null;
+        for (const c of endCandidates) {
+            if (h[c]) { end = h[c]; break; }
+            if (h.properties && h.properties[c] && (h.properties[c].value || (Array.isArray(h.properties[c].vals) && h.properties[c].vals[0] && h.properties[c].vals[0].value))) {
+                end = h.properties[c].value || (h.properties[c].vals[0] && h.properties[c].vals[0].value);
+                if (end) break;
+            }
+        }
+        if (!end) end = startFmt;
+        if (typeof end === 'object' && end.value) end = end.value;
+        const me = moment(end);
+        const endFmt = me && me.isValid() ? me.format('YYYY-MM-DD') : startFmt;
+        let holidayName = null;
+        const rawName = h.name || h.localName || h.local_name || h.title || h.holiday || (h.properties && h.properties.summary && h.properties.summary.value);
+        if (Array.isArray(rawName)) {
+            let found = rawName.find(n => n && n.language && n.language.toUpperCase() === 'DE');
+            if (!found && typeof navigator !== 'undefined' && navigator.language) {
+                const navLang = navigator.language.split('-')[0].toUpperCase();
+                found = rawName.find(n => n && n.language && n.language.toUpperCase() === navLang);
+            }
+            if (!found) found = rawName[0];
+            if (found) holidayName = found.text || found.name || (typeof found === 'string' ? found : null);
+        } else if (rawName && typeof rawName === 'object' && rawName.text) {
+            holidayName = rawName.text;
+        } else if (typeof rawName === 'string') {
+            holidayName = rawName;
+        } else if (h.description && typeof h.description === 'string') {
+            holidayName = h.description;
+        }
+        let halfDay = false;
+        if (h.temporalScope && typeof h.temporalScope === 'string' && /half/i.test(h.temporalScope)) halfDay = true;
+        for (const c of ['halfDay', 'half_day', 'isHalfDay', 'half', 'is_half_day']) {
+            if (h[c]) { halfDay = true; break; }
+        }
+        return { start: startFmt, end: endFmt, name: holidayName, halfDay };
+    }
+
+    function fetchHolidays(fromDate, toDate) {
+        try {
+            const openHolidayApi = window.$ && window.$.bsCalendar && window.$.bsCalendar.utils && window.$.bsCalendar.utils.openHolidayApi;
+            if (openHolidayApi && typeof openHolidayApi.getPublicHolidays === 'function') {
+                let result;
+                try {
+                    result = openHolidayApi.getPublicHolidays('CH', 'ZH', 'DE', fromDate, toDate);
+                } catch (e) {
+                    result = openHolidayApi.getPublicHolidays('CH', 'DE', fromDate, toDate);
+                }
+                if (result && typeof result.then === 'function') return result;
+                return Promise.resolve(result || []);
+            }
+        } catch (e) {}
+        return Promise.resolve([]);
+    }
+
+    function buildHolidayEvents(holidaysRaw) {
+        return (holidaysRaw || []).flatMap(function(h, idx) {
+            const norm = normalizeHoliday(h);
+            if (!norm || !norm.start) return [];
+            const title = (norm.name || 'Holiday') + (norm.halfDay ? ' (1/2 day)' : '');
+            return [{
+                id: 'holiday-' + norm.start + '-' + idx,
+                title: title,
+                start: norm.start + ' 00:00:00',
+                end: norm.end + ' 23:59:59',
+                color: 'warning',
+                type: 'holiday',
+                location: null,
+                allDay: true,
+                editable: false,
+                deleteable: false,
+            }];
+        });
+    }
+
+    /* ── bsCalendar instance factory ── */
+
+    const typeToColor = { course: 'primary', event: 'success', room_cancellation: 'danger' };
+
+    function makeCalendarUrl(roomId) {
+        return function(requestData) {
+            const fromDate = requestData.fromDate || STATE.date;
+            const toDate = requestData.toDate || STATE.date;
+
+            const params = new URLSearchParams();
+            params.append('room_id', String(roomId));
+            params.append('fromDate', fromDate);
+            params.append('toDate', toDate);
+
+            const fetchEvents = fetch('/courses/api/room-usage/?' + params.toString(), { credentials: 'same-origin' })
+                .then(function(resp) { return resp.ok ? resp.json() : []; })
+                .then(function(data) {
+                    if (!Array.isArray(data)) return [];
+                    return data.map(function(item) {
+                        const isCancellation = item.type === 'room_cancellation';
+                        return {
+                            id: item.id,
+                            title: isCancellation ? (item.title ? 'Cancelled: ' + item.title : 'Cancelled') : item.title,
+                            start: item.start,
+                            end: item.end,
+                            location: item.location,
+                            color: typeToColor[item.type] || 'primary',
+                            allDay: isCancellation,
+                            editable: false,
+                            deleteable: false,
+                            type: item.type,
+                            public_url: item.public_url || item.publicUrl || '',
+                            admin_url: item.admin_url || item.adminUrl || '',
+                        };
+                    });
+                })
+                .catch(function() { return []; });
+
+            const fetchHols = fetchHolidays(fromDate, toDate);
+
+            return Promise.all([fetchEvents, fetchHols]).then(function(results) {
+                const events = results[0];
+                const holidays = buildHolidayEvents(results[1]);
+                const combined = events.concat(holidays);
+                STATE.eventsCache[String(roomId)] = combined;
+                setTimeout(syncHourSlots, 0);
+                return combined;
+            }).catch(function() { return []; });
+        };
+    }
+
+    function initCalendarInstance(calDiv, roomId) {
+        calDiv.bsCalendar({
+            startView: 'day',
+            startDate: moment(STATE.date).toDate(),
+            showAddButton: false,
+            navigateOnWheel: false,
+            search: 0,
+            locale: 'en-GB',
+            hourSlots: { start: STATE.lastHourSlots.start, end: STATE.lastHourSlots.end },
+            holidays: { country: 'CH', language: 'DE', federalState: 'ZH' },
+            formatter: {
+                holiday: function(holiday) {
+                    return holiday.name || holiday.localName || holiday.description || '';
+                },
+                day: function(appointment) { return formatAppointment(appointment); },
+                week: function(appointment) { return formatAppointment(appointment); },
+                month: function(appointment) { return formatAppointment(appointment); },
+                window: async function(appointment) {
+                    return new Promise(function(resolve) {
+                        try {
+                            const title = escapeHtml(appointment && (appointment.title || appointment.name) || '');
+                            const desc = escapeHtml((appointment && appointment.description) || '');
+                            const publicUrl = (appointment && (appointment.public_url || appointment.publicUrl)) || '';
+                            const adminUrl = (appointment && (appointment.admin_url || appointment.adminUrl)) || '';
+                            const apptType = appointment && appointment.type;
+                            const publicLabel = apptType === 'event' ? 'Event page' : (apptType === 'room_cancellation' ? 'Details' : 'Course page');
+                            const publicBtn = publicUrl ? '<a href="' + escapeHtml(publicUrl) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success me-1">' + escapeHtml(publicLabel) + '</a>' : '';
+                            const adminBtn = adminUrl ? '<a href="' + escapeHtml(adminUrl) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success">Admin page</a>' : '';
+                            const buttons = (publicBtn || adminBtn) ? '<div class="d-flex appointment-extra mt-2">' + publicBtn + adminBtn + '</div>' : '';
+                            let details = '';
+                            try {
+                                const s = appointment && appointment.start ? moment(appointment.start).format('ddd, D. MMMM, HH:mm') : '';
+                                const e = appointment && appointment.end ? moment(appointment.end).format('ddd, D. MMMM, HH:mm') : '';
+                                const room = appointment && (appointment.location || appointment.room) ? escapeHtml(appointment.location || appointment.room) : '';
+                                const parts = [];
+                                if (s) parts.push('<strong>Start:</strong> ' + escapeHtml(s));
+                                if (e) parts.push('<strong>End:</strong> ' + escapeHtml(e));
+                                if (room) parts.push('<strong>Room:</strong> ' + room);
+                                if (parts.length) details = '<p class="mb-1">' + parts.join('<br>') + '</p>';
+                            } catch (e2) {}
+                            resolve('<h3>' + title + '</h3>' + details + (desc ? '<p>' + desc + '</p>' : '') + buttons);
+                        } catch (e) { resolve(''); }
+                    });
+                },
+            },
+            onAfterLoad: function(appointments) {
+                if (Array.isArray(appointments)) {
+                    appointments.forEach(function(a) { a.editable = false; a.deleteable = false; });
+                }
+                /* Re-apply overflow fix after every render/load cycle — bsCalendar may rebuild
+                   the time grid (e.g. after updateOptions changes hourSlots), which wipes inline styles. */
+                setTimeout(function() {
+                    fixCalendarOverflow(calDiv[0]);
+                    requestAnimationFrame(applyLineClamps);
+                }, 0);
+            },
+            url: makeCalendarUrl(roomId),
+        });
+        /* Hide bsCalendar's top nav bar (topNav = innerWrapper's first child).
+           bsCalendar injects its own <style> block which can override stylesheet rules,
+           so we use inline setProperty('important') which always wins. */
+        var innerWrapperEl = calDiv[0].firstElementChild;
+        var topNavEl = innerWrapperEl && innerWrapperEl.firstElementChild;
+        if (topNavEl) {
+            topNavEl.style.setProperty('display', 'none', 'important');
+        }
+
+        /* Initial fix (sync) + deferred fix in case bsCalendar defers any DOM work */
+        fixCalendarOverflow(calDiv[0]);
+        setTimeout(function() { fixCalendarOverflow(calDiv[0]); }, 0);
+    }
+
+    /* Walk every ancestor of every .wc-time-label up to the calDiv root and force
+       overflow:visible as an inline important style — highest possible CSS priority,
+       wins over any stylesheet rule including injected ones. Also hides topNav. */
+    function fixCalendarOverflow(calEl) {
+        calEl.querySelectorAll('.wc-time-label').forEach(function(label) {
+            var el = label.parentElement;
+            while (el && el !== calEl) {
+                el.style.setProperty('overflow', 'visible', 'important');
+                el = el.parentElement;
+            }
+        });
+    }
+
+    /* ── Navigation ── */
+
+    function navigateAll(newDate) {
+        STATE.date = newDate;
+        updateDateLabel();
+        const d = moment(newDate).toDate();
+        Object.values(STATE.instances).forEach(function(inst) {
+            try {
+                inst.bsCalendar('setDate', { date: d, view: 'day' });
+                /* setDate triggers async fetch + DOM rebuild; onAfterLoad handles the real fix,
+                   but also fix immediately in case bsCalendar renders synchronously */
+                fixCalendarOverflow(inst[0]);
+            } catch (e) {}
+        });
+        syncUrl();
+    }
+
+    document.getElementById('mc-prev').addEventListener('click', function() {
+        navigateAll(moment(STATE.date).subtract(1, 'day').format('YYYY-MM-DD'));
+    });
+    document.getElementById('mc-next').addEventListener('click', function() {
+        navigateAll(moment(STATE.date).add(1, 'day').format('YYYY-MM-DD'));
+    });
+    document.getElementById('mc-today').addEventListener('click', function() {
+        navigateAll(moment().format('YYYY-MM-DD'));
+    });
+
+    /* ── Room add / remove ── */
+
+    function isRoomAdded(roomId) {
+        return STATE.rooms.some(function(r) { return String(r.id) === String(roomId); });
+    }
+
+    function addRoom(id, name) {
+        if (isRoomAdded(id)) return;
+        STATE.rooms.push({ id, name });
+
+        // Hide empty hint
+        const hint = document.getElementById('mc-empty-hint');
+        if (hint) hint.style.display = 'none';
+
+        // Create column wrapper
+        const col = document.createElement('div');
+        col.className = 'room-col';
+        col.dataset.roomId = String(id);
+
+        // Room chip
+        const chip = document.createElement('div');
+        chip.className = 'room-chip';
+        chip.innerHTML = '<span class="text-truncate">' + escapeHtml(name) + '</span>';
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-close ms-2 flex-shrink-0';
+        removeBtn.setAttribute('aria-label', 'Remove room');
+        removeBtn.addEventListener('click', function() { removeRoom(id); });
+        chip.appendChild(removeBtn);
+        col.appendChild(chip);
+
+        // Calendar div
+        const calDiv = $('<div class="bs-calendar"></div>');
+        col.appendChild(calDiv[0]);
+        document.getElementById('multi-cal-row').appendChild(col);
+
+        initCalendarInstance(calDiv, id);
+        STATE.instances[String(id)] = calDiv;
+
+        syncUrl();
+    }
+
+    function removeRoom(id) {
+        const key = String(id);
+        if (STATE.instances[key]) {
+            try { STATE.instances[key].bsCalendar('destroy'); } catch (e) {}
+            delete STATE.instances[key];
+        }
+        delete STATE.eventsCache[key];
+        STATE.rooms = STATE.rooms.filter(function(r) { return String(r.id) !== key; });
+
+        const col = document.querySelector('#multi-cal-row .room-col[data-room-id="' + key + '"]');
+        if (col) col.remove();
+
+        if (STATE.rooms.length === 0) {
+            const hint = document.getElementById('mc-empty-hint');
+            if (hint) hint.style.display = '';
+        }
+
+        syncHourSlots();
+        syncUrl();
+    }
+
+    /* ── Room search ── */
+
+    (function() {
+        const input = document.getElementById('mc-room-search-input');
+        const resultsEl = document.getElementById('mc-room-search-results');
+
+        function showResults(items) {
+            if (!resultsEl) return;
+            resultsEl.innerHTML = '';
+            if (!items || items.length === 0) { resultsEl.style.display = 'none'; return; }
+            items.forEach(function(room) {
+                const li = document.createElement('li');
+                li.className = 'search-result';
+                li.dataset.roomId = String(room.id);
+                li.dataset.roomName = String(room.name || '');
+                const a = document.createElement('a');
+                a.className = 'dropdown-item';
+                a.href = 'javascript:void(0)';
+                a.textContent = room.name;
+                li.appendChild(a);
+                resultsEl.appendChild(li);
+            });
+            resultsEl.style.display = 'block';
+        }
+
+        function doSearch(q) {
+            if (!resultsEl) return;
+            if (!q) { resultsEl.style.display = 'none'; return; }
+            resultsEl.innerHTML = '<li><span class="dropdown-item fst-italic">Searching…</span></li>';
+            resultsEl.style.display = 'block';
+            fetch('/courses/api/search-room/?q=' + encodeURIComponent(q) + '&limit=20', { credentials: 'same-origin' })
+                .then(function(resp) { return resp.ok ? resp.json() : []; })
+                .then(function(data) {
+                    const mapped = Array.isArray(data) ? data.map(function(r) { return { id: r.value, name: r.text }; }) : [];
+                    showResults(mapped);
+                })
+                .catch(function() { showResults([]); });
+        }
+
+        if (input) {
+            input.addEventListener('input', function() { doSearch(this.value.trim()); });
+            input.addEventListener('focus', function() { if (this.value.trim()) doSearch(this.value.trim()); });
+        }
+
+        // Use mousedown so the handler fires before blur hides the dropdown
+        if (resultsEl) {
+            resultsEl.addEventListener('mousedown', function(e) {
+                e.preventDefault(); // keep input focused
+                const li = e.target.closest('li[data-room-id]');
+                if (!li) return;
+                const id = li.dataset.roomId;
+                const name = li.dataset.roomName || li.textContent.trim();
+                if (!id) return;
+                addRoom(id, name);
+                if (input) input.value = '';
+                resultsEl.style.display = 'none';
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!resultsEl) return;
+            if (e.target !== input && !resultsEl.contains(e.target)) {
+                resultsEl.style.display = 'none';
+            }
+        });
+    })();
+
+    /* ── Init: restore from URL ── */
+
+    updateDateLabel();
+
+    const initRoomIds = _initParams.getAll('room_id').flatMap(function(s) { return s.split(','); }).map(function(s) { return s.trim(); }).filter(Boolean);
+    if (initRoomIds.length > 0) {
+        Promise.all(
+            initRoomIds.map(function(roomId) {
+                return fetch('/courses/api/search-room/?id=' + encodeURIComponent(roomId), { credentials: 'same-origin' })
+                    .then(function(r) { return r.ok ? r.json() : []; })
+                    .then(function(data) {
+                        return Array.isArray(data) && data.length > 0 ? { id: data[0].value, name: data[0].text } : null;
+                    })
+                    .catch(function() { return null; });
+            })
+        ).then(function(rooms) {
+            rooms.forEach(function(r) { if (r) addRoom(r.id, r.name); });
+        });
+    }
+
+});
+</script>
+{% endaddtoblock %}
+
+</div>
+{% endblock main_content %}
