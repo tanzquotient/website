@@ -225,7 +225,6 @@ class RoomAccessCodeInline(admin.TabularInline):
 @admin.register(RoomAccessCodeView)
 class RoomAccessCodeViewAdmin(admin.ModelAdmin):
     list_display = ["viewed_at", "user", "access_code"]
-    list_filter = ["access_code"]
     readonly_fields = ["user", "access_code", "viewed_at"]
     ordering = ["-viewed_at"]
 
