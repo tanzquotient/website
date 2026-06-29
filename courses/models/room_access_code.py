@@ -76,7 +76,12 @@ class RoomAccessCode(models.Model):
                 }
             )
 
+    def __str__(self):
+        return f"{self.room} ({self.valid_from:%d.%m.%Y} – {self.valid_until:%d.%m.%Y}, {self.get_visibility_display()})"
+
     class Meta:
+        verbose_name = "room access code"
+        verbose_name_plural = "room access codes"
         constraints = [
             models.CheckConstraint(
                 condition=Q(valid_until__gte=F("valid_from")),
