@@ -115,11 +115,12 @@ def format_duration(start: datetime, end: datetime) -> str:
     date_now = datetime.now()
     current_year = date_now.year
     format_date_without_year = start.year == end.year and start.year == current_year
-    date_format = "D, d. N" if format_date_without_year else "D, d. N Y"
+    date_part = "d. N" if format_date_without_year else "d. N Y"
+    date_format = f"D, {date_part}"
     time_format = "H:i"
     date_time_format = f"{date_format}, {time_format}"
     if start.date() == end.date():
-        return f"{date(start, date_format)}, {date(start, time_format)} - {date(end, time_format)}"
+        return f"{date(start, 'D')}, {date(start, time_format)} - {date(end, time_format)}, {date(start, date_part)}"
 
     return f"{date(start, date_time_format)} - {date(end, date_time_format)}"
 
