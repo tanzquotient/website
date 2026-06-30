@@ -1,7 +1,7 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from django.views.generic import TemplateView
-from pytz import timezone
 
 from courses.models import (
     Course,
@@ -16,5 +16,5 @@ class CourseAttendanceView(TemplateView, TeacherOfCourseOnly):
         course: Course = Course.objects.filter(id=kwargs.get("course")).first()
         context = super(CourseAttendanceView, self).get_context_data(**kwargs)
         context["course"] = course
-        context["now"] = datetime.now(tz=timezone("Europe/Zurich"))
+        context["now"] = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         return context

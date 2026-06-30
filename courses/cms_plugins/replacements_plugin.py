@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from pytz import timezone
 
 from courses.models import (
     AttendanceState,
@@ -44,7 +44,7 @@ class ReplacementsPlugin(CMSPluginBase):
     def lessons_and_balances() -> tuple[dict[int, int], list[LessonOccurrence]]:
         lessons = (
             LessonOccurrence.objects.filter(
-                start__gte=datetime.now(tz=timezone("Europe/Zurich")),
+                start__gte=datetime.now(tz=ZoneInfo("Europe/Zurich")),
                 course__type__couple_course=True,
             )
             .prefetch_related(

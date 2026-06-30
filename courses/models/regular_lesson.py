@@ -2,9 +2,9 @@ import operator
 from datetime import date, datetime, time, timedelta
 from functools import reduce
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 from django.db import models
-from pytz import timezone
 
 from courses.models.choices import Weekday
 from courses.models.lesson_occurrence_data import LessonOccurrenceData
@@ -44,12 +44,10 @@ class RegularLesson(models.Model):
             room: Room | None = None,
         ) -> LessonOccurrenceData:
             return LessonOccurrenceData(
-                timezone("Europe/Zurich").localize(
-                    datetime.combine(d, time_from or self.time_from)
+                datetime.combine(
+                    d, time_from or self.time_from, ZoneInfo("Europe/Zurich")
                 ),
-                timezone("Europe/Zurich").localize(
-                    datetime.combine(d, time_to or self.time_to)
-                ),
+                datetime.combine(d, time_to or self.time_to, ZoneInfo("Europe/Zurich")),
                 room or self.course.room,
             )
 

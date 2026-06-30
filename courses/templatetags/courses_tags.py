@@ -1,7 +1,7 @@
 import datetime as dt
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
-import pytz
 from django import template
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -34,7 +34,7 @@ from survey.models.types import QuestionType
 
 register = template.Library()
 
-TIME_ZONE = pytz.timezone(settings.TIME_ZONE)
+TIME_ZONE = ZoneInfo(settings.TIME_ZONE)
 
 
 @register.filter

@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Iterable, Optional
+from zoneinfo import ZoneInfo
 
 from django.db import models
 from django.db.models import CASCADE
-from pytz import timezone
 
 from courses.models.lesson_occurrence_data import LessonOccurrenceData
 from courses.models.room import Room
@@ -47,12 +47,8 @@ class IrregularLesson(models.Model):
             return None
 
         return LessonOccurrenceData(
-            timezone("Europe/Zurich").localize(
-                datetime.combine(self.date, self.time_from)
-            ),
-            timezone("Europe/Zurich").localize(
-                datetime.combine(self.date, self.time_to)
-            ),
+            datetime.combine(self.date, self.time_from, ZoneInfo("Europe/Zurich")),
+            datetime.combine(self.date, self.time_to, ZoneInfo("Europe/Zurich")),
             self.get_room(),
         )
 

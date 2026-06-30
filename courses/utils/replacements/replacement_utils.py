@@ -1,8 +1,7 @@
 from datetime import datetime, time, timedelta
+from zoneinfo import ZoneInfo
 
-from pytz import timezone
-
-TIMEZONE = timezone("Europe/Zurich")
+TIMEZONE = ZoneInfo("Europe/Zurich")
 
 from courses.models import LessonOccurrence
 

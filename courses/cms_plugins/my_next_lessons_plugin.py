@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
@@ -7,7 +8,6 @@ from cms.plugin_pool import plugin_pool
 from django.contrib.auth.models import User
 from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
-from pytz import timezone
 
 from ..models import AttendanceState, LessonOccurrence, SubscribeState
 from ..utils import change_attendance_window_open
@@ -29,7 +29,7 @@ class MyNextLessonsPlugin(CMSPluginBase):
     @staticmethod
     def create_context(user, initial_context: dict = None) -> dict:
         context = initial_context or dict()
-        now = datetime.now(tz=timezone("Europe/Zurich"))
+        now = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         if not user.is_authenticated:
             return context
         lessons = MyNextLessonsPlugin._get_lessons(now, user)
