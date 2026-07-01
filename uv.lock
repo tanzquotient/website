@@ -568,6 +568,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-prometheus"
+version = "2.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "prometheus-client" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e1/51/485b4122e00f2b8efec8a6d718ef4ce6b150231e49398e554ce1151f65c3/django-prometheus-2.3.1.tar.gz", hash = "sha256:f9c8b6c780c9419ea01043c63a437d79db2c33353451347894408184ad9c3e1e", size = 24718, upload-time = "2023-05-02T19:53:58.42Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/75/fb3d4f056f9ed4f8848817d5afd7a1d949632ab117452ccd179e3839cfc4/django_prometheus-2.3.1-py2.py3-none-any.whl", hash = "sha256:cf9b26f7ba2e4568f08f8f91480a2882023f5908579681bcf06a4d2465f12168", size = 29081, upload-time = "2023-05-02T19:53:20.421Z" },
+]
+
+[[package]]
 name = "django-recurrence"
 version = "1.14"
 source = { registry = "https://pypi.org/simple" }
@@ -1320,6 +1332,15 @@ wheels = [
 ]
 
 [[package]]
+name = "prometheus-client"
+version = "0.25.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/fb/d9aa83ffe43ce1f19e557c0971d04b90561b0cfd50762aafb01968285553/prometheus_client-0.25.0.tar.gz", hash = "sha256:5e373b75c31afb3c86f1a52fa1ad470c9aace18082d39ec0d2f918d11cc9ba28", size = 86035, upload-time = "2026-04-09T19:53:42.359Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/9b/d4b1e644385499c8346fa9b622a3f030dce14cd6ef8a1871c221a17a67e7/prometheus_client-0.25.0-py3-none-any.whl", hash = "sha256:d5aec89e349a6ec230805d0df882f3807f74fd6c1a2fa86864e3c2279059fed1", size = 64154, upload-time = "2026-04-09T19:53:41.324Z" },
+]
+
+[[package]]
 name = "prompt-toolkit"
 version = "3.0.52"
 source = { registry = "https://pypi.org/simple" }
@@ -1818,6 +1839,7 @@ dependencies = [
     { name = "django-parler-rest" },
     { name = "django-photologue" },
     { name = "django-post-office" },
+    { name = "django-prometheus" },
     { name = "django-redis" },
     { name = "django-resized" },
     { name = "django-reversion" },
@@ -1867,6 +1889,7 @@ requires-dist = [
     { name = "django-parler-rest", specifier = "==2.2" },
     { name = "django-photologue", specifier = "==3.18" },
     { name = "django-post-office", specifier = "==3.11.2" },
+    { name = "django-prometheus", specifier = "==2.3.1" },
     { name = "django-redis", specifier = "==7.0.0" },
     { name = "django-resized", specifier = "==1.0.3" },
     { name = "django-reversion", specifier = "==6.3.0" },

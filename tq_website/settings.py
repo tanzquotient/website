@@ -37,6 +37,7 @@ CMS_CONFIRM_VERSION4 = True
 
 # Application definition
 INSTALLED_APPS = [
+    "django_prometheus",
     "treebeard",
     "hijack",  # Ability to impersonate other users
     "photologue",  # Django gallery plugin
@@ -80,6 +81,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -94,7 +96,12 @@ MIDDLEWARE = [
     "cms.middleware.language.LanguageCookieMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "hijack.middleware.HijackUserMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
+
+if not DEBUG:
+    PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(9090, 9096)
+    PROMETHEUS_METRICS_EXPORT_ADDRESS = ""  # listen on all interfaces
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#disable-the-toolbar-when-running-tests-optional
 if DEBUG and not TESTING:
