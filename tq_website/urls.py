@@ -22,6 +22,12 @@ from .views import WellKnownRedirectView, oidc_callback_view, oidc_login_view
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),
+]
+
+if settings.DEBUG:
+    urlpatterns += [path("", include("django_prometheus.urls"))]
+
+urlpatterns += [
     path("check/", courses_views.confirmation_check, name="confirmation_check"),
     path("duplicate-users/", courses_views.duplicate_users, name="duplicate_users"),
 ]
