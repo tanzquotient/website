@@ -3,7 +3,7 @@ from typing import Iterable
 
 from post_office.models import Email
 
-from . import send_email
+from .send_email import send_email
 
 log = logging.getLogger("tq")
 
