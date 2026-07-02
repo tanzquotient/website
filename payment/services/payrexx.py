@@ -3,16 +3,13 @@ Payrexx payment service.
 
 Handles gateway creation (hosted checkout) and webhook signature verification.
 
-Auth: Payrexx uses HMAC-SHA256 of the sorted, URL-encoded POST body, base64-encoded
-(binary digest, not hex). This matches the reference PHP SDK implementation.
+Auth: Payrexx recommends X-API-KEY header authentication (pass API secret directly).
 """
 
-import base64
 import hashlib
 import hmac
 import logging
 from decimal import ROUND_UP, Decimal
-from urllib.parse import urlencode
 
 import requests
 from django.conf import settings
@@ -30,20 +27,6 @@ def gross_up(net: Decimal, fee_rate: Decimal, fee_flat: Decimal) -> Decimal:
     Formula: gross = (net + flat) / (1 - rate), rounded up to the nearest centime.
     """
     return ((net + fee_flat) / (1 - fee_rate)).quantize(Decimal("0.01"), ROUND_UP)
-
-
-def _sign(payload: dict, api_key: str) -> str:
-    """
-    Compute the Payrexx ApiSignature.
-
-    Matches the reference PHP SDK: ksort params, http_build_query, then
-    base64(HMAC-SHA256(query_string, api_key)) using the binary digest.
-    The 'instance' key must NOT be included in the signed payload.
-    """
-    sorted_payload = dict(sorted(payload.items()))
-    encoded = urlencode(sorted_payload, doseq=True)
-    raw = hmac.new(api_key.encode(), encoded.encode(), hashlib.sha256).digest()
-    return base64.b64encode(raw).decode()
 
 
 def _fee_config(method: str) -> tuple[Decimal, Decimal]:
@@ -92,8 +75,6 @@ def create_gateway(
     for i, pm in enumerate(_payment_methods(method)):
         payload[f"pm[{i}]"] = pm
 
-    payload["ApiSignature"] = _sign(payload, cfg["api_key"])
-
     log.info(
         "Creating Payrexx gateway for subscription %s, method=%s, gross=CHF %s",
         subscription.usi,
@@ -104,6 +85,7 @@ def create_gateway(
         f"{PAYREXX_API_BASE}/Gateway/",
         params={"instance": cfg["instance"]},
         data=payload,
+        headers={"X-API-KEY": cfg["api_key"]},
         timeout=15,
     )
     resp.raise_for_status()
