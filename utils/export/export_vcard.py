@@ -2,7 +2,8 @@ from io import StringIO
 
 from django.http import HttpResponse
 
-from . import clean_filename, export_zip
+from .clean_filename import clean_filename
+from .export_zip import export_zip
 
 
 def write_vcard(data, file):
