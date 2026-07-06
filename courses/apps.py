@@ -6,4 +6,4 @@ class CoursesConfig(AppConfig):
     verbose_name = "Course Administration"
 
     def ready(self):
-        pass
+        import courses.signals  # noqa: F401
