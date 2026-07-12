@@ -17,7 +17,7 @@ dependencies = [
     "django-photologue==3.19", # Gallery application
     "django-sortedm2m==4.0.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
     # Django CMS
-    "django-cms==5.0.8", # Open source content management system based on the Django
+    "django-cms==5.0.9", # Open source content management system based on the Django
     "djangocms-text==0.9.10", # Text plugin for django CMS
     "djangocms-versioning==2.6.1", # Core package of django CMS, is used to e.g. hava page histories
     "djangocms-alias==3.1.1", # Core package of django CMS used for aliases
@@ -49,7 +49,7 @@ dependencies = [
     # Logging
     "sentry_sdk==2.64.0", # Used for logging exceptions to Sentry.io
     # Utils
-    "plotly==6.8.0", # For generating charts and graphs
+    "plotly==6.9.0", # For generating charts and graphs
     "shortuuid==1.0.13", # For generating short and unique ID's and codes
     "django-hijack==3.7.8", # Superuser can impersonate other users
     "python-dotenv==1.2.2", # Used to load environment variables from .env file
@@ -59,8 +59,8 @@ dependencies = [
 [dependency-groups]
 dev = [
     "django-debug-toolbar==6.3.0", # For development. Gives additional insights into e.g. database queries
-    "locust~=2.44.0", # Loadtesting
-    "ruff==0.15.20",
+    "locust~=2.45.0", # Loadtesting
+    "ruff==0.15.21",
     "pre-commit>=4.6.0",
 ]
 

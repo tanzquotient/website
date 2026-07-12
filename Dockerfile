@@ -61,7 +61,7 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:0.11.27@sha256:4d01caf3b22dfd11003455e2e68153da08c4ee1fa54fdbd166c6282d22693419 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.28@sha256:0f36cb9361a3346885ca3677e3767016687b5a170c1a6b88465ec14aefec90aa /uv /uvx /bin/
 
 ENV UV_NO_DEV=1 \
     UV_COMPILE_BYTECODE=1 \
