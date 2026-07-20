@@ -1,2 +1,0 @@
-# Loadtesting
-locust~=2.46.0
