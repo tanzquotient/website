@@ -26,7 +26,8 @@ class EventCategoryPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         context.update(
             {
-                "events": Event.displayed_events.future()
+                "events": Event.displayed_events.visible_to(context["request"].user)
+                .future()
                 .filter(category=instance.category)
                 .all(),
                 "use_cards": False,

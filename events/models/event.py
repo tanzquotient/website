@@ -71,6 +71,11 @@ class Event(TranslatableModel):
         default=True,
         help_text="Defines if this event should be displayed on the website.",
     )
+    published = BooleanField(
+        default=True,
+        help_text="Defines if this event's page can be viewed. Unpublished events "
+        "are only visible to staff who can view events.",
+    )
     image = ResizedImageField(
         blank=True,
         null=True,
@@ -196,6 +201,18 @@ class Event(TranslatableModel):
         return self.cancelled or (
             self.room is not None and self.room.is_cancelled(self.date)
         )
+
+    @staticmethod
+    def user_can_view_unpublished(user) -> bool:
+        return (
+            bool(user)
+            and user.is_authenticated
+            and user.is_staff
+            and user.has_perm("events.view_event")
+        )
+
+    def can_be_viewed_by(self, user) -> bool:
+        return self.published or Event.user_can_view_unpublished(user)
 
     @property
     def start(self) -> datetime:

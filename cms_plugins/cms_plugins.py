@@ -134,9 +134,8 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
         items = []
 
         events = (
-            Event.displayed_events.future(
-                delta_days=instance.delta_days, limit=instance.max_displayed
-            )
+            Event.displayed_events.visible_to(context["request"].user)
+            .future(delta_days=instance.delta_days, limit=instance.max_displayed)
             .prefetch_related("room")
             .all()
         )
@@ -160,6 +159,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     "format_prices": event.format_prices(),
                     "room": event.room,
                     "cancelled": event.is_cancelled(),
+                    "published": event.published,
                     "event": event,
                     "detail_url": reverse(
                         "events:detail", kwargs={"event_id": event.id}

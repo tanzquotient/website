@@ -1,6 +1,10 @@
 {% load i18n %}
 
-{% if event.is_cancelled %}
+{% if not event.published %}
+    <span class="text-uppercase badge text-bg-warning">
+        {% trans "Unpublished" %}
+    </span>
+{% elif event.is_cancelled %}
     <span class="text-uppercase badge text-bg-danger">
         {% trans "Cancelled" %}
     </span>

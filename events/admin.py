@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from parler.admin import TranslatableAdmin
 
 from events.admin_actions import *
@@ -26,6 +27,8 @@ class EventAdmin(TranslatableAdmin):
         "name",
         "special",
         "display",
+        "published",
+        "view_button",
         "date",
         "time_from",
         "date_to",
@@ -36,6 +39,8 @@ class EventAdmin(TranslatableAdmin):
         EventDateFilter,
         "room",
         "category",
+        "display",
+        "published",
     )
 
     model = Event
@@ -43,6 +48,8 @@ class EventAdmin(TranslatableAdmin):
     inlines = [RegistrationScheduleInline]
 
     actions = [copy_event, export_registrations_csv, export_registrations_excel]
+
+    readonly_fields = ("view_button",)
 
     fieldsets = [
         ("Info", {"fields": ["name", "category", "description", "image"]}),
@@ -52,6 +59,8 @@ class EventAdmin(TranslatableAdmin):
                 "fields": [
                     "special",
                     "display",
+                    "published",
+                    "view_button",
                     "cancelled",
                     "registration_enabled",
                     "max_participants",
@@ -69,6 +78,18 @@ class EventAdmin(TranslatableAdmin):
     ]
 
     filter_horizontal = ["responsible"]
+
+    def view_button(self, obj):
+        if obj is None or obj.pk is None:
+            return "—"
+        label = "Preview" if not obj.published else "View"
+        return mark_safe(
+            '<a class="button" '
+            'style="text-decoration: none; text-transform: uppercase;" '
+            f'href="{obj.detail_url()}" target="_blank">{label}</a>'
+        )
+
+    view_button.short_description = "View"
 
 
 @admin.register(EventCategory)

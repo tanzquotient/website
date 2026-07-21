@@ -27,7 +27,8 @@ class EventsPlugin(CMSPluginBase):
         specials = [instance.include_specials, not instance.include_regular]
         context.update(
             {
-                "events": Event.displayed_events.future()
+                "events": Event.displayed_events.visible_to(context["request"].user)
+                .future()
                 .filter(special__in=specials)
                 .all(),
                 "use_cards": instance.style == 1,

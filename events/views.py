@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -11,6 +11,8 @@ from events.models.event_registration import EventRegistration
 def detail(request, event_id):
     template_name = "events/event_detail.html"
     event = get_object_or_404(Event, pk=event_id)
+    if not event.can_be_viewed_by(request.user):
+        raise Http404()
     context = {
         "event": event,
         "user": request.user,
@@ -23,7 +25,10 @@ def category_detail(request: HttpRequest, category_id: int) -> HttpResponse:
     template_name = "events/category_detail.html"
     category = get_object_or_404(EventCategory, pk=category_id)
     context = {
-        "events": Event.displayed_events.future().filter(category=category).all(),
+        "events": Event.displayed_events.visible_to(request.user)
+        .future()
+        .filter(category=category)
+        .all(),
         "use_cards": False,
         "title": category.name,
         "text": category.description,
@@ -36,7 +41,7 @@ def category_detail(request: HttpRequest, category_id: int) -> HttpResponse:
 def archive(request: HttpRequest, year: int | None = None):
     template_name = "events/archive.html"
     today = timezone.now()
-    min_year = Event.objects.order_by("date").first().date.year
+    min_year = Event.objects.filter(published=True).order_by("date").first().date.year
     if year is None:
         year = today.year
     else:
@@ -47,7 +52,7 @@ def archive(request: HttpRequest, year: int | None = None):
 
     context = {
         "year": year,
-        "events": Event.objects.filter(date__year=year, date__lt=today)
+        "events": Event.objects.filter(published=True, date__year=year, date__lt=today)
         .all()
         .order_by("date"),
         "max_year": today.year,
@@ -58,6 +63,9 @@ def archive(request: HttpRequest, year: int | None = None):
 
 @login_required
 def register(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if not event.can_be_viewed_by(request.user):
+        raise Http404()
     user_id = request.user.id
     try:
         registration = EventRegistration(user_id=user_id, event_id=event_id)
@@ -69,6 +77,9 @@ def register(request, event_id):
 
 @login_required
 def unregister(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if not event.can_be_viewed_by(request.user):
+        raise Http404()
     user_id = request.user.id
     try:
         registration = EventRegistration.objects.get(user_id=user_id, event_id=event_id)
@@ -81,6 +92,8 @@ def unregister(request, event_id):
 def registration_confirmation(request, event_id):
     template_name = "events/event_detail.html"
     event = get_object_or_404(Event, pk=event_id)
+    if not event.can_be_viewed_by(request.user):
+        raise Http404()
     context = {
         "event": event,
         "user": request.user,
@@ -93,6 +106,8 @@ def registration_confirmation(request, event_id):
 def registration_removed(request, event_id):
     template_name = "events/event_detail.html"
     event = get_object_or_404(Event, pk=event_id)
+    if not event.can_be_viewed_by(request.user):
+        raise Http404()
     context = {
         "event": event,
         "user": request.user,

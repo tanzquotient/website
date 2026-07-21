@@ -28,6 +28,16 @@
 
         <div class="col-12 col-sm-6 col-md-8 col-lg-9">
 
+            {% if request.user.is_staff %}
+                <div class="fw-bold mt-2">{% trans "Admin area" %}</div>
+                <div class="d-flex flex-wrap gap-1 mb-2">
+                    <a href="{% url 'admin:events_event_change' event.pk %}" target="_blank"
+                       class="btn btn-success btn-sm align-self-center">
+                        <i class="bi bi-database-fill-gear"></i>
+                        {% trans "Event Admin" %}
+                    </a>
+                </div>
+            {% endif %}
             {% if event.max_participants %}
                 <div class="mb-3">
                 <div>

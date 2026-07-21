@@ -17,9 +17,13 @@ class FeaturedEventCategoriesPlugin(CMSPluginBase):
     allow_children = False
 
     def render(self, context, instance, placeholder):
+        user = context["request"].user
+        categories = list(EventCategory.objects.filter(is_featured=True))
+        for category in categories:
+            category.next_events = category.get_next_events_visible_to(user)
         context.update(
             {
-                "categories": EventCategory.objects.filter(is_featured=True),
+                "categories": categories,
             }
         )
         return context

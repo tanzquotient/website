@@ -16,6 +16,8 @@ from utils import TranslationUtils
 
 
 class EventCategory(TranslatableModel):
+    NEXT_EVENTS_LIMIT = 3
+
     is_featured = BooleanField(default=False)
     image = ResizedImageField(
         blank=True,
@@ -37,9 +39,17 @@ class EventCategory(TranslatableModel):
     def get_events(self) -> QuerySet[Event]:
         return Event.displayed_events.future().filter(category=self).all()
 
-    def get_next_events(self) -> Iterable[Event]:
-        limit = 3
-        return self.get_events().order_by("date", "time_from")[:limit]
+    def get_next_events(self, limit: int | None = NEXT_EVENTS_LIMIT) -> Iterable[Event]:
+        queryset = self.get_events().order_by("date", "time_from")
+        return queryset[:limit] if limit is not None else queryset
+
+    def get_events_visible_to(self, user) -> QuerySet[Event]:
+        return self.get_events().visible_to(user)
+
+    def get_next_events_visible_to(self, user) -> Iterable[Event]:
+        return self.get_next_events(limit=None).visible_to(user)[
+            : self.NEXT_EVENTS_LIMIT
+        ]
 
     def get_name(self) -> str:
         return TranslationUtils.get_text_with_language_fallback(self, "name")
