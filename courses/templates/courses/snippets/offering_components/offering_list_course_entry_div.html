@@ -29,6 +29,10 @@
                 {% if item.rooms|length > 1 %}
                 <i>+ {% trans "others" %}</i>
                 {% endif %}
+            {% elif item.rooms|length == 1 %}
+                {% include "courses/snippets/room_modal.html" with display_link=False room=item.rooms.0 only %}
+            {% elif item.rooms|length > 1 %}
+                {% trans "Multiple locations" %}
             {% else %}
                 {% trans "Currently unknown" %}
             {% endif %}
