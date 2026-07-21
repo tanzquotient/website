@@ -572,6 +572,7 @@ EMAIL_ADDRESS_FINANCES = "finanzen@tanzquotient.org"
 EMAIL_ADDRESS_DANCE_ADMIN = "tanzen@tanzquotient.org"
 EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS = "anmeldungen@tanzquotient.org"
 EMAIL_ADDRESS_IT = "informatik@tanzquotient.org"
+EMAIL_ADDRESS_ROOMS = "aktuar@tanzquotient.org"
 
 # Database
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

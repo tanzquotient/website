@@ -72,7 +72,9 @@ def disable_early_signup(modeladmin, request, queryset):
     queryset.update(early_signup=False)
 
 
-@admin.action(description="Cancel course. This rejects all participants.")
+@admin.action(
+    description="Cancel course. This rejects all participants and notifies Anmeldungen, Räume and Tanzadmin."
+)
 def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
     for c in queryset.all():
         services.subscriptions.reject_subscriptions(
@@ -94,6 +96,19 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
                     course_info=create_course_info(c),
                 ),
             )
+        send_email(
+            to=[
+                settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+                settings.EMAIL_ADDRESS_ROOMS,
+                settings.EMAIL_ADDRESS_DANCE_ADMIN,
+            ],
+            reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
+            template="internal_course_cancelled",
+            context=dict(
+                course=c.type.title,
+                course_info=create_course_info(c),
+            ),
+        )
 
 
 @admin.action(description="Create copy of courses in another offering")

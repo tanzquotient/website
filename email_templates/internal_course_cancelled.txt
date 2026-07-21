@@ -1,0 +1,21 @@
+Hallo
+
+Der folgende Kurs wurde soeben abgesagt:
+{{course_info|safe}}
+
+Liebe Grüsse
+
+Dein Tanzquotient
+tanzquotient.org
+
+_______________
+
+Hello,
+
+The following course has just been cancelled:
+{{course_info|safe}}
+
+Best regards,
+
+Your Tanzquotient
+tanzquotient.org
