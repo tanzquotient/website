@@ -14,7 +14,7 @@ dependencies = [
     "django-countries==9.0.0", # Country choices for use with forms and fields for models
     "django-ical==1.9.2", # Simple library for creating iCal feeds
     "django-allauth==65.18.0", # Authentication, registration, account management, 3rd party account authentication
-    "django-photologue==3.19", # Gallery application
+    "django-photologue==3.20", # Gallery application
     "django-sortedm2m==4.0.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
     # Django CMS
     "django-cms==5.1.0", # Open source content management system based on the Django
@@ -22,7 +22,7 @@ dependencies = [
     "djangocms-versioning==2.6.1", # Core package of django CMS, is used to e.g. hava page histories
     "djangocms-alias==3.1.1", # Core package of django CMS used for aliases
     # Rest framework
-    "djangorestframework==3.17.1", # Toolkit for building Web APIs
+    "djangorestframework==3.17.2", # Toolkit for building Web APIs
     "django-parler-rest==2.2", # Adding translation support to django-rest-framework
     # Tasks
     "celery==5.6.3", # Task queue with focus on real-time processing, while also supporting task scheduling
@@ -31,7 +31,7 @@ dependencies = [
     "django-redis==7.0.0", # Redis cache and session backend for Django
     # Files and encoding
     "openpyxl==3.1.5", # For Microsoft Excel Files
-    "svglib==2.0.2", # Used for creating vouchers from SVG tremplate
+    "svglib==2.1.0", # Used for creating vouchers from SVG tremplate
     "reportlab==5.0.0", # For generating PDFs and graphics
     "pypdf>=4.0", # For merging multiple voucher PDFs into a single file
     "pyyaml==6.0.3", # Used for generating environment variable file
@@ -47,7 +47,7 @@ dependencies = [
     "gunicorn==26.0.0", # Used to serve django for production
     "django-prometheus==2.5.0", # Exposes /metrics endpoint for Prometheus scraping
     # Logging
-    "sentry_sdk==2.66.0", # Used for logging exceptions to Sentry.io
+    "sentry_sdk==2.66.1", # Used for logging exceptions to Sentry.io
     # Utils
     "plotly==6.9.0", # For generating charts and graphs
     "shortuuid==1.0.13", # For generating short and unique ID's and codes
@@ -60,7 +60,7 @@ dependencies = [
 dev = [
     "django-debug-toolbar==7.0.0", # For development. Gives additional insights into e.g. database queries
     "locust~=2.46.0", # Loadtesting
-    "ruff==0.15.22",
+    "ruff==0.16.1",
     "pre-commit>=4.6.0",
 ]
 
