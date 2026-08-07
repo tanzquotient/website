@@ -6,7 +6,7 @@
             {{ access_code.code }}
         </code>
     {% elif access_code.display_format == "qr" %}
-        <div id="room_access_code_{{ access_code.pk }}" class="col-12 text-center"></div>
+        <div id="room_access_code_{{ access_code.pk }}" class="col-12 text-center bg-light p-2"></div>
     {% endif %}
 </div>
 
