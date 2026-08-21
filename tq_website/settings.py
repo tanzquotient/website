@@ -34,6 +34,7 @@ TESTING = "test" in sys.argv
 
 CMS_PERMISSION = True
 CMS_CONFIRM_VERSION4 = True
+CMS_TOOLBAR_HIDE = True
 
 # Application definition
 INSTALLED_APPS = [
