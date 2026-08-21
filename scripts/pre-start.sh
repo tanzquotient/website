@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # exit on error
 
 # Pre-start script for the Tanzquotient website on the VSETH SIP
 #
