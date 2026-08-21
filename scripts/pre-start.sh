@@ -14,6 +14,10 @@
 # All python manage.py commands will load the settings.py which in turns loads
 # all environment variables needed from .env
 
+# Prepare a fresh directory for prometheus_client's multiprocess mode
+rm -rf "$PROMETHEUS_MULTIPROC_DIR"
+mkdir -p "$PROMETHEUS_MULTIPROC_DIR"
+
 # Apply the database migrations
 python3 manage.py migrate
 

@@ -9,6 +9,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from django.views.generic import TemplateView
+from django_prometheus.exports import ExportToDjangoView
 from photologue.views import GalleryListView
 
 import courses.urls
@@ -18,14 +19,21 @@ import events.urls
 import payment.urls
 import survey.urls
 
-from .views import WellKnownRedirectView, oidc_callback_view, oidc_login_view
+from .views import (
+    WellKnownRedirectView,
+    oidc_callback_view,
+    oidc_login_view,
+    require_metrics_auth,
+)
 
 urlpatterns = [
     path("jsi18n/<packages>/", django.views.i18n.JavaScriptCatalog.as_view()),
+    path(
+        "metrics",
+        require_metrics_auth(ExportToDjangoView),
+        name="prometheus-django-metrics",
+    ),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [path("", include("django_prometheus.urls"))]
 
 urlpatterns += [
     path("check/", courses_views.confirmation_check, name="confirmation_check"),

@@ -100,10 +100,6 @@ MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
-if not DEBUG:
-    PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(9090, 9096)
-    PROMETHEUS_METRICS_EXPORT_ADDRESS = ""  # listen on all interfaces
-
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#disable-the-toolbar-when-running-tests-optional
 if DEBUG and not TESTING:
     INSTALLED_APPS = [
@@ -601,6 +597,11 @@ PAYREXX = {
     "card_fee_flat": Decimal("0.18"),
     "twint_fee_rate": Decimal("0.0125"),
     "twint_fee_flat": Decimal("0.18"),
+}
+
+# Prometheus /metrics endpoint (HTTP basic auth)
+METRICS = {
+    "basic_auth_password": environ.get("TQ_METRICS_BASIC_AUTH_PASSWORD", ""),
 }
 
 # Main Bank Account

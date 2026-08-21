@@ -74,6 +74,10 @@ env:
     secret:
       key: tq-payrexx-webhook-signing-key
       create: provided
+  - name: SIP_TQ_METRICS_BASIC_AUTH_PASSWORD
+    secret:
+      key: tq-metrics-basic-auth-password
+      create: provided
   - name: SIP_TQ_REDIS_URL
     secret:
       key: tq-redis-url
