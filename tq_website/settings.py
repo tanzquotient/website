@@ -537,12 +537,12 @@ SECRET_KEY = environ["TQ_SECRET_KEY"]
 CACHES = {
     "default": (
         {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "BACKEND": "django_prometheus.cache.backends.locmem.LocMemCache",
             "LOCATION": "tq_website",
         }
         if DEBUG
         else {
-            "BACKEND": "django_redis.cache.RedisCache",
+            "BACKEND": "django_prometheus.cache.backends.redis.RedisCache",
             "LOCATION": environ["TQ_REDIS_BROKER_URL"],
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -575,7 +575,7 @@ EMAIL_ADDRESS_ROOMS = "aktuar@tanzquotient.org"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
         "HOST": environ["TQ_DB_HOST"],
         "PORT": environ["TQ_DB_PORT"],
         "NAME": environ["TQ_DB_NAME"],
