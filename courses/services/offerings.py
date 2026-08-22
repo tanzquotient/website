@@ -93,9 +93,12 @@ def get_sections(offering, course_filter=None):
         )
         offering_sections.append(dict(courses=courses))
     elif offering.type == OfferingType.REGULAR:
+        all_courses = list(course_set.all())
         for w, w_name in Weekday.CHOICES:
             courses_on_weekday = [
-                c for c in CourseManager.weekday(course_set, w) if course_filter(c)
+                c
+                for c in CourseManager.weekday(course_set, w, courses=all_courses)
+                if course_filter(c)
             ]
             if courses_on_weekday:
                 offering_sections.append(
@@ -106,7 +109,9 @@ def get_sections(offering, course_filter=None):
                 )
 
         courses_without_weekday = [
-            c for c in CourseManager.weekday(course_set, None) if course_filter(c)
+            c
+            for c in CourseManager.weekday(course_set, None, courses=all_courses)
+            if course_filter(c)
         ]
         if courses_without_weekday:
             offering_sections.append(
@@ -117,7 +122,9 @@ def get_sections(offering, course_filter=None):
             )
 
     elif offering.type in [OfferingType.IRREGULAR, OfferingType.PARTNER]:
-        courses_by_month = CourseManager.by_month(course_set)
+        courses_by_month = CourseManager.by_month(
+            course_set, courses=list(course_set.all())
+        )
         for d, courses in courses_by_month:
             if d is None:
                 section_title = _("Unknown month")

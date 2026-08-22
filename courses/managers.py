@@ -15,9 +15,9 @@ class UserProfileManager(models.Manager):
 
 
 class CourseManager(TranslatableManager):
-    def weekday(self, weekday):
+    def weekday(self, weekday, courses=None):
         result_list = []
-        for c in self.all():
+        for c in self.all() if courses is None else courses:
             t = c.get_first_lesson_date()
             common_irr_weekday = c.get_common_irregular_weekday()
 
@@ -32,9 +32,9 @@ class CourseManager(TranslatableManager):
                 result_list.append(c)
         return result_list
 
-    def by_month(self):
+    def by_month(self, courses=None):
         result = []
-        courses = self.all()
+        courses = self.all() if courses is None else courses
         sorted_courses = sorted(
             courses,
             key=lambda c: (
