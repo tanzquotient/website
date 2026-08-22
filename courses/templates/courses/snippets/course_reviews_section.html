@@ -14,7 +14,8 @@
         {% if text_reviews|length > 3 %}
             <div class="collapse show collapse-reviews-{{ type }} mb-3"
                  id="collapse-reviews-{{ type }}-toggle">
-                <a data-bs-toggle="collapse" href=".collapse-reviews-{{ type }}"
+                <a data-bs-toggle="collapse" href="#" data-bs-target=".collapse-reviews-{{ type }}"
+                   role="button"
                    aria-expanded="false"
                    aria-controls="collapse-reviews-{{ type }}-extended collapse-reviews-{{ type }}-toggle">
                     {% trans "Show more" %}

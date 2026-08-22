@@ -19,7 +19,8 @@
             </ul>
             {% if open_surveys|length > max_surveys %}
             <div class="collapse show collapse-reviews mt-2" id="collapse-reviews-toggle">
-                <a data-bs-toggle="collapse" href=".collapse-reviews"
+                <a data-bs-toggle="collapse" href="#" data-bs-target=".collapse-reviews"
+                    role="button"
                     aria-expanded="false"
                     aria-controls="collapse-reviews-extended collapse-reviews-toggle">
                     <i class="bi bi-chevron-double-down"></i> {% trans "Show" %} {{ open_surveys|length|add:max_surveys_neg }} {% trans "more" %} <i class="bi bi-chevron-double-down"></i>
