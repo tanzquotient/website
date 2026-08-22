@@ -162,10 +162,11 @@ def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
     offering = get_object_or_404(Offering.objects, id=offering_id)
     if not offering.is_public():
         raise Http404()
+    sections = services.get_sections(offering)
     context = {
         "offering": offering,
-        "sections": services.get_sections(offering),
-        "limit_per_section": offering.course_set.count(),
+        "sections": sections,
+        "limit_per_section": sum(len(section["courses"]) for section in sections),
     }
     return render(request, template_name, context)
 
