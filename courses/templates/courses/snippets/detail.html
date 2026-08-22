@@ -1,5 +1,8 @@
 {% load i18n %}
 {% load courses_tags %}
+{% load cache %}
+
+{% get_current_language as LANGUAGE_CODE %}
 <div class="row">
     <div class="col-12">
         <div class="mb-3">
@@ -22,7 +25,9 @@
         {% if not course.cancelled %}
             {% include "courses/snippets/subscription_info_detail.html" with course=course long=True display_link=True user=user %}
         {% endif %}
-        {% include "courses/snippets/course_info.html" %}
+        {% cache 300 course_info course.id LANGUAGE_CODE %}
+            {% include "courses/snippets/course_info.html" %}
+        {% endcache %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-8">
         <div>
