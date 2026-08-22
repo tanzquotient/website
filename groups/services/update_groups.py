@@ -29,13 +29,22 @@ def update_groups(queryset=None):
         log.info("Updating group " + group_definition.name)
 
         group = group.get()
-        group.user_set.clear()
-        for profile in UserProfile.objects.select_related("user").iterator(
-            chunk_size=500
-        ):
-            user = profile.user
-            if group_definition.matches(user):
-                group.user_set.add(user)
+
+        matching_user_ids = {
+            profile.user_id
+            for profile in UserProfile.objects.select_related("user").iterator(
+                chunk_size=500
+            )
+            if group_definition.matches(profile.user)
+        }
+        current_user_ids = set(group.user_set.values_list("id", flat=True))
+
+        to_add = matching_user_ids - current_user_ids
+        to_remove = current_user_ids - matching_user_ids
+        if to_add:
+            group.user_set.add(*to_add)
+        if to_remove:
+            group.user_set.remove(*to_remove)
 
         log.info(
             "Updating group finished. Number of users in group "
