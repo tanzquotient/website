@@ -16,7 +16,12 @@ class EventFeed(ICalFeed):
     def items(self) -> QuerySet[Event]:
         events = (
             Event.objects.filter(cancelled=False, published=True)
-            .prefetch_related("category", "room__cancellations")
+            .prefetch_related(
+                "translations",
+                "category",
+                "category__translations",
+                "room__cancellations",
+            )
             .all()
         )
         return list(filter(lambda event: not event.is_cancelled(), events))
