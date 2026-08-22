@@ -8,7 +8,7 @@
     <div>
         <div>
             {% for review in text_reviews|slice:':3' %}
-                {% include 'courses/snippets/text_review.html' %}
+                {% include 'courses/snippets/text_review.html' with review=review show_course_type=show_course_type only %}
             {% endfor %}
         </div>
         {% if text_reviews|length > 3 %}
@@ -24,7 +24,7 @@
                  id="collapse-reviews-{{ type }}-extended">
                 <div>
                     {% for review in text_reviews|slice:'3:' %}
-                        {% include 'courses/snippets/text_review.html' %}
+                        {% include 'courses/snippets/text_review.html' with review=review show_course_type=show_course_type only %}
                     {% endfor %}
                 </div>
             </div>

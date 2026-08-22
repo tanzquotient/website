@@ -8,7 +8,7 @@
 {% include "courses/snippets/course_review_button.html" with course=course user=user only %}
 {% cache 86400 course_reviews course.id LANGUAGE_CODE %}
     <h4>{% trans "Reviews for " %}{{ course.type }}</h4>
-    {% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' %}
+    {% include "courses/snippets/course_reviews_section.html" with text_reviews=course_reviews type='course' only %}
     <h4>{% trans "Reviews the teachers got for other courses" %}</h4>
-    {% include "courses/snippets/course_reviews_section.html" with text_reviews=teachers_reviews type='teachers' show_course_type=True %}
+    {% include "courses/snippets/course_reviews_section.html" with text_reviews=teachers_reviews type='teachers' show_course_type=True only %}
 {% endcache %}
