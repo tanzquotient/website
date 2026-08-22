@@ -77,6 +77,7 @@ def get_sections(offering, course_filter=None):
         "lesson_occurrences__room__cancellations",
         "period__cancellations",
         "type__translations",
+        "type__styles",
         "room__cancellations",
         "subscriptions",
         "teaching__teacher__profile",

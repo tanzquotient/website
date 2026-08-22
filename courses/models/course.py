@@ -27,6 +27,7 @@ from courses.models.choices import (
     SubscribeState,
     Weekday,
 )
+from courses.models.style import Style
 
 if TYPE_CHECKING:
     from courses.models import (
@@ -706,19 +707,19 @@ class Course(TranslatableModel):
             return _("At least one more person is needed")
         return _("At least {} more people are needed.").format(people_needed)
 
-    def has_style(self, style_name) -> bool:
+    def has_style(self, style_name, style_lookup: dict | None = None) -> bool:
         if style_name is None:
             return True
 
-        for style in self.type.styles.all():
-            if style.name == style_name:
-                return True
+        if style_lookup is None:
+            style_lookup = {s.pk: s for s in Style.objects.all()}
 
-            parent = style.parent_style
-            while parent:
-                if parent.name == style_name:
+        for style in self.type.styles.all():
+            node = style
+            while node is not None:
+                if node.name == style_name:
                     return True
-                parent = parent.parent_style
+                node = style_lookup.get(node.parent_style_id)
 
         return False
 

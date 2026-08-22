@@ -4,7 +4,10 @@ from courses.models import Course, Style
 
 
 def _course_filter_style(
-    course: Course, style_name: str, filter_styles: Iterable[Style]
+    course: Course,
+    style_name: str,
+    filter_styles: Iterable[Style],
+    style_lookup: dict | None = None,
 ) -> bool:
     if not style_name:
         return True
@@ -14,11 +17,11 @@ def _course_filter_style(
 
     if style_name.lower() == "other":
         for style in filter_styles:
-            if course.has_style(style.name):
+            if course.has_style(style.name, style_lookup):
                 return False
         return True
 
-    return course.has_style(style_name)
+    return course.has_style(style_name, style_lookup)
 
 
 def _course_filter_type(course: Course, subscription_type: str) -> bool:
@@ -34,6 +37,7 @@ def course_filter(
     subscription_type: str,
     style_name: str,
     filter_styles: Iterable[Style],
+    style_lookup: dict | None = None,
 ) -> bool:
     if course.is_over():
         return False
@@ -45,5 +49,5 @@ def course_filter(
         return False
 
     return _course_filter_style(
-        course, style_name, filter_styles
+        course, style_name, filter_styles, style_lookup
     ) and _course_filter_type(course, subscription_type)

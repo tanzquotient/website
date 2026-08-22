@@ -84,10 +84,11 @@ def course_list_context(
     if cached is not None:
         return cached
     filter_styles = Style.objects.filter(filter_enabled=True)
+    style_lookup = {s.pk: s for s in Style.objects.all()}
 
     def matches_filter(c: Course) -> bool:
         return course_filter(
-            c, show_preview, subscription_type, style_name, filter_styles
+            c, show_preview, subscription_type, style_name, filter_styles, style_lookup
         )
 
     offerings = services.get_offerings_to_display(show_preview).prefetch_related(
