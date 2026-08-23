@@ -93,13 +93,12 @@ class VoucherYearUsedListFilter(SimpleListFilter):
     parameter_name = "year_used"
 
     def lookups(self, request, model_admin):
-        years = [
-            reduction.created_at.year
-            for reduction in PriceReduction.objects.filter(
-                used_voucher__isnull=False
-            ).all()
-        ]
-        return [(year, year) for year in set(years)]
+        years = (
+            PriceReduction.objects.filter(used_voucher__isnull=False)
+            .values_list("created_at__year", flat=True)
+            .distinct()
+        )
+        return [(year, year) for year in years]
 
     def queryset(self, request, queryset):
         if self.value() is not None:

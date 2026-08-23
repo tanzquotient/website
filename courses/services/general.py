@@ -1,6 +1,6 @@
 import logging
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from numbers import Number
 from typing import Iterable
 
@@ -8,7 +8,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 
-from courses.models import CourseType, Subscribe, SubscribeState
+from courses.models import CourseType, Style, Subscribe, SubscribeState
 from courses.services.cache import cached
 from utils import TranslationUtils
 
@@ -19,10 +19,17 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType,
     """returns similar courses that the user did before in the system"""
 
     def compute() -> list[tuple[CourseType, int]]:
+        all_styles = list(Style.objects.all())
+        style_lookup = {s.pk: s for s in all_styles}
+        children_by_parent_id = defaultdict(list)
+        for s in all_styles:
+            if s.parent_style_id is not None:
+                children_by_parent_id[s.parent_style_id].append(s)
+
         relevant_exp = [
             related_style.id
             for style in self.course.type.styles.all()
-            for related_style in style.related()
+            for related_style in style.related(style_lookup, children_by_parent_id)
         ]
 
         relevant_courses = Counter(

@@ -299,6 +299,7 @@ class CourseAdmin(TranslatableAdmin):
         SubscribeInlineForCourse,
     )
     widgets = {"type": SortedSelect}
+    show_full_result_count = False
 
     model = Course
 
@@ -369,7 +370,21 @@ class CourseAdmin(TranslatableAdmin):
 
     def get_queryset(self, request):
         return (
-            super().get_queryset(request).prefetch_related("teaching__teacher__profile")
+            super()
+            .get_queryset(request)
+            .select_related("type", "room", "offering", "offering__period", "period")
+            .prefetch_related(
+                "teaching__teacher__profile",
+                "type__translations",
+                "translations",
+                "regular_lessons__exceptions",
+                "irregular_lessons",
+                "lesson_occurrences",
+                "room__cancellations",
+                "period__cancellations",
+                "offering__period__cancellations",
+                "survey_instances",
+            )
         )
 
     @staticmethod
@@ -384,7 +399,7 @@ class CourseAdmin(TranslatableAdmin):
     @staticmethod
     @admin.display(description="E", boolean=True)
     def is_evaluated(course: Course) -> bool:
-        return course.survey_instances.exists()
+        return bool(course.survey_instances.all())
 
     @staticmethod
     @admin.display(description="C", boolean=True)
@@ -421,7 +436,7 @@ class CourseAdmin(TranslatableAdmin):
     @staticmethod
     @admin.display(description="#")
     def num_lessons(course: Course) -> int:
-        return course.lesson_occurrences.count()
+        return len(course.lesson_occurrences.all())
 
     @admin.display(boolean=True, description="Has description")
     def has_description_in_all_languages(self, obj: Course) -> bool:
@@ -550,7 +565,7 @@ class SubscribeChangeList(ChangeList):
         super(SubscribeChangeList, self).get_results(*args, **kwargs)
 
         self.info = {
-            "total": self.result_list.count(),
+            "total": self.result_count,
             "accepted": 0,
             "rejected": 0,
             "max_subscribers": None,
@@ -617,28 +632,34 @@ class SubscribeAdmin(VersionAdmin):
         "state",
         "usi",
     )
+    show_full_result_count = False
 
     model = Subscribe
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Subscribe]:
-        return Subscribe.objects.prefetch_related(
-            "partner",
-            "user__profile",
-            "user__subscriptions",
-            "user__subscriptions__course",
-            "user__subscriptions__course__offering",
-            "user__subscriptions__course__type",
-            "user__subscriptions__course__type__translations",
-            "user__subscriptions__course__type__styles",
-            "price_reductions",
-            "subscription_payments",
-            "course",
-            "course__period",
-            "course__offering",
-            "course__offering__period",
-            "course__type",
-            "course__type__styles",
-            "course__type__styles__parent_style",
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related(
+                "partner",
+                "user__profile",
+                "user__subscriptions",
+                "user__subscriptions__course",
+                "user__subscriptions__course__offering",
+                "user__subscriptions__course__type",
+                "user__subscriptions__course__type__translations",
+                "user__subscriptions__course__type__styles",
+                "rejections",
+                "price_reductions",
+                "subscription_payments",
+                "course",
+                "course__period",
+                "course__offering",
+                "course__offering__period",
+                "course__type",
+                "course__type__styles",
+                "course__type__styles__parent_style",
+            )
         )
 
     actions = [
@@ -708,8 +729,9 @@ class SubscribeAdmin(VersionAdmin):
     @staticmethod
     @admin.action(description="Additional Info")
     def get_additional_info(subscription: Subscribe) -> Optional[str]:
-        if subscription.rejections.exists():
-            reason = ", ".join([r.reason for r in subscription.rejections.all()])
+        rejections = subscription.rejections.all()
+        if rejections:
+            reason = ", ".join([r.reason for r in rejections])
             return f"Rejected: {reason}"
 
         return None
@@ -890,6 +912,25 @@ class VoucherAdmin(VersionAdmin):
     ]
     readonly_fields = ("key", "used", "pdf_file", "subscription")
     raw_id_fields = ["sent_to"]
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "purpose",
+                "sent_to",
+                "subscription",
+                "subscription__user",
+                "subscription__course",
+                "subscription__course__type",
+                "subscription__course__offering",
+            )
+            .prefetch_related(
+                "price_reductions", "subscription__course__type__translations"
+            )
+        )
 
     def sent_to_full_name(self, voucher: Voucher) -> Optional[str]:
         if voucher.sent_to:
@@ -936,8 +977,9 @@ class VoucherAdmin(VersionAdmin):
 
     @staticmethod
     def used_timestamp(voucher: Voucher) -> Optional[str]:
-        if voucher.price_reductions.exists():
-            return voucher.price_reductions.first().created_at
+        reductions = voucher.price_reductions.all()
+        if reductions:
+            return reductions[0].created_at
 
     @staticmethod
     def offering(voucher: Voucher) -> Optional[str]:

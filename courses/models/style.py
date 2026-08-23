@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Iterable
 
 from django.db import models
@@ -48,17 +49,41 @@ class Style(TranslatableModel):
 
         return False
 
-    def descendants(self) -> Iterable["Style"]:
-        yield self
-        for child in self.children.all():
-            for descendant in child.descendants():
-                yield descendant
+    def descendants(
+        self, children_by_parent_id: dict | None = None
+    ) -> Iterable["Style"]:
+        if children_by_parent_id is None:
+            children_by_parent_id = defaultdict(list)
+            for s in Style.objects.all():
+                if s.parent_style_id is not None:
+                    children_by_parent_id[s.parent_style_id].append(s)
 
-    def ancestors(self) -> Iterable["Style"]:
         yield self
-        if self.parent_style:
-            for ancestor in self.parent_style.ancestors():
-                yield ancestor
+        for child in children_by_parent_id.get(self.pk, []):
+            yield from child.descendants(children_by_parent_id)
 
-    def related(self) -> Iterable["Style"]:
-        return set(self.descendants()).union(set(self.ancestors()))
+    def ancestors(self, style_lookup: dict | None = None) -> Iterable["Style"]:
+        if style_lookup is None:
+            style_lookup = {s.pk: s for s in Style.objects.all()}
+
+        yield self
+        parent = style_lookup.get(self.parent_style_id)
+        if parent:
+            yield from parent.ancestors(style_lookup)
+
+    def related(
+        self,
+        style_lookup: dict | None = None,
+        children_by_parent_id: dict | None = None,
+    ) -> Iterable["Style"]:
+        if style_lookup is None or children_by_parent_id is None:
+            all_styles = list(Style.objects.all())
+            style_lookup = {s.pk: s for s in all_styles}
+            children_by_parent_id = defaultdict(list)
+            for s in all_styles:
+                if s.parent_style_id is not None:
+                    children_by_parent_id[s.parent_style_id].append(s)
+
+        return set(self.descendants(children_by_parent_id)).union(
+            set(self.ancestors(style_lookup))
+        )
