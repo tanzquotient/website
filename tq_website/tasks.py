@@ -1,5 +1,6 @@
 from celery import shared_task
 from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from photologue.models import Photo, PhotoSizeCache
 
 from courses.services.attendance import send_unexcused_absences_emails
@@ -78,6 +79,6 @@ def task_delete_user_and_courses_calendar_cache(
     course_ids: list[int],
 ) -> None:
     for user_id in user_ids:
-        cache.delete(f"user_ical_{user_id}")
+        cache.delete(make_template_fragment_key("user_ical", [user_id]))
     for course_id in course_ids:
-        cache.delete(f"course_ical_{course_id}")
+        cache.delete(make_template_fragment_key("course_ical", [course_id]))

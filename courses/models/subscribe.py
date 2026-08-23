@@ -124,6 +124,9 @@ class Subscribe(Model):
     def is_active(self) -> bool:
         return self.state not in SubscribeState.REJECTED_STATES
 
+    def is_accepted(self) -> bool:
+        return self.state in SubscribeState.ACCEPTED_STATES
+
     def is_admitted(self) -> bool:
         return self.state not in SubscribeState.REJECTED_STATES + [
             SubscribeState.WAITING_LIST
@@ -131,6 +134,9 @@ class Subscribe(Model):
 
     def is_matched(self) -> bool:
         return self.is_active() and self.matching_state in MatchingState.MATCHED_STATES
+
+    def is_couple(self) -> bool:
+        return self.matching_state == MatchingState.COUPLE
 
     def is_single_with_preference(self, lead_or_follow: str) -> bool:
         return (

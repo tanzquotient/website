@@ -25,7 +25,7 @@
         {% if not course.cancelled %}
             {% include "courses/snippets/subscription_info_detail.html" with course=course long=True display_link=True user=user %}
         {% endif %}
-        {% cache 300 course_info course.id LANGUAGE_CODE %}
+        {% cache 3600 course_info course.id LANGUAGE_CODE %}
             {% include "courses/snippets/course_info.html" %}
         {% endcache %}
     </div>
@@ -47,10 +47,14 @@
             {% include "courses/snippets/info_to_participants.html" %}
         </div>
         <div>
-            {% include "courses/snippets/room_disclaimer.html" %}
+            {% cache 3600 room_disclaimer course.id LANGUAGE_CODE %}
+                {% include "courses/snippets/room_disclaimer.html" %}
+            {% endcache %}
         </div>
         <div>
-            {% include "courses/snippets/course_description.html" %}
+            {% cache 3600 course_description course.id LANGUAGE_CODE %}
+                {% include "courses/snippets/course_description.html" %}
+            {% endcache %}
         </div>
         <div>
             {% course_reviews course user request %}

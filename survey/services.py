@@ -148,7 +148,7 @@ def send_course_surveys() -> None:
                 )
 
                 recipients = User.objects.filter(
-                    pk__in=course.participatory().values_list("user_id", flat=True)
+                    pk__in=[s.user_id for s in course.participatory()]
                 ).exclude(pk__in=already_invited_user_ids)
 
                 for recipient in recipients.iterator(chunk_size=200):

@@ -25,6 +25,7 @@ class RegularLesson(models.Model):
     def get_occurrences(self) -> Iterable[LessonOccurrenceData]:
         period = self.course.get_period()
         period_cancellations = [p.date for p in period.cancellations.all()]
+        exceptions_by_date = {e.date: e for e in self.exceptions.all()}
 
         all_dates_in_period = map(
             lambda offset: period.date_from + timedelta(days=offset),
@@ -53,8 +54,8 @@ class RegularLesson(models.Model):
 
         lesson_occurrences = []
         for lesson_date in filter(has_date_a_lesson, all_dates_in_period):
-            if self.exceptions.filter(date=lesson_date).exists():
-                exception = self.exceptions.get(date=lesson_date)
+            exception = exceptions_by_date.get(lesson_date)
+            if exception is not None:
                 if exception.is_cancelled():
                     continue
                 lesson_occurrences.append(

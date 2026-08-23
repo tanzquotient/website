@@ -11,7 +11,6 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from djangocms_text.fields import HTMLField
@@ -221,11 +220,11 @@ class Course(TranslatableModel):
                 }
             )
 
-    def participatory(self) -> QuerySet[Subscribe]:
-        return self.subscriptions.accepted()
+    def participatory(self) -> list[Subscribe]:
+        return [s for s in self.subscriptions.all() if s.is_accepted()]
 
     def participants(self) -> set[User]:
-        return {subscription.user for subscription in self.subscriptions.accepted()}
+        return {subscription.user for subscription in self.participatory()}
 
     def subscribed_user_ids(self) -> set[int]:
         return {
@@ -386,7 +385,7 @@ class Course(TranslatableModel):
         )
 
     def active_subscriptions_count(self) -> int:
-        return self.subscriptions.active().count()
+        return len([s for s in self.subscriptions.all() if s.is_active()])
 
     def matched_subscriptions_count(self, admitted_only: bool = False) -> int:
         return len(
@@ -438,7 +437,7 @@ class Course(TranslatableModel):
         return total_count
 
     def get_confirmed_count(self) -> int:
-        return self.subscriptions.accepted().count()
+        return len([s for s in self.subscriptions.all() if s.is_accepted()])
 
     def get_matched_and_individual_counts(
         self, admitted_only: bool = False
@@ -462,16 +461,19 @@ class Course(TranslatableModel):
         worst_case: bool = False,
         until_subscribe: Subscribe | None = None,
     ) -> int:
-        waiting_list = self.subscriptions.waiting_list()
-
-        if until_subscribe is not None:
-            waiting_list = waiting_list.filter(date__lte=until_subscribe.date)
-
-        waiting_list = waiting_list.all()
+        waiting_list = sorted(
+            (
+                s
+                for s in self.subscriptions.all()
+                if s.is_waiting_list()
+                and (until_subscribe is None or s.date <= until_subscribe.date)
+            ),
+            key=lambda s: s.date,
+        )
 
         if not self.type.couple_course:
             # just return the total number of subscribes on the waitlist
-            return waiting_list.count()
+            return len(waiting_list)
 
         # walk the waiting list assigning NO_PREFERENCE subscribes
         # to the shorter queue

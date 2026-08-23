@@ -2,10 +2,11 @@ from collections import defaultdict
 
 import reversion
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from reversion.models import Version
+
+from courses.services.cache import invalidate_course_reviews_cache
 
 from ..models import Answer
 
@@ -22,8 +23,7 @@ def show_or_hide_answer_on_post(request: HttpRequest) -> None:
                 answer.save()
 
                 # delete all course reviews cache
-                if cache.__class__.__name__ == "RedisCache":
-                    cache.delete_many(keys=cache.keys("*course_reviews*"))
+                invalidate_course_reviews_cache()
 
                 reversion.set_user(request.user)
                 fallback_comment = (

@@ -5,10 +5,12 @@ from zoneinfo import ZoneInfo
 from django import template
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache.utils import make_template_fragment_key
 from django.db.models import Count, Q, QuerySet
 from django.http import HttpRequest
 from django.template.defaultfilters import date
 from django.utils import timezone
+from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 import courses.utils as utils
@@ -18,7 +20,6 @@ from courses.models import (
     Course,
     LeadFollow,
     LessonOccurrence,
-    MatchingState,
     OfferingType,
     RejectionReason,
     Room,
@@ -29,6 +30,7 @@ from courses.models import (
     Weekday,
 )
 from courses.services import get_offerings_by_year
+from courses.services.cache import cached
 from survey.models import Answer, SurveyInstance
 from survey.models.types import QuestionType
 
@@ -155,21 +157,27 @@ def offerings_list(detail_url: str, only_public: bool = True) -> dict:
 
 @register.inclusion_tag(filename="courses/snippets/course_reviews.html")
 def course_reviews(course: Course, user: User, request: HttpRequest) -> dict:
-    course_answers = Answer.objects.filter(
-        survey_instance__course__type=course.type,
-    )
+    def compute() -> dict:
+        course_answers = Answer.objects.filter(
+            survey_instance__course__type=course.type,
+        )
 
-    course_teachers = course.get_teachers()
-    teachers_answers = Answer.objects.exclude(
-        survey_instance__course__type=course.type,
-    ).filter(survey_instance__course__teaching__teacher__in=course_teachers)
-    return dict(
-        course=course,
-        course_reviews=course_reviews_for_queryset(course_answers, course_teachers),
-        teachers_reviews=course_reviews_for_queryset(teachers_answers, course_teachers),
-        user=user,
-        request=request,
+        course_teachers = course.get_teachers()
+        teachers_answers = Answer.objects.exclude(
+            survey_instance__course__type=course.type,
+        ).filter(survey_instance__course__teaching__teacher__in=course_teachers)
+        return dict(
+            course_reviews=course_reviews_for_queryset(course_answers, course_teachers),
+            teachers_reviews=course_reviews_for_queryset(
+                teachers_answers, course_teachers
+            ),
+        )
+
+    cache_key = make_template_fragment_key(
+        "course_reviews_data", [course.id, get_language()]
     )
+    reviews_data = cached(cache_key, compute, 60 * 60 * 24)
+    return dict(course=course, user=user, request=request, **reviews_data)
 
 
 def course_reviews_for_queryset(
@@ -350,7 +358,7 @@ def get_waiting_list_length(course: Course, lead_follow: str = "no_preference") 
 @register.filter(name="get_position_on_waiting_list")
 def get_position_on_waiting_list(course: Course, user: User) -> int:
     # get user's subscription for course
-    subscription: Subscribe = Subscribe.objects.get(course=course, user=user)
+    subscription = next(s for s in course.subscriptions.all() if s.user_id == user.id)
     return subscription.get_position_on_waiting_list()
 
 
@@ -361,27 +369,26 @@ def user_can_subscribe(course: Course, user: User) -> bool:
 
 @register.filter(name="is_couple")
 def is_couple(subscribe: Subscribe) -> bool:
-    return subscribe.matching_state == MatchingState.COUPLE
+    return subscribe.is_couple()
 
 
 @register.filter(name="get_user_subscription")
 def get_user_subscription(course: Course, user: User) -> Subscribe:
-    return course.subscriptions.get(user=user)
+    return next(s for s in course.subscriptions.all() if s.user_id == user.id)
 
 
 @register.filter(name="get_waiting_list_composition")
 def get_waiting_list_composition(course: Course) -> list | None:
-    waiting_list_subscriptions: list[Subscribe] = course.subscriptions.waiting_list()
-    if not waiting_list_subscriptions.exists():
+    waiting_list_subscriptions: list[Subscribe] = [
+        s for s in course.subscriptions.all() if s.is_waiting_list()
+    ]
+    if not waiting_list_subscriptions:
         return None
 
     composition = []
 
     # couples
-    n_couples = (
-        waiting_list_subscriptions.filter(matching_state=MatchingState.COUPLE).count()
-        // 2
-    )
+    n_couples = len([s for s in waiting_list_subscriptions if s.is_couple()]) // 2
     composition.append(
         _("One couple")
         if n_couples == 1
@@ -427,9 +434,13 @@ def get_waiting_list_composition(course: Course) -> list | None:
     ]:
         composition.append(
             text(
-                waiting_list_subscriptions.filter(lead_follow=lead_follow)
-                .exclude(matching_state=MatchingState.COUPLE)
-                .count()
+                len(
+                    [
+                        s
+                        for s in waiting_list_subscriptions
+                        if s.lead_follow == lead_follow and not s.is_couple()
+                    ]
+                )
             )
         )
 

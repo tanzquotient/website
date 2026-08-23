@@ -12,8 +12,9 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.syndication.views import add_domain
 from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Prefetch
+from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -39,12 +40,9 @@ from . import figures, services
 from .forms.subscribe_form import SubscribeForm
 from .models import (
     Course,
-    IrregularLesson,
     LessonOccurrence,
-    MatchingState,
     Offering,
     OfferingType,
-    RegularLessonException,
     RejectionReason,
     RoomAccessCode,
     RoomAccessCodeView,
@@ -79,7 +77,10 @@ def course_list(
 def course_list_context(
     subscription_type="all", style_name="all", show_preview=False
 ) -> dict:
-    cache_key = f"course_list_context:{subscription_type}:{style_name}:{'preview' if show_preview else 'normal'}:{get_language()}"
+    cache_key = make_template_fragment_key(
+        "course_list_context",
+        [subscription_type, style_name, show_preview, get_language()],
+    )
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -92,31 +93,7 @@ def course_list_context(
         )
 
     offerings = services.get_offerings_to_display(show_preview).prefetch_related(
-        "period__cancellations",
-        "course_set",
-        "course_set__type",
-        "course_set__type__translations",
-        "course_set__period__cancellations",
-        "course_set__room",
-        "course_set__room__cancellations",
-        "course_set__regular_lessons",
-        "course_set__room__address",
-        "course_set__room__translations",
-        "course_set__lesson_occurrences",
-        Prefetch(
-            "course_set__irregular_lessons",
-            queryset=IrregularLesson.objects.order_by("date", "time_from"),
-        ),
-        Prefetch(
-            "course_set__regular_lessons__exceptions",
-            queryset=RegularLessonException.objects.order_by("date"),
-        ),
-        Prefetch(
-            "course_set__subscriptions",
-            queryset=Subscribe.objects.active(),
-            to_attr="active_subscriptions",
-        ),
-        "course_set__subscriptions",
+        "translations",
     )
     c_offerings = []
     for offering in offerings:
@@ -139,7 +116,7 @@ def course_list_context(
             "subscription_type": subscription_type,
         },
     }
-    cache.set(cache_key, context, 5 * 60)
+    cache.set(cache_key, context, 60 * 60)
     return context
 
 
@@ -174,10 +151,16 @@ def offering_by_id(request: HttpRequest, offering_id: int) -> HttpResponse:
 def course_detail(request: HttpRequest, course_id: int) -> HttpResponse:
     try:
         course = (
-            Course.objects.select_related("type", "offering")
+            Course.objects.select_related("type", "offering", "room")
             .prefetch_related(
-                "subscriptions",
+                "translations",
+                "type__translations",
                 "type__styles__translations",
+                "room__translations",
+                "room__cancellations",
+                "lesson_occurrences__room",
+                "subscriptions",
+                "subscriptions__user",
                 "regular_lessons__exceptions",
                 "irregular_lessons",
                 "teaching__teacher__functions",
@@ -302,7 +285,7 @@ def _event_to_ical_event(event: EventModel, request: HttpRequest) -> Event:
 
 
 def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
-    cache_key = f"course_ical_{course_id}"
+    cache_key = make_template_fragment_key("course_ical", [course_id])
     response = cache.get(cache_key)
     if response:
         return response
@@ -596,7 +579,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     if security_token != _user_specific_token(user):
         raise PermissionDenied()
 
-    cache_key = f"user_ical_{user_id}"
+    cache_key = make_template_fragment_key("user_ical", [user_id])
     response = cache.get(cache_key)
     if response:
         return response
@@ -749,7 +732,7 @@ def cancel_subscription_from_waiting_list(
 
     subscriptions_to_reject = [subscribe]
 
-    if subscribe.matching_state == MatchingState.COUPLE:
+    if subscribe.is_couple():
         partner_subscribe = subscribe.get_partner_subscription()
         assert partner_subscribe.state == SubscribeState.WAITING_LIST
         subscriptions_to_reject.append(partner_subscribe)

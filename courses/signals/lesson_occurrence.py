@@ -16,6 +16,10 @@ from courses.models import (
     RoomCancellation,
     Teach,
 )
+from courses.services.cache import (
+    invalidate_course_detail_cache,
+    invalidate_course_list_cache,
+)
 from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 
 
@@ -37,7 +41,7 @@ from tq_website.tasks import task_delete_user_and_courses_calendar_cache
 @receiver(post_delete, sender=PeriodCancellation)
 @receiver(post_delete, sender=RoomCancellation)
 @receiver(post_delete, sender=LessonDetails)
-def update_lesson_occurrences(sender, instance, **kwargs):
+def schedule_changed(sender, instance, **kwargs):
     courses: list[Course]
     if sender == Course:
         courses = [instance]
@@ -59,6 +63,9 @@ def update_lesson_occurrences(sender, instance, **kwargs):
 
     for course in courses:
         course.update_lesson_occurrences()
+
+    invalidate_course_list_cache()
+    invalidate_course_detail_cache([c.pk for c in courses])
 
 
 @receiver(post_save, sender=LessonOccurrenceTeach)
@@ -83,10 +90,12 @@ def update_hourly_wages(sender, instance, **kwargs):
 
 @receiver(post_save, sender=LessonOccurrence)
 @receiver(post_delete, sender=LessonOccurrence)
-def trigger_calendar_cache_delete_from_lesson_occurrence(sender, instance, **kwargs):
+def lesson_occurrence_changed(sender, instance, **kwargs):
     user_ids = list(instance.course.subscriptions.values_list("user", flat=True))
     user_ids += list(instance.course.teaching.values_list("teacher", flat=True))
     task_delete_user_and_courses_calendar_cache.delay(
         user_ids=user_ids,
         course_ids=[instance.course_id],
     )
+    invalidate_course_list_cache()
+    invalidate_course_detail_cache([instance.course_id])

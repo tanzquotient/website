@@ -4,11 +4,12 @@ from collections import Counter
 from numbers import Number
 from typing import Iterable
 
-from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 
 from courses.models import CourseType, Subscribe, SubscribeState
+from courses.services.cache import cached
 from utils import TranslationUtils
 
 log = logging.getLogger("tq")
@@ -16,39 +17,38 @@ log = logging.getLogger("tq")
 
 def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType, int]]:
     """returns similar courses that the user did before in the system"""
-    cache_key = f"calculate_relevant_experience:{self.pk}:{get_language()}"
-    cached = cache.get(cache_key)
-    if cached is not None:
-        return cached
 
-    relevant_exp = [
-        related_style.id
-        for style in self.course.type.styles.all()
-        for related_style in style.related()
-    ]
-
-    relevant_courses = Counter(
-        [
-            subscription.course.type
-            for subscription in self.user.subscriptions.all()
-            if subscription.state in SubscribeState.ACCEPTED_STATES
-            and any(
-                [
-                    style.id in relevant_exp
-                    for style in subscription.course.type.styles.all()
-                ]
-            )
+    def compute() -> list[tuple[CourseType, int]]:
+        relevant_exp = [
+            related_style.id
+            for style in self.course.type.styles.all()
+            for related_style in style.related()
         ]
-    )
 
-    result = sorted(
-        relevant_courses.items(),
-        key=lambda item: (item[0].level or 0, item[1]),
-        reverse=True,
-    )
+        relevant_courses = Counter(
+            [
+                subscription.course.type
+                for subscription in self.user.subscriptions.all()
+                if subscription.state in SubscribeState.ACCEPTED_STATES
+                and any(
+                    [
+                        style.id in relevant_exp
+                        for style in subscription.course.type.styles.all()
+                    ]
+                )
+            ]
+        )
 
-    cache.set(cache_key, result, 60 * 60 * 24)
-    return result
+        return sorted(
+            relevant_courses.items(),
+            key=lambda item: (item[0].level or 0, item[1]),
+            reverse=True,
+        )
+
+    cache_key = make_template_fragment_key(
+        "calculate_relevant_experience", [self.pk, get_language()]
+    )
+    return cached(cache_key, compute, 60 * 60 * 24)
 
 
 def format_prices(
