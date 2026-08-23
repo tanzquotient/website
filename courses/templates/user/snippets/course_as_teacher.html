@@ -19,11 +19,11 @@
                 {% trans "Add to calendar" %}
             </a>
         </div>
-        {% if course.rooms.exists %}
+        {% if course.rooms %}
             <strong>{% trans "Location" %}</strong>
             <div class="mb-2">
                 {% for room in course.rooms %}
-                    {% include "courses/snippets/room_modal.html" with display_link=True room=course.room only %}
+                    {% include "courses/snippets/room_modal.html" with display_link=True room=room only %}
                     {% if not forloop.last %}
                         <br/>
                     {% endif %}

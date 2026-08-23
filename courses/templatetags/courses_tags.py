@@ -339,9 +339,11 @@ def is_over_since(course: Course, days: int) -> bool:
 
 @register.filter(name="missing_presence_data")
 def missing_presence_data(course: Course) -> bool:
-    return course.lesson_occurrences.filter(
-        end__lte=timezone.localtime.now(), teachers=None
-    ).exists()
+    now = timezone.localtime(timezone.now())
+    return any(
+        occurrence.end <= now and not occurrence.teachers.all()
+        for occurrence in course.lesson_occurrences.all()
+    )
 
 
 @register.filter(name="get_waiting_list_length")

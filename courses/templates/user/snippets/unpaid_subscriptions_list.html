@@ -1,8 +1,7 @@
 {% load i18n %}
 {% load courses_tags %}
 
-{% with unpaid_subscriptions=user.profile.unpaid_subscriptions overdue_subscriptions=user.profile.subscriptions_with_overdue_payment %}
-    {% if unpaid_subscriptions|length or overdue_subscriptions|length %}
+{% if unpaid_subscriptions|length or overdue_subscriptions|length %}
         <div class="my-2 alert alert-{{ overdue_subscriptions|length|yesno:"danger,warning" }}">
             <h5 class="alert-heading">
                 {% trans "Unpaid subscriptions" %}
@@ -43,4 +42,3 @@
             {% trans "It can take up to a week for your payment to be acquired by our system." %}
         </div>
     {% endif %}
-{% endwith %}

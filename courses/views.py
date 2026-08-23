@@ -48,7 +48,6 @@ from .models import (
     RoomAccessCodeView,
     Style,
     Subscribe,
-    UserProfile,
 )
 from .services.data.teachers_overview import get_teachers_overview_data
 from .utils import course_filter
@@ -290,7 +289,15 @@ def course_ical(request: HttpRequest, course_id: int) -> HttpResponse:
     if response:
         return response
 
-    course: Course = get_object_or_404(Course.objects, id=course_id)
+    course: Course = get_object_or_404(
+        Course.objects.select_related("type").prefetch_related(
+            "translations",
+            "type__translations",
+            "teaching__teacher__profile",
+            "lesson_occurrences__room",
+        ),
+        id=course_id,
+    )
     cal = Calendar()
     cal.add("version", "2.0")
     cal.add("prodid", f"-//Tanzquotient calendar for course {course_id}//mxm.dk//")
@@ -522,28 +529,35 @@ def user_courses(request: HttpRequest) -> HttpResponse:
         User.objects.filter(id=user_id)
         .prefetch_related(
             "profile",
-            "teaching_courses__course__lesson_occurrences",
-            "profile__user__teaching_courses__course__lesson_occurrences",
+            "teaching_courses__course__lesson_occurrences__room",
+            "teaching_courses__course__lesson_occurrences__teachers",
+            "teaching_courses__course__survey_instances__survey",
+            "teaching_courses__course__subscriptions",
+            "teaching_courses__course__type__translations",
+            "teaching_courses__course__period",
+            "teaching_courses__course__offering__period",
+            "lesson_occurrences__course__lesson_occurrences__room",
+            "lesson_occurrences__course__lesson_occurrences__teachers",
+            "lesson_occurrences__course__survey_instances__survey",
+            "lesson_occurrences__course__subscriptions",
+            "lesson_occurrences__course__type__translations",
+            "lesson_occurrences__course__period",
+            "lesson_occurrences__course__offering__period",
         )
         .get()
     )
-    profile = (
-        UserProfile.objects.filter(user_id=user_id)
+    profile = user.profile
+    subscriptions = list(
+        user.subscriptions.select_related(
+            "course", "course__type", "course__room", "course__offering", "partner"
+        )
         .prefetch_related(
-            "user__teaching_courses__course__lesson_occurrences",
-            "user__lesson_occurrences__course__lesson_occurrences",
-            "user__teaching_courses__course__survey_instances__survey",
-            "user__lesson_occurrences__course__survey_instances__survey",
-        )
-        .get()
-    )
-    subscriptions = (
-        user.subscriptions.prefetch_related(
-            "course__lesson_occurrences",
+            "course__type__translations",
+            "course__lesson_occurrences__room",
             "course__irregular_lessons__lesson_details__room__cancellations",
             "course__regular_lessons__exceptions__lesson_details__room__cancellations",
             "course__room__cancellations",
-            "course__type",
+            "course__subscriptions",
             "price_reductions",
             "course__period__cancellations",
             "course__offering__period__cancellations",
@@ -551,12 +565,19 @@ def user_courses(request: HttpRequest) -> HttpResponse:
             "partner__profile",
         )
         .order_by("-date")
-        .all()
     )
+    waiting_list_subscriptions = [s for s in subscriptions if s.is_waiting_list()]
+    unpaid_subscriptions = [
+        s for s in subscriptions if s.state in SubscribeState.TO_PAY_STATES
+    ]
+    overdue_subscriptions = [s for s in subscriptions if s.is_payment_overdue()]
     context = {
         "user": user,
         "profile": profile,
         "subscriptions": subscriptions,
+        "waiting_list_subscriptions": waiting_list_subscriptions,
+        "unpaid_subscriptions": unpaid_subscriptions,
+        "overdue_subscriptions": overdue_subscriptions,
         "token": _user_specific_token(user),
         "payment_account": settings.PAYMENT_ACCOUNT["default"],
     }
@@ -593,7 +614,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
         "course__translations",
         "course__type__translations",
         "course__room",
-        "course__lesson_occurrences",
+        "course__lesson_occurrences__room",
         "course__teaching__teacher__profile",
     ]
     subscriptions = Subscribe.objects.filter(user=user).prefetch_related(*prefetch)

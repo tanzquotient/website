@@ -35,7 +35,7 @@
         {% endif %}
 
         <h3 class="m-0">{% trans "My Courses" %}</h3>
-        {% include "user/snippets/unpaid_subscriptions_list.html" with user=user only %}
+        {% include "user/snippets/unpaid_subscriptions_list.html" with unpaid_subscriptions=unpaid_subscriptions overdue_subscriptions=overdue_subscriptions only %}
         {% include "user/snippets/user_lessons.html" %}
         {% include "user/snippets/open_surveys.html" with user=user only %}
 
@@ -71,7 +71,7 @@
             </a>
         </p>
 
-        {% for subscription in user.subscriptions.waiting_list %}
+        {% for subscription in waiting_list_subscriptions %}
             {% include "courses/snippets/cancel_subscription_modal.html" with subscription=subscription only %}
         {% endfor %}
     </div>

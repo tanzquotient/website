@@ -187,7 +187,7 @@ class UserProfile(Model):
         return self.display_name
 
     def is_teacher(self) -> bool:
-        return self.user.teaching_courses.exists()
+        return bool(self.user.teaching_courses.all())
 
     def is_student(self) -> bool:
         if self.user.is_staff:
@@ -289,7 +289,7 @@ class UserProfile(Model):
     ############
 
     def is_substitute_teacher(self) -> bool:
-        return not self.is_teacher() and self.user.lesson_occurrences.exists()
+        return not self.is_teacher() and bool(self.user.lesson_occurrences.all())
 
     def get_hourly_wage(self, until: datetime | str = "now") -> Decimal:
         # If a teacher has a fixed wage, return it
