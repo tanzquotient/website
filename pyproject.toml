@@ -44,10 +44,10 @@ dependencies = [
     "boto3~=1.43.1", # Driver for S3 and S3 compatiables storage backends (e.g. Minio)
     "minio==7.2.20", # Perform bucket and object operations, used for initializing Minio
     # Webserver
-    "gunicorn==26.1.0", # Used to serve django for production
+    "gunicorn==26.2.0", # Used to serve django for production
     "django-prometheus==2.5.0", # Exposes /metrics endpoint for Prometheus scraping
     # Logging
-    "sentry_sdk==2.68.0", # Used for logging exceptions to Sentry.io
+    "sentry_sdk==2.68.1", # Used for logging exceptions to Sentry.io
     # Utils
     "plotly==6.9.0", # For generating charts and graphs
     "shortuuid==1.0.13", # For generating short and unique ID's and codes
