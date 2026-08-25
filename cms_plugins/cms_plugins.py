@@ -179,6 +179,9 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                         "name": irregular_lesson.course.type.title,
                         "room": irregular_lesson.course.room,
                         "special": False,
+                        # TODO: remove when published flag is added to
+                        # Course model
+                        "published": True,
                         "format_prices": irregular_lesson.course.format_prices(),
                         "course": irregular_lesson.course,
                         "detail_url": reverse(
