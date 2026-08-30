@@ -52,13 +52,14 @@
     {% render_block "css" %}
 </head>
 
-<body class="{% page_attribute "slug" %}">
+<body class="{% page_attribute "slug" %} d-flex flex-column min-vh-100">
 {% cms_toolbar %}
 
 {% block menu %}
     {% include "menu/main_menu.html" %}
 {% endblock %}
 
+<div class="flex-grow-1">
 {% block lead %}
     <header class="lead">
         <div class="container">
@@ -82,6 +83,7 @@
 
 {% block cms_bottom_content %}
 {% endblock %}
+</div>
 
 {% block footer %}
     {% include "footer.html" %}
