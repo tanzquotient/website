@@ -9,7 +9,7 @@ dependencies = [
     "Django==6.0.7",
     # Django Extensions
     "django-parler==2.4", # For simple translatable models
-    "django-post-office==3.11.2", # Send and manage emails asynchronously, database based email templates
+    "django-post-office==3.11.3", # Send and manage emails asynchronously, database based email templates
     "django-reversion==6.3.0", # Version control for model instances, e.g. used for subscriptions
     "django-countries==9.0.0", # Country choices for use with forms and fields for models
     "django-ical==1.9.2", # Simple library for creating iCal feeds
@@ -17,10 +17,10 @@ dependencies = [
     "django-photologue==3.20", # Gallery application
     "django-sortedm2m==4.0.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
     # Django CMS
-    "django-cms==5.1.1", # Open source content management system based on the Django
+    "django-cms==5.1.2", # Open source content management system based on the Django
     "djangocms-text==0.9.11", # Text plugin for django CMS
     "djangocms-versioning==2.7.0", # Core package of django CMS, is used to e.g. hava page histories
-    "djangocms-alias==3.1.1", # Core package of django CMS used for aliases
+    "djangocms-alias==3.2.0", # Core package of django CMS used for aliases
     # Rest framework
     "djangorestframework==3.18.0", # Toolkit for building Web APIs
     "django-parler-rest==2.2", # Adding translation support to django-rest-framework
@@ -60,7 +60,7 @@ dependencies = [
 dev = [
     "django-debug-toolbar==7.1.1", # For development. Gives additional insights into e.g. database queries
     "locust~=2.46.0", # Loadtesting
-    "ruff==0.16.4",
+    "ruff==0.16.5",
     "pre-commit>=4.6.0",
 ]
 
