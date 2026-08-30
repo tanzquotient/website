@@ -60,13 +60,9 @@ class Payment(models.Model):
         return [subscription.course for subscription in self.subscriptions.all()]
 
     def list_subscriptions(self):
-        from . import SubscriptionPayment
-
         return [
             subscription_payment.subscription.__str__()
-            for subscription_payment in SubscriptionPayment.objects.filter(
-                payment=self
-            ).all()
+            for subscription_payment in self.subscription_payments.all()
         ]
 
     def subscription_payments_amount_sum(self):

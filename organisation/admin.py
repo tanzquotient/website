@@ -19,3 +19,6 @@ class FunctionAdmin(TranslatableAdmin):
     )
     inlines = (UserInline,)
     exclude = ("users",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("translations", "users")

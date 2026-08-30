@@ -30,29 +30,36 @@ class SubscriptionPaymentFilter(SimpleListFilter):
         `self.value()`.
         """
 
-        if self.value() == "consistent":
-            return queryset.filter(
-                id__in=[
-                    sp.id
-                    for sp in queryset.all()
-                    if sp.subscription.sum_of_payments()
-                    == sp.subscription.price_after_reductions()
-                ]
-            )
-        elif self.value() == "overpaid":
-            return queryset.filter(
-                id__in=[
-                    sp.id
-                    for sp in queryset.all()
-                    if sp.subscription.sum_of_payments()
-                    > sp.subscription.price_after_reductions()
-                ]
-            )
-        elif self.value() == "underpaid":
-            return queryset.filter(
-                id__in=[
-                    sp.id for sp in queryset.all() if sp.subscription.open_amount() > 0
-                ]
-            )
-        else:
+        if self.value() not in ("consistent", "overpaid", "underpaid"):
             return queryset
+
+        subscription_payments = queryset.select_related(
+            "subscription__user__profile",
+            "subscription__course",
+        ).prefetch_related(
+            "subscription__price_reductions",
+            "subscription__subscription_payments",
+        )
+
+        if self.value() == "consistent":
+            ids = [
+                sp.id
+                for sp in subscription_payments
+                if sp.subscription.sum_of_payments()
+                == sp.subscription.price_after_reductions()
+            ]
+        elif self.value() == "overpaid":
+            ids = [
+                sp.id
+                for sp in subscription_payments
+                if sp.subscription.sum_of_payments()
+                > sp.subscription.price_after_reductions()
+            ]
+        else:
+            ids = [
+                sp.id
+                for sp in subscription_payments
+                if sp.subscription.open_amount() > 0
+            ]
+
+        return queryset.filter(id__in=ids)

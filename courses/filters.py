@@ -182,7 +182,11 @@ class CourseTypeStyleFilter(SimpleListFilter):
     parameter_name = "parent"
 
     def lookups(self, request, model_admin):
-        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+        return [
+            (s.name, s.name)
+            for s in Style.objects.prefetch_related("children")
+            if s.children.all()
+        ]
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -215,7 +219,11 @@ class StyleParentFilter(SimpleListFilter):
     parameter_name = "parent"
 
     def lookups(self, request, model_admin):
-        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+        return [
+            (s.name, s.name)
+            for s in Style.objects.prefetch_related("children")
+            if s.children.all()
+        ]
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -230,7 +238,11 @@ class StyleChildrenOfFilter(SimpleListFilter):
     parameter_name = "children_of"
 
     def lookups(self, request, model_admin):
-        return [(s.name, s.name) for s in Style.objects.all() if s.children.exists()]
+        return [
+            (s.name, s.name)
+            for s in Style.objects.prefetch_related("children")
+            if s.children.all()
+        ]
 
     def queryset(self, request, queryset):
         if self.value() is None:

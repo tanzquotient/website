@@ -19,3 +19,11 @@ class QuestionGroupAdmin(admin.ModelAdmin):
 class QuestionAdmin(TranslatableAdmin):
     list_display = ("question_text", "display", "question_group")
     search_fields = ["translations__question_text", "translations__answer_text"]
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("question_group")
+            .prefetch_related("translations")
+        )

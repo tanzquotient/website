@@ -42,6 +42,7 @@ class PaymentAdmin(admin.ModelAdmin):
     ]
 
     inlines = [SubscriptionPaymentInline]
+    show_full_result_count = False
     actions = [
         process_payments,
         check_balance,
@@ -49,6 +50,17 @@ class PaymentAdmin(admin.ModelAdmin):
         mark_payment_as_course_payment,
         mark_archive,
     ]
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related(
+                "subscription_payments__subscription__user",
+                "subscription_payments__subscription__course__offering",
+            )
+        )
+
     readonly_fields = (
         "credit_debit",
         "name",
@@ -81,6 +93,18 @@ class SubscriptionPaymentAdmin(admin.ModelAdmin):
     list_filter = [SubscriptionPaymentFilter]
     search_fields = ["id", "amount"]
     actions = [raise_price_to_pay]
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "payment",
+                "subscription__user",
+                "subscription__course__offering",
+            )
+        )
 
 
 @admin.register(CoursePayment)
@@ -88,6 +112,9 @@ class CoursePayment(admin.ModelAdmin):
     list_display = ["id", "payment", "course", "amount"]
     raw_id_fields = ["payment", "course"]
     search_fields = ["payment__name", "course__name"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("payment", "course")
 
 
 @admin.register(PayrexxGateway)
@@ -121,6 +148,9 @@ class PayrexxGatewayAdmin(admin.ModelAdmin):
         "payment",
     ]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("subscription__user")
+
 
 @admin.register(PaymentReminder)
 class PaymentReminderAdmin(admin.ModelAdmin):
@@ -141,3 +171,13 @@ class PaymentReminderAdmin(admin.ModelAdmin):
     model = PaymentReminder
 
     raw_id_fields = ("subscription", "mail")
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "subscription__user",
+                "subscription__course__offering",
+            )
+        )

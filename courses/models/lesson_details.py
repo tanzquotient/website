@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class LessonDetails(models.Model):
@@ -7,8 +8,9 @@ class LessonDetails(models.Model):
     )
 
     def get_course(self):
-        return self.get_lesson().course
+        return self.get_lesson.course
 
+    @cached_property
     def get_lesson(self):
         from courses.models import IrregularLesson
 

@@ -1,4 +1,4 @@
-from django.db.models import TextField
+from django.db.models import Count, Q, TextField
 from django.forms import Textarea
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -92,17 +92,32 @@ class SurveyAdmin(TranslatableAdmin):
     actions = [export_surveys_xlsx, copy_survey]
     inlines = [QuestionGroupInline]
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                num_question_groups=Count("questiongroup", distinct=True),
+                num_questions=Count("questiongroup__question", distinct=True),
+                num_answers=Count(
+                    "survey_instances",
+                    filter=Q(survey_instances__is_completed=True),
+                    distinct=True,
+                ),
+            )
+        )
+
     @staticmethod
     def questions(instance: Survey) -> str:
-        return f"{Question.objects.filter(question_group__survey=instance).count()} questions in total"
+        return f"{instance.num_questions} questions in total"
 
     @staticmethod
     def question_groups(instance: Survey) -> str:
-        return f"{instance.questiongroup_set.count()} question group(s)"
+        return f"{instance.num_question_groups} question group(s)"
 
     @staticmethod
     def answers(instance: Survey) -> str:
-        return f"received {instance.survey_instances.filter(is_completed=True).count()} answers"
+        return f"received {instance.num_answers} answers"
 
 
 @admin.register(Question)
@@ -150,6 +165,9 @@ class QuestionGroupAdmin(TranslatableAdmin):
 class ScaleAdmin(TranslatableAdmin):
     model = Scale
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("translations")
+
 
 @admin.register(SurveyInstance)
 class SurveyInstanceAdmin(admin.ModelAdmin):
@@ -165,6 +183,7 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
     )
     model = SurveyInstance
     raw_id_fields = ("course",)
+    show_full_result_count = False
     list_filter = (
         SubscribeOfferingListFilter,
         SubscribeCourseListFilter,
@@ -173,6 +192,13 @@ class SurveyInstanceAdmin(admin.ModelAdmin):
     )
 
     actions = [let_url_expire_now, fix_unintentional_reviews]
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("survey", "user", "course__offering")
+        )
 
     def has_add_permission(self, request) -> bool:
         return False
@@ -189,6 +215,19 @@ class AnswerAdmin(VersionAdmin):
     list_display = ("id", "survey_instance", "question", "value")
     model = Answer
     raw_id_fields = ("question", "survey_instance")
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "survey_instance__survey",
+                "survey_instance__user",
+                "survey_instance__course__offering",
+                "question",
+            )
+        )
 
     def has_add_permission(self, request) -> bool:
         return False

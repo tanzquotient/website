@@ -6,12 +6,14 @@ from typing import Optional
 from django import forms
 from django.contrib.admin import ModelAdmin
 from django.contrib.admin.views.main import ChangeList
+from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from django.utils.html import format_html_join, mark_safe
 from django_countries.fields import CountryField
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 from parler.widgets import SortedSelect
+from post_office.models import STATUS
 from reversion.admin import VersionAdmin
 from reversion.models import Version
 
@@ -129,6 +131,9 @@ class OfferingAdmin(TranslatableAdmin):
         ("Automatic survey", {"fields": ["survey"]}),
     ]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("period", "survey")
+
 
 class TeachInlineForCourse(admin.TabularInline):
     model = Teach
@@ -227,6 +232,10 @@ class RoomAccessCodeViewAdmin(admin.ModelAdmin):
     list_display = ["viewed_at", "user", "access_code"]
     readonly_fields = ["user", "access_code", "viewed_at"]
     ordering = ["-viewed_at"]
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("user", "access_code__room")
 
     def has_add_permission(self, request):
         return False
@@ -239,18 +248,32 @@ class RoomAccessCodeViewAdmin(admin.ModelAdmin):
 
 
 @admin.register(LessonDetails)
-class MemberAdmin(admin.ModelAdmin):
+class LessonDetailsAdmin(admin.ModelAdmin):
     list_display = [
         "get_course",
         "get_lesson",
         "room",
     ]
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "room",
+                "irregular_lesson__course__offering",
+                "regular_lesson_exception__regular_lesson__course__offering",
+            )
+        )
+
 
 @admin.register(RegularLesson)
-class MemberAdmin(admin.ModelAdmin):
+class RegularLessonAdmin(admin.ModelAdmin):
     list_display = ["course", "weekday", "time_from", "time_to"]
     inlines = (RegularLessonExceptionInline,)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("course__offering")
 
 
 @admin.register(Course)
@@ -481,6 +504,10 @@ class CourseTypeAdmin(TranslatableAdmin):
     ]
 
     model = CourseType
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("translations", "styles")
 
     @admin.display(boolean=True, description="Has description")
     def has_description_in_all_languages(self, obj: CourseType) -> bool:
@@ -511,7 +538,8 @@ class SkillAdmin(ModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .prefetch_related("dance_levels__style", "user")
+            .select_related("user")
+            .prefetch_related("dance_levels__style")
         )
 
     def has_add_permission(self, request: HttpRequest) -> bool:
@@ -523,7 +551,7 @@ class SkillAdmin(ModelAdmin):
     @staticmethod
     @admin.display(description="Number of known dances")
     def num_known_dances(skill: Skill) -> int:
-        return skill.dance_levels.count()
+        return len(skill.dance_levels.all())
 
 
 @admin.register(Attendance)
@@ -544,6 +572,17 @@ class AttendanceAdmin(ModelAdmin):
         "lesson_occurrence__course__name",
     ]
     list_filter = ["state", "role"]
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "lesson_occurrence__course__offering",
+                "user",
+            )
+        )
 
     def has_add_permission(self, request, obj=None) -> bool:
         return False
@@ -756,6 +795,17 @@ class ConfirmationAdmin(admin.ModelAdmin):
     model = Confirmation
 
     raw_id_fields = ("subscription", "mail")
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "subscription__user",
+                "subscription__course__offering",
+            )
+        )
 
 
 @admin.register(Rejection)
@@ -777,6 +827,17 @@ class RejectionAdmin(admin.ModelAdmin):
     model = Rejection
 
     raw_id_fields = ("subscription", "mail")
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "subscription__user",
+                "subscription__course__offering",
+            )
+        )
 
 
 @admin.register(TeacherWelcome)
@@ -793,6 +854,13 @@ class TeacherWelcomeAdmin(admin.ModelAdmin):
 
     raw_id_fields = ("teach", "mail")
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("teach__teacher", "teach__course__offering")
+        )
+
 
 @admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
@@ -808,7 +876,7 @@ class TeachAdmin(admin.ModelAdmin):
         SubscribeOfferingListFilter,
         SubscribeCourseListFilter,
     )
-    list_display_link = ("id",)
+    list_display_links = ("id",)
     search_fields = [
         "teacher__email",
         "teacher__first_name",
@@ -816,6 +884,25 @@ class TeachAdmin(admin.ModelAdmin):
         "course__name",
         "course__type__translations__title",
     ]
+    show_full_result_count = False
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("teacher", "course__offering")
+            .annotate(
+                is_welcomed=Exists(
+                    TeacherWelcome.objects.filter(
+                        teach=OuterRef("pk"), mail__status=STATUS.sent
+                    )
+                )
+            )
+        )
+
+    @admin.display(description="Welcomed", boolean=True)
+    def welcomed(self, obj: Teach) -> bool:
+        return obj.is_welcomed
 
 
 @admin.register(Style)
@@ -854,8 +941,11 @@ class RoomAdmin(TranslatableAdmin):
 @admin.register(RoomCancellation)
 class RoomCancellationAdmin(admin.ModelAdmin):
     list_display = ["__str__", "date", "room"]
-    search_fields = ["name", "room"]
+    search_fields = ["name", "room__name"]
     list_filter = ["date", RoomCancellationFilter]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("room")
 
 
 @admin.register(Address)
@@ -1012,7 +1102,7 @@ class BankAccountAdmin(admin.ModelAdmin):
     list_display = ["user", "iban", "bank_name"]
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[BankAccount]:
-        return BankAccount.objects.prefetch_related("user_profile__user")
+        return super().get_queryset(request).select_related("user_profile__user")
 
     @staticmethod
     def user(account: BankAccount) -> str:
