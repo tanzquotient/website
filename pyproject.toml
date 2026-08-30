@@ -49,7 +49,7 @@ dependencies = [
     # Logging
     "sentry_sdk==2.68.1", # Used for logging exceptions to Sentry.io
     # Utils
-    "plotly==6.9.0", # For generating charts and graphs
+    "plotly==7.0.0", # For generating charts and graphs
     "shortuuid==1.0.13", # For generating short and unique ID's and codes
     "django-hijack==3.7.8", # Superuser can impersonate other users
     "python-dotenv==1.2.3", # Used to load environment variables from .env file
