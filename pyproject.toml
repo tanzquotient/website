@@ -11,9 +11,9 @@ dependencies = [
     "django-parler==2.4", # For simple translatable models
     "django-post-office==3.11.3", # Send and manage emails asynchronously, database based email templates
     "django-reversion==6.3.0", # Version control for model instances, e.g. used for subscriptions
-    "django-countries==9.0.0", # Country choices for use with forms and fields for models
+    "django-countries==9.1.0", # Country choices for use with forms and fields for models
     "django-ical==1.9.2", # Simple library for creating iCal feeds
-    "django-allauth==65.19.2", # Authentication, registration, account management, 3rd party account authentication
+    "django-allauth==65.19.3", # Authentication, registration, account management, 3rd party account authentication
     "django-photologue==3.20", # Gallery application
     "django-sortedm2m==4.0.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
     # Django CMS
@@ -60,7 +60,7 @@ dependencies = [
 dev = [
     "django-debug-toolbar==8.0.0", # For development. Gives additional insights into e.g. database queries
     "locust~=2.46.0", # Loadtesting
-    "ruff==0.16.6",
+    "ruff==0.16.7",
     "pre-commit>=4.6.0",
 ]
 
