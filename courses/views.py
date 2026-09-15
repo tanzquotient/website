@@ -58,8 +58,6 @@ log = logging.getLogger("tq")
 # Create your views here.
 
 
-@cache_page(5 * 60)
-@vary_on_cookie
 def course_list(
     request, subscription_type="all", style_name="all", show_preview=False
 ) -> HttpResponse:
