@@ -558,8 +558,8 @@ CACHES = {
 # Configure the email host to send mails from
 EMAIL_HOST = environ["TQ_EMAIL_HOST"]
 EMAIL_HOST_USER = environ["TQ_EMAIL_HOST_USER"]
-EMAIL_PORT = 8081
-EMAIL_USE_TLS = False
+EMAIL_PORT = int(environ["TQ_EMAIL_PORT"])
+EMAIL_USE_TLS = bool(environ["TQ_EMAIL_USE_TLS"].lower() == "true")
 EMAIL_HOST_PASSWORD = environ["TQ_EMAIL_HOST_PASSWORD"]
 DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 
