@@ -40,6 +40,16 @@ def undisplay(modeladmin, request, queryset):
     queryset.update(display=False)
 
 
+@admin.action(description="Mark as opens soon")
+def mark_opens_soon(modeladmin, request, queryset):
+    queryset.update(opens_soon=True)
+
+
+@admin.action(description="Unmark opens soon")
+def unmark_opens_soon(modeladmin, request, queryset):
+    queryset.update(opens_soon=False)
+
+
 @admin.action(description="Activate")
 def activate(modeladmin, request, queryset):
     queryset.update(active=True)

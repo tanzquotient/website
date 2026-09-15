@@ -379,6 +379,8 @@ class CourseAdmin(TranslatableAdmin):
         undisplay,
         activate,
         deactivate,
+        mark_opens_soon,
+        unmark_opens_soon,
         enable_early_signup,
         disable_early_signup,
         cancel,
