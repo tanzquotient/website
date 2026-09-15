@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 
@@ -18,9 +19,11 @@ def course_type_changed(sender, instance: CourseType, **kwargs):
         user_ids += list(course.subscriptions.values_list("user", flat=True))
         user_ids += list(course.teaching.values_list("teacher", flat=True))
         course_ids.append(course.pk)
-    task_delete_user_and_courses_calendar_cache.delay(
-        user_ids=user_ids,
-        course_ids=course_ids,
+    transaction.on_commit(
+        lambda: task_delete_user_and_courses_calendar_cache.delay(
+            user_ids=user_ids,
+            course_ids=course_ids,
+        )
     )
     invalidate_course_list_cache()
     invalidate_course_detail_cache(course_ids)

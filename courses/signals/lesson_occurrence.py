@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Q
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
@@ -93,9 +94,12 @@ def update_hourly_wages(sender, instance, **kwargs):
 def lesson_occurrence_changed(sender, instance, **kwargs):
     user_ids = list(instance.course.subscriptions.values_list("user", flat=True))
     user_ids += list(instance.course.teaching.values_list("teacher", flat=True))
-    task_delete_user_and_courses_calendar_cache.delay(
-        user_ids=user_ids,
-        course_ids=[instance.course_id],
+    course_id = instance.course_id
+    transaction.on_commit(
+        lambda: task_delete_user_and_courses_calendar_cache.delay(
+            user_ids=user_ids,
+            course_ids=[course_id],
+        )
     )
     invalidate_course_list_cache()
-    invalidate_course_detail_cache([instance.course_id])
+    invalidate_course_detail_cache([course_id])

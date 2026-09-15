@@ -6,6 +6,7 @@ from django.core.cache.utils import (
     TEMPLATE_FRAGMENT_KEY_TEMPLATE,
     make_template_fragment_key,
 )
+from django.db import transaction
 
 T = TypeVar("T")
 
@@ -14,17 +15,24 @@ DETAIL_CACHE_FRAGMENTS = ["course_info", "course_description", "room_disclaimer"
 
 def invalidate_course_list_cache() -> None:
     if hasattr(cache, "delete_pattern"):
-        cache.delete_pattern(
-            TEMPLATE_FRAGMENT_KEY_TEMPLATE % ("course_list_context", "*")
+        transaction.on_commit(
+            lambda: cache.delete_pattern(
+                TEMPLATE_FRAGMENT_KEY_TEMPLATE % ("course_list_context", "*")
+            )
         )
 
 
 def invalidate_course_reviews_cache() -> None:
-    if hasattr(cache, "delete_pattern"):
+    if not hasattr(cache, "delete_pattern"):
+        return
+
+    def _delete_patterns() -> None:
         cache.delete_pattern(TEMPLATE_FRAGMENT_KEY_TEMPLATE % ("course_reviews", "*"))
         cache.delete_pattern(
             TEMPLATE_FRAGMENT_KEY_TEMPLATE % ("course_reviews_data", "*")
         )
+
+    transaction.on_commit(_delete_patterns)
 
 
 def invalidate_course_detail_cache(course_ids: Iterable[int]) -> None:
@@ -39,7 +47,7 @@ def invalidate_course_detail_cache(course_ids: Iterable[int]) -> None:
         for course_id in course_ids
         for lang in languages
     ]
-    cache.delete_many(keys)
+    transaction.on_commit(lambda: cache.delete_many(keys))
 
 
 def cached(cache_key: str, compute: Callable[[], T], timeout: int) -> T:
