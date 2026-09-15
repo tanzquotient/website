@@ -8,8 +8,8 @@ s3:
   - name: tq-postfinance
 
 # TODO (#272) Migrate to SIP smtp
-#smtp:
-#  - name: tq-mail
+smtp:
+ - name: tq-mail
 
 ingress:
   - subdomain: www
