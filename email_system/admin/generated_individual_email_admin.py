@@ -2,6 +2,7 @@ from typing import Any
 
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
+from django.db.models import QuerySet
 from django.http.request import HttpRequest
 from django.utils import timezone
 from post_office.models import Email
@@ -17,6 +18,9 @@ class GeneratedIndividualEmailAdmin(ModelAdmin):
     list_filter = ["email__status"]
     search_fields = ["email__to", "email__subject"]
     actions = []
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        return super().get_queryset(request).select_related("email")
 
     def subject(self, obj):
         return obj.email.subject
