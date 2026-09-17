@@ -1,5 +1,6 @@
 from typing import Callable, Optional
 
+from parler.models import TranslationDoesNotExist
 from parler.utils.context import switch_language
 
 from tq_website import settings
@@ -14,7 +15,10 @@ class TranslationUtils:
             "default"
         ]["fallbacks"]:
             with switch_language(model, lang):
-                val = getattr(model, attribute)
+                try:
+                    val = getattr(model, attribute)
+                except TranslationDoesNotExist:
+                    continue
             if val:
                 return val
         return None
