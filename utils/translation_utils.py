@@ -1,5 +1,7 @@
+import html
 from typing import Callable, Optional
 
+from django.utils.html import strip_tags
 from parler.models import TranslationDoesNotExist
 from parler.utils.context import switch_language
 
@@ -19,7 +21,7 @@ class TranslationUtils:
                     val = getattr(model, attribute)
                 except TranslationDoesNotExist:
                     continue
-            if val:
+            if val and html.unescape(strip_tags(val)).strip():
                 return val
         return None
 
