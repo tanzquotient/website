@@ -1,11 +1,60 @@
 # Define a new User admin
+from django import forms
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from hijack.contrib.admin import HijackUserAdminMixin
 
-from courses.admin import SubscribeInlineForUser, UserProfileInline
 from courses.admin_actions import make_inactive
+from courses.models import Subscribe, UserProfile
+
+
+class UserFullNameChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.get_full_name() or obj.get_username()
+
+
+class UserFullNameMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return obj.get_full_name() or obj.get_username()
+
+
+class UserFullNameAdminMixin:
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        User = get_user_model()
+
+        if db_field.remote_field and db_field.remote_field.model == User:
+            kwargs["form_class"] = UserFullNameChoiceField
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        User = get_user_model()
+
+        if db_field.remote_field and db_field.remote_field.model == User:
+            kwargs["form_class"] = UserFullNameMultipleChoiceField
+
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+class SubscribeInlineForUser(admin.TabularInline):
+    model = Subscribe
+    extra = 1
+    fk_name = "user"
+
+    raw_id_fields = ("course", "partner")
+    readonly_fields = (
+        "state",
+        "matching_state",
+        "usi",
+    )
+
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    readonly_fields = ["address", "bank_account"]
 
 
 class TQUserAdmin(HijackUserAdminMixin, UserAdmin):

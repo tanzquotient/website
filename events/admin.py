@@ -13,6 +13,7 @@ from events.models import (
     EventRegistration,
     EventRegistrationSchedule,
 )
+from groups.admin.tq_user_admin import UserFullNameAdminMixin
 
 
 class EventListFilter(SimpleListFilter):
@@ -43,7 +44,7 @@ class RegistrationScheduleInline(admin.TabularInline):
 
 
 @admin.register(Event)
-class EventAdmin(TranslatableAdmin):
+class EventAdmin(UserFullNameAdminMixin, TranslatableAdmin):
     list_display = (
         "name",
         "get_responsible",
@@ -99,7 +100,7 @@ class EventAdmin(TranslatableAdmin):
         ),
     ]
 
-    filter_horizontal = ["responsible"]
+    autocomplete_fields = ["responsible"]
 
     def get_queryset(self, request):
         return (

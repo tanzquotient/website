@@ -19,6 +19,7 @@ from reversion.models import Version
 
 from courses.admin_forms.voucher_admin_form import VoucherAdminForm
 from courses.filters import *
+from groups.admin.tq_user_admin import UserFullNameAdminMixin
 from utils import HTMLUtils, TranslationUtils
 
 from .models import Address, Room
@@ -135,15 +136,16 @@ class OfferingAdmin(TranslatableAdmin):
         return super().get_queryset(request).select_related("period", "survey")
 
 
-class TeachInlineForCourse(admin.TabularInline):
+class TeachInlineForCourse(UserFullNameAdminMixin, admin.TabularInline):
     model = Teach
     extra = 2
     fk_name = "course"
 
     raw_id_fields = ("teacher",)
+    autocomplete_fields = ["teacher"]
 
 
-class SubscribeInlineForCourse(admin.TabularInline):
+class SubscribeInlineForCourse(UserFullNameAdminMixin, admin.TabularInline):
     model = Subscribe
     extra = 1
     fk_name = "course"
@@ -155,18 +157,7 @@ class SubscribeInlineForCourse(admin.TabularInline):
         "usi",
     )
 
-
-class SubscribeInlineForUser(admin.TabularInline):
-    model = Subscribe
-    extra = 1
-    fk_name = "user"
-
-    raw_id_fields = ("course", "partner")
-    readonly_fields = (
-        "state",
-        "matching_state",
-        "usi",
-    )
+    autocomplete_fields = ["user", "partner"]
 
 
 class IrregularLessonInline(admin.TabularInline):
@@ -628,7 +619,7 @@ class SubscribeChangeList(ChangeList):
 
 
 @admin.register(Subscribe)
-class SubscribeAdmin(VersionAdmin):
+class SubscribeAdmin(UserFullNameAdminMixin, VersionAdmin):
     list_display = (
         "id",
         "state",
@@ -674,6 +665,8 @@ class SubscribeAdmin(VersionAdmin):
         "usi",
     )
     show_full_result_count = False
+
+    autocomplete_fields = ["user", "partner"]
 
     model = Subscribe
 
@@ -1109,9 +1102,3 @@ class BankAccountAdmin(admin.ModelAdmin):
     @staticmethod
     def user(account: BankAccount) -> str:
         return account.user_profile.user.get_full_name()
-
-
-class UserProfileInline(admin.StackedInline):
-    model = UserProfile
-    can_delete = False
-    readonly_fields = ["address", "bank_account"]

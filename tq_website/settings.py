@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
     "django.contrib.humanize",
-    "django.contrib.admin",
+    "tq_website.admin_config.TQAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

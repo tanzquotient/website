@@ -24,7 +24,7 @@ class Teach(models.Model):
         verbose_name_plural = "teaches"
 
     def __str__(self) -> str:
-        return f"{self.teacher} teaches {self.course}"
+        return f"{self.teacher.get_full_name()} teaches {self.course}"
 
     @property
     def welcomed(self) -> bool:
