@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib import admin
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils.safestring import mark_safe
@@ -44,6 +46,7 @@ class RegistrationScheduleInline(admin.TabularInline):
 class EventAdmin(TranslatableAdmin):
     list_display = (
         "name",
+        "get_responsible",
         "special",
         "display",
         "published",
@@ -103,20 +106,28 @@ class EventAdmin(TranslatableAdmin):
             super()
             .get_queryset(request)
             .select_related("room")
-            .prefetch_related("translations")
+            .prefetch_related("translations", "responsible")
         )
 
-    def view_button(self, obj):
-        if obj is None or obj.pk is None:
+    @staticmethod
+    @admin.display(description="Responsible")
+    def get_responsible(event: Event) -> Optional[str]:
+        responsible = event.responsible.all()
+        if not responsible:
+            return None
+        return ", ".join([r.get_full_name() for r in responsible])
+
+    @staticmethod
+    @admin.display(description="View")
+    def view_button(event: Event) -> str:
+        if event is None or event.pk is None:
             return "—"
-        label = "Preview" if not obj.published else "View"
+        label = "Preview" if not event.published else "View"
         return mark_safe(
             '<a class="button" '
             'style="text-decoration: none; text-transform: uppercase;" '
-            f'href="{obj.detail_url()}" target="_blank">{label}</a>'
+            f'href="{event.detail_url()}" target="_blank">{label}</a>'
         )
-
-    view_button.short_description = "View"
 
 
 @admin.register(EventCategory)
