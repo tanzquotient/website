@@ -18,6 +18,7 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
+import url_shortener.urls
 
 from .views import (
     WellKnownRedirectView,
@@ -38,6 +39,7 @@ urlpatterns = [
 urlpatterns += [
     path("check/", courses_views.confirmation_check, name="confirmation_check"),
     path("duplicate-users/", courses_views.duplicate_users, name="duplicate_users"),
+    path("url_shortener/", include(url_shortener.urls, namespace="url_shortener")),
 ]
 
 if settings.DEBUG and not settings.TESTING:
