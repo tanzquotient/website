@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "groups.apps.GroupsConfig",
     "email_system.apps.EmailSystemConfig",
     "partners.apps.PartnersConfig",
+    "url_shortener.apps.UrlShortenerConfig",
     "parler",
     "survey",
 ]
