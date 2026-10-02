@@ -155,9 +155,9 @@ class DestinationAdmin(admin.ModelAdmin):
 
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
-    list_display = ("id", "source", "destination", "visited_at")
+    list_display = ("id", "source", "destination", "visited_at", "ip_address")
     list_select_related = ("source", "destination")
-    readonly_fields = ("visited_at",)
+    readonly_fields = ("visited_at", "ip_address", "user_agent")
     change_list_template = "admin/url_shortener/visit/change_list.html"
 
     def get_urls(self):

@@ -21,7 +21,12 @@ def redirect_to_destination(request):
             "Ooops, something went wrong...", content_type="text/plain", status=404
         )
 
-    Visit.objects.create(source=source, destination=destination)
+    Visit.objects.create(
+        source=source,
+        destination=destination,
+        ip_address=request.META.get("REMOTE_ADDR"),
+        user_agent=request.headers.get("User-Agent", ""),
+    )
     return HttpResponseRedirect(
         destination_url_with_forwarded_parameters(destination.url, request)
     )

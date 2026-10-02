@@ -27,6 +27,8 @@ class Visit(models.Model):
         related_name="visits",
     )
     visited_at = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True, default="")
 
     class Meta:
         indexes = [

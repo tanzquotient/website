@@ -14,18 +14,17 @@ class RedirectToDestinationTests(TestCase):
         response = self.client.get(
             reverse("url_shortener:redirect"),
             {"f": self.source.id, "t": self.destination.id},
+            REMOTE_ADDR="203.0.113.10",
+            HTTP_USER_AGENT="Example browser",
         )
 
         self.assertRedirects(
             response, self.destination.url, fetch_redirect_response=False
         )
         self.assertEqual(response.content, b"")
-        self.assertEqual(
-            Visit.objects.filter(
-                source=self.source, destination=self.destination
-            ).count(),
-            1,
-        )
+        visit = Visit.objects.get(source=self.source, destination=self.destination)
+        self.assertEqual(visit.ip_address, "203.0.113.10")
+        self.assertEqual(visit.user_agent, "Example browser")
 
     def test_invalid_ids_return_a_generic_error_without_creating_a_visit(self):
         for parameters in (
