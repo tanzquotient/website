@@ -58,11 +58,20 @@ def schedule_changed(sender, instance, **kwargs):
     elif sender == PeriodCancellation:
         courses = list(instance.period.course_set.all())
     elif sender == RoomCancellation:
-        courses = list(instance.room.courses.all())
+        # include courses that use the room only for some lessons via lesson details
+        courses = list(
+            Course.objects.filter(
+                Q(room=instance.room)
+                | Q(irregular_lessons__lesson_details__room=instance.room)
+                | Q(regular_lessons__exceptions__lesson_details__room=instance.room)
+            ).distinct()
+        )
     elif sender == LessonDetails:
         courses = [instance.get_lesson.course] if not kwargs["created"] else []
 
-    for course in courses:
+    # reload the courses instead of using the signal's instances
+    # those may hold stale prefetched lessons
+    for course in Course.objects.filter(pk__in=[c.pk for c in courses]):
         course.update_lesson_occurrences()
 
     invalidate_course_list_cache()

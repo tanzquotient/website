@@ -28,36 +28,43 @@ from .admin_forms import (
 )
 from .emailcenter import create_course_info
 from .forms import CreateSendVoucherForm, DownloadVouchersForm, SendVoucherEmailForm
+from .services.cache import invalidate_course_list_cache
+
+
+def _update_courses(queryset: QuerySet[Course], **fields) -> None:
+    # update() skips post_save, so the cached course list is not invalidated otherwise
+    queryset.update(**fields)
+    invalidate_course_list_cache()
 
 
 @admin.action(description="Set displayed")
 def display(modeladmin, request, queryset):
-    queryset.update(display=True)
+    _update_courses(queryset, display=True)
 
 
 @admin.action(description="Set undisplayed")
 def undisplay(modeladmin, request, queryset):
-    queryset.update(display=False)
+    _update_courses(queryset, display=False)
 
 
 @admin.action(description="Mark as opens soon")
 def mark_opens_soon(modeladmin, request, queryset):
-    queryset.update(opens_soon=True)
+    _update_courses(queryset, opens_soon=True)
 
 
 @admin.action(description="Unmark opens soon")
 def unmark_opens_soon(modeladmin, request, queryset):
-    queryset.update(opens_soon=False)
+    _update_courses(queryset, opens_soon=False)
 
 
 @admin.action(description="Activate")
 def activate(modeladmin, request, queryset):
-    queryset.update(active=True)
+    _update_courses(queryset, active=True)
 
 
 @admin.action(description="Deactivate")
 def deactivate(modeladmin, request, queryset):
-    queryset.update(active=False)
+    _update_courses(queryset, active=False)
 
 
 @admin.action(description="Enable early sign-up")
@@ -79,7 +86,7 @@ def enable_early_signup(modeladmin, request, queryset):
 
 @admin.action(description="Disable early sign-up")
 def disable_early_signup(modeladmin, request, queryset):
-    queryset.update(early_signup=False)
+    _update_courses(queryset, early_signup=False)
 
 
 @admin.action(
