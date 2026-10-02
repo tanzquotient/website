@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <form method="post">
+      {% csrf_token %}
+      <fieldset class="module aligned">
+        {{ form.as_div }}
+      </fieldset>
+      <div class="submit-row"><input type="submit" value="Create URL"></div>
+    </form>
+
+    {% if generated_url %}
+      <fieldset class="module aligned">
+        <h2>Shortened URL</h2>
+        <input type="text" value="{{ generated_url }}" readonly size="100" aria-label="Shortened URL">
+      </fieldset>
+    {% endif %}
+  </div>
+{% endblock %}
