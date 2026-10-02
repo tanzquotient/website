@@ -502,19 +502,33 @@ class Course(TranslatableModel):
 
         return waiting_list_length[lead_follow]
 
+    def _clear_free_places_cache(self) -> None:
+        for name in (
+            "get_free_places_count",
+            "has_free_places_for_leaders",
+            "has_free_places_for_followers",
+        ):
+            self.__dict__.pop(name, None)
+        getattr(self, "_prefetched_objects_cache", {}).pop("subscriptions", None)
+
     def update_waiting_list(self):
         # resets the state of subscribes in the waiting list
         # so that they can move to NEW if any spot opened up
         waiting_list: list[Subscribe] = self.subscriptions.waiting_list().order_by(
             "date"
         )
+        promoted_partner_ids = set()
 
         for s in waiting_list:
+            if s.pk in promoted_partner_ids:
+                continue
+            # every promotion takes a place, so the free places must be recomputed
+            self._clear_free_places_cache()
             if (
                 not self.type.couple_course
                 or s.matching_state not in MatchingState.MATCHED_STATES
             ):
-                s.state = s.assign_state()
+                s.assign_state()
                 if s.state != SubscribeState.WAITING_LIST:
                     with reversion.create_revision():
                         s.save()
@@ -534,6 +548,7 @@ class Course(TranslatableModel):
                         partner_s.state = SubscribeState.NEW
                         s.save()
                         partner_s.save()
+                        promoted_partner_ids.add(partner_s.pk)
 
                         reversion.set_comment("Promoted from waiting list")
                 else:
