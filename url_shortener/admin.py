@@ -1,4 +1,5 @@
 from datetime import timedelta
+from urllib.parse import parse_qsl, urlencode
 
 from django import forms
 from django.contrib import admin, messages
@@ -7,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.shortcuts import render
-from django.urls import path
+from django.urls import path, reverse
 from django.utils import timezone
 
 from utils.export import export_csv
@@ -36,10 +37,77 @@ class VisitChartForm(forms.Form):
         return cleaned_data
 
 
+class ShortenedUrlForm(forms.Form):
+    source = forms.ModelChoiceField(queryset=Source.objects.order_by("description"))
+    destination = forms.ModelChoiceField(queryset=Destination.objects.order_by("url"))
+    destination_parameters = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        help_text=(
+            "Enter ordinary destination query parameters, for example "
+            "campaign=autumn&f=partner-a. Their names are automatically prefixed "
+            "with q_ in the generated URL."
+        ),
+    )
+
+    def clean_destination_parameters(self):
+        value = self.cleaned_data["destination_parameters"]
+        try:
+            parameters = parse_qsl(
+                value, keep_blank_values=True, strict_parsing=bool(value)
+            )
+        except ValueError as error:
+            raise ValidationError("Enter parameters in the form name=value.") from error
+
+        if any(not name for name, _ in parameters):
+            raise ValidationError("Destination parameter names must not be empty.")
+
+        return parameters
+
+
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
     list_display = ("id", "description")
     search_fields = ("description",)
+    change_list_template = "admin/url_shortener/source/change_list.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        create_url = [
+            path(
+                "create-shortened-url/",
+                self.admin_site.admin_view(self.create_shortened_url_view),
+                name="url_shortener_create_shortened_url",
+            ),
+        ]
+        return create_url + urls
+
+    def create_shortened_url_view(self, request):
+        form = ShortenedUrlForm(request.POST or None)
+        generated_url = None
+
+        if request.method == "POST" and form.is_valid():
+            parameters = [
+                ("f", form.cleaned_data["source"].id),
+                ("t", form.cleaned_data["destination"].id),
+                *[
+                    (f"q_{name}", value)
+                    for name, value in form.cleaned_data["destination_parameters"]
+                ],
+            ]
+            generated_url = request.build_absolute_uri(
+                f"{reverse('url_shortener:redirect')}?{urlencode(parameters)}"
+            )
+
+        context = {
+            **self.admin_site.each_context(request),
+            "form": form,
+            "generated_url": generated_url,
+            "title": "Create shortened URL",
+        }
+        return render(
+            request, "admin/url_shortener/source/create_shortened_url.html", context
+        )
 
 
 @admin.register(Destination)
