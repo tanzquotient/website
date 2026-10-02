@@ -1,56 +1,39 @@
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 
-from .models import Destination, Source, Visit
+from .models import ShortLink, Visit
 
 
 @require_GET
-def redirect_to_destination(request):
+def redirect_to_destination(request, tag):
     try:
-        source_ids = request.GET.getlist("f")
-        destination_ids = request.GET.getlist("t")
-        if len(source_ids) != 1 or len(destination_ids) != 1:
-            raise ValueError
-
-        source = Source.objects.get(pk=source_ids[0])
-        destination = Destination.objects.get(pk=destination_ids[0])
-    except (Destination.DoesNotExist, KeyError, Source.DoesNotExist, ValueError):
+        short_link = ShortLink.objects.select_related("source", "destination").get(
+            active=True, tag=tag
+        )
+    except ShortLink.DoesNotExist:
         return HttpResponse(
             "Ooops, something went wrong...", content_type="text/plain", status=404
         )
 
     Visit.objects.create(
-        source=source,
-        destination=destination,
+        short_link=short_link,
         ip_address=request.META.get("REMOTE_ADDR"),
         user_agent=request.headers.get("User-Agent", ""),
     )
     return HttpResponseRedirect(
-        destination_url_with_forwarded_parameters(destination.url, request)
+        destination_url_with_request_parameters(short_link.destination.url, request)
     )
 
 
-def destination_url_with_forwarded_parameters(destination_url, request):
-    forwarded_parameters = [
-        (name.removeprefix("q_"), value)
-        for name, values in request.GET.lists()
-        if name.startswith("q_")
-        for value in values
-    ]
-    if not forwarded_parameters:
+def destination_url_with_request_parameters(destination_url, request):
+    query_string = request.META.get("QUERY_STRING", "")
+    if not query_string:
         return destination_url
 
     destination_parts = urlsplit(destination_url)
-    forwarded_names = {name for name, _ in forwarded_parameters}
-    destination_parameters = [
-        (name, value)
-        for name, value in parse_qsl(destination_parts.query, keep_blank_values=True)
-        if name not in forwarded_names
-    ]
+    query = "&".join(filter(None, (destination_parts.query, query_string)))
     return urlunsplit(
-        destination_parts._replace(
-            query=urlencode(destination_parameters + forwarded_parameters)
-        )
+        destination_parts._replace(query=query)
     )

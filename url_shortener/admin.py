@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from utils.export import export_csv
 
-from .models import Destination, Source, Visit
+from .models import Destination, ShortLink, Source, Visit
 
 
 class VisitChartForm(forms.Form):
@@ -45,8 +45,7 @@ class ShortenedUrlForm(forms.Form):
         widget=forms.Textarea(attrs={"rows": 3}),
         help_text=(
             "Enter ordinary destination query parameters, for example "
-            "campaign=autumn&f=partner-a. Their names are automatically prefixed "
-            "with q_ in the generated URL."
+            "campaign=autumn&f=partner-a. They are passed on unchanged."
         ),
     )
 
@@ -87,16 +86,17 @@ class SourceAdmin(admin.ModelAdmin):
         generated_url = None
 
         if request.method == "POST" and form.is_valid():
-            parameters = [
-                ("f", form.cleaned_data["source"].id),
-                ("t", form.cleaned_data["destination"].id),
-                *[
-                    (f"q_{name}", value)
-                    for name, value in form.cleaned_data["destination_parameters"]
-                ],
-            ]
+            short_link = ShortLink.objects.create(
+                source=form.cleaned_data["source"],
+                destination=form.cleaned_data["destination"],
+            )
             generated_url = request.build_absolute_uri(
-                f"{reverse('url_shortener:redirect')}?{urlencode(parameters)}"
+                reverse("url_shortener:redirect", kwargs={"tag": short_link.tag})
+                + (
+                    f"?{urlencode(form.cleaned_data['destination_parameters'])}"
+                    if form.cleaned_data["destination_parameters"]
+                    else ""
+                )
             )
 
         context = {
@@ -108,6 +108,20 @@ class SourceAdmin(admin.ModelAdmin):
         return render(
             request, "admin/url_shortener/source/create_shortened_url.html", context
         )
+
+
+@admin.register(ShortLink)
+class ShortLinkAdmin(admin.ModelAdmin):
+    list_display = ("tag", "source", "destination", "active", "created_at")
+    list_select_related = ("source", "destination")
+    list_filter = ("active",)
+    search_fields = ("tag", "source__description", "destination__url")
+    readonly_fields = ("tag", "created_at")
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.visits.exists():
+            return (*self.readonly_fields, "source", "destination")
+        return self.readonly_fields
 
 
 @admin.register(Destination)
@@ -134,19 +148,21 @@ class DestinationAdmin(admin.ModelAdmin):
                 "source_description",
                 "destination_id",
                 "destination_url",
+                "short_link_tag",
                 "visited_at",
             ],
             *[
                 [
                     visit.id,
-                    visit.source_id,
-                    visit.source.description,
+                    visit.short_link.source_id,
+                    visit.short_link.source.description,
                     destination.id,
                     destination.url,
+                    visit.short_link.tag,
                     visit.visited_at.isoformat(),
                 ]
-                for visit in Visit.objects.filter(destination=destination)
-                .select_related("source")
+                for visit in Visit.objects.filter(short_link__destination=destination)
+                .select_related("short_link__source")
                 .order_by("visited_at", "id")
             ],
         ]
@@ -155,10 +171,25 @@ class DestinationAdmin(admin.ModelAdmin):
 
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
-    list_display = ("id", "source", "destination", "visited_at", "ip_address")
-    list_select_related = ("source", "destination")
-    readonly_fields = ("visited_at", "ip_address", "user_agent")
+    list_display = (
+        "id",
+        "short_link",
+        "source",
+        "destination",
+        "visited_at",
+        "ip_address",
+    )
+    list_select_related = ("short_link__source", "short_link__destination")
+    readonly_fields = ("short_link", "visited_at", "ip_address", "user_agent")
     change_list_template = "admin/url_shortener/visit/change_list.html"
+
+    @admin.display(ordering="short_link__source", description="Source")
+    def source(self, obj):
+        return obj.short_link.source
+
+    @admin.display(ordering="short_link__destination", description="Destination")
+    def destination(self, obj):
+        return obj.short_link.destination
 
     def get_urls(self):
         urls = super().get_urls()
@@ -186,11 +217,11 @@ class VisitAdmin(admin.ModelAdmin):
             date_to = form.cleaned_data["date_to"] or today
 
             visits = Visit.objects.filter(
-                destination=destination,
+                short_link__destination=destination,
                 visited_at__date__range=(date_from, date_to),
             )
             if source:
-                visits = visits.filter(source=source)
+                visits = visits.filter(short_link__source=source)
                 series = [
                     {
                         "id": source.id,
@@ -201,22 +232,24 @@ class VisitAdmin(admin.ModelAdmin):
             else:
                 series = [
                     {
-                        "id": entry["source_id"],
-                        "name": entry["source__description"],
+                        "id": entry["short_link__source_id"],
+                        "name": entry["short_link__source__description"],
                         "color": f"hsl({index * 137 % 360} 55% 40%)",
                     }
                     for index, entry in enumerate(
-                        visits.values("source_id", "source__description")
+                        visits.values(
+                            "short_link__source_id", "short_link__source__description"
+                        )
                         .distinct()
-                        .order_by("source__description", "source_id")
+                        .order_by("short_link__source__description", "short_link__source_id")
                     )
                 ]
 
             counts_by_day_and_source = {
-                (entry["day"], entry["source_id"]): entry["count"]
+                (entry["day"], entry["short_link__source_id"]): entry["count"]
                 for entry in (
                     visits.annotate(day=TruncDate("visited_at"))
-                    .values("day", "source_id")
+                    .values("day", "short_link__source_id")
                     .annotate(count=Count("id"))
                 )
             }

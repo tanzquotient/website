@@ -1,4 +1,12 @@
+import secrets
+import string
+
 from django.db import models
+
+
+def generate_short_tag() -> str:
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(16))
 
 
 class Source(models.Model):
@@ -15,22 +23,29 @@ class Destination(models.Model):
         return self.url
 
 
-class Visit(models.Model):
+class ShortLink(models.Model):
+    tag = models.CharField(
+        max_length=16, unique=True, editable=False, default=generate_short_tag
+    )
     source = models.ForeignKey(
-        Source,
-        on_delete=models.PROTECT,
-        related_name="visits",
+        Source, on_delete=models.PROTECT, related_name="short_links"
     )
     destination = models.ForeignKey(
-        Destination,
+        Destination, on_delete=models.PROTECT, related_name="short_links"
+    )
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.tag
+
+
+class Visit(models.Model):
+    short_link = models.ForeignKey(
+        ShortLink,
         on_delete=models.PROTECT,
         related_name="visits",
     )
     visited_at = models.DateTimeField(auto_now_add=True)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     user_agent = models.TextField(blank=True, default="")
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["source", "destination"]),
-        ]
