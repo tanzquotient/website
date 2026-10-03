@@ -1,6 +1,9 @@
+import base64
 from datetime import timedelta
+from io import BytesIO
 from urllib.parse import parse_qsl, urlencode
 
+import qrcode
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminDateWidget
@@ -10,10 +13,19 @@ from django.db.models.functions import TruncDate
 from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
+from qrcode.image.svg import SvgPathImage
 
 from utils.export import export_csv
 
 from .models import Destination, ShortLink, Source, Visit
+
+
+def qr_code_data_uri(value):
+    image = qrcode.make(value, image_factory=SvgPathImage)
+    buffer = BytesIO()
+    image.save(buffer)
+    encoded_svg = base64.b64encode(buffer.getvalue()).decode("ascii")
+    return f"data:image/svg+xml;base64,{encoded_svg}"
 
 
 class VisitChartForm(forms.Form):
@@ -84,6 +96,7 @@ class SourceAdmin(admin.ModelAdmin):
     def create_shortened_url_view(self, request):
         form = ShortenedUrlForm(request.POST or None)
         generated_url = None
+        qr_code_data = None
 
         if request.method == "POST" and form.is_valid():
             short_link = ShortLink.objects.create(
@@ -98,11 +111,13 @@ class SourceAdmin(admin.ModelAdmin):
                     else ""
                 )
             )
+            qr_code_data = qr_code_data_uri(generated_url)
 
         context = {
             **self.admin_site.each_context(request),
             "form": form,
             "generated_url": generated_url,
+            "qr_code_data": qr_code_data,
             "title": "Create shortened URL",
         }
         return render(

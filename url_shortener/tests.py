@@ -124,6 +124,9 @@ class CreateShortenedUrlAdminTests(TestCase):
             response.context["generated_url"],
             f"http://testserver/shorty/{short_link.tag}/?campaign=autumn&f=partner-a",
         )
+        self.assertTrue(
+            response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
+        )
         self.assertFalse(Visit.objects.exists())
 
     def test_admin_rejects_malformed_destination_parameters(self):
