@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .visit-chart { display: flex; gap: 3px; overflow-x: auto; padding: 0 0.5rem; }
+    .visit-chart__column { display: grid; flex: 0 0 2.5rem; grid-template-rows: 20rem auto; text-align: center; }
+    .visit-chart__bar-area { border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column-reverse; justify-content: flex-start; }
+    .visit-chart__bar { min-height: 0; }
+    .visit-chart__label { font-size: 0.7rem; margin-top: 0.4rem; transform: rotate(-45deg); white-space: nowrap; }
+    .visit-chart__legend { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; padding: 0; }
+    .visit-chart__legend-colour { display: inline-block; height: 0.9rem; margin-right: 0.3rem; vertical-align: middle; width: 0.9rem; }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <form method="get">
+      {{ form.media }}
+      <fieldset class="module aligned">
+        {{ form.as_div }}
+      </fieldset>
+      <div class="submit-row"><input type="submit" value="Show chart"></div>
+    </form>
+
+    {% if chart_data is not None %}
+      <h2>Visits to {{ destination }} from {{ date_from }} to {{ date_to }}</h2>
+      <p><a href="{{ csv_export_url }}">Download displayed visits as CSV</a></p>
+      <ul class="visit-chart__legend">
+        {% for item in series %}
+          <li><span class="visit-chart__legend-colour" style="background: {{ item.color }}"></span>{{ item.name }}</li>
+        {% empty %}
+          <li>No visits were recorded for this destination in the selected period.</li>
+        {% endfor %}
+      </ul>
+      <div class="visit-chart" role="img" aria-label="Visits per day">
+        {% for item in chart_data %}
+          <div class="visit-chart__column" title="{{ item.date }}: {{ item.count }} visits">
+            <div class="visit-chart__bar-area">
+              {% for segment in item.segments %}
+                <div class="visit-chart__bar" style="background: {{ segment.color }}; height: {{ segment.height }}%" title="{{ segment.name }}: {{ segment.count }} visits"></div>
+              {% endfor %}
+            </div>
+            <div class="visit-chart__label">{{ item.date|date:"d M" }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
