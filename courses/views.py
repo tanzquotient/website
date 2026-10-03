@@ -646,6 +646,11 @@ def user_profile(request: HttpRequest) -> HttpResponse:
     return render(request, template_name, context)
 
 
+# Set for accounts created without the signup form (e.g. via Switch edu-ID) to ask
+# the user to review their profile, until they have saved it once.
+PROFILE_REVIEW_SESSION_KEY = "profile_review"
+
+
 @method_decorator(login_required, name="dispatch")
 class ProfileView(FormView):
     template_name = "courses/auth/profile.html"
@@ -671,10 +676,14 @@ class ProfileView(FormView):
         context["is_board_member"] = user.profile.is_board_member()
         context["is_profile_complete"] = user.profile.is_complete()
         context["profile_missing_values"] = user.profile.missing_values()
+        context["is_profile_review"] = bool(
+            self.request.session.get(PROFILE_REVIEW_SESSION_KEY)
+        )
         return context
 
     def form_valid(self, form) -> HttpResponse:
         services.update_user(self.request.user, form.cleaned_data)
+        self.request.session.pop(PROFILE_REVIEW_SESSION_KEY, None)
         return super(ProfileView, self).form_valid(form)
 
 
