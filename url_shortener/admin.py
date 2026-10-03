@@ -241,7 +241,9 @@ class VisitAdmin(admin.ModelAdmin):
                             "short_link__source_id", "short_link__source__description"
                         )
                         .distinct()
-                        .order_by("short_link__source__description", "short_link__source_id")
+                        .order_by(
+                            "short_link__source__description", "short_link__source_id"
+                        )
                     )
                 ]
 
@@ -277,12 +279,8 @@ class VisitAdmin(admin.ModelAdmin):
                     "segments": [
                         {
                             **item,
-                            "count": counts_by_day_and_source.get(
-                                (day, item["id"]), 0
-                            ),
-                            "height": counts_by_day_and_source.get(
-                                (day, item["id"]), 0
-                            )
+                            "count": counts_by_day_and_source.get((day, item["id"]), 0),
+                            "height": counts_by_day_and_source.get((day, item["id"]), 0)
                             / max_count
                             * 100,
                         }

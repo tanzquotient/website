@@ -34,6 +34,4 @@ def destination_url_with_request_parameters(destination_url, request):
 
     destination_parts = urlsplit(destination_url)
     query = "&".join(filter(None, (destination_parts.query, query_string)))
-    return urlunsplit(
-        destination_parts._replace(query=query)
-    )
+    return urlunsplit(destination_parts._replace(query=query))

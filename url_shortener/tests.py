@@ -115,8 +115,7 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertEqual(short_link.destination, self.destination)
         self.assertEqual(
             response.context["generated_url"],
-            f"http://testserver/url_shortener/{short_link.tag}/"
-            "?campaign=autumn&f=partner-a",
+            f"http://testserver/shorty/{short_link.tag}/?campaign=autumn&f=partner-a",
         )
         self.assertFalse(Visit.objects.exists())
 
