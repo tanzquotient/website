@@ -1,9 +1,8 @@
 from django.db import migrations
 
-from ..models import Partner
-
 
 def resize(apps, schema_editor):
+    Partner = apps.get_model("partners", "Partner")
     instances_to_resize = Partner.objects.filter(image__isnull=False).all()
     for instance_to_resize in instances_to_resize:
         instance_to_resize.save(update_fields=["image"])

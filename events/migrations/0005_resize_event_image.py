@@ -1,10 +1,11 @@
 from django.db import migrations
 
-from ..models import Event, EventCategory
-
 
 def resize(apps, schema_editor):
-    models = [Event, EventCategory]
+    models = [
+        apps.get_model("events", "Event"),
+        apps.get_model("events", "EventCategory"),
+    ]
     for model in models:
         instances_to_resize = model.objects.filter(image__isnull=False).all()
         for instance_to_resize in instances_to_resize:

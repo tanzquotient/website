@@ -236,22 +236,6 @@ class UserProfile(Model):
             if s.state == SubscribeState.WAITING_LIST
         ]
 
-    def get_past_subscriptions(self) -> Iterable[Subscribe]:
-        sql = (
-            "SELECT * FROM courses_subscribe "
-            "WHERE user_id = %s AND course_id IN (SELECT id FROM past_courses) "
-            "ORDER BY id DESC"
-        )
-        return Subscribe.objects.raw(sql, [self.user_id])
-
-    def get_current_subscriptions(self) -> Iterable[Subscribe]:
-        sql = (
-            "SELECT * FROM courses_subscribe "
-            "WHERE user_id = %s AND course_id IN (SELECT id FROM current_courses) "
-            "ORDER BY id DESC"
-        )
-        return Subscribe.objects.raw(sql, [self.user_id])
-
     def get_student_status(self) -> str:
         return StudentStatus.TEXT[self.student_status]
 
