@@ -204,6 +204,21 @@ class DestinationAdmin(admin.ModelAdmin):
     list_display = ("id", "url")
     search_fields = ("url",)
     actions = ("export_visits_csv",)
+    change_form_template = "admin/url_shortener/destination/change_form.html"
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        destination = self.get_object(request, object_id)
+        if destination is None:
+            return super().change_view(request, object_id, form_url, extra_context)
+
+        extra_context = {
+            **(extra_context or {}),
+            "chart_url": (
+                reverse("admin:url_shortener_visit_chart")
+                + f"?{urlencode({'destination': destination.id})}"
+            ),
+        }
+        return super().change_view(request, object_id, form_url, extra_context)
 
     @admin.action(description="Download all visits to selected destination as CSV")
     def export_visits_csv(self, request, queryset):

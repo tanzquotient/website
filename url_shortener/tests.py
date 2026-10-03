@@ -175,3 +175,17 @@ class CreateShortenedUrlAdminTests(TestCase):
         )
         self.assertContains(response, "visit_id")
         self.assertContains(response, short_link.tag)
+
+    def test_destination_change_page_links_to_its_chart(self):
+        response = self.client.get(
+            reverse(
+                "admin:url_shortener_destination_change", args=[self.destination.id]
+            )
+        )
+
+        self.assertContains(response, "View visits per day chart for this destination")
+        self.assertContains(
+            response,
+            f"destination={self.destination.id}",
+            html=False,
+        )
