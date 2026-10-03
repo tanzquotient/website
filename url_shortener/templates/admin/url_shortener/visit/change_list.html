@@ -2,5 +2,6 @@
 
 {% block object-tools-items %}
   <li><a href="{% url 'admin:url_shortener_visit_chart' %}">Visits per day chart</a></li>
+  <li><a href="{% url 'admin:url_shortener_visit_export' %}">Download all visits as CSV</a></li>
   {{ block.super }}
 {% endblock %}

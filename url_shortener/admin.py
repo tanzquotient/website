@@ -10,6 +10,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django.core.exceptions import ValidationError
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
@@ -26,6 +27,36 @@ def qr_code_data_uri(value):
     image.save(buffer)
     encoded_svg = base64.b64encode(buffer.getvalue()).decode("ascii")
     return f"data:image/svg+xml;base64,{encoded_svg}"
+
+
+def visit_csv_rows(visits):
+    return [
+        [
+            "visit_id",
+            "source_id",
+            "source_description",
+            "destination_id",
+            "destination_url",
+            "short_link_tag",
+            "visited_at",
+            "user_id",
+        ],
+        *[
+            [
+                visit.id,
+                visit.short_link.source_id,
+                visit.short_link.source.description,
+                visit.short_link.destination_id,
+                visit.short_link.destination.url,
+                visit.short_link.tag,
+                visit.visited_at.isoformat(),
+                visit.user_id,
+            ]
+            for visit in visits.select_related(
+                "short_link__source", "short_link__destination", "user"
+            ).order_by("visited_at", "id")
+        ],
+    ]
 
 
 class VisitChartForm(forms.Form):
@@ -185,33 +216,7 @@ class DestinationAdmin(admin.ModelAdmin):
             return None
 
         destination = queryset.get()
-        rows = [
-            [
-                "visit_id",
-                "source_id",
-                "source_description",
-                "destination_id",
-                "destination_url",
-                "short_link_tag",
-                "visited_at",
-                "user_id",
-            ],
-            *[
-                [
-                    visit.id,
-                    visit.short_link.source_id,
-                    visit.short_link.source.description,
-                    destination.id,
-                    destination.url,
-                    visit.short_link.tag,
-                    visit.visited_at.isoformat(),
-                    visit.user_id,
-                ]
-                for visit in Visit.objects.filter(short_link__destination=destination)
-                .select_related("short_link__source", "user")
-                .order_by("visited_at", "id")
-            ],
-        ]
+        rows = visit_csv_rows(Visit.objects.filter(short_link__destination=destination))
         return export_csv(f"visits-to-destination-{destination.id}", rows)
 
 
@@ -239,35 +244,62 @@ class VisitAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        chart_urls = [
+        report_urls = [
+            path(
+                "export/",
+                self.admin_site.admin_view(self.export_all_visits_view),
+                name="url_shortener_visit_export",
+            ),
+            path(
+                "chart/export/",
+                self.admin_site.admin_view(self.chart_export_view),
+                name="url_shortener_visit_chart_export",
+            ),
             path(
                 "chart/",
                 self.admin_site.admin_view(self.chart_view),
                 name="url_shortener_visit_chart",
             ),
         ]
-        return chart_urls + urls
+        return report_urls + urls
+
+    def export_all_visits_view(self, request):
+        return export_csv("all-visits", visit_csv_rows(Visit.objects.all()))
+
+    def chart_selection(self, form):
+        today = timezone.localdate()
+        date_from = form.cleaned_data["date_from"] or today - timedelta(days=29)
+        date_to = form.cleaned_data["date_to"] or today
+        source = form.cleaned_data["source"]
+        destination = form.cleaned_data["destination"]
+        visits = Visit.objects.filter(
+            short_link__destination=destination,
+            visited_at__date__range=(date_from, date_to),
+        )
+        if source:
+            visits = visits.filter(short_link__source=source)
+        return source, destination, date_from, date_to, visits
+
+    def chart_export_view(self, request):
+        form = VisitChartForm(request.GET)
+        if not form.is_valid():
+            return HttpResponseBadRequest("Choose a valid chart before exporting it.")
+
+        _, destination, date_from, date_to, visits = self.chart_selection(form)
+        return export_csv(
+            f"visits-to-destination-{destination.id}-{date_from}-to-{date_to}",
+            visit_csv_rows(visits),
+        )
 
     def chart_view(self, request):
-        today = timezone.localdate()
-        default_start = today - timedelta(days=29)
         form = VisitChartForm(request.GET or None)
         chart_data = None
         date_from = None
         date_to = None
 
         if form.is_valid():
-            source = form.cleaned_data["source"]
-            destination = form.cleaned_data["destination"]
-            date_from = form.cleaned_data["date_from"] or default_start
-            date_to = form.cleaned_data["date_to"] or today
-
-            visits = Visit.objects.filter(
-                short_link__destination=destination,
-                visited_at__date__range=(date_from, date_to),
-            )
+            source, destination, date_from, date_to, visits = self.chart_selection(form)
             if source:
-                visits = visits.filter(short_link__source=source)
                 series = [
                     {
                         "id": source.id,
@@ -346,6 +378,20 @@ class VisitAdmin(admin.ModelAdmin):
             if chart_data is not None
             else None,
             "series": series if chart_data is not None else (),
+            "csv_export_url": (
+                reverse("admin:url_shortener_visit_chart_export")
+                + "?"
+                + urlencode(
+                    {
+                        "source": source.id if source else "",
+                        "destination": destination.id,
+                        "date_from": date_from.isoformat(),
+                        "date_to": date_to.isoformat(),
+                    }
+                )
+                if chart_data is not None
+                else None
+            ),
             "title": "Visits per day",
         }
         return render(request, "admin/url_shortener/visit/chart.html", context)

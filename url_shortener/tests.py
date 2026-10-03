@@ -158,3 +158,20 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
         )
+
+    def test_visit_exports_include_the_expected_visits(self):
+        short_link = ShortLink.objects.create(
+            source=self.source, destination=self.destination
+        )
+        Visit.objects.create(short_link=short_link)
+
+        response = self.client.get(reverse("admin:url_shortener_visit_export"))
+        self.assertContains(response, "visit_id")
+        self.assertContains(response, short_link.tag)
+
+        response = self.client.get(
+            reverse("admin:url_shortener_visit_chart_export"),
+            {"destination": self.destination.id},
+        )
+        self.assertContains(response, "visit_id")
+        self.assertContains(response, short_link.tag)

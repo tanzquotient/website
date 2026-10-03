@@ -25,6 +25,7 @@
 
     {% if chart_data is not None %}
       <h2>Visits to {{ destination }} from {{ date_from }} to {{ date_to }}</h2>
+      <p><a href="{{ csv_export_url }}">Download displayed visits as CSV</a></p>
       <ul class="visit-chart__legend">
         {% for item in series %}
           <li><span class="visit-chart__legend-colour" style="background: {{ item.color }}"></span>{{ item.name }}</li>
