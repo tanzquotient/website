@@ -16,7 +16,7 @@ class SwitchData(models.Model):
         unique=True,
     )
     swiss_edu_person_unique_id = models.CharField(
-        max_length=36,
+        max_length=255,
         blank=False,
         verbose_name="swissEduPersonUniqueID",
         help_text="Unique person identifier in the Switch edu-ID federation, institution-aware.",

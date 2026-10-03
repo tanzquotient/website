@@ -26,7 +26,16 @@
                 {% endif %}
             </span>
             <br/>
-            {% if not user.profile.has_switch %}
+            {% if user.profile.has_switch %}
+                <a href="{% url "oidc_login" %}?mode=renew" class="btn btn-sm btn-warning mt-1">
+                    {% if user.profile.student_validity %}
+                        {% trans "Renew" %}
+                    {% else %}
+                        {% trans "Verify student status" %}
+                    {% endif %}
+                    <i class="bi bi-arrow-clockwise"></i>
+                </a>
+            {% else %}
                 <a href="{% url "oidc_login" %}?mode=link">
                     {% trans "Connect your account to Switch edu-ID" %}
                     <i class="bi bi-arrow-right-circle-fill"></i>

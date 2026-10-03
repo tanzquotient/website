@@ -9,6 +9,15 @@
     {% url 'profile' as auth_profile %}
     <p><a href="{{ auth_profile }}"><i class="bi bi-arrow-left-circle-fill"></i> {% trans "Back to profile" %}</a>
 
+    {% if is_profile_review %}
+        <div class="alert alert-info" role="alert">
+            <strong>{% trans "Please review and complete your profile." %}</strong>
+            <p class="mb-0">
+                {% trans "Your account was created with your Switch edu-ID. Check the information below, add what is missing and save your profile." %}
+            </p>
+        </div>
+    {% endif %}
+
     {% if not is_profile_complete and not form.errors %}
         <div class="alert alert-danger" role="alert">
             <strong>Please complete your profile!</strong>

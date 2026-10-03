@@ -2,11 +2,13 @@ import base64
 import binascii
 import datetime
 import hmac
+import logging
 import uuid
 from functools import wraps
 from urllib.parse import urlencode
 
 import requests
+from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.utils import perform_login
 from django.conf import settings
@@ -20,11 +22,8 @@ from django.db.models import Q
 from django.http import (
     HttpRequest,
     HttpResponse,
-    HttpResponseBadRequest,
-    HttpResponseForbidden,
     HttpResponseNotFound,
     HttpResponseRedirect,
-    HttpResponseServerError,
 )
 from django.shortcuts import render
 from django.urls import reverse
@@ -37,9 +36,10 @@ from courses.models import (
     SwitchDataAffiliation,
     SwitchDataAffiliationEmail,
     SwitchDataAssociatedEmail,
-    UserProfile,
 )
-from courses.services import find_unused_username_variant
+from courses.views import PROFILE_REVIEW_SESSION_KEY
+
+log = logging.getLogger("tq")
 
 
 def require_metrics_auth(view):
@@ -85,14 +85,21 @@ class WellKnownRedirectView(RedirectView):
 
 
 _OIDC_IDP_CONFIG_CACHE_KEY = "oidc_idp_config"
+_OIDC_IDP_ENDPOINTS = ["authorization_endpoint", "token_endpoint", "userinfo_endpoint"]
 
 
 def _get_idp_config() -> dict | None:
     config = cache.get(_OIDC_IDP_CONFIG_CACHE_KEY)
     if config is None:
         try:
-            config = requests.get(settings.OIDC_IDP_CONFIGURATION, timeout=5).json()
-        except requests.exceptions.RequestException, ValueError:
+            response = requests.get(settings.OIDC_IDP_CONFIGURATION, timeout=5)
+            response.raise_for_status()
+            config = response.json()
+        except (requests.exceptions.RequestException, ValueError) as e:
+            log.warning("OIDC: could not load IdP configuration: %s", e)
+            return None
+        if not all(endpoint in config for endpoint in _OIDC_IDP_ENDPOINTS):
+            log.warning("OIDC: IdP configuration is missing endpoints")
             return None
         cache.set(_OIDC_IDP_CONFIG_CACHE_KEY, config, timeout=3600)
     return config
@@ -104,10 +111,66 @@ _REQUIRED_USERINFO_CLAIMS = [
     "given_name",
     "family_name",
     "email",
+]
+
+# Switch edu-ID omits multi-valued claims that have no values, e.g. users
+# without a linked organisation get no swissEduIDLinkedAffiliation at all.
+_OPTIONAL_USERINFO_LIST_CLAIMS = [
     "swissEduIDLinkedAffiliation",
     "swissEduIDLinkedAffiliationMail",
     "swissEduIDAssociatedMail",
 ]
+
+_OIDC_ERROR_INVALID_REQUEST = _("This Switch edu-ID request is invalid.")
+_OIDC_ERROR_SESSION = _(
+    "Your Switch edu-ID sign-in has expired or was already completed. Please try again."
+)
+_OIDC_ERROR_IDP = _(
+    "Something went wrong while communicating with Switch edu-ID. "
+    "Please try again later."
+)
+_OIDC_ERROR_MISSING_CLAIMS = _(
+    "Switch edu-ID did not provide all the information we need. Please try again later."
+)
+_OIDC_ERROR_WRONG_USER = _(
+    "You are signed in to a different account than the one that started this "
+    "request. Please try again."
+)
+_OIDC_ERROR_NOT_LINKED = _(
+    "This Switch edu-ID is not the one linked to your account. Please sign in to "
+    "Switch edu-ID with the account you linked."
+)
+# Same msgid as allauth's account_inactive template, so its translations apply.
+_OIDC_ERROR_INACTIVE = _("This account is inactive.")
+
+
+def _oidc_return_url(mode: str | None) -> str:
+    return reverse("profile" if mode in ("link", "renew") else "account_login")
+
+
+def _oidc_error(
+    request: HttpRequest,
+    mode: str | None,
+    status: int,
+    message: str,
+    log_message: str,
+    *log_args,
+) -> HttpResponse:
+    log.log(
+        logging.ERROR if status >= 500 else logging.WARNING,
+        "OIDC: " + log_message,
+        *log_args,
+    )
+    return render(
+        request,
+        "oidc_result.html",
+        {
+            "mode": "error",
+            "error_message": message,
+            "redirect_url": _oidc_return_url(mode),
+        },
+        status=status,
+    )
 
 
 def oidc_login_view(request: HttpRequest) -> HttpResponse:
@@ -117,7 +180,14 @@ def oidc_login_view(request: HttpRequest) -> HttpResponse:
     if next_url and not url_has_allowed_host_and_scheme(
         next_url, allowed_hosts={request.get_host()}
     ):
-        return HttpResponseForbidden()
+        return _oidc_error(
+            request,
+            mode,
+            403,
+            _OIDC_ERROR_INVALID_REQUEST,
+            "login rejected, next URL not allowed: %s",
+            next_url,
+        )
 
     if mode == "link":
         if request.user.is_anonymous:
@@ -143,11 +213,20 @@ def oidc_login_view(request: HttpRequest) -> HttpResponse:
         if not request.user.profile.has_switch():
             return HttpResponseRedirect(reverse("profile"))
     else:
-        return HttpResponseBadRequest()
+        return _oidc_error(
+            request,
+            mode,
+            400,
+            _OIDC_ERROR_INVALID_REQUEST,
+            "login rejected, unknown mode: %s",
+            mode,
+        )
 
     idp_config = _get_idp_config()
     if idp_config is None:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "IdP configuration unavailable"
+        )
 
     state = str(uuid.uuid4())
     request.session["oidc_state"] = state
@@ -170,12 +249,16 @@ def oidc_login_view(request: HttpRequest) -> HttpResponse:
 
 def oidc_callback_view(request: HttpRequest) -> HttpResponse:
     if request.GET.get("error"):
+        mode = request.session.pop("oidc_mode", None)
+        for key in ("oidc_state", "oidc_redirect", "oidc_user_id"):
+            request.session.pop(key, None)
+        log.info("OIDC: authorization ended with error: %s", request.GET.get("error"))
         messages.error(
             request,
             _("Switch edu-ID authentication was cancelled or failed."),
             extra_tags="alert-danger",
         )
-        return HttpResponseRedirect(reverse("account_login"))
+        return HttpResponseRedirect(_oidc_return_url(mode))
 
     code = request.GET.get("code")
 
@@ -190,11 +273,23 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
         or state != request.GET.get("state")
         or (mode in ("link", "renew") and not user_id)
     ):
-        return HttpResponseBadRequest()
+        return _oidc_error(
+            request,
+            mode,
+            400,
+            _OIDC_ERROR_SESSION,
+            "callback rejected: code=%s mode=%s session_state=%s state_match=%s",
+            bool(code),
+            mode,
+            state is not None,
+            state == request.GET.get("state"),
+        )
 
     idp_config = _get_idp_config()
     if idp_config is None:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "IdP configuration unavailable"
+        )
 
     try:
         token_response = requests.post(
@@ -208,20 +303,39 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             },
             timeout=10,
         )
-    except requests.exceptions.RequestException:
-        return HttpResponseServerError()
+    except requests.exceptions.RequestException as e:
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "token request failed: %s", e
+        )
 
     if token_response.status_code != 200:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request,
+            mode,
+            500,
+            _OIDC_ERROR_IDP,
+            "token request returned %s: %s",
+            token_response.status_code,
+            token_response.text[:500],
+        )
 
     try:
         token_data = token_response.json()
     except ValueError:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "token response is not JSON"
+        )
 
     access_token = token_data.get("access_token")
     if not access_token:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request,
+            mode,
+            500,
+            _OIDC_ERROR_IDP,
+            "token response has no access_token, keys: %s",
+            sorted(token_data),
+        )
 
     try:
         userinfo_response = requests.get(
@@ -229,19 +343,43 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             headers={"Authorization": f"Bearer {access_token}"},
             timeout=10,
         )
-    except requests.exceptions.RequestException:
-        return HttpResponseServerError()
+    except requests.exceptions.RequestException as e:
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "userinfo request failed: %s", e
+        )
 
     if userinfo_response.status_code != 200:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request,
+            mode,
+            500,
+            _OIDC_ERROR_IDP,
+            "userinfo request returned %s: %s",
+            userinfo_response.status_code,
+            userinfo_response.text[:500],
+        )
 
     try:
         userinfo = userinfo_response.json()
     except ValueError:
-        return HttpResponseServerError()
+        return _oidc_error(
+            request, mode, 500, _OIDC_ERROR_IDP, "userinfo response is not JSON"
+        )
 
-    if any(k not in userinfo for k in _REQUIRED_USERINFO_CLAIMS):
-        return HttpResponseServerError()
+    missing_claims = [k for k in _REQUIRED_USERINFO_CLAIMS if not userinfo.get(k)]
+    if missing_claims:
+        return _oidc_error(
+            request,
+            mode,
+            500,
+            _OIDC_ERROR_MISSING_CLAIMS,
+            "userinfo is missing required claims: %s",
+            missing_claims,
+        )
+
+    for claim in _OPTIONAL_USERINFO_LIST_CLAIMS:
+        value = userinfo.get(claim) or []
+        userinfo[claim] = [value] if isinstance(value, str) else value
 
     def _find_switch_data():
         try:
@@ -258,6 +396,7 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             return None
 
     already_linked_elsewhere = False
+    new_account = False
 
     if mode == "login":
         if not request.user.is_anonymous:
@@ -290,31 +429,63 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             else:
                 with transaction.atomic():
                     user = User.objects.create(
-                        username=find_unused_username_variant(userinfo["given_name"]),
+                        username=get_adapter(request).generate_unique_username(
+                            [
+                                userinfo["given_name"],
+                                userinfo["family_name"],
+                                userinfo["email"],
+                                "user",
+                            ]
+                        ),
                         first_name=userinfo["given_name"],
                         last_name=userinfo["family_name"],
                         email=userinfo["email"],
                     )
-                    profile = UserProfile.objects.create(user=user)
-                    user.emailaddress_set.create(email=userinfo["email"], verified=True)
-                switch_data.user_profile = profile
+                    user.emailaddress_set.create(
+                        email=userinfo["email"], verified=True, primary=True
+                    )
+                # The post_save signal on User has already created the profile.
+                switch_data.user_profile = user.profile
+                new_account = True
 
     elif mode == "renew":
         if request.user.id != user_id:
-            return HttpResponseForbidden()
+            return _oidc_error(
+                request,
+                mode,
+                403,
+                _OIDC_ERROR_WRONG_USER,
+                "renew rejected: signed in as user %s, flow started by user %s",
+                request.user.id,
+                user_id,
+            )
         existing = _find_switch_data()
         if not existing or existing.user_profile_id != request.user.pk:
-            return HttpResponseBadRequest()
+            return _oidc_error(
+                request,
+                mode,
+                400,
+                _OIDC_ERROR_NOT_LINKED,
+                "renew rejected: edu-ID is not the one linked to user %s",
+                request.user.id,
+            )
         switch_data = existing
         user = request.user
 
     elif mode == "link":
         if request.user.id != user_id:
-            return HttpResponseForbidden()
+            return _oidc_error(
+                request,
+                mode,
+                403,
+                _OIDC_ERROR_WRONG_USER,
+                "link rejected: signed in as user %s, flow started by user %s",
+                request.user.id,
+                user_id,
+            )
 
         existing = _find_switch_data()
         if existing:
-            logout(request)
             mode = "login"
             already_linked_elsewhere = True
             switch_data = existing
@@ -327,7 +498,24 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
             switch_data.user_profile = user.profile
 
     else:
-        return HttpResponseBadRequest()
+        return _oidc_error(
+            request,
+            mode,
+            400,
+            _OIDC_ERROR_INVALID_REQUEST,
+            "callback rejected, unknown mode: %s",
+            mode,
+        )
+
+    if mode == "login" and not user.is_active:
+        return _oidc_error(
+            request,
+            mode,
+            403,
+            _OIDC_ERROR_INACTIVE,
+            "login rejected: user %s is inactive",
+            user.pk,
+        )
 
     with transaction.atomic():
         switch_data.swiss_edu_id = userinfo["swissEduID"]
@@ -376,8 +564,19 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
         )
 
     if mode == "login":
-        perform_login(request, user, email_verification="none")
         if already_linked_elsewhere:
+            logout(request)
+        # allauth redirects to `redirect_url`, or returns its own response if
+        # the login could not be completed.
+        response = perform_login(
+            request,
+            user,
+            email_verification="none",
+            redirect_url=reverse("edit_profile") if new_account else redirect,
+        )
+        if new_account and request.user.is_authenticated:
+            request.session[PROFILE_REVIEW_SESSION_KEY] = True
+        if already_linked_elsewhere and request.user.is_authenticated:
             return render(
                 request,
                 "oidc_result.html",
@@ -386,12 +585,7 @@ def oidc_callback_view(request: HttpRequest) -> HttpResponse:
                     "redirect_url": redirect,
                 },
             )
-        messages.success(
-            request,
-            _("Signed in via Switch edu-ID."),
-            extra_tags="alert-success",
-        )
-        return HttpResponseRedirect(redirect)
+        return response
 
     return render(
         request,

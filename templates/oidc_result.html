@@ -8,7 +8,16 @@
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
 
-        {% if mode == "already_linked" %}
+        {% if mode == "error" %}
+            <div class="alert alert-danger">
+                <h4 class="alert-heading">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {% trans "Something went wrong" %}
+                </h4>
+                <p class="mb-0">{{ error_message }}</p>
+            </div>
+
+        {% elif mode == "already_linked" %}
             <div class="alert alert-info">
                 <h4 class="alert-heading">
                     <i class="bi bi-info-circle-fill"></i>
@@ -33,6 +42,12 @@
                         {% blocktrans with date=student_validity %}
                             Student status verified and valid until {{ date }}.
                         {% endblocktrans %}
+                    </p>
+                {% else %}
+                    <hr>
+                    <p class="mb-0">
+                        <i class="bi bi-info-circle"></i>
+                        {% trans "No active student affiliation was found, so your student status could not be verified." %}
                     </p>
                 {% endif %}
             </div>
