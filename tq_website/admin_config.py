@@ -2,6 +2,7 @@ from django.contrib.admin import AdminSite
 from django.contrib.admin.apps import AdminConfig
 from django.contrib.admin.views.autocomplete import AutocompleteJsonView
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
 
 
 class FullNameAutocompleteJsonView(AutocompleteJsonView):
@@ -20,6 +21,11 @@ class FullNameAutocompleteJsonView(AutocompleteJsonView):
 class TQAdminSite(AdminSite):
     def autocomplete_view(self, request):
         return FullNameAutocompleteJsonView.as_view(admin_site=self)(request)
+
+    def app_index(self, request, app_label, extra_context=None):
+        if app_label == "url_shortener":
+            return redirect("admin:url_shortener_visit_dashboard")
+        return super().app_index(request, app_label, extra_context)
 
 
 class TQAdminConfig(AdminConfig):
