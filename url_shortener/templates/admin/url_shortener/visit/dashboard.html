@@ -1,0 +1,57 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <p><a href="{% url 'admin:url_shortener_visit_chart' %}">Open visits per day chart</a></p>
+
+    <div class="module">
+      <h2>Visit totals</h2>
+      <table>
+        <thead>
+          <tr><th scope="col">Period</th><th scope="col">Visits</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Today</th><td>{{ today_visits }}</td></tr>
+          <tr><th scope="row">Last 7 days</th><td>{{ last_7_days_visits }}</td></tr>
+          <tr><th scope="row">Last 30 days</th><td>{{ last_30_days_visits }}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module">
+      <h2>Top sources in the last 30 days</h2>
+      <table>
+        <thead>
+          <tr><th scope="col">Source</th><th scope="col">Visits</th></tr>
+        </thead>
+        <tbody>
+          {% for source in top_sources %}
+            <tr><th scope="row">{{ source.short_link__source__description }}</th><td>{{ source.visits }}</td></tr>
+          {% empty %}
+            <tr><td colspan="2">No visits in this period.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module">
+      <h2>Top destinations in the last 30 days</h2>
+      <table>
+        <thead>
+          <tr><th scope="col">Destination</th><th scope="col">Visits</th><th scope="col">Chart</th></tr>
+        </thead>
+        <tbody>
+          {% for destination in top_destinations %}
+            <tr>
+              <th scope="row">{{ destination.short_link__destination__url }}</th>
+              <td>{{ destination.visits }}</td>
+              <td><a href="{{ destination.chart_url }}">View chart</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">No visits in this period.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

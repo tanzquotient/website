@@ -212,3 +212,28 @@ class CreateShortenedUrlAdminTests(TestCase):
             f"destination={self.destination.id}",
             html=False,
         )
+
+    def test_dashboard_shows_visit_totals_and_rankings(self):
+        short_link = ShortLink.objects.create(
+            source=self.source, destination=self.destination
+        )
+        Visit.objects.create(short_link=short_link)
+
+        response = self.client.get(reverse("admin:url_shortener_visit_dashboard"))
+
+        self.assertContains(response, "Visit totals")
+        self.assertContains(response, "Last 30 days")
+        self.assertContains(response, self.source.description)
+        self.assertContains(response, self.destination.url)
+        self.assertContains(response, "View chart")
+
+    def test_url_shortener_admin_index_redirects_to_the_dashboard(self):
+        response = self.client.get(
+            reverse("admin:app_list", kwargs={"app_label": "url_shortener"})
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:url_shortener_visit_dashboard"),
+            fetch_redirect_response=False,
+        )

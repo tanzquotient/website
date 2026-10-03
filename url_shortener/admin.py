@@ -276,6 +276,11 @@ class VisitAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         report_urls = [
             path(
+                "dashboard/",
+                self.admin_site.admin_view(self.dashboard_view),
+                name="url_shortener_visit_dashboard",
+            ),
+            path(
                 "export/",
                 self.admin_site.admin_view(self.export_all_visits_view),
                 name="url_shortener_visit_export",
@@ -292,6 +297,46 @@ class VisitAdmin(admin.ModelAdmin):
             ),
         ]
         return report_urls + urls
+
+    def dashboard_view(self, request):
+        today = timezone.localdate()
+        last_7_days_start = today - timedelta(days=6)
+        last_30_days_start = today - timedelta(days=29)
+        last_30_days_visits = Visit.objects.filter(
+            visited_at__date__range=(last_30_days_start, today)
+        )
+        top_destinations = list(
+            last_30_days_visits.values(
+                "short_link__destination_id", "short_link__destination__url"
+            )
+            .annotate(visits=Count("id"))
+            .order_by("-visits", "short_link__destination__url")[:5]
+        )
+        for destination in top_destinations:
+            destination["chart_url"] = (
+                reverse("admin:url_shortener_visit_chart")
+                + "?"
+                + urlencode({"destination": destination["short_link__destination_id"]})
+            )
+
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "URL shortener dashboard",
+            "today_visits": Visit.objects.filter(visited_at__date=today).count(),
+            "last_7_days_visits": Visit.objects.filter(
+                visited_at__date__range=(last_7_days_start, today)
+            ).count(),
+            "last_30_days_visits": last_30_days_visits.count(),
+            "top_sources": (
+                last_30_days_visits.values(
+                    "short_link__source_id", "short_link__source__description"
+                )
+                .annotate(visits=Count("id"))
+                .order_by("-visits", "short_link__source__description")[:5]
+            ),
+            "top_destinations": top_destinations,
+        }
+        return render(request, "admin/url_shortener/visit/dashboard.html", context)
 
     def export_all_visits_view(self, request):
         return export_csv("all-visits", visit_csv_rows(Visit.objects.all()))
