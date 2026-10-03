@@ -1,6 +1,8 @@
 from urllib.parse import urlsplit, urlunsplit
 
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from .models import ShortLink, Visit
@@ -9,8 +11,13 @@ from .models import ShortLink, Visit
 @require_GET
 def redirect_to_destination(request, tag):
     try:
-        short_link = ShortLink.objects.select_related("source", "destination").get(
-            active=True, tag=tag
+        now = timezone.now()
+        short_link = (
+            ShortLink.objects.select_related("source", "destination")
+            .filter(deactivated=False, tag=tag)
+            .filter(Q(valid_from__isnull=True) | Q(valid_from__lte=now))
+            .filter(Q(valid_until__isnull=True) | Q(valid_until__gte=now))
+            .get()
         )
     except ShortLink.DoesNotExist:
         return HttpResponse(

@@ -25,6 +25,7 @@ class Destination(models.Model):
 
 
 class ShortLink(models.Model):
+    description = models.CharField(max_length=255, blank=True)
     tag = models.CharField(
         max_length=16, unique=True, editable=False, default=generate_short_tag
     )
@@ -34,7 +35,11 @@ class ShortLink(models.Model):
     destination = models.ForeignKey(
         Destination, on_delete=models.PROTECT, related_name="short_links"
     )
-    active = models.BooleanField(default=True)
+    deactivated = models.BooleanField(
+        default=False, verbose_name="Manually deactivated"
+    )
+    valid_from = models.DateTimeField(blank=True, null=True)
+    valid_until = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

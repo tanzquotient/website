@@ -81,6 +81,10 @@ class VisitChartForm(forms.Form):
 
 
 class ShortenedUrlForm(forms.Form):
+    description = forms.CharField(
+        required=False,
+        help_text="Optional label to help identify this short URL in the admin.",
+    )
     source = forms.ModelChoiceField(queryset=Source.objects.order_by("description"))
     destination = forms.ModelChoiceField(queryset=Destination.objects.order_by("url"))
     destination_parameters = forms.CharField(
@@ -131,6 +135,7 @@ class SourceAdmin(admin.ModelAdmin):
 
         if request.method == "POST" and form.is_valid():
             short_link = ShortLink.objects.create(
+                description=form.cleaned_data["description"],
                 source=form.cleaned_data["source"],
                 destination=form.cleaned_data["destination"],
             )
@@ -158,16 +163,26 @@ class SourceAdmin(admin.ModelAdmin):
 
 @admin.register(ShortLink)
 class ShortLinkAdmin(admin.ModelAdmin):
-    list_display = ("tag", "source", "destination", "active", "created_at")
+    list_display = (
+        "tag",
+        "description",
+        "source",
+        "destination",
+        "deactivated",
+        "created_at",
+    )
     list_select_related = ("source", "destination")
-    list_filter = ("active",)
-    search_fields = ("tag", "source__description", "destination__url")
+    list_filter = ("deactivated",)
+    search_fields = ("tag", "description", "source__description", "destination__url")
     readonly_fields = ("tag", "created_at")
     change_form_template = "admin/url_shortener/shortlink/change_form.html"
     fieldsets = (
-        ("Short URL", {"fields": ("tag",)}),
+        ("Short URL", {"fields": ("tag", "description")}),
         ("Routing", {"fields": ("source", "destination")}),
-        ("Status", {"fields": ("active", "created_at")}),
+        (
+            "Availability",
+            {"fields": ("deactivated", "valid_from", "valid_until", "created_at")},
+        ),
     )
 
     def get_readonly_fields(self, request, obj=None):

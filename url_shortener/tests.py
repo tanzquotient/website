@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import Destination, ShortLink, Source, Visit
 
@@ -42,7 +45,7 @@ class RedirectToDestinationTests(TestCase):
 
         self.assertEqual(Visit.objects.get(short_link=self.short_link).user, user)
 
-    def test_unknown_or_inactive_link_returns_a_generic_error_without_a_visit(self):
+    def test_unknown_or_unavailable_link_returns_a_generic_error_without_a_visit(self):
         response = self.client.get(
             reverse("url_shortener:redirect", kwargs={"tag": "unknown-link"})
         )
@@ -51,12 +54,30 @@ class RedirectToDestinationTests(TestCase):
         self.assertEqual(response.content, b"Ooops, something went wrong...")
         self.assertFalse(Visit.objects.exists())
 
-        self.short_link.active = False
+        self.short_link.deactivated = True
         self.short_link.save()
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content, b"Ooops, something went wrong...")
+        self.assertFalse(Visit.objects.exists())
+
+    def test_link_outside_its_validity_window_returns_a_generic_error(self):
+        self.short_link.valid_from = timezone.now() + timedelta(days=1)
+        self.short_link.save()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(Visit.objects.exists())
+
+        self.short_link.valid_from = None
+        self.short_link.valid_until = timezone.now() - timedelta(days=1)
+        self.short_link.save()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 404)
         self.assertFalse(Visit.objects.exists())
 
     def test_request_parameters_are_forwarded_without_prefixes(self):
@@ -109,6 +130,7 @@ class CreateShortenedUrlAdminTests(TestCase):
         response = self.client.post(
             self.url,
             {
+                "description": "Autumn newsletter",
                 "source": self.source.id,
                 "destination": self.destination.id,
                 "destination_parameters": "campaign=autumn&f=partner-a",
@@ -118,6 +140,7 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertEqual(response.status_code, 200)
         short_link = ShortLink.objects.get()
         self.assertEqual(len(short_link.tag), 16)
+        self.assertEqual(short_link.description, "Autumn newsletter")
         self.assertEqual(short_link.source, self.source)
         self.assertEqual(short_link.destination, self.destination)
         self.assertEqual(
