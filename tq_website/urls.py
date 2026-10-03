@@ -18,6 +18,7 @@ import email_system.urls
 import events.urls
 import payment.urls
 import survey.urls
+import url_shortener.urls
 
 from .views import (
     WellKnownRedirectView,
@@ -64,6 +65,7 @@ urlpatterns += [
 
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
+    path("shorty/", include(url_shortener.urls, namespace="url_shortener")),
     path(
         "accounts/new_login",
         TemplateView.as_view(template_name="account/new_login.html"),

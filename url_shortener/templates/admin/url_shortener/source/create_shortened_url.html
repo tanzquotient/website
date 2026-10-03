@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <form method="post">
+      {% csrf_token %}
+      <fieldset class="module aligned">
+        {{ form.as_div }}
+      </fieldset>
+      <div class="submit-row"><input type="submit" value="Create URL"></div>
+    </form>
+
+    {% if generated_url %}
+      <fieldset class="module aligned">
+        <h2>Shortened URL</h2>
+        <input type="text" value="{{ generated_url }}" readonly size="100" aria-label="Shortened URL">
+        <h2>QR code</h2>
+        <img src="{{ qr_code_data }}" width="240" height="240" alt="QR code for the shortened URL">
+      </fieldset>
+    {% endif %}
+  </div>
+{% endblock %}
