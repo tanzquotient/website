@@ -19,8 +19,7 @@ def redirect_to_destination(request, tag):
 
     Visit.objects.create(
         short_link=short_link,
-        ip_address=request.META.get("REMOTE_ADDR"),
-        user_agent=request.headers.get("User-Agent", ""),
+        user=request.user if request.user.is_authenticated else None,
     )
     return HttpResponseRedirect(
         destination_url_with_request_parameters(short_link.destination.url, request)

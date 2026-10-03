@@ -1,6 +1,7 @@
 import secrets
 import string
 
+from django.conf import settings
 from django.db import models
 
 
@@ -47,5 +48,10 @@ class Visit(models.Model):
         related_name="visits",
     )
     visited_at = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField(blank=True, null=True)
-    user_agent = models.TextField(blank=True, default="")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="url_shortener_visits",
+    )

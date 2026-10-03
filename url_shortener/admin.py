@@ -150,6 +150,7 @@ class DestinationAdmin(admin.ModelAdmin):
                 "destination_url",
                 "short_link_tag",
                 "visited_at",
+                "user_id",
             ],
             *[
                 [
@@ -160,9 +161,10 @@ class DestinationAdmin(admin.ModelAdmin):
                     destination.url,
                     visit.short_link.tag,
                     visit.visited_at.isoformat(),
+                    visit.user_id,
                 ]
                 for visit in Visit.objects.filter(short_link__destination=destination)
-                .select_related("short_link__source")
+                .select_related("short_link__source", "user")
                 .order_by("visited_at", "id")
             ],
         ]
@@ -177,10 +179,10 @@ class VisitAdmin(admin.ModelAdmin):
         "source",
         "destination",
         "visited_at",
-        "ip_address",
+        "user",
     )
-    list_select_related = ("short_link__source", "short_link__destination")
-    readonly_fields = ("short_link", "visited_at", "ip_address", "user_agent")
+    list_select_related = ("short_link__source", "short_link__destination", "user")
+    readonly_fields = ("short_link", "visited_at", "user")
     change_list_template = "admin/url_shortener/visit/change_list.html"
 
     @admin.display(ordering="short_link__source", description="Source")

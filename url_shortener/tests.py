@@ -20,8 +20,6 @@ class RedirectToDestinationTests(TestCase):
         response = self.client.get(
             self.url,
             {"f": "external-source", "t": "external-destination"},
-            REMOTE_ADDR="203.0.113.10",
-            HTTP_USER_AGENT="Example browser",
         )
 
         self.assertRedirects(
@@ -32,8 +30,17 @@ class RedirectToDestinationTests(TestCase):
         self.assertEqual(response.content, b"")
         visit = Visit.objects.get(short_link=self.short_link)
         self.assertEqual(visit.short_link, self.short_link)
-        self.assertEqual(visit.ip_address, "203.0.113.10")
-        self.assertEqual(visit.user_agent, "Example browser")
+        self.assertIsNone(visit.user)
+
+    def test_valid_link_stores_the_authenticated_user(self):
+        user = get_user_model().objects.create_user(
+            username="short-link-visitor", password="password"
+        )
+        self.client.force_login(user)
+
+        self.client.get(self.url)
+
+        self.assertEqual(Visit.objects.get(short_link=self.short_link).user, user)
 
     def test_unknown_or_inactive_link_returns_a_generic_error_without_a_visit(self):
         response = self.client.get(
