@@ -60,3 +60,9 @@ class Visit(models.Model):
         on_delete=models.SET_NULL,
         related_name="url_shortener_visits",
     )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["visited_at"]),
+            models.Index(fields=["short_link", "visited_at"]),
+        ]

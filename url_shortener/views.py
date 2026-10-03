@@ -13,7 +13,8 @@ def redirect_to_destination(request, tag):
     try:
         now = timezone.now()
         short_link = (
-            ShortLink.objects.select_related("source", "destination")
+            ShortLink.objects.select_related("destination")
+            .only("id", "destination_id", "destination__url")
             .filter(deactivated=False, tag=tag)
             .filter(Q(valid_from__isnull=True) | Q(valid_from__lte=now))
             .filter(Q(valid_until__isnull=True) | Q(valid_until__gte=now))
@@ -25,8 +26,8 @@ def redirect_to_destination(request, tag):
         )
 
     Visit.objects.create(
-        short_link=short_link,
-        user=request.user if request.user.is_authenticated else None,
+        short_link_id=short_link.id,
+        user_id=request.user.id if request.user.is_authenticated else None,
     )
     return HttpResponseRedirect(
         destination_url_with_request_parameters(short_link.destination.url, request)

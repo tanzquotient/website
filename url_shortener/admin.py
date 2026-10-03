@@ -1,5 +1,5 @@
 import base64
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from io import BytesIO
 from urllib.parse import parse_qsl, urlencode
 
@@ -8,7 +8,7 @@ from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminDateWidget
 from django.core.exceptions import ValidationError
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db.models.functions import TruncDate
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
@@ -57,6 +57,18 @@ def visit_csv_rows(visits):
             ).order_by("visited_at", "id")
         ],
     ]
+
+
+def visit_date_range(date_from, date_to):
+    timezone_info = timezone.get_current_timezone()
+    return {
+        "visited_at__gte": timezone.make_aware(
+            datetime.combine(date_from, time.min), timezone_info
+        ),
+        "visited_at__lt": timezone.make_aware(
+            datetime.combine(date_to + timedelta(days=1), time.min), timezone_info
+        ),
+    }
 
 
 class VisitChartForm(forms.Form):
@@ -237,7 +249,8 @@ class DestinationAdmin(admin.ModelAdmin):
 
     @admin.action(description="Download all visits to selected destination as CSV")
     def export_visits_csv(self, request, queryset):
-        if queryset.count() != 1:
+        destinations = list(queryset[:2])
+        if len(destinations) != 1:
             self.message_user(
                 request,
                 "Select exactly one destination to export its visits.",
@@ -245,7 +258,7 @@ class DestinationAdmin(admin.ModelAdmin):
             )
             return None
 
-        destination = queryset.get()
+        destination = destinations[0]
         rows = visit_csv_rows(Visit.objects.filter(short_link__destination=destination))
         return export_csv(f"visits-to-destination-{destination.id}", rows)
 
@@ -302,8 +315,24 @@ class VisitAdmin(admin.ModelAdmin):
         today = timezone.localdate()
         last_7_days_start = today - timedelta(days=6)
         last_30_days_start = today - timedelta(days=29)
+        today_start = visit_date_range(today, today)["visited_at__gte"]
+        last_7_days_start_at = visit_date_range(last_7_days_start, today)[
+            "visited_at__gte"
+        ]
+        last_30_days_start_at = visit_date_range(last_30_days_start, today)[
+            "visited_at__gte"
+        ]
+        visit_totals = Visit.objects.aggregate(
+            today_visits=Count("id", filter=Q(visited_at__gte=today_start)),
+            last_7_days_visits=Count(
+                "id", filter=Q(visited_at__gte=last_7_days_start_at)
+            ),
+            last_30_days_visits=Count(
+                "id", filter=Q(visited_at__gte=last_30_days_start_at)
+            ),
+        )
         last_30_days_visits = Visit.objects.filter(
-            visited_at__date__range=(last_30_days_start, today)
+            visited_at__gte=last_30_days_start_at
         )
         top_destinations = list(
             last_30_days_visits.values(
@@ -322,11 +351,7 @@ class VisitAdmin(admin.ModelAdmin):
         context = {
             **self.admin_site.each_context(request),
             "title": "URL shortener dashboard",
-            "today_visits": Visit.objects.filter(visited_at__date=today).count(),
-            "last_7_days_visits": Visit.objects.filter(
-                visited_at__date__range=(last_7_days_start, today)
-            ).count(),
-            "last_30_days_visits": last_30_days_visits.count(),
+            **visit_totals,
             "top_sources": (
                 last_30_days_visits.values(
                     "short_link__source_id", "short_link__source__description"
@@ -349,7 +374,7 @@ class VisitAdmin(admin.ModelAdmin):
         destination = form.cleaned_data["destination"]
         visits = Visit.objects.filter(
             short_link__destination=destination,
-            visited_at__date__range=(date_from, date_to),
+            **visit_date_range(date_from, date_to),
         )
         if source:
             visits = visits.filter(short_link__source=source)
@@ -383,30 +408,42 @@ class VisitAdmin(admin.ModelAdmin):
                     }
                 ]
             else:
+                series = []
+
+            count_entries = list(
+                visits.annotate(day=TruncDate("visited_at"))
+                .values(
+                    "day",
+                    "short_link__source_id",
+                    "short_link__source__description",
+                )
+                .annotate(count=Count("id"))
+            )
+            if not source:
+                source_entries = sorted(
+                    {
+                        (
+                            entry["short_link__source_id"],
+                            entry["short_link__source__description"],
+                        )
+                        for entry in count_entries
+                    },
+                    key=lambda entry: (entry[1], entry[0]),
+                )
                 series = [
                     {
-                        "id": entry["short_link__source_id"],
-                        "name": entry["short_link__source__description"],
+                        "id": source_id,
+                        "name": source_description,
                         "color": f"hsl({index * 137 % 360} 55% 40%)",
                     }
-                    for index, entry in enumerate(
-                        visits.values(
-                            "short_link__source_id", "short_link__source__description"
-                        )
-                        .distinct()
-                        .order_by(
-                            "short_link__source__description", "short_link__source_id"
-                        )
+                    for index, (source_id, source_description) in enumerate(
+                        source_entries
                     )
                 ]
 
             counts_by_day_and_source = {
                 (entry["day"], entry["short_link__source_id"]): entry["count"]
-                for entry in (
-                    visits.annotate(day=TruncDate("visited_at"))
-                    .values("day", "short_link__source_id")
-                    .annotate(count=Count("id"))
-                )
+                for entry in count_entries
             }
             days = [
                 date_from + timedelta(days=offset)
