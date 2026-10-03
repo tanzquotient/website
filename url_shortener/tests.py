@@ -143,3 +143,18 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertContains(response, "Enter parameters in the form name=value.")
         self.assertIsNone(response.context["generated_url"])
         self.assertFalse(ShortLink.objects.exists())
+
+    def test_short_link_change_page_shows_the_url_and_qr_code(self):
+        short_link = ShortLink.objects.create(
+            source=self.source, destination=self.destination
+        )
+
+        response = self.client.get(
+            reverse("admin:url_shortener_shortlink_change", args=[short_link.id])
+        )
+
+        self.assertContains(response, f"http://testserver/shorty/{short_link.tag}/")
+        self.assertContains(response, "QR code for this short URL")
+        self.assertTrue(
+            response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
+        )

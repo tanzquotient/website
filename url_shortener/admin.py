@@ -132,11 +132,40 @@ class ShortLinkAdmin(admin.ModelAdmin):
     list_filter = ("active",)
     search_fields = ("tag", "source__description", "destination__url")
     readonly_fields = ("tag", "created_at")
+    change_form_template = "admin/url_shortener/shortlink/change_form.html"
+    fieldsets = (
+        ("Short URL", {"fields": ("tag",)}),
+        ("Routing", {"fields": ("source", "destination")}),
+        ("Status", {"fields": ("active", "created_at")}),
+    )
 
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.visits.exists():
             return (*self.readonly_fields, "source", "destination")
         return self.readonly_fields
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        short_link = self.get_object(request, object_id)
+        if short_link is None:
+            return super().change_view(request, object_id, form_url, extra_context)
+
+        short_url = request.build_absolute_uri(
+            reverse("url_shortener:redirect", kwargs={"tag": short_link.tag})
+        )
+        extra_context = {
+            **(extra_context or {}),
+            "short_url": short_url,
+            "qr_code_data": qr_code_data_uri(short_url),
+            "visits_url": (
+                reverse("admin:url_shortener_visit_changelist")
+                + f"?{urlencode({'short_link__id__exact': short_link.id})}"
+            ),
+            "chart_url": (
+                reverse("admin:url_shortener_visit_chart")
+                + f"?{urlencode({'destination': short_link.destination_id})}"
+            ),
+        }
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 @admin.register(Destination)
