@@ -25,10 +25,7 @@ def redirect_to_destination(request, tag):
             "Ooops, something went wrong...", content_type="text/plain", status=404
         )
 
-    Visit.objects.create(
-        short_link_id=short_link.id,
-        user_id=request.user.id if request.user.is_authenticated else None,
-    )
+    Visit.objects.create(short_link_id=short_link.id)
     return HttpResponseRedirect(
         destination_url_with_request_parameters(short_link.destination.url, request)
     )
