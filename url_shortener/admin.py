@@ -454,9 +454,9 @@ class VisitAdmin(admin.ModelAdmin):
                         for item in series
                     )
                     for day in days
-                ),
-                default=1,
+                )
             )
+            max_count = max(1, max_count)
             chart_data = [
                 {
                     "date": day,
