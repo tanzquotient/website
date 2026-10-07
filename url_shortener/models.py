@@ -6,7 +6,7 @@ from django.db import models
 
 def generate_short_tag() -> str:
     alphabet = string.ascii_letters + string.digits
-    return "".join(secrets.choice(alphabet) for _ in range(16))
+    return "".join(secrets.choice(alphabet) for _ in range(8))
 
 
 class Source(models.Model):
