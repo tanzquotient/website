@@ -2,6 +2,7 @@ from .course import trigger_calendar_cache_delete_from_course, update_waiting_li
 from .course_type import course_type_changed, course_type_styles_changed
 from .lesson_occurrence import (
     lesson_occurrence_changed,
+    remember_previous_room_cancellation,
     schedule_changed,
     update_hourly_wages,
 )

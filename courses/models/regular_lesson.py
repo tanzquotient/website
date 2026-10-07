@@ -26,6 +26,11 @@ class RegularLesson(models.Model):
         period = self.course.get_period()
         period_cancellations = [p.date for p in period.cancellations.all()]
         exceptions_by_date = {e.date: e for e in self.exceptions.all()}
+        course_room = self.course.room
+        # load once instead of querying the room's cancellations for every date
+        room_cancellations = (
+            {c.date for c in course_room.cancellations.all()} if course_room else set()
+        )
 
         all_dates_in_period = map(
             lambda offset: period.date_from + timedelta(days=offset),
@@ -67,7 +72,7 @@ class RegularLesson(models.Model):
                     )
                 )
             else:
-                if self.course.room and self.course.room.is_cancelled(lesson_date):
+                if lesson_date in room_cancellations:
                     continue
                 lesson_occurrences.append(to_lesson_occurrence(lesson_date))
 

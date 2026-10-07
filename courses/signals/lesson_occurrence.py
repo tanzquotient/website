@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.db.models import Q
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
 from courses.models import (
@@ -22,6 +22,39 @@ from courses.services.cache import (
     invalidate_course_list_cache,
 )
 from tq_website.tasks import task_delete_user_and_courses_calendar_cache
+
+
+def _courses_affected_by_room_cancellation(room_id, cancelled_date) -> Q:
+    # include courses that use the room only for some lessons via lesson details
+    uses_room = (
+        Q(room_id=room_id)
+        | Q(irregular_lessons__lesson_details__room_id=room_id)
+        | Q(regular_lessons__exceptions__lesson_details__room_id=room_id)
+    )
+    # only regular lessons within the course period or irregular lessons on that date
+    # can fall on the cancelled date, so skip all other (e.g. past) courses
+    has_lesson_on_date = (
+        Q(period__date_from__lte=cancelled_date, period__date_to__gte=cancelled_date)
+        | Q(
+            period__isnull=True,
+            offering__period__date_from__lte=cancelled_date,
+            offering__period__date_to__gte=cancelled_date,
+        )
+        | Q(irregular_lessons__date=cancelled_date)
+    )
+    return uses_room & has_lesson_on_date
+
+
+@receiver(pre_save, sender=RoomCancellation)
+def remember_previous_room_cancellation(sender, instance, **kwargs):
+    # changing the room or date of a cancellation also affects the old one's courses
+    instance._previous_room_and_date = (
+        RoomCancellation.objects.filter(pk=instance.pk)
+        .values_list("room_id", "date")
+        .first()
+        if instance.pk
+        else None
+    )
 
 
 @receiver(post_save, sender=Course)
@@ -58,14 +91,11 @@ def schedule_changed(sender, instance, **kwargs):
     elif sender == PeriodCancellation:
         courses = list(instance.period.course_set.all())
     elif sender == RoomCancellation:
-        # include courses that use the room only for some lessons via lesson details
-        courses = list(
-            Course.objects.filter(
-                Q(room=instance.room)
-                | Q(irregular_lessons__lesson_details__room=instance.room)
-                | Q(regular_lessons__exceptions__lesson_details__room=instance.room)
-            ).distinct()
-        )
+        query = _courses_affected_by_room_cancellation(instance.room_id, instance.date)
+        previous = getattr(instance, "_previous_room_and_date", None)
+        if previous and previous != (instance.room_id, instance.date):
+            query |= _courses_affected_by_room_cancellation(*previous)
+        courses = list(Course.objects.filter(query).distinct())
     elif sender == LessonDetails:
         courses = [instance.get_lesson.course] if not kwargs["created"] else []
 
