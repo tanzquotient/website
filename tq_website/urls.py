@@ -63,9 +63,14 @@ urlpatterns += [
     path(".well-known/<path:path>", WellKnownRedirectView.as_view()),
 ]
 
+urlpatterns += [
+    path("s/", include(url_shortener.urls, namespace="url_shortener")),
+]
+
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
-    path("shorty/", include(url_shortener.urls, namespace="url_shortener")),
+    # Legacy `shorty` path; remove after Herbstball 2026
+    path("shorty/", include(url_shortener.urls, namespace="url_shortener_legacy")),
     path(
         "accounts/new_login",
         TemplateView.as_view(template_name="account/new_login.html"),

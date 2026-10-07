@@ -67,30 +67,30 @@ class RedirectToDestinationTests(TestCase):
 
         self.assertEqual(Visit.objects.get(short_link=self.short_link).user, user)
 
-    def test_unknown_or_unavailable_link_returns_a_generic_error_without_a_visit(self):
-        response = self.client.get(
-            reverse("url_shortener:redirect", kwargs={"tag": "unknown-link"})
-        )
+    def assertRedirectsToLocalizedSite(self, response, url):
+        self.assertRedirects(response, f"/de{url}", fetch_redirect_response=False)
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.content, b"Ooops, something went wrong...")
+    def test_unknown_or_unavailable_link_redirects_to_the_site_without_a_visit(self):
+        unknown_url = reverse("url_shortener:redirect", kwargs={"tag": "unknown-link"})
+        response = self.client.get(unknown_url)
+
+        self.assertRedirectsToLocalizedSite(response, unknown_url)
         self.assertFalse(Visit.objects.exists())
 
         self.short_link.deactivated = True
         self.short_link.save()
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.content, b"Ooops, something went wrong...")
+        self.assertRedirectsToLocalizedSite(response, self.url)
         self.assertFalse(Visit.objects.exists())
 
-    def test_link_outside_its_validity_window_returns_a_generic_error(self):
+    def test_link_outside_its_validity_window_redirects_to_the_site(self):
         self.short_link.valid_from = timezone.now() + timedelta(days=1)
         self.short_link.save()
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirectsToLocalizedSite(response, self.url)
         self.assertFalse(Visit.objects.exists())
 
         self.short_link.valid_from = None
@@ -99,8 +99,20 @@ class RedirectToDestinationTests(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirectsToLocalizedSite(response, self.url)
         self.assertFalse(Visit.objects.exists())
+
+    def test_legacy_shorty_url_still_redirects(self):
+        response = self.client.get(
+            reverse(
+                "url_shortener_legacy:redirect", kwargs={"tag": self.short_link.tag}
+            )
+        )
+
+        self.assertRedirects(
+            response, "https://example.com/event", fetch_redirect_response=False
+        )
+        self.assertEqual(Visit.objects.get().short_link, self.short_link)
 
     def test_link_inside_its_validity_window_redirects_and_creates_a_visit(self):
         now = timezone.now()
@@ -188,7 +200,7 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertEqual(short_link.destination, self.destination)
         self.assertEqual(
             response.context["generated_url"],
-            f"http://testserver/de/shorty/{short_link.tag}/?campaign=autumn&f=partner-a",
+            f"http://testserver/s/{short_link.tag}/?campaign=autumn&f=partner-a",
         )
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
@@ -219,7 +231,7 @@ class CreateShortenedUrlAdminTests(TestCase):
             reverse("admin:url_shortener_shortlink_change", args=[short_link.id])
         )
 
-        self.assertContains(response, f"http://testserver/de/shorty/{short_link.tag}/")
+        self.assertContains(response, f"http://testserver/s/{short_link.tag}/")
         self.assertContains(response, "QR code for this short URL")
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
