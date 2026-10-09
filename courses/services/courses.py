@@ -11,7 +11,6 @@ from courses.models import Course, Voucher
 from courses.services.general import log
 from courses.services.offerings import get_subsequent_offering
 from email_system.services import send_all_emails
-from payment.utils.generate_voucher_pdf import generate_voucher_pdfs
 from survey.models import Survey, SurveyInstance
 from tq_website import settings
 
@@ -126,8 +125,6 @@ def create_send_vouchers(data, subscriptions, user):
             )
             reversion.set_user(user)
             reversion.set_comment(f"Sent voucher email to {recipient}")
-
-        generate_voucher_pdfs(vouchers=[voucher])
 
         vouchers_to_send.append(voucher)
 

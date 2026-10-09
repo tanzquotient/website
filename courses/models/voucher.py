@@ -24,6 +24,8 @@ from reversion import revisions as reversion
 from courses.models import Subscribe
 from utils import CodeGenerator
 
+PDF_FIELDS = ("key", "amount", "issued", "expires")
+
 
 def default_expiry() -> datetime.date:
     today = datetime.date.today()
@@ -96,11 +98,21 @@ class Voucher(Model):
     def save(self, *args, **kwargs) -> None:
         if not self.issued:
             self.issued = datetime.date.today()
-        from payment.utils import generate_voucher_pdf
+        if self._pdf_needs_update():
+            from payment.utils import generate_voucher_pdf
 
-        pdf_file = generate_voucher_pdf(voucher=self)
-        self.pdf_file.save(pdf_file.name, pdf_file, save=False)
+            pdf_file = generate_voucher_pdf(voucher=self)
+            self.pdf_file.save(pdf_file.name, pdf_file, save=False)
         super().save(*args, **kwargs)
+
+    def _pdf_needs_update(self) -> bool:
+        if self._state.adding or not self.pdf_file:
+            return True
+        # Only re-render when a value printed on the PDF changed
+        stored = Voucher.objects.filter(pk=self.pk).values(*PDF_FIELDS).first()
+        return stored is None or any(
+            stored[field] != getattr(self, field) for field in PDF_FIELDS
+        )
 
     def apply_to(
         self, subscription: Subscribe, user: User
