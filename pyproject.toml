@@ -36,6 +36,7 @@ dependencies = [
     "pypdf>=4.0", # For merging multiple voucher PDFs into a single file
     "pyyaml==6.0.3", # Used for generating environment variable file
     "qrbill==1.2.0", # For generating swiss payment QR codes, that can be scanne by banking apps
+    "qrcode==8.2", # For generating QR codes of short links in the URL shortener
     "django-resized==1.0.3", # Used to resize images on save of ImageField
     # Database
     "psycopg[binary]==3.3.6", # Driver for PostgreSQL

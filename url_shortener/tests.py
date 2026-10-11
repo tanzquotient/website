@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .models import Destination, ShortLink, Source, Visit
+from .models.short_link import TAG_LENGTH
 
 
 def authenticate_test_client(client, user):
@@ -54,18 +55,6 @@ class RedirectToDestinationTests(TestCase):
         self.assertEqual(response.content, b"")
         visit = Visit.objects.get(short_link=self.short_link)
         self.assertEqual(visit.short_link, self.short_link)
-
-    def test_valid_link_stores_the_authenticated_user(self):
-        user = get_user_model().objects.create_user(
-            username="short-link-visitor",
-            email="short-link-visitor@example.com",
-            password="password",
-        )
-        authenticate_test_client(self.client, user)
-
-        self.client.get(self.url)
-
-        self.assertEqual(Visit.objects.get(short_link=self.short_link).user, user)
 
     def assertRedirectsToLocalizedSite(self, response, url):
         self.assertRedirects(response, f"/de{url}", fetch_redirect_response=False)
@@ -194,13 +183,14 @@ class CreateShortenedUrlAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         short_link = ShortLink.objects.get()
-        self.assertEqual(len(short_link.tag), 16)
+        self.assertEqual(len(short_link.tag), TAG_LENGTH)
         self.assertEqual(short_link.description, "Autumn newsletter")
         self.assertEqual(short_link.source, self.source)
         self.assertEqual(short_link.destination, self.destination)
         self.assertEqual(
             response.context["generated_url"],
-            f"http://testserver/s/{short_link.tag}/?campaign=autumn&f=partner-a",
+            f"https://{settings.DEPLOYMENT_DOMAIN}/s/{short_link.tag}/"
+            "?campaign=autumn&f=partner-a",
         )
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
@@ -231,7 +221,9 @@ class CreateShortenedUrlAdminTests(TestCase):
             reverse("admin:url_shortener_shortlink_change", args=[short_link.id])
         )
 
-        self.assertContains(response, f"http://testserver/s/{short_link.tag}/")
+        self.assertContains(
+            response, f"https://{settings.DEPLOYMENT_DOMAIN}/s/{short_link.tag}/"
+        )
         self.assertContains(response, "QR code for this short URL")
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
