@@ -1,6 +1,3 @@
-English version below
----
-
 Hallo {{ first_name }}
 
 dein Studierendenstatus beim Tanzquotient läuft am {{ valid_until }} ab. Danach erhältst du bei neuen Kursanmeldungen keinen Studierendenrabatt mehr.
