@@ -4,6 +4,10 @@ from django.core.cache.utils import make_template_fragment_key
 from photologue.models import Photo, PhotoSizeCache
 
 from courses.services.attendance import send_unexcused_absences_emails
+from courses.services.student_status import (
+    send_student_status_expired_emails,
+    send_student_status_expiring_emails,
+)
 from courses.services.teachers import send_presence_reminder
 from email_system.services import send_queued_emails, send_scheduled_group_emails
 from groups.services import update_groups
@@ -58,6 +62,16 @@ def task_send_unexcused_absences_emails() -> None:
 @shared_task(name="send_course_presence_reminder", ignore_result=True)
 def task_send_course_presence_reminder() -> None:
     send_presence_reminder()
+
+
+@shared_task(name="send_student_status_expiring_emails", ignore_result=True)
+def task_send_student_status_expiring_emails() -> None:
+    send_student_status_expiring_emails()
+
+
+@shared_task(name="send_student_status_expired_emails", ignore_result=True)
+def task_send_student_status_expired_emails() -> None:
+    send_student_status_expired_emails()
 
 
 @shared_task(name="send_scheduled_group_emails", ignore_result=True)

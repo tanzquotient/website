@@ -17,6 +17,19 @@
                 <p class="mb-0">{{ error_message }}</p>
             </div>
 
+        {% elif mode == "confirm_switch" %}
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    {% trans "Switch edu-ID is linked to another account" %}
+                </h4>
+                <p class="mb-0">
+                    {% blocktrans trimmed with account=other_account %}
+                        This Switch edu-ID is already linked to the account {{ account }}. Do you want to sign out and sign in to that account instead?
+                    {% endblocktrans %}
+                </p>
+            </div>
+
         {% elif mode == "already_linked" %}
             <div class="alert alert-info">
                 <h4 class="alert-heading">
@@ -78,12 +91,24 @@
             {% endif %}
         {% endif %}
 
-        <div class="text-center mt-3">
-            <a href="{{ redirect_url }}" class="btn btn-primary">
-                {% trans "Continue" %}
-                <i class="bi bi-arrow-right-circle-fill"></i>
-            </a>
-        </div>
+        {% if mode == "confirm_switch" %}
+            <form method="post" action="{% url "oidc_switch_account" %}" class="text-center mt-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">
+                    {% trans "Sign in to the other account" %}
+                </button>
+                <a href="{{ redirect_url }}" class="btn btn-secondary">
+                    {% trans "Stay signed in" %}
+                </a>
+            </form>
+        {% else %}
+            <div class="text-center mt-3">
+                <a href="{{ redirect_url }}" class="btn btn-primary">
+                    {% trans "Continue" %}
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 </div>

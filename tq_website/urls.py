@@ -1,6 +1,7 @@
 import cms.urls
 import django.views.i18n
 import photologue.urls
+from allauth.account.views import LoginView
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.i18n import i18n_patterns
@@ -24,6 +25,7 @@ from .views import (
     WellKnownRedirectView,
     oidc_callback_view,
     oidc_login_view,
+    oidc_switch_account_view,
     require_metrics_auth,
 )
 
@@ -73,7 +75,7 @@ urlpatterns += i18n_patterns(
     path("shorty/", include(url_shortener.urls, namespace="url_shortener_legacy")),
     path(
         "accounts/new_login",
-        TemplateView.as_view(template_name="account/new_login.html"),
+        LoginView.as_view(template_name="account/new_login.html"),
         name="new_login",
     ),
     path("accounts/", include("allauth.urls")),
@@ -85,6 +87,11 @@ urlpatterns += i18n_patterns(
     path("profile/edit", courses_views.ProfileView.as_view(), name="edit_profile"),
     path("profile/auth/oidc_login", oidc_login_view, name="oidc_login"),
     path("profile/auth/oidc_callback", oidc_callback_view, name="oidc_callback"),
+    path(
+        "profile/auth/oidc_switch_account",
+        oidc_switch_account_view,
+        name="oidc_switch_account",
+    ),
     path("profile/", courses_views.user_profile, name="profile"),
     path("survey/", include(survey.urls, namespace="survey")),
     path("events/", include(events.urls, namespace="events")),
