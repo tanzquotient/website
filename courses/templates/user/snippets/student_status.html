@@ -36,8 +36,9 @@
                     <i class="bi bi-arrow-clockwise"></i>
                 </a>
             {% else %}
-                <a href="{% url "oidc_login" %}?mode=link" class="d-inline-block" title="{% trans "Connect your account to Switch edu-ID" %}">
-                    <img src="{% static "elements/eduid_login_button.svg" %}" alt="{% trans "Connect your account to Switch edu-ID" %}" height="48">
+                <a href="{% url "oidc_login" %}?mode=link" class="btn btn-sm bg-white text-dark border shadow-sm d-inline-flex align-items-center gap-2 mt-1">
+                    {% trans "Connect with" %}
+                    <img src="{% static "elements/eduid_logo.svg" %}" alt="Switch edu-ID" height="15">
                 </a>
             {% endif %}
         {% endif %}

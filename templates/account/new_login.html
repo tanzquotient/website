@@ -13,8 +13,9 @@
 
     <div class="text-center mb-3">
 
-        <a href="{% url "oidc_login" %}?mode=login{% if redirect_field_value %}&next={{ redirect_field_value|urlencode }}{% endif %}" class="d-inline-block mb-2" title="{% trans "Sign in with Switch edu-ID" %}">
-            <img src="{% static "elements/eduid_login_button.svg" %}" alt="{% trans "Sign in with Switch edu-ID" %}" height="72">
+        <a href="{% url "oidc_login" %}?mode=login{% if redirect_field_value %}&next={{ redirect_field_value|urlencode }}{% endif %}" class="btn btn-lg bg-white text-dark border shadow-sm d-inline-flex align-items-center gap-2 mb-2">
+            {% trans "Sign in with" %}
+            <img src="{% static "elements/eduid_logo.svg" %}" alt="Switch edu-ID" height="22">
         </a>
         <br/>
         <s>&emsp;</s>
