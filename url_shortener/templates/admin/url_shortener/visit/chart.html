@@ -1,5 +1,11 @@
 {% extends "admin/base_site.html" %}
 
+{% block extrahead %}
+  {{ block.super }}
+  <script src="{% url 'admin:jsi18n' %}"></script>
+  {{ media }}
+{% endblock %}
+
 {% block extrastyle %}
   {{ block.super }}
   <style>
@@ -16,7 +22,6 @@
 {% block content %}
   <div id="content-main">
     <form method="get">
-      {{ form.media }}
       <fieldset class="module aligned">
         {{ form.as_div }}
       </fieldset>

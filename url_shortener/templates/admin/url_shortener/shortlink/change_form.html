@@ -10,8 +10,10 @@
       </p>
       <p>
         <a href="{{ short_url }}" target="_blank" rel="noopener">Open short URL</a>
-        · <a href="{{ visits_url }}">View visits for this short URL</a>
-        · <a href="{{ chart_url }}">View destination chart</a>
+        {% if perms.url_shortener.view_visit %}
+          · <a href="{{ visits_url }}">View visits for this short URL</a>
+          · <a href="{{ chart_url }}">View destination chart</a>
+        {% endif %}
       </p>
       <img src="{{ qr_code_data }}" width="240" height="240" alt="QR code for this short URL">
     </fieldset>

@@ -2,7 +2,7 @@
 
 {% block after_field_sets %}
   {{ block.super }}
-  {% if chart_url %}
+  {% if chart_url and perms.url_shortener.view_visit %}
     <fieldset class="module aligned">
       <h2>Visit reporting</h2>
       <p><a href="{{ chart_url }}">View visits per day chart for this destination</a></p>

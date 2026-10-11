@@ -1,14 +1,14 @@
 from urllib.parse import urlsplit, urlunsplit
 
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.utils import timezone
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_safe
 
 from .models import ShortLink, Visit
 
 
-@require_GET
+@require_safe
 def redirect_to_destination(request, tag):
     try:
         now = timezone.now()
@@ -21,11 +21,11 @@ def redirect_to_destination(request, tag):
             .get()
         )
     except ShortLink.DoesNotExist:
-        return HttpResponse(
-            "Ooops, something went wrong...", content_type="text/plain", status=404
-        )
+        raise Http404
 
-    Visit.objects.create(short_link_id=short_link.id)
+    # HEAD requests come from link checkers, not from visitors
+    if request.method == "GET":
+        Visit.objects.create(short_link_id=short_link.id)
     return HttpResponseRedirect(
         destination_url_with_request_parameters(short_link.destination.url, request)
     )

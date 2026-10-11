@@ -23,7 +23,9 @@ class TQAdminSite(AdminSite):
         return FullNameAutocompleteJsonView.as_view(admin_site=self)(request)
 
     def app_index(self, request, app_label, extra_context=None):
-        if app_label == "url_shortener":
+        if app_label == "url_shortener" and request.user.has_perm(
+            "url_shortener.view_visit"
+        ):
             return redirect("admin:url_shortener_visit_dashboard")
         return super().app_index(request, app_label, extra_context)
 

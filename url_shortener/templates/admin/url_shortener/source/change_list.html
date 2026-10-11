@@ -1,6 +1,8 @@
 {% extends "admin/change_list.html" %}
 
 {% block object-tools-items %}
-  <li><a href="{% url 'admin:url_shortener_create_shortened_url' %}">Create shortened URL</a></li>
+  {% if perms.url_shortener.add_shortlink %}
+    <li><a href="{% url 'admin:url_shortener_create_shortened_url' %}">Create shortened URL</a></li>
+  {% endif %}
   {{ block.super }}
 {% endblock %}

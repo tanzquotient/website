@@ -7,7 +7,7 @@ import qrcode
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminDateWidget
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Q
 from django.db.models.functions import TruncDate
 from django.http import HttpResponseBadRequest
@@ -30,43 +30,36 @@ def qr_code_data_uri(value):
 
 
 def visit_csv_rows(visits):
-    return [
-        [
-            "visit_id",
-            "source_id",
-            "source_description",
-            "destination_id",
-            "destination_url",
-            "short_link_tag",
-            "visited_at",
-        ],
-        *[
-            [
-                visit.id,
-                visit.short_link.source_id,
-                visit.short_link.source.description,
-                visit.short_link.destination_id,
-                visit.short_link.destination.url,
-                visit.short_link.tag,
-                visit.visited_at.isoformat(),
-            ]
-            for visit in visits.select_related(
-                "short_link__source",
-                "short_link__destination",
-            ).order_by("visited_at", "id")
-        ],
+    yield [
+        "visit_id",
+        "source_id",
+        "source_description",
+        "destination_id",
+        "destination_url",
+        "short_link_tag",
+        "visited_at",
     ]
+    rows = visits.order_by("visited_at", "id").values_list(
+        "id",
+        "short_link__source_id",
+        "short_link__source__description",
+        "short_link__destination_id",
+        "short_link__destination__url",
+        "short_link__tag",
+        "visited_at",
+    )
+    for *values, visited_at in rows.iterator(chunk_size=2000):
+        yield [*values, visited_at.isoformat()]
+
+
+def start_of_day(day):
+    return timezone.make_aware(datetime.combine(day, time.min))
 
 
 def visit_date_range(date_from, date_to):
-    timezone_info = timezone.get_current_timezone()
     return {
-        "visited_at__gte": timezone.make_aware(
-            datetime.combine(date_from, time.min), timezone_info
-        ),
-        "visited_at__lt": timezone.make_aware(
-            datetime.combine(date_to + timedelta(days=1), time.min), timezone_info
-        ),
+        "visited_at__gte": start_of_day(date_from),
+        "visited_at__lt": start_of_day(date_to + timedelta(days=1)),
     }
 
 
@@ -91,11 +84,7 @@ class VisitChartForm(forms.Form):
         return cleaned_data
 
 
-class ShortenedUrlForm(forms.Form):
-    description = forms.CharField(
-        required=False,
-        help_text="Optional label to help identify this short URL in the admin.",
-    )
+class ShortenedUrlForm(forms.ModelForm):
     source = forms.ModelChoiceField(queryset=Source.objects.order_by("description"))
     destination = forms.ModelChoiceField(queryset=Destination.objects.order_by("url"))
     destination_parameters = forms.CharField(
@@ -106,6 +95,15 @@ class ShortenedUrlForm(forms.Form):
             "campaign=autumn&f=partner-a. They are passed on unchanged."
         ),
     )
+
+    class Meta:
+        model = ShortLink
+        fields = ("description", "source", "destination")
+        help_texts = {
+            "description": (
+                "Optional label to help identify this short URL in the admin."
+            ),
+        }
 
     def clean_destination_parameters(self):
         value = self.cleaned_data["destination_parameters"]
@@ -140,23 +138,19 @@ class SourceAdmin(admin.ModelAdmin):
         return create_url + urls
 
     def create_shortened_url_view(self, request):
+        if not request.user.has_perm("url_shortener.add_shortlink"):
+            raise PermissionDenied
+
         form = ShortenedUrlForm(request.POST or None)
         generated_url = None
         qr_code_data = None
 
         if request.method == "POST" and form.is_valid():
-            short_link = ShortLink.objects.create(
-                description=form.cleaned_data["description"],
-                source=form.cleaned_data["source"],
-                destination=form.cleaned_data["destination"],
-            )
-            generated_url = request.build_absolute_uri(
-                reverse("url_shortener:redirect", kwargs={"tag": short_link.tag})
-                + (
-                    f"?{urlencode(form.cleaned_data['destination_parameters'])}"
-                    if form.cleaned_data["destination_parameters"]
-                    else ""
-                )
+            short_link = form.save()
+            generated_url = short_link.short_url() + (
+                f"?{urlencode(form.cleaned_data['destination_parameters'])}"
+                if form.cleaned_data["destination_parameters"]
+                else ""
             )
             qr_code_data = qr_code_data_uri(generated_url)
 
@@ -197,32 +191,30 @@ class ShortLinkAdmin(admin.ModelAdmin):
     )
 
     def get_readonly_fields(self, request, obj=None):
-        if obj and obj.visits.exists():
+        if obj and obj.has_visits:
             return (*self.readonly_fields, "source", "destination")
         return self.readonly_fields
 
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        short_link = self.get_object(request, object_id)
-        if short_link is None:
-            return super().change_view(request, object_id, form_url, extra_context)
-
-        short_url = request.build_absolute_uri(
-            reverse("url_shortener:redirect", kwargs={"tag": short_link.tag})
-        )
-        extra_context = {
-            **(extra_context or {}),
-            "short_url": short_url,
-            "qr_code_data": qr_code_data_uri(short_url),
-            "visits_url": (
-                reverse("admin:url_shortener_visit_changelist")
-                + f"?{urlencode({'short_link__id__exact': short_link.id})}"
-            ),
-            "chart_url": (
-                reverse("admin:url_shortener_visit_chart")
-                + f"?{urlencode({'destination': short_link.destination_id})}"
-            ),
-        }
-        return super().change_view(request, object_id, form_url, extra_context)
+    def render_change_form(
+        self, request, context, add=False, change=False, form_url="", obj=None
+    ):
+        if obj is not None:
+            short_url = obj.short_url()
+            context.update(
+                {
+                    "short_url": short_url,
+                    "qr_code_data": qr_code_data_uri(short_url),
+                    "visits_url": (
+                        reverse("admin:url_shortener_visit_changelist")
+                        + f"?{urlencode({'short_link__id__exact': obj.id})}"
+                    ),
+                    "chart_url": (
+                        reverse("admin:url_shortener_visit_chart")
+                        + f"?{urlencode({'destination': obj.destination_id})}"
+                    ),
+                }
+            )
+        return super().render_change_form(request, context, add, change, form_url, obj)
 
 
 @admin.register(Destination)
@@ -232,21 +224,23 @@ class DestinationAdmin(admin.ModelAdmin):
     actions = ("export_visits_csv",)
     change_form_template = "admin/url_shortener/destination/change_form.html"
 
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        destination = self.get_object(request, object_id)
-        if destination is None:
-            return super().change_view(request, object_id, form_url, extra_context)
-
-        extra_context = {
-            **(extra_context or {}),
-            "chart_url": (
+    def render_change_form(
+        self, request, context, add=False, change=False, form_url="", obj=None
+    ):
+        if obj is not None:
+            context["chart_url"] = (
                 reverse("admin:url_shortener_visit_chart")
-                + f"?{urlencode({'destination': destination.id})}"
-            ),
-        }
-        return super().change_view(request, object_id, form_url, extra_context)
+                + f"?{urlencode({'destination': obj.id})}"
+            )
+        return super().render_change_form(request, context, add, change, form_url, obj)
 
-    @admin.action(description="Download all visits to selected destination as CSV")
+    def has_export_visits_permission(self, request):
+        return request.user.has_perm("url_shortener.view_visit")
+
+    @admin.action(
+        description="Download all visits to selected destination as CSV",
+        permissions=["export_visits"],
+    )
     def export_visits_csv(self, request, queryset):
         destinations = list(queryset[:2])
         if len(destinations) != 1:
@@ -275,6 +269,13 @@ class VisitAdmin(admin.ModelAdmin):
     readonly_fields = ("short_link", "visited_at")
     change_list_template = "admin/url_shortener/visit/change_list.html"
 
+    # Visits are recorded by the redirect view only and must not be edited
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
     @admin.display(ordering="short_link__source", description="Source")
     def source(self, obj):
         return obj.short_link.source
@@ -283,27 +284,35 @@ class VisitAdmin(admin.ModelAdmin):
     def destination(self, obj):
         return obj.short_link.destination
 
+    def report_view(self, view):
+        def wrapper(request):
+            if not self.has_view_permission(request):
+                raise PermissionDenied
+            return view(request)
+
+        return self.admin_site.admin_view(wrapper)
+
     def get_urls(self):
         urls = super().get_urls()
         report_urls = [
             path(
                 "dashboard/",
-                self.admin_site.admin_view(self.dashboard_view),
+                self.report_view(self.dashboard_view),
                 name="url_shortener_visit_dashboard",
             ),
             path(
                 "export/",
-                self.admin_site.admin_view(self.export_all_visits_view),
+                self.report_view(self.export_all_visits_view),
                 name="url_shortener_visit_export",
             ),
             path(
                 "chart/export/",
-                self.admin_site.admin_view(self.chart_export_view),
+                self.report_view(self.chart_export_view),
                 name="url_shortener_visit_chart_export",
             ),
             path(
                 "chart/",
-                self.admin_site.admin_view(self.chart_view),
+                self.report_view(self.chart_view),
                 name="url_shortener_visit_chart",
             ),
         ]
@@ -311,26 +320,14 @@ class VisitAdmin(admin.ModelAdmin):
 
     def dashboard_view(self, request):
         today = timezone.localdate()
-        last_7_days_start = today - timedelta(days=6)
-        last_30_days_start = today - timedelta(days=29)
-        today_start = visit_date_range(today, today)["visited_at__gte"]
-        last_7_days_start_at = visit_date_range(last_7_days_start, today)[
-            "visited_at__gte"
-        ]
-        last_30_days_start_at = visit_date_range(last_30_days_start, today)[
-            "visited_at__gte"
-        ]
-        visit_totals = Visit.objects.aggregate(
-            today_visits=Count("id", filter=Q(visited_at__gte=today_start)),
-            last_7_days_visits=Count(
-                "id", filter=Q(visited_at__gte=last_7_days_start_at)
-            ),
-            last_30_days_visits=Count(
-                "id", filter=Q(visited_at__gte=last_30_days_start_at)
-            ),
-        )
+        last_7_days_start = start_of_day(today - timedelta(days=6))
         last_30_days_visits = Visit.objects.filter(
-            visited_at__gte=last_30_days_start_at
+            visited_at__gte=start_of_day(today - timedelta(days=29))
+        )
+        visit_totals = last_30_days_visits.aggregate(
+            today_visits=Count("id", filter=Q(visited_at__gte=start_of_day(today))),
+            last_7_days_visits=Count("id", filter=Q(visited_at__gte=last_7_days_start)),
+            last_30_days_visits=Count("id"),
         )
         top_destinations = list(
             last_30_days_visits.values(
@@ -479,6 +476,7 @@ class VisitAdmin(admin.ModelAdmin):
         context = {
             **self.admin_site.each_context(request),
             "form": form,
+            "media": self.media + form.media,
             "chart_data": chart_data,
             "date_from": date_from,
             "date_to": date_to,
