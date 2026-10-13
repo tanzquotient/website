@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import override
 from post_office.models import EmailTemplate
 
 from courses.models import UserProfile
@@ -48,7 +49,11 @@ def _send_student_status_emails(template_name: str, student_validity: date) -> N
         user__is_staff=True,
     ).select_related("user")
 
-    profile_url = f"https://{settings.DEPLOYMENT_DOMAIN}{reverse('profile')}"
+    with override("de"):
+        profile_url_de = f"https://{settings.DEPLOYMENT_DOMAIN}{reverse('profile')}"
+    with override("en"):
+        profile_url_en = f"https://{settings.DEPLOYMENT_DOMAIN}{reverse('profile')}"
+
     emails = [
         dict(
             to=profile.user.email,
@@ -57,7 +62,8 @@ def _send_student_status_emails(template_name: str, student_validity: date) -> N
             context={
                 "first_name": profile.user.first_name,
                 "valid_until": student_validity.strftime("%d.%m.%Y"),
-                "profile_url": profile_url,
+                "profile_url_de": profile_url_de,
+                "profile_url_en": profile_url_en,
             },
         )
         for profile in profiles

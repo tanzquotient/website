@@ -4,7 +4,7 @@ dein Studierendenstatus beim Tanzquotient ist am {{ valid_until }} abgelaufen. B
 
 Wenn du weiterhin studierst, kannst du deinen Status mit Switch edu-ID ganz einfach erneuern:
 
-1. Gehe zu deinem Profil: {{ profile_url }}
+1. Gehe zu deinem Profil: {{ profile_url_de }}
 2. Klicke beim Studierendenstatus auf «Erneuern» und melde dich mit Switch edu-ID an
 
 
@@ -21,7 +21,7 @@ Your student status at Tanzquotient expired on {{ valid_until }}. You will there
 
 If you are still studying, you can easily renew your status with Switch edu-ID:
 
-1. Go to your profile: {{ profile_url }}
+1. Go to your profile: {{ profile_url_en }}
 2. Click "Renew" next to your student status and sign in with Switch edu-ID
 
 
