@@ -489,9 +489,7 @@ def subscription_overview(request: HttpRequest) -> HttpResponse:
             "plot": figures.offering_lead_follow_couple,
         },
     }
-    figure_type: str = (
-        request.GET["figure_type"] if "figure_type" in request.GET else "status"
-    )
+    figure_type: str = request.GET.get("figure_type", "status")
     return render(
         request,
         "courses/auth/subscription_overview.html",

@@ -69,6 +69,6 @@ extend-safe-fixes = [
     "C",
     "PLC0414",
     "RUF",
-    "SIM118",
+    "SIM",
     "UP"
 ]

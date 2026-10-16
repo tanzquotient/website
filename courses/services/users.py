@@ -40,7 +40,7 @@ def update_user(user: User, user_data: dict) -> User:
         profile.picture = None
     else:
         name = user_data["picture"].name
-        if not profile.picture.name == name:  # if picture name changed
+        if profile.picture.name != name:  # if picture name changed
             # generate new uuid for picture
             user_data["picture"].name = "{}.{}".format(
                 uuid.uuid4(), name.split(".")[-1]

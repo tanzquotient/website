@@ -594,10 +594,7 @@ class Course(TranslatableModel):
             reason=RejectionReason.USER_CANCELLED,
         ).exists()
 
-        if rejection_exists and not user_cancelled:
-            return False
-
-        return True
+        return not (rejection_exists and not user_cancelled)
 
     def number_of_possible_couples(self) -> int:
         (

@@ -35,9 +35,8 @@ def voucher_valid(code: str) -> None:
     voucher = Voucher.objects.filter(key=code).first()
     if voucher.used:
         raise ValidationError(_("The specified voucher code has already been used"))
-    if voucher.expires:
-        if not voucher.expires >= datetime.datetime.today().date():
-            raise ValidationError(_("The specified voucher code is expired"))
+    if voucher.expires and not voucher.expires >= datetime.datetime.today().date():
+        raise ValidationError(_("The specified voucher code is expired"))
 
 
 class USIForm(forms.Form):

@@ -178,7 +178,7 @@ class Subscribe(Model):
     get_user_student_status.short_description = "Student"
 
     def get_position_on_waiting_list(self) -> int:
-        if not self.state == SubscribeState.WAITING_LIST:
+        if self.state != SubscribeState.WAITING_LIST:
             return 0
 
         if self.matching_state not in MatchingState.MATCHED_STATES:
