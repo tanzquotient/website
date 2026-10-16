@@ -749,10 +749,7 @@ class SubscribeAdmin(UserFullNameAdminMixin, VersionAdmin):
                 and other_subscription.state in SubscribeState.TO_PAY_STATES
             ]
         )
-        if subscription.paid():
-            r = "Yes"
-        else:
-            r = "No"
+        r = "Yes" if subscription.paid() else "No"
 
         if c > 0:
             # this user didn't pay for other courses

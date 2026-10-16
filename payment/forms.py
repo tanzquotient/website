@@ -35,7 +35,7 @@ def voucher_valid(code: str) -> None:
     voucher = Voucher.objects.filter(key=code).first()
     if voucher.used:
         raise ValidationError(_("The specified voucher code has already been used"))
-    if voucher.expires and not voucher.expires >= datetime.datetime.today().date():
+    if voucher.expires and voucher.expires < datetime.datetime.today().date():
         raise ValidationError(_("The specified voucher code is expired"))
 
 

@@ -1,5 +1,8 @@
 # Define a new Group admin
+import contextlib
+
 from django.contrib import admin
+from django.contrib.admin.exceptions import NotRegistered
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group, User
@@ -47,8 +50,6 @@ class TQGroupAdmin(GroupAdmin):
 
 
 # Re-register GroupAdmin
-try:
+with contextlib.suppress(NotRegistered):
     admin.site.unregister(Group)
-except admin.sites.NotRegistered:
-    pass
 admin.site.register(Group, TQGroupAdmin)

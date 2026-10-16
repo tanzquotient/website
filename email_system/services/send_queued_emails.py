@@ -40,8 +40,8 @@ def send_queued_emails() -> None:
                         if batch_count >= batches_per_second:
                             batch_count = 0
                             sleep(1)
-                except Exception as e:
-                    logger.exception(e, extra={"status_code": 500})
+                except Exception:
+                    logger.exception("Sending failed", extra={"status_code": 500})
                     raise
 
                 connection.close()

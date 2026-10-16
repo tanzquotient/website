@@ -236,11 +236,7 @@ def user_has_taken_course(
         state__in=SubscribeState.ACCEPTED_STATES,
     ).all()
 
-    for subscription in subscriptions:
-        if subscription.course.is_over():
-            return True
-
-    return False
+    return any(subscription.course.is_over() for subscription in subscriptions)
 
 
 @register.simple_tag
@@ -331,8 +327,7 @@ def has_assigned_role(user: User, course: Course) -> bool:
 
 @register.simple_tag
 def attendance_state(user: User, lesson: LessonOccurrence) -> str:
-    attendance = lesson.attendances.all()
-    for attendance in attendance:
+    for attendance in lesson.attendances.all():
         if attendance.user_id == user.id:
             return attendance.state
     return Attendance.DEFAULT_STATE

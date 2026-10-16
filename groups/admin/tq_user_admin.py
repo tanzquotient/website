@@ -1,6 +1,9 @@
 # Define a new User admin
+import contextlib
+
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.exceptions import NotRegistered
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -99,8 +102,7 @@ class TQUserAdmin(HijackUserAdminMixin, UserAdmin):
 
 
 # Re-register UserAdmin
-try:
+with contextlib.suppress(NotRegistered):
     admin.site.unregister(User)
-except admin.sites.NotRegistered:
-    pass
+
 admin.site.register(User, TQUserAdmin)

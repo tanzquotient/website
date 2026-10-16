@@ -627,7 +627,7 @@ def user_ical(request: HttpRequest, user_id: int) -> HttpResponse:
     courses_as_teacher = [t.course for t in teachings if not t.course.cancelled]
     courses = courses_as_student.keys() | set(courses_as_teacher)
     for course in courses:
-        subscription = courses_as_student.get(course, None)
+        subscription = courses_as_student.get(course)
         for occurrence in course.lesson_occurrences.all():
             cal.add_component(
                 _lesson_to_ical_event(course, occurrence, request, subscription)

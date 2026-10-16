@@ -5,7 +5,6 @@ from datetime import date, time
 from django.db.models import Q, QuerySet
 from django.http import Http404
 from django.utils import dateformat
-from django.utils.translation import gettext as _
 
 from courses import models
 from courses.managers import CourseManager
@@ -94,7 +93,7 @@ def get_sections(offering, course_filter=None):
         offering_sections.append({"courses": courses})
     elif offering.type == OfferingType.REGULAR:
         all_courses = list(course_set.all())
-        for w, w_name in Weekday.CHOICES:
+        for w, _ in Weekday.CHOICES:
             courses_on_weekday = [
                 c
                 for c in CourseManager.weekday(course_set, w, courses=all_courses)

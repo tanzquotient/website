@@ -42,8 +42,8 @@ def subscribe(course: Course, user: User, data: dict) -> Subscribe:
     user_subscription.date = timezone.localtime(timezone.now())
 
     user_subscription.lead_follow = data.get("lead_follow", LeadFollow.NO_PREFERENCE)
-    user_subscription.experience = data.get("experience", None)
-    user_subscription.comment = data.get("comment", None)
+    user_subscription.experience = data.get("experience")
+    user_subscription.comment = data.get("comment")
 
     # Handle couple subscription
     if data["single_or_couple"] == SingleCouple.COUPLE:

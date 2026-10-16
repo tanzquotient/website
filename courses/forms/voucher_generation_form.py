@@ -34,8 +34,7 @@ class VoucherGenerationForm(VoucherForm):
         n = cleaned_data.get("number_of_vouchers")
         if recipients and n is not None and len(recipients) != n:
             raise forms.ValidationError(
-                _(
-                    f"Number of recipients ({len(recipients)}) must match number of vouchers ({n})."
-                )
+                _("Number of recipients must match number of vouchers.")
+                + f"{len(recipients)} != {n}"
             )
         return cleaned_data

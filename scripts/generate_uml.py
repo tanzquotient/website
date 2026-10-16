@@ -32,17 +32,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set the default values to command line arguments
-    if args.output_dir:
-        output_dir = args.output_dir
-    else:
-        output_dir = os.getcwd()
+    output_dir = args.output_dir or os.getcwd()
 
     # generate the list of files to consider
     files_to_analyse = []
 
     cwd = os.getcwd()
 
-    for dirpath, dirnames, filenames in os.walk(cwd):
+    for dirpath, _, filenames in os.walk(cwd):
         # check whether ignore this subdir
         parent_dir = dirpath.split("/")[-1]
         if parent_dir in EXCLUDE_DIRS:
@@ -78,4 +75,4 @@ if __name__ == "__main__":
     for folder, files in groups_of_files.items():
         files = " ".join(files)
         CMD = COMMAND_MASK.format(basename=folder, files=files)
-        subprocess.run(CMD.split(" "), cwd=output_dir)
+        subprocess.run(CMD.split(" "), cwd=output_dir, check=True)

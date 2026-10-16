@@ -32,6 +32,7 @@ from courses.models.style import Style
 if TYPE_CHECKING:
     from courses.models import (
         IrregularLesson,
+        LessonOccurrence,
         LessonOccurrenceData,
         Period,
         RegularLesson,

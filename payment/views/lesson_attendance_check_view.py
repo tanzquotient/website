@@ -81,9 +81,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
         now = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         if now + timedelta(minutes=15) < lesson.start:
             return False  # Too early
-        if now - timedelta(minutes=30) > lesson.end:
-            return False  # Too late
-        return True
+        return now - timedelta(minutes=30) <= lesson.end
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         lesson = get_object_or_404(LessonOccurrence, pk=kwargs.get("lesson"))

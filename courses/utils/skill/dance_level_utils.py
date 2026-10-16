@@ -64,11 +64,7 @@ def _has_required_level(
     styles: Iterable[Style],
     course_level: int,
 ) -> bool:
-    for style in styles:
-        if not _has_level(style, course_level, user_dance_levels):
-            return False
-
-    return True
+    return all(_has_level(style, course_level, user_dance_levels) for style in styles)
 
 
 def _has_level(style: Style, level: int, dance_levels: list[StyleLevel]) -> bool:
@@ -154,8 +150,7 @@ def combine_dance_levels(dance_levels: Iterable[StyleLevel]) -> list[StyleLevel]
 def _style_descendants(style: Style) -> list[Style]:
     descendants = [style]
     for child in _style_children(style):
-        for descendant in _style_descendants(child):
-            descendants.append(descendant)
+        descendants.extend(_style_descendants(child))
     return descendants
 
 

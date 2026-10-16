@@ -25,25 +25,30 @@ class SubscribeForm(forms.Form):
         partner_email = cleaned_data.get("partner_email")
 
         # If this course is couples-only, require coupling
-        if self.course.partner_required_at_signup:
-            if single_or_couple != SingleCouple.COUPLE:
-                error = ValidationError(
-                    message=_("You must sign up together with a partner."),
-                    code="partner required",
-                )
-                self.add_error("single_or_couple", error)
-                return cleaned_data
+        if (
+            self.course.partner_required_at_signup
+            and single_or_couple != SingleCouple.COUPLE
+        ):
+            error = ValidationError(
+                message=_("You must sign up together with a partner."),
+                code="partner required",
+            )
+            self.add_error("single_or_couple", error)
+            return cleaned_data
 
         # Mandatory experience?
         experience = cleaned_data.get("experience")
-        if self.course.experience_mandatory:
-            if experience is None or experience.strip() == "":
-                error = ValidationError(
-                    message=_("This field is required."),
-                    code="experience preference empty",
-                )
-                self.add_error("experience", error)
-                return cleaned_data
+        if (
+            self.course.experience_mandatory
+            and experience is None
+            or experience.strip() == ""
+        ):
+            error = ValidationError(
+                message=_("This field is required."),
+                code="experience preference empty",
+            )
+            self.add_error("experience", error)
+            return cleaned_data
 
         # Special validation for couple courses
         if self.course.type.couple_course:

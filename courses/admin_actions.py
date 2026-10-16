@@ -697,18 +697,18 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
 
         if fmt == "zip":
             # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
-            spooled = tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
-            with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
-                for voucher in queryset.iterator(chunk_size=50):
-                    with (
-                        voucher.pdf_file.file.open("rb") as src,
-                        zip_file.open(f"Voucher_{voucher.key}.pdf", "w") as dst,
-                    ):
-                        shutil.copyfileobj(src, dst, length=64 * 1024)
-            spooled.seek(0)
-            response = FileResponse(spooled, content_type="application/zip")
-            response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
-            return response
+            with tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024) as spooled:
+                with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                    for voucher in queryset.iterator(chunk_size=50):
+                        with (
+                            voucher.pdf_file.file.open("rb") as src,
+                            zip_file.open(f"Voucher_{voucher.key}.pdf", "w") as dst,
+                        ):
+                            shutil.copyfileobj(src, dst, length=64 * 1024)
+                spooled.seek(0)
+                response = FileResponse(spooled, content_type="application/zip")
+                response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
+                return response
 
         # fmt == "pdf": merge all pages into a single PDF
         from io import BytesIO
