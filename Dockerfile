@@ -39,7 +39,7 @@ LABEL org.opencontainers.image.authors="${AUTHORS}"
 
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.23@sha256:61d393e44e249f2e4b526b6c7ddcecce245946826e608e11c93ad4f5bba55b21 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.1@sha256:4a1f3666816dafadd20ceb71eac9a7d56d7ef30279f7d64048519ab901ada336 /uv /uvx /bin/
 
 ENV UV_NO_DEV=1 \
     UV_COMPILE_BYTECODE=1 \
