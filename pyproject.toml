@@ -3,7 +3,7 @@ name = "tq_website"
 version = "1.0.0"
 description = "Website of Tanzquotient"
 readme = "README.md"
-requires-python = "==3.14.*"
+requires-python = "==3.15.*"
 dependencies = [
     # Django
     "Django==6.0.8",
@@ -62,11 +62,4 @@ dev = [
     "locust~=2.46.0", # Loadtesting
     "ruff==0.16.10",
     "pre-commit>=4.6.0",
-]
-
-[tool.ruff.lint]
-select = [
-    "E", # pycodestyle errors
-    "F", # pyflakes
-    "I", # import sorting
 ]

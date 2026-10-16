@@ -4,25 +4,18 @@ ARG AUTHORS="Thore Göbel <thgoebel@ethz.ch>, Daniel Sparber <daniel@sparber.io>
 # ===========================
 # Base image
 # ===========================
-FROM python:3.14-slim AS base-image
+FROM python:3.15-slim AS base-image
 ARG AUTHORS
 LABEL org.opencontainers.image.authors="${AUTHORS}"
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    ca-certificates \
-    locales \
-    openssl \
-    procps \
+    apt-get install -y --no-install-recommends ca-certificates \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && sed --in-place '/en_US.UTF-8/s/^# //' /etc/locale.gen \
-    && dpkg-reconfigure locales \
-    && ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime \
-    && dpkg-reconfigure tzdata
+    && rm -rf /var/lib/apt/lists/*
 
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV TZ=Europe/Zurich
 
 ENV IMAGE_APP_USERNAME=app-user
 ENV IMAGE_APP_GROUPNAME=app-user
@@ -43,21 +36,6 @@ RUN groupadd "$IMAGE_APP_GROUPNAME" --gid "$IMAGE_APP_GID" && \
 FROM base-image AS builder
 ARG AUTHORS
 LABEL org.opencontainers.image.authors="${AUTHORS}"
-
-# Install build dependencies:
-# - libpq-dev to build psycopg2 (which in turn is needed for the connection to postgres)
-# - gettext to generate translations
-# - pkg-config & libcairo2-dev are needed for building reportlab
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-    build-essential \
-    gettext \
-    git \
-    libcairo2-dev \
-    libpq-dev \
-    pkg-config \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

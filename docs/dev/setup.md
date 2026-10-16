@@ -153,7 +153,7 @@ This files are not under version control because it contains some secrets and ma
 
 ## Let docker install all development dependencies
 
-*Note:* In the current setup the `docker-compose.yml` is customized via environment variables. Due to escaping issues, this works only with the zsh shell which may not be standard on some unix based systems.
+*Note:* In the current setup the `compose.yml` is customized via environment variables. Due to escaping issues, this works only with the zsh shell which may not be standard on some unix based systems.
 
 **On development machine**:
 
