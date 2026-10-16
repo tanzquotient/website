@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from reversion import revisions as reversion
 
-from courses import models as models
+from courses import models
 
 
 def correct_matching_state_to_couple(subscriptions, request=None):

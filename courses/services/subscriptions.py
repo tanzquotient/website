@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from reversion import revisions as reversion
 
-from courses import models as models
+from courses import models
 from courses.emailcenter import (
     detect_rejection_reason,
     send_move_to_waiting_list,
@@ -182,7 +182,7 @@ def unconfirm_subscriptions(
 
 
 def reject_subscription(
-    subscription: Subscribe, reason: str = None, send_email: bool = True
+    subscription: Subscribe, reason: str | None = None, send_email: bool = True
 ) -> None:
     """sends a rejection mail if subscription is rejected (by some other method)
     and no rejection mail was sent before"""
@@ -234,7 +234,9 @@ def reject_subscription(
 
 
 def reject_subscriptions(
-    subscriptions: Iterable[Subscribe], reason: str = None, send_email: bool = True
+    subscriptions: Iterable[Subscribe],
+    reason: str | None = None,
+    send_email: bool = True,
 ) -> None:
     """same as reject_subscription, but for multiple subscriptions at once"""
     for subscription in subscriptions:

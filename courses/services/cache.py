@@ -51,7 +51,7 @@ def invalidate_course_detail_cache(course_ids: Iterable[int]) -> None:
     transaction.on_commit(lambda: cache.delete_many(keys))
 
 
-def cached(cache_key: str, compute: Callable[[], T], timeout: int) -> T:
+def cached[T](cache_key: str, compute: Callable[[], T], timeout: int) -> T:
     result = cache.get(cache_key)
     if result is not None:
         return result

@@ -5,7 +5,11 @@ from utils import export
 
 
 def table_view_or_export(
-    request: HttpRequest, title: str, url_key: str, data: list, template: str = None
+    request: HttpRequest,
+    title: str,
+    url_key: str,
+    data: list,
+    template: str | None = None,
 ) -> HttpResponse:
     export_format = request.GET.get("format", None)
     if export_format in ["excel", "csv"]:

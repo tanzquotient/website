@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     # Combine dev_overrides and "overrideme"s
     overrides = dev_overrides
-    for key in variables.keys():
+    for key in variables:
         default = 1
         default_value = variables[key][default]
         if default_value == "overrideme":

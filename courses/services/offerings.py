@@ -7,7 +7,7 @@ from django.http import Http404
 from django.utils import dateformat
 from django.utils.translation import gettext as _
 
-from courses import models as models
+from courses import models
 from courses.managers import CourseManager
 from courses.models import (
     Course,

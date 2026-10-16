@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext as _
 from reversion import revisions as reversion
 
-from courses import models as models
+from courses import models
 from courses.managers import SubscribeQuerySet
 from courses.models import Course, LeadFollow, Subscribe
 

@@ -48,4 +48,4 @@ class WebsiteUser(HttpUser):
     @task(weight=3)
     def course_details(self):
         id = randrange(100_650, 100_700)
-        self.client.get("/en/courses/%s/detail/" % id, name="/en/courses/[id]/detail/")
+        self.client.get(f"/en/courses/{id}/detail/", name="/en/courses/[id]/detail/")

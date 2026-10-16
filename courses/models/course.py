@@ -698,7 +698,7 @@ class Course(TranslatableModel):
 
         if self.type.couple_course:
             (
-                matched_count,
+                _matched_count,
                 leads_count,
                 follows_count,
                 no_preference_count,

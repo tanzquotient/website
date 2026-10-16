@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from courses.models import StudentStatus
 
 
-def create_initial_from_user(user: User, initial: dict = None) -> dict:
+def create_initial_from_user(user: User, initial: dict | None = None) -> dict:
     data = initial or {}
 
     data["first_name"] = user.first_name

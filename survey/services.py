@@ -19,7 +19,7 @@ def export_surveys(
     surveys: Iterable[Survey],
     offering: Offering | None = None,
     course: Course | None = None,
-    export_format: str = None,
+    export_format: str | None = None,
     anonymize: bool = True,
 ) -> HttpResponse:
     export_data = {}
@@ -90,7 +90,7 @@ def export_surveys(
 
     if len(export_data.keys()) == 2:  # All + specific (but they are identical
         multiple = False
-        data = list(export_data.values())[0]
+        data = next(iter(export_data.values()))
     else:
         multiple = True
         data = [{"name": k, "data": v} for k, v in export_data.items()]

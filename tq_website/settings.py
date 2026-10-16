@@ -19,7 +19,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 # Load environment if not present
-if "TQ_DEBUG" not in environ.keys():
+if "TQ_DEBUG" not in environ:
     from dotenv import load_dotenv
 
     load_dotenv()

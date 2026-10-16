@@ -5,7 +5,7 @@ import uuid
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from courses import models as models
+from courses import models
 
 
 def update_user(user: User, user_data: dict) -> User:
@@ -20,7 +20,7 @@ def update_user(user: User, user_data: dict) -> User:
     profile = get_or_create_userprofile(user)
 
     # convenience method. if key is not given, assume same as attr
-    def set_if_given(attr: str, key: str = None) -> None:
+    def set_if_given(attr: str, key: str | None = None) -> None:
         if not key:
             key = attr
         if key in user_data:

@@ -5,9 +5,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from courses import models as models
+from courses import models
 from courses.emailcenter import send_teacher_welcome
-from courses.models import choices as choices
+from courses.models import choices
 from email_system.services import send_all_emails
 from tq_website import settings
 

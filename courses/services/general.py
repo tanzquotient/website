@@ -57,7 +57,9 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType,
 
 
 def format_prices(
-    price_with_legi: Number, price_without_legi: Number, price_special: str = None
+    price_with_legi: Number,
+    price_without_legi: Number,
+    price_special: str | None = None,
 ) -> str:
     if price_special:
         return price_special

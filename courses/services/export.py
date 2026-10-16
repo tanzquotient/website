@@ -2,8 +2,8 @@ from collections.abc import Iterable
 
 from django.http import HttpResponse
 
-from courses import models as models
-from courses.admin import VoucherAdmin as VoucherAdmin
+from courses import models
+from courses.admin import VoucherAdmin
 from utils import export
 
 

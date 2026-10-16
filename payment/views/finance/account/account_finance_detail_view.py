@@ -66,18 +66,15 @@ class AccountFinanceDetailView(
         payments = payments.all()
         context["payments"] = payments
         context["total_credit"] = (
-            "%.2f"
-            % sum([p.amount for p in payments if p.credit_debit == CreditDebit.CREDIT])
+            f"{sum([p.amount for p in payments if p.credit_debit == CreditDebit.CREDIT]):.2f}"
         ).replace(
             ".", ","
         )  # replace function after float formatting to have decimal separator for German numbering format
         context["total_debit"] = (
-            "%.2f"
-            % sum([p.amount for p in payments if p.credit_debit == CreditDebit.DEBIT])
+            f"{sum([p.amount for p in payments if p.credit_debit == CreditDebit.DEBIT]):.2f}"
         ).replace(".", ",")
         context["total_unknown"] = (
-            "%.2f"
-            % sum([p.amount for p in payments if p.credit_debit == CreditDebit.UNKNOWN])
+            f"{sum([p.amount for p in payments if p.credit_debit == CreditDebit.UNKNOWN]):.2f}"
         ).replace(".", ",")
 
         # Summary

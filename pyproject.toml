@@ -65,4 +65,10 @@ dev = [
 ]
 
 [tool.ruff.lint]
-extend-safe-fixes = ["C"]
+extend-safe-fixes = [
+    "C",
+    "PLC0414",
+    "RUF",
+    "SIM118",
+    "UP"
+]

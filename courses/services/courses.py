@@ -7,7 +7,6 @@ import reversion
 from django.contrib.auth.models import User
 from post_office.models import EmailTemplate
 
-from courses import models as models
 from courses.models import Course, Voucher
 from courses.services.general import log
 from courses.services.offerings import get_subsequent_offering

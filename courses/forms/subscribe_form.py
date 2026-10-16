@@ -14,7 +14,7 @@ class SubscribeForm(forms.Form):
     experience = forms.CharField(required=False)
     general_terms = forms.BooleanField()
 
-    def __init__(self, user: User, course: Course, data: dict = None) -> None:
+    def __init__(self, user: User, course: Course, data: dict | None = None) -> None:
         super().__init__(data=data)
         self.user = user
         self.course = course
