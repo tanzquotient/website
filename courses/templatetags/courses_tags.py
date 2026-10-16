@@ -72,9 +72,11 @@ def course_lessons_compact(course: Course) -> dict:
     )
 
     regular_lines = [
-        f"{date(first_lesson.start.astimezone(TIME_ZONE), 'D, H:i')} - "
-        f"{date(first_lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
-        f"{format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}",
+        (
+            f"{date(first_lesson.start.astimezone(TIME_ZONE), 'D, H:i')} - "
+            f"{date(first_lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
+            f"{format_period(start=first_lesson.start.date(), end=last_lesson.end.date())}"
+        ),
     ]
 
     if len(lessons) <= len(regular_lines) + len(cancellation_lines):
@@ -95,9 +97,11 @@ def course_lessons_detailed(course: Course) -> dict:
     for lesson in lesson_occurrences:
         lesson: LessonOccurrence
         lines += [
-            f"{date(lesson.start.astimezone(TIME_ZONE), 'D, d. b, H:i')} - "
-            f"{date(lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
-            f"{lesson.room.name}"
+            (
+                f"{date(lesson.start.astimezone(TIME_ZONE), 'D, d. b, H:i')} - "
+                f"{date(lesson.end.astimezone(TIME_ZONE), 'H:i')}, "
+                f"{lesson.room.name}"
+            )
         ]
 
     return {"lines": lines}
