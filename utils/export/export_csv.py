@@ -15,7 +15,7 @@ def write_csv(data, file):
 
 def export_csv(title, data, multiple=False):
     if multiple:
-        files = dict()
+        files = {}
         for count, item in enumerate(data):
             file = StringIO()
             write_csv(item["data"], file)

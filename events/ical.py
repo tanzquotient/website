@@ -58,7 +58,7 @@ class EventFeed(ICalFeed):
         return event.room.name
 
     def item_link(self, event: Event) -> str:
-        return reverse("events:detail", kwargs=dict(event_id=event.id))
+        return reverse("events:detail", kwargs={"event_id": event.id})
 
     def item_guid(self, event: Event) -> str:
         return f"tanzquotient_event_{event.id}"

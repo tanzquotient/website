@@ -89,12 +89,12 @@ def send_presence_reminder() -> None:
             )
 
             emails.append(
-                dict(
-                    to=main_teacher.email,
-                    reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
-                    template="teacher_course_presence_reminder",
-                    context=context,
-                )
+                {
+                    "to": main_teacher.email,
+                    "reply_to": settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                    "template": "teacher_course_presence_reminder",
+                    "context": context,
+                }
             )
 
     log.info(f"Sending {len(emails)} emails")

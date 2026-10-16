@@ -26,24 +26,24 @@ def send_email(
 ) -> Email | None:
     # https://stackoverflow.com/questions/26320899/why-is-the-empty-dictionary-a-dangerous-default-value-in-python
     if headers is None:
-        headers = dict()
+        headers = {}
 
     if reply_to:
         headers[HEADER_REPLY_TO] = reply_to
     elif HEADER_REPLY_TO not in headers:
         headers[HEADER_REPLY_TO] = settings.EMAIL_ADDRESS_CONTACT
 
-    email = dict(
-        recipients=to if isinstance(to, list) else [to],
-        template=template,
-        context=context,
-        sender=sender or settings.DEFAULT_FROM_EMAIL,
-        subject=subject,
-        headers=headers,
-        message=message,
-        html_message=html_message,
-        attachments=attachments,
-    )
+    email = {
+        "recipients": to if isinstance(to, list) else [to],
+        "template": template,
+        "context": context,
+        "sender": sender or settings.DEFAULT_FROM_EMAIL,
+        "subject": subject,
+        "headers": headers,
+        "message": message,
+        "html_message": html_message,
+        "attachments": attachments,
+    }
 
     try:
         return mail.send(**email)

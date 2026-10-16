@@ -9,7 +9,7 @@ log = logging.getLogger("tq")
 
 
 def send_all_emails(emails: Iterable[dict]) -> list[Email]:
-    sent_emails = list()
+    sent_emails = []
     for email in emails:
         sent_email = send_email(**email)
         if sent_email:

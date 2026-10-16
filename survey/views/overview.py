@@ -16,7 +16,7 @@ def overview(request: HttpRequest) -> HttpResponse:
         .order_by("-id")
         .all()
     )
-    context = dict(
-        surveys=surveys,
-    )
+    context = {
+        "surveys": surveys,
+    }
     return render(request, "survey/overview.html", context=context)

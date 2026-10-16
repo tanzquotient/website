@@ -120,7 +120,7 @@ def course_list_context(
 @cache_page(60 * 60)
 def archive(request: HttpRequest) -> HttpResponse:
     template_name = "courses/archive.html"
-    context = dict()
+    context = {}
     return render(request, template_name, context)
 
 
@@ -243,7 +243,7 @@ def _lesson_to_ical_event(
         "url",
         add_domain(
             get_current_site(request),
-            reverse("courses:course_detail", kwargs=dict(course_id=course.id)),
+            reverse("courses:course_detail", kwargs={"course_id": course.id}),
             request.is_secure(),
         ),
     )
@@ -274,7 +274,7 @@ def _event_to_ical_event(event: EventModel, request: HttpRequest) -> Event:
         "url",
         add_domain(
             get_current_site(request),
-            reverse("events:detail", kwargs=dict(event_id=event.id)),
+            reverse("events:detail", kwargs={"event_id": event.id}),
             request.is_secure(),
         ),
     )
@@ -322,10 +322,10 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
         return render(
             request,
             "courses/overdue_payments.html",
-            dict(
-                email_address=settings.EMAIL_ADDRESS_FINANCES,
-                payment_account=settings.PAYMENT_ACCOUNT["default"],
-            ),
+            {
+                "email_address": settings.EMAIL_ADDRESS_FINANCES,
+                "payment_account": settings.PAYMENT_ACCOUNT["default"],
+            },
         )
 
     # Get form
@@ -358,7 +358,7 @@ def subscribe_form(request: HttpRequest, course_id: int) -> HttpResponse:
             continue
         partners_set.add((partner.get_full_name(), partner.email))
 
-    past_partners = sorted(list(partners_set))
+    past_partners = sorted(partners_set)
 
     context = {
         "course": course,
@@ -389,7 +389,7 @@ def duplicate_users(request: HttpRequest) -> HttpResponse:
     template_name = "courses/duplicate_users.html"
     context = {}
     users = []
-    user_aliases = dict()
+    user_aliases = {}
 
     # if this is a POST request we need to process the form data
     if (
@@ -398,7 +398,7 @@ def duplicate_users(request: HttpRequest) -> HttpResponse:
         and request.POST["post"] == "yes"
     ):
         duplicates_ids = request.session["duplicates"]
-        to_merge = dict()
+        to_merge = {}
         for primary_id, aliases_ids in duplicates_ids.items():
             to_merge_aliases = []
             for alias_id in aliases_ids:
@@ -471,36 +471,40 @@ def teachers_overview(request: HttpRequest) -> HttpResponse:
 
 @staff_member_required
 def subscription_overview(request: HttpRequest) -> HttpResponse:
-    figure_types = dict(
-        status=dict(
-            title=_("By subscription status"), plot=figures.offering_state_status
-        ),
-        affiliation=dict(
-            title=_("By affiliation"), plot=figures.offering_by_student_status
-        ),
-        matching=dict(
-            title=_("By matching states"), plot=figures.offering_matching_status
-        ),
-        lead_follow=dict(
-            title=_("By lead and follow"), plot=figures.offering_lead_follow_couple
-        ),
-    )
+    figure_types = {
+        "status": {
+            "title": _("By subscription status"),
+            "plot": figures.offering_state_status,
+        },
+        "affiliation": {
+            "title": _("By affiliation"),
+            "plot": figures.offering_by_student_status,
+        },
+        "matching": {
+            "title": _("By matching states"),
+            "plot": figures.offering_matching_status,
+        },
+        "lead_follow": {
+            "title": _("By lead and follow"),
+            "plot": figures.offering_lead_follow_couple,
+        },
+    }
     figure_type: str = (
         request.GET["figure_type"] if "figure_type" in request.GET else "status"
     )
     return render(
         request,
         "courses/auth/subscription_overview.html",
-        dict(
-            figure_type=figure_type,
-            figure_types=[(k, v["title"]) for k, v in figure_types.items()],
-            plots={
+        {
+            "figure_type": figure_type,
+            "figure_types": [(k, v["title"]) for k, v in figure_types.items()],
+            "plots": {
                 offering_type: plot_figure(
                     figure_types[figure_type]["plot"](offering_type)
                 )
                 for offering_type in [OfferingType.REGULAR, OfferingType.IRREGULAR]
             },
-        ),
+        },
     )
 
 

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 def find_duplicate_users():
     """find duplicates for all users in the system"""
-    duplicates = dict()
+    duplicates = {}
     done = set()
     for user in User.objects.all():
         if user.id not in done:

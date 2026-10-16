@@ -40,12 +40,12 @@ def offering_finance_teachers(
     return (
         export_name,
         [
-            dict(data=courses, name="Courses"),
-            dict(data=teachers_completed, name="Teachers Summary"),
-            dict(data=teachings_completed, name="Teachers by Course"),
-            dict(data=personal_details, name="Personal Data"),
-            dict(data=teachers_tentative, name="[Tentative] Teachers Summary"),
-            dict(data=teachings_tentative, name="[Tentative] Teachers by course"),
+            {"data": courses, "name": "Courses"},
+            {"data": teachers_completed, "name": "Teachers Summary"},
+            {"data": teachings_completed, "name": "Teachers by Course"},
+            {"data": personal_details, "name": "Personal Data"},
+            {"data": teachers_tentative, "name": "[Tentative] Teachers Summary"},
+            {"data": teachings_tentative, "name": "[Tentative] Teachers by course"},
         ],
     )
 
@@ -110,7 +110,7 @@ def _courses(offerings: Sequence[Offering], use_html: bool = False) -> list:
             [""] * (len(header) - 1)
             + [
                 mark_safe(
-                    f"<button {'data-course-without-teachers=true' if any([c.lesson_occurrences.without_teachers().exists() for c in course_list]) else ''} data-course-id='all' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark all as completed')}</button>"
+                    f"<button {'data-course-without-teachers=true' if any(c.lesson_occurrences.without_teachers().exists() for c in course_list) else ''} data-course-id='all' class='btn btn-secondary btn-sm btn-completed'><i class='bi bi-person-fill-lock'></i> {_('Mark all as completed')}</button>"
                 )
             ]
         )
@@ -182,7 +182,7 @@ def _get_num_teachers_per_lesson(course: Course) -> list[str]:
     # count how many lessons with a certain number of teachers
     teachers_per_lesson = [l.teachers.count() for l in course.lesson_occurrences.all()]
 
-    lessons_for_x_teachers = dict()
+    lessons_for_x_teachers = {}
     teachers_number_text = []
     for num_teachers in sorted(teachers_per_lesson):
         lessons_for_x_teachers[num_teachers] = (
@@ -317,7 +317,7 @@ def _teachings(
 
 def _teachers(offerings: Sequence[Offering], only_completed: bool = True) -> list:
     all_completed = all(
-        [course.completed for course in Course.objects.filter(offering__in=offerings)]
+        course.completed for course in Course.objects.filter(offering__in=offerings)
     )
 
     if only_completed and not all_completed:

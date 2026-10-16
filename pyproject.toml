@@ -63,3 +63,6 @@ dev = [
     "ruff==0.17.1",
     "pre-commit>=4.6.0",
 ]
+
+[tool.ruff.lint]
+extend-safe-fixes = ["C"]

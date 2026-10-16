@@ -62,12 +62,14 @@ def send_unexcused_absences_emails() -> None:
         }
 
         emails.append(
-            dict(
-                to=user.email,
-                reply_to=getattr(settings, "EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS", None),
-                template=email_template,
-                context=context,
-            )
+            {
+                "to": user.email,
+                "reply_to": getattr(
+                    settings, "EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS", None
+                ),
+                "template": email_template,
+                "context": context,
+            }
         )
 
     log.info(f"Sending {len(emails)} unexcused absence emails")

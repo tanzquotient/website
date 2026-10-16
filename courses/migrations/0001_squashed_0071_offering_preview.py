@@ -1815,19 +1815,19 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="styletranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="roomtranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="coursetypetranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="coursetranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.RunPython(
             code=migrate_untranslated_style,

@@ -21,7 +21,7 @@ def get_teachers_overview_data() -> list[list]:
         + list(years)
         + [_("Total years"), _("Total hours")]
     )
-    teachers_data = dict()
+    teachers_data = {}
     for l in lesson_occurrences:
         if l.course.is_external():
             continue

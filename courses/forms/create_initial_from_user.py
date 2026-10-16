@@ -4,7 +4,7 @@ from courses.models import StudentStatus
 
 
 def create_initial_from_user(user: User, initial: dict = None) -> dict:
-    data = initial or dict()
+    data = initial or {}
 
     data["first_name"] = user.first_name
     data["last_name"] = user.last_name

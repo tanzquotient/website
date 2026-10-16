@@ -15,9 +15,11 @@ def create_qrbill_for_subscription(subscribe: Subscribe) -> QRBill:
     postal_code, city = payment_account["postal_code_and_city"].split(" ")
     return QRBill(
         account=payment_account["IBAN"],
-        creditor=dict(
-            name=payment_account["recipient_name"], pcode=postal_code, city=city
-        ),
+        creditor={
+            "name": payment_account["recipient_name"],
+            "pcode": postal_code,
+            "city": city,
+        },
         amount=str(subscribe.open_amount()),
         additional_information=f"USI-{subscribe.usi}",
         top_line=False,

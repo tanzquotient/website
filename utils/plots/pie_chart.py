@@ -16,16 +16,16 @@ def pie_chart(values: list[Any], labels: list[Any]) -> Figure:
         ],
         layout=Layout(
             height=300,
-            margin=dict(
-                l=0,
-                r=0,
-                t=0,
-                b=0,
-                pad=10,
-            ),
+            margin={
+                "l": 0,
+                "r": 0,
+                "t": 0,
+                "b": 0,
+                "pad": 10,
+            },
             hovermode="y",
             dragmode=False,
-            xaxis=dict(fixedrange=True),
-            yaxis=dict(fixedrange=True),
+            xaxis={"fixedrange": True},
+            yaxis={"fixedrange": True},
         ),
     )

@@ -206,10 +206,8 @@ class Subscribe(Model):
             self.state = (
                 SubscribeState.NEW
                 if all(
-                    [
-                        self.course.has_free_places_for(lead_or_follow=lead_follow)
-                        for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
-                    ]
+                    self.course.has_free_places_for(lead_or_follow=lead_follow)
+                    for lead_follow in [LeadFollow.LEAD, LeadFollow.FOLLOW]
                 )
                 else SubscribeState.WAITING_LIST
             )

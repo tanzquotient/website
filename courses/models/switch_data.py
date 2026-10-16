@@ -46,4 +46,4 @@ class SwitchData(models.Model):
         verbose_name_plural = "switch data"
 
     def is_student(self) -> bool:
-        return any([a.is_student_affiliation() for a in self.affiliations.all()])
+        return any(a.is_student_affiliation() for a in self.affiliations.all())

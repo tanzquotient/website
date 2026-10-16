@@ -104,11 +104,11 @@ def offering_finance_revenue(request: HttpRequest, offering_id: int) -> HttpResp
     return render(
         request,
         "finance/offering/revenue/index.html",
-        dict(
-            title=_("Revenue overview"),
-            active="revenue",
-            url_key="payment:offering_revenue",
-            data=get_data(offering),
-            offering=offering,
-        ),
+        {
+            "title": _("Revenue overview"),
+            "active": "revenue",
+            "url_key": "payment:offering_revenue",
+            "data": get_data(offering),
+            "offering": offering,
+        },
     )

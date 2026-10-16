@@ -16,15 +16,15 @@ class TqStorage(S3Boto3Storage):
         file_overwrite=True,
         querystring_auth=True,
     ) -> None:
-        config = dict(
-            use_ssl=use_ssl,
-            url_protocol="https:" if use_ssl else "http:",
-            access_key=access_key,
-            secret_key=secret_key,
-            region_name=region,
-            querystring_auth=querystring_auth,
-            file_overwrite=file_overwrite,
-        )
+        config = {
+            "use_ssl": use_ssl,
+            "url_protocol": "https:" if use_ssl else "http:",
+            "access_key": access_key,
+            "secret_key": secret_key,
+            "region_name": region,
+            "querystring_auth": querystring_auth,
+            "file_overwrite": file_overwrite,
+        }
         if custom_domain:
             config["custom_domain"] = custom_domain.format(bucket_name)
         else:

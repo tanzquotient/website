@@ -55,5 +55,5 @@ def changed_answers(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "survey/changed_answers.html",
-        context=dict(changed_answers=changed_answers),
+        context={"changed_answers": changed_answers},
     )

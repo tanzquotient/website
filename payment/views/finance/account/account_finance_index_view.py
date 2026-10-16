@@ -14,7 +14,7 @@ class AccountFinanceIndexView(PermissionRequiredMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         payments = Payment.objects.all()
-        years = sorted(set(p.date.year for p in payments))
+        years = sorted({p.date.year for p in payments})
         kwargs.update({"years": years})
         return kwargs
 

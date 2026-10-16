@@ -85,14 +85,14 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 html_message = html_message or email_template.html_content
 
             emails.append(
-                dict(
-                    to=recipient.email,
-                    reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
-                    subject=subject,
-                    message=message,
-                    html_message=html_message,
-                    context=context,
-                )
+                {
+                    "to": recipient.email,
+                    "reply_to": settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+                    "subject": subject,
+                    "message": message,
+                    "html_message": html_message,
+                    "context": context,
+                }
             )
 
     log.info(f"Sending {len(emails)} emails")
@@ -150,13 +150,13 @@ def email_vouchers(data: dict, vouchers: list[Voucher]):
         }
 
         emails.append(
-            dict(
-                to=voucher.sent_to.email,
-                reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
-                template="voucher",
-                context=email_context,
-                attachments={"Voucher.pdf": voucher.pdf_file.file},
-            )
+            {
+                "to": voucher.sent_to.email,
+                "reply_to": settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+                "template": "voucher",
+                "context": email_context,
+                "attachments": {"Voucher.pdf": voucher.pdf_file.file},
+            }
         )
 
     log.info(f"Sending {len(emails)} emails")

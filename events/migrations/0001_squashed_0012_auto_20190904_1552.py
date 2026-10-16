@@ -332,7 +332,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="eventtranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.RunPython(
             code=migrate_untranslated,

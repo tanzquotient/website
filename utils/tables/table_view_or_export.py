@@ -14,5 +14,5 @@ def table_view_or_export(
     return render(
         request,
         template or "snippets/table_view_and_export.html",
-        dict(title=title, url_key=url_key, data=data),
+        {"title": title, "url_key": url_key, "data": data},
     )

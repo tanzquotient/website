@@ -28,5 +28,5 @@ def overview_as_teacher(request: HttpRequest) -> HttpResponse:
         ),
     )
     return render(
-        request, "survey/overview_as_teacher.html", context=dict(courses=courses)
+        request, "survey/overview_as_teacher.html", context={"courses": courses}
     )

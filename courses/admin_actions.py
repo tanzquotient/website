@@ -106,12 +106,12 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
                 to=teacher.email,
                 reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
                 template="teacher_course_cancelled",
-                context=dict(
-                    first_name=teacher.first_name,
-                    last_name=teacher.last_name,
-                    course=c.type.title,
-                    course_info=create_course_info(c),
-                ),
+                context={
+                    "first_name": teacher.first_name,
+                    "last_name": teacher.last_name,
+                    "course": c.type.title,
+                    "course_info": create_course_info(c),
+                },
             )
         send_email(
             to=[
@@ -121,10 +121,10 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
             ],
             reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
             template="internal_course_cancelled",
-            context=dict(
-                course=c.type.title,
-                course_info=create_course_info(c),
-            ),
+            context={
+                "course": c.type.title,
+                "course_info": create_course_info(c),
+            },
         )
 
 
@@ -450,7 +450,7 @@ def send_vouchers_for_subscriptions(modeladmin, request, queryset):
         form = CreateSendVoucherForm(
             initial={
                 "_selected_action": map(str, queryset.values_list("id", flat=True)),
-                "voucher_comment": f"Sent to subscriptions to: {', '.join(list(set([subscription.course.name for subscription in queryset])))}",
+                "voucher_comment": f"Sent to subscriptions to: {', '.join(list({subscription.course.name for subscription in queryset}))}",
             }
         )
 

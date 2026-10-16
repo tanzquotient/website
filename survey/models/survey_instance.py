@@ -77,7 +77,7 @@ class SurveyInstance(Model):
     def create_url(self) -> str:
         return reverse(
             "survey:survey_with_key",
-            kwargs=dict(survey_id=self.survey.id, url_key=self.url_key),
+            kwargs={"survey_id": self.survey.id, "url_key": self.url_key},
         )
 
     def create_full_url(self) -> str:

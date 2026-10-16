@@ -328,19 +328,19 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="surveytranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="questiontranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="questiongrouptranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.AlterUniqueTogether(
             name="choicetranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.CreateModel(
             name="SurveyInstance",
@@ -582,7 +582,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="scaletemplatetranslation",
-            unique_together=set([("language_code", "master")]),
+            unique_together={("language_code", "master")},
         ),
         migrations.RemoveField(
             model_name="answer",
@@ -634,7 +634,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="questiongroup",
-            unique_together=set([("name", "survey")]),
+            unique_together={("name", "survey")},
         ),
         migrations.AlterField(
             model_name="question",
@@ -643,7 +643,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="question",
-            unique_together=set([("name", "question_group")]),
+            unique_together={("name", "question_group")},
         ),
         migrations.AlterField(
             model_name="question",

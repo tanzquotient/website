@@ -10,4 +10,4 @@ def teachers_table(offering: Offering):
     from payment import services
 
     _, data = services.offering_finance_teachers([offering], use_html=True)
-    return dict(data=data)
+    return {"data": data}

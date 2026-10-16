@@ -54,7 +54,7 @@ def course_lessons_compact(course: Course) -> dict:
     same_end_time = len({l.end.astimezone(TIME_ZONE).time() for l in lessons}) == 1
     is_regular = same_weekday and same_start_time and same_end_time
     if len(lessons) < 3 or not is_regular:
-        return dict(lines=[format_duration(l.start, l.end) for l in lessons])
+        return {"lines": [format_duration(l.start, l.end) for l in lessons]}
 
     last_lesson = lessons[-1]
     first_lesson = lessons[0]
@@ -78,9 +78,9 @@ def course_lessons_compact(course: Course) -> dict:
     ]
 
     if len(lessons) <= len(regular_lines) + len(cancellation_lines):
-        return dict(lines=[format_duration(l.start, l.end) for l in lessons])
+        return {"lines": [format_duration(l.start, l.end) for l in lessons]}
 
-    return dict(lines=regular_lines + cancellation_lines)
+    return {"lines": regular_lines + cancellation_lines}
 
 
 @register.inclusion_tag(
@@ -100,7 +100,7 @@ def course_lessons_detailed(course: Course) -> dict:
             f"{lesson.room.name}"
         ]
 
-    return dict(lines=lines)
+    return {"lines": lines}
 
 
 @register.inclusion_tag(filename="courses/plugins/next_lessons/index.html")
@@ -148,11 +148,11 @@ def format_date(value: dt.date) -> str:
 @register.inclusion_tag(filename="courses/snippets/offerings_list.html")
 def offerings_list(detail_url: str, only_public: bool = True) -> dict:
     offering_types = [OfferingType.REGULAR, OfferingType.IRREGULAR]
-    return dict(
-        detail_url=detail_url,
-        offerings=get_offerings_by_year(offering_types, only_public),
-        offering_types=offering_types,
-    )
+    return {
+        "detail_url": detail_url,
+        "offerings": get_offerings_by_year(offering_types, only_public),
+        "offering_types": offering_types,
+    }
 
 
 @register.inclusion_tag(filename="courses/snippets/course_reviews.html")
@@ -166,12 +166,14 @@ def course_reviews(course: Course, user: User, request: HttpRequest) -> dict:
         teachers_answers = Answer.objects.exclude(
             survey_instance__course__type=course.type,
         ).filter(survey_instance__course__teaching__teacher__in=course_teachers)
-        return dict(
-            course_reviews=course_reviews_for_queryset(course_answers, course_teachers),
-            teachers_reviews=course_reviews_for_queryset(
+        return {
+            "course_reviews": course_reviews_for_queryset(
+                course_answers, course_teachers
+            ),
+            "teachers_reviews": course_reviews_for_queryset(
                 teachers_answers, course_teachers
             ),
-        )
+        }
 
     cache_key = make_template_fragment_key(
         "course_reviews_data", [course.id, get_language()]
@@ -207,11 +209,11 @@ def course_reviews_for_queryset(
     )
 
     return [
-        dict(
-            text=answer.value,
-            date=answer.survey_instance.last_update,
-            course=answer.survey_instance.course,
-        )
+        {
+            "text": answer.value,
+            "date": answer.survey_instance.last_update,
+            "course": answer.survey_instance.course,
+        }
         for answer in text_answers
     ]
 
@@ -485,15 +487,15 @@ def lead_follow_selector(
     context: dict, show_waiting_list: bool, course: Course
 ) -> dict:
     context.update(
-        dict(
-            leaders_waiting_list=show_waiting_list
+        {
+            "leaders_waiting_list": show_waiting_list
             and not course.has_free_places_for_leaders,
-            no_preference_waiting_list=show_waiting_list
+            "no_preference_waiting_list": show_waiting_list
             and not course.has_free_places_for_leaders
             and not course.has_free_places_for_followers,
-            followers_waiting_list=show_waiting_list
+            "followers_waiting_list": show_waiting_list
             and not course.has_free_places_for_followers,
-        )
+        }
     )
     return context
 

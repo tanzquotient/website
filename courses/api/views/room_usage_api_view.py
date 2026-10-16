@@ -57,7 +57,7 @@ class RoomUsageApiView(APIView):
             )
 
         rooms_qs = Room.objects.filter(pk__in=room_ids_int)
-        found_ids = set(r.id for r in rooms_qs)
+        found_ids = {r.id for r in rooms_qs}
         if len(found_ids) != len(set(room_ids_int)):
             return Response(
                 {"detail": "one or more room_id values not found"},

@@ -55,17 +55,17 @@ def _send_student_status_emails(template_name: str, student_validity: date) -> N
         profile_url_en = f"https://{settings.DEPLOYMENT_DOMAIN}{reverse('profile')}"
 
     emails = [
-        dict(
-            to=profile.user.email,
-            reply_to=settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
-            template=email_template,
-            context={
+        {
+            "to": profile.user.email,
+            "reply_to": settings.EMAIL_ADDRESS_COURSE_SUBSCRIPTIONS,
+            "template": email_template,
+            "context": {
                 "first_name": profile.user.first_name,
                 "valid_until": student_validity.strftime("%d.%m.%Y"),
                 "profile_url_de": profile_url_de,
                 "profile_url_en": profile_url_en,
             },
-        )
+        }
         for profile in profiles
         if profile.user.email
     ]

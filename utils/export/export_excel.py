@@ -12,7 +12,7 @@ def export_excel(title, data, has_column_headings=True, multiple=False):
     workbook = Workbook()
 
     if multiple:
-        sheets = dict()
+        sheets = {}
         workbook.remove_sheet(workbook.active)
         for item in data:
             sheet_title = clean_filename(item["name"])[:30]

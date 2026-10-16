@@ -28,7 +28,7 @@ class MyNextLessonsPlugin(CMSPluginBase):
 
     @staticmethod
     def create_context(user, initial_context: dict = None) -> dict:
-        context = initial_context or dict()
+        context = initial_context or {}
         now = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         if not user.is_authenticated:
             return context

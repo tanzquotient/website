@@ -81,13 +81,13 @@ def send_group_email(group_email: GroupEmail) -> None:
 
             # Add email
             emails.append(
-                dict(
-                    to=user.email,
-                    subject=subject,
-                    headers=headers,
-                    html_message=html_message,
-                    context=context,
-                )
+                {
+                    "to": user.email,
+                    "subject": subject,
+                    "headers": headers,
+                    "html_message": html_message,
+                    "context": context,
+                }
             )
 
         sent_emails = send_all_emails(emails)

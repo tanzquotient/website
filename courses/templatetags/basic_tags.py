@@ -16,7 +16,7 @@ def fence(value, s):
     if isinstance(value, str):
         return fence_helper(value, s)
     elif isinstance(value, list):
-        return map(lambda v: fence_helper(v, s), value)
+        return (fence_helper(v, s) for v in value)
     else:
         return fence_helper(str(value), s)
 

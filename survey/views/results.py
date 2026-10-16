@@ -73,13 +73,13 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     elif selected_offering:
         survey_instances = survey_instances.filter(course__offering=selected_offering)
 
-    context = dict(
-        survey=survey,
-        offerings=offerings,
-        courses=courses,
-        selected_offering=selected_offering,
-        selected_course=selected_course,
-        survey_instances=survey_instances,
-        answers_count=survey_instances.filter(is_completed=True).count(),
-    )
+    context = {
+        "survey": survey,
+        "offerings": offerings,
+        "courses": courses,
+        "selected_offering": selected_offering,
+        "selected_course": selected_course,
+        "survey_instances": survey_instances,
+        "answers_count": survey_instances.filter(is_completed=True).count(),
+    }
     return render(request, "survey/results.html", context=context)

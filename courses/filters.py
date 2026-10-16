@@ -27,7 +27,7 @@ class SubscribeCourseListFilter(SimpleListFilter):
     parameter_name = "course"
 
     def lookups(self, request: HttpRequest, model_admin) -> list[tuple[int, str]]:
-        offering_id = (request.GET or dict()).get("offering")
+        offering_id = (request.GET or {}).get("offering")
         if not offering_id:
             return []
 

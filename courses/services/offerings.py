@@ -91,7 +91,7 @@ def get_sections(offering, course_filter=None):
             [c for c in course_set.all() if course_filter(c)],
             key=course_sort_key,
         )
-        offering_sections.append(dict(courses=courses))
+        offering_sections.append({"courses": courses})
     elif offering.type == OfferingType.REGULAR:
         all_courses = list(course_set.all())
         for w, w_name in Weekday.CHOICES:

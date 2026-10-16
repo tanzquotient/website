@@ -49,16 +49,16 @@ def subscription_payment_view(request: HttpRequest, usi: str):
     card_gross = compute_gross(subscription, "card")
     twint_gross = compute_gross(subscription, "twint")
 
-    context = dict(
-        subscription=subscription,
-        voucher_form=voucher_form,
-        voucher_for_remainder=voucher_for_remainder,
-        voucher_applied=voucher_applied,
-        payment_account=settings.PAYMENT_ACCOUNT["default"],
-        payrexx_card_amount=card_gross,
-        payrexx_card_fee=card_gross - net,
-        payrexx_twint_amount=twint_gross,
-        payrexx_twint_fee=twint_gross - net,
-    )
+    context = {
+        "subscription": subscription,
+        "voucher_form": voucher_form,
+        "voucher_for_remainder": voucher_for_remainder,
+        "voucher_applied": voucher_applied,
+        "payment_account": settings.PAYMENT_ACCOUNT["default"],
+        "payrexx_card_amount": card_gross,
+        "payrexx_card_fee": card_gross - net,
+        "payrexx_twint_amount": twint_gross,
+        "payrexx_twint_fee": twint_gross - net,
+    }
 
     return render(request, "payment/subscription/index.html", context)

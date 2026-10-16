@@ -93,7 +93,7 @@ def export_surveys(
         data = list(export_data.values())[0]
     else:
         multiple = True
-        data = [dict(name=k, data=v) for k, v in export_data.items()]
+        data = [{"name": k, "data": v} for k, v in export_data.items()]
 
     return export(
         export_format=export_format,
@@ -179,12 +179,12 @@ def send_course_surveys() -> None:
                     )
 
                     emails.append(
-                        dict(
-                            to=recipient.email,
-                            reply_to=settings.EMAIL_ADDRESS_DANCE_ADMIN,
-                            template=email_template,
-                            context=context,
-                        )
+                        {
+                            "to": recipient.email,
+                            "reply_to": settings.EMAIL_ADDRESS_DANCE_ADMIN,
+                            "template": email_template,
+                            "context": context,
+                        }
                     )
 
                     if len(emails) >= BATCH_SIZE:

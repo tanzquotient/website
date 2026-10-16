@@ -26,7 +26,7 @@ def write_vcard(data, file):
 
 def export_vcard(title, data, multiple=False):
     if multiple:
-        files = dict()
+        files = {}
         for count, item in enumerate(data):
             file = StringIO()
             write_vcard(item["data"], file)

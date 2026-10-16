@@ -20,16 +20,16 @@ def bar_chart(values: list[Any], labels: list[str]) -> Figure:
         ],
         layout=Layout(
             height=len(values) * 30,
-            margin=dict(
-                l=0,
-                r=0,
-                t=0,
-                b=0,
-                pad=10,
-            ),
+            margin={
+                "l": 0,
+                "r": 0,
+                "t": 0,
+                "b": 0,
+                "pad": 10,
+            },
             hovermode="y",
             dragmode=False,
-            xaxis=dict(fixedrange=True),
-            yaxis=dict(fixedrange=True),
+            xaxis={"fixedrange": True},
+            yaxis={"fixedrange": True},
         ),
     )

@@ -8,6 +8,4 @@ register = template.Library()
 
 @register.inclusion_tag(filename="qrbill/qrbill.html")
 def qrbill_for_subscription(subscribe: Subscribe, qr_only: bool = False):
-    return dict(
-        qrbill=to_svg_string(create_qrbill_for_subscription(subscribe), qr_only)
-    )
+    return {"qrbill": to_svg_string(create_qrbill_for_subscription(subscribe), qr_only)}

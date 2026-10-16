@@ -32,9 +32,9 @@ class RegularLesson(models.Model):
             {c.date for c in course_room.cancellations.all()} if course_room else set()
         )
 
-        all_dates_in_period = map(
-            lambda offset: period.date_from + timedelta(days=offset),
-            range((period.date_to - period.date_from).days + 1),
+        all_dates_in_period = (
+            period.date_from + timedelta(days=offset)
+            for offset in range((period.date_to - period.date_from).days + 1)
         )
 
         def has_date_a_lesson(d: date) -> bool:
@@ -79,7 +79,7 @@ class RegularLesson(models.Model):
         return lesson_occurrences
 
     def get_total_time(self) -> timedelta:
-        return reduce(operator.add, map(lambda l: l.duration, self.get_occurrences()))
+        return reduce(operator.add, (l.duration for l in self.get_occurrences()))
 
     def __str__(self) -> str:
         return (

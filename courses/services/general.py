@@ -38,10 +38,8 @@ def calculate_relevant_experience(self: Subscribe) -> Iterable[tuple[CourseType,
                 for subscription in self.user.subscriptions.all()
                 if subscription.state in SubscribeState.ACCEPTED_STATES
                 and any(
-                    [
-                        style.id in relevant_exp
-                        for style in subscription.course.type.styles.all()
-                    ]
+                    style.id in relevant_exp
+                    for style in subscription.course.type.styles.all()
                 )
             ]
         )
