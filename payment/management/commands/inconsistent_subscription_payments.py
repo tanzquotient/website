@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 for sp in p.subscription_payments.all():
                     s = sp.subscription
                     if not s.paymentmethod:
-                        msg_method.append("{} - {} - {}".format(s.id, s.usi, s))
+                        msg_method.append(f"{s.id} - {s.usi} - {s}")
                     if s.sum_of_payments() != s.price_after_reductions():
                         msg_amount.append(
                             f"{s.id} - {s.usi} - {s}: "

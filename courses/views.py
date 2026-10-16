@@ -2,7 +2,7 @@ import hashlib
 import json
 import logging
 import os
-from datetime import timedelta, timezone
+from datetime import UTC, timedelta
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import update_session_auth_hash
@@ -202,8 +202,8 @@ def _lesson_to_ical_event(
     subscription: Subscribe = None,
 ):
     event = Event()
-    event["dtstart"] = vDatetime(lesson_occurrence.start.astimezone(timezone.utc))
-    event["dtend"] = vDatetime(lesson_occurrence.end.astimezone(timezone.utc))
+    event["dtstart"] = vDatetime(lesson_occurrence.start.astimezone(UTC))
+    event["dtend"] = vDatetime(lesson_occurrence.end.astimezone(UTC))
 
     course_title = course.type.title
     event_title = course_title
@@ -264,8 +264,8 @@ def _lesson_to_ical_event(
 
 def _event_to_ical_event(event: EventModel, request: HttpRequest) -> Event:
     calendar_event = Event()
-    calendar_event["dtstart"] = vDatetime(event.start.astimezone(timezone.utc))
-    calendar_event["dtend"] = vDatetime(event.end.astimezone(timezone.utc))
+    calendar_event["dtstart"] = vDatetime(event.start.astimezone(UTC))
+    calendar_event["dtend"] = vDatetime(event.end.astimezone(UTC))
 
     calendar_event.add("summary", vText(event.name))
     if event.room:
@@ -402,7 +402,7 @@ def duplicate_users(request: HttpRequest) -> HttpResponse:
         for primary_id, aliases_ids in duplicates_ids.items():
             to_merge_aliases = []
             for alias_id in aliases_ids:
-                key = "{}-{}".format(primary_id, alias_id)
+                key = f"{primary_id}-{alias_id}"
                 if key in request.POST and request.POST[key] == "yes":
                     to_merge_aliases.append(alias_id)
             if to_merge_aliases:
@@ -669,7 +669,7 @@ class ProfileView(FormView):
 
     def get_context_data(self, **kwargs) -> dict:
         # Call the base implementation first to get a context
-        context = super(ProfileView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         user = self.request.user
         context["is_teacher"] = user.profile.is_teacher()
@@ -684,7 +684,7 @@ class ProfileView(FormView):
     def form_valid(self, form) -> HttpResponse:
         services.update_user(self.request.user, form.cleaned_data)
         self.request.session.pop(PROFILE_REVIEW_SESSION_KEY, None)
-        return super(ProfileView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 @login_required

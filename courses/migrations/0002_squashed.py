@@ -290,7 +290,7 @@ class Migration(migrations.Migration):
             field=models.DecimalField(
                 blank=True,
                 decimal_places=2,
-                default=Decimal("35"),
+                default=Decimal(35),
                 max_digits=6,
                 null=True,
             ),
@@ -301,7 +301,7 @@ class Migration(migrations.Migration):
             field=models.DecimalField(
                 blank=True,
                 decimal_places=2,
-                default=Decimal("70"),
+                default=Decimal(70),
                 max_digits=6,
                 null=True,
             ),
@@ -378,7 +378,7 @@ class Migration(migrations.Migration):
             name="default_hourly_wage",
             field=models.DecimalField(
                 decimal_places=2,
-                default=Decimal("30"),
+                default=Decimal(30),
                 help_text="The default hourly wage, which serves as a preset value for taught courses. ",
                 max_digits=6,
             ),

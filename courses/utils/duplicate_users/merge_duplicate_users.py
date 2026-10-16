@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from django.contrib.auth.models import User
 
@@ -20,7 +20,7 @@ def merge_duplicate_users(to_merge) -> None:
         )
         user.save()
 
-        log.info("Merging {}".format(user))
+        log.info(f"Merging {user}")
 
         profile = user.profile
         profile.legi = _get_value_from_most_recent_alias_profile(
@@ -103,9 +103,7 @@ def merge_duplicate_users(to_merge) -> None:
             alias.delete()
 
 
-def _get_value_from_most_recent_alias_profile(
-    alias_ids, profile, field
-) -> Optional[Any]:
+def _get_value_from_most_recent_alias_profile(alias_ids, profile, field) -> Any | None:
     from courses.models import UserProfile
 
     value = getattr(profile, field)

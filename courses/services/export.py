@@ -1,4 +1,4 @@
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from django.http import HttpResponse
 
@@ -9,7 +9,7 @@ from utils import export
 
 def export_subscriptions(
     course_ids: Iterable[int], export_format: str
-) -> Optional[HttpResponse]:
+) -> HttpResponse | None:
     export_data = []
     for course_id in course_ids:
         course = models.Course.objects.get(id=course_id)
@@ -77,7 +77,7 @@ def export_subscriptions(
         course_name = export_data[0]["name"]
         return export(
             export_format,
-            title="Kursteilnehmer-{}".format(course_name),
+            title=f"Kursteilnehmer-{course_name}",
             data=export_data[0]["data"],
         )
 
@@ -133,7 +133,7 @@ def export_teacher_payment_information(export_format: str = "csv", offerings=Non
 
 def export_vouchers(
     voucher_keys: Iterable[int], export_format: str = "csv"
-) -> Optional[HttpResponse]:
+) -> HttpResponse | None:
     vouchers = []
     for key in voucher_keys:
         vouchers.append(models.Voucher.objects.get(key=key))

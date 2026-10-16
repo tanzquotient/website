@@ -12,7 +12,7 @@ class CoursePaymentDetailView(TemplateView, TeacherOfCourseOnly):
     def get_context_data(self, **kwargs):
         course = Course.objects.filter(id=kwargs["course"]).first()
 
-        context = super(CoursePaymentDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["course"] = course
         context["description_de"] = course.safe_translation_getter(
             "description", language_code="de"

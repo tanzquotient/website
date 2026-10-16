@@ -10,7 +10,7 @@ log = logging.getLogger("tq")
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        log.info("run management command: {}".format(__file__))
+        log.info(f"run management command: {__file__}")
         print(
             "the following subscriptions have the incorrect state CONFIRMED eventhough there is a valid subscription payment entry:"
         )
@@ -19,7 +19,7 @@ class Command(BaseCommand):
             s = sp.subscription
             if s.state == SubscribeState.CONFIRMED and s.open_amount().is_zero():
                 count += 1
-                print("{} - {} - {}".format(s.id, s.usi, s))
+                print(f"{s.id} - {s.usi} - {s}")
                 s.state = SubscribeState.PAID
                 s.save()
-        print("TOTAL fixed: {}".format(count))
+        print(f"TOTAL fixed: {count}")

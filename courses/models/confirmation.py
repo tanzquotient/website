@@ -13,4 +13,4 @@ class Confirmation(models.Model):
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "({}) confirmed at {}".format(self.subscription, self.date)
+        return f"({self.subscription}) confirmed at {self.date}"

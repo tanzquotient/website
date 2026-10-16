@@ -1,5 +1,5 @@
 import html
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.utils.html import strip_tags
 from parler.models import TranslationDoesNotExist
@@ -10,7 +10,7 @@ from tq_website import settings
 
 class TranslationUtils:
     @staticmethod
-    def get_text_with_language_fallback(model, attribute: str) -> Optional[str]:
+    def get_text_with_language_fallback(model, attribute: str) -> str | None:
         if model is None:
             return None
         for lang in [model.get_current_language()] + settings.PARLER_LANGUAGES[

@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import Optional
 
 from django.db import transaction
 from django.db.models import QuerySet
@@ -81,9 +80,7 @@ class PaymentProcessor:
                 if num_subscriptions == 0:
                     # USI was probably misspelled by user
                     log.warning(
-                        "USI {0} was not found for payment {1}.".format(
-                            subscription_id, payment
-                        )
+                        f"USI {subscription_id} was not found for payment {payment}."
                     )
                     continue
 
@@ -121,9 +118,7 @@ class PaymentProcessor:
                     payment=payment, subscription=matched_subscription, amount=amount
                 )
                 log.info(
-                    "Matched payment {0} to subscription {1}".format(
-                        payment, subscription_query
-                    )
+                    f"Matched payment {payment} to subscription {subscription_query}"
                 )
 
             # Check balance -> this sets state of subscription payment (MATCHED, REIMBURSE, MANUAL)
@@ -132,7 +127,7 @@ class PaymentProcessor:
     @staticmethod
     def try_to_get_unique_subscription_identifiers(
         payment: Payment,
-    ) -> Optional[list[str]]:
+    ) -> list[str] | None:
         if (
             not payment.remittance_user_string
         ):  # FYI: remittance translates to Überweisung (german)

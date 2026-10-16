@@ -1,7 +1,6 @@
 # Register your models here.
 from datetime import timedelta
 from decimal import Decimal
-from typing import Optional
 
 from django import forms
 from django.contrib.admin import ModelAdmin
@@ -187,7 +186,7 @@ class RoomCancellationInline(admin.TabularInline):
 
     def get_queryset(self, request):
         return (
-            super(RoomCancellationInline, self)
+            super()
             .get_queryset(request)
             .filter(date__gte=timezone.now().date() - timedelta(days=90))
         )
@@ -200,7 +199,7 @@ class RoomAccessCodeInline(admin.TabularInline):
 
     def get_queryset(self, request):
         return (
-            super(RoomAccessCodeInline, self)
+            super()
             .get_queryset(request)
             .filter(valid_until__gte=timezone.now().date() - timedelta(days=90))
         )
@@ -594,7 +593,7 @@ class AttendanceAdmin(ModelAdmin):
 
 class SubscribeChangeList(ChangeList):
     def get_results(self, *args, **kwargs):
-        super(SubscribeChangeList, self).get_results(*args, **kwargs)
+        super().get_results(*args, **kwargs)
 
         self.info = {
             "total": self.result_count,
@@ -757,12 +756,12 @@ class SubscribeAdmin(UserFullNameAdminMixin, VersionAdmin):
 
         if c > 0:
             # this user didn't pay for other courses
-            r += ", owes {} more".format(c)
+            r += f", owes {c} more"
         return r
 
     @staticmethod
     @admin.action(description="Additional Info")
-    def get_additional_info(subscription: Subscribe) -> Optional[str]:
+    def get_additional_info(subscription: Subscribe) -> str | None:
         rejections = subscription.rejections.all()
         if rejections:
             reason = ", ".join([r.reason for r in rejections])
@@ -1017,13 +1016,13 @@ class VoucherAdmin(VersionAdmin):
             )
         )
 
-    def sent_to_full_name(self, voucher: Voucher) -> Optional[str]:
+    def sent_to_full_name(self, voucher: Voucher) -> str | None:
         if voucher.sent_to:
             return voucher.sent_to.get_full_name()
 
     sent_to_full_name.short_description = "sent to"
 
-    def comment_shortened(self, voucher: Voucher, max_len: int = 30) -> Optional[str]:
+    def comment_shortened(self, voucher: Voucher, max_len: int = 30) -> str | None:
         if voucher.comment and len(voucher.comment) > max_len:
             return voucher.comment[:max_len] + "[...]"
         else:
@@ -1032,12 +1031,12 @@ class VoucherAdmin(VersionAdmin):
     comment_shortened.short_description = "comment"
 
     @staticmethod
-    def amount(voucher: Voucher) -> Optional[str]:
+    def amount(voucher: Voucher) -> str | None:
         if voucher.amount:
             return voucher.amount
 
     @staticmethod
-    def redeemed_amount(voucher: Voucher) -> Optional[str]:
+    def redeemed_amount(voucher: Voucher) -> str | None:
         tot_amount = sum(
             [reduction.amount for reduction in voucher.price_reductions.all()]
         )
@@ -1045,7 +1044,7 @@ class VoucherAdmin(VersionAdmin):
             return tot_amount
 
     @staticmethod
-    def issuer(voucher: Voucher) -> Optional[str]:
+    def issuer(voucher: Voucher) -> str | None:
         first_version = (
             Version.objects.get_for_object(voucher)
             .order_by("revision__date_created")
@@ -1061,23 +1060,23 @@ class VoucherAdmin(VersionAdmin):
             return issuer.get_full_name()
 
     @staticmethod
-    def used_timestamp(voucher: Voucher) -> Optional[str]:
+    def used_timestamp(voucher: Voucher) -> str | None:
         reductions = voucher.price_reductions.all()
         if reductions:
             return reductions[0].created_at
 
     @staticmethod
-    def offering(voucher: Voucher) -> Optional[str]:
+    def offering(voucher: Voucher) -> str | None:
         if voucher.subscription:
             return voucher.subscription.course.offering.name
 
     @staticmethod
-    def course(voucher: Voucher) -> Optional[str]:
+    def course(voucher: Voucher) -> str | None:
         if voucher.subscription:
             return voucher.subscription.course.type.title
 
     @staticmethod
-    def redeemer(voucher: Voucher) -> Optional[str]:
+    def redeemer(voucher: Voucher) -> str | None:
         if voucher.subscription:
             return voucher.subscription.user.get_full_name()
 

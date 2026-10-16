@@ -27,7 +27,7 @@ class CourseTeacherPresenceView(TemplateView, TeacherPresenceEnabled, APIView):
         course: Course = Course.objects.filter(id=kwargs.get("course")).first()
         course.update_lesson_occurrences()
 
-        context = super(CourseTeacherPresenceView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["course"] = course
         context["now"] = timezone.now()
         context["errors"] = kwargs.get("errors")

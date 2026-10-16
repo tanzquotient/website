@@ -37,4 +37,4 @@ class TeacherOfCourseOnly(View):
         if not allowed:
             raise PermissionDenied
 
-        return super(TeacherOfCourseOnly, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)

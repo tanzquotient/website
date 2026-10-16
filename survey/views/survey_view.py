@@ -1,7 +1,6 @@
 import logging
 from collections import defaultdict
 from datetime import datetime
-from typing import Optional
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -27,7 +26,7 @@ def _get_survey_instance(url_key: str):
     )
 
 
-def survey_view(request, survey_id: int, url_key: Optional[str] = None) -> HttpResponse:
+def survey_view(request, survey_id: int, url_key: str | None = None) -> HttpResponse:
     survey = get_object_or_404(Survey, pk=survey_id)
 
     # Get survey instance

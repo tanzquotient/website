@@ -1,8 +1,8 @@
 import logging
 import re
 from collections import Counter, defaultdict
+from collections.abc import Iterable
 from numbers import Number
-from typing import Iterable
 
 from django.core.cache.utils import make_template_fragment_key
 from django.utils.translation import get_language

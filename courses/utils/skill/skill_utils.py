@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from functools import cache
-from typing import Iterable
 
 from django.contrib.auth.models import User
 

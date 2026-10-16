@@ -52,9 +52,7 @@ class Payment(models.Model):
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "Payment ({}) of {} by {}".format(
-            self.credit_debit, self.amount, self.name
-        )
+        return f"Payment ({self.credit_debit}) of {self.amount} by {self.name}"
 
     def courses(self):
         return [subscription.course for subscription in self.subscriptions.all()]

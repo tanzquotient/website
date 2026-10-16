@@ -448,13 +448,11 @@ class VisitAdmin(admin.ModelAdmin):
                 for offset in range((date_to - date_from).days + 1)
             ]
             max_count = max(
-                (
-                    sum(
-                        counts_by_day_and_source.get((day, item["id"]), 0)
-                        for item in series
-                    )
-                    for day in days
+                sum(
+                    counts_by_day_and_source.get((day, item["id"]), 0)
+                    for item in series
                 )
+                for day in days
             )
             max_count = max(1, max_count)
             chart_data = [

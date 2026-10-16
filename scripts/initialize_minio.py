@@ -55,13 +55,13 @@ policy_static_read_only = {
             "Effect": "Allow",
             "Principal": {"AWS": "*"},
             "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
-            "Resource": "arn:aws:s3:::{}".format(static_bucket),
+            "Resource": f"arn:aws:s3:::{static_bucket}",
         },
         {
             "Effect": "Allow",
             "Principal": {"AWS": "*"},
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::{}/*".format(static_bucket),
+            "Resource": f"arn:aws:s3:::{static_bucket}/*",
         },
     ],
 }

@@ -1,4 +1,5 @@
-from typing import Callable, Iterable, TypeVar
+from collections.abc import Callable, Iterable
+from typing import TypeVar
 
 from django.conf import settings
 from django.core.cache import cache

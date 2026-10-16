@@ -14,8 +14,8 @@ class CounterPaymentIndexView(FormView):
         self.success_url = reverse(
             "payment:counterpayment_detail", kwargs={"usi": form.cleaned_data["usi"]}
         )
-        return super(CounterPaymentIndexView, self).form_valid(form)
+        return super().form_valid(form)
 
     @method_decorator(permission_required("courses.access_counterpayment"))
     def dispatch(self, *args, **kwargs):
-        return super(CounterPaymentIndexView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)

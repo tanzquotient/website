@@ -1,6 +1,6 @@
 from collections import defaultdict
+from collections.abc import Collection
 from datetime import date, time
-from typing import Collection
 
 from django.db.models import Q, QuerySet
 from django.http import Http404

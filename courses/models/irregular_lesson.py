@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from datetime import datetime, timedelta
-from typing import Iterable, Optional
 from zoneinfo import ZoneInfo
 
 from django.db import models
@@ -42,7 +42,7 @@ class IrregularLesson(models.Model):
         room = self.get_room()
         return room is not None and room.is_cancelled(self.date)
 
-    def get_occurrence(self) -> Optional[LessonOccurrenceData]:
+    def get_occurrence(self) -> LessonOccurrenceData | None:
         if self.is_cancelled():
             return None
 

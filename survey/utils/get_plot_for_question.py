@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from django.utils.translation import gettext_lazy as _
 
@@ -54,7 +54,7 @@ def _plot_for_multiple_choice(question: Question, answer_set: Iterable[Answer]) 
 
 def get_plot_for_question(
     question: Question, selected_offering: Offering, selected_course: Course
-) -> Optional[str]:
+) -> str | None:
     answer_set = question.answers
     if selected_offering:
         answer_set = answer_set.filter(

@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from courses.models import Course, Offering
 from survey.models import Answer, Question

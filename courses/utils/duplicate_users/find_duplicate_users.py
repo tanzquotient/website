@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from django.contrib.auth.models import User
 
@@ -36,7 +36,7 @@ def _find_duplicates_of(user):
 
     candidates = list(candidates)
     candidates.sort(
-        key=lambda u: u.last_login or datetime.min.replace(tzinfo=timezone.utc),
+        key=lambda u: u.last_login or datetime.min.replace(tzinfo=UTC),
         reverse=True,
     )
 

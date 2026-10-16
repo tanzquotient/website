@@ -1,5 +1,5 @@
 import logging
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -17,8 +17,8 @@ log = logging.getLogger("tq")
 
 def export_surveys(
     surveys: Iterable[Survey],
-    offering: Optional[Offering] = None,
-    course: Optional[Course] = None,
+    offering: Offering | None = None,
+    course: Course | None = None,
     export_format: str = None,
     anonymize: bool = True,
 ) -> HttpResponse:

@@ -73,10 +73,10 @@ def send_group_email(group_email: GroupEmail) -> None:
                 unsubscribe_url = unsubscribe_code.get_unsubscribe_url(
                     unsubscribe_context
                 )
-                headers["List-Unsubscribe"] = "<{}>".format(unsubscribe_url)
+                headers["List-Unsubscribe"] = f"<{unsubscribe_url}>"
                 headers["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
-                html_message += '<p><a href="{}">Unsubscribe here</a></p>'.format(
-                    unsubscribe_url
+                html_message += (
+                    f'<p><a href="{unsubscribe_url}">Unsubscribe here</a></p>'
                 )
 
             # Add email

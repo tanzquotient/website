@@ -41,4 +41,4 @@ class TeacherPresenceEnabled(View):
         if not allowed:
             raise PermissionDenied
 
-        return super(TeacherPresenceEnabled, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)

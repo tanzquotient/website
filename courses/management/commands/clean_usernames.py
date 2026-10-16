@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from django.contrib.auth.models import User
@@ -11,7 +10,7 @@ log = logging.getLogger("tq")
 
 class Command(BaseCommand):
     def handle(self, **options):
-        log.info("run management command: {}".format(__file__))
+        log.info(f"run management command: {__file__}")
         for user in User.objects.all():
             try:
                 un = services.clean_username(user.username)
@@ -21,7 +20,7 @@ class Command(BaseCommand):
                 ).lower()
                 user.save()
                 print(
-                    "cleaned user {}".format(user.username)
+                    f"cleaned user {user.username}"
                 )  # NOTE: do not print UTF-8 symbols here
             except Exception as e:
-                print("PROBLEM cleaning user {}: {}".format(user.username, e))
+                print(f"PROBLEM cleaning user {user.username}: {e}")

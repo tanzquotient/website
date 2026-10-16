@@ -24,7 +24,5 @@ class SubscriptionPayment(models.Model):
         # Don't allow larger amount then available amount of payment
         if self.amount and (self.amount > self.payment.amount):
             raise ValidationError(
-                "The available payment amount is not sufficient to allow the association of {}.".format(
-                    self.amount
-                )
+                f"The available payment amount is not sufficient to allow the association of {self.amount}."
             )

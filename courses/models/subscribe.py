@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -229,7 +228,7 @@ class Subscribe(Model):
         if self.open_amount().is_zero():
             return self.mark_as_paid(self.paymentmethod)
 
-    def get_last_updated_date(self) -> Optional[datetime.date]:
+    def get_last_updated_date(self) -> datetime.date | None:
         return (
             Version.objects.get_for_object(self)
             .order_by("revision__date_created")
@@ -320,7 +319,7 @@ class Subscribe(Model):
         return max(Decimal(0), open_amount)
 
     def apply_price_reduction(
-        self, amount: Decimal, voucher, user: Optional[User] = None
+        self, amount: Decimal, voucher, user: User | None = None
     ) -> Decimal:
         PriceReduction.objects.create(
             subscription=self,
@@ -335,7 +334,7 @@ class Subscribe(Model):
 
         return open_amount
 
-    def get_last_payment_reminder(self) -> Optional[datetime.date]:
+    def get_last_payment_reminder(self) -> datetime.date | None:
         q = self.payment_reminders
         if q.count():
             return q.first().date
@@ -367,7 +366,7 @@ class Subscribe(Model):
             self.matching_state = MatchingState.NOT_REQUIRED
             # DO NOT save here since this method is also called from save()
 
-    def get_partner_name(self) -> Optional[str]:
+    def get_partner_name(self) -> str | None:
         if not self.partner:
             return None
         return f"{self.partner.first_name} {self.partner.last_name}"
@@ -423,7 +422,7 @@ class Subscribe(Model):
             and self.assigned_role() != LeadFollow.NO_PREFERENCE
         )
 
-    def get_partner_subscription(self) -> Optional[Subscribe]:
+    def get_partner_subscription(self) -> Subscribe | None:
         if self.partner_id is None:
             return None
 
@@ -451,7 +450,7 @@ class Subscribe(Model):
         if not self.state:
             self.assign_state()
 
-        super(Subscribe, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs) -> None:
         if self.state != SubscribeState.NEW:
@@ -459,7 +458,7 @@ class Subscribe(Model):
                 None, messages.ERROR, "Cannot delete non-NEW subscription."
             )
         else:
-            super(Subscribe, self).delete(*args, **kwargs)
+            super().delete(*args, **kwargs)
 
     def __str__(self) -> str:
-        return "{} subscribes to {}".format(self.user.get_full_name(), self.course)
+        return f"{self.user.get_full_name()} subscribes to {self.course}"

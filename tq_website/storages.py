@@ -29,7 +29,7 @@ class TqStorage(S3Boto3Storage):
             config["custom_domain"] = custom_domain.format(bucket_name)
         else:
             protocol = "https" if use_ssl else "http"
-            config["endpoint_url"] = "{}://{}:{}".format(protocol, host, port)
+            config["endpoint_url"] = f"{protocol}://{host}:{port}"
         super().__init__(bucket_name=bucket_name, **config)
 
 

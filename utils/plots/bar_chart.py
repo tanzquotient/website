@@ -7,7 +7,7 @@ def bar_chart(values: list[Any], labels: list[str]) -> Figure:
     labels.reverse()
     values.reverse()
     values_sum = max(sum(values), 1)
-    percent = ["({:2.1f} %)".format(100 * v / values_sum) for v in values]
+    percent = [f"({100 * v / values_sum:2.1f} %)" for v in values]
 
     return Figure(
         data=[

@@ -18,7 +18,7 @@ def write_vcard(data, file):
             tel = user.profile.phone_number
             if len(tel) >= 2 and tel[0:2] == "07":  # Add country code for swiss numbers
                 tel = "+41 " + tel[1:]
-            card += "TEL:{}\n".format(tel)
+            card += f"TEL:{tel}\n"
         card += "END:VCARD\n"
 
         file.write(card)
@@ -36,8 +36,8 @@ def export_vcard(title, data, multiple=False):
 
     else:
         response = HttpResponse(content_type="text/vcard")
-        response["Content-Disposition"] = 'attachment; filename="{}.vcf"'.format(
-            clean_filename(title)
+        response["Content-Disposition"] = (
+            f'attachment; filename="{clean_filename(title)}.vcf"'
         )
         write_vcard(data, response)
         return response

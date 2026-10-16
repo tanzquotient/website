@@ -1,5 +1,4 @@
 from datetime import date, datetime, time, timedelta
-from typing import Optional
 
 from django.db.models import QuerySet
 from django.urls import reverse
@@ -53,7 +52,7 @@ class EventFeed(ICalFeed):
             return date_to + timedelta(days=1)
         return datetime.combine(date_to, event.time_to or time.max)
 
-    def item_location(self, event: Event) -> Optional[str]:
+    def item_location(self, event: Event) -> str | None:
         if event.room is None:
             return None
         return event.room.name

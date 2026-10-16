@@ -32,7 +32,7 @@ def export_registrations(event_ids, export_format):
         event_name = export_data[0]["name"]
         return export(
             export_format,
-            title="Registrations-{}".format(event_name),
+            title=f"Registrations-{event_name}",
             data=export_data[0]["data"],
         )
 

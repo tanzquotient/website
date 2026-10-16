@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Iterable
+from collections.abc import Iterable
 
 from django.db import models
 from django.db.models import SET_NULL
@@ -35,12 +35,12 @@ class Style(TranslatableModel):
         )
 
     def __str__(self) -> str:
-        return "{}".format(self.name)
+        return f"{self.name}"
 
     class Meta:
         ordering = ["name"]
 
-    def is_child_of(self, style: "Style") -> bool:
+    def is_child_of(self, style: Style) -> bool:
         current_style = self
         while current_style is not None:
             current_style = current_style.parent_style
@@ -49,9 +49,7 @@ class Style(TranslatableModel):
 
         return False
 
-    def descendants(
-        self, children_by_parent_id: dict | None = None
-    ) -> Iterable["Style"]:
+    def descendants(self, children_by_parent_id: dict | None = None) -> Iterable[Style]:
         if children_by_parent_id is None:
             children_by_parent_id = defaultdict(list)
             for s in Style.objects.all():
@@ -62,7 +60,7 @@ class Style(TranslatableModel):
         for child in children_by_parent_id.get(self.pk, []):
             yield from child.descendants(children_by_parent_id)
 
-    def ancestors(self, style_lookup: dict | None = None) -> Iterable["Style"]:
+    def ancestors(self, style_lookup: dict | None = None) -> Iterable[Style]:
         if style_lookup is None:
             style_lookup = {s.pk: s for s in Style.objects.all()}
 
@@ -75,7 +73,7 @@ class Style(TranslatableModel):
         self,
         style_lookup: dict | None = None,
         children_by_parent_id: dict | None = None,
-    ) -> Iterable["Style"]:
+    ) -> Iterable[Style]:
         if style_lookup is None or children_by_parent_id is None:
             all_styles = list(Style.objects.all())
             style_lookup = {s.pk: s for s in all_styles}

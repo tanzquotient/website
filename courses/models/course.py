@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
+from collections.abc import Iterable
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from numbers import Number
-from typing import TYPE_CHECKING, Iterable, Optional, Union
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.contrib import admin
@@ -81,12 +82,10 @@ class Course(TranslatableModel):
     early_signup = models.BooleanField(
         default=True,
         help_text=_(
-            (
-                "Defines if users eligible for early sign-up "
-                "can subscribe to this course "
-                "(if checked, course early sign-up is enabled "
-                "if offering early sign-up is enabled)."
-            )
+            "Defines if users eligible for early sign-up "
+            "can subscribe to this course "
+            "(if checked, course early sign-up is enabled "
+            "if offering early sign-up is enabled)."
         ),
     )
     opens_soon = models.BooleanField(
@@ -193,7 +192,7 @@ class Course(TranslatableModel):
     def save(self, *args, **kwargs):
         if self.subscription_type == CourseSubscriptionType.EXTERNAL or self.cancelled:
             self.completed = True
-        super(Course, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def clean(self):
         if self.early_signup and not self.type.predecessors.exists():
@@ -410,7 +409,7 @@ class Course(TranslatableModel):
         )
 
     @cached_property
-    def get_free_places_count(self) -> Optional[int]:
+    def get_free_places_count(self) -> int | None:
         # No maximum => free places is not defined
         if self.max_subscribers is None:
             return None
@@ -693,7 +692,7 @@ class Course(TranslatableModel):
             )
         return texts
 
-    def not_enough_participants_info(self) -> Optional[str]:
+    def not_enough_participants_info(self) -> str | None:
         if self.has_enough_participants():
             return None
 
@@ -834,7 +833,7 @@ class Course(TranslatableModel):
     def is_over(self) -> bool:
         course_end = self.get_last_lesson_end()
         if course_end is not None:
-            return course_end < datetime.now(timezone.utc)
+            return course_end < datetime.now(UTC)
         return self.get_last_lesson_date() < date.today()
 
     def is_over_since(self, days: int) -> bool:
@@ -844,7 +843,7 @@ class Course(TranslatableModel):
     def has_started_for(self, extra_time: timedelta = timedelta(days=7)) -> bool:
         return self.get_first_lesson_date() + extra_time < date.today()
 
-    def get_lessons(self) -> list[Union[RegularLesson, IrregularLesson]]:
+    def get_lessons(self) -> list[RegularLesson | IrregularLesson]:
         return list(self.regular_lessons.all()) + self.get_irregular_lessons()
 
     def get_irregular_lessons(self) -> list[IrregularLesson]:
@@ -908,7 +907,7 @@ class Course(TranslatableModel):
 
     def get_next_lesson_occurrence_by_date(
         self, lesson_date: date | None = None
-    ) -> Optional["LessonOccurrenceData"]:
+    ) -> LessonOccurrenceData | None:
         if lesson_date is None:
             lesson_date = date.today()
         lesson_occurrences = self.get_lesson_occurrences()
@@ -962,18 +961,18 @@ class Course(TranslatableModel):
 
     format_cancellations.short_description = "Cancellations"
 
-    def get_first_regular_lesson(self) -> Optional[RegularLesson]:
+    def get_first_regular_lesson(self) -> RegularLesson | None:
         if self.regular_lessons.exists():
             return self.regular_lessons.all()[0]
         else:
             return None
 
     @cached_property
-    def first_lesson(self) -> Optional[LessonOccurrence]:
+    def first_lesson(self) -> LessonOccurrence | None:
         occurrences = list(self.lesson_occurrences.all())
         return occurrences[0] if occurrences else None
 
-    def get_first_lesson_start(self) -> Optional[datetime]:
+    def get_first_lesson_start(self) -> datetime | None:
         first_lesson = self.first_lesson
         return first_lesson.start if first_lesson else None
 
@@ -981,7 +980,7 @@ class Course(TranslatableModel):
         start = self.get_first_lesson_start()
         return start.date() if start else self.get_period().date_from
 
-    def get_last_lesson_end(self) -> Optional[datetime]:
+    def get_last_lesson_end(self) -> datetime | None:
         occurrences = list(self.lesson_occurrences.all())
         return occurrences[-1].end if occurrences else None
 
@@ -989,23 +988,23 @@ class Course(TranslatableModel):
         end = self.get_last_lesson_end()
         return end.date() if end else self.get_period().date_to
 
-    def get_first_regular_lesson_start(self) -> Optional[datetime]:
+    def get_first_regular_lesson_start(self) -> datetime | None:
         first = optional_min(self.get_regular_lesson_occurrences())
         return first.start if first else None
 
-    def get_first_regular_lesson_date(self) -> Optional[date]:
+    def get_first_regular_lesson_date(self) -> date | None:
         start = self.get_first_regular_lesson_start()
         return start.date() if start else None
 
-    def get_last_regular_lesson_end(self) -> Optional[datetime]:
+    def get_last_regular_lesson_end(self) -> datetime | None:
         last = optional_max(self.get_regular_lesson_occurrences())
         return last.end if last else None
 
-    def get_last_regular_lesson_date(self) -> Optional[date]:
+    def get_last_regular_lesson_date(self) -> date | None:
         end = self.get_last_regular_lesson_end()
         return end.date() if end else None
 
-    def get_common_irregular_weekday(self) -> Optional[str]:
+    def get_common_irregular_weekday(self) -> str | None:
         """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
         if self.irregular_lessons.exists():
             weekdays = [

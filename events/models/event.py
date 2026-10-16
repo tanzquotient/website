@@ -1,5 +1,4 @@
 from datetime import datetime, time
-from typing import Optional
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
@@ -167,7 +166,7 @@ class Event(TranslatableModel):
     def get_price_special(self) -> str:
         return TranslationUtils.get_text_with_language_fallback(self, "price_special")
 
-    def free_spots(self) -> Optional[int]:
+    def free_spots(self) -> int | None:
         if self.max_participants is None:
             return None
         else:

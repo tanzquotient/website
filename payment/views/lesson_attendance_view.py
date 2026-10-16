@@ -20,7 +20,7 @@ class LessonAttendanceView(TemplateView, TeacherOfCourseOnly):
     template_name = "payment/lesson/attendance.html"
 
     def get_context_data(self, **kwargs: object) -> dict[str, Any]:
-        context = super(LessonAttendanceView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(LessonOccurrence, pk=kwargs.get("lesson"))
         context["lesson"] = lesson
         context["course"] = lesson.course

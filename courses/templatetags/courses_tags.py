@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-import courses.utils as utils
+from courses import utils
 from courses.cms_plugins import MyNextLessonsPlugin
 from courses.models import (
     Attendance,

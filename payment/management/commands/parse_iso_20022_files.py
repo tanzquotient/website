@@ -27,8 +27,8 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        log.info("run management command: {}".format(__file__))
+        log.info(f"run management command: {__file__}")
         count = ISO2022Parser.parse_files_and_save_payments(
             reparse=options["reparse"], dry_run=options["dry_run"]
         )
-        log.info("found and parsed {} new transactions".format(count))
+        log.info(f"found and parsed {count} new transactions")

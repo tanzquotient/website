@@ -16,6 +16,4 @@ class PaymentReminder(models.Model):
         ordering = ["-date"]
 
     def __str__(self):
-        return "({}) reminded of missing payment at {}".format(
-            self.subscription, self.date
-        )
+        return f"({self.subscription}) reminded of missing payment at {self.date}"

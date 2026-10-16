@@ -13,7 +13,7 @@ from utils.iban_validator import validate_iban
 class UserEditForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
-        super(UserEditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     first_name = forms.CharField(required=True, label=_("First name"))
     last_name = forms.CharField(required=True, label=_("Last name"))
@@ -99,7 +99,7 @@ class UserEditForm(forms.Form):
     )
 
     def clean(self) -> dict:
-        cleaned_data = super(UserEditForm, self).clean()
+        cleaned_data = super().clean()
 
         if (
             cleaned_data.get("display_name")

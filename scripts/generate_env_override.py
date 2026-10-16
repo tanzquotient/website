@@ -51,5 +51,5 @@ if __name__ == "__main__":
     # Write overrides.yml file
     with open(OVERRIDE_FILE, "w") as override_file:
         for key, value in overrides.items():
-            line = "{}: {}\n".format(key, value)
+            line = f"{key}: {value}\n"
             override_file.write(line)

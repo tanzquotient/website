@@ -16,7 +16,7 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
     show_or_hide_answer_on_post(request)
 
     selected_course = None
-    if "course_id" in request.GET and request.GET["course_id"]:
+    if request.GET.get("course_id"):
         selected_course = get_object_or_404(Course, id=request.GET["course_id"])
 
     if not request.user.is_staff and not (
@@ -53,7 +53,7 @@ def results(request: HttpRequest, survey_id: int) -> HttpResponse:
 
     if selected_course:
         selected_offering = selected_course.offering
-    elif "offering_id" in request.GET and request.GET["offering_id"]:
+    elif request.GET.get("offering_id"):
         selected_offering = get_object_or_404(Offering, id=request.GET["offering_id"])
     elif offerings.count() == 1:
         selected_offering = offerings.first()

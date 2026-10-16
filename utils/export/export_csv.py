@@ -27,8 +27,8 @@ def export_csv(title, data, multiple=False):
 
     else:
         response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
-            clean_filename(title)
+        response["Content-Disposition"] = (
+            f'attachment; filename="{clean_filename(title)}.csv"'
         )
         write_csv(data, response)
         return response

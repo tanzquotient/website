@@ -85,6 +85,6 @@ class SurveyInstance(Model):
 
     def __str__(self) -> str:
         if self.course:
-            return "{} for {} of {}".format(self.survey, self.course, self.user)
+            return f"{self.survey} for {self.course} of {self.user}"
         else:
-            return "{} of {}".format(self.survey, self.user)
+            return f"{self.survey} of {self.user}"

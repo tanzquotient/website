@@ -44,4 +44,4 @@ class Command(BaseCommand):
                 pay.amount = Decimal(amount)
                 pay.save()
             except:
-                print("Could not convert {} to Decimal".format(amount))
+                print(f"Could not convert {amount} to Decimal")

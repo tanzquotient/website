@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from django.contrib import messages
 from django.contrib.auth.models import User

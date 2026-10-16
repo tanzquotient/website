@@ -17,10 +17,8 @@ class CourseType(TranslatableModel):
         related_name="successors",
         blank=True,
         help_text=_(
-            (
-                "Course types that allow for early subscription "
-                "(within time bounds) to courses if this type."
-            )
+            "Course types that allow for early subscription "
+            "(within time bounds) to courses if this type."
         ),
     )
 

@@ -18,7 +18,7 @@ def validate_iban(iban):
 
     def generate_iban_check_digits(iban):
         number_iban = _number_iban(iban[:2] + "00" + iban[4:])
-        return "{:0>2}".format(98 - (int(number_iban) % 97))
+        return f"{98 - (int(number_iban) % 97):0>2}"
 
     def valid_iban(iban):
         return int(_number_iban(iban)) % 97 == 1

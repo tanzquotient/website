@@ -51,8 +51,8 @@ def export_excel(title, data, has_column_headings=True, multiple=False):
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
-    response["Content-Disposition"] = "attachment; filename={}.xlsx".format(
-        clean_filename(title)
+    response["Content-Disposition"] = (
+        f"attachment; filename={clean_filename(title)}.xlsx"
     )
 
     workbook.save(response)

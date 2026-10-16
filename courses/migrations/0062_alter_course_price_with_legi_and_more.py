@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             field=models.DecimalField(
                 blank=True,
                 decimal_places=2,
-                default=Decimal("40"),
+                default=Decimal(40),
                 max_digits=6,
                 null=True,
             ),
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             field=models.DecimalField(
                 blank=True,
                 decimal_places=2,
-                default=Decimal("80"),
+                default=Decimal(80),
                 max_digits=6,
                 null=True,
             ),

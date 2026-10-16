@@ -1,6 +1,7 @@
 import math
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Any, Iterable, Optional
+from typing import Any
 
 import reversion
 from django.contrib.auth.models import User
@@ -28,13 +29,13 @@ def copy_course(course: Course, to=None):
 
 
 def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
-    email_template: Optional[EmailTemplate] = data["email_template"]
-    email_subject: Optional[str] = data["email_subject"]
-    email_content: Optional[str] = data["email_content"]
+    email_template: EmailTemplate | None = data["email_template"]
+    email_subject: str | None = data["email_subject"]
+    email_content: str | None = data["email_content"]
     send_to_participants: bool = data["send_to_participants"]
     send_to_teachers: bool = data["send_to_teachers"]
-    survey: Optional[Survey] = data["survey"]
-    survey_url_expire_date: Optional[datetime] = data["survey_url_expire_date"]
+    survey: Survey | None = data["survey"]
+    survey_url_expire_date: datetime | None = data["survey_url_expire_date"]
 
     emails = []
 
@@ -75,8 +76,8 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 context["survey_expiration"] = survey_instance.url_expire_date
 
             subject: str = email_subject
-            message: Optional[str] = None
-            html_message: Optional[str] = email_content
+            message: str | None = None
+            html_message: str | None = email_content
 
             if email_template:
                 subject = subject or email_template.subject
@@ -94,7 +95,7 @@ def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:
                 )
             )
 
-    log.info("Sending {} emails".format(len(emails)))
+    log.info(f"Sending {len(emails)} emails")
     send_all_emails(emails)
 
 
@@ -158,5 +159,5 @@ def email_vouchers(data: dict, vouchers: list[Voucher]):
             )
         )
 
-    log.info("Sending {} emails".format(len(emails)))
+    log.info(f"Sending {len(emails)} emails")
     send_all_emails(emails)

@@ -23,7 +23,7 @@ class UnsubscribeCode(Model):
             "email_system:unsubscribe",
             kwargs={"context": context, "user_id": self.user.id, "code": self.code},
         )
-        return "https://{}{}".format(settings.DEPLOYMENT_DOMAIN, url)
+        return f"https://{settings.DEPLOYMENT_DOMAIN}{url}"
 
     def __str__(self):
         return self.code

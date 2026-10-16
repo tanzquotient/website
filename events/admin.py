@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.contrib import admin
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils.safestring import mark_safe
@@ -112,7 +110,7 @@ class EventAdmin(UserFullNameAdminMixin, TranslatableAdmin):
 
     @staticmethod
     @admin.display(description="Responsible")
-    def get_responsible(event: Event) -> Optional[str]:
+    def get_responsible(event: Event) -> str | None:
         responsible = event.responsible.all()
         if not responsible:
             return None

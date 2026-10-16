@@ -14,10 +14,10 @@ class EventRegistration(Model):
     timestamp = DateTimeField(blank=False, null=False, auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        super(EventRegistration, self).save(*args, **kwargs)  # ensure id is set
+        super().save(*args, **kwargs)  # ensure id is set
         if self.timestamp is None:
             self.timestamp = datetime.now()
-            super(EventRegistration, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
     class Meta:
         unique_together = ("user", "event")

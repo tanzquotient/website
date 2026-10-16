@@ -45,10 +45,8 @@ class Offering(TranslatableModel):
     early_signup = models.BooleanField(
         default=False,
         help_text=_(
-            (
-                "Defines if users eligible for early sign-up "
-                "can subscribe to courses in this offering."
-            )
+            "Defines if users eligible for early sign-up "
+            "can subscribe to courses in this offering."
         ),
     )
     early_signup_max_days = models.PositiveSmallIntegerField(
@@ -56,11 +54,9 @@ class Offering(TranslatableModel):
         blank=False,
         default=180,
         help_text=_(
-            (
-                "Maximum days between the last lesson of the preceding course "
-                "and the first one of the succeeding course to be eligible "
-                "for early sign-up (if applicable)"
-            )
+            "Maximum days between the last lesson of the preceding course "
+            "and the first one of the succeeding course to be eligible "
+            "for early sign-up (if applicable)"
         ),
     )
     preview = models.BooleanField(
@@ -132,7 +128,7 @@ class Offering(TranslatableModel):
         )
 
     def __str__(self) -> str:
-        return "{}".format(self.name)
+        return f"{self.name}"
 
     class Meta:
         ordering = ["-period__date_to", "name"]

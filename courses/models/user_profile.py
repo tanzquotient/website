@@ -1,7 +1,7 @@
 import uuid
+from collections.abc import Iterable
 from datetime import date, datetime, timedelta
 from decimal import Decimal
-from typing import Iterable, Optional
 
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
@@ -297,7 +297,7 @@ class UserProfile(Model):
         return False
 
     @cached_property
-    def teaching_since(self) -> Optional[date]:
+    def teaching_since(self) -> date | None:
         if not self.is_teacher():
             return None
 
@@ -412,4 +412,4 @@ class UserProfile(Model):
         permissions = (("access_counterpayment", "Can access counter payment"),)
 
     def __str__(self) -> str:
-        return "{}".format(self.user.get_full_name())
+        return f"{self.user.get_full_name()}"

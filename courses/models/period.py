@@ -16,10 +16,8 @@ class Period(models.Model):
 
     def __str__(self) -> str:
         if self.name:
-            return "{} ({})".format(self.name, self.date_as_string())
+            return f"{self.name} ({self.date_as_string()})"
         return self.date_as_string()
 
     def date_as_string(self) -> str:
-        return "{} - {}".format(
-            self.format_date(self.date_from), self.format_date(self.date_to)
-        )
+        return f"{self.format_date(self.date_from)} - {self.format_date(self.date_to)}"

@@ -51,7 +51,7 @@ class AccountFinanceDetailView(
         return year, month, filter, payments
 
     def get_context_data(self, **kwargs):
-        context = super(AccountFinanceDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         year, month, filter, payments = self._filter()
 
@@ -102,13 +102,9 @@ class AccountFinanceDetailView(
             or 0
         )
         summary = {
-            "TOTAL subscription_payment": "{} CHF".format(total_subscription_payment),
-            "TOTAL course_payment_transfer": "{} CHF".format(
-                total_course_payment_transfer
-            ),
-            "TOTAL subscription_payment + course_payment_transfer": "{} CHF".format(
-                total_subscription_payment + total_course_payment_transfer
-            ),
+            "TOTAL subscription_payment": f"{total_subscription_payment} CHF",
+            "TOTAL course_payment_transfer": f"{total_course_payment_transfer} CHF",
+            "TOTAL subscription_payment + course_payment_transfer": f"{total_subscription_payment + total_course_payment_transfer} CHF",
         }
         context["summary"] = summary
 
@@ -126,7 +122,7 @@ class AccountFinanceDetailView(
         )
 
         for p in payments:
-            p.comment = self.request.POST["comment-{}".format(p.id)]
+            p.comment = self.request.POST[f"comment-{p.id}"]
             p.save()
 
-        return super(AccountFinanceDetailView, self).post(request)
+        return super().post(request)

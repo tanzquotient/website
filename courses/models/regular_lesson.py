@@ -1,7 +1,7 @@
 import operator
+from collections.abc import Iterable
 from datetime import date, datetime, time, timedelta
 from functools import reduce
-from typing import Iterable
 from zoneinfo import ZoneInfo
 
 from django.db import models

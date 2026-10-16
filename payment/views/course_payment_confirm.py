@@ -16,7 +16,7 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
     def get_context_data(self, **kwargs):
         subscription = Subscribe.objects.filter(usi=self.kwargs["usi"]).first()
 
-        context = super(CoursePaymentConfirm, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["subscription"] = subscription
         return context
 
@@ -34,4 +34,4 @@ class CoursePaymentConfirm(FormView, TeacherOfCourseOnly):
                 "USI " + self.kwargs["usi"] + _(" successfully marked as paid."),
             )
 
-        return super(CoursePaymentConfirm, self).form_valid(form)
+        return super().form_valid(form)

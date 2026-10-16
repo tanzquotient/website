@@ -1,6 +1,5 @@
 import logging
 from tempfile import TemporaryFile
-from typing import Optional
 
 from django.conf import settings
 from django.urls import reverse
@@ -38,7 +37,7 @@ def _course_url_from_subscription(subscription: Subscribe) -> str:
     )
 
 
-def send_subscription_confirmation(subscription: Subscribe) -> Optional[Email]:
+def send_subscription_confirmation(subscription: Subscribe) -> Email | None:
     context = {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -126,7 +125,7 @@ def _build_subscription_context(subscription: Subscribe) -> dict:
     }
 
 
-def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
+def send_participation_confirmation(subscription: Subscribe) -> Email | None:
     context = _build_subscription_context(subscription)
 
     if subscription.partner is not None:
@@ -160,7 +159,7 @@ def send_participation_confirmation(subscription: Subscribe) -> Optional[Email]:
     return send_email(**email_args)
 
 
-def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
+def send_online_payment_successful(subscription: Subscribe) -> Email | None:
     context = {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -177,7 +176,7 @@ def send_online_payment_successful(subscription: Subscribe) -> Optional[Email]:
     )
 
 
-def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email]:
+def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Email | None:
     context = {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -194,7 +193,7 @@ def send_sorry_for_incorrect_reminder(subscription: Subscribe) -> Optional[Email
     )
 
 
-def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
+def send_payment_reminder(subscription: Subscribe) -> Email | None:
     context = _build_subscription_context(subscription)
     context["open_amount"] = subscription.open_amount()
     context["reductions"] = subscription.sum_of_reductions()
@@ -215,7 +214,7 @@ def send_payment_reminder(subscription: Subscribe) -> Optional[Email]:
         )
 
 
-def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
+def send_rejection(subscription: Subscribe, reason: str) -> Email | None:
     context = {
         "first_name": subscription.user.first_name,
         "last_name": subscription.user.last_name,
@@ -223,7 +222,7 @@ def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
         "course_info": create_course_info(subscription.course),
     }
 
-    template = "rejection_{}".format(reason)
+    template = f"rejection_{reason}"
 
     return send_email(
         to=subscription.user.email,
@@ -233,7 +232,7 @@ def send_rejection(subscription: Subscribe, reason: str) -> Optional[Email]:
     )
 
 
-def send_teacher_welcome(teach: Teach) -> Optional[Email]:
+def send_teacher_welcome(teach: Teach) -> Email | None:
     teacher = teach.teacher
     if not teacher.email:
         return None
@@ -314,7 +313,7 @@ def create_course_info(course: Course) -> str:
     return s.strip("\n")
 
 
-def send_move_to_waiting_list(subscription: Subscribe) -> Optional[Email]:
+def send_move_to_waiting_list(subscription: Subscribe) -> Email | None:
     context = {
         "first_name": subscription.user.first_name,
         "course": subscription.course.type.title,

@@ -1,5 +1,4 @@
 from datetime import date
-from typing import Optional
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -63,16 +62,16 @@ class Room(TranslatableModel):
         ),
     )
 
-    def get_description(self) -> Optional[str]:
+    def get_description(self) -> str | None:
         return TranslationUtils.get_text_with_language_fallback(self, "description")
 
-    def get_instructions(self) -> Optional[str]:
+    def get_instructions(self) -> str | None:
         return TranslationUtils.get_text_with_language_fallback(self, "instructions")
 
-    def get_disclaimer(self) -> Optional[str]:
+    def get_disclaimer(self) -> str | None:
         return TranslationUtils.get_text_with_language_fallback(self, "disclaimer")
 
-    def get_information_for_participants(self) -> Optional[str]:
+    def get_information_for_participants(self) -> str | None:
         return TranslationUtils.get_text_with_language_fallback(
             self, "information_for_participants"
         )
@@ -87,7 +86,7 @@ class Room(TranslatableModel):
         ) is not None
 
     def is_cancelled(self, query_date: date) -> bool:
-        return any((query_date == c.date for c in self.cancellations.all()))
+        return any(query_date == c.date for c in self.cancellations.all())
 
     def get_access_codes(
         self, code_date: date | None = None

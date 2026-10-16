@@ -1,4 +1,5 @@
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 from uuid import uuid4
 
 from django import template
@@ -31,12 +32,12 @@ def concat_all(*args: Iterable[Any]) -> str:
 
 
 @register.filter(name="abs")
-def absolute(value: int | float) -> int | float:
+def absolute(value: float) -> int | float:
     return abs(value)
 
 
 @register.filter(name="minus")
-def minus(a: int | float, b: int | float) -> int | float:
+def minus(a: float, b: float) -> int | float:
     return a - b
 
 

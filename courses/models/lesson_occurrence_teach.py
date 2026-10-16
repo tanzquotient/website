@@ -18,7 +18,7 @@ class LessonOccurrenceTeach(models.Model):
     def save(self, *args, **kwargs):
         if self.hourly_wage is None:
             self.hourly_wage = self.calculate_hourly_wage()
-        super(LessonOccurrenceTeach, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def calculate_hourly_wage(self) -> Decimal:
         # For external courses, teachers are not paid by us

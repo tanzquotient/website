@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
-from typing import Optional
 
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -116,7 +115,7 @@ class Voucher(Model):
 
     def apply_to(
         self, subscription: Subscribe, user: User
-    ) -> tuple[bool, Optional[Voucher]]:
+    ) -> tuple[bool, Voucher | None]:
         with transaction.atomic():
             locked_voucher = Voucher.objects.select_for_update().get(pk=self.pk)
             if locked_voucher.used:
@@ -171,9 +170,9 @@ class Voucher(Model):
 
     def mark_as_used(
         self,
-        subscription: Optional[Subscribe] = None,
-        user: Optional[User] = None,
-        comment: Optional[str] = None,
+        subscription: Subscribe | None = None,
+        user: User | None = None,
+        comment: str | None = None,
     ) -> None:
         with transaction.atomic(), reversion.create_revision():
             self.used = True

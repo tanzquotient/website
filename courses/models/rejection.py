@@ -22,4 +22,4 @@ class Rejection(models.Model):
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self) -> str:
-        return "({}) rejected at {}".format(self.subscription, self.date)
+        return f"({self.subscription}) rejected at {self.date}"

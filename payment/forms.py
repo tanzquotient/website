@@ -65,7 +65,7 @@ class VoucherForm(forms.Form):
 
 class AccountFinanceIndexForm(forms.Form):
     def __init__(self, years, *args, **kwargs):
-        super(AccountFinanceIndexForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["year"] = forms.ChoiceField(
             label=_("Select year"),
             required=False,

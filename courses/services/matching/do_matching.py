@@ -46,13 +46,11 @@ def _partition_subscribes(
     If there are to many leaders or followers, the newest subscriptions are discarded
     If there is an odd number of subscriptions, the newest subscription is discarded
     """
-    log.info("got {} subscribes".format(len(subscribes)))
+    log.info(f"got {len(subscribes)} subscribes")
 
     a, b, no_preference = _get_lists_for_partition(subscribes)
     log.info(
-        "sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(
-            len(a), len(b), len(no_preference)
-        )
+        f"sizes: |a| = {len(a)}, |b| = {len(b)}, |no_preference| = {len(no_preference)}"
     )
 
     if len(a) >= len(b) + len(no_preference):
@@ -60,37 +58,29 @@ def _partition_subscribes(
         a = a[0:num_pairs]
         b += no_preference
         log.info(
-            "added all with no preference to smaller set. Limiting larger set to {} subscribes".format(
-                num_pairs
-            )
+            f"added all with no preference to smaller set. Limiting larger set to {num_pairs} subscribes"
         )
 
     else:  # diff := len(a) - len(b) < len(no_preference)
         # If odd number: remove last subscribe
         if len(subscribes) % 2 == 1:
-            log.info(
-                "odd number of subscriptions, dropping '{}'".format(subscribes[-1])
-            )
+            log.info(f"odd number of subscriptions, dropping '{subscribes[-1]}'")
             subscribes = subscribes[0:-1]
             a, b, no_preference = _get_lists_for_partition(subscribes)
             log.info(
-                "new sizes: |a| = {}, |b| = {}, |no_preference| = {}".format(
-                    len(a), len(b), len(no_preference)
-                )
+                f"new sizes: |a| = {len(a)}, |b| = {len(b)}, |no_preference| = {len(no_preference)}"
             )
 
         diff = len(a) - len(b)
         assign_to_a_count = (len(no_preference) - diff) // 2
         log.info(
-            "assigning {} subscribe(s) with no preference to a. The remaining {} will be assigned to b".format(
-                assign_to_a_count, len(no_preference) - assign_to_a_count
-            )
+            f"assigning {assign_to_a_count} subscribe(s) with no preference to a. The remaining {len(no_preference) - assign_to_a_count} will be assigned to b"
         )
 
         a += no_preference[0:assign_to_a_count]
         b += no_preference[assign_to_a_count:]
 
-    log.info("found partition with |a| = {}, |b| = {}.".format(len(a), len(b)))
+    log.info(f"found partition with |a| = {len(a)}, |b| = {len(b)}.")
     return a, b
 
 
@@ -132,7 +122,7 @@ def _match_for_course(
         assert LeadFollow.is_compatible(
             subscribe_a.lead_follow, subscribe_b.lead_follow
         )
-        log.info("going to match '{}' with '{}'".format(subscribe_a, subscribe_b))
+        log.info(f"going to match '{subscribe_a}' with '{subscribe_b}'")
 
         with reversion.create_revision():
             subscribe_a.partner = subscribe_b.user
@@ -148,7 +138,7 @@ def _match_for_course(
             )
 
     match_count = len(a)
-    log.info("match count = {}".format(match_count))
+    log.info(f"match count = {match_count}")
     return match_count
 
 
@@ -158,10 +148,10 @@ def match_partners(
     courses = subscriptions.values_list("course", flat=True)
     match_count = 0
     for course_id in set(courses):
-        log.info("matching for course id {}".format(course_id))
+        log.info(f"matching for course id {course_id}")
         match_count += _match_for_course(subscriptions, course_id, request)
 
-    log.info("{} couples matched successfully".format(match_count))
+    log.info(f"{match_count} couples matched successfully")
     if match_count > 0:
         messages.add_message(
             request,

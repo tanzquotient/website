@@ -19,4 +19,4 @@ class TeacherOnly(View):
         ):
             raise PermissionDenied
 
-        return super(TeacherOnly, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)

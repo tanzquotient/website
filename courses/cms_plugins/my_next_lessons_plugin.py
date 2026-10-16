@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable
 from zoneinfo import ZoneInfo
 
 from cms.models.pluginmodel import CMSPlugin

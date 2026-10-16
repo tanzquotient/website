@@ -11,4 +11,4 @@ class TeacherWelcome(models.Model):
     mail = models.ForeignKey(Email, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "({}) welcomed at {}".format(self.teach, self.date)
+        return f"({self.teach}) welcomed at {self.date}"

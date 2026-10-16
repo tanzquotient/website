@@ -14,7 +14,7 @@ class CourseAttendanceView(TemplateView, TeacherOfCourseOnly):
 
     def get_context_data(self, **kwargs):
         course: Course = Course.objects.filter(id=kwargs.get("course")).first()
-        context = super(CourseAttendanceView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["course"] = course
         context["now"] = datetime.now(tz=ZoneInfo("Europe/Zurich"))
         return context

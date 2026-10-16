@@ -9,9 +9,7 @@ from courses.models.choices import LeadFollow, MatchingState, SubscribeState, We
 
 class UserProfileManager(models.Manager):
     def get_queryset(self):
-        return (
-            super(UserProfileManager, self).get_queryset().filter(user__is_active=True)
-        )
+        return super().get_queryset().filter(user__is_active=True)
 
 
 class CourseManager(TranslatableManager):

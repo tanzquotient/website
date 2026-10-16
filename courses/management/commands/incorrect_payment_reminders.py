@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from django.core.management.base import BaseCommand
@@ -23,7 +22,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        log.info("run management command: {}".format(__file__))
+        log.info(f"run management command: {__file__}")
         print(
             "the following subscribers where incorrectly reminded of not having paid:"
         )
@@ -32,7 +31,7 @@ class Command(BaseCommand):
             s = pr.subscription
             if s.state in SubscribeState.PAID_STATES:
                 count += 1
-                print("{} - {} - {}".format(s.id, s.usi, s))
+                print(f"{s.id} - {s.usi} - {s}")
                 if options["sorry"]:
                     send_sorry_for_incorrect_reminder(s)
-        print("TOTAL: {}".format(count))
+        print(f"TOTAL: {count}")

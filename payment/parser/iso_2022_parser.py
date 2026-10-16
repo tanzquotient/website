@@ -1,8 +1,8 @@
 import logging
 import re
+from collections.abc import Iterable
 from datetime import datetime
 from decimal import Decimal
-from typing import Iterable
 from xml.etree import ElementTree as ET
 
 from django.db import DatabaseError
@@ -86,7 +86,7 @@ class ISO2022Parser:
     @staticmethod
     def parse_file(db_file: FinanceFile) -> list[Payment]:
         filename = db_file.name
-        log.info("parse file {}".format(filename))
+        log.info(f"parse file {filename}")
         if db_file.processed:
             log.info("file has already been processed previously")
 
@@ -97,7 +97,7 @@ class ISO2022Parser:
         ns = {"pf": "urn:iso:std:iso:20022:tech:xsd:camt.053.001.04"}
 
         def find_or_empty(transaction, name):
-            e = transaction.find(".//pf:{}".format(name), ns)
+            e = transaction.find(f".//pf:{name}", ns)
             return e.text if e is not None else ""
 
         for transaction in root.findall(".//pf:Ntry", ns):
@@ -106,20 +106,16 @@ class ISO2022Parser:
             only_zero_regex = re.compile(r"^0*$")
             if only_zero_regex.match(transaction_id):
                 log.warning(
-                    "A transaction of file {} has an invalid transaction ID: {}".format(
-                        filename, transaction_id
-                    )
+                    f"A transaction of file {filename} has an invalid transaction ID: {transaction_id}"
                 )
                 continue
-            log.info("processing transaction {}".format(transaction_id))
+            log.info(f"processing transaction {transaction_id}")
             payments_count = Payment.objects.filter(
                 transaction_id=transaction_id
             ).count()
             if payments_count > 0:
                 log.warning(
-                    "transaction {} in file {} already exists in database".format(
-                        transaction_id, filename
-                    )
+                    f"transaction {transaction_id} in file {filename} already exists in database"
                 )
                 continue
 
@@ -163,7 +159,7 @@ class ISO2022Parser:
             payment.filename = filename
             payment.file = db_file
             payments.append(payment)
-            log.info("Detected payment: {}".format(payment))
+            log.info(f"Detected payment: {payment}")
 
         return payments
 

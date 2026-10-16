@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 from zoneinfo import ZoneInfo
 
 from django.contrib.auth.models import User
@@ -23,7 +23,7 @@ from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 @dataclass(kw_only=True, frozen=True)
 class CheckItem:
     user: User
-    present: Optional[bool]
+    present: bool | None
     is_replacement: bool
     is_excused: bool = False
 
@@ -32,7 +32,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
     template_name = "payment/lesson/attendance_check.html"
 
     def get_context_data(self, **kwargs: object) -> dict[str, Any]:
-        context = super(LessonAttendanceCheckView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(LessonOccurrence, pk=kwargs.get("lesson"))
         context["lesson"] = lesson
         context["course"] = lesson.course
@@ -54,7 +54,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
             a.user for a in attendances if a.state == AttendanceState.ABSENT_EXCUSED
         ]
 
-        def is_present(user: User) -> Optional[bool]:
+        def is_present(user: User) -> bool | None:
             if user in present:
                 return True
             if user in absent:
@@ -115,8 +115,8 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
 
     @staticmethod
     def update_attendance(
-        existing_attendance: Optional[Attendance],
-        role: Optional[LeadFollow],
+        existing_attendance: Attendance | None,
+        role: LeadFollow | None,
         is_present: bool,
         lesson: LessonOccurrence,
         user_id: int,

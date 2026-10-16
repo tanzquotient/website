@@ -1,5 +1,5 @@
 import logging
-from typing import Iterable, Optional, Union
+from collections.abc import Iterable
 
 from django.core.exceptions import ValidationError
 from post_office import mail
@@ -13,17 +13,17 @@ HEADER_REPLY_TO = "Reply-To"
 
 
 def send_email(
-    to: Union[str, Iterable[str]],
-    reply_to: Optional[str] = None,
-    template: Optional[str] = None,
-    context: Optional[dict] = None,
-    sender: Optional[str] = None,
-    subject: Optional[str] = None,
-    headers: Optional[dict] = None,
-    message: Optional[str] = None,
-    html_message: Optional[str] = None,
-    attachments: Optional[dict] = None,
-) -> Optional[Email]:
+    to: str | Iterable[str],
+    reply_to: str | None = None,
+    template: str | None = None,
+    context: dict | None = None,
+    sender: str | None = None,
+    subject: str | None = None,
+    headers: dict | None = None,
+    message: str | None = None,
+    html_message: str | None = None,
+    attachments: dict | None = None,
+) -> Email | None:
     # https://stackoverflow.com/questions/26320899/why-is-the-empty-dictionary-a-dangerous-default-value-in-python
     if headers is None:
         headers = dict()
@@ -49,7 +49,7 @@ def send_email(
         return mail.send(**email)
 
     except ValidationError as e:
-        log.warning(f"Validation failed: {repr(e)}. Data: {email}")
+        log.warning(f"Validation failed: {e!r}. Data: {email}")
     except EmailTemplate.DoesNotExist:
         log.error(f"Email Template missing with name: {email['template']}")
 

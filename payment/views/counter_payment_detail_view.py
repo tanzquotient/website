@@ -18,14 +18,14 @@ class CounterPaymentDetailView(FormView):
         usi = self.kwargs["usi"]
         subscription = Subscribe.objects.filter(usi=usi).first()
 
-        context = super(CounterPaymentDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["subscription"] = subscription
 
         return context
 
     @method_decorator(permission_required("courses.access_counterpayment"))
     def dispatch(self, *args, **kwargs):
-        return super(CounterPaymentDetailView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
     def form_valid(self, form, **kwargs):
         usi = self.kwargs["usi"]
@@ -39,4 +39,4 @@ class CounterPaymentDetailView(FormView):
                 "USI " + usi + " " + _("successfully marked as paid."),
             )
 
-        return super(CounterPaymentDetailView, self).form_valid(form)
+        return super().form_valid(form)

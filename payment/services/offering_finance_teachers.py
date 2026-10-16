@@ -1,5 +1,5 @@
+from collections.abc import Sequence
 from decimal import Decimal
-from typing import Sequence
 
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -277,16 +277,14 @@ def _teachings(
                 hours = 0
             else:
                 hours = Decimal(
-                    (
-                        sum(
-                            [
-                                lesson_occurrence.get_hours()
-                                for lesson_occurrence in LessonOccurrence.objects.filter(
-                                    course=course, teachers=teacher
-                                ).all()
-                            ],
-                            Decimal(0),
-                        )
+                    sum(
+                        [
+                            lesson_occurrence.get_hours()
+                            for lesson_occurrence in LessonOccurrence.objects.filter(
+                                course=course, teachers=teacher
+                            ).all()
+                        ],
+                        Decimal(0),
                     )
                 )
 
@@ -383,17 +381,15 @@ def _teachers(offerings: Sequence[Offering], only_completed: bool = True) -> lis
         )
 
         teacher_hours = Decimal(
-            (
-                sum(
-                    [
-                        lesson_occurrence.get_hours()
-                        for lesson_occurrence in LessonOccurrence.objects.filter(
-                            course__in=teacher_courses,
-                            teachers=teacher,
-                        ).all()
-                    ],
-                    Decimal(0),
-                )
+            sum(
+                [
+                    lesson_occurrence.get_hours()
+                    for lesson_occurrence in LessonOccurrence.objects.filter(
+                        course__in=teacher_courses,
+                        teachers=teacher,
+                    ).all()
+                ],
+                Decimal(0),
             )
         )
         teacher_total_salary = sum(

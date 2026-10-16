@@ -12,5 +12,5 @@ class PeriodCancellation(models.Model):
     def __str__(self):
         date_string = "{}".format(self.date.strftime("%d.%m.%Y"))
         if self.name:
-            return "{} ({})".format(self.name, date_string)
+            return f"{self.name} ({date_string})"
         return date_string

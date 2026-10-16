@@ -613,7 +613,7 @@ def make_inactive(modeladmin, request, queryset):
         user.is_active = False
         user.save()
     messages.add_message(
-        request, messages.SUCCESS, "Deactivated {} profiles".format(queryset.count())
+        request, messages.SUCCESS, f"Deactivated {queryset.count()} profiles"
     )
 
 
