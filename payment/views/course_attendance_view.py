@@ -13,7 +13,11 @@ class CourseAttendanceView(TemplateView, TeacherOfCourseOnly):
     template_name = "payment/courses/attendance.html"
 
     def get_context_data(self, **kwargs):
-        course: Course = Course.objects.filter(id=kwargs.get("course")).first()
+        course: Course = (
+            Course.objects.filter(id=kwargs.get("course"))
+            .prefetch_related("subscriptions", "lesson_occurrences__attendances")
+            .first()
+        )
         context = super().get_context_data(**kwargs)
         context["course"] = course
         context["now"] = datetime.now(tz=ZoneInfo("Europe/Zurich"))

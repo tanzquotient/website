@@ -17,6 +17,7 @@ from courses.models import (
     Subscribe,
     SubscribeState,
 )
+from courses.utils import attendances_by_state
 from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 
 
@@ -48,7 +49,7 @@ class LessonAttendanceCheckView(TemplateView, TeacherOfCourseOnly):
         ]
         present = [a.user for a in attendances if a.state == AttendanceState.PRESENT]
         replacements = [
-            a.user for a in attendances if a.state == AttendanceState.REPLACEMENT
+            a.user for a in attendances_by_state(lesson, [AttendanceState.REPLACEMENT])
         ]
         excused = [
             a.user for a in attendances if a.state == AttendanceState.ABSENT_EXCUSED

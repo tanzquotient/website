@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
@@ -33,9 +34,18 @@ class MyAttendanceApiView(APIView):
         if not change_attendance_window_open(lesson_occurrence):
             raise ValidationError(detail="You can not change your attendance anymore.")
 
-        # Special case: replacement cancels
-        if state == AttendanceState.ABSENT_EXCUSED and (
-            Attendance.objects.filter(
+        subscription = Subscribe.objects.filter(
+            user=user,
+            course=lesson_occurrence.course,
+            state__in=SubscribeState.ACCEPTED_STATES,
+        ).first()
+
+        # Special case: replacement cancels (a spot claimed before joining the course
+        # is ignored, the user is handled as a regular participant then)
+        if (
+            subscription is None
+            and state == AttendanceState.ABSENT_EXCUSED
+            and Attendance.objects.filter(
                 lesson_occurrence=lesson_occurrence,
                 user=user,
                 state=AttendanceState.REPLACEMENT,
@@ -49,12 +59,8 @@ class MyAttendanceApiView(APIView):
             return Response(data=data)
 
         # Regular case: participant attendance
-        subscription = get_object_or_404(
-            Subscribe,
-            user=user,
-            course=lesson_occurrence.course,
-            state__in=SubscribeState.ACCEPTED_STATES,
-        )
+        if subscription is None:
+            raise Http404
 
         role = subscription.assigned_role()
         if role == LeadFollow.NO_PREFERENCE:
@@ -67,12 +73,10 @@ class MyAttendanceApiView(APIView):
                 lesson_occurrence=lesson_occurrence, user=user
             ).delete()
         else:
-            attendance, _ = Attendance.objects.get_or_create(
+            Attendance.objects.update_or_create(
                 user=user,
                 lesson_occurrence=lesson_occurrence,
-                role=role,
+                defaults={"role": role, "state": state},
             )
-            attendance.state = state
-            attendance.save()
 
         return Response(data=data)

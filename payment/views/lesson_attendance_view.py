@@ -13,6 +13,7 @@ from courses.models import (
     Subscribe,
     SubscribeState,
 )
+from courses.utils import attendances_by_state
 from payment.views.teachers_of_course_only import TeacherOfCourseOnly
 
 
@@ -21,11 +22,18 @@ class LessonAttendanceView(TemplateView, TeacherOfCourseOnly):
 
     def get_context_data(self, **kwargs: object) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        lesson = get_object_or_404(LessonOccurrence, pk=kwargs.get("lesson"))
+        lesson = get_object_or_404(
+            LessonOccurrence.objects.select_related("course").prefetch_related(
+                "course__subscriptions__user", "attendances__user"
+            ),
+            pk=kwargs.get("lesson"),
+        )
         context["lesson"] = lesson
         context["course"] = lesson.course
         attendances = sorted(
-            lesson.attendances.all(),
+            attendances_by_state(
+                lesson, AttendanceState.PRESENT_STATES + AttendanceState.ABSENT_STATES
+            ),
             key=lambda a: a.user.get_full_name(),
         )
         absent = [

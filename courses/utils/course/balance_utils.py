@@ -16,13 +16,9 @@ def course_lead_follow_balance(course: Course) -> int:
     balance = #leaders - #followers
     """
     subscriptions = course_accepted_subscriptions(course)
-    single_leaders = [
-        s for s in subscriptions if s.is_single_with_preference(LeadFollow.LEAD)
-    ]
-    single_followers = [
-        s for s in subscriptions if s.is_single_with_preference(LeadFollow.FOLLOW)
-    ]
-    return len(single_leaders) - len(single_followers)
+    leaders = [s for s in subscriptions if s.assigned_role() == LeadFollow.LEAD]
+    followers = [s for s in subscriptions if s.assigned_role() == LeadFollow.FOLLOW]
+    return len(leaders) - len(followers)
 
 
 def course_accepted_subscriptions(course: Course) -> list[Subscribe]:
@@ -56,8 +52,17 @@ def attendances_by_state(
     lesson: LessonOccurrence,
     states: Collection[str],
 ) -> list[Attendance]:
+    participant_ids = {s.user_id for s in course_accepted_subscriptions(lesson.course)}
     return [
         attendance
         for attendance in lesson.attendances.all()
         if attendance.state in states
+        and _matches_participation(attendance, participant_ids)
     ]
+
+
+def _matches_participation(attendance: Attendance, participant_ids: set[int]) -> bool:
+    is_participant = attendance.user_id in participant_ids
+    if attendance.state == AttendanceState.REPLACEMENT:
+        return not is_participant
+    return is_participant
