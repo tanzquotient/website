@@ -1051,6 +1051,12 @@ class Course(TranslatableModel):
         for lesson in old.irregular_lessons.all():
             lesson.pk = None
             lesson.course = self
+            # lesson details are one-to-one, so the copied lesson needs its own
+            if lesson.lesson_details is not None:
+                lesson_details = lesson.lesson_details
+                lesson_details.pk = None
+                lesson_details.save()
+                lesson.lesson_details = lesson_details
             lesson.save()
 
         # copy teachers
