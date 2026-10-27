@@ -77,6 +77,39 @@ class RoomAdminForm(TranslatableModelForm):
         return instance
 
 
+class LessonDetailsRoomForm(forms.ModelForm):
+    # choose the room directly instead of selecting one of all existing lesson
+    # details, which are only labelled by their room (each room listed many times)
+    room = forms.ModelChoiceField(
+        queryset=Room.objects.all(),
+        required=False,
+        help_text="Only set, if different from the course's room",
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.lesson_details:
+            self.fields["room"].initial = self.instance.lesson_details.room
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        room = self.cleaned_data.get("room")
+        details = instance.lesson_details
+        if details is None:
+            if room:
+                instance.lesson_details = LessonDetails.objects.create(room=room)
+        elif details.room != room:
+            details.room = room
+            details.save()
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
+
+
 @admin.register(Offering)
 class OfferingAdmin(TranslatableAdmin):
     list_display = (
@@ -161,6 +194,8 @@ class SubscribeInlineForCourse(UserFullNameAdminMixin, admin.TabularInline):
 
 class IrregularLessonInline(admin.TabularInline):
     model = IrregularLesson
+    form = LessonDetailsRoomForm
+    exclude = ("lesson_details",)
     extra = 0
 
 
@@ -172,6 +207,8 @@ class RegularLessonInline(admin.TabularInline):
 
 class RegularLessonExceptionInline(admin.TabularInline):
     model = RegularLessonException
+    form = LessonDetailsRoomForm
+    exclude = ("lesson_details",)
     extra = 0
 
 

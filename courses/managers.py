@@ -1,7 +1,9 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import OuterRef, QuerySet, Subquery
+from django.db.models.functions import Coalesce
+from django.utils.translation import get_language
 from parler.managers import TranslatableManager
 
 from courses.models.choices import LeadFollow, MatchingState, SubscribeState, Weekday
@@ -149,7 +151,14 @@ class SubscribeQuerySet(models.QuerySet):
 
 class CourseTypeManager(TranslatableManager):
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().order_by("translations__title").distinct()
+        # ordering by translations__title would list a course type once per
+        # language, so sort by its title in the active language (or any other)
+        titles = self.model._parler_meta.root_model.objects.filter(
+            master=OuterRef("pk")
+        ).values("title")
+        title = Subquery(titles.filter(language_code=get_language())[:1])
+        fallback_title = Subquery(titles[:1])
+        return super().get_queryset().order_by(Coalesce(title, fallback_title))
 
 
 class LessonOccurrenceQuerySet(models.QuerySet):
