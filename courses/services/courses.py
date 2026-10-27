@@ -7,24 +7,47 @@ import reversion
 from django.contrib.auth.models import User
 from post_office.models import EmailTemplate
 
-from courses.models import Course, Voucher
+from courses.models import Course, CourseType, Voucher
 from courses.services.general import log
-from courses.services.offerings import get_subsequent_offering
 from email_system.services import send_all_emails
 from survey.models import Survey, SurveyInstance
 from tq_website import settings
 
 
-def copy_course(course: Course, to=None):
-    if to is None:
-        to = get_subsequent_offering()
-    if to is not None:
-        course_copy = course.copy()
-        course_copy.offering = to
-        course_copy.active = False
-        course_copy.cancelled = False
-        course_copy.completed = False
-        course_copy.save()
+def get_next_level_type(course_type: CourseType) -> CourseType | None:
+    """
+    Returns the successor of the course type (as set for early sign-up) one level
+    higher, the course type itself if it is its own successor (e.g. a show group)
+    or None if there is no unique successor.
+    """
+    successors = list(course_type.successors.all())
+    candidates = []
+    if course_type.level is not None:
+        candidates = [t for t in successors if t.level == course_type.level + 1]
+    if len(candidates) > 1:
+        # e.g. Bachata 3 and Bachata Sensual 3 for Bachata 2
+        next_title = course_type.title.replace(
+            str(course_type.level), str(course_type.level + 1)
+        )
+        candidates = [t for t in candidates if t.title == next_title]
+    if len(candidates) == 1:
+        return candidates[0]
+    return course_type if course_type in successors else None
+
+
+def get_copy_notes(course: Course) -> list[str]:
+    """Describes what Course.copy() changes or leaves out for the given course."""
+    notes = []
+    if course.cancelled:
+        notes.append("Cancelled, offered again at the same level")
+    if course.period:
+        notes.append(f"Custom period {course.period} replaced by the offering period")
+    irregular_lessons = course.irregular_lessons.all()
+    if not course.regular_lessons.all():
+        notes.append("No regular lessons, add the lessons manually")
+    if irregular_lessons:
+        notes.append(f"{len(irregular_lessons)} irregular lesson(s) not copied")
+    return notes
 
 
 def send_course_email(data: dict[str, Any], courses: Iterable[Course]) -> None:

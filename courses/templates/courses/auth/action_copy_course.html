@@ -2,19 +2,51 @@
 
 {% block content %}
 
-<p>This action requires additional information:</p>
-
 <form action="" method="post">
     {% csrf_token %}
+    {% for field in copy_form.hidden_fields %}{{ field }}{% endfor %}
+    {{ copy_form.non_field_errors }}
+
+    {{ copy_form.offering.errors }}
+    <p>{{ copy_form.offering.label_tag }} {{ copy_form.offering }}</p>
+
     <p>
-        {{ copy_form }}
+        Everything that does not depend on dates is copied: name, room, prices, settings,
+        description, teachers and the weekday and time of the regular lessons.
+        The copies use the period of the offering. Custom periods, irregular lessons,
+        exceptions of regular lessons and subscriptions are not copied.
+        The copies are inactive until you activate them.
     </p>
-    <p>The following subscriptions will be copied to the selected offering:</p>
 
-    <ul>{{ courses|unordered_list }}</ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Copy</th>
+                <th>Course</th>
+                <th>Course type</th>
+                <th>Course type of the copy</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in copy_form.rows %}
+                <tr>
+                    <td>{{ row.copy }}</td>
+                    <td>{{ row.course }}</td>
+                    <td>{{ row.course.type }}</td>
+                    <td>{{ row.type.errors }}{{ row.type }}</td>
+                    <td>
+                        {% for note in row.notes %}
+                            {{ note }}{% if not forloop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <input type="hidden" name="action" value="copy_courses" />
-    <input type="submit" name="copy" value="Copy" />
+    <input type="hidden" name="action" value="{{ action }}" />
+    <p><input type="submit" name="copy" value="Copy" /></p>
 </form>
 
 {% endblock %}

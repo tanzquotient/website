@@ -31,9 +31,11 @@ from courses.models.style import Style
 
 if TYPE_CHECKING:
     from courses.models import (
+        CourseType,
         IrregularLesson,
         LessonOccurrence,
         LessonOccurrenceData,
+        Offering,
         Period,
         RegularLesson,
         RegularLessonException,
@@ -1034,38 +1036,58 @@ class Course(TranslatableModel):
             f"{self.get_total_time().total_seconds() / hour.total_seconds():.2f}"
         )
 
-    # create and stores identical copy of this course
-    def copy(self) -> Course:
-        old = Course.objects.get(pk=self.id)
-        self.pk = None
-        self.completed = False
-        self.save()
+    def copy(self, offering: Offering, course_type: CourseType | None = None) -> Course:
+        """
+        Creates an inactive copy of this course in the given offering, leaving out
+        everything that depends on dates: the copy uses the offering's period and
+        gets the regular lessons without their exceptions, but no irregular lessons.
+        """
+        course_type = course_type or self.type
 
-        # copy regular lessons
-        for lesson in old.regular_lessons.all():
-            lesson.pk = None
-            lesson.course = self
-            lesson.save()
+        # fresh instance, so no prefetched relations of this course are carried over
+        course_copy = Course.objects.get(pk=self.pk)
+        course_copy.pk = None
+        course_copy.id = None
+        course_copy._state.adding = True
 
-        # copy irregular lessons
-        for lesson in old.irregular_lessons.all():
-            lesson.pk = None
-            lesson.course = self
-            # lesson details are one-to-one, so the copied lesson needs its own
-            if lesson.lesson_details is not None:
-                lesson_details = lesson.lesson_details
-                lesson_details.pk = None
-                lesson_details.save()
-                lesson.lesson_details = lesson_details
-            lesson.save()
+        course_copy.offering = offering
+        course_copy.period = None
+        course_copy.type = course_type
+        if course_type != self.type:
+            course_copy.name = self.name.replace(self.type.title, course_type.title)
+        course_copy.active = False
+        # cancelling hides a course, but the copy is offered again
+        course_copy.display = self.display or self.cancelled
+        course_copy.cancelled = False
+        course_copy.completed = False
+        # the course type might have changed, keep the copy valid (see clean())
+        course_copy.early_signup = (
+            self.early_signup and course_type.predecessors.exists()
+        )
+        course_copy.partner_required_at_signup = (
+            self.partner_required_at_signup and course_type.couple_course
+        )
 
-        # copy teachers
-        for teach in old.teaching.all():
-            teach.pk = None
-            teach.course = self
-            teach.save()
+        # information for participants is addressed to the current participants
+        for translation in self.translations.all():
+            course_copy.set_current_language(translation.language_code)
+            course_copy.description = translation.description
 
-        return self
+        course_copy.save()
+
+        for lesson in self.regular_lessons.all():
+            course_copy.regular_lessons.create(
+                weekday=lesson.weekday,
+                time_from=lesson.time_from,
+                time_to=lesson.time_to,
+            )
+
+        for teach in self.teaching.all():
+            course_copy.teaching.create(
+                teacher_id=teach.teacher_id, hourly_wage=teach.hourly_wage
+            )
+
+        return course_copy
 
     class Meta:
         ordering = ["offering", "name"]

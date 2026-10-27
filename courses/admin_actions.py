@@ -4,6 +4,7 @@ import tempfile
 import zipfile
 
 from django.contrib import admin, messages
+from django.db import transaction
 from django.db.models import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -129,39 +130,69 @@ def cancel(modeladmin, request, queryset: QuerySet[Course]) -> None:
         )
 
 
-@admin.action(description="Create copy of courses in another offering")
-def copy_courses(modeladmin, request, queryset):
-    form = None
+def _copy_courses_into_offering(
+    modeladmin, request, queryset, courses, action, advance_levels
+):
+    form = CopyCourseForm(
+        request.POST if "copy" in request.POST else None,
+        initial={
+            "_selected_action": map(str, queryset.values_list("id", flat=True)),
+            "offering": services.get_subsequent_offering(),
+        },
+        courses=courses.select_related("type", "period", "offering").prefetch_related(
+            "type__translations",
+            "type__successors__translations",
+            "regular_lessons",
+            "irregular_lessons",
+        ),
+        advance_levels=advance_levels,
+    )
 
-    if "copy" in request.POST:
-        form = CopyCourseForm(request.POST)
-
-        if form.is_valid():
-            offering = form.cleaned_data["offering"]
-
-            for c in queryset:
-                services.courses.copy_course(
-                    c,
-                    to=offering,
-                )
-
-            return HttpResponseRedirect(request.get_full_path())
-
-    if not form:
-        form = CopyCourseForm(
-            initial={
-                "_selected_action": map(str, queryset.values_list("id", flat=True)),
-                "offering": services.get_subsequent_offering(),
-            }
+    if form.is_valid():
+        offering = form.cleaned_data["offering"]
+        with transaction.atomic():
+            copies = [
+                course.copy(offering, course_type)
+                for course, course_type in form.get_courses_to_copy()
+            ]
+        modeladmin.message_user(
+            request,
+            f"Copied {len(copies)} courses into {offering}. "
+            "The copies are inactive, activate them once they are ready.",
+            messages.SUCCESS,
+        )
+        return HttpResponseRedirect(
+            reverse("admin:courses_course_changelist")
+            + f"?offering__id__exact={offering.pk}"
         )
 
     return render(
         request,
         "courses/auth/action_copy_course.html",
         {
-            "courses": queryset,
+            **modeladmin.admin_site.each_context(request),
             "copy_form": form,
+            "action": action,
         },
+    )
+
+
+@admin.action(description="Create copy of courses in another offering")
+def copy_courses(modeladmin, request, queryset):
+    return _copy_courses_into_offering(
+        modeladmin, request, queryset, queryset, "copy_courses", advance_levels=False
+    )
+
+
+@admin.action(description="Copy courses into another offering (one level higher)")
+def copy_offering_courses(modeladmin, request, queryset):
+    return _copy_courses_into_offering(
+        modeladmin,
+        request,
+        queryset,
+        Course.objects.filter(offering__in=queryset),
+        "copy_offering_courses",
+        advance_levels=True,
     )
 
 

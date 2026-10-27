@@ -129,6 +129,7 @@ class OfferingAdmin(TranslatableAdmin):
         deactivate,
         enable_early_signup,
         disable_early_signup,
+        copy_offering_courses,
         offering_emaillist,
         export_teacher_payment_information_csv,
         export_teacher_payment_information_excel,
