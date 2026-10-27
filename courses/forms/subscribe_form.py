@@ -38,10 +38,8 @@ class SubscribeForm(forms.Form):
 
         # Mandatory experience?
         experience = cleaned_data.get("experience")
-        if (
-            self.course.experience_mandatory
-            and experience is None
-            or experience.strip() == ""
+        if self.course.experience_mandatory and (
+            experience is None or experience.strip() == ""
         ):
             error = ValidationError(
                 message=_("This field is required."),

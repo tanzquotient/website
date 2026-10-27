@@ -1,3 +1,4 @@
+import contextlib
 import shutil
 import tempfile
 import zipfile
@@ -696,8 +697,11 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
         fmt = request.POST.get("format", "pdf")
 
         if fmt == "zip":
-            # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
-            with tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024) as spooled:
+            with contextlib.ExitStack() as stack:
+                # Spool to disk past 10 MB to avoid holding many PDFs in RAM at once.
+                spooled = stack.enter_context(
+                    tempfile.SpooledTemporaryFile(max_size=10 * 1024 * 1024)
+                )
                 with zipfile.ZipFile(spooled, "w", zipfile.ZIP_DEFLATED) as zip_file:
                     for voucher in queryset.iterator(chunk_size=50):
                         with (
@@ -708,6 +712,8 @@ def download_vouchers(modeladmin, request, queryset: QuerySet[Voucher]) -> HttpR
                 spooled.seek(0)
                 response = FileResponse(spooled, content_type="application/zip")
                 response["Content-Disposition"] = 'attachment; filename="vouchers.zip"'
+                # FileResponse now owns the file and closes it after streaming.
+                stack.pop_all()
                 return response
 
         # fmt == "pdf": merge all pages into a single PDF

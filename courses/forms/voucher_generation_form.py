@@ -35,6 +35,6 @@ class VoucherGenerationForm(VoucherForm):
         if recipients and n is not None and len(recipients) != n:
             raise forms.ValidationError(
                 _("Number of recipients must match number of vouchers.")
-                + f"{len(recipients)} != {n}"
+                + f" ({len(recipients)} != {n})"
             )
         return cleaned_data
