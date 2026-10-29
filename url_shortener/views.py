@@ -1,5 +1,6 @@
 from urllib.parse import urlsplit, urlunsplit
 
+from django.contrib.auth.views import redirect_to_login
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.utils import timezone
@@ -14,7 +15,7 @@ def redirect_to_destination(request, tag):
         now = timezone.now()
         short_link = (
             ShortLink.objects.select_related("destination")
-            .only("id", "destination_id", "destination__url")
+            .only("id", "requires_login", "destination_id", "destination__url")
             .filter(deactivated=False, tag=tag)
             .filter(Q(valid_from__isnull=True) | Q(valid_from__lte=now))
             .filter(Q(valid_until__isnull=True) | Q(valid_until__gte=now))
@@ -22,6 +23,9 @@ def redirect_to_destination(request, tag):
         )
     except ShortLink.DoesNotExist:
         raise Http404
+
+    if short_link.requires_login and not request.user.is_authenticated:
+        return redirect_to_login(request.get_full_path())
 
     # HEAD requests come from link checkers, not from visitors
     if request.method == "GET":

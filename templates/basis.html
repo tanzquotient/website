@@ -3,6 +3,7 @@
 
 {% load static %}
 {% load account %}
+{% load tq_tags %}
 
 
 <!DOCTYPE html>
@@ -46,7 +47,7 @@
     <script type="text/javascript" src="{% static "js/theme-toggler.js" %}"></script>
 
     <!-- Third party packages -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    {% plotly_js %}
 
     <!-- CSS render block -->
     {% render_block "css" %}

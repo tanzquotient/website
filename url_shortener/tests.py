@@ -1,4 +1,5 @@
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import admin
@@ -157,6 +158,34 @@ class RedirectToDestinationTests(TestCase):
             fetch_redirect_response=False,
         )
 
+    def test_link_requiring_login_forwards_only_after_login(self):
+        self.short_link.requires_login = True
+        self.short_link.save()
+
+        response = self.client.get(self.url, {"campaign": "autumn"})
+
+        self.assertRedirects(
+            response,
+            f"{settings.LOGIN_URL}?next={quote(f'{self.url}?campaign=autumn')}",
+            fetch_redirect_response=False,
+        )
+        self.assertFalse(Visit.objects.exists())
+
+        user = get_user_model().objects.create_user(
+            username="short-link-visitor",
+            email="short-link-visitor@example.com",
+            password="password",
+        )
+        authenticate_test_client(self.client, user)
+        response = self.client.get(self.url, {"campaign": "autumn"})
+
+        self.assertRedirects(
+            response,
+            "https://example.com/event?campaign=autumn",
+            fetch_redirect_response=False,
+        )
+        self.assertTrue(Visit.objects.filter(short_link=self.short_link).exists())
+
 
 class CreateShortenedUrlAdminTests(TestCase):
     def setUp(self):
@@ -178,6 +207,7 @@ class CreateShortenedUrlAdminTests(TestCase):
                 "source": self.source.id,
                 "destination": self.destination.id,
                 "destination_parameters": "campaign=autumn&f=partner-a",
+                "requires_login": "on",
             },
         )
 
@@ -187,6 +217,7 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertEqual(short_link.description, "Autumn newsletter")
         self.assertEqual(short_link.source, self.source)
         self.assertEqual(short_link.destination, self.destination)
+        self.assertTrue(short_link.requires_login)
         self.assertEqual(
             response.context["generated_url"],
             f"https://{settings.DEPLOYMENT_DOMAIN}/s/{short_link.tag}/"
@@ -228,6 +259,16 @@ class CreateShortenedUrlAdminTests(TestCase):
         self.assertTrue(
             response.context["qr_code_data"].startswith("data:image/svg+xml;base64,")
         )
+
+    def test_short_link_changelist_has_a_copy_link_button(self):
+        short_link = ShortLink.objects.create(
+            source=self.source, destination=self.destination
+        )
+
+        response = self.client.get(reverse("admin:url_shortener_shortlink_changelist"))
+
+        self.assertContains(response, f'data-copy-link="{short_link.short_url()}"')
+        self.assertContains(response, "url_shortener/copy_link.js")
 
     def test_short_link_routing_fields_are_read_only_after_a_visit(self):
         short_link = ShortLink.objects.create(
@@ -319,10 +360,38 @@ class CreateShortenedUrlAdminTests(TestCase):
             },
         )
 
-        chart_data = response.context["chart_data"]
-        self.assertEqual([item["count"] for item in chart_data], [1, 0, 2])
-        self.assertEqual(len(chart_data[-1]["segments"]), 2)
+        series = response.context["series"]
+        self.assertEqual(
+            [sum(day) for day in zip(*(item.values for item in series))], [1, 0, 2]
+        )
+        self.assertEqual(len(series), 2)
         self.assertContains(response, "Download displayed visits as CSV")
+
+    def test_chart_accepts_dotted_dates_and_rejects_a_start_after_the_end(self):
+        chart_url = reverse("admin:url_shortener_visit_chart")
+
+        response = self.client.get(
+            chart_url,
+            {
+                "destination": self.destination.id,
+                "date_from": "05.10.2026",
+                "date_to": "2026-10-20",
+            },
+        )
+
+        self.assertEqual(response.context["date_from"], date(2026, 10, 5))
+        self.assertEqual(response.context["date_to"], date(2026, 10, 20))
+
+        response = self.client.get(
+            chart_url,
+            {
+                "destination": self.destination.id,
+                "date_to": f"{timezone.localdate() - timedelta(days=30):%d.%m.%Y}",
+            },
+        )
+
+        self.assertFalse(response.context["form"].is_valid())
+        self.assertContains(response, "must not be after the end date")
 
     def test_destination_csv_action_exports_one_destination_and_rejects_multiple(self):
         short_link = ShortLink.objects.create(

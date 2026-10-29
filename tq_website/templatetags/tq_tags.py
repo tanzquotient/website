@@ -1,7 +1,13 @@
+import base64
+import hashlib
+from functools import cache
+
 import shortuuid
 from django import template
 from django.conf import settings
 from django.urls import reverse
+from django.utils.html import format_html
+from plotly.offline import get_plotlyjs, get_plotlyjs_version
 
 register = template.Library()
 
@@ -35,3 +41,16 @@ def collapsible_list(items: list, limit: int, item_template: str):
 @register.simple_tag
 def settings_value(name):
     return getattr(settings, name, "")
+
+
+@register.simple_tag
+@cache
+def plotly_js():
+    # Load the plotly.js version the installed plotly package generates figures for
+    integrity = base64.b64encode(hashlib.sha256(get_plotlyjs().encode()).digest())
+    return format_html(
+        '<script src="https://cdn.plot.ly/plotly-{}.min.js" integrity="sha256-{}" '
+        'crossorigin="anonymous"></script>',
+        get_plotlyjs_version(),
+        integrity.decode(),
+    )

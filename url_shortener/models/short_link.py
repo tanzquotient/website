@@ -29,6 +29,13 @@ class ShortLink(models.Model):
     deactivated = models.BooleanField(
         default=False, verbose_name="Manually deactivated"
     )
+    requires_login = models.BooleanField(
+        default=False,
+        verbose_name="Require login before forwarding",
+        help_text=(
+            "Visitors who are not logged in have to log in before they are forwarded."
+        ),
+    )
     valid_from = models.DateTimeField(blank=True, null=True)
     valid_until = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

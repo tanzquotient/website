@@ -14,9 +14,11 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
+from django.utils.html import format_html
 from qrcode.image.svg import SvgPathImage
 
 from utils.export import export_csv
+from utils.plots import DataSeries, plot_figure, stacked_time_series_chart
 
 from .models import Destination, ShortLink, Source, Visit
 
@@ -63,6 +65,21 @@ def visit_date_range(date_from, date_to):
     }
 
 
+def chart_date_field(help_text):
+    return forms.DateField(
+        required=False,
+        input_formats=["%d.%m.%Y", "%d.%m.%y", "%Y-%m-%d"],
+        widget=AdminDateWidget(attrs={"placeholder": "DD.MM.YYYY"}, format="%d.%m.%Y"),
+        help_text=(
+            "Enter as DD.MM.YYYY (for example 05.10.2026) or pick a date from "
+            f"the calendar. {help_text}"
+        ),
+        error_messages={
+            "invalid": "Enter a date as DD.MM.YYYY, for example 05.10.2026."
+        },
+    )
+
+
 class VisitChartForm(forms.Form):
     source = forms.ModelChoiceField(
         queryset=Source.objects.order_by("description"),
@@ -70,17 +87,26 @@ class VisitChartForm(forms.Form):
         help_text="Leave blank to show all sources as a stacked chart.",
     )
     destination = forms.ModelChoiceField(queryset=Destination.objects.order_by("url"))
-    date_from = forms.DateField(required=False, widget=AdminDateWidget)
-    date_to = forms.DateField(required=False, widget=AdminDateWidget)
+    date_from = chart_date_field("Leave blank to start 29 days before today.")
+    date_to = chart_date_field("Leave blank to end today.")
 
     def clean(self):
         cleaned_data = super().clean()
-        date_from = cleaned_data.get("date_from")
-        date_to = cleaned_data.get("date_to")
+        if self.has_error("date_from") or self.has_error("date_to"):
+            return cleaned_data
 
-        if date_from and date_to and date_from > date_to:
-            raise ValidationError("The start date must not be after the end date.")
+        today = timezone.localdate()
+        date_from = cleaned_data["date_from"] or today - timedelta(days=29)
+        date_to = cleaned_data["date_to"] or today
 
+        if date_from > date_to:
+            raise ValidationError(
+                f"The start date ({date_from:%d.%m.%Y}) must not be after the end "
+                f"date ({date_to:%d.%m.%Y})."
+            )
+
+        cleaned_data["date_from"] = date_from
+        cleaned_data["date_to"] = date_to
         return cleaned_data
 
 
@@ -98,7 +124,7 @@ class ShortenedUrlForm(forms.ModelForm):
 
     class Meta:
         model = ShortLink
-        fields = ("description", "source", "destination")
+        fields = ("description", "source", "destination", "requires_login")
         help_texts = {
             "description": (
                 "Optional label to help identify this short URL in the admin."
@@ -170,14 +196,16 @@ class SourceAdmin(admin.ModelAdmin):
 class ShortLinkAdmin(admin.ModelAdmin):
     list_display = (
         "tag",
+        "copy_short_url",
         "description",
         "source",
         "destination",
         "deactivated",
+        "requires_login",
         "created_at",
     )
     list_select_related = ("source", "destination")
-    list_filter = ("deactivated",)
+    list_filter = ("deactivated", "requires_login")
     search_fields = ("tag", "description", "source__description", "destination__url")
     readonly_fields = ("tag", "created_at")
     change_form_template = "admin/url_shortener/shortlink/change_form.html"
@@ -186,9 +214,27 @@ class ShortLinkAdmin(admin.ModelAdmin):
         ("Routing", {"fields": ("source", "destination")}),
         (
             "Availability",
-            {"fields": ("deactivated", "valid_from", "valid_until", "created_at")},
+            {
+                "fields": (
+                    "deactivated",
+                    "requires_login",
+                    "valid_from",
+                    "valid_until",
+                    "created_at",
+                )
+            },
         ),
     )
+
+    class Media:
+        js = ("url_shortener/copy_link.js",)
+
+    @admin.display(description="Short URL")
+    def copy_short_url(self, obj):
+        return format_html(
+            '<button type="button" class="button" data-copy-link="{}">Copy link</button>',
+            obj.short_url(),
+        )
 
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.has_visits:
@@ -362,9 +408,8 @@ class VisitAdmin(admin.ModelAdmin):
         return export_csv("all-visits", visit_csv_rows(Visit.objects.all()))
 
     def chart_selection(self, form):
-        today = timezone.localdate()
-        date_from = form.cleaned_data["date_from"] or today - timedelta(days=29)
-        date_to = form.cleaned_data["date_to"] or today
+        date_from = form.cleaned_data["date_from"]
+        date_to = form.cleaned_data["date_to"]
         source = form.cleaned_data["source"]
         destination = form.cleaned_data["destination"]
         visits = Visit.objects.filter(
@@ -388,23 +433,15 @@ class VisitAdmin(admin.ModelAdmin):
 
     def chart_view(self, request):
         form = VisitChartForm(request.GET or None)
-        chart_data = None
-        date_from = None
-        date_to = None
+        context = {
+            **self.admin_site.each_context(request),
+            "form": form,
+            "media": self.media + form.media,
+            "title": "Visits per day",
+        }
 
         if form.is_valid():
             source, destination, date_from, date_to, visits = self.chart_selection(form)
-            if source:
-                series = [
-                    {
-                        "id": source.id,
-                        "name": source.description,
-                        "color": "#417690",
-                    }
-                ]
-            else:
-                series = []
-
             count_entries = list(
                 visits.annotate(day=TruncDate("visited_at"))
                 .values(
@@ -414,28 +451,16 @@ class VisitAdmin(admin.ModelAdmin):
                 )
                 .annotate(count=Count("id"))
             )
-            if not source:
-                source_entries = sorted(
-                    {
-                        (
-                            entry["short_link__source_id"],
-                            entry["short_link__source__description"],
-                        )
-                        for entry in count_entries
-                    },
-                    key=lambda entry: (entry[1], entry[0]),
-                )
-                series = [
-                    {
-                        "id": source_id,
-                        "name": source_description,
-                        "color": f"hsl({index * 137 % 360} 55% 40%)",
-                    }
-                    for index, (source_id, source_description) in enumerate(
-                        source_entries
+            source_entries = sorted(
+                {
+                    (
+                        entry["short_link__source_id"],
+                        entry["short_link__source__description"],
                     )
-                ]
-
+                    for entry in count_entries
+                },
+                key=lambda entry: (entry[1], entry[0]),
+            )
             counts_by_day_and_source = {
                 (entry["day"], entry["short_link__source_id"]): entry["count"]
                 for entry in count_entries
@@ -444,60 +469,39 @@ class VisitAdmin(admin.ModelAdmin):
                 date_from + timedelta(days=offset)
                 for offset in range((date_to - date_from).days + 1)
             ]
-            max_count = max(
-                sum(
-                    counts_by_day_and_source.get((day, item["id"]), 0)
-                    for item in series
-                )
-                for day in days
-            )
-            max_count = max(1, max_count)
-            chart_data = [
-                {
-                    "date": day,
-                    "count": sum(
-                        counts_by_day_and_source.get((day, item["id"]), 0)
-                        for item in series
-                    ),
-                    "segments": [
-                        {
-                            **item,
-                            "count": counts_by_day_and_source.get((day, item["id"]), 0),
-                            "height": counts_by_day_and_source.get((day, item["id"]), 0)
-                            / max_count
-                            * 100,
-                        }
-                        for item in series
+            series = [
+                DataSeries(
+                    name=source_description,
+                    values=[
+                        counts_by_day_and_source.get((day, source_id), 0)
+                        for day in days
                     ],
-                }
-                for day in days
+                )
+                for source_id, source_description in source_entries
             ]
 
-        context = {
-            **self.admin_site.each_context(request),
-            "form": form,
-            "media": self.media + form.media,
-            "chart_data": chart_data,
-            "date_from": date_from,
-            "date_to": date_to,
-            "destination": form.cleaned_data["destination"]
-            if chart_data is not None
-            else None,
-            "series": series if chart_data is not None else (),
-            "csv_export_url": (
-                reverse("admin:url_shortener_visit_chart_export")
-                + "?"
-                + urlencode(
-                    {
-                        "source": source.id if source else "",
-                        "destination": destination.id,
-                        "date_from": date_from.isoformat(),
-                        "date_to": date_to.isoformat(),
-                    }
-                )
-                if chart_data is not None
-                else None
-            ),
-            "title": "Visits per day",
-        }
+            context.update(
+                {
+                    "destination": destination,
+                    "date_from": date_from,
+                    "date_to": date_to,
+                    "series": series,
+                    "chart": plot_figure(stacked_time_series_chart(days, series))
+                    if series
+                    else None,
+                    "csv_export_url": (
+                        reverse("admin:url_shortener_visit_chart_export")
+                        + "?"
+                        + urlencode(
+                            {
+                                "source": source.id if source else "",
+                                "destination": destination.id,
+                                "date_from": date_from.isoformat(),
+                                "date_to": date_to.isoformat(),
+                            }
+                        )
+                    ),
+                }
+            )
+
         return render(request, "admin/url_shortener/visit/chart.html", context)

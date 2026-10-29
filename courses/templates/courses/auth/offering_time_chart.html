@@ -28,20 +28,21 @@
         var data = [{% for trace in chart.traces %}trace{{ forloop.counter }},{% endfor %} trace_total];
 
         var layout = {
-            title: 'Timeline',
+            title: {text: 'Timeline'},
             height: 800,
             barmode: 'stack',
             xaxis: {
-                title: 'date',
+                title: {text: 'date'},
                 type: 'date',
             },
             yaxis: {
-                title: 'individual course subscriptions',
+                title: {text: 'individual course subscriptions'},
             },
             yaxis2: {
-                title: 'TOTAL subscriptions',
+                title: {text: 'TOTAL subscriptions'},
                 side: 'right',
                 overlaying: 'y',
+                tickmode: 'auto',
             },
             legend: {
                 x: -0.2,
