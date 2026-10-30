@@ -265,8 +265,8 @@ class ShortLinkAdmin(admin.ModelAdmin):
 
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
-    list_display = ("id", "url")
-    search_fields = ("url",)
+    list_display = ("id", "label", "url")
+    search_fields = ("label", "url")
     actions = ("export_visits_csv",)
     change_form_template = "admin/url_shortener/destination/change_form.html"
 
