@@ -876,7 +876,7 @@ msgstr "Keine Paare zugeordnet"
 
 #: courses/services/offerings.py:113
 msgid "Irregular weekday"
-msgstr "Ungültiger Wochentag"
+msgstr "Unregelmässiger Wochentag"
 
 #: courses/services/offerings.py:122
 msgid "Unknown month"

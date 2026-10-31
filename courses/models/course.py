@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Iterable
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
@@ -1004,19 +1004,25 @@ class Course(TranslatableModel):
         end = self.get_last_regular_lesson_end()
         return end.date() if end else None
 
-    def get_common_irregular_weekday(self) -> str | None:
-        """Returns a weekday string if all irregular lessons are on same weekday, otherwise returns None"""
-        if self.irregular_lessons.exists():
-            weekdays = [
-                lesson.date.weekday() for lesson in self.irregular_lessons.all()
-            ]
-            weekdays_unique = list(set(weekdays))
-            if len(weekdays_unique) == 1:
-                return Weekday.NUMBER_2_SLUG[weekdays_unique[0]]
-            else:
-                return None
-        else:
+    def get_main_weekday(self) -> str | None:
+        """Returns the main weekday of the course: the weekday of the regular lessons,
+        otherwise the most frequent weekday of the irregular lessons.
+        Returns None if the regular lessons are on several weekdays, there are no lessons
+        or no single most frequent weekday"""
+        regular_weekdays = {l.get_weekday_number() for l in self.regular_lessons.all()}
+        if len(regular_weekdays) > 1:
             return None
+        if regular_weekdays:
+            return Weekday.NUMBER_2_SLUG[regular_weekdays.pop()]
+
+        most_common = Counter(
+            lesson.date.weekday() for lesson in self.get_irregular_lessons()
+        ).most_common(2)
+        if not most_common or (
+            len(most_common) == 2 and most_common[0][1] == most_common[1][1]
+        ):
+            return None
+        return Weekday.NUMBER_2_SLUG[most_common[0][0]]
 
     def get_teachers_welcomed(self) -> bool:
         teaches = list(self.teaching.all())

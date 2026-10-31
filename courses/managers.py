@@ -6,7 +6,7 @@ from django.db.models.functions import Coalesce
 from django.utils.translation import get_language
 from parler.managers import TranslatableManager
 
-from courses.models.choices import LeadFollow, MatchingState, SubscribeState, Weekday
+from courses.models.choices import LeadFollow, MatchingState, SubscribeState
 
 
 class UserProfileManager(models.Manager):
@@ -16,21 +16,11 @@ class UserProfileManager(models.Manager):
 
 class CourseManager(TranslatableManager):
     def weekday(self, weekday, courses=None):
-        result_list = []
-        for c in self.all() if courses is None else courses:
-            t = c.get_first_lesson_date()
-            common_irr_weekday = c.get_common_irregular_weekday()
-
-            weekday_to_add = None
-            if t is not None:
-                weekday_to_add = Weekday.NUMBER_2_SLUG[t.weekday()]
-            else:
-                if common_irr_weekday is not None:
-                    weekday_to_add = common_irr_weekday
-
-            if weekday_to_add == weekday:
-                result_list.append(c)
-        return result_list
+        return [
+            c
+            for c in (self.all() if courses is None else courses)
+            if c.get_main_weekday() == weekday
+        ]
 
     def by_month(self, courses=None):
         result = []
