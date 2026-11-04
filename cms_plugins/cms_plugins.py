@@ -158,7 +158,7 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                     "special": event.special,
                     "format_prices": event.format_prices(),
                     "room": event.room,
-                    "cancelled": event.is_cancelled(),
+                    "is_cancelled": event.is_cancelled(),
                     "published": event.published,
                     "event": event,
                     "detail_url": reverse(
@@ -179,6 +179,8 @@ class UpcomingEventsAndCoursesPlugin(CMSPluginBase):
                         "name": irregular_lesson.course.type.title,
                         "room": irregular_lesson.course.room,
                         "special": False,
+                        "is_cancelled": irregular_lesson.course.cancelled
+                        or irregular_lesson.is_cancelled(),
                         # TODO: remove when published flag is added to
                         # Course model
                         "published": True,
