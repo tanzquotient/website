@@ -178,21 +178,6 @@ class TeachInlineForCourse(UserFullNameAdminMixin, admin.TabularInline):
     autocomplete_fields = ["teacher"]
 
 
-class SubscribeInlineForCourse(UserFullNameAdminMixin, admin.TabularInline):
-    model = Subscribe
-    extra = 1
-    fk_name = "course"
-
-    raw_id_fields = ("user", "partner")
-    readonly_fields = (
-        "state",
-        "matching_state",
-        "usi",
-    )
-
-    autocomplete_fields = ["user", "partner"]
-
-
 class IrregularLessonInline(admin.TabularInline):
     model = IrregularLesson
     form = LessonDetailsRoomForm
@@ -347,7 +332,6 @@ class CourseAdmin(TranslatableAdmin):
         RegularLessonInline,
         IrregularLessonInline,
         TeachInlineForCourse,
-        SubscribeInlineForCourse,
     )
     widgets = {"type": SortedSelect}
     show_full_result_count = False
