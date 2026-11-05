@@ -366,7 +366,9 @@ POST_OFFICE = {
     "BACKENDS": {
         # backend used by post_office
         "default": (
-            EMAIL_BACKEND if DEBUG else "django.core.mail.backends.smtp.EmailBackend"
+            EMAIL_BACKEND
+            if DEBUG
+            else "email_system.backends.MicrosoftGraphEmailBackend"
         ),
     },
     "CELERY_ENABLED": not DEBUG,
@@ -556,12 +558,9 @@ CACHES = {
     },
 }
 
-# Configure the email host to send mails from
-EMAIL_HOST = environ["TQ_EMAIL_HOST"]
-EMAIL_HOST_USER = environ["TQ_EMAIL_HOST_USER"]
-EMAIL_PORT = int(environ["TQ_EMAIL_PORT"])
-EMAIL_USE_TLS = bool(environ["TQ_EMAIL_USE_TLS"].lower() == "true")
-EMAIL_HOST_PASSWORD = environ["TQ_EMAIL_HOST_PASSWORD"]
+EMAIL_GRAPH_TENANT_ID = environ["TQ_EMAIL_GRAPH_TENANT_ID"]
+EMAIL_GRAPH_CLIENT_ID = environ["TQ_EMAIL_GRAPH_CLIENT_ID"]
+EMAIL_GRAPH_CLIENT_SECRET = environ["TQ_EMAIL_GRAPH_CLIENT_SECRET"]
 DEFAULT_FROM_EMAIL = environ["TQ_DEFAULT_FROM_EMAIL"]
 
 EMAIL_ADDRESS_CONTACT = "kontakt@tanzquotient.org"

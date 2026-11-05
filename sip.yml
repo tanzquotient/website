@@ -7,10 +7,6 @@ s3:
   - name: tq-static
   - name: tq-postfinance
 
-# TODO (#272) Migrate to SIP smtp
-smtp:
- - name: tq-mail
-
 ingress:
   - subdomain: www
     cname: tanzquotient.org
@@ -97,35 +93,23 @@ env:
       key: tq-environment
       create: provided
 
-  # TODO(#272) Migrate to SIP smtp
-  - name: SIP_SMTP_TQ_MAIL_HOST
+  # Email via Microsoft Graph (ETH service account)
+  - name: SIP_TQ_MAIL_GRAPH_TENANT_ID
     secret:
-      key: tq-mail-host
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_PORT
+      key: tq-mail-graph-tenant-id
+      create: provided
+  - name: SIP_TQ_MAIL_GRAPH_CLIENT_ID
     secret:
-      key: tq-mail-port
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_ENCRYPTION
+      key: tq-mail-graph-client-id
+      create: provided
+  - name: SIP_TQ_MAIL_GRAPH_CLIENT_SECRET
     secret:
-      key: tq-mail-encryption
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_USE_TLS
+      key: tq-mail-graph-client-secret
+      create: provided
+  - name: SIP_TQ_MAIL_SENDER
     secret:
-      key: tq-mail-use-tls
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_MAIL_USER
-    secret:
-      key: tq-mail-user
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_MAIL_PW
-    secret:
-      key: tq-mail-pw
-      value: provided
-  - name: SIP_SMTP_TQ_MAIL_FROM_MAIL
-    secret:
-      key: tq-mail-from-mail
-      value: provided
+      key: tq-mail-sender
+      create: provided
   # OIDC
   - name: SIP_TQ_OIDC_CLIENT_ID
     secret:
