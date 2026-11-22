@@ -843,6 +843,9 @@ class Course(TranslatableModel):
     def has_started_for(self, extra_time: timedelta = timedelta(days=7)) -> bool:
         return self.get_first_lesson_date() + extra_time < date.today()
 
+    def has_started(self) -> bool:
+        return self.has_started_for(extra_time=timedelta())
+
     def get_lessons(self) -> list[RegularLesson | IrregularLesson]:
         return list(self.regular_lessons.all()) + self.get_irregular_lessons()
 

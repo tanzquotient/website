@@ -6,8 +6,15 @@
             <span class="text-uppercase badge text-bg-danger">
                 {% trans "Cancelled" %}
             </span>
+        {% elif course.is_over %}
+            <span class="text-uppercase badge text-bg-secondary">
+                {% trans "Finished" %}
+            </span>
+        {% elif not course.has_started %}
+            <span class="text-uppercase badge text-bg-info">
+                {% trans "Upcoming" %}
+            </span>
         {% endif %}
-
     </div>
     <div class="card-body">
         {% include "user/snippets/missing_presence_data_alert.html" with course=course only %}

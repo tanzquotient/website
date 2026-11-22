@@ -385,7 +385,8 @@ class UserProfile(Model):
             self.get_current_teaching_courses()
             + self.get_current_teaching_courses_as_substitute()
         )
-        courses.sort(key=Course.get_first_lesson_date)
+        today = date.today()
+        courses.sort(key=lambda c: (today - c.get_first_lesson_date(), c.type.title))
         return courses
 
     #################
