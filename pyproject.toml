@@ -9,16 +9,16 @@ dependencies = [
     "Django==6.0.8",
     # Django Extensions
     "django-parler==2.4", # For simple translatable models
-    "django-post-office==3.12.0", # Send and manage emails asynchronously, database based email templates
+    "django-post-office==3.13.0", # Send and manage emails asynchronously, database based email templates
     "django-reversion==6.5.2", # Version control for model instances, e.g. used for subscriptions
     "django-countries==9.1.0", # Country choices for use with forms and fields for models
-    "django-ical==1.9.2", # Simple library for creating iCal feeds
-    "django-allauth==65.22.0", # Authentication, registration, account management, 3rd party account authentication
-    "django-photologue==3.20", # Gallery application
+    "django-ical==1.10.0", # Simple library for creating iCal feeds
+    "django-allauth==65.22.1", # Authentication, registration, account management, 3rd party account authentication
+    "django-photologue==3.21", # Gallery application
     "django-sortedm2m==4.1.0", # Fix transitive dependency of django-photologue to version that suppoerts django 5.1
     # Django CMS
     "django-cms==5.1.3", # Open source content management system based on the Django
-    "djangocms-text==1.0.2", # Text plugin for django CMS
+    "djangocms-text==1.1.0", # Text plugin for django CMS
     "djangocms-versioning==2.8.0", # Core package of django CMS, is used to e.g. hava page histories
     "djangocms-alias==3.2.0", # Core package of django CMS used for aliases
     # Rest framework
@@ -34,7 +34,7 @@ dependencies = [
     "svglib==2.4.0", # Used for creating vouchers from SVG tremplate
     "reportlab==5.1.0", # For generating PDFs and graphics
     "pypdf>=4.0", # For merging multiple voucher PDFs into a single file
-    "pyyaml==6.0.3", # Used for generating environment variable file
+    "pyyaml==6.0.4", # Used for generating environment variable file
     "qrbill==1.2.0", # For generating swiss payment QR codes, that can be scanne by banking apps
     "qrcode==8.2", # For generating QR codes of short links in the URL shortener
     "django-resized==1.0.3", # Used to resize images on save of ImageField
@@ -52,7 +52,7 @@ dependencies = [
     # Utils
     "plotly==7.1.0", # For generating charts and graphs
     "shortuuid==1.0.13", # For generating short and unique ID's and codes
-    "django-hijack==3.8.0", # Superuser can impersonate other users
+    "django-hijack==3.8.1", # Superuser can impersonate other users
     "python-dotenv==1.2.4", # Used to load environment variables from .env file
     "requests==2.34.2", # Used for OIDC requests
 ]
@@ -61,7 +61,7 @@ dependencies = [
 dev = [
     "django-debug-toolbar==8.0.0", # For development. Gives additional insights into e.g. database queries
     "locust~=2.47.0", # Loadtesting
-    "ruff==0.17.5",
+    "ruff==0.17.6",
     "pre-commit>=4.6.0",
 ]
 
